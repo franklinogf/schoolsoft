@@ -37,5 +37,13 @@ class Topic extends TopicModel
     return $this->getTopicComments($this->id);
   }
 
+  public function newComment($creatorId,$desc,$type)
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un tema');
+    }
+    return $this->insertTopicComments($creatorId,$type,$this->id,$desc);
+  }
+
 
 }

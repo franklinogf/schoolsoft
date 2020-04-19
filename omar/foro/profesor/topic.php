@@ -8,6 +8,10 @@ use Classes\Controllers\Teacher;
 
 require_once '../../app.php';
 
+if(!isset($_SESSION['logged'])){
+  Route::redirect('/foro');
+}
+
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
 $student = new Student();
@@ -47,12 +51,13 @@ $student = new Student();
     </div>
 
     <div class="container mt-3 pb-5">
-      <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>">
+      <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
+      <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
         <div class="form-group">
           <label for="comment">Comentario nuevo</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
         </div>
-        <button class="btn btn-primary" type="button">Comentar</button>
+        <button class="btn btn-primary" type="submit">Comentar</button>
       </form>
       </textarea>
       <?php foreach ($topic->comments() as $comment) : ?>

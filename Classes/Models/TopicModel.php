@@ -2,6 +2,7 @@
 
 namespace Classes\Models;
 
+use Classes\Util;
 use Classes\Controllers\School;
 
 
@@ -56,5 +57,18 @@ class TopicModel extends School
     $obj = $result->fetch_all(MYSQLI_ASSOC);
 
     return $this->toObject($obj);
+  }
+
+  protected function insertTopicComments($id,$type,$id_topic,$desc)
+  {
+    $query = "INSERT INTO detalle_foro_entradas (creador_id,tipo,entrada_id,descripcion,fecha,hora,year)
+    VALUES (?,?,?,?,?,?,?)";
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
+    $year = $this->get('year');
+    $date = Util::date();
+    $time = Util::time();
+    $stmt->bind_param('isissss', $id,$type,$id_topic,$desc,$date,$time,$year);
+    $stmt->execute();     
   }
 }
