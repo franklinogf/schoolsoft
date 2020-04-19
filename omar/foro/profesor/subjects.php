@@ -27,7 +27,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
    Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center">Mi Salon Hogar</h1>
+    <h1 class="text-center">Mis Cursos</h1>
     <table id="myTable" class="table table-striped table-hover cell-border w-100 shadow">
       <thead class="bg-primary border-0">
         <tr>

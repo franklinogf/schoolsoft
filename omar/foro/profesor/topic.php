@@ -36,9 +36,10 @@ $student = new Student();
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
-  <div class="container-lg mt-lg-2 px-0">
+  <div class="container-lg mt-lg-2">
+
     <div class="row mt-3">
-      <div class="col-lg-4"><button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block">Editar tema</button></div>
+      <div class="col-lg-4"><button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block"><i class="fas fa-edit"></i> Editar tema</button></div>
     </div>
 
 
