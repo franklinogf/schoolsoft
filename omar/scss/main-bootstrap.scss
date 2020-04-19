@@ -3,8 +3,12 @@
 
 $theme-colors: (
   primary: #59ABE3 ,
-  secondary: #6C7A89
+  secondary: #6C7A89,
+  light:#f0f1f3
 );
+
 $enable-shadows : true;
+$enable-gradients: true;
+$enable-responsive-font-sizes : true;
 
 @import "../../bootstrap/scss/bootstrap";

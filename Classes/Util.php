@@ -31,7 +31,7 @@ class Util
    }
    public static function time()
    {
-      $date = \date('Y-m-d');
+      $date = \date('H:i:s');
       return $date;
    }
 
