@@ -1,0 +1,3 @@
+RewriteEngine On
+Options All -Indexes
+#RewriteRule ^([^/]+)/? school.php?url=$1 [L,QSA]
