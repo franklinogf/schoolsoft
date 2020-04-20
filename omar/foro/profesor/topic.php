@@ -24,7 +24,7 @@ $student = new Student();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foro -  <?= $topic->titulo ?></title>
+  <title>Foro - <?= $topic->titulo ?></title>
   <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
 
   <?php
@@ -39,14 +39,19 @@ $student = new Student();
   <div class="container-lg mt-lg-2">
 
     <div class="row mt-3">
-      <div class="col-lg-4"><button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block"><i class="fas fa-edit"></i> Editar tema</button></div>
+      <div class="col-lg-4">
+        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
+          <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
+        </button>        
+      </div>
+      <div class="col-lg-8 d-flex justify-content-end align-items-end">
+        <i class="fas fa-toggle-on <?=($topic->estado === 'a' ? 'text-success' : 'text-danger' )?> "></i>
+      </div>
     </div>
 
 
-    <div class="card mt-3">
-      <h4 id="title" class="card-header text-center bg-primary rounded-0">
-        <?= $topic->titulo ?>
-      </h4>
+    <div class="card">
+      <h4 id="title" class="card-header text-center bg-primary rounded-0"><?= $topic->titulo ?></h4>
       <div class="card-body">
         <h5 class="card-title"><?= $teacher->fullName(); ?></h5>
         <p id="description" class="card-text"><?= $topic->descripcion ?></p>
@@ -67,7 +72,7 @@ $student = new Student();
         <button class="btn btn-primary" type="submit">Comentar</button>
       </form>
       </textarea>
-      
+
       <?php foreach ($topic->comments() as $comment) : ?>
         <div class="media bg-light mt-3 pt-3 px-3">
           <img src="<?= Directories::$noProfilePicture ?>" class="mr-3" alt="student profile picture" width="64" height="64">
@@ -89,29 +94,48 @@ $student = new Student();
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form method="POST">
+          <form action="<?= Route::url('/foro/profesor/includes/topics.php') ?>" method="POST">
             <div class="modal-body">
               <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
               <div class="form-row">
                 <div class="form-group col-12">
                   <label for="modalTitle">Titulo del tema:</label>
-                  <input type="text" class="form-control" name='title' id="modalTitle">
+                  <input type="text" class="form-control" name='title' id="modalTitle" value="<?= $topic->titulo ?>">
                 </div>
                 <div class="form-group  col-12">
                   <label for="modalDescription">Descripcion del tema</label>
-                  <textarea class="form-control" name="description" id="modalDescription" rows="3" required></textarea>
+                  <textarea class="form-control" name="description" id="modalDescription" rows="3" required><?= $topic->descripcion ?></textarea>
                 </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label class="d-block">Tema disponible?</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="state" id="radio1" value="a" <?= ($topic->estado === 'a' ? 'checked' : '' )?>>
+                    <label class="form-check-label" for="radio1">Si</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="state" id="radio2" value="c" <?= ($topic->estado === 'c' ? 'checked' : '' )?>>
+                    <label class="form-check-label" for="radio2">No</label>
+                  </div>
+                </div>
+                <div class="form-group col-6">
+                  <label for="modalUntilDate">Disponible hasta:</label>
+                  <input type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= $topic->desde ?>">
+                </div>
+
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary">Guardar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+  
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
 

@@ -8,6 +8,7 @@ class SchoolModel extends DataBase
 {
   private $table = 'colegio';
   private $primary_key = 'id';
+  const TABLE = 'colegio';
 
   protected function getSchoolByPK($pk)
   {

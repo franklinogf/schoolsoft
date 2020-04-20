@@ -9,7 +9,7 @@ use Classes\Controllers\School;
 class TopicModel extends School
 {
   private $table = 'foro_entradas';
-  private $primary_key = 'id';
+  protected $primary_key = 'id';
 
   public function __construct()
   {
@@ -21,14 +21,14 @@ class TopicModel extends School
 
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
     $db = $this->connect();
-    $stmt = $db->prepare($query);    
+    $stmt = $db->prepare($query);
     $stmt->bind_param('i', $pk);
     $stmt->execute();
     $result = $stmt->get_result();
-    if($obj = $result->fetch_assoc() ){    
+    if ($obj = $result->fetch_assoc()) {
       return (object) $obj;
-     }
-     return false;
+    }
+    return false;
   }
 
 
@@ -59,7 +59,7 @@ class TopicModel extends School
     return $this->toObject($obj);
   }
 
-  protected function insertTopicComments($id,$type,$id_topic,$desc)
+  protected function insertTopicComments($id, $type, $id_topic, $desc)
   {
     $query = "INSERT INTO detalle_foro_entradas (creador_id,tipo,entrada_id,descripcion,fecha,hora,year)
     VALUES (?,?,?,?,?,?,?)";
@@ -68,7 +68,30 @@ class TopicModel extends School
     $year = $this->get('year');
     $date = Util::date();
     $time = Util::time();
-    $stmt->bind_param('isissss', $id,$type,$id_topic,$desc,$date,$time,$year);
-    $stmt->execute();     
+    $stmt->bind_param('isissss', $id, $type, $id_topic, $desc, $date, $time, $year);
+    $stmt->execute();
+  }
+  protected function updateTopic($propsArray)
+  {
+
+    $query = "UPDATE {$this->table} SET ";
+
+    $count = 0;
+    $paramsArray = [];
+    // Remove primary key from the array to update (pk is not supose to update)
+    unset($propsArray[$this->primary_key]);
+    foreach ($propsArray as $key => $value) {
+      $paramsArray[] = $value;
+      $coma = ($count > 0 ? ',' : '');
+      $query .= "$coma $key = ?";
+      $count++;
+    }
+    $query .= " WHERE {$this->primary_key} = '" . $this->{$this->primary_key} . "'";
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
+    $bind =  str_repeat('s',count($paramsArray));
+    $stmt->bind_param($bind,...$paramsArray);
+    $stmt->execute();
+
   }
 }

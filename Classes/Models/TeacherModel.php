@@ -9,6 +9,7 @@ class TeacherModel extends School
 {
   private $table = 'profesor';
   private $primary_key = 'id';
+  const TABLE = 'profesor';
 
   public function __construct()
   {
@@ -45,7 +46,7 @@ class TeacherModel extends School
 
   protected function getTeacherClasses($id)
   {
-    $query = "SELECT DISTINCT curso, descripcion FROM padres WHERE  `year` = ? and id = ? ORDER BY curso";
+    $query = "SELECT * FROM `cursos` where  `year` = ? AND `id` = ?  ORDER BY curso";    
     $db = $this->connect();
     $stmt = $db->prepare($query);
     $year = $this->get('year');
@@ -60,7 +61,7 @@ class TeacherModel extends School
   protected function getHomeStudents($grade)
   {
     $table = StudentModel::TABLE;
-    $query = "SELECT * FROM {$table} WHERE grado = ? AND year= ? and fecha_baja='0000-00-00' ORDER BY apellidos";
+    $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? and `fecha_baja`='0000-00-00' ORDER BY `apellidos`,`usuario`";
     $db = $this->connect();
     $year = $this->get('year');
     $stmt = $db->prepare($query);
@@ -75,15 +76,16 @@ class TeacherModel extends School
   protected function getLastTeacherTopic($id)
   {
 
-    $query = "SELECT e.id,e.titulo,c.curso,c.desc1,d.fecha,d.hora FROM `detalle_foro_entradas` as d
-	INNER JOIN foro_entradas AS e ON e.id = d.entrada_id
-	INNER JOIN cursos AS c ON c.curso = e.curso
-	WHERE c.id= ? AND c.year= ?
-  ORDER BY d.fecha DESC,d.hora DESC LIMIT 1";
+    $query = "SELECT `e`.`id`,`e`.`titulo`,`c`.`curso`,`c`.`desc1`,`d`.`fecha`,`d`.`hora` FROM `detalle_foro_entradas` as `d`
+            INNER JOIN `foro_entradas` AS `e` ON `e`.`id` = `d`.`entrada_id`
+            INNER JOIN `cursos` AS `c` ON `c`.`curso` = `e`.`curso`
+            WHERE `c`.`id`= ? AND `c`.`year`=? AND `e`.`year`= ? AND `e`.`estado`='a'
+            ORDER BY `d`.`fecha` DESC,`d`.`hora` DESC LIMIT 1";
+  
     $db = $this->connect();
     $stmt = $db->prepare($query);
-    $year = $this->get('year');
-    $stmt->bind_param('is', $id, $year);
+    $year = $this->get('year');  
+    $stmt->bind_param('iss', $id, $year, $year);
     $stmt->execute();
     $result = $stmt->get_result();
    if($obj = $result->fetch_assoc() ){

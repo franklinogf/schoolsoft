@@ -2,6 +2,7 @@
 use Classes\Route;
 
 Route::css("/css/main-bootstrap.css");
+Route::css("/css/main.css",true);
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
