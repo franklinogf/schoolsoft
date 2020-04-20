@@ -2,6 +2,7 @@
 
 use Classes\Controllers\School;
 use Classes\Controllers\Teacher;
+use Classes\Route;
 
 $file = basename($_SERVER['SCRIPT_FILENAME']);
 
@@ -19,13 +20,13 @@ $teacher = new Teacher(16);
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav  mr-auto">
       <li class="nav-item <?= ($pathFile === 'index' ? 'active' : '') ?>">
-        <a class="nav-link" href="index.php">Inicio <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/index.php') ?>">Inicio <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'subjects' ? 'active' : '') ?>">
-        <a class="nav-link" href="subjects.php">Mis Cursos</a>
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/subjects.php') ?>">Mis Cursos</a>
       </li>
       <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
-        <a class="nav-link" href="home.php">Salon Hogar</a>
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/home.php') ?>">Salon Hogar</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,10 +59,10 @@ $teacher = new Teacher(16);
           <?= isset($teacher) ? $teacher->nombre : 'username?'  ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="profile.php">Mi Perfil</a>
+          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>">Mi Perfil</a>
           <a class="dropdown-item" href="#">Mensajes <span class="badge badge-pill badge-primary">0</span></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Cerrar Sesión</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>">Cerrar Sesión</a>
         </div>
       </li>
     </ul>

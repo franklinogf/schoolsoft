@@ -6,7 +6,7 @@ use Classes\Controllers\School;
 class StudentModel extends School
 {
   private $table = 'year';
-  private $primary_key = 'mt';
+  protected $primary_key = 'mt';
   const TABLE = 'year';
 
   public function __construct()

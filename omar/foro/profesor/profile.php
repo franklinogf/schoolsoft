@@ -29,7 +29,8 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
     <div class="row mt-5">
 
       <div class="col-lg-6 col-sm-12">
-        <form>
+        <form action="<?=  Route::url('/foro/profesor/includes/profiles.php') ?>" method="POST">
+        <input type="hidden" name="id_teacher" value="<?= $teacher->id ?>">
           <img src="<?= $teacher->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
           <div class="form-group text-center mt-2">
             <button type='button' class="btn btn-secondary">Cambiar Foto</button>
@@ -44,7 +45,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
             </div>
             <div class="form-group col-md-6">
               <label for="lastname">Apellidos</label>
-              <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastname' id="lastname">
+              <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastName' id="lastname">
             </div>            
             <div class="form-group col-md-12">
               <label for="email1">E-mail Principal</label>
@@ -54,9 +55,9 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
             </div>
             <div class="form-group  col-md-6">
               <label for="pass1">Nueva Clave</label>
-              <input type="password" class="form-control" name='pass1' id="pass1">
+              <input type="password" class="form-control" name='password' id="pass1">
               <label for="pass2">Confirmar Clave</label>
-              <input type="password" class="form-control" name='pass2' id="pass2">
+              <input type="password" class="form-control" id="pass2">
             </div>
             <div class="form-group col-md-12">
               <button type="submit" class="btn btn-primary btn-lg btn-block">Guardar</button>

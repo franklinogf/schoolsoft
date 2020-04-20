@@ -95,5 +95,23 @@ class Teacher extends TeacherModel
 
   }
 
+  public function save()
+  {
+    // get self public class, no parents classes
+    $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
+
+    if(count( $propsArray) > 0){
+      if (isset($this->{$this->primary_key})) {
+        $this->updateTeacher($propsArray);
+      } else {
+        echo 'insert <hr>';
+      }
+    }else{
+      throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');
+
+    }
+
+  }
+
 
 }

@@ -8,7 +8,7 @@ use Classes\Models\StudentModel;
 class TeacherModel extends School
 {
   private $table = 'profesor';
-  private $primary_key = 'id';
+  protected $primary_key = 'id';
   const TABLE = 'profesor';
 
   public function __construct()
@@ -33,9 +33,7 @@ class TeacherModel extends School
   {
     $query = "SELECT * FROM `cursos` where  `year` = ? AND `id` = ?  ORDER BY curso";    
     $year = $this->get('year');
-    return $this->selectTable($query,[$year,$id]);
-
-    return $this->toObject($obj);
+    return $this->selectTable($query,[$year,$id]);    
   }
 
   protected function getHomeStudents($grade)
@@ -63,5 +61,11 @@ class TeacherModel extends School
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";
     return $this->selectTable($query,[$username,$password]);
+  }
+
+  protected function updateTeacher($propsArray)
+  {
+
+    $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
   }
 }
