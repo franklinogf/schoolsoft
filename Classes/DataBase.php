@@ -52,10 +52,10 @@ class DataBase
     $stmt->execute();
   }
 
-  protected function selectTable($query,$whereArray = null){
+  protected function selectTable($query,$whereArray = []){
     $db = $this->connect();
     $stmt = $db->prepare($query);
-    if(count($whereArray > 0)){
+    if(count($whereArray) > 0){
       $bind = str_repeat('s',count($whereArray));
       $stmt->bind_param($bind, ...$whereArray);
     }

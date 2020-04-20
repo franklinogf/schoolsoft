@@ -26,7 +26,7 @@ class SchoolModel extends DataBase
 
   protected function getSchool()
   {
-    $this->getSchoolByUser();
+    return $this->getSchoolByUser();
   }
 
   
