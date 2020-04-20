@@ -27,10 +27,7 @@ class School extends SchoolModel
    {
       return $this->props[$key];
    }
-   protected function toObject($obj)
-   {
-      return json_decode(json_encode($obj));
-   }  
+   
      
    
    public static function logo( $path = 'logo.gif')

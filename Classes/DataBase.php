@@ -2,6 +2,7 @@
 namespace Classes;
 
 use mysqli;
+use Classes\Util;
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase connection                     */
 /* -------------------------------------------------------------------------- */
@@ -26,4 +27,49 @@ class DataBase
 
         return $db;
     }
+
+    // update tables 
+    protected function updateTable($table, $pk, $wherePk, $propsArray)
+  {
+
+    $query = "UPDATE {$table} SET ";
+
+    $count = 0;
+    $paramsArray = [];
+    // Remove primary key from the array to update (pk is not supose to update)
+    unset($propsArray[$pk]);
+    foreach ($propsArray as $key => $value) {
+      $paramsArray[] = $value;
+      $coma = ($count > 0 ? ',' : '');
+      $query .= "$coma $key = ?";
+      $count++;
+    }
+    $query .= " WHERE {$pk} = '" . $wherePk . "'";
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
+    $bind =  str_repeat('s', count($paramsArray));
+    $stmt->bind_param($bind, ...$paramsArray);
+    $stmt->execute();
+  }
+
+  protected function selectTable($query,$whereArray = null){
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
+    if(count($whereArray > 0)){
+      $bind = str_repeat('s',count($whereArray));
+      $stmt->bind_param($bind, ...$whereArray);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows > 1){
+        $obj = $result->fetch_all(MYSQLI_ASSOC);
+        return Util::toObject($obj);
+    }else if($result->num_rows === 1){
+        $obj = $result->fetch_assoc();
+        return (object) $obj;
+    }else{
+        return false;
+    }
+
+  }
 }

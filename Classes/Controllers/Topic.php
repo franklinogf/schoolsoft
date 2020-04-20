@@ -50,15 +50,12 @@ class Topic extends TopicModel
   public function save()
   {
     // get self public class, no parents classes
-    $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this))); 
-   
-    if (isset($this->{$this->primary_key})) {     
-       $this->updateTopic($propsArray);       
-    }else{
+    $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
+
+    if (isset($this->{$this->primary_key})) {
+      $this->updateTopic($propsArray);
+    } else {
       echo 'insert <hr>';
-      foreach ($propsArray as $key => $value) {
-        echo "$key = ?", '<br>';
-      }
     }
   }
 }

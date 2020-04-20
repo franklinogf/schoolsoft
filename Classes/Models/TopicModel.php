@@ -20,43 +20,21 @@ class TopicModel extends School
   {
 
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('i', $pk);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($obj = $result->fetch_assoc()) {
-      return (object) $obj;
-    }
-    return false;
+    return $this->selectTable($query,[$pk]);
   }
 
 
   protected function getAllTopics()
   {
     $query = "SELECT * FROM {$this->table} AND `year` = ? ORDER BY fecha";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
     $year = $this->get('year');
-    $stmt->bind_param('s', $year);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
-
-    return $this->toObject($obj);
+    return $this->selectTable($query,[$year]);
   }
 
   protected function getTopicComments($id)
   {
     $query = "SELECT * FROM detalle_foro_entradas WHERE entrada_id = ? ORDER BY fecha DESC,hora DESC";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
-
-    return $this->toObject($obj);
+    return $this->selectTable($query,[$id]);
   }
 
   protected function insertTopicComments($id, $type, $id_topic, $desc)
@@ -74,24 +52,6 @@ class TopicModel extends School
   protected function updateTopic($propsArray)
   {
 
-    $query = "UPDATE {$this->table} SET ";
-
-    $count = 0;
-    $paramsArray = [];
-    // Remove primary key from the array to update (pk is not supose to update)
-    unset($propsArray[$this->primary_key]);
-    foreach ($propsArray as $key => $value) {
-      $paramsArray[] = $value;
-      $coma = ($count > 0 ? ',' : '');
-      $query .= "$coma $key = ?";
-      $count++;
-    }
-    $query .= " WHERE {$this->primary_key} = '" . $this->{$this->primary_key} . "'";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $bind =  str_repeat('s',count($paramsArray));
-    $stmt->bind_param($bind,...$paramsArray);
-    $stmt->execute();
-
+    $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
   }
 }

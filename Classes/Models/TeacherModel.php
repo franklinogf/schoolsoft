@@ -19,41 +19,21 @@ class TeacherModel extends School
   protected function getTeacherByPK($pk)
   {
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    $db = $this->connect();
-
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('i', $pk);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if($obj = $result->fetch_assoc() ){    
-      return (object) $obj;
-     }
-     return false;
+    return $this->selectTable($query,[$pk]);
   }
 
 
   protected function getAllTeachers()
   {
     $query = "SELECT * FROM {$this->table} ORDER BY apellidos";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
-
-    return $this->toObject($obj);
+    return $this->selectTable($query);
   }
 
   protected function getTeacherClasses($id)
   {
     $query = "SELECT * FROM `cursos` where  `year` = ? AND `id` = ?  ORDER BY curso";    
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
     $year = $this->get('year');
-    $stmt->bind_param('si', $year, $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
+    return $this->selectTable($query,[$year,$id]);
 
     return $this->toObject($obj);
   }
@@ -62,15 +42,8 @@ class TeacherModel extends School
   {
     $table = StudentModel::TABLE;
     $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? and `fecha_baja`='0000-00-00' ORDER BY `apellidos`,`usuario`";
-    $db = $this->connect();
     $year = $this->get('year');
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('ss', $grade, $year);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
-
-    return $this->toObject($obj);
+    return $this->selectTable($query,[$grade,$year]);
   }
 
   protected function getLastTeacherTopic($id)
@@ -82,32 +55,13 @@ class TeacherModel extends School
             WHERE `c`.`id`= ? AND `c`.`year`=? AND `e`.`year`= ? AND `e`.`estado`='a'
             ORDER BY `d`.`fecha` DESC,`d`.`hora` DESC LIMIT 1";
   
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $year = $this->get('year');  
-    $stmt->bind_param('iss', $id, $year, $year);
-    $stmt->execute();
-    $result = $stmt->get_result();
-   if($obj = $result->fetch_assoc() ){
-    
-    return (object) $obj;
-   }
-   return false;
+  $year = $this->get('year');  
+  return $this->selectTable($query,[$id,$year,$year]);
   }
 
   protected function teacherLogin($username, $password)
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('ss', $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows === 1) {
-      $obj = $result->fetch_assoc();
-      return (object) $obj;
-    }
-
-    return false;
+    return $this->selectTable($query,[$username,$password]);
   }
 }
