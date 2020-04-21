@@ -8,7 +8,7 @@ $file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $pathFile = str_replace('.php', '', $file);
 
-$teacher = new Teacher(16);
+global $teacher;
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-secondary">
   <span class="navbar-brand mr-5">

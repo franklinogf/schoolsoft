@@ -1,24 +1,32 @@
 $(document).ready(function () {
    let prevPicture = $('.profile-picture').prop('src');
 
-  
+
    // Change profile picture
    $("#pictureBtn").click(() => {
       $("#picture").click();
    });
 
 
-   $('#picture').change(e =>{      
-      previewPicture(e.target,'.profile-picture');
-      $('#pictureCancel').removeAttr('hidden');
-   })
-   $('#pictureCancel').click(e => {
-      $('.profile-picture').prop('src',prevPicture);
-      $('#picture').val('');
-      if(e.target.tagName === 'I'){
-         $(e.target).parent().attr('hidden',true);
+   $('#picture').change(e => {
+
+      if(previewPicture(e.target, '.profile-picture')){
+         $('#pictureCancel').removeAttr('hidden');
       }else{
-         $(e.target).attr('hidden',true);
+         alert('Solo se aceptan imagenes');
+      }
+
+   })
+
+
+
+   $('#pictureCancel').click(e => {
+      $('.profile-picture').prop('src', prevPicture);
+      $('#picture').val('');
+      if (e.target.tagName === 'I') {
+         $(e.target).parent().attr('hidden', true);
+      } else {
+         $(e.target).attr('hidden', true);
       }
    })
 
@@ -39,15 +47,23 @@ $(document).ready(function () {
    });
 
    // functions
-   function previewPicture(input,where) {      
+   function previewPicture(input, where) {
       if (input.files && input.files[0]) {
-          var reader = new FileReader();          
-          reader.onload = function (e) {
-              $(where).prop('src', e.target.result);
-          }          
-          reader.readAsDataURL(input.files[0]);
+         const fileType = input.files[0]["type"];
+         const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"];
+         if (validImageTypes.includes(fileType)) {
+            console.log('Es una imagen')
+            const reader = new FileReader();
+            reader.onload = function (e) {
+               $(where).prop('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+            return true;
+         }
+         return false;
       }
-  }
+      return false;
+   }
 
 
    function checkPasswords(id) {
