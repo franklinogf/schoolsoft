@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const table = $('#studentsTable').DataTable({
+  const studentsTable = $('.studentsTable').DataTable({
     "language": {
       "decimal": ".",
       "emptyTable": "No hay datos disponibles",
@@ -27,12 +27,14 @@ $(document).ready(function () {
 
   });
 
+  let prevUsername = '';
 
-  $('#studentsTable tbody').on('click', 'tr', function () {
-    const row = table.row(this)
+  $('.studentsTable tbody').on('click', 'tr', function () {
+    const row = studentsTable.row(this)
     if (row.index() !== undefined) {
       const data = row.data();
-      const modal = $('#myModal') 
+      const modal = $('#myModal')
+      prevUsername = data[1];
 
       modal.find('input[name=id_student]').val(row.id())
       modal.find('.modal-title').text(data[0])
@@ -40,71 +42,91 @@ $(document).ready(function () {
       modal.modal('show')
     }
   });
-  
-  // Check if user already exists
-  $('#username').change(e => { 
 
-    if($('#username').val().length > 0){
-      $.post(getBaseUrl('includes/homes.php'),
-     {'checkUser':$('#username').val()},({response}) =>{
-      if(response === true){
-        $("#usernameAlert").removeClass('invisible');
-        $('#username').val('').focus();
-      }else{
-        if(!$("#usernameAlert").hasClass('invisible')){
-          $("#usernameAlert").addClass('invisible');
-        }
+  // Check if user already exists
+  $('#username').change(e => {
+    if ($('#username').val().length > 0) {
+      if ($('#username').val() !== prevUsername) {
+        const returnUser = $.ajax({
+          type: "POST",
+          url: getBaseUrl('includes/homes.php'),
+          data: { 'checkUser': $('#username').val() },
+          dataType: "json",
+          success: (res) => {
+            if (res.response === true) {
+              $('#username').removeClass('is-valid')
+                .addClass('is-invalid')
+                .val('')
+                .focus();
+            }
+            else {
+              $('#username').removeClass('is-invalid')
+                .addClass('is-valid');
+            }
+          }
+        });
+        return returnUser;
       }
-     
-    },'json'
-  );
+      else {
+        $('#username').removeClass('is-invalid is-valid');
+
+      }
     }
+
   })
 
   function getBaseUrl(fileName) {
     var re = new RegExp(/^.*\//);
     return re.exec(window.location.href) + fileName;
-}
-
-// check passwords to submit 
-
-$('#pass1').change(() => {
-  checkPasswords(1);
-});
-
-$('#pass2').change(() => {
-  checkPasswords(2);
-});
-
-$('form').submit(event => {
-  if (!checkPasswords()) {
-     event.preventDefault();
   }
-});
+
+  // check passwords to submit 
+
+  $('#pass1').change(() => {
+    checkPasswords(1);
+  });
+
+  $('#pass2').change(() => {
+    checkPasswords(2);
+  });
+
+  $('form').submit(event => {
 
 
-function checkPasswords(id = 1) {
+    if (!checkPasswords() || $('#username').val().length === 0) {
+      event.preventDefault();
+    }
 
-  if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
-     if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
+  });
+
+
+  function checkPasswords(id = 1) {
+
+    if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
+      if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
         if ($("#pass" + (id === 1 ? '1' : '2')).val() !== $('#pass' + (id !== 1 ? '1' : '2')).val()) {
-           alert("Las claves deben de coincidir");
-           $("#pass" + (id === 1 ? '1' : '2')).focus();
-           return false
+          $('.pass').addClass('is-invalid')
+            .removeClass('is-valid')
+          $("#pass" + (id === 1 ? '1' : '2')).focus();
+          return false
         } else {
-           return true;
+          $('.pass').addClass('is-valid')
+            .removeClass('is-invalid')
+          return true;
         }
-     }
+      }
+    }
+    return true;
   }
-  return true;
-}
 
 
-// delete everything when the modal hides
+  // delete everything when the modal hides
 
-$('#myModal').on('hidden.bs.modal', function (e) {
-  const modal = $(this);
-  modal.find('input').val('');
-})
+  $('#myModal').on('hidden.bs.modal', function (e) {
+    const modal = $(this);
+    modal.find('input').val('')
+      .removeClass('is-invalid is-valid');
+  })
 
 });
+

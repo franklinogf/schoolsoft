@@ -36,7 +36,7 @@ $lastTopic = $teacher->lastTopic();
       <h2>Bienvenido <?= $teacher->fullName(); ?></h2>
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5" >
-          <h4 class="card-header bg-info">
+          <h4 class="card-header bg-gradient-info bg-info">
             Ultimo tema comentado
           </h4>
           <div class="card-body border-info">

@@ -10,7 +10,7 @@ $theme-colors: (
   );
   
   $enable-shadows : true;
-  $enable-gradients: true;
+  // $enable-gradients: true;
   $enable-responsive-font-sizes : true;
   
   @import "../../bootstrap/scss/bootstrap";

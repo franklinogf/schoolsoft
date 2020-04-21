@@ -29,8 +29,8 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   ?>
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Mi Salon Hogar</h1>
-    <table id="studentsTable" class="table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-gradient-primary border-0">
+    <table class="studentsTable table table-striped table-hover cell-border w-100 shadow">
+      <thead class="bg-gradient-primary bg-primary border-0">
         <tr>
           <th>Estudiante</th>
           <th>Usuario</th>
@@ -45,7 +45,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
         <?php endforeach ?>
       </tbody>
       <tfoot>
-        <tr class="bg-gradient-secondary">
+        <tr class="bg-gradient-secondary bg-secondary">
           <th>Estudiante</th>
           <th>Usuario</th>
         </tr>
@@ -55,7 +55,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <form action="<?= Route::url('/foro/profesor/includes/students.php') ?>" method="POST">
+        <form action="<?= Route::url('/foro/profesor/includes/homes.php') ?>" method="POST">
           <input type="hidden" name="id_student">
           <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -69,19 +69,21 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
                 <div class="form-group col-md-6">
                   <label for="username">Usuario</label>
                   <input type="text" class="form-control" name='username' id="username">
-                  <small id="usernameAlert" class="text-danger invisible">Ya existe este usuario</small>
+                  <div class="invalid-feedback">Ya existe este usuario</div>        
+                  <div class="valid-feedback">Usuario disponible</div>                  
                 </div>
                 <div class="form-group  col-md-6">
                   <label for="pass1">Nueva Clave</label>
-                  <input type="password" class="form-control" name='password' id="pass1">
+                  <input type="password" class="form-control pass" name='password' id="pass1">
                   <label for="pass2">Confirmar Clave</label>
-                  <input type="password" class="form-control" id="pass2">
+                  <input type="password" class="form-control pass" id="pass2">
+                  <div class="invalid-feedback">Las claves no coinciden</div>                  
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" name="changeStudentUser" class="btn btn-primary">Guardar</button>
+              <button type="submit" name="changeStudentUser" id="changeStudentUser" class="btn btn-primary">Guardar</button>
             </div>
         </form>
       </div>

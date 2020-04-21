@@ -10,7 +10,7 @@ $pathFile = str_replace('.php', '', $file);
 
 global $teacher;
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-secondary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
     <a href="<?= Route::url('/foro/profesor/index.php') ?>"><img src="<?= School::logo() ?>" alt="Logo" width="72" height="72"></a>
   </span>

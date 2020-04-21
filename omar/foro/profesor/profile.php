@@ -58,9 +58,10 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
             </div>
             <div class="form-group  col-md-6">
               <label for="pass1">Nueva Clave</label>
-              <input type="password" class="form-control" name='password' id="pass1">
+              <input type="password" class="form-control pass" name='password' id="pass1">
               <label for="pass2">Confirmar Clave</label>
-              <input type="password" class="form-control" id="pass2">
+              <input type="password" class="form-control pass" id="pass2">
+              <div class="invalid-feedback">Las claves no coinciden</div>             
             </div>
             <div class="form-group col-md-12">
               <button type="submit" class="btn btn-primary btn-lg btn-block">Guardar</button>
@@ -72,7 +73,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
       <div class="offset-lg-2 col-lg-4 col-sm-12 mt-sm-3">
         <hr class="d-lg-none d-sm-block"/>
         <div class="card border-info">
-          <h6 class="card-header bg-info">
+          <h6 class="card-header bg-gradient-info bg-info">
             Información importante
           </h6>
           <div class="card-body">

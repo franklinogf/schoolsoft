@@ -51,12 +51,12 @@ $student = new Student();
 
 
     <div class="card">
-      <h4 id="title" class="card-header text-center bg-gradient-primary rounded-0"><?= $topic->titulo ?></h4>
+      <h4 id="title" class="card-header text-center bg-gradient-primary bg-primary rounded-0"><?= $topic->titulo ?></h4>
       <div class="card-body">
         <h5 class="card-title"><?= $teacher->fullName(); ?></h5>
         <p id="description" class="card-text"><?= $topic->descripcion ?></p>
       </div>
-      <div class="card-footer text-white d-flex justify-content-between bg-gradient-secondary">
+      <div class="card-footer text-white d-flex justify-content-between bg-gradient-secondary bg-secondary">
         <span><?= Util::formatDate($topic->fecha, true, true) ?></span>
         <span><?= Util::formatTime($topic->hora) ?></span>
       </div>
@@ -76,7 +76,7 @@ $student = new Student();
      
 
       <?php foreach ($topic->comments() as $comment) : ?>
-        <div class="media bg-gradient-light mt-3 pt-3 px-3">
+        <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
           <img src="<?= __noProfilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
           <div class="media-body">
          

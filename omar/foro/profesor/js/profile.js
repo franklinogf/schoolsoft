@@ -9,16 +9,16 @@ $(document).ready(function () {
 
 
    $('#picture').change(e => {
-     if($('#picture').val() !== ''){
-      const valid = previewPicture(e.target, '.profile-picture');     
-      if (valid) {
-         $('#pictureCancel').removeAttr('hidden');
-      } else if(valid === false) {
-         alert('Solo se aceptan imagenes');
+      if ($('#picture').val() !== '') {
+         const valid = previewPicture(e.target, '.profile-picture');
+         if (valid) {
+            $('#pictureCancel').removeAttr('hidden');
+         } else if (valid === false) {
+            alert('Solo se aceptan imagenes');
+         }
+      } else {
+         $('.profile-picture').prop('src', prevPicture);
       }
-     }else{
-      $('.profile-picture').prop('src', prevPicture);
-     }
 
    })
 
@@ -38,20 +38,20 @@ $(document).ready(function () {
       if (input.files && input.files[0]) {
          const fileType = input.files[0]["type"];
          const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"];
-         if (validImageTypes.includes(fileType)) {           
+         if (validImageTypes.includes(fileType)) {
             const reader = new FileReader();
             reader.onload = function (e) {
                $(where).prop('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
             return true;
-         }         
+         }
          return false;
-      }   
-     
-      
-         return undefined;
-      
+      }
+
+
+      return undefined;
+
    }
 
    // check passwords to submit 
@@ -77,10 +77,13 @@ $(document).ready(function () {
       if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
          if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
             if ($("#pass" + (id === 1 ? '1' : '2')).val() !== $('#pass' + (id !== 1 ? '1' : '2')).val()) {
-               alert("Las claves deben de coincidir");
+               $('.pass').addClass('is-invalid')
+                  .removeClass('is-valid')
                $("#pass" + (id === 1 ? '1' : '2')).focus();
                return false
             } else {
+               $('.pass').addClass('is-valid')
+                  .removeClass('is-invalid')
                return true;
             }
          }

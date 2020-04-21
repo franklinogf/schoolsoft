@@ -29,33 +29,36 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   ?>
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Mis Cursos</h1>
-    <table id="myTable" class="table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-gradient-primary border-0">
+    <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
+      <thead class="bg-gradient-primary bg-primary border-0">
         <tr>
           <th>Curso</th>
+          <th>Descripción</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($teacher->classes() as $class) : ?>
           <tr>
-            <td><?= "$class->curso - $class->desc1" ?></td>
+            <td><?= $class->curso ?></td>
+            <td><?= $class->desc1 ?></td>
           </tr>
         <?php endforeach ?>
       </tbody>
       <tfoot>
-        <tr class="bg-gradient-secondary">
+        <tr class="bg-gradient-secondary bg-secondary">
           <th>Curso</th>
+          <th>Descripción</th>
         </tr>
       </tfoot>
     </table>
 
 
   </div>
-
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
   Route::includeFile('/includes/datatable-js.php', true);
   ?>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 
 </body>
 
