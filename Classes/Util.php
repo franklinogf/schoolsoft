@@ -53,4 +53,8 @@ class Util
    {
       return json_decode(json_encode($obj));
    }  
+   public static function toJson($obj)
+   {
+      return json_encode($obj);
+   }  
 }

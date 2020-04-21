@@ -32,12 +32,39 @@ $(document).ready(function () {
     const row = table.row(this)
     if (row.index() !== undefined) {
       const data = row.data();
-      const modal = $('#myModal')
+      const modal = $('#myModal') 
+
+      modal.find('input[name=id_student]').val(row.id())
       modal.find('.modal-title').text(data[0])
       modal.find('#username').val(data[1])
       modal.modal('show')
     }
   });
+  
+  // Check if user already exists
+  $('#username').change(e => { 
+
+    if($('#username').val().length > 0){
+      $.post(getBaseUrl('includes/homes.php'),
+     {'checkUser':$('#username').val()},({response}) =>{
+      if(response === true){
+        $("#usernameAlert").removeClass('invisible');
+        $('#username').val('').focus();
+      }else{
+        if(!$("#usernameAlert").hasClass('invisible')){
+          $("#usernameAlert").addClass('invisible');
+        }
+      }
+     
+    },'json'
+  );
+    }
+  })
+
+  function getBaseUrl(fileName) {
+    var re = new RegExp(/^.*\//);
+    return re.exec(window.location.href) + fileName;
+}
 
 // check passwords to submit 
 

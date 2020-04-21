@@ -43,6 +43,12 @@ class StudentModel extends School
     return $this->selectAll($query,[$year,$ss]);
 
   }
+  protected function getStudentByUser($username)
+  {
+    $query = "SELECT * FROM {$this->table} WHERE usuario= ? ";
+    return $this->select($query,[$username]);
+  }
+
   protected function studentLogin($username, $password)
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";

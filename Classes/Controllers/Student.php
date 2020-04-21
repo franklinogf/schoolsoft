@@ -27,9 +27,7 @@ class Student extends StudentModel
 
   public function find($pk)
   {
-    $array = $this->getStudentByPK($pk);
-    echo "<pre>";
-    var_dump($array);
+    $array = $this->getStudentByPK($pk);    
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
@@ -41,11 +39,11 @@ class Student extends StudentModel
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
-    return $array;
+    return $this;
   }
   public function fullName()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un estudiante');
     }
     $fullName = ucwords(strtolower("{$this->nombre} {$this->apellidos}"));
@@ -54,7 +52,7 @@ class Student extends StudentModel
 
   public function classes()
   {
-    if (!isset($this->ss)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un estudiante');
     }
     return $this->getStudentClasses($this->ss);
@@ -76,4 +74,28 @@ class Student extends StudentModel
     return $this;
 
   }
+  public function findByUser($username){
+    return $this->getStudentByUser($username);
+  }
+
+  public function save()
+  {
+    // get self public class, no parents classes
+    $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
+
+    if(count( $propsArray) > 0){
+      if (isset($this->{$this->primary_key})) {
+        $this->updateStudent($propsArray);
+      } else {
+        echo 'insert <hr>';
+      }
+    }else{
+      throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');
+
+    }
+
+  }
+
+
+
 }

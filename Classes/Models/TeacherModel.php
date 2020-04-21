@@ -56,6 +56,11 @@ class TeacherModel extends School
   $year = $this->get('year');  
   return $this->select($query,[$id,$year,$year]);
   }
+  protected function getTeacherByUser($username)
+  {
+    $query = "SELECT * FROM {$this->table} WHERE usuario= ? ";
+    return $this->select($query,[$username]);
+  }
 
   protected function teacherLogin($username, $password)
   {

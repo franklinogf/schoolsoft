@@ -94,6 +94,9 @@ class Teacher extends TeacherModel
     return $this;
 
   }
+  public function findByUser($username){
+    return $this->getTeacherByUser($username);
+  }
 
   public function save()
   {
