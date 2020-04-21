@@ -2,6 +2,7 @@
 use Classes\Route;
 use Classes\Controllers\Teacher;
 
+
 include '../../app.php';
 
 $teacher = new Teacher($_SESSION['logged']['user']['id']);

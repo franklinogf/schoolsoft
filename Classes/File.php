@@ -12,22 +12,24 @@ class File
 
       if (isset($_FILES[$file])) {
          $this->file = $_FILES[$file];
+         return true;
       } else {
          return false;
       }
    }
 
-   public  function upload($name,$path){
-     if(!is_dir($path)){
-         mkdir($path,0777,true);
-     }
-     echo $this->tmp(),'<hr>',$path.$name;
-     if(move_uploaded_file($this->tmp(),$path.$name)){
-        echo 'se subio';
+   public  function upload($name, $path)
+   {
+
+      $fullPath = __ROOT . DIRECTORY_SEPARATOR . $path;
+      if (!is_dir($fullPath)) {
+         mkdir($fullPath, 0777, true);
+      }
+     if( move_uploaded_file($this->tmp(), $fullPath . $name)){
+        return true;
      }else{
-        echo 'no se subio';
+        return false;
      }
-      
    }
 
    public function name()

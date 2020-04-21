@@ -9,12 +9,16 @@ $(document).ready(function () {
 
 
    $('#picture').change(e => {
-
-      if (previewPicture(e.target, '.profile-picture')) {
+     if($('#picture').val() !== ''){
+      const valid = previewPicture(e.target, '.profile-picture');     
+      if (valid) {
          $('#pictureCancel').removeAttr('hidden');
-      } else {
+      } else if(valid === false) {
          alert('Solo se aceptan imagenes');
       }
+     }else{
+      $('.profile-picture').prop('src', prevPicture);
+     }
 
    })
 
@@ -34,18 +38,20 @@ $(document).ready(function () {
       if (input.files && input.files[0]) {
          const fileType = input.files[0]["type"];
          const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"];
-         if (validImageTypes.includes(fileType)) {
-            console.log('Es una imagen')
+         if (validImageTypes.includes(fileType)) {           
             const reader = new FileReader();
             reader.onload = function (e) {
                $(where).prop('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
             return true;
-         }
+         }         
          return false;
-      }
-      return false;
+      }   
+     
+      
+         return undefined;
+      
    }
 
    // check passwords to submit 
