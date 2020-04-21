@@ -9,36 +9,36 @@ use Classes\Controllers\Student;
 class Login
 {
 
-   public static function login($request,$location)
+   public static function login($request, $location)
    {
-      if($location === 'foro'){
-
-         self::foro($request);
-      }      
-      
+      if ($location === 'foro') {
+         // php 5 version
+         (new self)->foro($request);
+         // php 7 version 
+         // self::foro($request);
+      }
    }
 
-   private function foro($request){
+   private function foro($request)
+   {
       $teacher = new Teacher();
-      if ($teacher->login($request['username'], $request['password'])->logged === true) {
-         echo 'profesor';
-         $_SESSION['logged'] = [           
-            "user" => ['id'=>$teacher->id],
-            'type'=> 'profesor'
+      if ($teacher->login($request['username'], $request['password'])->logged === true) {        
+         $_SESSION['logged'] = [
+            "user" => ['id' => $teacher->id],
+            'type' => 'profesor'
          ];
-        Route::redirect('/foro/profesor');     
-      } else {
-         echo 'estudiante';
+         Route::redirect('/foro/profesor');
+      } else {         
          $student = new Student();
          if ($student->login($request['username'], $request['password'])->logged === true) {
-            $_SESSION['logged'] = [               
-               "user" => ['id'=>$student->mt],
-               'type'=> 'estudiante'
+            $_SESSION['logged'] = [
+               "user" => ['id' => $student->mt],
+               'type' => 'estudiante'
             ];
             Route::redirect('/foro/estudiante');
-         }else{
+         } else {
             $_SESSION['errorLogin'] = 'No coincide con los datos, intentelo otra vez';
-            
+
             Route::redirect('/foro');
          }
       }

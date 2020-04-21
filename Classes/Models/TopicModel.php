@@ -20,26 +20,26 @@ class TopicModel extends School
   {
 
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->selectTable($query,[$pk]);
+    return $this->select($query,[$pk]);
   }
 
 
   protected function getAllTopics()
   {
-    $query = "SELECT * FROM {$this->table} AND `year` = ? ORDER BY fecha";
+    $query = "SELECT * FROM {$this->table} AND `year` = ? ORDER BY `fecha`";
     $year = $this->get('year');
-    return $this->selectTable($query,[$year]);
+    return $this->selectAll($query,[$year]);
   }
 
   protected function getTopicComments($id)
   {
-    $query = "SELECT * FROM detalle_foro_entradas WHERE entrada_id = ? ORDER BY fecha DESC,hora DESC";
-    return $this->selectTable($query,[$id]);
+    $query = "SELECT * FROM `detalle_foro_entradas` WHERE `entrada_id` = ? ORDER BY `fecha` DESC,`hora` DESC";
+    return $this->selectAll($query,[$id]);
   }
 
   protected function insertTopicComments($id, $type, $id_topic, $desc)
   {
-    $query = "INSERT INTO detalle_foro_entradas (creador_id,tipo,entrada_id,descripcion,fecha,hora,year)
+    $query = "INSERT INTO `detalle_foro_entradas` (`creador_id`,`tipo`,`entrada_id`,`descripcion`,`fecha`,`hora`,`year`)
     VALUES (?,?,?,?,?,?,?)";
     $db = $this->connect();
     $stmt = $db->prepare($query);

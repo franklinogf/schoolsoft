@@ -28,6 +28,8 @@ class Student extends StudentModel
   public function find($pk)
   {
     $array = $this->getStudentByPK($pk);
+    echo "<pre>";
+    var_dump($array);
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }

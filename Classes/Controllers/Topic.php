@@ -35,7 +35,7 @@ class Topic extends TopicModel
   {
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un tema');
-    }
+    }   
     return $this->getTopicComments($this->id);
   }
 

@@ -15,13 +15,13 @@ class SchoolModel extends DataBase
   {
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";    
 
-    return $this->selectTable($query,[$pk]);
+    return $this->select($query,[$pk]);
   }
 
   protected function getSchoolByUser($user = 'administrador')
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario = ?";
-    return $this->selectTable($query,[$user]);
+    return $this->select($query,[$user]);
   }
 
   protected function getSchool()

@@ -5,7 +5,7 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Topic;
 use Classes\Controllers\Teacher;
-use Classes\Directories;
+
 
 require_once '../../app.php';
 
@@ -25,7 +25,8 @@ $student = new Student();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foro - <?= $topic->titulo ?></title>
-  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous" ></script>
+  <!-- <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script> -->
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
@@ -45,25 +46,26 @@ $student = new Student();
         </button>        
       </div>
       <div class="col-lg-8 d-flex justify-content-end align-items-end">
-        <i class="fas fa-toggle-on <?=($topic->estado === 'a' ? 'text-success' : 'text-danger' )?> "></i>
+        <i class="fas fa-toggle-on fa-3x <?=($topic->estado === 'a' ? 'text-success' : 'text-danger' )?> "></i>
       </div>
     </div>
 
 
     <div class="card">
-      <h4 id="title" class="card-header text-center bg-primary rounded-0"><?= $topic->titulo ?></h4>
+      <h4 id="title" class="card-header text-center bg-gradient-primary rounded-0"><?= $topic->titulo ?></h4>
       <div class="card-body">
         <h5 class="card-title"><?= $teacher->fullName(); ?></h5>
         <p id="description" class="card-text"><?= $topic->descripcion ?></p>
       </div>
-      <div class="card-footer text-white d-flex justify-content-between bg-secondary">
+      <div class="card-footer text-white d-flex justify-content-between bg-gradient-secondary">
         <span><?= Util::formatDate($topic->fecha, true, true) ?></span>
         <span><?= Util::formatTime($topic->hora) ?></span>
       </div>
     </div>
 
     <div class="container mt-3 pb-5">
-      <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
+     <?php if($topic->estado === 'a'): ?>
+     <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
         <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
         <div class="form-group">
           <label for="comment">Comentario nuevo</label>
@@ -71,13 +73,15 @@ $student = new Student();
         </div>
         <button class="btn btn-primary" type="submit">Comentar</button>
       </form>
-      </textarea>
+      <?php endif ?>
+     
 
       <?php foreach ($topic->comments() as $comment) : ?>
-        <div class="media bg-light mt-3 pt-3 px-3">
-          <img src="<?= Directories::$noProfilePicture ?>" class="mr-3" alt="student profile picture" width="64" height="64">
+        <div class="media bg-gradient-light mt-3 pt-3 px-3">
+          <img src="<?= __noProfilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
           <div class="media-body">
-            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i> ' . $student->find($comment->creador_id)->fullName()) ?></h5>
+         
+            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i>'. $student->find($comment->creador_id)->fullName()) ?></h5>
             <p><?= $comment->descripcion ?></p>
             <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
           </div>

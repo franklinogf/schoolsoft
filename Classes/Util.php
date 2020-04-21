@@ -49,7 +49,7 @@ class Util
       echo '<pre/>';
       exit();
    }
-   public function toObject($obj)
+   public static function toObject($obj)
    {
       return json_decode(json_encode($obj));
    }  

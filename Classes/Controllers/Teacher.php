@@ -1,7 +1,7 @@
 <?php
 namespace Classes\Controllers;
 
-use Classes\Directories;
+
 use Classes\Models\TeacherModel;
 
 
@@ -51,11 +51,11 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    Directories::init();
+   
     if($this->foto_name != ''){
-      $picturePath = Directories::$teacherProfilePicture.$this->foto_name;
+      $picturePath = __teacherProfilePicture.$this->foto_name;
     }else{
-        $picturePath = Directories::$noProfilePicture;
+        $picturePath = __noProfilePicture;
     }
     
     return $picturePath;

@@ -16,6 +16,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foro - Mi Perfil</title>
+  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
   <?php
     Route::includeFile('/foro/profesor/includes/layouts/links.php');
   ?>
@@ -29,12 +30,13 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
     <div class="row mt-5">
 
       <div class="col-lg-6 col-sm-12">
-        <form action="<?=  Route::url('/foro/profesor/includes/profiles.php') ?>" method="POST">
+        <form action="<?=  Route::url('/foro/profesor/includes/profiles.php') ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_teacher" value="<?= $teacher->id ?>">
           <img src="<?= $teacher->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
           <div class="form-group text-center mt-2">
-            <button type='button' class="btn btn-secondary">Cambiar Foto</button>
-            <input type="file" hidden name="foto" id="foto">
+            <button id="pictureBtn" type='button' class="btn btn-secondary">Cambiar Foto</button>
+            <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
+            <input type="file" hidden name="picture" id="picture" accept="image/jpg,image/png,image/gif,image/jpeg">
           </div>
           <hr class="mb-3"/>
 

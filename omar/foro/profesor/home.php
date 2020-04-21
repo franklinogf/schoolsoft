@@ -29,7 +29,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Mi Salon Hogar</h1>
     <table id="studentsTable" class="table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-primary border-0">
+      <thead class="bg-gradient-primary border-0">
         <tr>
           <th>Estudiante</th>
           <th>Usuario</th>
@@ -46,13 +46,13 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
         
       </tbody>
       <tfoot>
-        <tr class="bg-secondary">
+        <tr class="bg-gradient-secondary">
           <th>Estudiante</th>
           <th>Usuario</th>
         </tr>
       </tfoot>
     </table>
-    <a href="#" class="btn btn-secondary mt-2">Enviar usuarios a los padres</a>
+    <a href="#" class="btn btn-primary mt-2">Enviar usuarios a los padres</a>
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">

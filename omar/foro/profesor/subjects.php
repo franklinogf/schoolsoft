@@ -30,7 +30,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Mis Cursos</h1>
     <table id="myTable" class="table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-primary border-0">
+      <thead class="bg-gradient-primary border-0">
         <tr>
           <th>Curso</th>
         </tr>
@@ -43,7 +43,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
         <?php endforeach ?>
       </tbody>
       <tfoot>
-        <tr class="bg-secondary">
+        <tr class="bg-gradient-secondary">
           <th>Curso</th>
         </tr>
       </tfoot>

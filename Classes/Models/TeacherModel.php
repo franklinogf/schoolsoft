@@ -19,21 +19,21 @@ class TeacherModel extends School
   protected function getTeacherByPK($pk)
   {
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->selectTable($query,[$pk]);
+    return $this->select($query,[$pk]);
   }
 
 
   protected function getAllTeachers()
   {
     $query = "SELECT * FROM {$this->table} ORDER BY apellidos";
-    return $this->selectTable($query);
+    return $this->selectAll($query);
   }
-
+ 
   protected function getTeacherClasses($id)
   {
     $query = "SELECT * FROM `cursos` where  `year` = ? AND `id` = ?  ORDER BY curso";    
     $year = $this->get('year');
-    return $this->selectTable($query,[$year,$id]);    
+    return $this->selectAll($query,[$year,$id]);    
   }
 
   protected function getHomeStudents($grade)
@@ -41,7 +41,7 @@ class TeacherModel extends School
     $table = StudentModel::TABLE;
     $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? and `fecha_baja`='0000-00-00' ORDER BY `apellidos`,`usuario`";
     $year = $this->get('year');
-    return $this->selectTable($query,[$grade,$year]);
+    return $this->selectAll($query,[$grade,$year]);
   }
 
   protected function getLastTeacherTopic($id)
@@ -54,13 +54,13 @@ class TeacherModel extends School
             ORDER BY `d`.`fecha` DESC,`d`.`hora` DESC LIMIT 1";
   
   $year = $this->get('year');  
-  return $this->selectTable($query,[$id,$year,$year]);
+  return $this->select($query,[$id,$year,$year]);
   }
 
   protected function teacherLogin($username, $password)
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";
-    return $this->selectTable($query,[$username,$password]);
+    return $this->select($query,[$username,$password]);
   }
 
   protected function updateTeacher($propsArray)

@@ -2,7 +2,7 @@
 namespace Classes\Controllers;
 
 
-use Classes\Directories;
+
 use Classes\Models\SchoolModel;
 
 class School extends SchoolModel
@@ -32,8 +32,8 @@ class School extends SchoolModel
    
    public static function logo( $path = 'logo.gif')
    {  
-      Directories::init();
-      $path = Directories::$logo . $path;
+     
+      $path = __logo . $path;
       return $path;
    }
 

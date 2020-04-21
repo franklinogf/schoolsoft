@@ -31,7 +31,6 @@ class DataBase
     // update tables 
     protected function updateTable($table, $pk, $wherePk, $propsArray)
   {
-
     $query = "UPDATE {$table} SET ";
 
     $count = 0;
@@ -48,28 +47,51 @@ class DataBase
     $db = $this->connect();
     $stmt = $db->prepare($query);
     $bind =  str_repeat('s', count($paramsArray));
-    $stmt->bind_param($bind, ...$paramsArray);
+    // php 5 version
+    $refs = array();
+    foreach($paramsArray as $key => $value) {
+            $refs[$key] = &$paramsArray[$key];
+    }         
+    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
+    // php 7 version
+    // $stmt->bind_param($bind, ...$paramsArray);
     $stmt->execute();
   }
 
-  protected function selectTable($query,$whereArray = []){
+  protected function select($query,$whereArray = []){   
+    $result = $this->selectFromDB($query,$whereArray);
+    $obj = $result->fetch_assoc();
+    return (object) $obj;   
+
+  }
+  protected function selectAll($query,$whereArray = []){
+
+    $result = $this->selectFromDB($query,$whereArray);
+    $obj = $result->fetch_all(MYSQLI_ASSOC);
+    return Util::toObject($obj);
+   
+
+  }
+
+  private function selectFromDB($query,$whereArray){
     $db = $this->connect();
     $stmt = $db->prepare($query);
     if(count($whereArray) > 0){
       $bind = str_repeat('s',count($whereArray));
-      $stmt->bind_param($bind, ...$whereArray);
+      // php 5 version
+      $refs = array();
+      foreach($whereArray as $key => $value) {
+              $refs[$key] = &$whereArray[$key];
+      }   
+
+    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
+
+    // php 7 version
+    // $stmt->bind_param($bind, ...$whereArray);
+     
     }
     $stmt->execute();
-    $result = $stmt->get_result();
-    if($result->num_rows > 1){
-        $obj = $result->fetch_all(MYSQLI_ASSOC);
-        return Util::toObject($obj);
-    }else if($result->num_rows === 1){
-        $obj = $result->fetch_assoc();
-        return (object) $obj;
-    }else{
-        return false;
-    }
-
+    $result = $stmt->get_result();   
+    return $result;
   }
 }
