@@ -10,9 +10,9 @@ $(document).ready(function () {
 
    $('#picture').change(e => {
 
-      if(previewPicture(e.target, '.profile-picture')){
+      if (previewPicture(e.target, '.profile-picture')) {
          $('#pictureCancel').removeAttr('hidden');
-      }else{
+      } else {
          alert('Solo se aceptan imagenes');
       }
 
@@ -30,23 +30,6 @@ $(document).ready(function () {
       }
    })
 
-   // check passwords to submit 
-
-   $('#pass1').change(() => {
-      checkPasswords(1);
-   });
-
-   $('#pass2').change(() => {
-      checkPasswords(2);
-   });
-
-   $('form').submit(event => {
-      if (!checkPasswords(1)) {
-         event.preventDefault();
-      }
-   });
-
-   // functions
    function previewPicture(input, where) {
       if (input.files && input.files[0]) {
          const fileType = input.files[0]["type"];
@@ -65,8 +48,25 @@ $(document).ready(function () {
       return false;
    }
 
+   // check passwords to submit 
 
-   function checkPasswords(id) {
+   $('#pass1').change(() => {
+      checkPasswords(1);
+   });
+
+   $('#pass2').change(() => {
+      checkPasswords(2);
+   });
+
+   $('form').submit(event => {
+      if (!checkPasswords()) {
+         event.preventDefault();
+      }
+   });
+
+
+
+   function checkPasswords(id = 1) {
 
       if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
          if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
