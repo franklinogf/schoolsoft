@@ -11,7 +11,7 @@ class Login
 
    public static function login($request, $location)
    {
-      if ($location === 'foro') {
+      if ($location === 'foro') {        
          // php 5 version
          (new self)->foro($request);
          // php 7 version 
@@ -20,9 +20,10 @@ class Login
    }
 
    private function foro($request)
-   {
+   {      
       $teacher = new Teacher();
-      if ($teacher->login($request['username'], $request['password'])->logged === true) {        
+      if ($teacher->login(trim($request['username']), trim($request['password']))->logged === true) {   
+         
          $_SESSION['logged'] = [
             "user" => ['id' => $teacher->id],
             'type' => 'profesor'
@@ -30,7 +31,7 @@ class Login
          Route::redirect('/foro/profesor');
       } else {         
          $student = new Student();
-         if ($student->login($request['username'], $request['password'])->logged === true) {
+         if ($student->login(trim($request['username']), trim($request['password']))->logged === true) {
             $_SESSION['logged'] = [
                "user" => ['id' => $student->mt],
                'type' => 'estudiante'

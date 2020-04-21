@@ -59,16 +59,25 @@ class DataBase
   }
 
   protected function select($query,$whereArray = []){   
+   
     $result = $this->selectFromDB($query,$whereArray);
-    $obj = $result->fetch_assoc();
-    return (object) $obj;   
+    if($result->num_rows > 0){    
+     
+      $obj = $result->fetch_assoc();     
+      return (object) $obj;   
+    }else{
+      return false;
+    }    
 
   }
   protected function selectAll($query,$whereArray = []){
 
     $result = $this->selectFromDB($query,$whereArray);
+    if($result->num_rows > 0){
     $obj = $result->fetch_all(MYSQLI_ASSOC);
     return Util::toObject($obj);
+    }
+    return false;
    
 
   }
@@ -83,15 +92,14 @@ class DataBase
       foreach($whereArray as $key => $value) {
               $refs[$key] = &$whereArray[$key];
       }   
-
     call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
-
     // php 7 version
     // $stmt->bind_param($bind, ...$whereArray);
      
     }
     $stmt->execute();
     $result = $stmt->get_result();   
+    $stmt->close();
     return $result;
   }
 }

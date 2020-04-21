@@ -39,7 +39,7 @@ class TeacherModel extends School
   protected function getHomeStudents($grade)
   {
     $table = StudentModel::TABLE;
-    $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? and `fecha_baja`='0000-00-00' ORDER BY `apellidos`,`usuario`";
+    $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? AND `fecha_baja`='0000-00-00' ORDER BY `apellidos`,`usuario`";
     $year = $this->get('year');
     return $this->selectAll($query,[$grade,$year]);
   }
@@ -59,7 +59,9 @@ class TeacherModel extends School
 
   protected function teacherLogin($username, $password)
   {
-    $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";
+   
+    $query = "SELECT * FROM {$this->table} WHERE usuario = ? AND clave = ?";  
+
     return $this->select($query,[$username,$password]);
   }
 
