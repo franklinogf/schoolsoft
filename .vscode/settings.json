@@ -1,0 +1,16 @@
+{
+   "spellright.language": [
+      "es"
+   ],
+   "spellright.documentTypes": [
+      "xml"      
+   ],
+   "spellright.parserByClass": {
+      "php": {
+         "parser": "xml"
+      },
+      "blade": {
+         "parser": "xml"
+      }
+   }
+}

@@ -1,6 +1,5 @@
 <?php
 
-use Classes\File;
 use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Student;

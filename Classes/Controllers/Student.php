@@ -77,6 +77,9 @@ class Student extends StudentModel
   public function findByUser($username){
     return $this->getStudentByUser($username);
   }
+  public function findByClass($class){
+    return $this->getStudentsByClass($class);
+  }
 
   public function save()
   {

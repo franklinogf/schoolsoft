@@ -47,7 +47,7 @@ $(document).ready(function () {
   $('#username').change(e => {
     if ($('#username').val().length > 0) {
       if ($('#username').val() !== prevUsername) {
-        const returnUser = $.ajax({
+        $.ajax({
           type: "POST",
           url: getBaseUrl('includes/homes.php'),
           data: { 'checkUser': $('#username').val() },
@@ -64,8 +64,7 @@ $(document).ready(function () {
                 .addClass('is-valid');
             }
           }
-        });
-        return returnUser;
+        });       
       }
       else {
         $('#username').removeClass('is-invalid is-valid');
@@ -75,10 +74,6 @@ $(document).ready(function () {
 
   })
 
-  function getBaseUrl(fileName) {
-    var re = new RegExp(/^.*\//);
-    return re.exec(window.location.href) + fileName;
-  }
 
   // check passwords to submit 
 
@@ -127,6 +122,12 @@ $(document).ready(function () {
     modal.find('input').val('')
       .removeClass('is-invalid is-valid');
   })
+
+  // functions
+  function getBaseUrl(fileName) {
+    var re = new RegExp(/^.*\//);
+    return re.exec(window.location.href) + fileName;
+  }
 
 });
 

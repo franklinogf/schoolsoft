@@ -1,3 +1,8 @@
 .table tbody tr {
-   cursor: pointer;
+  cursor: pointer;
+}
+
+.profile-picture{
+  width: 250px;
+  height: 250px;
 }

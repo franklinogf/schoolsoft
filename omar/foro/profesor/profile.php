@@ -17,8 +17,8 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foro - Mi Perfil</title>
-  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
   <?php
+    Route::fontawasome();
     Route::includeFile('/foro/profesor/includes/layouts/links.php');
   ?>
 </head>

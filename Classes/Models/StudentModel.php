@@ -31,22 +31,32 @@ class StudentModel extends School
 
   protected function getAllStudents()
   {
-    $query = "SELECT * FROM {$this->table} WHERE  `year` = ? AND fecha_baja='0000-00-00' ORDER BY apellidos";
+    $query = "SELECT * FROM {$this->table} WHERE  `year` = ? AND `fecha_baja`='0000-00-00' ORDER BY `apellidos`";
     $year = $this->get('year');
     return $this->selectAll($query,[$year]);
   }
 
   protected function getStudentClasses($ss)
   {
-    $query = "SELECT DISTINCT curso, descripcion FROM padres WHERE  `year` = ? and ss = ? ORDER BY curso";
+    $query = "SELECT DISTINCT `curso`, `descripcion` FROM `padres` WHERE  `year` = ? and `ss` = ? ORDER BY `curso`";
     $year = $this->get('year');
     return $this->selectAll($query,[$year,$ss]);
 
   }
   protected function getStudentByUser($username)
   {
-    $query = "SELECT * FROM {$this->table} WHERE usuario= ? ";
+    $query = "SELECT * FROM {$this->table} WHERE `usuario`= ? ";
     return $this->select($query,[$username]);
+  }
+  protected function getStudentsByClass($class)
+  {
+    $query = "SELECT `e`.* FROM `padres` as `p` 
+    INNER JOIN `year` AS `e` ON `p`.`ss` = `e`.`ss` 
+    WHERE `p`.`curso` = ? AND `e`.`year` = ? AND `p`.`year` = ? and `e`.`fecha_baja`='0000-00-00'
+    ORDER BY `e`.`apellidos`";
+    
+    $year = $this->get('year');
+    return $this->selectAll($query,[$class,$year,$year]);
   }
 
   protected function studentLogin($username, $password)
