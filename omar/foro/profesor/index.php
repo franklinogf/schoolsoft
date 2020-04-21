@@ -5,7 +5,9 @@ use Classes\Route;
 use Classes\Controllers\Teacher;
 
 include '../../app.php';
-
+if(!isset($_SESSION['logged'])){
+  Route::redirect('/foro');
+}
 
 $teacher = new Teacher($_SESSION['logged']['user']['id']);
 $lastTopic = $teacher->lastTopic();
