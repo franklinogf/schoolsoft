@@ -56,7 +56,6 @@ $('form').submit(event => {
 });
 
 
-
 function checkPasswords(id = 1) {
 
   if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
@@ -74,6 +73,11 @@ function checkPasswords(id = 1) {
 }
 
 
+// delete everything when the modal hides
 
+$('#myModal').on('hidden.bs.modal', function (e) {
+  const modal = $(this);
+  modal.find('input').val('');
+})
 
 });

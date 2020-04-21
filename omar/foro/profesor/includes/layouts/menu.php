@@ -1,9 +1,11 @@
 <?php
-
 use Classes\Controllers\School;
 use Classes\Controllers\Teacher;
 use Classes\Route;
 
+if(!isset($_SESSION['logged'])){
+  Route::redirect('/foro');
+}
 $file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $pathFile = str_replace('.php', '', $file);

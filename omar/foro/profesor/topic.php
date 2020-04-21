@@ -9,9 +9,6 @@ use Classes\Controllers\Teacher;
 
 require_once '../../app.php';
 
-if (!isset($_SESSION['logged'])) {
-  Route::redirect('/foro');
-}
 
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);

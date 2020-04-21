@@ -10,14 +10,23 @@ if(!isset($_SESSION['logged'])){
    Route::redirect('/foro');
 }
 
-$teacher = new Teacher($_SESSION['logged']['user']['id']);
+if($_SERVER["REQUEST_METHOD"] == 'POST'){
+   
+ 
+   $teacher = new Teacher($_SESSION['logged']['user']['id']);
+   
+   $id_topic = $_POST['id_topic'];
+   $comment = $_POST['comment'];
+   
+   $topic = new Topic($id_topic);
+   
+   
+   $topic->newComment($teacher->id,$comment,'p');
+   
+   Route::redirect('/foro/profesor/topic.php?id='.$id_topic);
 
-$id_topic = $_POST['id_topic'];
-$comment = $_POST['comment'];
+}else{
+   Route::error();
+}
+ 
 
-$topic = new Topic($id_topic);
-
-
-$topic->newComment($teacher->id,$comment,'p');
-
-Route::redirect('/foro/profesor/topic.php?id='.$id_topic);
