@@ -1,4 +1,4 @@
-$(() => {
+$(function () {
 
   // data table global configuration
   if ($.fn.dataTable) {
@@ -30,7 +30,11 @@ $(() => {
 
     });
 
+    // Classes table custom info
+    $(".classesTable").DataTable();
+    
+    // Students table custom info
+    $(".studentsTable").DataTable();
   }
-
 
 });

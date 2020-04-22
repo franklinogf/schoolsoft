@@ -1,4 +1,9 @@
 textarea {
-   resize: vertical; /* user can resize vertically, but width is fixed */
+   resize: vertical !important; /* user can resize vertically, but width is fixed */
    min-height: 100px !important;
+ }
+
+
+ th.checkbox{
+   width: 2rem;
  }

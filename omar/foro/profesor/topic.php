@@ -8,7 +8,7 @@ use Classes\Controllers\Teacher;
 
 
 require_once '../../app.php';
-if(!isset($_SESSION['logged'])){
+if (!isset($_SESSION['logged'])) {
   Route::redirect('/foro');
 }
 
@@ -24,7 +24,7 @@ $student = new Student();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foro - <?= $topic->titulo ?></title>
-  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous" ></script>
+  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
   <!-- <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script> -->
 
   <?php
@@ -42,10 +42,10 @@ $student = new Student();
       <div class="col-lg-4">
         <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
-        </button>        
+        </button>
       </div>
       <div class="col-lg-8 d-flex justify-content-end align-items-end">
-        <i class="fas fa-toggle-on fa-3x <?=($topic->estado === 'a' ? 'text-success' : 'text-danger' )?> "></i>
+        <i class="fas fa-toggle-on fa-3x <?= ($topic->estado === 'a' ? 'text-success' : 'text-danger') ?> "></i>
       </div>
     </div>
 
@@ -63,24 +63,24 @@ $student = new Student();
     </div>
 
     <div class="container mt-3 pb-5">
-     <?php if($topic->estado === 'a'): ?>
-     <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
-        <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
-        <div class="form-group">
-          <label for="comment">Comentario nuevo</label>
-          <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
-        </div>
-        <button class="btn btn-primary" type="submit">Comentar</button>
-      </form>
+      <?php if ($topic->estado === 'a') : ?>
+        <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
+          <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
+          <div class="form-group">
+            <label for="comment">Comentario nuevo</label>
+            <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Comentar</button>
+        </form>
       <?php endif ?>
-     
+
 
       <?php foreach ($topic->comments() as $comment) : ?>
         <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
           <img src="<?= __noProfilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
           <div class="media-body">
-         
-            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i>'. $student->find($comment->creador_id)->fullName()) ?></h5>
+
+            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i>' . $student->find($comment->creador_id)->fullName()) ?></h5>
             <p><?= $comment->descripcion ?></p>
             <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
           </div>
@@ -113,14 +113,16 @@ $student = new Student();
               <div class="form-row">
                 <div class="form-group col-6">
                   <label class="d-block">Tema disponible?</label>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="state" id="radio1" value="a" <?= ($topic->estado === 'a' ? 'checked' : '' )?>>
-                    <label class="form-check-label" for="radio1">Si</label>
+
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input class="custom-control-input" type="radio" name="state" id="radio1" value="a" <?= ($topic->estado === 'a' ? 'checked' : '') ?>>
+                    <label class="custom-control-label" for="radio1">Si</label>
                   </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="state" id="radio2" value="c" <?= ($topic->estado === 'c' ? 'checked' : '' )?>>
-                    <label class="form-check-label" for="radio2">No</label>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input class="custom-control-input" type="radio" name="state" id="radio2" value="c" <?= ($topic->estado === 'c' ? 'checked' : '') ?>>
+                    <label class="custom-control-label" for="radio2">No</label>
                   </div>
+
                 </div>
                 <div class="form-group col-6">
                   <label for="modalUntilDate">Disponible hasta:</label>
@@ -138,7 +140,7 @@ $student = new Student();
       </div>
     </div>
   </div>
-  
+
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
 

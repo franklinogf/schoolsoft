@@ -33,7 +33,7 @@ global $teacher;
           Informes
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
-          <a class="dropdown-item" href="#">Lista Cursos</a>
+          <a class="dropdown-item  <?= ($pathFile === 'listsubjects' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listsubjects.php') ?>">Lista de cursos</a>
           <a class="dropdown-item" href="#">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHome.php') ?>">Salon Hogar</a>
