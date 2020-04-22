@@ -10,7 +10,7 @@ if(!isset($_SESSION['logged'])){
 $teacher = new Teacher($_SESSION['logged']['user']['id']);
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= __LANG ?>">
 
 <head>
   <meta charset="UTF-8" />

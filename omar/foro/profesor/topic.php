@@ -18,7 +18,7 @@ $student = new Student();
 
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= __LANG ?>">
 
 <head>
   <meta charset="UTF-8" />

@@ -10,7 +10,7 @@ if(isset($_SESSION['logged'])){
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= __LANG ?>">
 
 <head>
    <meta charset="utf-8">

@@ -37,6 +37,9 @@ define('__logo', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/logo/'));
 /*                                   Config                                   */
 /* -------------------------------------------------------------------------- */
 
+// lenguaje a usar
+define('__LANG', 'es');
+
 /** For the United States:
  * Eastern ........... America/New_York
  * Central ........... America/Chicago
