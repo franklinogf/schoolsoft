@@ -5,7 +5,9 @@ use Classes\Route;
 use Classes\Controllers\School;
 use Classes\Session;
 
-Session::is_logged();
+if(Session::is_logged(false)){
+   Route::redirect(Session::type());
+}
 
 ?>
 <!DOCTYPE html>

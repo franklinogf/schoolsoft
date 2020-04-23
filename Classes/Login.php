@@ -28,7 +28,7 @@ class Login
             "user" => ['id' => $teacher->id],
             'type' => 'profesor'
          ];
-         Route::redirect('/foro/profesor');
+         Route::redirect('/profesor');
       } else {         
          $student = new Student();
          if ($student->login(trim($request['username']), trim($request['password']))->logged === true) {
@@ -36,11 +36,11 @@ class Login
                "user" => ['id' => $student->mt],
                'type' => 'estudiante'
             ];
-            Route::redirect('/foro/estudiante');
+            Route::redirect('/estudiante');
          } else {
             $_SESSION['errorLogin'] = 'No coincide con los datos, intentelo otra vez';
 
-            Route::redirect('/foro');
+            Route::redirect();
          }
       }
    }

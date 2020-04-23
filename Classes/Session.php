@@ -15,7 +15,7 @@ class Session
     {
         if (!isset($_SESSION['logged'])) {
             if ($reditect) {
-                Route::redirect(__SUB_ROOT_URL);
+                Route::redirect();
             }
             return false;
         }        
@@ -28,7 +28,7 @@ class Session
         if (self::is_logged(false)) {
             return $_SESSION['logged']['user']['id'];
         }else{
-            Route::redirect(__SUB_ROOT_URL);
+            Route::redirect();
         }
     }
 
@@ -37,14 +37,14 @@ class Session
         if (self::is_logged(false)) {
             return $_SESSION['logged']['type'];
         }else{
-            Route::redirect(__SUB_ROOT_URL);
+            Route::redirect();
         }
     }
 
     // public static function redirect()
     // {
     //     if (self::is_logged(false)) {
-    //         Route::redirect('/foro/'.$_SESSION['logged']['type']);
+    //         Route::redirect('/'.$_SESSION['logged']['type']);
 
     //     }
 

@@ -7,7 +7,7 @@ use Classes\Controllers\Teacher;
 require_once '../../../app.php';
 
 if(!isset($_SESSION['logged'])){
-   Route::redirect('/foro');
+   Route::redirect();
 }
 
 if($_SERVER["REQUEST_METHOD"] == 'POST'){
@@ -23,7 +23,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST'){
    
    $topic->newComment($teacher->id,$comment,'p');
    
-   Route::redirect('/foro/profesor/topic.php?id='.$id_topic);
+   Route::redirect('/profesor/topic.php?id='.$id_topic);
 
 }else{
    Route::error();

@@ -8,7 +8,7 @@ use Classes\Controllers\Teacher;
 require_once '../../../app.php';
 
 if (!isset($_SESSION['logged'])) {
-   Route::redirect('/foro');
+   Route::redirect();
 }
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
       // Util::dump($file->file);
 
 
-      Route::redirect('/foro/profesor/home.php');
+      Route::redirect('/profesor/home.php');
 
    }else if (isset($_POST['checkUser'])){      
       $student = new Student;

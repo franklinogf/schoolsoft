@@ -7,4 +7,4 @@ require_once '../../app.php';
 
 session_destroy();
 
-Route::redirect('/foro');
+Route::redirect();
