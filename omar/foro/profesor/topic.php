@@ -1,16 +1,14 @@
 <?php
+require_once '../../app.php';
 
 use Classes\Controllers\Student;
 use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Topic;
 use Classes\Controllers\Teacher;
+use Classes\Session;
 
-
-require_once '../../app.php';
-if (!isset($_SESSION['logged'])) {
-  Route::redirect('/foro');
-}
+Session::is_logged();
 
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
@@ -77,7 +75,7 @@ $student = new Student();
 
       <?php foreach ($topic->comments() as $comment) : ?>
         <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
-          <img src="<?= __noProfilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
+          <img src="<?= __NO_PROFILE_PICTURE ?>" class="mr-3" alt="profile picture" width="64" height="64">
           <div class="media-body">
 
             <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i>' . $student->find($comment->creador_id)->fullName()) ?></h5>

@@ -1,13 +1,11 @@
 <?php
+require_once '../../app.php';
 
 use Classes\Route;
+use Classes\Session;
 use Classes\Controllers\Teacher;
 
-include '../../app.php';
-if (!isset($_SESSION['logged'])) {
-  Route::redirect('/foro');
-}
-$teacher = new Teacher($_SESSION['logged']['user']['id']);
+$teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -91,7 +89,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
           <div class="modal-body text-center">
             <div class="row">
               <div class="col-12">                
-                <img id="profilePicture" src="<?= __noProfilePicture ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
+                <img id="profilePicture" src="<?= __NO_PROFILE_PICTURE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
                 <hr>
               </div>
             </div>

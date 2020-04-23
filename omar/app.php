@@ -10,27 +10,27 @@ define('__USERNAME', "root");
 define('__PASSWORD', "");
 define('__DB_NAME', "demo");
 
-
-
 /* -------------------------------------------------------------------------- */
 /*                              Root directories                              */
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------ don't change ------------------------------ */
 
-define('__ROOT_SCHOOL', __DIR__);
-define('__ROOT', dirname(__DIR__));
+define('__ROOT_SCHOOL',str_replace('/',DIRECTORY_SEPARATOR,__DIR__));
+define('__ROOT', str_replace('/',DIRECTORY_SEPARATOR,dirname(__DIR__)));
 define('__ROOT_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL))));
+$root = str_replace(__ROOT_SCHOOL,'', str_replace('/',DIRECTORY_SEPARATOR,$_SERVER['SCRIPT_FILENAME'])); 
+define('__SUB_ROOT_URL', str_replace('\\','/',substr($root,0,strpos($root,DIRECTORY_SEPARATOR,1))));
 
 
 /* -------------------------------------------------------------------------- */
 /*                              Files Directories                             */
 /* -------------------------------------------------------------------------- */
 
-define('__teacherProfilePicture', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/pictures/teachers/'));
-define('__studentProfilePicture', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/pictures/students/'));
-define('__noProfilePicture', str_replace('/',DIRECTORY_SEPARATOR,'/images/none.jpg'));
-define('__logo', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/logo/'));
+define('__TEACHER_PROFILE_PICTURE', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/pictures/teachers/'));
+define('__STUDENT_PROFILE_PICTURE', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/pictures/students/'));
+define('__NO_PROFILE_PICTURE', str_replace('/',DIRECTORY_SEPARATOR,'/images/none.jpg'));
+define('__LOGO_PATH', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/logo/'));
 
 
 /* -------------------------------------------------------------------------- */
@@ -39,6 +39,7 @@ define('__logo', str_replace('/',DIRECTORY_SEPARATOR,__ROOT_URL.'/logo/'));
 
 // lenguaje a usar
 define('__LANG', 'es');
+define('__DEFAULT_LOGO', 'logo.gif');
 
 /** For the United States:
  * Eastern ........... America/New_York

@@ -1,13 +1,12 @@
 <?php
-
+require_once '../app.php';
 
 use Classes\Route;
 use Classes\Controllers\School;
+use Classes\Session;
 
-require_once '../app.php';
-if(isset($_SESSION['logged'])){
-   Route::redirect('/foro/'.$_SESSION['logged']['type']);
-}
+Session::is_logged();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

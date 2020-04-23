@@ -31,7 +31,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST'){
       $fileName = $teacher->id . '.jpg';
       $teacher->foto_name = $fileName;
      
-      $file->upload($fileName, __teacherProfilePicture);
+      $file->upload($fileName, __TEACHER_PROFILE_PICTURE);
       
    }
    

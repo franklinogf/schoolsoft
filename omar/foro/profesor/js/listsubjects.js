@@ -18,17 +18,17 @@ $(document).ready(function () {
       } else if ($(`${_check}:checked`).length === $(_check).length) {
          $(`${_checkAll}`).prop("indeterminate", false);
          $(`${_checkAll}`).prop("checked", true);
+         $('.alert').addClass('invisible');
       } else {
+         $('.alert').addClass('invisible');
          $(`${_checkAll}`).prop("indeterminate", true);
       }
    });
 
    //continuar debe de haber seleccionado al menos uno
    $("form").submit(function (event) {
-      event.preventDefault();
-      if ($(`${_check}:checked`).length > 0) {
-
-      } else {
+      if ($(`${_check}:checked`).length === 0) {   
+         event.preventDefault();
          console.log('Debe de seleccionar uno');
          $('.alert').removeClass('invisible')
 

@@ -53,9 +53,9 @@ class Teacher extends TeacherModel
     }
    
     if($this->foto_name != ''){
-      $picturePath = __teacherProfilePicture.$this->foto_name;
+      $picturePath = __TEACHER_PROFILE_PICTURE.$this->foto_name;
     }else{
-        $picturePath = __noProfilePicture;
+        $picturePath = __NO_PROFILE_PICTURE;
     }
     
     return $picturePath;

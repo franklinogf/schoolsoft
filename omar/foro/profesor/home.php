@@ -1,12 +1,12 @@
 <?php
+require_once '../../app.php';
 
 use Classes\Route;
 use Classes\Controllers\Teacher;
+use Classes\Session;
 
-include '../../app.php';
-if(!isset($_SESSION['logged'])){
-  Route::redirect('/foro');
-}
+Session::is_logged();
+
 $teacher = new Teacher($_SESSION['logged']['user']['id']);
 ?>
 <!DOCTYPE html>

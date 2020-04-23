@@ -1,13 +1,12 @@
 <?php
+require_once '../../app.php';
 
 use Classes\Route;
+use Classes\Session;
 use Classes\Controllers\Teacher;
 
-include '../../app.php';
-if (!isset($_SESSION['logged'])) {
-  Route::redirect('/foro');
-}
-$teacher = new Teacher($_SESSION['logged']['user']['id']);
+
+$teacher = new Teacher(Session::id());
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +48,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
             <tr>
               <td>
                 <div class="custom-control custom-checkbox">
-                  <input class="custom-control-input check" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
+                  <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
                 <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
                 </div>
               </td>
