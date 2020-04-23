@@ -1,31 +1,4 @@
 $(document).ready(function () {
-  const studentsTable = $('.studentsTable').DataTable({
-    "language": {
-      "decimal": ".",
-      "emptyTable": "No hay datos disponibles",
-      "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
-      "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
-      "infoFiltered": "(Filtrado de un total de _MAX_ )",
-      "loadingRecords": "Cargando...",
-      "processing": "Procesando...",
-      "search": "Buscar:",
-      "zeroRecords": "No se encontraron datos",
-      "paginate": {
-        "first": "Primera",
-        "last": "Ultima",
-        "next": "Siguente",
-        "previous": "Anterior"
-      },
-      "aria": {
-        "sortAscending": ": Activar para ordernar la columna de forma ascendente",
-        "sortDescending": ": Activar para ordernar la columna de forma descendente"
-      }
-    },
-    "pageLength": 10,
-    "lengthChange": false,
-    "ordering": false
-
-  });
 
   let prevUsername = '';
 
@@ -64,7 +37,7 @@ $(document).ready(function () {
                 .addClass('is-valid');
             }
           }
-        });       
+        });
       }
       else {
         $('#username').removeClass('is-invalid is-valid');
@@ -74,46 +47,19 @@ $(document).ready(function () {
 
   })
 
-
   // check passwords to submit 
 
-  $('#pass1').change(() => {
-    checkPasswords(1);
+  $('#pass1,#pass2').change(() => {
+    checkPasswords();
   });
-
-  $('#pass2').change(() => {
-    checkPasswords(2);
-  });
-
+ 
   $('form').submit(event => {
-
 
     if (!checkPasswords() || $('#username').val().length === 0) {
       event.preventDefault();
     }
 
   });
-
-
-  function checkPasswords(id = 1) {
-
-    if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
-      if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
-        if ($("#pass" + (id === 1 ? '1' : '2')).val() !== $('#pass' + (id !== 1 ? '1' : '2')).val()) {
-          $('.pass').addClass('is-invalid')
-            .removeClass('is-valid')
-          $("#pass" + (id === 1 ? '1' : '2')).focus();
-          return false
-        } else {
-          $('.pass').addClass('is-valid')
-            .removeClass('is-invalid')
-          return true;
-        }
-      }
-    }
-    return true;
-  }
-
 
   // delete everything when the modal hides
 
@@ -123,11 +69,6 @@ $(document).ready(function () {
       .removeClass('is-invalid is-valid');
   })
 
-  // functions
-  function getBaseUrl(fileName) {
-    var re = new RegExp(/^.*\//);
-    return re.exec(window.location.href) + fileName;
-  }
 
 });
 

@@ -7,7 +7,7 @@ use Classes\Route;
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
- Route::js('/js/app.js');
+Route::js('/js/app.js');
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
@@ -15,8 +15,7 @@ $__jsFile = str_replace('.php', '', $__file) . '.js';
 $__path = '/foro/profesor/js/' . $__jsFile;
 
 
-if (Route::file_exists($__path)){
+if (Route::file_exists($__path)) {
 
- Route::js($__path);
-
+   Route::js($__path);
 }

@@ -56,13 +56,10 @@ $(document).ready(function () {
 
    // check passwords to submit 
 
-   $('#pass1').change(() => {
-      checkPasswords(1);
+   $('#pass1,#pass2').change(() => {
+      checkPasswords();
    });
 
-   $('#pass2').change(() => {
-      checkPasswords(2);
-   });
 
    $('form').submit(event => {
       if (!checkPasswords()) {
@@ -70,26 +67,6 @@ $(document).ready(function () {
       }
    });
 
-
-
-   function checkPasswords(id = 1) {
-
-      if ($('#pass' + (id === 1 ? '1' : '2')).val().length > 0) {
-         if ($('#pass' + (id !== 1 ? '1' : '2')).val().length > 0) {
-            if ($("#pass" + (id === 1 ? '1' : '2')).val() !== $('#pass' + (id !== 1 ? '1' : '2')).val()) {
-               $('.pass').addClass('is-invalid')
-                  .removeClass('is-valid')
-               $("#pass" + (id === 1 ? '1' : '2')).focus();
-               return false
-            } else {
-               $('.pass').addClass('is-valid')
-                  .removeClass('is-invalid')
-               return true;
-            }
-         }
-      }
-      return true;
-   }
 
    // delete everything when the modal hides
 

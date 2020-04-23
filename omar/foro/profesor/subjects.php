@@ -71,7 +71,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
           <th>Usuario</th>
         </tr>
         <tr class="bg-gradient-light bg-light">
-          <td colspan="2"><button id="back" type="button" class="btn btn-block btn-primary d-block mx-auto">Atrás</button></td>
+          <td colspan="2"><button id="back" type="button" class="btn btn-block btn-primary">Atrás</button></td>
         </tr>
       </tfoot>
     </table>

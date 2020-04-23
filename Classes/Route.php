@@ -30,7 +30,7 @@ class Route
          if (strpos($path, 'react-components'))
             Route::includeFile('/includes/react.php', true);
       }
-      echo '<script src="' . $root . $path . '"></script>';
+      echo '<script type="text/javascript" src="' . $root . $path . '"></script>';
    }
 
    public static function file_exists($path)

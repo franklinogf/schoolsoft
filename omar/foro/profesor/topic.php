@@ -114,11 +114,11 @@ $student = new Student();
                 <div class="form-group col-6">
                   <label class="d-block">Tema disponible?</label>
 
-                  <div class="custom-control custom-checkbox custom-control-inline">
+                  <div class="custom-control custom-radio custom-control-inline">
                     <input class="custom-control-input" type="radio" name="state" id="radio1" value="a" <?= ($topic->estado === 'a' ? 'checked' : '') ?>>
                     <label class="custom-control-label" for="radio1">Si</label>
                   </div>
-                  <div class="custom-control custom-checkbox custom-control-inline">
+                  <div class="custom-control custom-radio custom-control-inline">
                     <input class="custom-control-input" type="radio" name="state" id="radio2" value="c" <?= ($topic->estado === 'c' ? 'checked' : '') ?>>
                     <label class="custom-control-label" for="radio2">No</label>
                   </div>

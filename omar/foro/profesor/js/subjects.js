@@ -1,8 +1,4 @@
 $(document).ready(function () {
-
-  const studentsTable = $('.studentsTable').DataTable({ 'rowId': 'id' });
-  const classesTable = $('.classesTable').DataTable();
-
   let _class = '';
 
   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
@@ -34,9 +30,7 @@ $(document).ready(function () {
 
               $(thisRow.node()).prop('id', student.mt)
 
-
             })
-
 
             classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
               studentsTableWrapper.show('drop', { direction: "right" }, 400);
@@ -75,7 +69,7 @@ $(document).ready(function () {
         success: (res) => {
           if (res.response === true) {
             modal.find('#id').text(res.data.id)
-            const username = (res.data.usuario !== '' ? `<span class="badge badge-secondary">${res.data.usuario}</span>` :'')
+            const username = (res.data.usuario !== '' ? `<span class="badge badge-secondary">${res.data.usuario}</span>` : '')
             modal.find('.modal-title').html(`Perfil del estudiante ${username}`)
             modal.find('#name').text(`${res.data.nombre} ${res.data.apellidos}`)
             modal.find('#grade').text(res.data.grado)
@@ -95,10 +89,6 @@ $(document).ready(function () {
     }
   });
 
-  // functions
-  function getBaseUrl(fileName) {
-    var re = new RegExp(/^.*\//);
-    return re.exec(window.location.href) + fileName;
-  }
+
 
 });

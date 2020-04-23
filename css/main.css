@@ -5,5 +5,26 @@ textarea {
 
 
  th.checkbox{
-   width: 2rem;
+   width: 2rem !important;
  }
+
+ .table tbody tr {
+  cursor: pointer !important;
+}
+.bg-secondary.custom-control-input:checked ~ .custom-control-label::before,
+.bg-secondary.custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color:var(--secondary);
+  border-color:var(--secondary);
+}
+.bg-success.custom-control-input:checked ~ .custom-control-label::before,
+.bg-success.custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color:var(--success);
+  border-color:var(--success);
+}
+
+.bg-info.custom-control-input:checked ~ .custom-control-label::before,
+.bg-info.custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color:var(--info);
+  border-color:var(--info);
+}
+
