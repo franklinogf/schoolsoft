@@ -42,14 +42,13 @@ define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
 
 /* ----------------------------------- PDF ---------------------------------- */
+
 // RGB $pdf->SetFillColor(red,green,blue)
 define('__PDF_FILL_COLOR', [
-   'red' => 229,
-   'green' => 236,
-   'blue' => 249
+   'red' => 247,
+   'green' => 202,
+   'blue' => 24
 ]);
-
-
 
 /* -------------------------------- time zone ------------------------------- */
 
