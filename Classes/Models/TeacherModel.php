@@ -38,7 +38,7 @@ class TeacherModel extends School
       ->where([
         ['year', $year],
         ['id', $id]
-      ])->orderBy('curso')->get();
+      ])->orderBy('curso','ASC')->get();
     return $obj;
   }
 

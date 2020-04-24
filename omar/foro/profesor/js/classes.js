@@ -14,7 +14,7 @@ $(document).ready(function () {
 
       $.ajax({
         type: "POST",
-        url: getBaseUrl('includes/subjects.php'),
+        url: getBaseUrl('includes/classes.php'),
         data: { 'studentsByClass': _class },
         dataType: "json",
         success: (res) => {
@@ -63,7 +63,7 @@ $(document).ready(function () {
 
       $.ajax({
         type: "POST",
-        url: getBaseUrl('includes/subjects.php'),
+        url: getBaseUrl('includes/classes.php'),
         data: { 'studentByPK': studentId },
         dataType: "json",
         success: (res) => {

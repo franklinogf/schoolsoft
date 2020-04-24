@@ -22,8 +22,8 @@ global $teacher;
       <li class="nav-item  <?= ($pathFile === 'index' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/index.php') ?>">Inicio <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item <?= ($pathFile === 'subjects' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/subjects.php') ?>">Mis Cursos</a>
+      <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
+        <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/classes.php') ?>">Mis Cursos</a>
       </li>
       <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/home.php') ?>">Salon Hogar</a>
@@ -33,10 +33,10 @@ global $teacher;
           Informes
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
-          <a class="dropdown-item  <?= ($pathFile === 'listsubjects' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listsubjects.php') ?>">Lista de cursos</a>
+          <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>">Lista de cursos</a>
           <a class="dropdown-item" href="#">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHome.php') ?>">Salon Hogar</a>
+          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>">Salon Hogar</a>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsers.php') ?>">Lista de Usuarios</a>
         </div>
       </li>

@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
    }else if(isset($_POST['studentByPK'])){
       $student = new Student;     
-      if($data = $student->find($_POST['studentByPK']) ){
+      if($data = $student->findPK($_POST['studentByPK']) ){
          $array = [
             'response'=>true,
             'data'=> $data
