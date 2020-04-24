@@ -9,6 +9,7 @@ namespace Classes\DataBase;
 
 class DB extends DataBase
 {
+  private static $instance = null;
   private static $table = '';
   private static $columns = '*';
   private static $query = '';
@@ -17,7 +18,10 @@ class DB extends DataBase
   private static $whereCols = [];
   private static $whereValues = [];
   private static $whereOperators = [];
-  private static $instance = null;
+  private static $innerJoinTable = [];
+  private static $innerJoinCol1 = [];
+  private static $innerJoinCol2 = [];
+  private static $innerJoinOperator = [];
 
 
   public static function table($table)
@@ -76,9 +80,18 @@ class DB extends DataBase
     return self::$instance;
   }
 
+  public function join($tableToJoin, $table1Col, $operator, $table2Col)
+  {
+    self::$innerJoinTable[] = $tableToJoin;
+    self::$innerJoinCol1[] = $table1Col;
+    self::$innerJoinCol2[] = $table2Col;
+    self::$innerJoinOperator[] = $operator;
+    return self::$instance;
+  }
+
   public function get()
   {
-    $this->buildQuery();
+    $this->buildSelectQuery();
     $obj = $this->selectAll(self::$query, self::$whereValues);   
     $this->closeDB();
     return $obj;
@@ -86,16 +99,17 @@ class DB extends DataBase
 
   public function first()
   {
-    $this->buildQuery('limit 1');
+    $this->buildSelectQuery('limit 1');
     $obj = $this->selectOne(self::$query, self::$whereValues);
     $this->closeDB();
     return $obj;
   }
 
-  private function buildQuery($other = '')
+  private function buildSelectQuery($other = '')
   {
     $other = trim($other);
-    $where = '';
+
+    $where = '';    
     $count = 0;
     if (count(self::$whereCols) > 0) {
       foreach (self::$whereCols  as $i => $col) {
@@ -105,7 +119,14 @@ class DB extends DataBase
       }
     }
 
-    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $where . self::$orderBy . ' ' . $other;
+    $join = '';    
+    if(count(self::$innerJoinTable) > 0){
+      foreach (self::$innerJoinTable  as $i => $table) {       
+        $join .= ' INNER JOIN ' . $table . ' ON ' . self::$innerJoinCol1[$i] .' '. self::$innerJoinOperator[$i] . ' ' . self::$innerJoinCol2[$i];        
+      }
+    }
+
+    echo self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$orderBy . ' ' . $other;
   
   }
 
@@ -117,6 +138,7 @@ class DB extends DataBase
   }
 
   private function closeDB(){
+    self::$instance = null;
     self::$table = '';
     self::$columns = '*';
     self::$query = '';
@@ -125,6 +147,10 @@ class DB extends DataBase
     self::$whereCols = [];
     self::$whereValues = [];
     self::$whereOperators = [];
-    self::$instance = null;
+    self::$innerJoinTable = [];
+    self::$innerJoinCol1 = [];
+    self::$innerJoinCol2 = [];
+    self::$innerJoinOperator = [];
+
   }
 }
