@@ -12,7 +12,7 @@ class Teacher extends TeacherModel
 
     parent::__construct();
     if ($value !== '') {
-      $this->find($value);
+      $this->findPK($value);
     }
   }
 
@@ -21,7 +21,7 @@ class Teacher extends TeacherModel
     return $this->getAllTeachers();
   }
 
-  public function find($pk)
+  public function findPK($pk)
   {
     $array = $this->getTeacherByPK($pk);
     foreach ($array as $key => $value) {

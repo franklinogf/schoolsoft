@@ -13,7 +13,7 @@ class Topic extends TopicModel
 
     parent::__construct();
     if ($value !== '') {
-      $this->find($value);
+      $this->findPK($value);
     }
   }
 
@@ -22,7 +22,7 @@ class Topic extends TopicModel
     return $this->getAllTopics();
   }
 
-  public function find($pk)
+  public function findPK($pk)
   {
     $array = $this->getTopicByPK($pk);
     foreach ($array as $key => $value) {

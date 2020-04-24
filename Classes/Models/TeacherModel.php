@@ -3,6 +3,7 @@
 namespace Classes\Models;
 
 use Classes\Controllers\School;
+use Classes\DataBase\DB;
 use Classes\Models\StudentModel;
 
 class TeacherModel extends School
@@ -18,30 +19,42 @@ class TeacherModel extends School
 
   protected function getTeacherByPK($pk)
   {
-    $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->select($query,[$pk]);
+    $obj =  DB::table($this->table)->where($this->primary_key, $pk)->first();
+    return $obj;
   }
 
 
   protected function getAllTeachers()
   {
-    $query = "SELECT * FROM {$this->table} ORDER BY apellidos";
-    return $this->selectAll($query);
+
+    $obj =  DB::table($this->table)->orderBy('apellidos')->get();
+    return $obj;
   }
- 
+
   protected function getTeacherClasses($id)
   {
-    $query = "SELECT * FROM `cursos` where  `year` = ? AND `id` = ?  ORDER BY curso";    
-    $year = $this->get('year');
-    return $this->selectAll($query,[$year,$id]);    
+    $year = $this->info('year');
+    $obj =  DB::table('cursos')
+      ->where([
+        ['year', $year],
+        ['id', $id]
+      ])->orderBy('curso')->get();
+    return $obj;
   }
 
   protected function getHomeStudents($grade)
   {
-    $table = StudentModel::TABLE;
-    $query = "SELECT * FROM {$table} WHERE `grado` = ? AND `year`= ? AND `fecha_baja`='0000-00-00' ORDER BY `apellidos`";
-    $year = $this->get('year');
-    return $this->selectAll($query,[$grade,$year]);
+    $year = $this->info('year');
+    $obj =  DB::table(StudentModel::TABLE)
+      ->where([
+        ['grado', $grade],
+        ['year', $year],
+        ['fecha_baja', '0000-00-00']
+      ])
+      ->orderBy('apellidos')->get();
+      
+
+    return $obj;
   }
 
   protected function getLastTeacherTopic($id)
@@ -52,22 +65,26 @@ class TeacherModel extends School
             INNER JOIN `cursos` AS `c` ON `c`.`curso` = `e`.`curso`
             WHERE `c`.`id`= ? AND `c`.`year`=? AND `e`.`year`= ? AND `e`.`estado`='a'
             ORDER BY `d`.`fecha` DESC,`d`.`hora` DESC LIMIT 1";
-  
-  $year = $this->get('year');  
-  return $this->select($query,[$id,$year,$year]);
+
+    $year = $this->info('year');
+    return $this->selectOne($query, [$id, $year, $year]);
   }
   protected function getTeacherByUser($username)
   {
-    $query = "SELECT * FROM {$this->table} WHERE usuario= ? ";
-    return $this->select($query,[$username]);
+    $obj =  DB::table($this->table)
+      ->where('usuario', $username)->first();
+    return $obj;
   }
 
   protected function teacherLogin($username, $password)
   {
-   
-    $query = "SELECT * FROM {$this->table} WHERE usuario = ? AND clave = ?";  
+    $obj =  DB::table($this->table)
+      ->where([
+        ['usuario', $username],
+        ['clave', $password]
+      ])->first();
 
-    return $this->select($query,[$username,$password]);
+    return $obj;
   }
 
   protected function updateTeacher($propsArray)

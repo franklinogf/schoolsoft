@@ -17,36 +17,37 @@ class StudentModel extends School
   protected function getStudentByPK($pk)
   {
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->select($query,[$pk]);
+    
+    return $this->selectOne($query,[$pk]);
   }
 
   protected function getStudentBySS($ss)
   {
 
     $query = "SELECT * FROM {$this->table} WHERE `ss` = ? AND `year` = ? ";
-    $year = $this->get('year');
+    $year = $this->info('year');
 
-    return $this->select($query,[$ss,$year]);
+    return $this->selectOne($query,[$ss,$year]);
   }
 
   protected function getAllStudents()
   {
     $query = "SELECT * FROM {$this->table} WHERE  `year` = ? AND `fecha_baja`='0000-00-00' ORDER BY `apellidos`";
-    $year = $this->get('year');
+    $year = $this->info('year');
     return $this->selectAll($query,[$year]);
   }
 
   protected function getStudentClasses($ss)
   {
     $query = "SELECT DISTINCT `curso`, `descripcion` FROM `padres` WHERE  `year` = ? and `ss` = ? ORDER BY `curso`";
-    $year = $this->get('year');
+    $year = $this->info('year');
     return $this->selectAll($query,[$year,$ss]);
 
   }
   protected function getStudentByUser($username)
   {
     $query = "SELECT * FROM {$this->table} WHERE `usuario`= ? ";
-    return $this->select($query,[$username]);
+    return $this->selectOne($query,[$username]);
   }
   protected function getStudentsByClass($class)
   {
@@ -55,14 +56,14 @@ class StudentModel extends School
     WHERE `p`.`curso` = ? AND `e`.`year` = ? AND `p`.`year` = ? and `e`.`fecha_baja`='0000-00-00'
     ORDER BY `e`.`apellidos`";
     
-    $year = $this->get('year');
+    $year = $this->info('year');
     return $this->selectAll($query,[$class,$year,$year]);
   }
 
   protected function studentLogin($username, $password)
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario= ? AND clave = ?";
-    return $this->select($query,[$username,$password]);
+    return $this->selectOne($query,[$username,$password]);
   }
 
   protected function updateStudent($propsArray)

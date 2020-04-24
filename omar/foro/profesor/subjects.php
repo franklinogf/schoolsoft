@@ -5,6 +5,8 @@ use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
 
+Session::is_logged();
+
 $teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>

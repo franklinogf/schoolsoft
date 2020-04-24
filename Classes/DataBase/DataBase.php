@@ -1,5 +1,5 @@
 <?php
-namespace Classes;
+namespace Classes\DataBase;
 
 use mysqli;
 use Classes\Util;
@@ -58,7 +58,7 @@ class DataBase
     $stmt->execute();
   }
 
-  protected function select($query,$whereArray = []){   
+  protected function selectOne($query,$whereArray = []){   
    
     $result = $this->selectFromDB($query,$whereArray);
     if($result->num_rows > 0){    
@@ -71,7 +71,7 @@ class DataBase
 
   }
   protected function selectAll($query,$whereArray = []){
-
+    // var_dump($whereArray);
     $result = $this->selectFromDB($query,$whereArray);
     if($result->num_rows > 0){
     $obj = $result->fetch_all(MYSQLI_ASSOC);
@@ -80,19 +80,22 @@ class DataBase
     return false;
    
 
-  }
+  } 
 
   private function selectFromDB($query,$whereArray){
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
+    $db = $this->connect();    
+    $stmt = $db->prepare($query);    
+    
     if(count($whereArray) > 0){
+      
       $bind = str_repeat('s',count($whereArray));
       // php 5 version
       $refs = array();
       foreach($whereArray as $key => $value) {
               $refs[$key] = &$whereArray[$key];
-      }   
-    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
+      }  
+      // var_dump($refs); 
+      call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
     // php 7 version
     // $stmt->bind_param($bind, ...$whereArray);
      

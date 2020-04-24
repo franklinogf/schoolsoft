@@ -15,7 +15,7 @@ class Student extends StudentModel
       if (strpos($value, '-')) {
         $this->findBySS($value);
       } else {
-       $this->find($value);
+       $this->findPK($value);
       }
     }
   }
@@ -25,7 +25,7 @@ class Student extends StudentModel
     return $this->getAllStudents();
   }
 
-  public function find($pk)
+  public function findPK($pk)
   {
     $array = $this->getStudentByPK($pk);    
     foreach ($array as $key => $value) {

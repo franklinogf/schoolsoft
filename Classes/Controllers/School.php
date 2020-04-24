@@ -19,23 +19,21 @@ class School extends SchoolModel
          $this->set($key, $value);
       }
    }
-
    private function set($key, $value)
    {
       $this->props[$key] = $value;
    }
-   public function get($key)
+
+   public function info($key)
    {
       return $this->props[$key];
    }
 
 
-   public static function logo($path = __DEFAULT_LOGO,$root = false)
+   public static function logo($path = __DEFAULT_LOGO, $root = false)
    {
       $newPath = ($root ? __ROOT : '');
       $newPath .= __LOGO_PATH . $path;
       return $newPath;
    }
-
-  
 }

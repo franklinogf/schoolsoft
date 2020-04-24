@@ -20,14 +20,14 @@ class TopicModel extends School
   {
 
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->select($query,[$pk]);
+    return $this->selectOne($query,[$pk]);
   }
 
 
   protected function getAllTopics()
   {
     $query = "SELECT * FROM {$this->table} AND `year` = ? ORDER BY `fecha`";
-    $year = $this->get('year');
+    $year = $this->info('year');
     return $this->selectAll($query,[$year]);
   }
 
@@ -43,7 +43,7 @@ class TopicModel extends School
     VALUES (?,?,?,?,?,?,?)";
     $db = $this->connect();
     $stmt = $db->prepare($query);
-    $year = $this->get('year');
+    $year = $this->info('year');
     $date = Util::date();
     $time = Util::time();
     $stmt->bind_param('isissss', $id, $type, $id_topic, $desc, $date, $time, $year);

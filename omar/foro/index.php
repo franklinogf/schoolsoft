@@ -54,7 +54,7 @@ if(Session::is_logged(false)){
 
       <!-- <div class="checkbox mb-3">
          <label>
-            <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" value="remember"> Recordarme
          </label>
       </div> -->
       <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>

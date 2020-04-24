@@ -2,10 +2,10 @@
 
 namespace Classes\Models;
 
-use Classes\DataBase;
+use Classes\DataBase\DB;
 
 
-class SchoolModel extends DataBase
+class SchoolModel extends DB
 {
   private $table = 'colegio';
   protected $primary_key = 'id';
@@ -15,13 +15,13 @@ class SchoolModel extends DataBase
   {
     $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";    
 
-    return $this->select($query,[$pk]);
+    return $this->selectOne($query,[$pk]);
   }
 
   protected function getSchoolByUser($user = 'administrador')
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario = ?";
-    return $this->select($query,[$user]);
+    return $this->selectOne($query,[$user]);
   }
 
   protected function getSchool()

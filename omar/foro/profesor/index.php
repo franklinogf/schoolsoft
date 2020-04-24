@@ -5,8 +5,9 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
+use Classes\DataBase\DB;
 
-
+Session::is_logged();
 
 $teacher = new Teacher(Session::id());
 $lastTopic = $teacher->lastTopic();
@@ -34,7 +35,7 @@ $lastTopic = $teacher->lastTopic();
       <div class="react-clock text-right"></div>
       <h2>Bienvenido <?= $teacher->fullName(); ?></h2>
       <?php if ($lastTopic) : ?>
-        <div class="card mx-auto mt-5" >
+        <div class="card mx-auto mt-5">
           <h4 class="card-header bg-gradient-info bg-info">
             Ultimo tema comentado
           </h4>
@@ -44,14 +45,14 @@ $lastTopic = $teacher->lastTopic();
             <a class="btn btn-primary" href="topic.php?id=<?= $lastTopic->id ?>">Ir al tema</a>
           </div>
           <div class="card-footer text-muted d-flex justify-content-between">
-            <span><?=Util::formatDate($lastTopic->fecha, true, true)?></span>
-            <span><?=Util::formatTime($lastTopic->hora)?></span>           
+            <span><?= Util::formatDate($lastTopic->fecha, true, true) ?></span>
+            <span><?= Util::formatTime($lastTopic->hora) ?></span>
           </div>
-        </div>  
-      <?php else: ?>
-      <div class="alert alert-info mt-5 mb-0" role="alert">
-      No tiene comentarios nuevos en los temas de conversación
-      </div>
+        </div>
+      <?php else : ?>
+        <div class="alert alert-info mt-5 mb-0" role="alert">
+          No tiene comentarios nuevos en los temas de conversación
+        </div>
 
       <?php endif ?>
     </div>

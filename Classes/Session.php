@@ -27,18 +27,16 @@ class Session
     {
         if (self::is_logged(false)) {
             return $_SESSION['logged']['user']['id'];
-        }else{
-            Route::redirect();
         }
+        return false;
     }
 
     public static function type()
     {
         if (self::is_logged(false)) {
             return $_SESSION['logged']['type'];
-        }else{
-            Route::redirect();
         }
+        return false;
     }
 
     // public static function redirect()
