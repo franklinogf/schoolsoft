@@ -18,8 +18,8 @@ $students = DB::table('year')
 $pdf = new PDF();
 $pdf->AddPage();
 $pdf->SetTitle('Lista de clases');
+$pdf->Fill();
 $pdf->SetFont('Arial');
-$pdf->SetFillColor(229, 236, 249);				
 
 $num = 1;
 
