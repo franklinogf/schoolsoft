@@ -37,7 +37,7 @@ global $teacher;
           <a class="dropdown-item" href="#">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>">Salon Hogar</a>
-          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsers.php') ?>">Lista de Usuarios</a>
+          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>">Lista de Usuarios</a>
         </div>
       </li>
       <li class="nav-item dropdown">
