@@ -31,7 +31,7 @@ $teacher = new Teacher(Session::id());
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Lista de cursos </h1>
     <!-- classes table -->
-    <form action="<?= Route::url('/foro/profesor/pdf/pdfUsers.php') ?>" method="POST" target="pdfUsers">
+    <form action="<?= Route::url('/foro/profesor/pdf/pdfClasses.php') ?>" method="POST" target="pdfClasses">
       <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
         <thead class="bg-gradient-primary bg-primary border-0">
           <tr>
