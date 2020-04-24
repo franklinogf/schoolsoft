@@ -29,7 +29,7 @@ $teacher = new Teacher(Session::id());
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center">Mis Cursos</h1>
+    <h1 id="header" class="text-center">Mis Cursos</h1>
     <!-- classes table -->
     <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
       <thead class="bg-gradient-primary bg-primary border-0">
@@ -78,7 +78,7 @@ $teacher = new Teacher(Session::id());
 
     <!-- modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-dialog modal-lg" role="document">
 
         <input type="hidden" name="id_student">
         <div class="modal-content">

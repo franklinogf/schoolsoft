@@ -18,11 +18,9 @@ $(document).ready(function () {
         data: { 'studentsByClass': _class },
         dataType: "json",
         success: (res) => {
-          if (res.response === true) {
-
-            // res.data.sort((a, b) => a.apellidos < b.apellidos);
+          if (res.response === true) {    
+                    
             res.data.map(student => {
-
               const thisRow = studentsTable.row.add({
                 0: `${student.apellidos} ${student.nombre}`,
                 1: student.usuario
@@ -34,6 +32,9 @@ $(document).ready(function () {
 
             classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
               studentsTableWrapper.show('drop', { direction: "right" }, 400);
+              $("#header").animate({ opacity: 0}, 250,  () => {
+                $("#header").text('Lista de estudiantes').animate({opacity: 1}, 250);
+              });
             });
           }
           else {
@@ -50,6 +51,9 @@ $(document).ready(function () {
     studentsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
       studentsTable.rows().remove();
       classesTableWrapper.show('drop', { direction: "left" }, 400);
+      $("#header").animate({ opacity: 0}, 250,  () => {
+        $("#header").text('Mis Cursos').animate({opacity: 1}, 250);
+      });
     });
   })
 
