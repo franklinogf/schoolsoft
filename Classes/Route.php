@@ -62,7 +62,7 @@ class Route
       return $newPath;
    }
 
-   public static function redirect($path = __SUB_ROOT_URL,$rootSchool = true){
+   public static function redirect($path = '',$rootSchool = true){
       if($rootSchool){
          $newPath = __SUB_ROOT_URL;
       }
