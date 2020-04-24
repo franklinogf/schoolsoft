@@ -3,7 +3,6 @@
 namespace Classes\Models;
 
 use Classes\Controllers\School;
-use Classes\DataBase\DB;
 use Classes\Models\StudentModel;
 
 class TeacherModel extends School
@@ -19,7 +18,7 @@ class TeacherModel extends School
 
   protected function getTeacherByPK($pk)
   {
-    $obj =  DB::table($this->table)->where($this->primary_key, $pk)->first();
+    $obj =  parent::table($this->table)->where($this->primary_key, $pk)->first();
     return $obj;
   }
 
@@ -27,14 +26,14 @@ class TeacherModel extends School
   protected function getAllTeachers()
   {
 
-    $obj =  DB::table($this->table)->orderBy('apellidos')->get();
+    $obj =  parent::table($this->table)->orderBy('apellidos')->get();
     return $obj;
   }
 
   protected function getTeacherClasses($id)
   {
     $year = $this->info('year');
-    $obj =  DB::table('cursos')
+    $obj =  parent::table('cursos')
       ->where([
         ['year', $year],
         ['id', $id]
@@ -45,7 +44,7 @@ class TeacherModel extends School
   protected function getHomeStudents($grade)
   {
     $year = $this->info('year');
-    $obj =  DB::table(StudentModel::TABLE)
+    $obj =  parent::table(StudentModel::TABLE)
       ->where([
         ['grado', $grade],
         ['year', $year],
@@ -77,7 +76,7 @@ class TeacherModel extends School
 
   protected function teacherLogin($username, $password)
   {
-    $obj =  DB::table($this->table)
+    $obj =  parent::table($this->table)
       ->where([
         ['usuario', $username],
         ['clave', $password]
