@@ -60,19 +60,18 @@ class TeacherModel extends School
   protected function getLastTeacherTopic($id)
   {
 
-    $query = "SELECT `e`.`id`,`e`.`titulo`,`c`.`curso`,`c`.`desc1`,`d`.`fecha`,`d`.`hora` FROM `detalle_foro_entradas` as `d`
-            INNER JOIN `foro_entradas` AS `e` ON `e`.`id` = `d`.`entrada_id`
-            INNER JOIN `cursos` AS `c` ON `c`.`curso` = `e`.`curso`
-            WHERE `c`.`id`= ? AND `c`.`year`=? AND `e`.`year`= ? AND `e`.`estado`='a'
-            ORDER BY `d`.`fecha` DESC,`d`.`hora` DESC LIMIT 1";
-
     $year = $this->info('year');
-    return $this->selectOne($query, [$id, $year, $year]);
-  }
-  protected function getTeacherByUser($username)
-  {
-    $obj =  DB::table($this->table)
-      ->where('usuario', $username)->first();
+    $obj =  parent::table('detalle_foro_entradas')
+      ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
+      ->join('cursos', 'foro_entradas.curso', '=', 'cursos.curso')
+      ->where([
+        ['cursos.id', $id],
+        ['cursos.year', $year],
+        ['foro_entradas.year', $year],
+        ['foro_entradas.estado', 'a']
+      ])
+      ->orderBy('detalle_foro_entradas.fecha')->first();
+
     return $obj;
   }
 
