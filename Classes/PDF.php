@@ -1,6 +1,7 @@
 <?php
+
 namespace Classes;
-  
+
 use Classes\Util;
 use Classes\FPDF\FPDF;
 use Classes\Controllers\School;
@@ -8,33 +9,49 @@ use Classes\Controllers\School;
 class PDF extends FPDF
 {
 	public $footer = true;
+	public $header = true;
 	
-	function Header()
-	{				
-		$school = new School();
-		// dafault values
-		$this->SetAuthor($school->info('colegio') ,true);
-		$this->setCreator('School Soft');
-		$this->SetAutoPageBreak(true,-15);
 
-		if (file_exists(__ROOT . School::logo())) {
-			$this->Image(__ROOT . School::logo(), 10, 10, 25);
+	function Header()
+	{
+		if ($this->header) {
+			$school = new School();
+			// dafault values
+			$this->SetAuthor($school->info('colegio'), true);
+			$this->setCreator('School Soft');
+			$this->SetAutoPageBreak(true, -15);
+			if (file_exists(__ROOT . School::logo())) {
+				$this->Image(__ROOT . School::logo(), 10, 10, 25);
+			}
+			$this->SetFont('Arial', 'B', 15);
+			$this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
+			$this->SetFontSize(9);
+			if ($school->info('dir1') !== '') {
+				$this->Cell(0, 4, $school->info('dir1'), 0, 1, 'C');
+			}
+			if ($school->info('dir2') !== '') {
+				$this->Cell(0, 4, $school->info('dir2'), 0, 1, 'C');
+			}
+			$this->Cell(0, 4, $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
+			$this->SetFontSize(8);
+			$this->Cell(0, 4, 'Tel: ' . $school->info('telefono') . ' Fax: ' . $school->info('fax'), 0, 1, 'C');
+			$this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
+			$this->Ln(10);
+			$this->SetFontSize(10);
 		}
-		$this->SetFont('Arial', 'B', 15);
-		$this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
-		$this->SetFontSize(9);
-		if ($school->info('dir1') !== '') {
-			$this->Cell(0, 4, $school->info('dir1'), 0, 1, 'C');
-		}
-		if ($school->info('dir2') !== '') {
-			$this->Cell(0, 4, $school->info('dir2'), 0, 1, 'C');
-		}
-		$this->Cell(0, 4, $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
-		$this->SetFontSize(8);
-		$this->Cell(0, 4, 'Tel: ' . $school->info('telefono') . ' Fax: ' . $school->info('fax'), 0, 1, 'C');
-		$this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
-		$this->Ln(10);
-		$this->SetFontSize(10);
+	}
+
+	public function useHeader($bool = true){
+		$this->header = $bool;
+	}
+
+	public function useFooter($bool = true){
+		$this->footer = $bool;
+	}
+
+	public function Fill($red = __PDF_FILL_COLOR['red'], $green = __PDF_FILL_COLOR['green'], $blue =  __PDF_FILL_COLOR['blue'])
+	{
+		$this->SetFillColor($red, $green, $blue);
 	}
 
 	function Footer()
