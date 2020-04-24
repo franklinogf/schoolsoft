@@ -15,7 +15,7 @@ $teacher = new Teacher(Session::id());
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - Lista de clases</title>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');

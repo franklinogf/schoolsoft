@@ -14,7 +14,7 @@ $teacher = new Teacher($_SESSION['logged']['user']['id']);
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - Salon Hogar</title>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
