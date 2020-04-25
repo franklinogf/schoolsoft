@@ -1,10 +1,10 @@
 <?php
+require_once '../../../app.php';
 
 use Classes\Util;
 use Classes\Controllers\Student;
 use Classes\Server;
 
-require_once '../../../app.php';
 
 Server::is_post();
 

@@ -1,4 +1,5 @@
 <?php
+require_once '../../../app.php';
 
 use Classes\Route;
 use Classes\Controllers\Topic;
@@ -6,11 +7,7 @@ use Classes\Controllers\Teacher;
 use Classes\Server;
 use Classes\Session;
 
-require_once '../../../app.php';
 
-if (!isset($_SESSION['logged'])) {
-   Route::redirect();
-}
 
 Server::is_post();
 
