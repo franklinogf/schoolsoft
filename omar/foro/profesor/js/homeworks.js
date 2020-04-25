@@ -10,37 +10,37 @@ $(document).ready(function () {
     if (row.index() !== undefined) {
       const data = row.data();
       _class = data[0];
+      $.ajax({
+        type: "POST",
+        url: getBaseUrl('includes/homeworks.php'),
+        data: { 'homeworksByClass': _class },
+        dataType: "json",
+        success: (res) => {
+         
+          if (res.response === true) {
 
-      // $.ajax({
-      //   type: "POST",
-      //   url: getBaseUrl('includes/classes.php'),
-      //   data: { 'studentsByClass': _class },
-      //   dataType: "json",
-      //   success: (res) => {
-      //     if (res.response === true) {    
-                    
-      //       res.data.map(student => {
-      //         const thisRow = homeworksTable.row.add({
-      //           0: `${student.apellidos} ${student.nombre}`,
-      //           1: student.usuario
-      //         }).draw();
+            res.data.map(homework => {
+              const thisRow = homeworksTable.row.add({
+                0: homework.titulo,
+                1: formatDate(homework.fec_out)
+              }).draw();
 
-      //         $(thisRow.node()).prop('id', student.mt)
+              $(thisRow.node()).prop('id', homework.id_documento)
 
-      //       })
+            })
 
-      //       classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-      //         homeworksTableWrapper.show('drop', { direction: "right" }, 400);
-      //         $("#header").animate({ opacity: 0}, 250,  () => {
-      //           $("#header").text('Lista de estudiantes').animate({opacity: 1}, 250);
-      //         });
-      //       });
-      //     }
-      //     else {
-      //       alert('No existen tareas en esta clase');
-      //     }
-      //   }
-      // });
+            classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
+              homeworksTableWrapper.show('drop', { direction: "right" }, 400);
+              $("#header").animate({ opacity: 0 }, 250, () => {
+                $("#header").text('Lista de tareas').animate({ opacity: 1 }, 250);
+              });
+            });
+          }
+          else {
+            alert('No existen tareas en esta clase');
+          }
+        }
+      });
 
 
     }
@@ -50,8 +50,8 @@ $(document).ready(function () {
     homeworksTableWrapper.hide('drop', { direction: "right" }, 400, () => {
       homeworksTable.rows().remove();
       classesTableWrapper.show('drop', { direction: "left" }, 400);
-      $("#header").animate({ opacity: 0}, 250,  () => {
-        $("#header").text('Mis Cursos').animate({opacity: 1}, 250);
+      $("#header").animate({ opacity: 0 }, 250, () => {
+        $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
       });
     });
   })
