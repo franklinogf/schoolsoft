@@ -1,33 +1,24 @@
 <?php
-use Classes\Util;
-use Classes\Route;
-use Classes\Controllers\Student;
-
-
 require_once '../../../app.php';
 
-if (!isset($_SESSION['logged'])) {
-   Route::redirect();
-}
+use Classes\Util;
+use Classes\Controllers\Student;
+use Classes\Server;
 
-if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-  if (isset($_POST['homeworksByClass'])){   
+Server::is_post();
 
-      $student = new Student;   
+if (isset($_POST['homeworksByClass'])) {
 
-      if($data = $student->findByClass($_POST['homeworksByClass']) ){
-         $array = [
-            'response'=>true,
-            'data'=> $data
-         ];
+   $student = new Student;
 
-      }else{
-         $array = ['response'=>false];
-      }
-      echo Util::toJson($array);
-
+   if ($data = $student->findByClass($_POST['homeworksByClass'])) {
+      $array = [
+         'response' => true,
+         'data' => $data
+      ];
+   } else {
+      $array = ['response' => false];
    }
-} else {
-   Route::error();
+   echo Util::toJson($array);
 }
