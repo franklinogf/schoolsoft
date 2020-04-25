@@ -1,20 +1,22 @@
-<link rel="icon" href="<?= __ROOT_URL ?>/favicon.ico" />
-<?php 
+<?php
+
+use Classes\Controllers\School;
 use Classes\Route;
 
+echo '<link rel="icon" href="' . School::logo() . '" />';
+
+
 Route::css("/css/main-bootstrap.css");
-Route::css("/css/main.css",true);
+Route::css("/css/main.css", true);
 
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
-$__cssFile = str_replace('.php','',$__file) . '.css';
+$__cssFile = str_replace('.php', '', $__file) . '.css';
 
-$__path ='/foro/profesor/css/'.$__cssFile;
+$__path = '/foro/profesor/css/' . $__cssFile;
 
 if (Route::file_exists($__path)) {
-   
+
     Route::css($__path);
 }
-
-
