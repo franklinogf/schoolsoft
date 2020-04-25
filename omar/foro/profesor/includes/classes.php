@@ -2,7 +2,6 @@
 use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
 
 require_once '../../../app.php';
 

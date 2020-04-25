@@ -30,29 +30,10 @@ $teacher = new Teacher(Session::id());
   ?>
   <div class="container mt-5 pb-5">
     <h1 id="header" class="text-center">Mis Cursos</h1>
-    <!-- classes table -->
-    <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-gradient-primary bg-primary border-0">
-        <tr>
-          <th>Curso</th>
-          <th>Descripción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($teacher->classes() as $class) : ?>
-          <tr>
-            <td><?= $class->curso ?></td>
-            <td><?= $class->desc1 ?></td>
-          </tr>
-        <?php endforeach ?>
-      </tbody>
-      <tfoot>
-        <tr class="bg-gradient-secondary bg-secondary">
-          <th>Curso</th>
-          <th>Descripción</th>
-        </tr>
-      </tfoot>
-    </table>
+
+    <?php
+    Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
+    ?>
 
     <!-- Students table -->
 
@@ -90,7 +71,7 @@ $teacher = new Teacher(Session::id());
           </div>
           <div class="modal-body text-center">
             <div class="row">
-              <div class="col-12">                
+              <div class="col-12">
                 <img id="profilePicture" src="<?= __NO_PROFILE_PICTURE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
                 <hr>
               </div>

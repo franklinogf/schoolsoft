@@ -66,6 +66,9 @@ if ($.fn.dataTable) {
   
   // Students table custom info
   studentsTable = $('.studentsTable').DataTable();
+
+ // Homewrok table custom info
+  homeworksTable = $('.homeworksTable').DataTable();
 }
 
 
