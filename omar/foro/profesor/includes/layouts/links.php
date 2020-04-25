@@ -1,3 +1,4 @@
+<link rel="icon" href="<?= __ROOT_URL ?>/favicon.ico" />
 <?php 
 use Classes\Route;
 
