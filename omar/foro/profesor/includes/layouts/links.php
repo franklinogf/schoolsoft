@@ -3,6 +3,9 @@
 use Classes\Controllers\School;
 use Classes\Route;
 
+
+echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
+
 echo '<link rel="icon" href="' . School::logo() . '" />';
 
 
