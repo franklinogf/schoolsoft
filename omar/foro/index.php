@@ -5,7 +5,7 @@ use Classes\Route;
 use Classes\Controllers\School;
 use Classes\Session;
 
-if(Session::is_logged(false)){
+if (Session::is_logged(false)) {
    Route::redirect(Session::type());
 }
 
@@ -18,7 +18,6 @@ if(Session::is_logged(false)){
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    <title>Foro - Iniciar Sesión</title>
    <link rel="icon" href="<?= School::logo() ?>"/>
-
    <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
 
    <?php
@@ -29,13 +28,13 @@ if(Session::is_logged(false)){
 
 <body class="text-center">
    <form class="form-signin" method='POST' action="<?= Route::url('/foro/includes/login.php') ?>">
-      <img class="mb-4" src="<?= School::logo() ?>" alt="Logo" width="72" height="72">
+      <img class="mb-4" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>">
       <h1 class="h3 mb-3 font-weight-normal">Iniciar Sesión</h1>
-      <?php if(isset($_SESSION['errorLogin'])):?>
-      <div class="alert alert-danger" role="alert">
-         <strong>Error!</strong> <?= $_SESSION['errorLogin'] ?>         
-      </div>
-      <?php unset($_SESSION['errorLogin']) ?>
+      <?php if (isset($_SESSION['errorLogin'])) : ?>
+         <div class="alert alert-danger" role="alert">
+            <strong>Error!</strong> <?= $_SESSION['errorLogin'] ?>
+         </div>
+         <?php unset($_SESSION['errorLogin']) ?>
       <?php endif ?>
       <label for="username" class="sr-only">Usuario:</label>
       <div class="input-group">
@@ -61,7 +60,7 @@ if(Session::is_logged(false)){
       <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
    </form>
-  
+
 </body>
 
 </html>

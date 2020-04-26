@@ -40,6 +40,8 @@ define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/logo/
 // Language: es = Spanish, en = English
 define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
+define('__LOGO_SIZE_W', 120);
+define('__LOGO_SIZE_H', 72);
 
 /* ----------------------------------- PDF ---------------------------------- */
 
@@ -48,9 +50,9 @@ define('__PDF_FILL_COLOR', [
    'red' => 247,
    'green' => 202,
    'blue' => 24
-   ]);
+]);
 define('__PDF_LOGO_SIZE', 40);
-   
+
 /* -------------------------------- time zone ------------------------------- */
 
 /** For the United States:

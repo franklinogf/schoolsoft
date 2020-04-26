@@ -12,7 +12,7 @@ global $teacher;
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
-    <a href="<?= Route::url('/foro/profesor/index.php') ?>"><img src="<?= School::logo() ?>" alt="Logo" width="72" height="72"></a>
+    <a href="<?= Route::url('/foro/profesor/index.php') ?>"><img src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>"></a>
   </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
