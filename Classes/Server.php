@@ -21,4 +21,14 @@ class Server
         }
         return true;
     }
+
+    public static function referer($value){
+        
+        $file = basename(self::get('HTTP_REFERER'));
+        $pathFile = str_replace('.php', '', $file);
+        if($pathFile === $value){
+            return true;
+        }
+        return false;
+    }
 }
