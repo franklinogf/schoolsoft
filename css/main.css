@@ -11,24 +11,28 @@ textarea {
  .table tbody tr {
   cursor: pointer !important;
 }
+
+
+
 .bg-secondary.custom-control-input:checked ~ .custom-control-label::before,
 .bg-secondary.custom-control-input:indeterminate ~ .custom-control-label::before {
-  background-color:var(--secondary);
-  border-color:var(--secondary);
+  background:var(--secondary) !important;  
+  border-color:var(--secondary) !important;
 }
 .bg-success.custom-control-input:checked ~ .custom-control-label::before,
 .bg-success.custom-control-input:indeterminate ~ .custom-control-label::before {
-  background-color:var(--success);
-  border-color:var(--success);
+  
+  background: var(--success) !important;
+  border-color:var(--success) !important;
 }
 
 .bg-info.custom-control-input:checked ~ .custom-control-label::before,
 .bg-info.custom-control-input:indeterminate ~ .custom-control-label::before {
-  background-color:var(--info);
-  border-color:var(--info);
+  background:var(--info) !important;
+  border-color:var(--info) !important;
 }
 
 a.nav-link {
-  mix-blend-mode: screen;
+  mix-blend-mode: screen !important;
 }
 
