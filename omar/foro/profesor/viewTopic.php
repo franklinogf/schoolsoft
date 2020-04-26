@@ -6,13 +6,16 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Topic;
 use Classes\Controllers\Teacher;
+use Classes\Server;
 use Classes\Session;
+
 
 Session::is_logged();
 
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
 $student = new Student();
+
 
 ?>
 <!DOCTYPE html>
@@ -22,8 +25,6 @@ $student = new Student();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - <?= $topic->titulo ?></title>
-  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
-  <!-- <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script> -->
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
@@ -38,11 +39,16 @@ $student = new Student();
 
     <div class="row mt-3">
       <div class="col-lg-4">
+        <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::back() ?>">
+          <i class="fas fa-arrow-left"></i> Atrás
+        </a>
+      </div>
+      <div class="col-lg-4">
         <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
-      <div class="col-lg-8 d-flex justify-content-end align-items-end">
+      <div class="col-lg-4 d-flex justify-content-end align-items-end">
         <i class="fas fa-toggle-on fa-3x <?= ($topic->estado === 'a' ? 'text-success' : 'text-danger') ?> "></i>
       </div>
     </div>
@@ -141,7 +147,6 @@ $student = new Student();
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-
   ?>
 
 </body>
