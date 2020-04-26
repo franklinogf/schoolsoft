@@ -28,3 +28,7 @@ textarea {
   border-color:var(--info);
 }
 
+a.nav-link {
+  mix-blend-mode: screen;
+}
+
