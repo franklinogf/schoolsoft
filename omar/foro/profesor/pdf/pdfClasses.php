@@ -8,6 +8,8 @@ use Classes\PDF;
 use Classes\Server;
 use Classes\Session;
 
+Session::is_logged();
+
 Server::is_post();
 
 $classes = $_POST['class'];
@@ -28,8 +30,7 @@ foreach ($classes as $class) {
 
 	$pdf->AddPage();
 	$pdf->SetFont('Arial', 'B', 12);
-	$pdf->Cell(95, 5, "$class - $thisClass->desc1", 0);
-	$pdf->Cell(0, 5, $teacher->fullName(), 0, 1, "R");
+	$pdf->splitCells("$class - $thisClass->desc1", $teacher->fullName());
 	// table header
 	$pdf->Cell(10, 7, "", "LTB", 0, "C", true);
 	$pdf->Cell(15, 7, "ID", "RTB", 0, "C", true);

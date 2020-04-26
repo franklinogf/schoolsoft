@@ -61,7 +61,7 @@ $(document).ready(function () {
     if (row.index() !== undefined) {
       // const data = row.data();
       const homeworkId = $(row.node()).prop('id');      
-      window.open(getBaseUrl('includes/pdf/pdfHomeworks.php?id='+homeworkId),'homework')
+      window.open(getBaseUrl('pdf/pdfHomeworks.php?id='+homeworkId),'homework')
       
 
     }

@@ -2,12 +2,14 @@
 require_once '../../../app.php';
 
 use Classes\PDF;
-use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Teacher;
 
+Session::is_logged();
+
 $teacher = new Teacher(Session::id());
+
 $students = DB::table('year')
 	->where([
 		['grado', $teacher->grado],
@@ -22,8 +24,7 @@ $pdf->Fill();
 
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(50, 5, 'Salon Hogar: ' . $teacher->grado, 0, 0, "L");
-$pdf->Cell(0, 5, $teacher->fullName(), 0, 1, "R");
+$pdf->splitCells("Salon Hogar: $teacher->grado", $teacher->fullName());
 // table header
 $pdf->SetFont('Arial', 'B', 13);
 $pdf->Cell(10, 7, "", "LTB", 0, "C", true);
