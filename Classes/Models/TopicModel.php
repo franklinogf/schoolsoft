@@ -34,7 +34,6 @@ class TopicModel extends School
   protected function getTopicComments($id)
   {
     $obj = parent::table('detalle_foro_entradas')->where('entrada_id',$id)->orderBy('fecha DESC,hora DESC')->get();
-
     return $obj;
   }
 
