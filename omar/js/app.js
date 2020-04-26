@@ -6,15 +6,34 @@ let studentsTable;
 //* --------------------------- functions --------------------------- *//
 
 function formatDate(value) {
-  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  const date = new Date(value);
+  if (value !== '0000-00-00') {
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  const day = date.getDate()
-  const month = months[date.getMonth()];
-  const year = date.getFullYear()
+    const date = new Date(value);
 
-  return day + ' ' + month + ' ' + year
+    const day = date.getDate()
+    const month = months[date.getMonth()];
+    const year = date.getFullYear()
+
+    return day + ' ' + month + ' ' + year
+  }
+
+  return '';
+
+}
+
+function formatTime(value) {
+  let [h, m, s] = value.split(':');
+  let p = 'AM'
+
+  if (h > 12) {
+    p = 'PM'
+    h -= 12
+  }
+
+
+  return h + ':' + m + ':' + s + ' ' + p
 
 }
 
@@ -74,16 +93,16 @@ $(function () {
 
     });
     // Classes table custom info
-    if($('.classesTable')) classesTable = $(".classesTable").DataTable();
+    if ($('.classesTable')) classesTable = $(".classesTable").DataTable();
 
     // Students table custom info
-    if($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
+    if ($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
 
     // Homework table custom info
-    if($('.homeworksTable'))  homeworksTable = $('.homeworksTable').DataTable();
+    if ($('.homeworksTable')) homeworksTable = $('.homeworksTable').DataTable();
 
     // Topics table custom info
-    if($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
+    if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
   }
 
 
