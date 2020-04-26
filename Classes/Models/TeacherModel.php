@@ -61,6 +61,7 @@ class TeacherModel extends School
 
     $year = $this->info('year');
     $obj =  parent::table('detalle_foro_entradas')
+      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
       ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
       ->join('cursos', 'foro_entradas.curso', '=', 'cursos.curso')
       ->where([
