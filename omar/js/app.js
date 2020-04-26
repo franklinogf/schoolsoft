@@ -5,6 +5,18 @@ let studentsTable;
 
 //* --------------------------- functions --------------------------- *//
 
+function formatDate(value){
+  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  const date = new Date(value);
+
+  const day = date.getDate()
+  const month = months[date.getMonth()];
+  const year = date.getFullYear()
+
+  return day + ' ' + month + ' ' + year
+
+}
 
 function getBaseUrl(fileName) {
   var re = new RegExp(/^.*\//);
@@ -66,6 +78,9 @@ if ($.fn.dataTable) {
   
   // Students table custom info
   studentsTable = $('.studentsTable').DataTable();
+
+ // Homewrok table custom info
+  homeworksTable = $('.homeworksTable').DataTable();
 }
 
 

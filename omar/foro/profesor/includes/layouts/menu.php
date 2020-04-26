@@ -34,14 +34,14 @@ global $teacher;
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
           <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>">Lista de cursos</a>
-          <a class="dropdown-item" href="#">Tareas Entregadas</a>
+          <a class="dropdown-item" <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>">Salon Hogar</a>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>">Lista de Usuarios</a>
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link text-primary dropdown-toggle" href="#" id="dropDownForo" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link text-primary dropdown-toggle disabled" href="#" id="dropDownForo" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Foro
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
