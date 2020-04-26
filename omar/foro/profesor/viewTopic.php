@@ -95,7 +95,7 @@ $student = new Student();
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="<?= Route::url('/foro/profesor/includes/topics.php') ?>" method="POST">
+          <form action="<?= Route::url('/foro/profesor/includes/viewTopics.php') ?>" method="POST">
             <div class="modal-body">
               <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
               <div class="form-row">

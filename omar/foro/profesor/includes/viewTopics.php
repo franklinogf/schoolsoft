@@ -17,4 +17,4 @@ $topic->estado = $_POST['state'];
 $topic->desde = $_POST['untilDate'];
 $topic->save();
 
-Route::redirect('/profesor/topic.php?id=' . $id_topic);
+Route::redirect('/profesor/viewTopic.php?id=' . $id_topic);

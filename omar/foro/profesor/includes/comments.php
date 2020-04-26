@@ -22,4 +22,4 @@ $topic = new Topic($id_topic);
 
 $topic->newComment($teacher->id, $comment, 'p');
 
-Route::redirect('/profesor/topic.php?id=' . $id_topic);
+Route::redirect('/profesor/viewTopic.php?id=' . $id_topic);
