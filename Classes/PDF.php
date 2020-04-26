@@ -10,7 +10,7 @@ class PDF extends FPDF
 {
 	public $footer = true;
 	public $header = true;
-	
+
 
 	function Header()
 	{
@@ -41,12 +41,20 @@ class PDF extends FPDF
 		}
 	}
 
-	public function useHeader($bool = true){
+	public function useHeader($bool = true)
+	{
 		$this->header = $bool;
 	}
 
-	public function useFooter($bool = true){
+	public function useFooter($bool = true)
+	{
 		$this->footer = $bool;
+	}
+
+	public function splitCells($value1, $value2)
+	{
+		$this->Cell(0, 5, $value1, 0, 0, "L");
+		$this->Cell(0, 5, $value2, 0, 1, "R");
 	}
 
 	public function Fill($red = __PDF_FILL_COLOR['red'], $green = __PDF_FILL_COLOR['green'], $blue =  __PDF_FILL_COLOR['blue'])
