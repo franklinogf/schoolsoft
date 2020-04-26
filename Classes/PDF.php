@@ -21,7 +21,7 @@ class PDF extends FPDF
 			$this->setCreator('School Soft');
 			$this->SetAutoPageBreak(true, -15);
 			if (file_exists(__ROOT . School::logo())) {
-				$this->Image(__ROOT . School::logo(), 10, 10, 25);
+				$this->Image(__ROOT . School::logo(), 10, 10, __PDF_LOGO_SIZE);
 			}
 			$this->SetFont('Arial', 'B', 15);
 			$this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');

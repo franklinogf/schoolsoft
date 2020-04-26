@@ -48,8 +48,9 @@ define('__PDF_FILL_COLOR', [
    'red' => 247,
    'green' => 202,
    'blue' => 24
-]);
-
+   ]);
+define('__PDF_LOGO_SIZE', 40);
+   
 /* -------------------------------- time zone ------------------------------- */
 
 /** For the United States:
