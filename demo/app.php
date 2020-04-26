@@ -40,6 +40,7 @@ define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/logo/
 // Language: es = Spanish, en = English
 define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
+// regular is 72 x 72
 define('__LOGO_SIZE_W', 120);
 define('__LOGO_SIZE_H', 72);
 
@@ -47,9 +48,9 @@ define('__LOGO_SIZE_H', 72);
 
 // RGB $pdf->SetFillColor(red,green,blue)
 define('__PDF_FILL_COLOR', [
-   'red' => 247,
-   'green' => 202,
-   'blue' => 24
+   'red' => 89,
+   'green' => 171,
+   'blue' => 227
 ]);
 define('__PDF_LOGO_SIZE', 40);
 
