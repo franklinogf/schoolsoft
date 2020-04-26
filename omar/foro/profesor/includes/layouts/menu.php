@@ -1,6 +1,5 @@
 <?php
 use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
 use Classes\Route;
 
 
@@ -45,11 +44,10 @@ global $teacher;
           Foro
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
-          <a class="dropdown-item" href="#">Foro</a>
+          <a class="dropdown-item <?= ($pathFile === 'topics' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/topics.php') ?>">Temas</a>
           <a class="dropdown-item" href="#">Crear Tareas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Tareas Recibidas</a>
-          <a class="dropdown-item" href="#">Opciones</a>
+          <a class="dropdown-item" href="#">Tareas Recibidas</a>          
         </div>
       </li>
     </ul>
