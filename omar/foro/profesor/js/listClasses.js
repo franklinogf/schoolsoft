@@ -5,8 +5,10 @@ $(document).ready(function () {
    // check all
    $(_checkAll).change(function () {
       if ($(this).prop("checked")) {
+         $(`${_checkAll}`).prop("indeterminate", false);
          $(`${_check}, ${_checkAll}`).prop("checked", true);
       } else {
+         $(`${_checkAll}`).prop("indeterminate", false);
          $(`${_check}, ${_checkAll}`).prop("checked", false);
       }
    });
