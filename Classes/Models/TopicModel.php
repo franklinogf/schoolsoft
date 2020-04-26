@@ -19,22 +19,23 @@ class TopicModel extends School
   protected function getTopicByPK($pk)
   {
 
-    $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
-    return $this->selectOne($query,[$pk]);
+    $obj = parent::table($this->table)->where($this->primary_key,$pk)->first();
+    return $obj;
   }
 
 
   protected function getAllTopics()
   {
-    $query = "SELECT * FROM {$this->table} AND `year` = ? ORDER BY `fecha`";
     $year = $this->info('year');
-    return $this->selectAll($query,[$year]);
+    $obj = parent::table($this->table)->where('year',$year)->orderBy('fecha')->get();
+    return $obj;
   }
 
   protected function getTopicComments($id)
   {
-    $query = "SELECT * FROM `detalle_foro_entradas` WHERE `entrada_id` = ? ORDER BY `fecha` DESC,`hora` DESC";
-    return $this->selectAll($query,[$id]);
+    $obj = parent::table('detalle_foro_entradas')->where('entrada_id',$id)->orderBy('fecha DESC,hora DESC')->get();
+
+    return $obj;
   }
 
   protected function insertTopicComments($id, $type, $id_topic, $desc)

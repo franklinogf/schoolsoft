@@ -24,7 +24,7 @@ class Topic extends TopicModel
 
   public function findPK($pk)
   {
-    $array = $this->getTopicByPK($pk);
+    $array = $this->getTopicByPK($pk);   
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
