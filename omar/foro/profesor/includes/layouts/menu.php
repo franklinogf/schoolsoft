@@ -41,7 +41,7 @@ global $teacher;
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link text-primary dropdown-toggle disabled" href="#" id="dropDownForo" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link text-primary dropdown-toggle" href="#" id="dropDownForo" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Foro
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
