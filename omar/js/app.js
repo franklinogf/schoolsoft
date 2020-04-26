@@ -5,8 +5,8 @@ let studentsTable;
 
 //* --------------------------- functions --------------------------- *//
 
-function formatDate(value){
-  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function formatDate(value) {
+  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   const date = new Date(value);
 
@@ -45,43 +45,46 @@ function checkPasswords(pass1 = '#pass1', pass2 = '#pass2', bothClass = '.pass')
 
 $(function () {
   // Data table global configuration
-if ($.fn.dataTable) {
-  $.extend($.fn.dataTable.defaults, {
-    "language": {
-      "decimal": ".",
-      "emptyTable": "No hay datos disponibles",
-      "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
-      "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
-      "infoFiltered": "(Filtrado de un total de _MAX_ )",
-      "loadingRecords": "Cargando...",
-      "processing": "Procesando...",
-      "search": "Buscar:",
-      "zeroRecords": "No se encontraron datos",
-      "paginate": {
-        "first": "Primera",
-        "last": "Ultima",
-        "next": "Siguente",
-        "previous": "Anterior"
+  if ($.fn.dataTable) {
+    $.extend($.fn.dataTable.defaults, {
+      "language": {
+        "decimal": ".",
+        "emptyTable": "No hay datos disponibles",
+        "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
+        "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
+        "infoFiltered": "(Filtrado de un total de _MAX_ )",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "No se encontraron datos",
+        "paginate": {
+          "first": "Primera",
+          "last": "Ultima",
+          "next": "Siguente",
+          "previous": "Anterior"
+        },
+        "aria": {
+          "sortAscending": ": Activar para ordernar la columna de forma ascendente",
+          "sortDescending": ": Activar para ordernar la columna de forma descendente"
+        }
       },
-      "aria": {
-        "sortAscending": ": Activar para ordernar la columna de forma ascendente",
-        "sortDescending": ": Activar para ordernar la columna de forma descendente"
-      }
-    },
-    "pageLength": 10,
-    "lengthChange": false,
-    "ordering": false
+      "pageLength": 10,
+      "lengthChange": false,
+      "ordering": false
 
-  });
-  // Classes table custom info
-  classesTable = $(".classesTable").DataTable();
-  
-  // Students table custom info
-  studentsTable = $('.studentsTable').DataTable();
+    });
+    // Classes table custom info
+    if($('.classesTable')) classesTable = $(".classesTable").DataTable();
 
- // Homewrok table custom info
-  homeworksTable = $('.homeworksTable').DataTable();
-}
+    // Students table custom info
+    if($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
+
+    // Homework table custom info
+    if($('.homeworksTable'))  homeworksTable = $('.homeworksTable').DataTable();
+
+    // Topics table custom info
+    if($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
+  }
 
 
 });
