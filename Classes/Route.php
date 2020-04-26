@@ -71,7 +71,10 @@ class Route
    }
 
    public static function back(){
-      header("Location: ".$_SERVER["REQUEST_URI"]);
+      
+      return Server::get('HTTP_REFERER');
    }
+ 
+   
 
 }
