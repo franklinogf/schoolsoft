@@ -15,7 +15,7 @@ $teacher = new Teacher(Session::id());
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Foro - Tareas</title>
+  <title>Foro - Informe de Tareas</title>
   <?php
   Route::fontawasome();
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
