@@ -32,3 +32,7 @@ a.nav-link {
   mix-blend-mode: screen;
 }
 
+.hidden{
+  display:none;
+}
+
