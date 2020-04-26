@@ -59,7 +59,10 @@ $(document).ready(function () {
   $('.homeworksTable tbody').on('click', 'tr', function () {
     const row = homeworksTable.row(this)
     if (row.index() !== undefined) {
-      const data = row.data();
+      // const data = row.data();
+      const homeworkId = $(row.node()).prop('id');      
+      window.open(getBaseUrl('includes/pdf/pdfHomeworks.php?id='+homeworkId),'homework')
+      
 
     }
   });
