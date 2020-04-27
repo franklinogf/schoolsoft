@@ -1,0 +1,92 @@
+$(document).ready(function () {
+   let _class = '';
+
+   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
+   const topicsTableWrapper = $(".topicsTable").parents('.dataTables_wrapper');
+   topicsTableWrapper.hide(0);  
+   
+   
+if(sessionStorage.getItem('class')){
+   getTopics(sessionStorage.getItem('class'));  
+}
+
+
+   $('.classesTable tbody').on('click', 'tr', function () {
+      const row = classesTable.row(this)
+      if (row.index() !== undefined) {
+         const data = row.data();
+         getTopics(data[0]);
+      }
+   });
+
+   function getTopics(thisClass) {
+      _class = thisClass
+      $.ajax({
+         type: "POST",
+         url: getBaseUrl('includes/topics.php'),
+         data: { 'topicsByClass': _class },
+         dataType: "json",
+         success: (res) => { 
+            if (res.response === true) {
+               
+               res.data.map(topic => {
+                  console.log('res.data: ', res.data);                    
+                  const thisRow = topicsTable.row.add({
+                     0: topic.titulo,
+                     1: formatDate(topic.desde),
+                     2: formatDate(topic.fecha),
+                     3: formatTime(topic.hora),
+                  }).draw();
+
+                  $(thisRow.node()).prop('id', topic.id)
+
+               })
+               // hide first table and show second table
+               classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
+                  $('#newTopic').fadeToggle(250);
+                  topicsTableWrapper.show('drop', { direction: "right" }, 400);
+                  $("#header").animate({ opacity: 0 }, 250, () => {
+                     $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+                  });
+               });
+            }
+            else {
+               alert('No existen temas en esta clase');
+            }
+         }
+      });
+     }
+
+   $("#back").click((e) => {
+      // hide second table and shows first table
+      $('#newTopic').fadeToggle(250);      
+      topicsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
+         // Reset the variables
+         sessionStorage.clear('class');
+         topicsTable.rows().remove();         
+         classesTableWrapper.show('drop', { direction: "left" }, 400);
+         $("#header").animate({ opacity: 0 }, 250, () => {
+            $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
+         });
+      });
+   })
+
+   $("#newTopic").click((e) => {
+      const modal = $('#myModal');
+      modal.modal('show');
+   })
+
+   $('.topicsTable tbody').on('click', 'tr', function () {
+      const row = topicsTable.row(this)
+      if (row.index() !== undefined) {        
+         const topicId = $(row.node()).prop('id');
+         sessionStorage.setItem("class", _class);
+         window.location.href = getBaseUrl('viewTopic.php?id='+topicId)
+      }
+   });
+
+
+
+
+
+});

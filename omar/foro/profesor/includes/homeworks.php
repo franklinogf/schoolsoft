@@ -2,7 +2,6 @@
 require_once '../../../app.php';
 
 use Classes\Util;
-use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
 use Classes\Server;
