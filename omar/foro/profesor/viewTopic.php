@@ -6,17 +6,13 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Controllers\Topic;
 use Classes\Controllers\Teacher;
-use Classes\Server;
 use Classes\Session;
-
 
 Session::is_logged();
 
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
 $student = new Student();
-
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,12 +35,12 @@ $student = new Student();
 
     <div class="row mt-3">
       <div class="col-lg-4">
-        <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::back() ?>">
-          <i class="fas fa-arrow-left"></i> Atrás
+        <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
+          Temas
         </a>
       </div>
       <div class="col-lg-4">
-        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
+        <button type="button" id="editTopicBtn"  class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#myModal">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
@@ -69,12 +65,12 @@ $student = new Student();
     <div class="container mt-3 pb-5">
       <?php if ($topic->estado === 'a') : ?>
         <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
-          <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
+          <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
           <div class="form-group">
             <label for="comment">Comentario nuevo</label>
             <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
           </div>
-          <button class="btn btn-primary" type="submit">Comentar</button>
+          <button class="btn btn-primary" name="insertComment" type="submit">Comentar</button>
         </form>
       <?php endif ?>
 
@@ -137,7 +133,7 @@ $student = new Student();
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="submit" name="editTopic" class="btn btn-primary">Guardar</button>
             </div>
           </form>
         </div>
