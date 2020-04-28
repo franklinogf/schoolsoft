@@ -75,6 +75,7 @@ $student = new Student();
       <?php endif ?>
 
 
+      <?php if($topic->comments()): ?>
       <?php foreach ($topic->comments() as $comment) : ?>
         <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
           <img src="<?= __NO_PROFILE_PICTURE ?>" class="mr-3" alt="profile picture" width="64" height="64">
@@ -86,6 +87,7 @@ $student = new Student();
           </div>
         </div>
       <?php endforeach ?>
+      <?php endif ?>
     </div>
     <!-- Modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
