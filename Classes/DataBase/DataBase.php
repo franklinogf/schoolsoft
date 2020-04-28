@@ -34,29 +34,33 @@ class DataBase
   protected function updateTable($table, $pk, $wherePk, $propsArray)
   {
     $query = "UPDATE {$table} SET ";
-
     $count = 0;
-    $paramsArray = [];
+    $valuesArray = [];
     // Remove primary key from the array to update (pk is not supose to update)
     unset($propsArray[$pk]);
     foreach ($propsArray as $key => $value) {
-      $paramsArray[] = $value;
+      $valuesArray[] = $value;
       $coma = ($count > 0 ? ',' : '');
       $query .= "$coma $key = ?";
       $count++;
     }
     $query .= " WHERE {$pk} = '" . $wherePk . "'";
+    $this->updateQuery($query,$valuesArray);
+    
+  }
+  protected function updateQuery($query,$valuesArray){
+        
     $db = $this->connect();
     $stmt = $db->prepare($query);
-    $bind =  str_repeat('s', count($paramsArray));
+    $bind =  str_repeat('s', count($valuesArray));
     // php 5 version
     $refs = array();
-    foreach ($paramsArray as $key => $value) {
-      $refs[$key] = &$paramsArray[$key];
+    foreach ($valuesArray as $key => $value) {
+      $refs[$key] = &$valuesArray[$key];
     }
     call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
     // php 7 version
-    // $stmt->bind_param($bind, ...$paramsArray);
+    // $stmt->bind_param($bind, ...$valuesArray);
     $stmt->execute();
   }
 

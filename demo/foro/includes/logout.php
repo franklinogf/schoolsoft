@@ -1,9 +1,7 @@
 <?php
-
-use Classes\Route;
-
 require_once '../../app.php';
 
+use Classes\Route;
 
 session_destroy();
 

@@ -14,7 +14,6 @@ class DB extends DataBase
   private static $columns = '*';
   private static $query = '';
   private static $orderBy = null;
-  private static $findby = null;
   private static $where = [];
   private static $whereCols = [];
   private static $whereValues = [];
@@ -27,19 +26,17 @@ class DB extends DataBase
   private static $innerJoinCol2 = [];
   private static $innerJoinOperator = [];
 
-/* ---------------------------- select the table ---------------------------- */
+  /* ---------------------------- select the table ---------------------------- */
 
   public static function table($table)
   {
-    if (self::$instance === null) {
-      self::$instance = new self;
-    }
+    self::$instance = new self;
     self::$table = trim($table);
 
     return self::$instance;
   }
 
-/* ---------------- Select columns of the table defaults ALL ---------------- */
+  /* ---------------- Select columns of the table defaults ALL ---------------- */
 
   public function select($columns)
   {
@@ -48,9 +45,9 @@ class DB extends DataBase
     return self::$instance;
   }
 
-/* --------------------- Insert one row or multiple rows -------------------- */
+  /* --------------------- Insert one row or multiple rows -------------------- */
 
-  public function insert($insertArray,$getId = false)
+  public function insert($insertArray, $getId = false)
   {
     $valuesArray = [];
     $query = [];
@@ -83,27 +80,49 @@ class DB extends DataBase
       $query[] = 'INSERT INTO ' . self::$table . "($columns) VALUES ($values)";
     }
 
-    return $this->insertQuery($query,$valuesArray,$getId);
+    return $this->insertQuery($query, $valuesArray, $getId);
   }
 
-/* ------------------ insert a row and get the inserted id ------------------ */
+  /* ------------------ insert a row and get the inserted id ------------------ */
 
-  public function insertGetId($insertArray){
-    return $this->insert($insertArray,true);
-  }  
-  
-/* ------------------------- find by the primary key ------------------------ */
+  public function insertGetId($insertArray)
+  {
+    return $this->insert($insertArray, true);
+  }
+
+  public function update($updateArray)
+  {
+    $count = 0;
+    $set = '';
+    $valuesArray = [];
+    foreach ($updateArray as $key => $value) {
+      $valuesArray[] = $value;
+      $coma = ($count > 0 ? ',' : '');
+      $set .= "$coma $key = ?";
+      $count++;
+    }    
+    $where = $this->buildWhere($updateArray);
+
+   $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
+    $values = array_merge($valuesArray,self::$whereValues);
+    
+    $this->updateQuery($query,$values);
+    $this->closeDB();
+  }
+
+  /* ------------------------- find by the primary key ------------------------ */
 
   public function find($value, $col = 'id')
   {
 
-    self::$findby = ' WHERE ' . trim($col) . ' = ?';
-    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . self::$findby;
-    $obj = $this->selectOne(self::$query, [trim($value)]);
+    self::where($col, $value);
+    $this->buildSelectQuery();
+    $obj = $this->selectOne(self::$query, self::$where);
+    $this->closeDB();
     return $obj;
   }
 
-/* ------------------------------ where clause ------------------------------ */
+  /* ------------------------------ where clause ------------------------------ */
 
   public function where($w1, $w2 = false, $w3 = false)
   {
@@ -128,7 +147,7 @@ class DB extends DataBase
     return self::$instance;
   }
 
-/* ----------------------------- OR WHERE clause ---------------------------- */
+  /* ----------------------------- OR WHERE clause ---------------------------- */
 
   public function orWhere($w1, $w2 = false, $w3 = false)
   {
@@ -154,9 +173,9 @@ class DB extends DataBase
     return self::$instance;
   }
 
-/* ------------------------------- Inner join ------------------------------- */
+  /* ------------------------------- Inner join ------------------------------- */
 
-  public function join(string $tableToJoin, $table1Col, $operator, $table2Col)
+  public function join($tableToJoin, $table1Col, $operator, $table2Col)
   {
     self::$innerJoinTable[] = $tableToJoin;
     self::$innerJoinCol1[] = $table1Col;
@@ -165,7 +184,7 @@ class DB extends DataBase
     return self::$instance;
   }
 
-/* ----------------------------- Order by filter ---------------------------- */
+  /* ----------------------------- Order by filter ---------------------------- */
 
   public function orderBy($col, $mode = null)
   {
@@ -174,7 +193,7 @@ class DB extends DataBase
     return self::$instance;
   }
 
-/* ---------------------------- get multiple rows --------------------------- */
+  /* ---------------------------- get multiple rows --------------------------- */
 
   public function get()
   {
@@ -184,7 +203,7 @@ class DB extends DataBase
     return $obj;
   }
 
-/* ------------------------------- get one row ------------------------------ */
+  /* ------------------------------- get one row ------------------------------ */
 
   public function first()
   {
@@ -194,14 +213,8 @@ class DB extends DataBase
     return $obj;
   }
 
-  
-/* ----------------- Build the query of the select statement ---------------- */
-
-  private function buildSelectQuery($other = '')
+  private function buildWhere()
   {
-    // for the limit or other
-    $other = trim($other);
-
     $where = '';
     if (count(self::$whereCols) > 0) {
       foreach (self::$whereCols  as $i => $col) {
@@ -218,6 +231,19 @@ class DB extends DataBase
 
     self::$where = array_merge(self::$whereValues, self::$orWhereValues);
 
+    return $where;
+  }
+
+
+  /* ----------------- Build the query of the select statement ---------------- */
+
+  private function buildSelectQuery($other = '')
+  {
+    // for the limit or other
+    $other = trim($other);
+
+    $where = $this->buildWhere();
+
     $join = '';
     if (count(self::$innerJoinTable) > 0) {
       foreach (self::$innerJoinTable  as $i => $table) {
@@ -226,9 +252,9 @@ class DB extends DataBase
     }
 
     self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$orderBy . ' ' . $other;
-  } 
+  }
 
-/* ---------------- restore the DB class to the initial state --------------- */
+  /* ---------------- restore the DB class to the initial state --------------- */
 
   private function closeDB()
   {
@@ -237,7 +263,6 @@ class DB extends DataBase
     self::$columns = '*';
     self::$query = '';
     self::$orderBy = null;
-    self::$findby = null;
     self::$where = [];
     self::$whereCols = [];
     self::$whereValues = [];

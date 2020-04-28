@@ -2,7 +2,6 @@
 
 namespace Classes;
 
-use Classes\Util;
 use Classes\Controllers\Teacher;
 use Classes\Controllers\Student;
 

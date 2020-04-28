@@ -41,7 +41,7 @@ define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/logo/
 define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
 // regular is 72 x 72
-define('__LOGO_SIZE_W', 120);
+define('__LOGO_SIZE_W', 200);
 define('__LOGO_SIZE_H', 72);
 
 /* ----------------------------------- PDF ---------------------------------- */

@@ -7,7 +7,7 @@ use Classes\Session;
 
 Session::is_logged();
 
-$teacher = new Teacher($_SESSION['logged']['user']['id']);
+$teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
