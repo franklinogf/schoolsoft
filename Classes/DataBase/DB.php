@@ -133,6 +133,46 @@ class DB extends DataBase
     return $obj;
   }
 
+  public function insert($insertArray,$getId = false)
+  {
+    $valuesArray = [];
+    $query = [];
+    if ($this->isMultiArray($insertArray)) {
+      foreach ($insertArray as $array) {
+        $count = 0;
+        $valuesArray[] = $array;
+        $values = '';
+        $columns = '';
+        foreach ($array as $key => $value) {
+          $coma = ($count > 0 ? ',' : '');
+          $columns .= "{$coma}{$key}";
+          $values .= "{$coma}?";
+          $count++;
+        }
+        $query[] = 'INSERT INTO ' . self::$table . "($columns) VALUES ($values)";
+      }
+    } else {
+      $count = 0;
+      $columns = '';
+      $values = '';
+      $query = [];
+      foreach ($insertArray as $key => $value) {
+        $valuesArray[] = $value;
+        $coma = ($count > 0 ? ',' : '');
+        $columns .= "{$coma}{$key}";
+        $values .= "{$coma}?";
+        $count++;
+      }
+      $query[] = 'INSERT INTO ' . self::$table . "($columns) VALUES ($values)";
+    }
+
+    return $this->insertQuery($query,$valuesArray,$getId);
+  }
+
+  public function insertGetId($insertArray){
+    return $this->insert($insertArray,true);
+  }
+
   private function buildSelectQuery($other = '')
   {
     // for the limit or other
@@ -164,12 +204,7 @@ class DB extends DataBase
     self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$orderBy . ' ' . $other;
   }
 
-  private function isMultiArray($array)
-  {
-    $rv = array_filter($array, 'is_array');
-    if (count($rv) > 0) return true;
-    return false;
-  }
+ 
 
   private function closeDB()
   {

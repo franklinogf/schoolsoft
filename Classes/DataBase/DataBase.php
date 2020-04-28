@@ -3,6 +3,7 @@
 namespace Classes\DataBase;
 
 use mysqli;
+use Exception;
 use Classes\Util;
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase connection                     */
@@ -78,19 +79,50 @@ class DataBase
     }
 
     $query .= "({$columns}) VALUES ($values)";
-    
+
+    $this->insertQuery([$query], $valuesArray);
+  }
+
+  protected function insertQuery($query, $valuesArray, $insertId = false)
+  {
     $db = $this->connect();
-    $stmt = $db->prepare($query);
-    $bind =  str_repeat('s', count($valuesArray));
-    // php 5 version
-    $refs = array();
-    foreach ($valuesArray as $key => $value) {
-      $refs[$key] = &$valuesArray[$key];
+    // multiple inserts
+    if ($this->isMultiArray($valuesArray)) {
+
+      foreach ($valuesArray as $key => $array) {        
+        $stmt = $db->prepare($query[$key]);
+        $bind =  str_repeat('s', count($array));
+        // php 5 version
+        $refs = [];
+        foreach ($array as $key => $value) {
+          $refs[$key] = &$array[$key];
+        }
+        call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+        // // php 7 version
+        // $stmt->bind_param($bind, ...$array);
+        $stmt->execute();
+      }
+    } else {
+      $stmt = $db->prepare($query[0]);
+      $bind =  str_repeat('s', count($valuesArray));
+      // php 5 version
+      $refs = [];
+      foreach ($valuesArray as $key => $value) {
+        $refs[$key] = &$valuesArray[$key];
+      }
+      call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+      // php 7 version
+      // $stmt->bind_param($bind, ...$valuesArray);
+      if ($stmt->execute()) {
+        echo 'funciono';
+        if ($insertId === true) {
+          return $stmt->insert_id;
+        }
+        return true;
+      } else {
+        throw new Exception($stmt->error);   
+      }
     }
-    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
-    // php 7 version
-    // $stmt->bind_param($bind, ...$paramsArray);
-    $stmt->execute();
   }
 
   // select just one row
@@ -116,7 +148,7 @@ class DataBase
     }
     return false;
   }
-
+  // global select
   private function selectFromDB($query, $whereArray)
   {
     $db = $this->connect();
@@ -136,9 +168,19 @@ class DataBase
       // $stmt->bind_param($bind, ...$whereArray);
 
     }
-    $stmt->execute();
+    if(!$stmt->execute()){
+      throw new Exception($stmt->error);   
+    }
+    
     $result = $stmt->get_result();
     $stmt->close();
     return $result;
+  }
+  // check if the array given is a assosiative array
+  protected function isMultiArray($array)
+  {
+    $rv = array_filter($array, 'is_array');
+    if (count($rv) > 0) return true;
+    return false;
   }
 }
