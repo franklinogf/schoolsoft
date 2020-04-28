@@ -30,6 +30,12 @@ class DataBase
     return $db;
   }
 
+  protected function deleteQuery($query, $valuesArray)
+  {
+
+    $this->updateQuery($query, $valuesArray);
+  }
+
   // update tables 
   protected function updateTable($table, $pk, $wherePk, $propsArray)
   {
@@ -45,11 +51,11 @@ class DataBase
       $count++;
     }
     $query .= " WHERE {$pk} = '" . $wherePk . "'";
-    $this->updateQuery($query,$valuesArray);
-    
+    $this->updateQuery($query, $valuesArray);
   }
-  protected function updateQuery($query,$valuesArray){
-        
+  protected function updateQuery($query, $valuesArray)
+  {
+
     $db = $this->connect();
     $stmt = $db->prepare($query);
     $bind =  str_repeat('s', count($valuesArray));
@@ -93,7 +99,7 @@ class DataBase
     // multiple inserts
     if ($this->isMultiArray($valuesArray)) {
 
-      foreach ($valuesArray as $key => $array) {        
+      foreach ($valuesArray as $key => $array) {
         $stmt = $db->prepare($query[$key]);
         $bind =  str_repeat('s', count($array));
         // php 5 version
@@ -124,7 +130,7 @@ class DataBase
         }
         return true;
       } else {
-        throw new Exception($stmt->error);   
+        throw new Exception($stmt->error);
       }
     }
   }
@@ -172,10 +178,10 @@ class DataBase
       // $stmt->bind_param($bind, ...$whereArray);
 
     }
-    if(!$stmt->execute()){
-      throw new Exception($stmt->error);   
+    if (!$stmt->execute()) {
+      throw new Exception($stmt->error);
     }
-    
+
     $result = $stmt->get_result();
     $stmt->close();
     return $result;

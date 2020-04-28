@@ -101,12 +101,20 @@ class DB extends DataBase
       $set .= "$coma $key = ?";
       $count++;
     }    
-    $where = $this->buildWhere($updateArray);
+    $where = $this->buildWhere();
 
    $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
     $values = array_merge($valuesArray,self::$whereValues);
     
     $this->updateQuery($query,$values);
+    $this->closeDB();
+  }
+  public function delete()
+  {
+   
+    $where = $this->buildWhere();
+    $query = 'DELETE FROM ' . self::$table .' ' . $where;    
+    $this->deleteQuery($query,self::$whereValues);
     $this->closeDB();
   }
 
