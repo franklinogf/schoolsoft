@@ -1,4 +1,5 @@
 <?php
+
 namespace Classes\DataBase;
 
 use mysqli;
@@ -11,25 +12,25 @@ class DataBase
 {
 
 
-    private $host = __HOST;
-    private $username = __USERNAME;
-    private $password = __PASSWORD;
-    private $dbName = __DB_NAME;
+  private $host = __HOST;
+  private $username = __USERNAME;
+  private $password = __PASSWORD;
+  private $dbName = __DB_NAME;
 
 
-    protected function connect()
-    {
-        $db = new mysqli($this->host, $this->username, $this->password, $this->dbName);
-        if ($db->connect_errno) {
-            echo "Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-        }
-        $db->set_charset("utf8");
-
-        return $db;
+  protected function connect()
+  {
+    $db = new mysqli($this->host, $this->username, $this->password, $this->dbName);
+    if ($db->connect_errno) {
+      echo "Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     }
+    $db->set_charset("utf8");
 
-    // update tables 
-    protected function updateTable($table, $pk, $wherePk, $propsArray)
+    return $db;
+  }
+
+  // update tables 
+  protected function updateTable($table, $pk, $wherePk, $propsArray)
   {
     $query = "UPDATE {$table} SET ";
 
@@ -49,59 +50,94 @@ class DataBase
     $bind =  str_repeat('s', count($paramsArray));
     // php 5 version
     $refs = array();
-    foreach($paramsArray as $key => $value) {
-            $refs[$key] = &$paramsArray[$key];
-    }         
-    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
+    foreach ($paramsArray as $key => $value) {
+      $refs[$key] = &$paramsArray[$key];
+    }
+    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
     // php 7 version
     // $stmt->bind_param($bind, ...$paramsArray);
     $stmt->execute();
   }
 
-  protected function selectOne($query,$whereArray = []){   
-   
-    $result = $this->selectFromDB($query,$whereArray);
-    if($result->num_rows > 0){    
-     
-      $obj = $result->fetch_assoc();     
-      return (object) $obj;   
-    }else{
-      return false;
-    }    
+  // Insert row into tables 
+  protected function insertTable($table, $propsArray)
+  {
+    $query = "INSERT INTO {$table}";
 
+    $count = 0;
+    $valuesArray = [];
+    $columns = '';
+    $values = '';
+
+    foreach ($propsArray as $key => $value) {
+      $valuesArray[] = $value;
+      $coma = ($count > 0 ? ',' : '');
+      $columns .= "$coma $key";
+      $values .= "$coma ?";
+      $count++;
+    }
+
+    $query .= "({$columns}) VALUES ($values)";
+    
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
+    $bind =  str_repeat('s', count($valuesArray));
+    // php 5 version
+    $refs = array();
+    foreach ($valuesArray as $key => $value) {
+      $refs[$key] = &$valuesArray[$key];
+    }
+    call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+    // php 7 version
+    // $stmt->bind_param($bind, ...$paramsArray);
+    $stmt->execute();
   }
-  protected function selectAll($query,$whereArray = []){
-    // var_dump($whereArray);
-    $result = $this->selectFromDB($query,$whereArray);
-    if($result->num_rows > 0){
-    $obj = $result->fetch_all(MYSQLI_ASSOC);
-    return Util::toObject($obj);
+
+  // select just one row
+  protected function selectOne($query, $whereArray = [])
+  {
+
+    $result = $this->selectFromDB($query, $whereArray);
+    if ($result->num_rows > 0) {
+
+      $obj = $result->fetch_assoc();
+      return (object) $obj;
+    } else {
+      return false;
+    }
+  }
+  // select multiple rows
+  protected function selectAll($query, $whereArray = [])
+  {
+    $result = $this->selectFromDB($query, $whereArray);
+    if ($result->num_rows > 0) {
+      $obj = $result->fetch_all(MYSQLI_ASSOC);
+      return Util::toObject($obj);
     }
     return false;
-   
+  }
 
-  } 
+  private function selectFromDB($query, $whereArray)
+  {
+    $db = $this->connect();
+    $stmt = $db->prepare($query);
 
-  private function selectFromDB($query,$whereArray){
-    $db = $this->connect();    
-    $stmt = $db->prepare($query);    
-    
-    if(count($whereArray) > 0){
-      
-      $bind = str_repeat('s',count($whereArray));
+    if (count($whereArray) > 0) {
+
+      $bind = str_repeat('s', count($whereArray));
       // php 5 version
       $refs = array();
-      foreach($whereArray as $key => $value) {
-              $refs[$key] = &$whereArray[$key];
-      }  
+      foreach ($whereArray as $key => $value) {
+        $refs[$key] = &$whereArray[$key];
+      }
       // var_dump($refs); 
-      call_user_func_array(array($stmt, "bind_param"), array_merge([$bind],$refs));
-    // php 7 version
-    // $stmt->bind_param($bind, ...$whereArray);
-     
+      call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+      // php 7 version
+      // $stmt->bind_param($bind, ...$whereArray);
+
     }
     $stmt->execute();
-    $result = $stmt->get_result();   
+    $result = $stmt->get_result();
     $stmt->close();
     return $result;
   }
