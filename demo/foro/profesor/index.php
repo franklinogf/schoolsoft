@@ -8,7 +8,6 @@ use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
 
 Session::is_logged();
-
 $teacher = new Teacher(Session::id());
 $lastTopic = $teacher->lastTopic();
 

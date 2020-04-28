@@ -2,6 +2,7 @@
 
 namespace Classes\DataBase;
 
+use Classes\Util;
 
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase queries                        */
@@ -100,21 +101,21 @@ class DB extends DataBase
       $coma = ($count > 0 ? ',' : '');
       $set .= "$coma $key = ?";
       $count++;
-    }    
+    }
     $where = $this->buildWhere();
 
-   $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
-    $values = array_merge($valuesArray,self::$whereValues);
-    
-    $this->updateQuery($query,$values);
+    $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
+    $values = array_merge($valuesArray, self::$whereValues);
+
+    $this->updateQuery($query, $values);
     $this->closeDB();
   }
   public function delete()
   {
-   
+
     $where = $this->buildWhere();
-    $query = 'DELETE FROM ' . self::$table .' ' . $where;    
-    $this->deleteQuery($query,self::$whereValues);
+    $query = 'DELETE FROM ' . self::$table . ' ' . $where;
+    $this->deleteQuery($query, self::$whereValues);
     $this->closeDB();
   }
 
@@ -242,7 +243,6 @@ class DB extends DataBase
     return $where;
   }
 
-
   /* ----------------- Build the query of the select statement ---------------- */
 
   private function buildSelectQuery($other = '')
@@ -282,5 +282,22 @@ class DB extends DataBase
     self::$innerJoinCol1 = [];
     self::$innerJoinCol2 = [];
     self::$innerJoinOperator = [];
+  }
+
+  /* -------------------------------- var_dump -------------------------------- */
+  public function dump()
+  {
+    $this->buildSelectQuery();
+    $result = $this->selectFromDB(self::$query, self::$where);   
+    if($result->num_rows == 1){
+      $obj = $result->fetch_assoc();
+      Util::dump($obj);     
+
+    }else if ($result->num_rows > 1) {
+      $obj = $result->fetch_all(MYSQLI_ASSOC);
+      Util::dump($obj);    
+     
+    }
+   
   }
 }

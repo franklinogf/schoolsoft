@@ -159,7 +159,7 @@ class DataBase
     return false;
   }
   // global select
-  private function selectFromDB($query, $whereArray)
+  protected function selectFromDB($query, $whereArray)
   {
     $db = $this->connect();
     $stmt = $db->prepare($query);
