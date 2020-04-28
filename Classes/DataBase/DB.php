@@ -27,6 +27,7 @@ class DB extends DataBase
   private static $innerJoinCol2 = [];
   private static $innerJoinOperator = [];
 
+/* ---------------------------- select the table ---------------------------- */
 
   public static function table($table)
   {
@@ -38,6 +39,8 @@ class DB extends DataBase
     return self::$instance;
   }
 
+/* ---------------- Select columns of the table defaults ALL ---------------- */
+
   public function select($columns)
   {
     self::$columns = trim($columns);
@@ -45,93 +48,7 @@ class DB extends DataBase
     return self::$instance;
   }
 
-  public function orderBy($col, $mode = null)
-  {
-
-    self::$orderBy = ' ORDER BY ' . trim($col) . ' ' . trim($mode);
-    return self::$instance;
-  }
-
-  public function find($value, $col = 'id')
-  {
-
-    self::$findby = ' WHERE ' . trim($col) . ' = ?';
-    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . self::$findby;
-    $obj = $this->selectOne(self::$query, [trim($value)]);
-    return $obj;
-  }
-
-  public function where($w1, $w2 = false, $w3 = false)
-  {
-    if ($w2) {
-      self::$whereCols[] = trim($w1);
-      self::$whereValues[] = ($w3 ? trim($w3) : trim($w2));
-      self::$whereOperators[] = ($w3 ? trim($w2) : '=');
-    } else if (!$w2) {
-      if ($this->isMultiArray($w1)) {
-        foreach ($w1 as $w) {
-          self::$whereCols[] = trim($w[0]);
-          self::$whereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
-          self::$whereOperators[] = (isset($w[2]) ? trim($w[1]) : '=');
-        }
-      } else {
-        self::$whereCols[] = trim($w1[0]);
-        self::$whereValues[] = (isset($w1[2]) ? trim($w1[2]) : trim($w1[1]));
-        self::$whereOperators[] = (isset($w1[2]) ? trim($w1[1]) : '=');
-      }
-    }
-
-    return self::$instance;
-  }
-
-  public function orWhere($w1, $w2 = false, $w3 = false)
-  {
-    if ($w2) {
-      self::$orWhereCols[] = trim($w1);
-      self::$orWhereValues[] = ($w3 ? trim($w3) : trim($w2));
-      self::$orWhereOperators[] = ($w3 ? trim($w2) : '=');
-    } else if (!$w2) {
-      if ($this->isMultiArray($w1)) {
-        foreach ($w1 as $w) {
-          self::$orWhereCols[] = trim($w[0]);
-          self::$orWhereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
-          self::$orWhereOperators[] = (isset($w[2]) ? trim($w[1]) : '=');
-        }
-      } else {
-        self::$orWhereCols[] = trim($w1[0]);
-        self::$orWhereValues[] = (isset($w1[2]) ? trim($w1[2]) : trim($w1[1]));
-        self::$orWhereOperators[] = (isset($w1[2]) ? trim($w1[1]) : '=');
-      }
-    }
-
-
-    return self::$instance;
-  }
-
-  public function join($tableToJoin, $table1Col, $operator, $table2Col)
-  {
-    self::$innerJoinTable[] = $tableToJoin;
-    self::$innerJoinCol1[] = $table1Col;
-    self::$innerJoinCol2[] = $table2Col;
-    self::$innerJoinOperator[] = $operator;
-    return self::$instance;
-  }
-
-  public function get()
-  {
-    $this->buildSelectQuery();
-    $obj = $this->selectAll(self::$query, self::$where);
-    $this->closeDB();
-    return $obj;
-  }
-
-  public function first()
-  {
-    $this->buildSelectQuery('limit 1');
-    $obj = $this->selectOne(self::$query, self::$where);
-    $this->closeDB();
-    return $obj;
-  }
+/* --------------------- Insert one row or multiple rows -------------------- */
 
   public function insert($insertArray,$getId = false)
   {
@@ -169,9 +86,116 @@ class DB extends DataBase
     return $this->insertQuery($query,$valuesArray,$getId);
   }
 
+/* ------------------ insert a row and get the inserted id ------------------ */
+
   public function insertGetId($insertArray){
     return $this->insert($insertArray,true);
+  }  
+  
+/* ------------------------- find by the primary key ------------------------ */
+
+  public function find($value, $col = 'id')
+  {
+
+    self::$findby = ' WHERE ' . trim($col) . ' = ?';
+    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . self::$findby;
+    $obj = $this->selectOne(self::$query, [trim($value)]);
+    return $obj;
   }
+
+/* ------------------------------ where clause ------------------------------ */
+
+  public function where($w1, $w2 = false, $w3 = false)
+  {
+    if ($w2) {
+      self::$whereCols[] = trim($w1);
+      self::$whereValues[] = ($w3 ? trim($w3) : trim($w2));
+      self::$whereOperators[] = ($w3 ? trim($w2) : '=');
+    } else if (!$w2) {
+      if ($this->isMultiArray($w1)) {
+        foreach ($w1 as $w) {
+          self::$whereCols[] = trim($w[0]);
+          self::$whereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
+          self::$whereOperators[] = (isset($w[2]) ? trim($w[1]) : '=');
+        }
+      } else {
+        self::$whereCols[] = trim($w1[0]);
+        self::$whereValues[] = (isset($w1[2]) ? trim($w1[2]) : trim($w1[1]));
+        self::$whereOperators[] = (isset($w1[2]) ? trim($w1[1]) : '=');
+      }
+    }
+
+    return self::$instance;
+  }
+
+/* ----------------------------- OR WHERE clause ---------------------------- */
+
+  public function orWhere($w1, $w2 = false, $w3 = false)
+  {
+    if ($w2) {
+      self::$orWhereCols[] = trim($w1);
+      self::$orWhereValues[] = ($w3 ? trim($w3) : trim($w2));
+      self::$orWhereOperators[] = ($w3 ? trim($w2) : '=');
+    } else if (!$w2) {
+      if ($this->isMultiArray($w1)) {
+        foreach ($w1 as $w) {
+          self::$orWhereCols[] = trim($w[0]);
+          self::$orWhereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
+          self::$orWhereOperators[] = (isset($w[2]) ? trim($w[1]) : '=');
+        }
+      } else {
+        self::$orWhereCols[] = trim($w1[0]);
+        self::$orWhereValues[] = (isset($w1[2]) ? trim($w1[2]) : trim($w1[1]));
+        self::$orWhereOperators[] = (isset($w1[2]) ? trim($w1[1]) : '=');
+      }
+    }
+
+
+    return self::$instance;
+  }
+
+/* ------------------------------- Inner join ------------------------------- */
+
+  public function join(string $tableToJoin, $table1Col, $operator, $table2Col)
+  {
+    self::$innerJoinTable[] = $tableToJoin;
+    self::$innerJoinCol1[] = $table1Col;
+    self::$innerJoinCol2[] = $table2Col;
+    self::$innerJoinOperator[] = $operator;
+    return self::$instance;
+  }
+
+/* ----------------------------- Order by filter ---------------------------- */
+
+  public function orderBy($col, $mode = null)
+  {
+
+    self::$orderBy = ' ORDER BY ' . trim($col) . ' ' . trim($mode);
+    return self::$instance;
+  }
+
+/* ---------------------------- get multiple rows --------------------------- */
+
+  public function get()
+  {
+    $this->buildSelectQuery();
+    $obj = $this->selectAll(self::$query, self::$where);
+    $this->closeDB();
+    return $obj;
+  }
+
+/* ------------------------------- get one row ------------------------------ */
+
+  public function first()
+  {
+    $this->buildSelectQuery('limit 1');
+    $obj = $this->selectOne(self::$query, self::$where);
+    $this->closeDB();
+    return $obj;
+  }
+
+  
+/* ----------------- Build the query of the select statement ---------------- */
 
   private function buildSelectQuery($other = '')
   {
@@ -202,9 +226,9 @@ class DB extends DataBase
     }
 
     self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$orderBy . ' ' . $other;
-  }
+  } 
 
- 
+/* ---------------- restore the DB class to the initial state --------------- */
 
   private function closeDB()
   {
