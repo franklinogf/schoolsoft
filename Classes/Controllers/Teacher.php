@@ -69,6 +69,22 @@ class Teacher extends TeacherModel
     return $this->getLastTeacherTopic($this->id);
   }
 
+  public function topicsByClass($class)
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    return $this->getTeachersTopicsByClass($this->id,$class);
+  }
+
+  public function topics()
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    return $this->getTeachersTopics($this->id);
+  }
+
   public function fullName()
   {
     if (!isset($this->id)) {

@@ -42,7 +42,7 @@ $lastTopic = $teacher->lastTopic();
           <div class="card-body border-info">
             <h5 class="card-title"><?= $lastTopic->titulo ?></h5>
             <p class="card-text text-monospace"> El ultimo comentario se ha hecho en el curso <?= "{$lastTopic->curso} ({$lastTopic->desc1})" ?> </p>
-            <a class="btn btn-primary" href="topic.php?id=<?= $lastTopic->id ?>">Ir al tema</a>
+            <a class="btn btn-primary" href="viewTopic.php?id=<?= $lastTopic->id ?>">Ir al tema</a>
           </div>
           <div class="card-footer text-muted d-flex justify-content-between">
             <span><?= Util::formatDate($lastTopic->fecha, true, true) ?></span>

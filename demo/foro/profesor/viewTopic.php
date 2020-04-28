@@ -13,7 +13,6 @@ Session::is_logged();
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
 $student = new Student();
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -22,8 +21,6 @@ $student = new Student();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - <?= $topic->titulo ?></title>
-  <script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>
-  <!-- <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script> -->
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
@@ -38,11 +35,16 @@ $student = new Student();
 
     <div class="row mt-3">
       <div class="col-lg-4">
-        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
+        <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
+          Temas
+        </a>
+      </div>
+      <div class="col-lg-4">
+        <button type="button" id="editTopicBtn"  class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#myModal">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
-      <div class="col-lg-8 d-flex justify-content-end align-items-end">
+      <div class="col-lg-4 d-flex justify-content-end align-items-end">
         <i class="fas fa-toggle-on fa-3x <?= ($topic->estado === 'a' ? 'text-success' : 'text-danger') ?> "></i>
       </div>
     </div>
@@ -63,16 +65,17 @@ $student = new Student();
     <div class="container mt-3 pb-5">
       <?php if ($topic->estado === 'a') : ?>
         <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
-          <input type="hidden" name="id_topic" value="<?= $topic->id ?>">
+          <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
           <div class="form-group">
             <label for="comment">Comentario nuevo</label>
             <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
           </div>
-          <button class="btn btn-primary" type="submit">Comentar</button>
+          <button class="btn btn-primary" name="insertComment" type="submit">Comentar</button>
         </form>
       <?php endif ?>
 
 
+      <?php if($topic->comments()): ?>
       <?php foreach ($topic->comments() as $comment) : ?>
         <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
           <img src="<?= __NO_PROFILE_PICTURE ?>" class="mr-3" alt="profile picture" width="64" height="64">
@@ -84,6 +87,7 @@ $student = new Student();
           </div>
         </div>
       <?php endforeach ?>
+      <?php endif ?>
     </div>
     <!-- Modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
@@ -95,7 +99,7 @@ $student = new Student();
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="<?= Route::url('/foro/profesor/includes/topics.php') ?>" method="POST">
+          <form action="<?= Route::url('/foro/profesor/includes/viewTopics.php') ?>" method="POST">
             <div class="modal-body">
               <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
               <div class="form-row">
@@ -131,7 +135,7 @@ $student = new Student();
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="submit" name="editTopic" class="btn btn-primary">Guardar</button>
             </div>
           </form>
         </div>
@@ -141,7 +145,6 @@ $student = new Student();
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-
   ?>
 
 </body>

@@ -75,6 +75,34 @@ class TeacherModel extends School
     return $obj;
   }
 
+  protected function getTeachersTopicsByClass($id,$class)
+  {
+
+    $year = $this->info('year');
+    $obj =  parent::table('foro_entradas')
+    ->where([
+       ['creador_id', $id],
+       ['curso', $class],
+       ['year', $year]
+    ])->orderBy('fecha DESC, hora DESC')->get();      
+
+    return $obj;
+  }
+
+  protected function getTeachersTopics($id)
+  {
+
+    $year = $this->info('year');
+    $obj =  parent::table('foro_entradas')
+    ->where([
+       ['creador_id', $id],       
+       ['year', $year]
+    ])->orderBy('fecha DESC, hora DESC')->get();      
+
+    return $obj;
+  }
+
+
   protected function teacherLogin($username, $password)
   {
     $obj =  parent::table($this->table)

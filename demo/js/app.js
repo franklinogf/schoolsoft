@@ -1,20 +1,34 @@
-let classesTable;
-let studentsTable;
-
-
-
 //* --------------------------- functions --------------------------- *//
 
-function formatDate(value){
-  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function formatDate(value) {
 
-  const date = new Date(value);
+  if (value !== '0000-00-00') {
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  const day = date.getDate()
-  const month = months[date.getMonth()];
-  const year = date.getFullYear()
+    const date = new Date(value);
 
-  return day + ' ' + month + ' ' + year
+    const day = date.getDate()
+    const month = months[date.getMonth()];
+    const year = date.getFullYear()
+
+    return day + ' ' + month + ' ' + year
+  }
+
+  return '';
+
+}
+
+function formatTime(value) {
+  let [h, m, s] = value.split(':');
+  let p = 'AM'
+
+  if (h > 12) {
+    p = 'PM'
+    h -= 12
+  }
+
+
+  return h + ':' + m + ':' + s + ' ' + p
 
 }
 
@@ -45,43 +59,53 @@ function checkPasswords(pass1 = '#pass1', pass2 = '#pass2', bothClass = '.pass')
 
 $(function () {
   // Data table global configuration
-if ($.fn.dataTable) {
-  $.extend($.fn.dataTable.defaults, {
-    "language": {
-      "decimal": ".",
-      "emptyTable": "No hay datos disponibles",
-      "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
-      "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
-      "infoFiltered": "(Filtrado de un total de _MAX_ )",
-      "loadingRecords": "Cargando...",
-      "processing": "Procesando...",
-      "search": "Buscar:",
-      "zeroRecords": "No se encontraron datos",
-      "paginate": {
-        "first": "Primera",
-        "last": "Ultima",
-        "next": "Siguente",
-        "previous": "Anterior"
+  if ($.fn.dataTable) {
+    $.extend($.fn.dataTable.defaults, {
+      "language": {
+        "decimal": ".",
+        "emptyTable": "No hay datos disponibles",
+        "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
+        "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
+        "infoFiltered": "(Filtrado de un total de _MAX_ )",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "No se encontraron datos",
+        "paginate": {
+          "first": "Primera",
+          "last": "Ultima",
+          "next": "Siguente",
+          "previous": "Anterior"
+        },
+        "aria": {
+          "sortAscending": ": Activar para ordernar la columna de forma ascendente",
+          "sortDescending": ": Activar para ordernar la columna de forma descendente"
+        }
       },
-      "aria": {
-        "sortAscending": ": Activar para ordernar la columna de forma ascendente",
-        "sortDescending": ": Activar para ordernar la columna de forma descendente"
-      }
-    },
-    "pageLength": 10,
-    "lengthChange": false,
-    "ordering": false
+      "pageLength": 10,
+      "lengthChange": false,
+      "ordering": false
 
-  });
-  // Classes table custom info
-  classesTable = $(".classesTable").DataTable();
-  
-  // Students table custom info
-  studentsTable = $('.studentsTable').DataTable();
+    });
+    // Classes table custom info
+    if ($('.classesTable')) classesTable = $(".classesTable").DataTable();
 
- // Homewrok table custom info
-  homeworksTable = $('.homeworksTable').DataTable();
-}
+    // Students table custom info
+    if ($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
 
+    // Homework table custom info
+    if ($('.homeworksTable')) homeworksTable = $('.homeworksTable').DataTable();
+
+    // Topics table custom info
+    if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
+  }
+ // delete everything when the modal hides
+
+ $('.modal').on('hidden.bs.modal', function (e) {
+  const modal = $(this);
+  modal.find('input').val('');
+  modal.find('textarea').val('');
+  modal.find('input[type=radio],input[type=checkbox]').prop('checked',false);
+})
 
 });
