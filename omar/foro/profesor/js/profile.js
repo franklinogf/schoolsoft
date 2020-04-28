@@ -68,12 +68,7 @@ $(document).ready(function () {
    });
 
 
-   // delete everything when the modal hides
-
-   $('#myModal').on('hidden.bs.modal', function (e) {
-      const modal = $(this);
-      modal.find('input').val('');
-   })
+  
 
 
 });

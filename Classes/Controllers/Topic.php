@@ -24,7 +24,7 @@ class Topic extends TopicModel
 
   public function findPK($pk)
   {
-    $array = $this->getTopicByPK($pk);   
+    $array = $this->getTopicByPK($pk);
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
@@ -35,7 +35,7 @@ class Topic extends TopicModel
   {
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un tema');
-    }   
+    }
     return $this->getTopicComments($this->id);
   }
 
@@ -55,7 +55,7 @@ class Topic extends TopicModel
     if (isset($this->{$this->primary_key})) {
       $this->updateTopic($propsArray);
     } else {
-      echo 'insert <hr>';
+      $this->insertTopic($propsArray);
     }
   }
 }

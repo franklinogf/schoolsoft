@@ -73,8 +73,8 @@ $teacher = new Teacher(Session::id());
                   </button>
                </div>
                <form action="<?= Route::url('/foro/profesor/includes/topics.php') ?>" method="POST">
+                  <input type="hidden" name="class" id="class">
                   <div class="modal-body">
-                     <input type="hidden" name="id_topic" id="id_topic">
                      <div class="form-row">
                         <div class="form-group col-12">
                            <label for="modalTitle">Titulo del tema:</label>
@@ -101,14 +101,14 @@ $teacher = new Teacher(Session::id());
                         </div>
                         <div class="form-group col-6">
                            <label for="modalUntilDate">Disponible hasta:</label>
-                           <input  type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= Util::date() ?>">
+                           <input type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= Util::date() ?>">
                         </div>
 
                      </div>
                   </div>
                   <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                     <button type="submit" class="btn btn-primary">Guardar</button>
+                     <button type="submit" name="insertTopic" class="btn btn-primary">Guardar</button>
                   </div>
                </form>
             </div>

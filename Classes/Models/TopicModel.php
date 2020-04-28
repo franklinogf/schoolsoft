@@ -19,7 +19,7 @@ class TopicModel extends School
   protected function getTopicByPK($pk)
   {
 
-    $obj = parent::table($this->table)->where($this->primary_key,$pk)->first();
+    $obj = parent::table($this->table)->where($this->primary_key, $pk)->first();
     return $obj;
   }
 
@@ -27,13 +27,13 @@ class TopicModel extends School
   protected function getAllTopics()
   {
     $year = $this->info('year');
-    $obj = parent::table($this->table)->where('year',$year)->orderBy('fecha')->get();
+    $obj = parent::table($this->table)->where('year', $year)->orderBy('fecha')->get();
     return $obj;
   }
 
   protected function getTopicComments($id)
   {
-    $obj = parent::table('detalle_foro_entradas')->where('entrada_id',$id)->orderBy('fecha DESC,hora DESC')->get();
+    $obj = parent::table('detalle_foro_entradas')->where('entrada_id', $id)->orderBy('fecha DESC,hora DESC')->get();
     return $obj;
   }
 
@@ -53,5 +53,11 @@ class TopicModel extends School
   {
 
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
+  }
+
+  protected function insertTopic($propsArray)
+  {
+
+    $this->insertTable($this->table, $propsArray);
   }
 }

@@ -3,12 +3,12 @@ $(document).ready(function () {
 
    const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
    const topicsTableWrapper = $(".topicsTable").parents('.dataTables_wrapper');
-   topicsTableWrapper.hide(0);  
-   
-   
-if(sessionStorage.getItem('class')){
-   getTopics(sessionStorage.getItem('class'));  
-}
+   topicsTableWrapper.hide(0);
+
+
+   if (sessionStorage.getItem('class')) {
+      getTopics(sessionStorage.getItem('class'));
+   }
 
 
    $('.classesTable tbody').on('click', 'tr', function () {
@@ -21,16 +21,16 @@ if(sessionStorage.getItem('class')){
 
    function getTopics(thisClass) {
       _class = thisClass
+      $('#class').val(thisClass)
       $.ajax({
          type: "POST",
          url: getBaseUrl('includes/topics.php'),
          data: { 'topicsByClass': _class },
          dataType: "json",
-         success: (res) => { 
-            if (res.response === true) {
-               
+         success: (res) => {
+            if (res.data) {
                res.data.map(topic => {
-                  console.log('res.data: ', res.data);                    
+                  console.log('res.data: ', res.data);
                   const thisRow = topicsTable.row.add({
                      0: topic.titulo,
                      1: formatDate(topic.desde),
@@ -41,29 +41,27 @@ if(sessionStorage.getItem('class')){
                   $(thisRow.node()).prop('id', topic.id)
 
                })
-               // hide first table and show second table
-               classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-                  $('#newTopic').fadeToggle(250);
-                  topicsTableWrapper.show('drop', { direction: "right" }, 400);
-                  $("#header").animate({ opacity: 0 }, 250, () => {
-                     $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
-                  });
+            }
+            // hide first table and show second table
+            classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
+               $('#newTopic').fadeToggle(250);
+               topicsTableWrapper.show('drop', { direction: "right" }, 400);
+               $("#header").animate({ opacity: 0 }, 250, () => {
+                  $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
                });
-            }
-            else {
-               alert('No existen temas en esta clase');
-            }
+            });
+
          }
       });
-     }
+   }
 
    $("#back").click((e) => {
       // hide second table and shows first table
-      $('#newTopic').fadeToggle(250);      
+      $('#newTopic').fadeToggle(250);
       topicsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
          // Reset the variables
          sessionStorage.clear('class');
-         topicsTable.rows().remove();         
+         topicsTable.rows().remove();
          classesTableWrapper.show('drop', { direction: "left" }, 400);
          $("#header").animate({ opacity: 0 }, 250, () => {
             $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
@@ -78,14 +76,17 @@ if(sessionStorage.getItem('class')){
 
    $('.topicsTable tbody').on('click', 'tr', function () {
       const row = topicsTable.row(this)
-      if (row.index() !== undefined) {        
+      if (row.index() !== undefined) {
          const topicId = $(row.node()).prop('id');
          sessionStorage.setItem("class", _class);
-         window.location.href = getBaseUrl('viewTopic.php?id='+topicId)
+         window.location.href = getBaseUrl('viewTopic.php?id=' + topicId)
       }
    });
 
-
+   // save the class into a session if a new topic is inserted
+   $('form').submit((e) => {
+      sessionStorage.setItem("class", _class);
+   })
 
 
 
