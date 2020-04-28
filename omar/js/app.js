@@ -1,8 +1,3 @@
-let classesTable;
-let studentsTable;
-
-
-
 //* --------------------------- functions --------------------------- *//
 
 function formatDate(value) {
@@ -104,6 +99,13 @@ $(function () {
     // Topics table custom info
     if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
   }
+ // delete everything when the modal hides
 
+ $('.modal').on('hidden.bs.modal', function (e) {
+  const modal = $(this);
+  modal.find('input').val('');
+  modal.find('textarea').val('');
+  modal.find('input[type=radio],input[type=checkbox]').prop('checked',false);
+})
 
 });
