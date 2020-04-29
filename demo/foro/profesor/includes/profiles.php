@@ -6,7 +6,9 @@ use Classes\File;
 use Classes\Route;
 use Classes\Controllers\Teacher;
 use Classes\Server;
+use Classes\Session;
 
+Session::is_logged();
 Server::is_post();
 
 $id_teacher = $_POST['id_teacher'];
@@ -21,11 +23,13 @@ if ($_POST['password'] !== '') {
    $teacher->clave = $_POST['password'];
 }
 
-if ($file = new File('picture')) {
-   $fileName = $teacher->id . '.jpg';
-   $teacher->foto_name = $fileName;
 
-   $file->upload($fileName, __TEACHER_PROFILE_PICTURE_URL);
+$file = new File('picture');
+
+if ($file->amount > 0) {
+   $newName = $teacher->id . '.jpg';
+   $teacher->foto_name = $newName;
+   $file::upload($file->files, __TEACHER_PROFILE_PICTURE_PATH,$newName);
 }
 
 $teacher->save();
