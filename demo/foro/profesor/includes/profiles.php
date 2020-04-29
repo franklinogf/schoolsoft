@@ -25,7 +25,7 @@ if ($file = new File('picture')) {
    $fileName = $teacher->id . '.jpg';
    $teacher->foto_name = $fileName;
 
-   $file->upload($fileName, __TEACHER_PROFILE_PICTURE);
+   $file->upload($fileName, __TEACHER_PROFILE_PICTURE_URL);
 }
 
 $teacher->save();
