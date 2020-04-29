@@ -43,7 +43,7 @@ function includeThisFile() {
 }
 
 function baseName(str) {
-  var base = new String(str).substring(str.lastIndexOf('/') + 1);
+  var base = new String(str).substring(str.lastIndexOf('\\') + 1);
   if (base.lastIndexOf(".") != -1)
     base = base.substring(0, base.lastIndexOf("."));
   return base;
@@ -119,5 +119,41 @@ $(function () {
     modal.find('textarea').val('');
     modal.find('input[type=radio],input[type=checkbox]').prop('checked', false);
   })
+
+  // add file button
+
+  $("button.addFile").click(e => {
+    $(e.target).after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
+    <div class="custom-file">
+       <input type="file" class="custom-file-input file">
+       <label class="custom-file-label text-nowrap overflow-hidden">Seleccionar Archivo</label>
+    </div>
+    <div class="input-group-append">
+       <button class="btn btn-danger delFile" type="button"><i class="fas fa-trash-alt"></i></button>
+    </div>
+ </div>`);
+  });
+
+
+  $(document).on('change', 'input.file', e => {
+    //get the file name   
+    var fileName = baseName($(e.target).val());
+    //replace the "Seleccionar archivo" label
+    $(e.target).next('.custom-file-label').html(fileName)
+  })
+
+  $(document).on('click', 'button.delFile', e => {
+    if ($(e.target).parents('.input-group-append').prev().children('input.file').val() !== '') {
+      if (confirm("¿Seguro que quiere eliminar este archivo?")) {
+        $(e.target).parents('.input-group').remove()
+      }
+    }else{
+      $(e.target).parents('.input-group').remove()
+    }
+  })
+  // end add file
+
+  // enable tooltips 
+  $('[data-toggle="tooltip"]').tooltip()
 
 });
