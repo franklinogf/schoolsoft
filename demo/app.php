@@ -18,7 +18,7 @@ define('__DB_NAME', "demo");
 
 define('__ROOT_SCHOOL', str_replace('/', DIRECTORY_SEPARATOR, __DIR__));
 define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__)));
-define('__ROOT_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL))));
+define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL))));
 $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
 define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, DIRECTORY_SEPARATOR, 1))));
 
@@ -27,10 +27,12 @@ define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, D
 /*                              Files Directories                             */
 /* -------------------------------------------------------------------------- */
 
-define('__TEACHER_PROFILE_PICTURE', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/pictures/teachers/'));
-define('__STUDENT_PROFILE_PICTURE', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/pictures/students/'));
+define('__TEACHER_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/pictures/teachers/'));
+define('__TEACHER_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/teachers/'));
+define('__STUDENT_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/pictures/students/'));
+define('__STUDENT_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/students/'));
 define('__NO_PROFILE_PICTURE', str_replace('/', DIRECTORY_SEPARATOR, '/images/none.jpg'));
-define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __ROOT_URL . '/logo/'));
+define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/logo/'));
 
 
 /* -------------------------------------------------------------------------- */
