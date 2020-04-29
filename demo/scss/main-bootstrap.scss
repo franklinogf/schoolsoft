@@ -12,6 +12,7 @@ $theme-colors: (
   $enable-shadows : true;
   $enable-gradients: true;
   $enable-responsive-font-sizes : true;
+  $card-height: 100%;
  
   
   @import "../../bootstrap/scss/bootstrap";
