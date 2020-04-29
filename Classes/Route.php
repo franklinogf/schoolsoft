@@ -16,7 +16,7 @@ class Route
    {
       $root = '';
       if (!$serverRoot) {
-         $root = __ROOT_URL;
+         $root = __SCHOOL_URL;
       }
       echo '<link rel="stylesheet" href="' . $root . $path . '" />';
    }
@@ -25,7 +25,7 @@ class Route
    {
       $root = '';
       if (!$serverRoot) {
-         $root = __ROOT_URL;
+         $root = __SCHOOL_URL;
       } else {
          if (strpos($path, 'react-components'))
             Route::includeFile('/includes/react.php', true);
@@ -58,7 +58,7 @@ class Route
    }
 
    public static function url($path){
-      $newPath = __ROOT_URL.$path;
+      $newPath = __SCHOOL_URL.$path;
       return $newPath;
    }
 
@@ -67,7 +67,7 @@ class Route
          $newPath = __SUB_ROOT_URL;
       }
       $newPath .= $path;
-      header("Location: ".__ROOT_URL.$newPath);
+      header("Location: ".__SCHOOL_URL.$newPath);
    }
 
    public static function back(){
