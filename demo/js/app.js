@@ -125,7 +125,7 @@ $(function () {
   $("button.addFile").click(e => {
     $(e.target).after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
     <div class="custom-file">
-       <input type="file" class="custom-file-input file">
+       <input type="file" class="custom-file-input file" name="file[]">
        <label class="custom-file-label text-nowrap overflow-hidden">Seleccionar Archivo</label>
     </div>
     <div class="input-group-append">
