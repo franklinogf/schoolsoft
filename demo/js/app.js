@@ -32,9 +32,21 @@ function formatTime(value) {
 
 }
 
-function getBaseUrl(fileName) {
+function getBaseUrl(fileName = '') {
   var re = new RegExp(/^.*\//);
   return re.exec(window.location.href) + fileName;
+}
+
+function includeThisFile() {
+  const phpFile = getBaseUrl() + 'includes/' + baseName(window.location.href) + '.php'
+  return phpFile
+}
+
+function baseName(str) {
+  var base = new String(str).substring(str.lastIndexOf('/') + 1);
+  if (base.lastIndexOf(".") != -1)
+    base = base.substring(0, base.lastIndexOf("."));
+  return base;
 }
 
 // check input passwords
@@ -99,13 +111,13 @@ $(function () {
     // Topics table custom info
     if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
   }
- // delete everything when the modal hides
+  // delete everything when the modal hides
 
- $('.modal').on('hidden.bs.modal', function (e) {
-  const modal = $(this);
-  modal.find('input').val('');
-  modal.find('textarea').val('');
-  modal.find('input[type=radio],input[type=checkbox]').prop('checked',false);
-})
+  $('.modal').on('hidden.bs.modal', function (e) {
+    const modal = $(this);
+    modal.find('input').val('');
+    modal.find('textarea').val('');
+    modal.find('input[type=radio],input[type=checkbox]').prop('checked', false);
+  })
 
 });

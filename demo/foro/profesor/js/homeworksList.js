@@ -1,6 +1,5 @@
 $(document).ready(function () {
   let _class = '';
-
   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
   const homeworksTableWrapper = $(".homeworksTable").parents('.dataTables_wrapper');
   homeworksTableWrapper.hide(0);
@@ -12,7 +11,7 @@ $(document).ready(function () {
       _class = data[0];
       $.ajax({
         type: "POST",
-        url: getBaseUrl('includes/homeworks.php'),
+        url: includeThisFile(),
         data: { 'homeworksByClass': _class },
         dataType: "json",
         success: (res) => {
@@ -32,7 +31,7 @@ $(document).ready(function () {
             classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
               homeworksTableWrapper.show('drop', { direction: "right" }, 400);
               $("#header").animate({ opacity: 0 }, 250, () => {
-                $("#header").text('Lista de tareas').animate({ opacity: 1 }, 250);
+                $("#header").text('Lista de tareas entregadas').animate({ opacity: 1 }, 250);
               });
             });
           }

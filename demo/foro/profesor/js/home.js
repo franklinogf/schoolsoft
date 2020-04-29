@@ -22,7 +22,7 @@ $(document).ready(function () {
       if ($('#username').val() !== prevUsername) {
         $.ajax({
           type: "POST",
-          url: getBaseUrl('includes/homes.php'),
+          url: includeThisFile(),
           data: { 'checkUser': $('#username').val() },
           dataType: "json",
           success: (res) => {

@@ -33,7 +33,7 @@ global $teacher;
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
           <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>">Lista de cursos</a>
-          <a class="dropdown-item" <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>">Tareas Entregadas</a>
+          <a class="dropdown-item" <?= ($pathFile === 'homeworksList' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>">Salon Hogar</a>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>">Lista de Usuarios</a>
@@ -45,7 +45,7 @@ global $teacher;
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
           <a class="dropdown-item <?= ($pathFile === 'topics' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/topics.php') ?>">Temas</a>
-          <a class="dropdown-item" href="#">Crear Tareas</a>
+          <a class="dropdown-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>" href="#">Tareas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Tareas Recibidas</a>          
         </div>

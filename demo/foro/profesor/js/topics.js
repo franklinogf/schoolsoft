@@ -24,7 +24,7 @@ $(document).ready(function () {
       $('#class').val(thisClass)
       $.ajax({
          type: "POST",
-         url: getBaseUrl('includes/topics.php'),
+         url: includeThisFile(),
          data: { 'topicsByClass': _class },
          dataType: "json",
          success: (res) => {
