@@ -124,7 +124,7 @@ class DataBase
       // php 7 version
       // $stmt->bind_param($bind, ...$valuesArray);
       if ($stmt->execute()) {
-        echo 'funciono';
+        
         if ($insertId === true) {
           return $stmt->insert_id;
         }
