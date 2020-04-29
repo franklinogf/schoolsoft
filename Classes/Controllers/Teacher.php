@@ -1,4 +1,5 @@
 <?php
+
 namespace Classes\Controllers;
 
 
@@ -51,13 +52,13 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-   
-    if($this->foto_name != ''){
-      $picturePath = __TEACHER_PROFILE_PICTURE.$this->foto_name;
-    }else{
-        $picturePath = __NO_PROFILE_PICTURE;
+
+    if ($this->foto_name != '') {
+      $picturePath = __TEACHER_PROFILE_PICTURE . $this->foto_name;
+    } else {
+      $picturePath = __NO_PROFILE_PICTURE;
     }
-    
+
     return $picturePath;
   }
 
@@ -74,7 +75,7 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeachersTopicsByClass($this->id,$class);
+    return $this->getTeachersTopicsByClass($this->id, $class);
   }
 
   public function topics()
@@ -84,6 +85,18 @@ class Teacher extends TeacherModel
     }
     return $this->getTeachersTopics($this->id);
   }
+  public function homeworks($class = false)
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    if ($class) {
+      return $this->getTeachersHomeworksByClass($this->id, $class);
+    } else {
+      return $this->getTeachersHomeworks($this->id);
+    }
+  }
+
 
   public function fullName()
   {
@@ -94,23 +107,23 @@ class Teacher extends TeacherModel
     return $fullName;
   }
 
-  public function login($username,$password){
-    
+  public function login($username, $password)
+  {
+
     if ($array = $this->teacherLogin($username, $password)) {
-        foreach ($array as $key => $value) {
-            $this->{$key} = $value;
-        }
-        
-        $this->logged = true;   
-            
-    }else{
-      
+      foreach ($array as $key => $value) {
+        $this->{$key} = $value;
+      }
+
+      $this->logged = true;
+    } else {
+
       $this->logged = false;
     }
     return $this;
-
   }
-  public function findByUser($username){
+  public function findByUser($username)
+  {
     return $this->getTeacherByUser($username);
   }
 
@@ -119,18 +132,14 @@ class Teacher extends TeacherModel
     // get self public class, no parents classes
     $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
 
-    if(count( $propsArray) > 0){
+    if (count($propsArray) > 0) {
       if (isset($this->{$this->primary_key})) {
         $this->updateTeacher($propsArray);
       } else {
         echo 'insert <hr>';
       }
-    }else{
+    } else {
       throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');
-
     }
-
   }
-
-
 }

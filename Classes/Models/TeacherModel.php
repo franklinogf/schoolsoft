@@ -37,7 +37,7 @@ class TeacherModel extends School
       ->where([
         ['year', $year],
         ['id', $id]
-      ])->orderBy('curso','ASC')->get();
+      ])->orderBy('curso', 'ASC')->get();
     return $obj;
   }
 
@@ -51,7 +51,7 @@ class TeacherModel extends School
         ['fecha_baja', '0000-00-00']
       ])
       ->orderBy('apellidos')->get();
-      
+
 
     return $obj;
   }
@@ -70,21 +70,21 @@ class TeacherModel extends School
         ['foro_entradas.year', $year],
         ['foro_entradas.estado', 'a']
       ])
-      ->orderBy('detalle_foro_entradas.fecha','DESC')->first();
+      ->orderBy('detalle_foro_entradas.fecha', 'DESC')->first();
 
     return $obj;
   }
 
-  protected function getTeachersTopicsByClass($id,$class)
+  protected function getTeachersTopicsByClass($id, $class)
   {
 
     $year = $this->info('year');
     $obj =  parent::table('foro_entradas')
-    ->where([
-       ['creador_id', $id],
-       ['curso', $class],
-       ['year', $year]
-    ])->orderBy('fecha DESC, hora DESC')->get();      
+      ->where([
+        ['creador_id', $id],
+        ['curso', $class],
+        ['year', $year]
+      ])->orderBy('fecha DESC, hora DESC')->get();
 
     return $obj;
   }
@@ -94,11 +94,50 @@ class TeacherModel extends School
 
     $year = $this->info('year');
     $obj =  parent::table('foro_entradas')
-    ->where([
-       ['creador_id', $id],       
-       ['year', $year]
-    ])->orderBy('fecha DESC, hora DESC')->get();      
+      ->where([
+        ['creador_id', $id],
+        ['year', $year]
+      ])->orderBy('fecha DESC, hora DESC')->get();
 
+    return $obj;
+  }
+
+  protected function getTeachersHomeworks($id)
+  {
+
+    $obj = parent::table('tbl_documentos')
+      ->where('id2', $id)
+      ->orderBy('id_documento', 'DESC')->get();
+    foreach ($obj as $homework) {
+      $files = parent::table('T_archivos')
+        ->where('id_documento', $homework->id_documento)->get();
+      if ($files) {
+        foreach ($files as $file) {
+          $homework->archivos[] = $file;
+        }
+      }
+    }
+
+
+    return $obj;
+  }
+  protected function getTeachersHomeworksByClass($id, $class)
+  {
+    $obj = parent::table('tbl_documentos')
+      ->where([
+        ['id2', $id],
+        ['curso', $class]
+      ])
+      ->orderBy('id_documento', 'DESC')->get();
+    foreach ($obj as $homework) {
+      $files = parent::table('T_archivos')
+        ->where('id_documento', $homework->id_documento)->get();
+      if ($files) {
+        foreach ($files as $file) {
+          $homework->archivos[] = $file;
+        }
+      }
+    }
     return $obj;
   }
 
