@@ -40,3 +40,9 @@ a.nav-link {
   display:none;
 }
 
+.custom-file-label::after{
+  content:"Buscar";
+  background: var(--primary);
+  color: var(--dark);
+}
+
