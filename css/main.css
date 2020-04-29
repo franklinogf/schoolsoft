@@ -46,3 +46,7 @@ a.nav-link {
   color: var(--dark);
 }
 
+.blend-screen{
+  mix-blend-mode: screen !important;
+}
+
