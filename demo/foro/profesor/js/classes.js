@@ -67,7 +67,7 @@ $(document).ready(function () {
 
       $.ajax({
         type: "POST",
-        url: getBaseUrl('includes/classes.php'),
+        url: includeThisFile(),
         data: { 'studentByPK': studentId },
         dataType: "json",
         success: (res) => {
