@@ -1,6 +1,7 @@
 //* --------------------------- functions --------------------------- *//
 
 // function for animations
+
 /** 
 Animations class
 bounce         	flash           	pulse            	rubberBand
@@ -22,12 +23,12 @@ zoomInLeft     	zoomInRight     	zoomInUp         	zoomOut
 zoomOutDown    	zoomOutLeft     	zoomOutRight     	zoomOutUp
 slideInDown    	slideInLeft     	slideInRight     	slideInUp
 slideOutDown   	slideOutLeft    	slideOutRight    	slideOutUp
-heartBeat			*/
+heartBeat			
+*/
 function animateCSS(element, animationName, callback) {
   $("head").append('<link id="_animatedLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">')
   const node = $(element)
   node.addClass(`animated ${animationName}`)
-
   function handleAnimationEnd() {
 
     if (animationName.indexOf('In') > 0) {
@@ -161,17 +162,19 @@ $(function () {
   }
   // delete everything when the modal hides
 
-  $('.modal').on('hidden.bs.modal', function (e) {
-    const modal = $(this);
-    modal.find('input').val('');
-    modal.find('textarea').val('');
-    modal.find('input[type=radio],input[type=checkbox]').prop('checked', false);
-  })
+  if ($('.modal').length > 0) {
+    $('.modal').on('hidden.bs.modal', function (e) {
+      const modal = $(this);
+      modal.find('input').val('');
+      modal.find('textarea').val('');
+      modal.find('input[type=radio],input[type=checkbox]').prop('checked', false);
+    })
+  }
 
   // add file button
-
-  $("button.addFile").click(e => {
-    $(e.target).after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
+  if ($("button.addFile").length > 0) {
+    $("button.addFile").click(e => {
+      $(e.target).after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
     <div class="custom-file">
        <input type="file" class="custom-file-input file" name="file[]">
        <label class="custom-file-label text-nowrap overflow-hidden">Seleccionar Archivo</label>
@@ -180,29 +183,31 @@ $(function () {
        <button class="btn btn-danger delFile" type="button"><i class="fas fa-trash-alt"></i></button>
     </div>
  </div>`);
-  });
+    });
 
+    $(document).on('change', 'input.file', e => {
+      //get the file name   
+      var fileName = baseName($(e.target).val());
+      //replace the "Seleccionar archivo" label
+      $(e.target).next('.custom-file-label').html(fileName)
+    })
 
-  $(document).on('change', 'input.file', e => {
-    //get the file name   
-    var fileName = baseName($(e.target).val());
-    //replace the "Seleccionar archivo" label
-    $(e.target).next('.custom-file-label').html(fileName)
-  })
-
-  $(document).on('click', 'button.delFile', e => {
-    if ($(e.target).parents('.input-group-append').prev().children('input.file').val() !== '') {
-      if (confirm("¿Seguro que quiere eliminar este archivo?")) {
+    $(document).on('click', 'button.delFile', e => {
+      if ($(e.target).parents('.input-group-append').prev().children('input.file').val() !== '') {
+        if (confirm("¿Seguro que quiere eliminar este archivo?")) {
+          $(e.target).parents('.input-group').remove()
+        }
+      } else {
         $(e.target).parents('.input-group').remove()
       }
-    } else {
-      $(e.target).parents('.input-group').remove()
-    }
-  })
+    })
+  }
   // end add file
 
-  // enable tooltips 
-  $('[data-toggle="tooltip"]').tooltip()
+  // enable tooltips  
+  if ($('[data-toggle="tooltip"]').length > 0) {
+    $('[data-toggle="tooltip"]').tooltip()
+  }
 
 
 
