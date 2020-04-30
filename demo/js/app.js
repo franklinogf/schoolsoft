@@ -30,12 +30,7 @@ function animateCSS(element, animationName, callback) {
   const node = $(element)
   node.addClass(`animated ${animationName}`)
   function handleAnimationEnd() {
-
-    if (animationName.indexOf('In') > 0) {
-      node.css({ 'opacity': 1 })
-    } else if (animationName.indexOf('Out') > 0) {
-      node.css({ 'opacity': 0 })
-    }
+        
     node.removeClass(`animated ${animationName}`)
     node.off('animationend', handleAnimationEnd)
     $("#_animatedLink").remove()
