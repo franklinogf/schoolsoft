@@ -22,22 +22,29 @@ zoomInLeft     	zoomInRight     	zoomInUp         	zoomOut
 zoomOutDown    	zoomOutLeft     	zoomOutRight     	zoomOutUp
 slideInDown    	slideInLeft     	slideInRight     	slideInUp
 slideOutDown   	slideOutLeft    	slideOutRight    	slideOutUp
-heartBeat			*/ 
+heartBeat			*/
 function animateCSS(element, animationName, callback) {
   $("head").append('<link id="_animatedLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">')
   const node = $(element)
   node.addClass(`animated ${animationName}`)
 
   function handleAnimationEnd() {
-      node.removeClass(`animated ${animationName}`)
-      node.off('animationend', handleAnimationEnd)
-      $("#_animatedLink").remove()
-      
-      if (typeof callback === 'function') callback()
+
+    if (animationName.indexOf('In') > 0) {
+      node.css({ 'opacity': 1 })
+    } else if (animationName.indexOf('Out') > 0) {
+      node.css({ 'opacity': 0 })
+    }
+    node.removeClass(`animated ${animationName}`)
+    node.off('animationend', handleAnimationEnd)
+    $("#_animatedLink").remove()
+
+    if (typeof callback === 'function') callback()
   }
 
   node.on('animationend', handleAnimationEnd)
 }
+
 // fomart date
 function formatDate(value) {
 
@@ -82,9 +89,10 @@ function includeThisFile() {
 }
 
 function baseName(str) {
-  var base = new String(str).substring(str.lastIndexOf('\\') + 1);
-  if (base.lastIndexOf(".") != -1)
+  var base = new String(str).substring(str.lastIndexOf('/') + 1);
+  if (base.lastIndexOf(".") != -1) {
     base = base.substring(0, base.lastIndexOf("."));
+  }
   return base;
 }
 
@@ -187,7 +195,7 @@ $(function () {
       if (confirm("¿Seguro que quiere eliminar este archivo?")) {
         $(e.target).parents('.input-group').remove()
       }
-    }else{
+    } else {
       $(e.target).parents('.input-group').remove()
     }
   })
@@ -197,6 +205,6 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 
 
-  
+
 
 });
