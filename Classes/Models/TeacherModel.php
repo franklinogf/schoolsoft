@@ -2,6 +2,7 @@
 
 namespace Classes\Models;
 
+use Classes\Controllers\Homework;
 use Classes\Controllers\School;
 use Classes\Models\StudentModel;
 
@@ -104,43 +105,16 @@ class TeacherModel extends School
 
   protected function getTeachersHomeworks($id)
   {
-
-    $obj = parent::table('tbl_documentos')
-      ->where('id2', $id)
-      ->orderBy('id_documento', 'DESC')->get();
-    foreach ($obj as $homework) {
-      $files = parent::table('T_archivos')
-        ->where('id_documento', $homework->id_documento)->get();
-      if ($files) {
-        foreach ($files as $file) {
-          $homework->archivos[] = $file;
-        }
-      }
-    }
-
-
+    $hw = new Homework();   
+    $obj = $hw->findByTeacher($id);
     return $obj;
   }
   protected function getTeachersHomeworksByClass($id, $class)
   {
-    $obj = parent::table('tbl_documentos')
-      ->where([
-        ['id2', $id],
-        ['curso', $class]
-      ])
-      ->orderBy('id_documento', 'DESC')->get();
-    foreach ($obj as $homework) {
-      $files = parent::table('T_archivos')
-        ->where('id_documento', $homework->id_documento)->get();
-      if ($files) {
-        foreach ($files as $file) {
-          $homework->archivos[] = $file;
-        }
-      }
-    }
+    $hw = new Homework();   
+    $obj = $hw->findByTeacher($id,$class);
     return $obj;
   }
-
 
   protected function teacherLogin($username, $password)
   {

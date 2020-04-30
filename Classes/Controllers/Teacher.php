@@ -14,6 +14,7 @@ class Teacher extends TeacherModel
     parent::__construct();
     if ($value !== '') {
       $this->findPK($value);
+      
     }
   }
 
