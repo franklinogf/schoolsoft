@@ -1,7 +1,9 @@
 $(document).ready(function () {
    
 
-animateCSS('img','jello delay-1s');
+setInterval(() => {
+   animateCSS('img','jello');
+}, 5000);
 
 
 });
