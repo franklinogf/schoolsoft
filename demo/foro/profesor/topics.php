@@ -122,9 +122,10 @@ $teacher = new Teacher(Session::id());
 
    </div>
    <?php
+   $jqUI = true;
    Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
    Route::includeFile('/includes/datatable-js.php', true);
-   Route::jqUI();
+   
    ?>
 
 </body>
