@@ -12,7 +12,7 @@ Session::is_logged();
 Server::is_post();
 
 if (isset($_POST['addHomework'])) {
-$id_teacher = Session::id();
+   $id_teacher = Session::id();
    $document_id = DB::table('tbl_documentos')->insertGetId([
       'titulo' => $_POST["title"],
       'descripcion' => $_POST["description"],
@@ -39,8 +39,21 @@ $id_teacher = Session::id();
    }
 
    Route::redirect('/profesor/homeworks.php');
-   
-}elseif(isset($_POST['delHomework'])){
-   
+} elseif (isset($_POST['delHomework'])) {
+
    $document_id = $_POST['delHomework'];
+   $homework = DB::table('tbl_documentos')->where('id_documento', $document_id)->first();
+
+   if ($homework->nombre_archivo !== '') {
+      File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $homework->nombre_archivo);
+   }
+   DB::table('tbl_documentos')->where('id_documento', $document_id)->delete();
+
+   $files = DB::table('T_archivos')->where('id_documento', $document_id)->get();
+   if ($files) {
+      foreach ($files as $file) {
+         File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
+      }
+      DB::table('T_archivos')->where('id_documento', $document_id)->delete();
+   }
 }

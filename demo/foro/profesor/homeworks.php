@@ -153,7 +153,7 @@ $classes = $teacher->classes();
                         <button data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
                      </div>
                      <div class="col">
-                        <button data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
+                        <button id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
                      </div>
                      </div>
                   </div>
