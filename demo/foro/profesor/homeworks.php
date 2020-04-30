@@ -12,7 +12,7 @@ Session::is_logged();
 $teacher = new Teacher(Session::id());
 
 $homeworks = $teacher->homeworks();
-// Util::dump($homeworks);
+$classes = $teacher->classes();
 
 ?>
 <!DOCTYPE html>
@@ -40,11 +40,11 @@ $homeworks = $teacher->homeworks();
          Si el PDF es muy grande entre a esta <a class="alert-link" href="https://www.ilovepdf.com/es/comprimir_pdf" target="_blank">pagina</a> para comprimir.
       </div>
 
-      <form method="POST" action="">
+      <form method="POST" action="<?= Route::url('/foro/profesor/includes/homeworks.php') ?>" enctype="multipart/form-data">
          <div class="jumbotron py-4">
             <div class="form-group">
                <label for="title">Titulo</label>
-               <input class="form-control" type="text" name="title" id="title">
+               <input class="form-control" type="text" name="title" id="title" required>
             </div>
 
             <div class="form-group mt-2">
@@ -56,17 +56,18 @@ $homeworks = $teacher->homeworks();
                <div class="col-6 col-lg-4 mt-2">
                   <label for="class">Curso</label>
                   <select class="form-control" name="class" id="class">
-                     <option value="1">Class 1</option>
-                     <option value="2">Class 2</option>
+                     <?php foreach($classes as $class): ?>
+                        <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                     <?php endforeach ?>
                   </select>
                </div>
                <div class="col-12 col-lg-4 mt-2">
-                  <label for="sinceDate">Desde</label>
-                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" min="<?= Util::date('Y-m-d') ?>" value="<?= Util::date('Y-m-d') ?>">
+                  <label for="sinceDate">Fecha Inicial</label>
+                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" min="<?= Util::date('Y-m-d') ?>" value="<?= Util::date('Y-m-d') ?>" required>
                   <small class="form-text text-info">La tarea estará disponible en esta fecha</small>
                </div>
                <div class="col-12 col-lg-4 mt-2">
-                  <label for="untilDate">Hasta</label>
+                  <label for="untilDate">Fecha Final</label>
                   <input class="form-control" type="date" name="untilDate" id="untilDate" min="<?= Util::date('Y-m-d') ?>">
                   <small class="form-text text-info">La tarea dejara de estar disponible despues de esta fecha</small>
                </div>
@@ -102,7 +103,7 @@ $homeworks = $teacher->homeworks();
             </div>
 
             <div class="form-group mb-0 mt-5">
-               <button type='button' class="btn btn-primary btn-block">Guardar</button>
+               <button type='submit' class="btn btn-primary btn-block" name="addClass">Guardar</button>
             </div>
 
          </div>
@@ -117,20 +118,15 @@ $homeworks = $teacher->homeworks();
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
 
          <?php foreach ($homeworks as $homework) : ?>
-            <div class="col mb-4">
+            <div class="col mb-4 homework">
                <div class="card">
                   <h6 class="card-header bg-primary"><?= $homework->curso ?></h6>
                   <div class="card-body">
-
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
-
                      <p class="card-text"><?= $homework->descripcion ?></p>
-
                   </div>
-
                   <div class="card-footer bg-transparent">
-                     <small class="card-text text-warning d-block">Fecha final: <?= Util::formatDate($homework->fec_out, true) ?></small>
-
+                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? "Fecha final: ".Util::formatDate($homework->fec_out, true) : 'Sin fecha de finalización' ?></small>
                      <?php if(!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)): ?>
                         <div class="btn-group btn-group-sm w-100 mt-2">
                         <?php for ($i=1; $i <= 3; $i++): ?>
@@ -150,14 +146,13 @@ $homeworks = $teacher->homeworks();
                      <?php endif ?>
 
                   </div>
-
                   <div class="card-footer text-center bg-transparent">
                      <div class="row row-cols-2">
                      <div class="col">
-                        <button data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block"><i class="fas fa-edit"></i></button>
+                        <button data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
                      </div>
                      <div class="col">
-                        <button data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block"><i class="fas fa-trash-alt"></i></button>
+                        <button data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
                      </div>
                      </div>
                   </div>
@@ -180,7 +175,8 @@ $homeworks = $teacher->homeworks();
 
 
    <?php
-   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+   $jqUI = true;
+   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');   
    ?>
 </body>
 
