@@ -30,9 +30,10 @@ $(document).ready(function () {
 
             classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
               homeworksTableWrapper.show('drop', { direction: "right" }, 400);
-              $("#header").animate({ opacity: 0 }, 250, () => {
-                $("#header").text('Lista de tareas entregadas').animate({ opacity: 1 }, 250);
-              });
+            });
+            $("#header").hide('drop', { direction: "left" }, 400, () => {
+              $("#header").text('Lista de estudiantes')
+                .show('drop', { direction: "right" }, 400);
             });
           }
           else {
@@ -48,10 +49,11 @@ $(document).ready(function () {
   $("#back").click((e) => {
     homeworksTableWrapper.hide('drop', { direction: "right" }, 400, () => {
       homeworksTable.rows().remove();
-      classesTableWrapper.show('drop', { direction: "left" }, 400);
-      $("#header").animate({ opacity: 0 }, 250, () => {
-        $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
-      });
+      classesTableWrapper.show('drop', { direction: "left" }, 400);     
+    });
+    $("#header").hide('drop', { direction: "right" }, 400, () => {
+      $("#header").text('Mis Cursos')
+      .show('drop', { direction: "left" }, 400);
     });
   })
 
