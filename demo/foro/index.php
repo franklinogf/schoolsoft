@@ -60,7 +60,12 @@ if (Session::is_logged(false)) {
       <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
    </form>
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<?php
 
+ Route::js('/js/app.js');
+ Route::js('/foro/js/index.js');
+?>
 </body>
 
 </html>
