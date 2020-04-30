@@ -26,15 +26,14 @@ slideOutDown   	slideOutLeft    	slideOutRight    	slideOutUp
 heartBeat			
 */
 function animateCSS(element, animationName, callback) {
-  $("head").append('<link id="_animatedLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">')
+  // $("head").append('<link id="_animatedLink" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">')
   const node = $(element)
   node.addClass(`animated ${animationName}`)
   function handleAnimationEnd() {
         
     node.removeClass(`animated ${animationName}`)
     node.off('animationend', handleAnimationEnd)
-    $("#_animatedLink").remove()
-
+    // $("#_animatedLink").remove()
     if (typeof callback === 'function') callback()
   }
 

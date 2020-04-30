@@ -1,3 +1,6 @@
+@import "./animate.css";
+@import "./fa-all.min.css";
+
 textarea {
    resize: vertical !important; /* user can resize vertically, but width is fixed */
    min-height: 100px !important;
