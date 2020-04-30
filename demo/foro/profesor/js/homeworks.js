@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
-  $(".delHomework").click((e) => {  
-
+  $(".delHomework").click((e) => {
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
       animateCSS($(e.target).parents('.homework'), 'zoomOutDown', () => {
         if (e.target.tagName === 'I') {
