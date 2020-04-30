@@ -53,6 +53,22 @@ class File
       }
    }
 
+   public static function delete($path, $fileName)
+   {           
+      $fullPath = __ROOT_SCHOOL . DIRECTORY_SEPARATOR . str_replace('/',DIRECTORY_SEPARATOR,$path);
+      
+      $filePath = $fullPath.$fileName;
+
+      if (file_exists($filePath)) {
+         if(unlink($filePath)){
+            return true;
+         }
+         return false;
+      }
+      
+      return false;
+   }
+
 
    private function isMultiArray($array)
   {
