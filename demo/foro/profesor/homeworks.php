@@ -26,6 +26,7 @@ $classes = $teacher->classes();
    Route::fontawasome();
    Route::includeFile('/foro/profesor/includes/layouts/links.php');
    ?>
+   
 </head>
 
 <body class='pb-5'>
@@ -174,8 +175,7 @@ $classes = $teacher->classes();
 
 
 
-   <?php
-   $jqUI = true;
+   <?php   
    Route::includeFile('/foro/profesor/includes/layouts/scripts.php');   
    ?>
 </body>
