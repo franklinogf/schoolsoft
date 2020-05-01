@@ -36,7 +36,7 @@ $teacher = new Teacher(Session::id());
       ?>
 
       <!-- topics table -->
-      <button id="newTopic" type="button" class="btn btn-secondary hidden">Nuevo tema</button>
+      <button id="newTopic" type="button" class="btn btn-secondary hidden"><i class="far fa-comment"></i> Nuevo tema </button>
 
       <table class="topicsTable table table-striped table-hover cell-border w-100 shadow">
          <thead>

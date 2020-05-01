@@ -36,7 +36,7 @@ $student = new Student();
     <div class="row mt-3">
       <div class="col-lg-4">
         <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
-          Temas
+        <i class="far fa-comment"></i> Temas
         </a>
       </div>
       <div class="col-lg-4">
