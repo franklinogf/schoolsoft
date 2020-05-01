@@ -35,8 +35,8 @@ global $teacher;
           <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>">Lista de cursos</a>
           <a class="dropdown-item" <?= ($pathFile === 'homeworksList' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>">Tareas Entregadas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf"></i> Salon Hogar</a>
-          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>"><i class="far fa-file-pdf"></i></i> Lista de Usuarios</a>
+          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-secondary"></i> Salon Hogar</a>
+          <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>"><i class="far fa-file-pdf text-secondary"></i></i> Lista de Usuarios</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -57,10 +57,10 @@ global $teacher;
           <?= isset($teacher) ? $teacher->nombre : 'username?'  ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>">Mi Perfil</a>
-          <a class="dropdown-item" href="#">Mensajes <span class="badge badge-pill badge-primary">0</span></a>
+          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="fas fa-user-tie text-secondary"></i> Mi Perfil</a>
+          <a class="dropdown-item" href="#"><i class="fas fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-primary">0</span></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>">Cerrar Sesión</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-secondary"></i> Cerrar Sesión</a>
         </div>
       </li>
     </ul>
