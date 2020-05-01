@@ -101,7 +101,7 @@ $classes = $teacher->classes();
             </div>
 
             <div class="form-group mb-0 mt-5">
-               <button type='submit' class="btn btn-primary btn-block" name="addClass">Guardar</button>
+               <button id="homeworkFormBtn" type='submit' class="btn btn-primary btn-block" name="addHomework">Guardar</button>
             </div>
 
          </div>

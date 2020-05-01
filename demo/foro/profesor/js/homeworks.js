@@ -34,6 +34,7 @@ $(document).ready(function () {
       data: { 'getHomework': document_id },
       dataType: 'json',
       success: function (res) {
+        $("#homeworkFormBtn").prop('name','editHomework');
         $("#title").val(res.titulo)
         $("#description").val(res.descripcion)
         $("#class").val(res.curso)
@@ -84,6 +85,7 @@ $(document).ready(function () {
   })
 
   function clearForm() {
+    $("#homeworkFormBtn").prop('name','addHomework');
     $("input").val('')
     $("button.addFile").nextAll().remove()
   }
