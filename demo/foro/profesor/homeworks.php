@@ -1,16 +1,15 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Controllers\Homework;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\DataBase\DB;
 use Classes\Util;
 
 Session::is_logged();
 
 $teacher = new Teacher(Session::id());
-
 $homeworks = $teacher->homeworks();
 $classes = $teacher->classes();
 
@@ -22,11 +21,10 @@ $classes = $teacher->classes();
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
    <title>Foro - Tareas</title>
-   <?php
-   Route::fontawasome();
+   <?php  
    Route::includeFile('/foro/profesor/includes/layouts/links.php');
    ?>
-   
+
 </head>
 
 <body class='pb-5'>
@@ -57,7 +55,7 @@ $classes = $teacher->classes();
                <div class="col-6 col-lg-4 mt-2">
                   <label for="class">Curso</label>
                   <select class="form-control" name="class" id="class">
-                     <?php foreach($classes as $class): ?>
+                     <?php foreach ($classes as $class) : ?>
                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                      <?php endforeach ?>
                   </select>
@@ -89,13 +87,13 @@ $classes = $teacher->classes();
             <label>Links</label>
             <div class="form-row">
                <div class="form-group col-12 col-lg-4">
-                  <input class="form-control" type="text" name="link1" placeholder="link 1">
+                  <input id="link1" class="form-control" type="text" name="link1" placeholder="link 1">
                </div>
                <div class="form-group col-12 col-lg-4">
-                  <input class="form-control" type="text" name="link2" placeholder="link 2">
+                  <input id="link2" class="form-control" type="text" name="link2" placeholder="link 2">
                </div>
                <div class="form-group col-12 col-lg-4">
-                  <input class="form-control" type="text" name="link3" placeholder="link 3">
+                  <input id="link3" class="form-control" type="text" name="link3" placeholder="link 3">
                </div>
             </div>
 
@@ -127,34 +125,34 @@ $classes = $teacher->classes();
                      <p class="card-text"><?= $homework->descripcion ?></p>
                   </div>
                   <div class="card-footer bg-transparent">
-                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? "Fecha final: ".Util::formatDate($homework->fec_out, true) : 'Sin fecha de finalización' ?></small>
-                     <?php if(!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)): ?>
+                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? "Fecha final: " . Util::formatDate($homework->fec_out, true) : 'Sin fecha de finalización' ?></small>
+                     <?php if (!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)) : ?>
                         <div class="btn-group btn-group-sm w-100 mt-2">
-                        <?php for ($i=1; $i <= 3; $i++): ?>
-                           <?php if($homework->{"lin{$i}"} !== ''): ?>
-                              <a href="<?=$homework->{"lin{$i}"}?>" target="_blank" data-toggle="tooltip" title='<?=$homework->{"lin{$i}"}?>' class="btn btn-outline-info px-1"><i class="fas fa-external-link-alt"></i> Link <?=$i?> </a>
-                           <?php endif ?>
-                        <?php endfor ?>                        
-                     </div>
+                           <?php for ($i = 1; $i <= 3; $i++) : ?>
+                              <?php if ($homework->{"lin{$i}"} !== '') : ?>
+                                 <a href="<?= $homework->{"lin{$i}"} ?>" target="_blank" data-toggle="tooltip" title='<?= $homework->{"lin{$i}"} ?>' class="btn btn-outline-info px-1"><i class="fas fa-external-link-alt"></i> Link <?= $i ?> </a>
+                              <?php endif ?>
+                           <?php endfor ?>
+                        </div>
                      <?php endif ?>
 
-                     <?php if(property_exists($homework,'archivos')): ?>
+                     <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
-                        <?php foreach($homework->archivos as $i => $file): ?>
-                           <a href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary"><i class="far fa-file"></i> <?= "Archivo ".($i+1) ?> </a>
-                        <?php endforeach ?>
-                     </div>
+                           <?php foreach ($homework->archivos as $i => $file) : ?>
+                              <a href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary"><i class="far fa-file"></i> <?= "Archivo " . ($i + 1) ?> </a>
+                           <?php endforeach ?>
+                        </div>
                      <?php endif ?>
 
                   </div>
                   <div class="card-footer text-center bg-transparent">
                      <div class="row row-cols-2">
-                     <div class="col">
-                        <button data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
-                     </div>
-                     <div class="col">
-                        <button id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
-                     </div>
+                        <div class="col">
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="col">
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
+                        </div>
                      </div>
                   </div>
                   <div class="card-footer bg-secondary d-flex justify-content-lg-between">
@@ -171,12 +169,8 @@ $classes = $teacher->classes();
 
    </div><!-- end container -->
 
-
-
-
-
-   <?php   
-   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');   
+   <?php
+   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
    ?>
 </body>
 
