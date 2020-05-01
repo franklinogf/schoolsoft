@@ -116,10 +116,11 @@ $classes = $teacher->classes();
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
 
          <?php foreach ($homeworks as $homework) : ?>
+         <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'border-success' : 'border-warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
-               <div class="card <?= ($homework->fec_out > Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'border-warning')?>">
+               <div class="card <?= $expired ?>">
                   <h6 class="card-header bg-primary"><?= $homework->curso ?></h6>
-                  <div class="card-body">
+                  <div class="card-body ">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
                      <p class="card-text"><?= $homework->descripcion ?></p>
                   </div>
