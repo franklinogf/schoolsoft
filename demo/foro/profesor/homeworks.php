@@ -1,7 +1,6 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Homework;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
@@ -117,7 +116,7 @@ $classes = $teacher->classes();
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
 
          <?php foreach ($homeworks as $homework) : ?>
-            <div class="col mb-4 homework">
+            <div class="col mb-4 homework <?= $homework->id_documento ?>">
                <div class="card">
                   <h6 class="card-header bg-primary"><?= $homework->curso ?></h6>
                   <div class="card-body">
@@ -139,7 +138,7 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary"><i class="far fa-file"></i> <?= "Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary btn-sm"><i class="far fa-file"></i> <?= "Archivo " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>

@@ -46,21 +46,40 @@ $(document).ready(function () {
         $("#link3").val(res.lin3)
         if (res.archivos) {
           res.archivos.forEach(file => {
-            addExistingFile(file.nombre)
+            addExistingFile(file.nombre, file.id)
           });
         }
 
         $('html').animate({
           scrollTop: $("form").offset().top
-        }, 500);
+        }, 500, () => {
+          animateCSS('form', 'pulse')
+
+        });
       }
     });
 
   })
 
   $(document).on('click', 'button.delExistingFile', e => {
+    const fileId = e.target.tagName === 'I' ? $(e.target).parent().data('fileId') : $(e.target).data('fileId');
+    console.log('fileId: ', fileId);
     if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
-      $(e.target).parents('.input-group').remove()
+      animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
+        $(e.target).parents('.input-group').remove()
+      })
+      animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
+        const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
+        $(".homework").find(`[data-file-id="${fileId}"]`).remove()
+        parent.change()
+      })
+
+    }
+  })
+
+  $('div.btn-group-vertical').change(e => {
+    if($(e.target).children().length === 0){
+      $(e.target).remove();
     }
   })
 
