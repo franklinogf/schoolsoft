@@ -1,6 +1,9 @@
 $(document).ready(function () {
 
   $(".delHomework").click((e) => {
+
+/* ------ check if the fontawasome icon was click instead of the button ----- */
+
     document_id = e.target.tagName === 'I' ? $(e.target).parent().data('homeworkId') : $(e.target).data('homeworkId');
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
       $.ajax({
@@ -51,6 +54,8 @@ $(document).ready(function () {
           });
         }
 
+/* -- scroll the view to the form when the edit homework button is pressed -- */
+
         $('html').animate({
           scrollTop: $("form").offset().top
         }, 500, () => {
@@ -64,12 +69,15 @@ $(document).ready(function () {
 
   $(document).on('click', 'button.delExistingFile', e => {
     const fileId = e.target.tagName === 'I' ? $(e.target).parent().data('fileId') : $(e.target).data('fileId');
-    console.log('fileId: ', fileId);
+    
     if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
       animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
         $(e.target).parents('.input-group').remove()
       })
       animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
+
+/* ------- get the parent of the file before removing it from the DOM ------- */
+
         const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
         $(".homework").find(`[data-file-id="${fileId}"]`).remove()
         parent.change()
