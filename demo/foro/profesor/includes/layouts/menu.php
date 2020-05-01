@@ -32,8 +32,8 @@ global $teacher;
           Informes
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
-          <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>">Lista de cursos</a>
-          <a class="dropdown-item" <?= ($pathFile === 'homeworksList' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>">Tareas Entregadas</a>
+          <a class="dropdown-item  <?= ($pathFile === 'listClasses' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/listClasses.php') ?>"><i class="far fa-list-alt"></i> Lista de estudiantes por curso</a>
+          <a class="dropdown-item" <?= ($pathFile === 'homeworksList' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>"><i class="far fa-list-alt"></i> Lista de tareas entregadas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-secondary"></i> Salon Hogar</a>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>"><i class="far fa-file-pdf text-secondary"></i></i> Lista de Usuarios</a>
