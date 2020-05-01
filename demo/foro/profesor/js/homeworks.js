@@ -34,7 +34,7 @@ $(document).ready(function () {
       data: { 'getHomework': document_id },
       dataType: 'json',
       success: function (res) {
-        $("#homeworkFormBtn").prop('name','editHomework');
+        $("#homeworkFormBtn").prop('name', 'editHomework');
         $("#title").val(res.titulo)
         $("#description").val(res.descripcion)
         $("#class").val(res.curso)
@@ -79,14 +79,16 @@ $(document).ready(function () {
   })
 
   $('div.btn-group-vertical').change(e => {
-    if($(e.target).children().length === 0){
+    if ($(e.target).children().length === 0) {
       $(e.target).remove();
     }
   })
 
   function clearForm() {
-    $("#homeworkFormBtn").prop('name','addHomework');
-    $("input").val('')
+    $("#homeworkFormBtn").prop('name', 'addHomework');
     $("button.addFile").nextAll().remove()
+    $('input').val('');
+    $('textarea').val('');
+    $('input[type=radio],input[type=checkbox]').prop('checked', false);
   }
 });
