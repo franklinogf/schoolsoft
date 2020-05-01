@@ -127,8 +127,13 @@ function addExistingFile(name, id = false) {
 }
 
 function fileRealName(fileName) {
-  const realName = fileName.substring(fileName.indexOf(')')+1);
+  const realName = fileName.substring(fileName.indexOf(')')+1)
   return realName.trim()
+}
+
+function fileExtension(fileName) {
+  const extension = fileName.substring(fileName.lastIndexOf('.'))
+  return extension
 }
 
 $(function () {
