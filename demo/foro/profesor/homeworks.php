@@ -74,7 +74,7 @@ $classes = $teacher->classes();
             <div class="form-group mt-2">
                <label class="d-block">Tarea disponible?</label>
                <div class="custom-control custom-radio custom-control-inline">
-                  <input class="custom-control-input" type="radio" name="state" id="radio1" value="si" checked>
+                  <input class="custom-control-input" type="radio" name="state" id="radio1" value="si" required>
                   <label class="custom-control-label" for="radio1">Si</label>
                </div>
                <div class="custom-control custom-radio custom-control-inline">
