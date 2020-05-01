@@ -71,7 +71,6 @@ $(document).ready(function () {
     const fileId = e.target.tagName === 'I' ? $(e.target).parent().data('fileId') : $(e.target).data('fileId');
 
     if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
-
       $.ajax({
         type: "POST",
         url: includeThisFile(),
@@ -88,15 +87,18 @@ $(document).ready(function () {
           })
         }
       });
-
-
-
     }
   })
 
   $('div.btn-group-vertical').change(e => {
     if ($(e.target).children().length === 0) {
       $(e.target).remove();
+    } else {
+      // rename the files
+      const files = $(e.target).children();
+      files.map((i, file) => {
+        file.text = `Archivo ${i + 1}`
+      });
     }
   })
 
