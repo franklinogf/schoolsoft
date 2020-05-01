@@ -26,7 +26,7 @@ $teacher = new Teacher(Session::id());
       Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5">
-    <h1 class="text-center">Mi Perfil</h1>
+    <h1 class="text-center">Mi Perfil <i class="far fa-id-card"></i></h1>
     <div class="row mt-5">
 
       <div class="col-lg-6 col-sm-12">
