@@ -44,7 +44,37 @@ if (isset($_POST['getHomework'])) {
    }
 
    Route::redirect('/profesor/homeworks.php');
-} elseif (isset($_POST['delHomework'])) {
+}else if(isset($_POST['editHomework'])){
+   $id_teacher = Session::id();
+   $document_id = $_POST['document_id'];
+
+   DB::table('tbl_documentos')->where('id_documento',$document_id)->update([
+      'titulo' => $_POST["title"],
+      'descripcion' => $_POST["description"],      
+      'fec_in' => $_POST["sinceDate"],
+      'fec_out' => $_POST["untilDate"],
+      'curso' => $_POST["class"],
+      'lin1' => $_POST["link1"],
+      'lin2' => $_POST["link2"],
+      'lin3' => $_POST["link3"],
+      'enviartarea' => $_POST["state"]
+   ]);
+
+   $file = new File('file');
+   foreach ($file->files as $file) {
+      $newName = "({$id_teacher}-{$document_id}) $file->name";
+      if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
+         DB::table('T_archivos')->insert([
+            'nombre' => $newName,
+            'id_documento' => $document_id
+         ]);
+      }
+   }
+   
+   Route::redirect('/profesor/homeworks.php');
+
+
+} else if (isset($_POST['delHomework'])) {
 
    $document_id = $_POST['delHomework'];
    $homework = DB::table('tbl_documentos')->where('id_documento', $document_id)->first();
