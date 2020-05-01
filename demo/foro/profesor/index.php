@@ -31,7 +31,10 @@ $lastTopic = $teacher->lastTopic();
   ?>
   <div class="container-lg mt-lg-5  px-0">
     <div class="jumbotron">
-      <div class="react-clock text-right"></div>
+      <div class="text-right">
+        <i class="far fa-clock d-inline-block"></i>
+        <div class="react-clock d-inline-block"></div>
+      </div>
       <h2>Bienvenido <?= $teacher->fullName(); ?></h2>
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5">
