@@ -126,6 +126,10 @@ function addExistingFile(name, id = false) {
 </div>`);
 }
 
+function fileRealName(fileName) {
+  const realName = fileName.substring(fileName.indexOf(')')+1);
+  return realName.trim()
+}
 
 $(function () {
   // Data table global configuration
