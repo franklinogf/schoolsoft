@@ -29,10 +29,9 @@ $(document).ready(function () {
         $("#link3").val(res.lin3)
         if (res.archivos) {
           res.archivos.forEach(file => {
-            addExistingFile(file.nombre, file.id)
+            addExistingFile(fileRealName(file.nombre), file.id)
           });
         }
-
         // scroll the view to the form when the edit homework button is pressed
 
         $('html').animate({
@@ -72,15 +71,25 @@ $(document).ready(function () {
     const fileId = e.target.tagName === 'I' ? $(e.target).parent().data('fileId') : $(e.target).data('fileId');
 
     if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
-      animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
-        $(e.target).parents('.input-group').remove()
-      })
-      animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
-        // get the parent of the file before removing it from the DOM
-        const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
-        $(".homework").find(`[data-file-id="${fileId}"]`).remove()
-        parent.change()
-      })
+
+      $.ajax({
+        type: "POST",
+        url: includeThisFile(),
+        data: { 'delExistingFile': fileId },
+        success: function (response) {
+          animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
+            $(e.target).parents('.input-group').remove()
+          })
+          animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
+            // get the parent of the file before removing it from the DOM
+            const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
+            $(".homework").find(`[data-file-id="${fileId}"]`).remove()
+            parent.change()
+          })
+        }
+      });
+
+
 
     }
   })

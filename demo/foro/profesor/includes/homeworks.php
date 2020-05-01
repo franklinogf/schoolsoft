@@ -15,7 +15,6 @@ if (isset($_POST['getHomework'])) {
    $document_id = $_POST['getHomework'];
    $hw = new Homework($document_id);
    echo Util::toJson($hw);
-   
 } else if (isset($_POST['addHomework'])) {
    $id_teacher = Session::id();
    $document_id = DB::table('tbl_documentos')->insertGetId([
@@ -44,13 +43,13 @@ if (isset($_POST['getHomework'])) {
    }
 
    Route::redirect('/profesor/homeworks.php');
-}else if(isset($_POST['editHomework'])){
+} else if (isset($_POST['editHomework'])) {
    $id_teacher = Session::id();
    $document_id = $_POST['document_id'];
 
-   DB::table('tbl_documentos')->where('id_documento',$document_id)->update([
+   DB::table('tbl_documentos')->where('id_documento', $document_id)->update([
       'titulo' => $_POST["title"],
-      'descripcion' => $_POST["description"],      
+      'descripcion' => $_POST["description"],
       'fec_in' => $_POST["sinceDate"],
       'fec_out' => $_POST["untilDate"],
       'curso' => $_POST["class"],
@@ -70,10 +69,8 @@ if (isset($_POST['getHomework'])) {
          ]);
       }
    }
-   
+
    Route::redirect('/profesor/homeworks.php');
-
-
 } else if (isset($_POST['delHomework'])) {
 
    $document_id = $_POST['delHomework'];
@@ -91,4 +88,13 @@ if (isset($_POST['getHomework'])) {
       }
       DB::table('T_archivos')->where('id_documento', $document_id)->delete();
    }
+} else if (isset($_POST['delExistingFile'])) {
+
+   $file_id = $_POST['delExistingFile'];
+
+   $file = DB::table('T_archivos')->where('id', $file_id)->first();
+
+   File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
+
+   DB::table('T_archivos')->where('id', $file_id)->delete();
 }
