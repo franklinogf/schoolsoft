@@ -19,7 +19,7 @@ global $teacher;
   <div class="collapse navbar-collapse " id="navbarNavDropdown">
     <ul class="navbar-nav  mr-auto ">
       <li class="nav-item  <?= ($pathFile === 'index' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/index.php') ?>">Inicio <span class="sr-only">(current)</span></a>
+        <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/index.php') ?>"><i class="fas fa-house-user text-secondary"></i> Inicio</a>
       </li>
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/profesor/classes.php') ?>">Mis Cursos</a>
@@ -44,8 +44,8 @@ global $teacher;
           Foro
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
-          <a class="dropdown-item <?= ($pathFile === 'topics' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/topics.php') ?>">Temas</a>
-          <a class="dropdown-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>" href="#">Tareas</a>
+          <a class="dropdown-item <?= ($pathFile === 'topics' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/topics.php') ?>"><i class="far fa-comment text-secondary"></i> Temas</a>
+          <a class="dropdown-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>" href="#"><i class="fas fa-book-open text-secondary"></i> Tareas</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Tareas Recibidas</a>          
         </div>
@@ -57,8 +57,8 @@ global $teacher;
           <?= isset($teacher) ? $teacher->nombre : 'username?'  ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="fas fa-user-tie text-secondary"></i> Mi Perfil</a>
-          <a class="dropdown-item" href="#"><i class="fas fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-primary">0</span></a>
+          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="far fa-id-card text-secondary"></i> Mi Perfil</a>
+          <a class="dropdown-item" href="#"><i class="far fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-primary">0</span></a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-secondary"></i> Cerrar Sesión</a>
         </div>
