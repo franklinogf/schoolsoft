@@ -25,8 +25,9 @@ $(document).ready(function () {
     clearForm();
 
     document_id = e.target.tagName === 'I' ?
-     $(e.target).parent().tooltip('hide').data('homeworkId') :
-     $(e.target).tooltip('hide').data('homeworkId');
+      $(e.target).parent().tooltip('hide').data('homeworkId') :
+      $(e.target).tooltip('hide').data('homeworkId');
+
     $.ajax({
       type: "POST",
       url: includeThisFile(),
@@ -42,10 +43,10 @@ $(document).ready(function () {
         $("#radio2").prop('checked', res.enviartarea === 'si' ? false : true)
         $("#link1").val(res.lin1)
         $("#link2").val(res.lin2)
-        $("#link3").val(res.lin3)        
-        if(res.archivos){
+        $("#link3").val(res.lin3)
+        if (res.archivos) {
           res.archivos.forEach(file => {
-           addExistingFile(file.nombre)            
+            addExistingFile(file.nombre)
           });
         }
 
@@ -63,7 +64,7 @@ $(document).ready(function () {
     }
   })
 
-  function clearForm(){
+  function clearForm() {
     $("input").val('')
     $("button.addFile").nextAll().remove()
   }
