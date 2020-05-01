@@ -66,3 +66,24 @@ body{
   
   background-attachment: fixed;
 }
+
+/* custom border gradient */
+.border-primary-gradient-top{
+  border-style: solid;
+  border-image: linear-gradient( to bottom, rgba(0, 0, 0, 0),var(--primary) ) 1;
+}
+
+.border-primary-gradient-bottom{
+  border-style: solid;
+  border-image: linear-gradient( to top, rgba(0, 0, 0, 0),var(--primary) ) 1;
+}
+
+.border-secondary-gradient-top{
+  border-style: solid;
+  border-image: linear-gradient( to bottom, rgba(0, 0, 0, 0),var(--secondary) ) 1;
+}
+
+.border-secondary-gradient-bottom{
+  border-style: solid;
+  border-image: linear-gradient( to top, rgba(0, 0, 0, 0),var(--secondary) ) 1;
+}
