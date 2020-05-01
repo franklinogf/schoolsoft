@@ -126,8 +126,11 @@ function addExistingFile(name, id = false) {
 </div>`);
 }
 
-function fileRealName(fileName) {
-  const realName = fileName.substring(fileName.indexOf(')')+1)
+function fileRealName(fileName,baseName = false) {
+  let realName = fileName.substring(fileName.indexOf(')')+1)
+  if(baseName){
+    realName = fileBaseName(realName)
+  }
   return realName.trim()
 }
 
