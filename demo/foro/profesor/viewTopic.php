@@ -12,7 +12,7 @@ Session::is_logged();
 
 $topic = new Topic($_GET['id']);
 $teacher = new Teacher($topic->creador_id);
-$student = new Student();
+$comments = $topic->comments();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -75,13 +75,20 @@ $student = new Student();
       <?php endif ?>
 
 
-      <?php if($topic->comments()): ?>
-      <?php foreach ($topic->comments() as $comment) : ?>
-        <div class="media bg-gradient-light bg-light mt-3 pt-3 px-3">
-          <img src="<?= __NO_PROFILE_PICTURE ?>" class="mr-3" alt="profile picture" width="64" height="64">
+      <?php if($comments): ?>
+      <?php foreach ($comments as $comment) : ?>
+      <?php 
+      $student = new Student($comment->creador_id);
+      $profilePicture = __NO_PROFILE_PICTURE;
+      if ($comment->tipo === 'p') {
+        $profilePicture = $teacher->profilePicture();
+      } 
+      ?>
+        <div class="media mt-3 pt-3 px-3">
+          <img src="<?= $profilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
           <div class="media-body">
 
-            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-sm"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-sm"></i>' . $student->find($comment->creador_id)->fullName()) ?></h5>
+            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
             <p><?= $comment->descripcion ?></p>
             <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
           </div>
@@ -89,6 +96,9 @@ $student = new Student();
       <?php endforeach ?>
       <?php endif ?>
     </div>
+
+
+
     <!-- Modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="dialog">
