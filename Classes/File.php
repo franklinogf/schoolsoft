@@ -8,6 +8,23 @@ class File
 {
    public $amount = 0;
    public $files = [];
+   public static $faIcons = [
+      "png" => '<i class="far fa-file-image"></i>',
+      "jpg" => '<i class="far fa-file-image"></i>',
+      "jpeg" => '<i class="far fa-file-image"></i>',
+      "gif" => '<i class="far fa-file-image"></i>',
+      "pdf" => '<i class="far fa-file-pdf"></i>',
+      "mp3" => '<i class="far fa-file-audio"></i>',
+      "mp4" => '<i class="far fa-file-video"></i>',
+      "xls" => '<i class="far fa-file-excel"></i>',
+      "xlsx" => '<i class="far fa-file-excel"></i>',
+      "ppt" => '<i class="far fa-file-powerpoint"></i>',
+      "pptx" => '<i class="far fa-file-powerpoint"></i>',
+      "doc" => '<i class="far fa-file-word"></i>',
+      "docx" => '<i class="far fa-file-word"></i>',
+      "zip" => '<i class="far fa-file-archive"></i>'     
+   ];
+   public static $fileIcon = '<i class="far fa-file-alt"></i>';
 
    public function __construct($file)
    {
@@ -67,6 +84,28 @@ class File
       }
       
       return false;
+   }
+
+   public static function extension($fileName){
+      $fileInfo = pathinfo($fileName);
+      return strtolower($fileInfo['extension']);
+   }
+
+   public static function name($fileName,$baseName = false){
+      $fileInfo = pathinfo($fileName);
+      $fileName = $fileInfo['filename'];
+      if($baseName){
+         $fileName = substr($fileName,strpos($fileName,")")+1);
+      }
+      return trim($fileName);
+   }
+
+   public static function faIcon($extension){
+      $faIcon = self::$fileIcon;
+      if(array_key_exists($extension,self::$faIcons)){
+         $faIcon = self::$faIcons[$extension];
+      }
+      return $faIcon;
    }
 
 
