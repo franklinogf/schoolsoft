@@ -4,6 +4,7 @@ require_once '../../app.php';
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
+use Classes\File;
 use Classes\Util;
 
 Session::is_logged();
@@ -11,7 +12,6 @@ Session::is_logged();
 $teacher = new Teacher(Session::id());
 $homeworks = $teacher->homeworks();
 $classes = $teacher->classes();
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -61,12 +61,12 @@ $classes = $teacher->classes();
                </div>
                <div class="col-12 col-lg-4 mt-2">
                   <label for="sinceDate">Fecha Inicial</label>
-                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" min="<?= Util::date('Y-m-d') ?>" value="<?= Util::date('Y-m-d') ?>" required>
+                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" value="<?= Util::date('Y-m-d') ?>" required>
                   <small class="form-text text-info">La tarea estará disponible en esta fecha</small>
                </div>
                <div class="col-12 col-lg-4 mt-2">
                   <label for="untilDate">Fecha Final</label>
-                  <input class="form-control" type="date" name="untilDate" id="untilDate" min="<?= Util::date('Y-m-d') ?>">
+                  <input class="form-control" type="date" name="untilDate" id="untilDate">
                   <small class="form-text text-info">La tarea dejara de estar disponible despues de esta fecha</small>
                </div>
             </div>
@@ -138,7 +138,7 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary btn-sm"><i class="far fa-file"></i> <?= "Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary btn-sm"><?= File::faIcon(File::extension($file->nombre))." Archivo " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>
