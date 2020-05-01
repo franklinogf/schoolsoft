@@ -20,7 +20,7 @@ $classes = $teacher->classes();
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
    <title>Foro - Tareas</title>
-   <?php  
+   <?php
    Route::includeFile('/foro/profesor/includes/layouts/links.php');
    ?>
 
@@ -117,7 +117,7 @@ $classes = $teacher->classes();
 
          <?php foreach ($homeworks as $homework) : ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
-               <div class="card">
+               <div class="card <?= ($homework->fec_out > Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'border-warning')?>">
                   <h6 class="card-header bg-primary"><?= $homework->curso ?></h6>
                   <div class="card-body">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
@@ -138,7 +138,7 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary btn-sm"><?= File::faIcon(File::extension($file->nombre))." Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= $file->nombre ?>' class="btn btn-outline-secondary btn-sm"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>
@@ -156,7 +156,7 @@ $classes = $teacher->classes();
                   </div>
                   <div class="card-footer bg-secondary d-flex justify-content-lg-between">
                      <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
-                     <small class="text-primary blend-screen"><?= (strpos($homework->hora,'(') > -1 ? $homework->hora  :Util::formatTime($homework->hora)) ?></small>
+                     <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                   </div>
                </div>
 
