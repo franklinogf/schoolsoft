@@ -131,9 +131,14 @@ function fileRealName(fileName) {
   return realName.trim()
 }
 
+function fileBaseName(fileName) {
+  const baseName = str.substring(0,str.lastIndexOf('.'))
+  return baseName.trim()
+}
+
 function fileExtension(fileName) {
   const extension = fileName.substring(fileName.lastIndexOf('.'))
-  return extension
+  return extension.trim()
 }
 
 $(function () {
