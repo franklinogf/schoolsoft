@@ -60,3 +60,9 @@ a.nav-link {
   mix-blend-mode: screen !important;
 }
 
+/* body background to be gradient */
+body{
+  background-image: linear-gradient(white , var(--light));
+  
+  background-attachment: fixed;
+}
