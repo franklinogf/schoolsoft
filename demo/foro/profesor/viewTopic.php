@@ -36,11 +36,11 @@ $comments = $topic->comments();
     <div class="row mt-3">
       <div class="col-lg-4">
         <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
-        <i class="far fa-comment"></i> Temas
+          <i class="far fa-comment"></i> Temas
         </a>
       </div>
       <div class="col-lg-4">
-        <button type="button" id="editTopicBtn"  class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#myModal">
+        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#myModal">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
@@ -75,25 +75,21 @@ $comments = $topic->comments();
       <?php endif ?>
 
 
-      <?php if($comments): ?>
-      <?php foreach ($comments as $comment) : ?>
-      <?php 
-      $student = new Student($comment->creador_id);
-      $profilePicture = __NO_PROFILE_PICTURE;
-      if ($comment->tipo === 'p') {
-        $profilePicture = $teacher->profilePicture();
-      } 
-      ?>
-        <div class="media mt-3 pt-3 px-3">
-          <img src="<?= $profilePicture ?>" class="mr-3" alt="profile picture" width="64" height="64">
-          <div class="media-body">
-
-            <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
-            <p><?= $comment->descripcion ?></p>
-            <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
+      <?php if ($comments) : ?>
+        <?php foreach ($comments as $comment) : ?>
+          <?php
+          $student = new Student($comment->creador_id);
+          $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : __NO_PROFILE_PICTURE;
+          ?>
+          <div class="media mt-3 pt-3 px-3 border-bottom border-primary">
+            <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
+            <div class="media-body">
+              <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
+              <p class="m-0 p-2"><?= $comment->descripcion ?></p>
+              <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
+            </div>
           </div>
-        </div>
-      <?php endforeach ?>
+        <?php endforeach ?>
       <?php endif ?>
     </div>
 
