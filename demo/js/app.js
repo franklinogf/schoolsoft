@@ -135,7 +135,7 @@ function fileRealName(fileName,baseName = false) {
 }
 
 function fileBaseName(fileName) {
-  const baseName = str.substring(0,str.lastIndexOf('.'))
+  const baseName = fileName.substring(0,fileName.lastIndexOf('.'))
   return baseName.trim()
 }
 
