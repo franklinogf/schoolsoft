@@ -113,11 +113,11 @@ function checkPasswords(pass1 = '#pass1', pass2 = '#pass2', bothClass = '.pass')
 
 
 // function to add to the dom when it is an existing file
-function addExistingFile(name) {
+function addExistingFile(name,id = false) {
   $("button.addFile").after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
   <input type="text" class="form-control bg-white" value="${name}" disabled >
   <div class="input-group-append">
-     <button class="btn btn-danger delExistingFile" type="button" id="button-addon2"><i class="fas fa-trash-alt"></i></button>
+     <button ${id !== false ? `data-file-id="${id}"` : ''} class="btn btn-danger delExistingFile" type="button"><i class="fas fa-trash-alt"></i></button>
   </div>
 </div>`);
 }
