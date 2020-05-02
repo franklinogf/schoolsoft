@@ -55,7 +55,7 @@ $teacher = new Teacher(Session::id());
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <form action="<?= Route::url('/foro/profesor/includes/homes.php') ?>" method="POST">
+        <form action="<?= Route::url('/foro/profesor/includes/home.php') ?>" method="POST">
           <input type="hidden" name="id_student">
           <div class="modal-content">
             <div class="modal-header bg-primary">
