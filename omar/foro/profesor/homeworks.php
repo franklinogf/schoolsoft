@@ -156,7 +156,7 @@ $classes = $teacher->classes();
                         </div>
                      </div>
                   </div>
-                  <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-lg-between">
+                  <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-between">
                      <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
                      <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                   </div>
