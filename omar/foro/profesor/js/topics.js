@@ -26,7 +26,6 @@ $(document).ready(function () {
       $.post(includeThisFile(), { topicsByClass: _class }, res => {
          if (res.data) {
             res.data.map(topic => {
-               console.log('res.data: ', res.data);
                const thisRow = topicsTable.row.add({
                   0: topic.titulo,
                   1: formatDate(topic.desde),
@@ -35,6 +34,7 @@ $(document).ready(function () {
                }).draw();
 
                $(thisRow.node()).prop('id', topic.id)
+               $(thisRow.node()).addClass(topic.estado === 'a' ?'table-success':'table-danger')
 
             })
          }
