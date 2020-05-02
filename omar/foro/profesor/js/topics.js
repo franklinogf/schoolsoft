@@ -22,37 +22,34 @@ $(document).ready(function () {
    function getTopics(thisClass) {
       _class = thisClass
       $('#class').val(thisClass)
-      $.ajax({
-         type: "POST",
-         url: includeThisFile(),
-         data: { 'topicsByClass': _class },
-         dataType: "json",
-         success: (res) => {
-            if (res.data) {
-               res.data.map(topic => {
-                  console.log('res.data: ', res.data);
-                  const thisRow = topicsTable.row.add({
-                     0: topic.titulo,
-                     1: formatDate(topic.desde),
-                     2: formatDate(topic.fecha),
-                     3: formatTime(topic.hora),
-                  }).draw();
 
-                  $(thisRow.node()).prop('id', topic.id)
+      $.post(includeThisFile(), { topicsByClass: _class }, res => {
+         if (res.data) {
+            res.data.map(topic => {
+               console.log('res.data: ', res.data);
+               const thisRow = topicsTable.row.add({
+                  0: topic.titulo,
+                  1: formatDate(topic.desde),
+                  2: formatDate(topic.fecha),
+                  3: formatTime(topic.hora),
+               }).draw();
 
-               })
-            }
-            // hide first table and show second table
-            classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-               $('#newTopic').fadeToggle(250);
-               topicsTableWrapper.show('drop', { direction: "right" }, 400);
-               $("#header").animate({ opacity: 0 }, 250, () => {
-                  $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
-               });
-            });
+               $(thisRow.node()).prop('id', topic.id)
 
+            })
          }
-      });
+         // hide first table and show second table
+         classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
+            $('#newTopic').fadeToggle(250);
+            topicsTableWrapper.show('drop', { direction: "right" }, 400);
+            $("#header").animate({ opacity: 0 }, 250, () => {
+               $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+            });
+         });
+      },
+         "json"
+      );
+
    }
 
    $("#back").click((e) => {
