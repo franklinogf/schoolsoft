@@ -117,15 +117,15 @@ $classes = $teacher->classes();
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
 
          <?php foreach ($homeworks as $homework) : ?>
-            <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'text-success' : 'text-warning'); ?>
+            <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
-               <div class="card">
-                  <h6 class="card-header bg-primary d-flex justify-content-between"><?= $homework->curso ?> <i class="fas fa-circle <?= $expired ?>"></i></h6>
+               <div class="card border-<?=$expired?>">
+                  <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= $homework->curso ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
                   <div class="card-body ">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
                      <p class="card-text"><?= $homework->descripcion ?></p>
                   </div>
-                  <div class="card-footer bg-transparent">
+                  <div class="card-footer bg-white">
                      <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? "Fecha final: " . Util::formatDate($homework->fec_out, true) : 'Sin fecha de finalización' ?></small>
                      <?php if (!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)) : ?>
                         <div class="btn-group btn-group-sm w-100 mt-2">
@@ -140,23 +140,23 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-secondary btn-sm"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="#" target="_blank" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>
 
                   </div>
-                  <div class="card-footer text-center bg-transparent">
+                  <div class="card-footer text-center bg-white">
                      <div class="row row-cols-2">
                         <div class="col">
-                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Editar" class="btn btn-info btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
                         </div>
                         <div class="col">
-                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-outline-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
                         </div>
                      </div>
                   </div>
-                  <div class="card-footer bg-secondary d-flex justify-content-lg-between">
+                  <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-lg-between">
                      <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
                      <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                   </div>
