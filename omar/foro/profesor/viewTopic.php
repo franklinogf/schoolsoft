@@ -40,7 +40,7 @@ $comments = $topic->comments();
         </a>
       </div>
       <div class="col-lg-4">
-        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3" data-toggle="modal" data-target="#myModal">
+        <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
@@ -64,18 +64,16 @@ $comments = $topic->comments();
 
     <div class="container mt-3 pb-5">
       <?php if ($topic->estado === 'a') : ?>
-        <form action="<?= Route::url('/foro/profesor/includes/comments.php') ?>" method="POST">
-          <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
           <div class="form-group">
             <label for="comment">Comentario nuevo</label>
-            <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
+            <textarea class="form-control" id="comment" rows="3" required></textarea>
+            <div class="invalid-feedback">Por favor escriba algo</div> 
           </div>
-          <button class="btn btn-primary" name="insertComment" type="submit">Comentar</button>
-        </form>
+          <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>      
       <?php endif ?>
 
 
-      <div class="bg-white">
+      <div id="commentsList" class="bg-white">
         <?php if ($comments) : ?>
           <?php foreach ($comments as $comment) : ?>
             <?php
@@ -107,7 +105,7 @@ $comments = $topic->comments();
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="<?= Route::url('/foro/profesor/includes/viewTopics.php') ?>" method="POST">
+          <form action="<?= Route::url('/foro/profesor/includes/viewTopic.php') ?>" method="POST">
             <div class="modal-body">
               <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
               <div class="form-row">
