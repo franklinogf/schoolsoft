@@ -75,22 +75,24 @@ $comments = $topic->comments();
       <?php endif ?>
 
 
-      <?php if ($comments) : ?>
-        <?php foreach ($comments as $comment) : ?>
-          <?php
-          $student = new Student($comment->creador_id);
-          $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : __NO_PROFILE_PICTURE;
-          ?>
-          <div class="media mt-3 pt-3 px-3 border-bottom border-primary">
-            <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
-            <div class="media-body">
-              <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
-              <p class="m-0 p-2"><?= $comment->descripcion ?></p>
-              <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
+      <div class="bg-white">
+        <?php if ($comments) : ?>
+          <?php foreach ($comments as $comment) : ?>
+            <?php
+            $student = new Student($comment->creador_id);
+            $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : __NO_PROFILE_PICTURE;
+            ?>
+            <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
+              <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
+              <div class="media-body">
+                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
+                <p class="m-0 p-2"><?= $comment->descripcion ?></p>
+                <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
+              </div>
             </div>
-          </div>
-        <?php endforeach ?>
-      <?php endif ?>
+          <?php endforeach ?>
+        <?php endif ?>
+      </div>
     </div>
 
 
