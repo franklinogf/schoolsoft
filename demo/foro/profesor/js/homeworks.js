@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
-
+$('.toast').toast({autoHide:false});
+$('.toast').toast('show');
 
   $(".editHomework").click((e) => {
     clearForm();
@@ -45,9 +46,11 @@ $(document).ready(function () {
     //  check if the fontawasome icon was click instead of the button    
     document_id = e.target.tagName === 'I' ? $(e.target).parent().data('homeworkId') : $(e.target).data('homeworkId');
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
-
+      const homeworkCard = $(e.target).parents('.homework')
+      if($("#homework_id").length === 1 && homeworkCard.hasClass($("#homework_id").val()) ){
+        clearForm()
+      }
       $.post(includeThisFile(), { delHomework: document_id }, () => {
-        const homeworkCard = $(e.target).parents('.homework')
         animateCSS(homeworkCard, 'zoomOutDown', () => {
           animateCSS(homeworkCard.nextAll(),'slideInUp')
           if (e.target.tagName === 'I') {
@@ -99,6 +102,7 @@ $(document).ready(function () {
     $("button.addFile").nextAll().remove()
     $('input').val('');
     $('textarea').val('');
+    $('select').val('');
     $('input[type=radio],input[type=checkbox]').prop('checked', false);
   }
 });
