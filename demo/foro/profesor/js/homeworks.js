@@ -47,14 +47,15 @@ $(document).ready(function () {
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
 
       $.post(includeThisFile(), { delHomework: document_id }, () => {
-
-        animateCSS($(e.target).parents('.homework'), 'zoomOutDown', () => {
+        const homeworkCard = $(e.target).parents('.homework')
+        animateCSS(homeworkCard, 'zoomOutDown', () => {
+          animateCSS(homeworkCard.nextAll(),'slideInUp')
           if (e.target.tagName === 'I') {
             $(e.target).parent().tooltip('hide')
           } else {
             $(e.target).tooltip('hide')
           }
-          $(e.target).parents('.homework').remove();
+          homeworkCard.remove();
         })
       })
 
