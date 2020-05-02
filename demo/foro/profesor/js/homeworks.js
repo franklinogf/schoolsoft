@@ -9,7 +9,7 @@ $(document).ready(function () {
       $(e.target).parent().tooltip('hide').data('homeworkId') :
       $(e.target).tooltip('hide').data('homeworkId');
 
-    $.post(includeThisFile(), { 'getHomework': document_id }, res => {
+    $.post(includeThisFile(), { getHomework: document_id }, res => {
 
       $("#homeworkFormBtn").prop('name', 'editHomework');
       $("form").prepend(`<input type="hidden" name="document_id" id="homework_id" value="${document_id}"/>`)
@@ -37,7 +37,7 @@ $(document).ready(function () {
     },
       "json"
     );
-   
+
 
   })
 
@@ -45,21 +45,19 @@ $(document).ready(function () {
     //  check if the fontawasome icon was click instead of the button    
     document_id = e.target.tagName === 'I' ? $(e.target).parent().data('homeworkId') : $(e.target).data('homeworkId');
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
-      $.ajax({
-        type: "POST",
-        url: includeThisFile(),
-        data: { 'delHomework': document_id },
-        success: function (response) {
-          animateCSS($(e.target).parents('.homework'), 'zoomOutDown', () => {
-            if (e.target.tagName === 'I') {
-              $(e.target).parent().tooltip('hide')
-            } else {
-              $(e.target).tooltip('hide')
-            }
-            $(e.target).parents('.homework').remove();
-          })
-        }
-      });
+
+      $.post(includeThisFile(), { delHomework: document_id }, () => {
+
+        animateCSS($(e.target).parents('.homework'), 'zoomOutDown', () => {
+          if (e.target.tagName === 'I') {
+            $(e.target).parent().tooltip('hide')
+          } else {
+            $(e.target).tooltip('hide')
+          }
+          $(e.target).parents('.homework').remove();
+        })
+      })
+
     }
   })
 
@@ -67,22 +65,18 @@ $(document).ready(function () {
     const fileId = e.target.tagName === 'I' ? $(e.target).parent().data('fileId') : $(e.target).data('fileId');
 
     if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
-      $.ajax({
-        type: "POST",
-        url: includeThisFile(),
-        data: { 'delExistingFile': fileId },
-        success: function (response) {
-          animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
-            $(e.target).parents('.input-group').remove()
-          })
-          animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
-            // get the parent of the file before removing it from the DOM
-            const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
-            $(".homework").find(`[data-file-id="${fileId}"]`).remove()
-            parent.change()
-          })
-        }
-      });
+      $.post(includeThisFile(), { delExistingFile: fileId }, () => {
+        animateCSS($(e.target).parents('.input-group'), 'zoomOut', () => {
+          $(e.target).parents('.input-group').remove()
+        })
+        animateCSS($(".homework").find(`[data-file-id="${fileId}"]`), 'zoomOut', () => {
+          // get the parent of the file before removing it from the DOM
+          const parent = $(".homework").find(`[data-file-id="${fileId}"]`).parent();
+          $(".homework").find(`[data-file-id="${fileId}"]`).remove()
+          parent.change()
+        })
+      })
+
     }
   })
 
