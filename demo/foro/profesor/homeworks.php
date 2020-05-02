@@ -54,6 +54,7 @@ $classes = $teacher->classes();
                <div class="col-6 col-lg-4 mt-2">
                   <label for="class">Curso</label>
                   <select class="form-control" name="class" id="class">
+                     <option value="">Seleccionar Curso</option>
                      <?php foreach ($classes as $class) : ?>
                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                      <?php endforeach ?>
