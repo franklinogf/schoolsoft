@@ -49,6 +49,20 @@ class Student extends StudentModel
     $fullName = ucwords(strtolower("{$this->nombre} {$this->apellidos}"));
     return $fullName;
   }
+  public function profilePicture()
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un estudiante');
+    }
+
+    if ($this->imagen != '') {
+      $picturePath = __STUDENT_PROFILE_PICTURE_URL . $this->imagen;
+    } else {
+      $picturePath = __NO_PROFILE_PICTURE;
+    }
+
+    return $picturePath;
+  }
 
   public function classes()
   {
