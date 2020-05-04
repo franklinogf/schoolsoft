@@ -152,11 +152,11 @@ class DataBase
   protected function selectAll($query, $whereArray = [])
   {
     $result = $this->selectFromDB($query, $whereArray);
-    if ($result->num_rows > 0) {
-      $obj = $result->fetch_all(MYSQLI_ASSOC);
-      return Util::toObject($obj);
-    }
-    return false;
+    // if ($result->num_rows > 0) {
+    // }
+    $obj = $result->fetch_all(MYSQLI_ASSOC);
+    return Util::toObject($obj);
+    // return false;
   }
   // global select
   protected function selectFromDB($query, $whereArray)
