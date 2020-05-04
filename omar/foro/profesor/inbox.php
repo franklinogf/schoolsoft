@@ -28,77 +28,44 @@ $teacher = new Teacher(Session::id());
    Route::includeFile('/foro/profesor/includes/layouts/menu.php');
    ?>
 
-   <div class="container mt-md-5">
-      <div class="row shadow inbox">
-         <div class="col-12 col-md-4 p-0 border-primary overflow-auto mh-100 custom-scroll">
-
-            <div class="card w-100 rounded-0 pointer-cursor">
-               <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">Franklin González Flores</p>
-                  <p class="card-text mb-0 text-muted"><small>Thursday 5th July 2014</small></p>
-                  <p class="card-text mb-0 text-truncate font-weight-light">sdfsd fds sfsdfsdfs Asunto asdasd asdjas kldjakdl jasdkljaskldjkalsd </p>
-                  <p class="card-text text-right"><small class="badge badge-success rounded-0">new</small></p>
+   <div class="container mt-5 pb-5">
+      <div class="row shadow-lg inbox">
+         <div class="col-12 col-md-4 p-0">
+            <div id="inboxTitle" class="col p-2">
+               <div class="btn-group">
+                  <button class="btn btn-secondary btn-sm" type="button">
+                     Nuevo Mensaje
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  </button>
+                  <div class="dropdown-menu">
+                     <h6 class="dropdown-header">Mensajes:</h6>
+                     <a data-option="inbound" class="dropdown-item message-option active" href="#">Recibidos</a>
+                     <a data-option="outbound" class="dropdown-item message-option" href="#">Enviados</a>
+                  </div>
                </div>
             </div>
-
-            <div class="card w-100 rounded-0 pointer-cursor">
-               <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">Franklin González Flores</p>
-                  <p class="card-text mb-0 text-muted"><small>Thursday 5th July 2014</small></p>
-                  <p class="card-text mb-0 text-truncate font-weight-light">Asunto asdasd asdjas kldjakdl jasdkljaskldjkalsd </p>
-                  <p class="card-text text-right"><small class="badge badge-success rounded-0">new</small></p>
+            <!-- messages list -->
+            <div id="messages" class="col h-100 p-0 overflow-auto custom-scroll">
+               <div class="d-flex justify-content-center align-items-center h-100 font-bree">
+                  Cargando...
                </div>
             </div>
-
-            <div class="card w-100 rounded-0 pointer-cursor">
-               <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">Franklin González Flores</p>
-                  <p class="card-text mb-0 text-muted"><small>Thursday 5th July 2014</small></p>
-                  <p class="card-text mb-0 text-truncate font-weight-light">Asunto asdasd asdjas kldjakdl jasdkljaskldjkalsd </p>
-                  <p class="card-text text-right"><small class="badge badge-success rounded-0">new</small></p>
-               </div>
-            </div>
-
-            <div class="card w-100 rounded-0 pointer-cursor">
-               <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">Franklin González Flores</p>
-                  <p class="card-text mb-0 text-muted"><small>Thursday 5th July 2014</small></p>
-                  <p class="card-text mb-0 text-truncate font-weight-light">Asunto asdasd asdjas kldjakdl jasdkljaskldjkalsd </p>
-                  <p class="card-text text-right"><small class="badge badge-success rounded-0">new</small></p>
-               </div>
-            </div>
-
          </div>
 
-         <div class="col-12 col-md-8 bg-gradient-light bg-light overflow-auto mh-100 custom-scroll">
-            <div class="media p-2">
-               <img src="<?= __NO_PROFILE_PICTURE ?>" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
-               <div class="media-body">
-                  <p class="m-0"><strong>Franklin González Flores</strong> <small>(teacher)</small></p>
-                  <small class="text-muted font-weight-light">Thursday 5th July 2014</small>                  
-               </div>
-               <button title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button"><i class="fas fa-reply text-primary"></i></button>
+         <div id="message" class="col-12 col-md-8 align-self-start bg-gradient-light bg-light overflow-auto custom-scroll border-inbox border-secondary">
+            <div class="d-flex justify-content-center align-items-center h-100 font-bree">
+               Seleccione un mensaje
             </div>
-            <p class="p-2 my-0 font-bree">Asunto del tema</p>
-            <hr class="my-1">
-            <p class="p-2 mt-1 message-text font-markazi">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eaque dolorem iste corrupti perferendis accusamus voluptatem consequuntur porro, nihil nemo voluptatibus quos voluptatum commodi et laboriosam aliquam facere error sapiente soluta.
-                  Aspernatur quia dicta corporis aperiam dolorem, aliquid quidem laboriosam amet. Perferendis, mollitia, illo explicabo minus obcaecati unde incidunt autem necessitatibus nostrum, vitae fugit iste consectetur itaque sapiente libero. Quo, expedita!
-                  Aperiam pariatur aspernatur culpa corrupti nemo amet repellat, qui provident adipisci et quaerat minima, aliquam omnis nobis facilis est vero, dolores ex iusto nesciunt cum debitis reprehenderit quis? Eaque, magnam!
-                  Deserunt dolorem commodi consequatur ut fugiat molestias ipsum hic consectetur debitis delectus fugit tenetur quaerat odit saepe, nulla vitae autem! Sapiente tenetur minima quidem expedita iusto? Mollitia magni libero voluptatem?
-                  Dolores tenetur sit sapiente repudiandae cum deleniti aperiam doloribus optio, quaerat provident officia laboriosam quis ut quisquam asperiores officiis quam odio similique. Sint natus rem voluptas nihil, iure iste aliquid!
-                  Saepe hic deserunt eligendi aperiam, ex dicta omnis autem. Obcaecati est commodi sit, eos suscipit fugiat quis, fugit, illo consequatur quod ullam mollitia at! Blanditiis iure quia est ipsam nostrum.
-                  Facilis quibusdam aliquam eius, labore id facere deserunt nostrum, repudiandae inventore nulla quos totam. Incidunt, culpa dolorum necessitatibus temporibus distinctio harum eveniet quidem sed error, ut ratione quasi minima magni!
-                  Eaque quod quo iusto quam a aliquam autem ullam, eos provident, doloremque dolorem? Voluptate, alias? Corporis hic aliquid quas quam omnis voluptatibus sint nemo porro adipisci magnam aut, sunt minima.
-                  Nulla vitae tenetur et aspernatur deleniti aliquid, impedit necessitatibus odio iusto consequuntur aut assumenda natus aliquam eos placeat voluptas. Distinctio totam voluptates repudiandae voluptas reprehenderit incidunt culpa molestiae assumenda cupiditate.
-                  Quas exercitationem aliquam quis ratione similique explicabo voluptates soluta, accusamus eligendi, excepturi praesentium aliquid eius dolorem consequatur nam nisi! Fugiat non exercitationem eaque qui dolor rerum, libero voluptatum aliquam accusantium!</p>
-               </div>
          </div>
+
       </div>
+   </div>
 
 
-      <?php
-      Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-      ?>
+   <?php
+   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+   ?>
 </body>
 
 </html>
