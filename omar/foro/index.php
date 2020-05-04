@@ -6,7 +6,7 @@ use Classes\Controllers\School;
 use Classes\Session;
 
 if (Session::is_logged(false)) {
-   Route::redirect(Session::type());
+   Route::redirect('/'.Session::type());
 }
 
 ?>
