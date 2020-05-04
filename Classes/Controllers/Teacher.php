@@ -65,7 +65,11 @@ class Teacher extends TeacherModel
     if ($this->foto_name != '') {
       $picturePath = __TEACHER_PROFILE_PICTURE_URL . $this->foto_name;
     } else {
-      $picturePath = __NO_PROFILE_PICTURE;
+      if($this->genero === 'Femenino'){
+        $picturePath = __NO_PROFILE_PICTURE_TEACHER_FEMALE;
+      }else{
+        $picturePath = __NO_PROFILE_PICTURE_TEACHER_MALE;
+      }
     }
 
     return $picturePath;

@@ -58,7 +58,11 @@ class Student extends StudentModel
     if ($this->imagen != '') {
       $picturePath = __STUDENT_PROFILE_PICTURE_URL . $this->imagen;
     } else {
-      $picturePath = __NO_PROFILE_PICTURE;
+      if($this->genero === 'F'){
+        $picturePath = __NO_PROFILE_PICTURE_STUDENT_FEMALE;
+      }else{
+        $picturePath = __NO_PROFILE_PICTURE_STUDENT_MALE;
+      }
     }
 
     return $picturePath;

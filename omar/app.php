@@ -31,10 +31,13 @@ define('__TEACHER_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __
 define('__TEACHER_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/teachers/'));
 define('__STUDENT_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/pictures/students/'));
 define('__STUDENT_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/students/'));
-define('__NO_PROFILE_PICTURE', str_replace('/', DIRECTORY_SEPARATOR, '/images/none.jpg'));
 define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/logo/'));
 define('__TEACHER_HOMEWORKS_DIRECTORY', str_replace('/', DIRECTORY_SEPARATOR,'documentos/'));
 define('__STUDENT_HOMEWORKS_DIRECTORY', str_replace('/', DIRECTORY_SEPARATOR,'tareas/'));
+define('__NO_PROFILE_PICTURE_TEACHER_MALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-teacher.png'));
+define('__NO_PROFILE_PICTURE_TEACHER_FEMALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-teacher.png'));
+define('__NO_PROFILE_PICTURE_STUDENT_MALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-boy.png'));
+define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-girl.png'));
 
 
 /* -------------------------------------------------------------------------- */
