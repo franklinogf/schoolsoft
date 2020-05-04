@@ -47,6 +47,14 @@ class Teacher extends TeacherModel
     }
     return $this->getHomeStudents($this->grado);
   }
+  
+  public function unreadMessages()
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    return $this->getUnreadMessages($this->id);
+  }
 
   public function profilePicture()
   {
