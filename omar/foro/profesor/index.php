@@ -34,7 +34,7 @@ $lastTopic = $teacher->lastTopic();
         <i class="far fa-clock d-inline-block text-secondary"></i>
         <div class="react-clock d-inline-block"></div>
       </div>
-      <h2>Bienvenido <?= $teacher->fullName(); ?></h2>
+      <h2><?= $teacher->genero === 'Femenino' ? 'Bienvenida' : 'Bienvenido' ?> <?= $teacher->fullName(); ?></h2>
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5">
           <h4 class="card-header bg-gradient-info bg-info">
