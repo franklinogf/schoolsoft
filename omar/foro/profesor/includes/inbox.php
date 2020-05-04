@@ -49,14 +49,15 @@ if (isset($_POST['getMessages'])) {
             'nombre' => $name,
             'foto' => $foto,
             'leido' => $message->leido_p,
+            'enviadoPor' => $message->enviado_por,
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
 
          ];
       }
 
-      $array = [
-         'response' => true,
+      $array = [    
+         'response' => true,     
          'data' => $data
       ];
    }
@@ -68,5 +69,9 @@ if (isset($_POST['getMessages'])) {
 $message_id = $_POST['changeStatus'];
 
 DB::table('foro_mensajes')->where('id',$message_id)->update(['leido_p'=>'si']);
-
+$teacher = new Teacher(Session::id());
+$array = [  
+   'unreadMessages' => $teacher->unreadMessages()
+];
+echo Util::toJson($array);
 }

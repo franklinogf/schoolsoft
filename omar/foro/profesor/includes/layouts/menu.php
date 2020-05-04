@@ -58,7 +58,7 @@ global $teacher;
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
           <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="far fa-id-card text-secondary"></i> Mi Perfil</a>
-          <a class="dropdown-item  <?= ($pathFile === 'inbox' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/inbox.php') ?>"><i class="far fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-info">0</span></a>
+          <a class="dropdown-item  <?= ($pathFile === 'inbox' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/inbox.php') ?>"><i class="far fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span></a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-secondary"></i> Cerrar Sesión</a>
         </div>

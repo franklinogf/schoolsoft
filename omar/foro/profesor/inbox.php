@@ -29,30 +29,30 @@ $teacher = new Teacher(Session::id());
    ?>
 
    <div class="container mt-5 pb-5">
-      <div class="row shadow-lg inbox">
-         <div class="col-12 col-md-4 p-0">
-            <div id="inboxTitle" class="col p-2">
-               <div class="btn-group">
-                  <button class="btn btn-secondary btn-sm" type="button">
-                     Nuevo Mensaje
-                  </button>
-                  <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  </button>
-                  <div class="dropdown-menu">
-                     <h6 class="dropdown-header">Mensajes:</h6>
-                     <a data-option="inbound" class="dropdown-item message-option active" href="#">Recibidos</a>
-                     <a data-option="outbound" class="dropdown-item message-option" href="#">Enviados</a>
-                  </div>
-               </div>
+      <div class="mb-2">
+         <div class="btn-group">
+            <button id="newMessageBtn" class="btn btn-secondary btn-sm" type="button">
+               Nuevo Mensaje
+            </button>
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </button>
+            <div class="dropdown-menu">
+               <h6 class="dropdown-header">Mensajes:</h6>
+               <a data-option="inbound" class="dropdown-item messageOption active" href="#">Recibidos <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span></a>
+               <a data-option="outbound" class="dropdown-item messageOption" href="#">Enviados</a>
             </div>
-            <!-- messages list -->
-            <div id="messages" class="col h-100 p-0 overflow-auto custom-scroll">
+         </div>
+      </div>
+      <div class="row shadow-lg inbox">
+         <div class="col-12 col-md-4 p-0 overflow-auto custom-scroll">
+            <!-- Messages list -->
+            <div id="messages" class="col h-100 p-0">
                <div class="d-flex justify-content-center align-items-center h-100 font-bree">
                   Cargando...
                </div>
             </div>
          </div>
-
+         <!-- View Message -->
          <div id="message" class="col-12 col-md-8 align-self-start bg-gradient-light bg-light overflow-auto custom-scroll border-inbox border-secondary">
             <div class="d-flex justify-content-center align-items-center h-100 font-bree">
                Seleccione un mensaje
@@ -62,10 +62,81 @@ $teacher = new Teacher(Session::id());
       </div>
    </div>
 
+   <div id="respondModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="dialog">
+         <input type="hidden" name="id_message">
+         <div class="modal-content">
+            <div class="modal-header bg-primary">
+               <h5 class="modal-title">Responder a:</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-group row">
+                  <label for="respondSubject" class="col-2 col-form-label">Asunto:</label>
+                  <div class="col">
+                     <input type="text" readonly class="form-control-plaintext" id="respondSubject" value="">
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label for="respondMessage">Mensaje:</label>
+                  <textarea id="respondMessage" class="form-control" name="message"></textarea>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+               <button type="button" class="btn btn-primary">Enviar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div id="newMessageModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="dialog">
+         <input type="hidden" name="id_message">
+         <div class="modal-content">
+            <div class="modal-header bg-primary">
+               <h5 class="modal-title">Mensaje nuevo</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-group row">
+                  <label for="newTitle" class="col-form-label col-md-2">Titulo:</label>
+                  <div class="col-md-10">
+                     <input id="newTitle" class="form-control" type="text" name="title">
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label for="newSubject" class="col-form-label col-md-2">Asunto:</label>
+                  <div class="col-md-10">
+                  <input id="newSubject" class="form-control" type="text" name="subject">
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label for="newMessage">Mensaje:</label>
+                  <textarea id="newMessage" class="form-control" name="message"></textarea>
+               </div>
+               <div class="container">
+                  <button class="btn btn-primary mx-auto d-block addFile">Agregar archivo</button>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+               <button type="button" class="btn btn-primary">Enviar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
 
    <?php
    Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
    ?>
+
+
 </body>
 
 </html>
