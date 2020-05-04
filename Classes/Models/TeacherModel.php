@@ -71,7 +71,7 @@ class TeacherModel extends School
         ['foro_entradas.year', $year],
         ['foro_entradas.estado', 'a']
       ])
-      ->orderBy('detalle_foro_entradas.fecha', 'DESC')->first();
+      ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
 
     return $obj;
   }
