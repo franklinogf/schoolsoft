@@ -118,7 +118,7 @@ function addExistingFile(name, id = false) {
   if (addFileBtn.nextAll().length > 0) {
     addFileBtn = addFileBtn.nextAll().last();
   }
-  addFileBtn.after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto">
+  addFileBtn.after(`<div class="input-group mt-3 w-75 mx-auto">
   <input type="text" class="form-control bg-white" value="${name}" disabled >
   <div class="input-group-append">
      <button ${id !== false ? `data-file-id="${id}"` : ''} class="btn btn-danger delExistingFile" type="button"><i class="fas fa-trash-alt"></i></button>
@@ -205,7 +205,7 @@ $(function () {
       if (thisBtn.nextAll().length > 0) {
         thisBtn = thisBtn.nextAll().last();
       }
-      thisBtn.after(`<div class="input-group mt-3 col-12 col-lg-6 mx-auto animated fadeInUp faster">
+      thisBtn.after(`<div class="input-group mt-3 w-75 mx-auto animated fadeInUp faster">
     <div class="custom-file">
        <input type="file" class="custom-file-input file" name="file[]">
        <label class="custom-file-label text-nowrap overflow-hidden">Seleccionar Archivo</label>
