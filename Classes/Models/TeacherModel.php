@@ -52,9 +52,20 @@ class TeacherModel extends School
         ['fecha_baja', '0000-00-00']
       ])
       ->orderBy('apellidos')->get();
-
-
+      
     return $obj;
+  }
+  protected function getUnreadMessages($id)
+  {
+    $year = $this->info('year');
+    $obj = parent::table('foro_mensajes')->where([
+      ['enviado_por','<>', 'p'],
+      ['id_p', $id ],
+      ['leido_p','<>', 'si' ],
+      ['year', $year]
+   ])->get();
+    
+    return count($obj);
   }
 
   protected function getLastTeacherTopic($id)
