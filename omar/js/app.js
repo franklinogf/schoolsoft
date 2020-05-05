@@ -246,7 +246,31 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
   }
 
-
+/* ------------------------- Global checkbox system ------------------------- */
+// check all
+$("[type='checkbox'].checkAll").change(function () {
+  if ($(this).prop("checked")) {
+     $("[type='checkbox'].checkAll").prop("indeterminate", false);
+     $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", true);
+  } else {
+     $("[type='checkbox'].checkAll").prop("indeterminate", false);
+     $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", false);
+  }
+});
+// single check
+$(_check).change(function () {
+  if ($(`[type='checkbox'].check:checked`).length === 0) {
+     $("[type='checkbox'].checkAll").prop("checked", false);
+     $("[type='checkbox'].checkAll").prop("indeterminate", false);
+  } else if ($(`[type='checkbox'].check:checked`).length === $(_check).length) {
+     $("[type='checkbox'].checkAll").prop("indeterminate", false);
+     $("[type='checkbox'].checkAll").prop("checked", true);
+     $('.alert').addClass('invisible');
+  } else {
+     $('.alert').addClass('invisible');
+     $("[type='checkbox'].checkAll").prop("indeterminate", true);
+  }
+});
 
 
 });
