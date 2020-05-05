@@ -126,16 +126,16 @@ function addExistingFile(name, id = false) {
 </div>`);
 }
 
-function fileRealName(fileName,baseName = false) {
-  let realName = fileName.substring(fileName.indexOf(')')+1)
-  if(baseName){
+function fileRealName(fileName, baseName = false) {
+  let realName = fileName.substring(fileName.indexOf(')') + 1)
+  if (baseName) {
     realName = fileBaseName(realName)
   }
   return realName.trim()
 }
 
 function fileBaseName(fileName) {
-  const baseName = fileName.substring(0,fileName.lastIndexOf('.'))
+  const baseName = fileName.substring(0, fileName.lastIndexOf('.'))
   return baseName.trim()
 }
 
@@ -246,31 +246,43 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
   }
 
-/* ------------------------- Global checkbox system ------------------------- */
-// check all
-$("[type='checkbox'].checkAll").change(function () {
-  if ($(this).prop("checked")) {
-     $("[type='checkbox'].checkAll").prop("indeterminate", false);
-     $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", true);
-  } else {
-     $("[type='checkbox'].checkAll").prop("indeterminate", false);
-     $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", false);
-  }
-});
-// single check
-$(_check).change(function () {
-  if ($(`[type='checkbox'].check:checked`).length === 0) {
-     $("[type='checkbox'].checkAll").prop("checked", false);
-     $("[type='checkbox'].checkAll").prop("indeterminate", false);
-  } else if ($(`[type='checkbox'].check:checked`).length === $(_check).length) {
-     $("[type='checkbox'].checkAll").prop("indeterminate", false);
-     $("[type='checkbox'].checkAll").prop("checked", true);
-     $('.alert').addClass('invisible');
-  } else {
-     $('.alert').addClass('invisible');
-     $("[type='checkbox'].checkAll").prop("indeterminate", true);
-  }
-});
+  /* ------------------------- Global checkbox system ------------------------- */
+  // check all
+  $("[type='checkbox'].checkAll").change(function () {
+    if ($(this).prop("checked")) {
+      $("[type='checkbox'].checkAll").prop("indeterminate", false);
+      $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", true);
+    } else {
+      $("[type='checkbox'].checkAll").prop("indeterminate", false);
+      $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", false);
+    }
+  });
+  // single check
+  $("[type='checkbox'].check").change(function () {
+    if ($(`[type='checkbox'].check:checked`).length === 0) {
+      $("[type='checkbox'].checkAll").prop("checked", false);
+      $("[type='checkbox'].checkAll").prop("indeterminate", false);
+    } else if ($(`[type='checkbox'].check:checked`).length === $("[type='checkbox'].check").length) {
+      $("[type='checkbox'].checkAll").prop("indeterminate", false);
+      $("[type='checkbox'].checkAll").prop("checked", true);
+      $('.alert').addClass('invisible');
+    } else {
+      $('.alert').addClass('invisible');
+      $("[type='checkbox'].checkAll").prop("indeterminate", true);
+    }
+  });
+
+  // Datatable
+  $("table tbody").on("click", "tr", function () {
+    if ($(this).find("[type='checkbox'].check")) {
+      const row = classesTable.row(this);
+      if (row.index() !== undefined) {
+        const check = $("[type='checkbox'].check").eq(row.index());
+        check.prop('checked', !check.prop('checked'));
+        check.change();
+      }
+    }
+  });
 
 
 });
