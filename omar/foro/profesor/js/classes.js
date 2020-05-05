@@ -63,7 +63,6 @@ $(document).ready(function () {
 
     const row = studentsTable.row(this)
     if (row.index() !== undefined) {
-      const data = row.data();
       const studentId = $(row.node()).prop('id');
       const modal = $('#myModal')
 
@@ -77,7 +76,8 @@ $(document).ready(function () {
             modal.find('#id').text(res.data.id)
             const username = (res.data.usuario !== '' ? `<span class="badge badge-secondary">${res.data.usuario}</span>` : '')
             modal.find('.modal-title').html(`Perfil del estudiante ${username}`)
-            modal.find('#name').text(`${res.data.nombre} ${res.data.apellidos}`)
+            modal.find('#profilePicture').prop('src',res.data.foto)
+            modal.find('#name').text(`${res.data.nombre}`)
             modal.find('#grade').text(res.data.grado)
             modal.find('#date').text((res.data.fecha === '0000-00-00' ? '' : res.data.fecha))
             modal.find('#email').text(res.data.email)

@@ -72,7 +72,7 @@ $teacher = new Teacher(Session::id());
           <div class="modal-body text-center">
             <div class="row">
               <div class="col-12">
-                <img id="profilePicture" src="<?= __NO_PROFILE_PICTURE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
+                <img id="profilePicture" src="#" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
                 <hr>
               </div>
             </div>

@@ -13,7 +13,7 @@ if (isset($_POST['studentsByClass'])) {
    if ($data = $student->findByClass($_POST['studentsByClass'])) {
       $array = [
          'response' => true,
-         'data' => $data
+         'data' => $data         
       ];
    } else {
       $array = ['response' => false];
@@ -24,7 +24,18 @@ if (isset($_POST['studentsByClass'])) {
    if ($data = $student->findPK($_POST['studentByPK'])) {
       $array = [
          'response' => true,
-         'data' => $data
+         'data' => [
+            'id'=> $student->id,
+            'nombre' => $student->fullName(),
+            'usuario'=> $student->usuario,
+            'grado'=> $student->grado,
+            'genero'=> $student->genero,
+            'foto' => $student->profilePicture(),
+            'fecha'=> $student->fecha,
+            'email'=> $student->email
+
+         ]
+         
       ];
    } else {
       $array = ['response' => false];
