@@ -1,8 +1,10 @@
 <?php
+global $DataTable;
 
 use Classes\Controllers\School;
 use Classes\Route;
 
+if ($DataTable) Route::includeFile('/includes/datatable-css.php', true);
 
 echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
 
