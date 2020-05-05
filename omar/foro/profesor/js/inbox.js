@@ -5,10 +5,38 @@ $(document).ready(function () {
    const $unreadMessages = $(".unreadMessages")
    const $newMessageBtn = $("#newMessageBtn")
    const $respondModal = $("#respondModal")
+   const $respondForm = $("#respondForm")
    const $newMessageModal = $("#newMessageModal")
+   const $newMessageForm = $("#newMessageForm")
    let messages = []
    let message = []
    getMessages();
+
+
+   $respondForm.submit(function (e) {
+      e.preventDefault();
+      const formData = $(this).serializeArray();
+      message.respondMessage = formData[0].value     
+
+      $.post(includeThisFile(), { respondMessage: message }, res => {
+         console.log(res)
+         delete message.respondMessage   
+         $respondModal.modal('hide')      
+      })
+
+
+   })
+   $newMessageForm.submit(function (e) {
+      const formData = $(this).serializeArray();
+      let data = [];
+      formData.map(input => {
+         data[input.name] = input.value
+      })
+      console.log('data: ', data);
+
+      e.preventDefault();
+   })
+
 
 
    $($message).on('click', '#respondBtn', function (e) {
@@ -48,7 +76,7 @@ $(document).ready(function () {
       $message.html(`<div class="media p-2 mt-2">
       <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
       <div class="media-body">
-         <p class="m-0"><strong>${message.nombre}</strong> <small>(teacher)</small></p>
+         <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
          <small class="text-muted font-weight-light">${message.fecha}</small>
       </div>
       ${message.enviadoPor !== 'p' ?
@@ -87,7 +115,7 @@ $(document).ready(function () {
    function getMessages(type = 'inbound') {
       $.post(includeThisFile(), { getMessages: type }, res => {
          if (res.response) {
-            $messages.html('')
+            $messages.empty()
             messages = res.data
             res.data.map(message => {
 
@@ -95,7 +123,8 @@ $(document).ready(function () {
                <div class="card-body p-2">
                   <p class="card-text mb-0 font-weight-bold">${message.nombre}</p>
                   <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${message.fecha}</small><small>${message.hora}</small></p>
-                  <p class="card-text mb-0 text-truncate font-weight-light">${message.asunto}</p>
+                  <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
+                  <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
                   <p class="card-text text-right">${message.leido !== 'si' ? '<small class="badge badge-success rounded-0 status">Nuevo</small>' : ''}</p>
                </div>
             </div>`)

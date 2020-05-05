@@ -72,22 +72,24 @@ $teacher = new Teacher(Session::id());
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <div class="modal-body">
-               <div class="form-group row">
-                  <label for="respondSubject" class="col-2 col-form-label">Asunto:</label>
-                  <div class="col">
-                     <input type="text" readonly class="form-control-plaintext" id="respondSubject" value="">
+            <form id="respondForm">
+               <div class="modal-body">
+                  <div class="form-group row">
+                     <label for="respondSubject" class="col-2 col-form-label">Asunto:</label>
+                     <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" id="respondSubject" value="">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label for="respondMessage">Mensaje:</label>
+                     <textarea id="respondMessage" class="form-control" name="message"></textarea>
                   </div>
                </div>
-               <div class="form-group">
-                  <label for="respondMessage">Mensaje:</label>
-                  <textarea id="respondMessage" class="form-control" name="message"></textarea>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-primary">Responder</button>
                </div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-               <button type="button" class="btn btn-primary">Enviar</button>
-            </div>
+            </form>
          </div>
       </div>
    </div>
@@ -112,7 +114,7 @@ $teacher = new Teacher(Session::id());
                <div class="form-group row">
                   <label for="newSubject" class="col-form-label col-md-2">Asunto:</label>
                   <div class="col-md-10">
-                  <input id="newSubject" class="form-control" type="text" name="subject">
+                     <input id="newSubject" class="form-control" type="text" name="subject">
                   </div>
                </div>
                <div class="form-group">
