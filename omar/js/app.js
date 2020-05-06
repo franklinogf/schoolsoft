@@ -1,9 +1,10 @@
 //* --------------------------- functions --------------------------- *//
 // download file
 function downloadFile(url,name = false) {
+  console.log(baseName(url));
   var a = document.createElement('a');
-  a.href = url;
-  a.download = baseName(url);
+  a.href ='/'+url;
+  a.download = ''
   if(name){
     a.download = name;
   }
