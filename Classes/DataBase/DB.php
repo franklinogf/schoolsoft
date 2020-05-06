@@ -14,6 +14,7 @@ class DB extends DataBase
   private static $table = '';
   private static $columns = '*';
   private static $query = '';
+  private static $groupBy = null;
   private static $orderBy = null;
   private static $where = [];
   private static $whereCols = [];
@@ -201,12 +202,21 @@ class DB extends DataBase
     self::$orderBy = ' ORDER BY ' . trim($col) . ' ' . trim($mode);
     return self::$instance;
   }
+  
+  /* ----------------------------- group by filter ---------------------------- */
+
+  public function groupBy($col)
+  {
+
+    self::$groupBy = ' GROUP BY ' . trim($col) ;
+    return self::$instance;
+  }
 
   /* ---------------------------- get multiple rows --------------------------- */
 
-  public function get()
+  public function get($other = '')
   {
-    $this->buildSelectQuery();
+    $this->buildSelectQuery($other);
     $obj = $this->selectAll(self::$query, self::$where);
     $this->closeDB();
     return $obj;
@@ -259,7 +269,7 @@ class DB extends DataBase
       }
     }
 
-    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$orderBy . ' ' . $other;
+    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$groupBy. self::$orderBy . ' ' . $other;
   }
 
   /* ---------------- restore the DB class to the initial state --------------- */
@@ -270,6 +280,7 @@ class DB extends DataBase
     self::$table = '';
     self::$columns = '*';
     self::$query = '';
+    self::$groupBy = null;
     self::$orderBy = null;
     self::$where = [];
     self::$whereCols = [];
