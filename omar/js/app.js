@@ -195,7 +195,7 @@ $(function () {
       modal.find('textarea').val('');
       modal.find('input[type=radio],input[type=checkbox]').prop({
         'checked': false,
-        'indeterminate':false
+        'indeterminate': false
       });
     })
   }
@@ -251,25 +251,38 @@ $(function () {
 
   /* ------------------------- Global checkbox system ------------------------- */
   // check all
-  $("table tr").on('change',"[type='checkbox'].checkAll",function () {
+  $("table tr").on('change', "[type='checkbox'].checkAll", function () {
+    let rows
+    if ($(this).parents('table.studentsTable').length > 0) {
+      rows = studentsTable.rows();
+    } else if ($(this).parents('table.classesTable').length > 0) {
+      rows = classesTable.rows();
+    }
     if ($(this).prop("checked")) {
-      $("[type='checkbox'].checkAll").prop("indeterminate", false);
-      $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", true);
+      $("[type='checkbox'].checkAll").prop({
+        "indeterminate": false,
+        "checked": true
+      });
+      $(rows.nodes()).find("[type='checkbox'].check").prop("checked", true);
+
     } else {
-      $("[type='checkbox'].checkAll").prop("indeterminate", false);
-      $(`[type='checkbox'].check, [type='checkbox'].checkAll`).prop("checked", false);
+      $(rows.nodes()).find("[type='checkbox'].check").prop("checked", false);
+      $("[type='checkbox'].checkAll").prop({
+        "indeterminate": false,
+        "checked": false
+      });
     }
   });
   // single check
-  $("table tbody").on('change',"[type='checkbox'].check",function () { 
-    let rows    
+  $("table tbody").on('change', "[type='checkbox'].check", function () {
+    let rows
     if ($(this).parents('table.studentsTable').length > 0) {
       rows = studentsTable.rows();
-    }else if ($(this).parents('table.classesTable').length > 0) {
+    } else if ($(this).parents('table.classesTable').length > 0) {
       rows = classesTable.rows();
-    }   
-    const noCheked =$(rows.nodes()).find("[type='checkbox'].check").length
-    const checked =$(rows.nodes()).find("[type='checkbox'].check:checked").length
+    }
+    const noCheked = $(rows.nodes()).find("[type='checkbox'].check").length
+    const checked = $(rows.nodes()).find("[type='checkbox'].check:checked").length
     if (checked === 0) {
       $("[type='checkbox'].checkAll").prop("checked", false);
       $("[type='checkbox'].checkAll").prop("indeterminate", false);
@@ -284,15 +297,15 @@ $(function () {
   });
 
   // Datatable
-  $("table tbody").on("click", "tr", function () {  
-    if ($(this).find("[type='checkbox'].check").length > 0) {      
+  $("table tbody").on("click", "tr", function () {
+    if ($(this).find("[type='checkbox'].check").length > 0) {
       let row;
       if ($(this).parents('table.studentsTable').length > 0) {
         row = studentsTable.row(this);
-      }else if ($(this).parents('table.classesTable').length > 0) {
+      } else if ($(this).parents('table.classesTable').length > 0) {
         row = classesTable.row(this);
       }
-      if (row.index() !== undefined) {        
+      if (row.index() !== undefined) {
         const check = $("[type='checkbox'].check").eq($(this).index());
         check.prop('checked', !check.prop('checked'));
         check.change();
