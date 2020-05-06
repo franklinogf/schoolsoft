@@ -26,10 +26,10 @@ class File
    ];
    public static $fileIcon = '<i class="far fa-file-alt"></i>';
 
-   public function __construct($file)
+   public function __construct($file = 'file')
    {
       
-      if (isset($_FILES[$file]) && !empty($file)) {
+      if (isset($_FILES[$file]) && !empty($file) && $_FILES[$file]['error'] === 0) {
          if($this->isMultiArray($_FILES[$file])){
             foreach ($_FILES[$file]['name'] as $i => $name) {
                $this->files[$i]['name'] =  $_FILES[$file]['name'][$i];
