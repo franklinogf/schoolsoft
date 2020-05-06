@@ -214,9 +214,9 @@ class DB extends DataBase
 
   /* ---------------------------- get multiple rows --------------------------- */
 
-  public function get($other = '')
+  public function get()
   {
-    $this->buildSelectQuery($other);
+    $this->buildSelectQuery();
     $obj = $this->selectAll(self::$query, self::$where);
     $this->closeDB();
     return $obj;
