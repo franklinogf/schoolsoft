@@ -7,7 +7,8 @@ use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
-
+$jqUI = true;
+$DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
@@ -18,9 +19,7 @@ $teacher = new Teacher(Session::id());
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
    <title>Foro - Temas</title>
    <?php
-   Route::fontawasome();
    Route::includeFile('/foro/profesor/includes/layouts/links.php');
-   Route::includeFile('/includes/datatable-css.php', true);
    ?>
 </head>
 
@@ -122,10 +121,7 @@ $teacher = new Teacher(Session::id());
 
    </div>
    <?php
-   $jqUI = true;
    Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-   Route::includeFile('/includes/datatable-js.php', true);
-   
    ?>
 
 </body>

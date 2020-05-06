@@ -6,7 +6,8 @@ use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
-
+$jqUI = true;
+$DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
@@ -17,9 +18,7 @@ $teacher = new Teacher(Session::id());
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - Mis Cursos</title>
   <?php
-  Route::fontawasome();
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
-  Route::includeFile('/includes/datatable-css.php', true);
   ?>
 </head>
 
@@ -31,31 +30,12 @@ $teacher = new Teacher(Session::id());
   <div class="container mt-5 pb-5">
     <h1 id="header" class="text-center">Mis Cursos</h1>
 
-    <?php
+    <?php    
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
+    Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
     ?>
 
-    <!-- Students table -->
-
-    <table class="studentsTable table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-gradient-primary bg-primary border-0">
-        <tr>
-          <th>Estudiante</th>
-          <th>Usuario</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      <tfoot>
-        <tr class="bg-gradient-secondary bg-secondary">
-          <th>Estudiante</th>
-          <th>Usuario</th>
-        </tr>
-        <tr class="bg-gradient-light bg-light">
-          <td colspan="2"><button id="back" type="button" class="btn btn-block btn-primary">Atrás</button></td>
-        </tr>
-      </tfoot>
-    </table>
+    
 
     <!-- modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
@@ -119,10 +99,7 @@ $teacher = new Teacher(Session::id());
 
   </div>
   <?php
-  $jqUI = true;
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-  Route::includeFile('/includes/datatable-js.php', true);
-  
   ?>
 
 </body>

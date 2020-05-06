@@ -6,7 +6,7 @@ use Classes\Controllers\Teacher;
 use Classes\Session;
 
 Session::is_logged();
-
+$DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
@@ -18,7 +18,6 @@ $teacher = new Teacher(Session::id());
   <title>Foro - Salon Hogar</title>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
-  Route::includeFile('/includes/datatable-css.php', true);
   ?>
 </head>
 
@@ -29,28 +28,12 @@ $teacher = new Teacher(Session::id());
   ?>
   <div class="container mt-5 pb-5">
     <h1 class="text-center">Mi Salon Hogar</h1>
-    <table class="studentsTable table table-striped table-hover cell-border w-100 shadow">
-      <thead class="bg-gradient-primary bg-primary border-0">
-        <tr>
-          <th>Estudiante</th>
-          <th>Usuario</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($teacher->homeStudents() as $student) : ?>
-          <tr id="<?= $student->mt ?>">
-            <td><?= "$student->apellidos $student->nombre" ?></td>
-            <td><?= $student->usuario ?></td>
-          </tr>
-        <?php endforeach ?>
-      </tbody>
-      <tfoot>
-        <tr class="bg-gradient-secondary bg-secondary">
-          <th>Estudiante</th>
-          <th>Usuario</th>
-        </tr>
-      </tfoot>
-    </table>
+
+    <?php
+    $students = $teacher->homeStudents();
+    Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
+    ?>
+
     <a href="#" class="btn btn-primary mt-2">Enviar usuarios a los padres</a>
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
@@ -69,15 +52,15 @@ $teacher = new Teacher(Session::id());
                 <div class="form-group col-md-6">
                   <label for="username">Usuario</label>
                   <input type="text" class="form-control" name='username' id="username">
-                  <div class="invalid-feedback">Ya existe este usuario</div>        
-                  <div class="valid-feedback">Usuario disponible</div>                  
+                  <div class="invalid-feedback">Ya existe este usuario</div>
+                  <div class="valid-feedback">Usuario disponible</div>
                 </div>
                 <div class="form-group  col-md-6">
                   <label for="pass1">Nueva Clave</label>
                   <input type="password" class="form-control pass" name='password' id="pass1">
                   <label for="pass2">Confirmar Clave</label>
                   <input type="password" class="form-control pass" id="pass2">
-                  <div class="invalid-feedback">Las claves no coinciden</div>                  
+                  <div class="invalid-feedback">Las claves no coinciden</div>
                 </div>
               </div>
             </div>
@@ -94,7 +77,6 @@ $teacher = new Teacher(Session::id());
 
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-  Route::includeFile('/includes/datatable-js.php', true);
   ?>
 </body>
 

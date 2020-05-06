@@ -6,6 +6,7 @@ use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
+$DataTable = true;
 $teacher = new Teacher(Session::id());
 
 ?>
@@ -95,7 +96,7 @@ $teacher = new Teacher(Session::id());
    </div>
 
    <div id="newMessageModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg" role="dialog">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg" role="dialog">
          <input type="hidden" name="id_message">
          <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -104,36 +105,62 @@ $teacher = new Teacher(Session::id());
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <div class="modal-body">
-               <div class="form-group row">
-                  <label for="newTitle" class="col-form-label col-md-2">Titulo:</label>
-                  <div class="col-md-10">
-                     <input id="newTitle" class="form-control" type="text" name="title">
-                  </div>
-               </div>
-               <div class="form-group row">
-                  <label for="newSubject" class="col-form-label col-md-2">Asunto:</label>
-                  <div class="col-md-10">
-                     <input id="newSubject" class="form-control" type="text" name="subject">
-                  </div>
-               </div>
-               <div class="form-group">
-                  <label for="newMessage">Mensaje:</label>
-                  <textarea id="newMessage" class="form-control" name="message"></textarea>
-               </div>
-               <div class="container">
-                  <button class="btn btn-primary mx-auto d-block addFile">Agregar archivo</button>
-               </div>
+            <div class="modal-body custom-scroll">
+               <?php
+               $tableStudentsCheckbox = true;
+               Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
+               Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
+               ?>
             </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-               <button type="button" class="btn btn-primary">Enviar</button>
-            </div>
+            <form enctype="multipart/form-data">
+               <div class="modal-body">
+
+                  <div class="form hidden">
+                     <p class="studentsAmount text-info font-bree"></p>
+                     <div class="form-group row">
+                        <label for="newTitle" class="col-form-label col-md-2">Titulo:</label>
+                        <div class="col-md-10">
+                           <input id="newTitle" class="form-control" type="text" name="title">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label for="newSubject" class="col-form-label col-md-2">Asunto:</label>
+                        <div class="col-md-10">
+                           <input id="newSubject" class="form-control" type="text" name="subject">
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label for="newMessage">Mensaje:</label>
+                        <textarea id="newMessage" class="form-control" name="message"></textarea>
+                     </div>
+                     <div class="container">
+                        <button type="button" class="btn btn-primary mx-auto d-block addFile">Agregar archivo</button>
+                     </div>
+                  </div>
+
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-primary form hidden back">Atras</button>
+                  <button type="button" class="btn btn-secondary closeModal">Cerrar</button>
+                  <button type="submit" class="btn btn-primary form hidden">Enviar</button>
+               </div>
+            </form>
          </div>
       </div>
    </div>
 
-
+   <div id="modalAlert" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content bg-danger">
+            <div class="modal-body d-flex justify-content-between">
+               <p class="mb-0">Debe de seleccionar al menos uno</p>
+               <button type="button" class="close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
    <?php
    Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
    ?>

@@ -1,4 +1,7 @@
 $(document).ready(function () {
+   let _class = '';
+   const $classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
+   const $studentsTableWrapper = $(".studentsTable").parents('.dataTables_wrapper');
    const $messages = $("#messages")
    const $message = $("#message")
    const $messageOptions = $(".messageOption")
@@ -7,35 +10,178 @@ $(document).ready(function () {
    const $respondModal = $("#respondModal")
    const $respondForm = $("#respondForm")
    const $newMessageModal = $("#newMessageModal")
-   const $newMessageForm = $("#newMessageForm")
+   const $newMessageForm = $newMessageModal.find('.form')
+   const $modalAlert = $("#modalAlert");
    let messages = []
    let message = []
    getMessages();
+   $studentsTableWrapper.hide(0);
+
+   $("#newMessageModal form").submit(function (e) {
+      e.preventDefault();
+      const fd = new FormData(this);
+      const students = $(studentsTable.rows().nodes()).find("[type='checkbox'].check:checked").serializeArray()
+      const files = $('[name="file[]"]')
+      fd.append('newMessage', true)
+      // append the students list
+      students.map(studentInput => {
+         fd.append('students[]', studentInput.value)
+      })
+      // append files
+      files.map(input => {
+         fd.append('file[]', input.files)
+
+      })
+      // send messages
+      $.ajax({
+         type: "POST",
+         url: includeThisFile(),
+         data: fd,
+         contentType: false,
+         cache: false,
+         processData: false,
+         success:function (res) {
+            $newMessageModal.modal('hide')
+         }
+      });
+
+      // $.post(includeThisFile(), { newMessage: '', data: formData, students: studentsData,files}, res => {
+      //    console.log(res)
+      // })
+   })
+
+   $(".classesTable tbody").on('click', 'tr', function () {
+      const row = classesTable.row(this)
+      if (row.index() !== undefined) {
+         const data = row.data();
+         _class = data[0];
+         $.ajax({
+            type: "POST",
+            url: getBaseUrl('includes/classes.php'),
+            data: { 'studentsByClass': _class },
+            dataType: "json",
+            success: (res) => {
+               if (res.response === true) {
+
+                  res.data.map(student => {
+                     const thisRow = studentsTable.row.add({
+                        0: ` <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input check bg-success" type="checkbox" id="${student.mt}" name="student[]" value="${student.mt}">
+                        <label class=" custom-control-label" for="${student.mt}"></label>
+                     </div>`,
+                        1: `${student.apellidos} ${student.nombre}`,
+                        2: student.usuario
+                     }).draw();
+
+                     $(thisRow.node()).prop('id', student.mt)
+
+                  })
+                  //   hide classes and show students
+                  animateCSS($classesTableWrapper, 'zoomOut faster', () => {
+                     $classesTableWrapper.hide(0);
+                     $studentsTableWrapper.show(0);
+                     animateCSS($studentsTableWrapper, 'zoomIn faster')
+                  })
+
+               }
+               else {
+                  alert('No existen estudiantes en esta clase');
+               }
+            }
+         });
+
+
+      }
+   });
+
+
+
+   $("#back").click((e) => {
+      //   hide students and show classes
+      animateCSS($studentsTableWrapper, 'zoomOut faster', () => {
+         $studentsTableWrapper.hide(0);
+         studentsTable.rows().remove();
+         $classesTableWrapper.show(0);
+         animateCSS($classesTableWrapper, 'zoomIn faster')
+      })
+   })
+
+   $("#newMessageModal .continueBtn").click((e) => {
+      //  hide students and show form
+
+      const checked = $(studentsTable.rows().nodes()).find("[type='checkbox'].check:checked").length
+      if (checked > 0) {
+         const plural = checked > 1 ? "estudiantes" : 'estudiante'
+         $("#newMessageModal .studentsAmount").text(`Este correo se le enviara a ${checked} ${plural}`)
+         animateCSS($studentsTableWrapper, 'zoomOut faster', () => {
+            $studentsTableWrapper.hide(0);
+
+            $newMessageForm.show(0, () => {
+               animateCSS($newMessageForm, 'zoomIn faster')
+            })
+         })
+      } else {
+         $modalAlert.modal("show")
+         // alert('Debe de seleccionar al menos un estudiante')
+      }
+   })
+
+   $("#newMessageModal .back").click(() => {
+      //  hide form and show students    
+      animateCSS($newMessageForm, 'zoomOut faster', () => {
+         $newMessageForm.hide(0);
+
+         $studentsTableWrapper.show(0, () => {
+            animateCSS($studentsTableWrapper, 'zoomIn faster')
+         })
+      })
+
+   })
+
+   $("#modalAlert .close").click(() => {
+      $modalAlert.modal('hide')
+      $newMessageModal.modal('handleUpdate')
+   })
+
+   $newMessageModal.on('click','.closeModal', function (e) {
+      console.log('cerrar');
+      if ($("#newTitle").val().length > 0 ||
+         $("#newSubject").val().length > 0 ||
+         $("#newMessage").val().length > 0) {
+         if (confirm("Tiene cambios sin guardar, seguro quiere cerrarlo?")) {
+            $newMessageModal.modal('hide')
+         }
+      }else{
+         $newMessageModal.modal('hide')
+      }
+
+
+   })
+   $newMessageModal.on('hidden.bs.modal', function (e) {
+
+      $newMessageForm.hide(0)
+      $studentsTableWrapper.hide(0)
+      $classesTableWrapper.show(0)
+      $("input.file").parents('.input-group').remove()
+
+   })
+
+
 
 
    $respondForm.submit(function (e) {
       e.preventDefault();
       const formData = $(this).serializeArray();
-      message.respondMessage = formData[0].value     
+      message.respondMessage = formData[0].value
 
       $.post(includeThisFile(), { respondMessage: message }, res => {
-         console.log(res)
-         delete message.respondMessage   
-         $respondModal.modal('hide')      
+         delete message.respondMessage
+         $respondModal.modal('hide')
       })
 
 
    })
-   $newMessageForm.submit(function (e) {
-      const formData = $(this).serializeArray();
-      let data = [];
-      formData.map(input => {
-         data[input.name] = input.value
-      })
-      console.log('data: ', data);
 
-      e.preventDefault();
-   })
 
 
 
@@ -47,7 +193,7 @@ $(document).ready(function () {
    })
 
    $newMessageBtn.click(function (e) {
-      $newMessageModal.modal('show')
+      $newMessageModal.modal('show')     
    })
 
 

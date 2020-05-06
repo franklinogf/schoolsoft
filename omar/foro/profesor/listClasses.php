@@ -6,7 +6,7 @@ use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
-
+$DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
 
@@ -19,7 +19,6 @@ $teacher = new Teacher(Session::id());
   <title>Foro - Lista de clases</title>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
-  Route::includeFile('/includes/datatable-css.php', true);
   ?>
 </head>
 
@@ -50,7 +49,7 @@ $teacher = new Teacher(Session::id());
               <td>
                 <div class="custom-control custom-checkbox">
                   <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
-                <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
+                  <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
                 </div>
               </td>
               <td><?= $class->curso ?></td>
@@ -86,7 +85,6 @@ $teacher = new Teacher(Session::id());
   </div>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
-  Route::includeFile('/includes/datatable-js.php', true);
   ?>
 
 </body>
