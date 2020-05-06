@@ -1,5 +1,17 @@
 //* --------------------------- functions --------------------------- *//
-
+// download file
+function downloadFile(url,name = false) {
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = baseName(url);
+  if(name){
+    a.download = name;
+  }
+  document.body.append(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
 // function for animations
 
 /** 
