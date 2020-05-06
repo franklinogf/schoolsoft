@@ -6,10 +6,7 @@ use Classes\Route;
 
 if ($DataTable) Route::includeFile('/includes/datatable-css.php', true);
 
-echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
-
 echo '<link rel="icon" href="' . School::logo() . '" />';
-
 
 Route::css("/css/main-bootstrap.css");
 Route::css("/css/main.css", true);
