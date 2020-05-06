@@ -1,7 +1,10 @@
 $(document).ready(function () {
 
-$('.toast').toast({autoHide:false});
-$('.toast').toast('show');
+// $(document).on('click','.downloadFIle',function (e) { 
+//   e.preventDefault()
+//   console.log($(this).prop('href'))
+//   downloadFile($(this).prop('href'))
+//   })
 
   $(".editHomework").click((e) => {
     clearForm();
