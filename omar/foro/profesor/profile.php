@@ -31,7 +31,7 @@ $teacher = new Teacher(Session::id());
       <div class="col-lg-6 col-sm-12">
         <form action="<?=  Route::url('/foro/profesor/includes/profiles.php') ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_teacher" value="<?= $teacher->id ?>">
-          <img src="<?= $teacher->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
+          <img src="<?= $teacher->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
           <div class="form-group text-center mt-2">
             <button id="pictureBtn" type='button' class="btn btn-secondary">Cambiar Foto</button>
             <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
