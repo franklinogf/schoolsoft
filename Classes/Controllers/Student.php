@@ -1,4 +1,5 @@
 <?php
+
 namespace Classes\Controllers;
 
 use Classes\Models\StudentModel;
@@ -15,7 +16,7 @@ class Student extends StudentModel
       if (strpos($value, '-')) {
         $this->findBySS($value);
       } else {
-       $this->findPK($value);
+        $this->findPK($value);
       }
     }
   }
@@ -27,7 +28,7 @@ class Student extends StudentModel
 
   public function findPK($pk)
   {
-    $array = $this->getStudentByPK($pk);    
+    $array = $this->getStudentByPK($pk);
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
@@ -51,16 +52,16 @@ class Student extends StudentModel
   }
   public function profilePicture()
   {
-     if (!isset($this->{$this->primary_key})) {
+    if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
 
     if ($this->imagen != '') {
       $picturePath = __STUDENT_PROFILE_PICTURE_URL . $this->imagen;
     } else {
-      if($this->genero === 'F'){
+      if ($this->genero === 'F') {
         $picturePath = __NO_PROFILE_PICTURE_STUDENT_FEMALE;
-      }else{
+      } else {
         $picturePath = __NO_PROFILE_PICTURE_STUDENT_MALE;
       }
     }
@@ -69,7 +70,7 @@ class Student extends StudentModel
   }
   public function lastTopic()
   {
-     if (!isset($this->{$this->primary_key})) {
+    if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
     return $this->getLastStudentTopic($this->{$this->primary_key});
@@ -90,26 +91,27 @@ class Student extends StudentModel
     return $this->getStudentClasses($this->ss);
   }
 
-  public function login($username,$password){
-    
+  public function login($username, $password)
+  {
+
     if ($array = $this->studentLogin($username, $password)) {
-        foreach ($array as $key => $value) {
-            $this->{$key} = $value;
-        }
-        
-        $this->logged = true;   
-            
-    }else{
-      
+      foreach ($array as $key => $value) {
+        $this->{$key} = $value;
+      }
+
+      $this->logged = true;
+    } else {
+
       $this->logged = false;
     }
     return $this;
-
   }
-  public function findByUser($username){
+  public function findByUser($username)
+  {
     return $this->getStudentByUser($username);
   }
-  public function findByClass($class){
+  public function findByClass($class)
+  {
     return $this->getStudentsByClass($class);
   }
 
@@ -117,23 +119,19 @@ class Student extends StudentModel
   {
     // get self public class, no parents classes
     $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
-
-    if(count( $propsArray) > 0){
+    if (count($propsArray) > 0) {
       if (isset($this->{$this->primary_key})) {
         $this->updateStudent($propsArray);
       } else {
         echo 'insert <hr>';
       }
-    }else{
+    } else {
       $this->exception('Debe de asignar valor a las propiedades en primer lugar');
-
     }
-
   }
 
-private function exception($message = "Primero debe de buscar un estudiante")
-{
-  throw new \Exception($message);
-}
-
+  private function exception($message = "Primero debe de buscar un estudiante")
+  {
+    throw new \Exception($message);
+  }
 }

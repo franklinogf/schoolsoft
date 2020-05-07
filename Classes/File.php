@@ -44,8 +44,10 @@ class File
 
             $this->amount = count($this->files);
          } else {
-            $this->files = Util::toObject($_FILES[$file]);
-            $this->amount = 1;
+            if ($_FILES[$file]['name'] !== '') {
+                $this->files = Util::toObject($_FILES[$file]);
+                $this->amount = 1;
+            }
          }
          return true;
       } else {

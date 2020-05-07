@@ -30,7 +30,6 @@ $student = new Student(Session::id());
 
       <div class="col-lg-6 col-sm-12">
         <form action="<?=  Route::url('/foro/estudiante/includes/profiles.php') ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id_teacher" value="<?= $student->id ?>">
           <img src="<?= $student->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block">
           <div class="form-group text-center mt-2">
             <button id="pictureBtn" type='button' class="btn btn-secondary">Cambiar Foto</button>
@@ -49,10 +48,8 @@ $student = new Student(Session::id());
               <input type="text" value='<?= $student->apellidos ?>' class="form-control" name='lastName' id="lastname">
             </div>            
             <div class="form-group col-md-12">
-              <label for="email1">E-mail Principal</label>
-              <input type="email" value='<?= $student->email1 ?>' class="form-control" name='email1' id="email1">
-              <label for="email2">E-mail Secundario</label>
-              <input type="email" value='<?= $student->email2 ?>' class="form-control" name='email2' id="email2">
+              <label for="email">E-mail</label>
+              <input type="email" value='<?= $student->email ?>' class="form-control" name='email' id="email">              
             </div>
             <div class="form-group  col-md-6">
               <label for="pass1">Nueva Clave</label>
@@ -77,8 +74,7 @@ $student = new Student(Session::id());
           <div class="card-body">
             <p class="text-monospace">ID: <span class="badge badge-info"><?= $student->id ?> </span></p>
             <p class="text-monospace">Usuario: <span class="badge badge-info"><?= $student->usuario ?></span></p>
-            <p class="text-monospace">Salon Hogar: <span class="badge badge-info"><?= $student->grado ?></span></p>
-            <p class="text-monospace">Total de estudiantes: <span class="badge badge-info"><?= sizeof($student->homeStudents()) ?></span></p>
+            <p class="text-monospace">Grado: <span class="badge badge-info"><?= $student->grado ?></span></p>
           </div>
         </div>
 
