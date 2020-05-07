@@ -35,6 +35,12 @@ class Util
       return $date;
    }
 
+   public static function dateTime()
+   {
+      $date = \date('Y-m-d H:i:s');
+      return $date;
+   }
+
    public static function formatTime($time)
    {
 
