@@ -87,6 +87,39 @@ class StudentModel extends School
     ])->first();
     return $obj;
   }
+  protected function getUnreadMessages($id)
+  {
+    $year = $this->info('year');
+    $obj = parent::table('foro_mensajes')->where([
+      ['enviado_por','<>', 'e'],
+      ['id_e', $id ],
+      ['leido_e','<>', 'si' ],
+      ['year', $year]
+   ])->get();
+    
+    return count($obj);
+  }
+
+  protected function getLastStudentTopic($id)
+  {
+    
+    $year = $this->info('year');
+    $obj =  parent::table('detalle_foro_entradas')
+      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
+      ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
+      ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+      ->join('cursos', 'padres.curso', '=', 'cursos.curso')
+      ->join('year', 'year.ss', '=', 'padres.ss')
+      ->where([
+        ['year.mt', $id],
+        ['cursos.year', $year],
+        ['padres.year', $year],
+        ['foro_entradas.estado', 'a']
+      ])
+      ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
+
+    return $obj;
+  }
 
   protected function updateStudent($propsArray)
   {

@@ -44,15 +44,15 @@ class Student extends StudentModel
   public function fullName()
   {
     if (!isset($this->{$this->primary_key})) {
-      throw new \Exception('Primero debe de buscar un estudiante');
+      $this->exception();
     }
     $fullName = ucwords(strtolower("{$this->nombre} {$this->apellidos}"));
     return $fullName;
   }
   public function profilePicture()
   {
-    if (!isset($this->id)) {
-      throw new \Exception('Primero debe de buscar un estudiante');
+     if (!isset($this->{$this->primary_key})) {
+      $this->exception();
     }
 
     if ($this->imagen != '') {
@@ -67,11 +67,25 @@ class Student extends StudentModel
 
     return $picturePath;
   }
+  public function lastTopic()
+  {
+     if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getLastStudentTopic($this->{$this->primary_key});
+  }
+  public function unreadMessages()
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getUnreadMessages($this->{$this->primary_key});
+  }
 
   public function classes()
   {
     if (!isset($this->{$this->primary_key})) {
-      throw new \Exception('Primero debe de buscar un estudiante');
+      $this->exception();
     }
     return $this->getStudentClasses($this->ss);
   }
@@ -111,12 +125,15 @@ class Student extends StudentModel
         echo 'insert <hr>';
       }
     }else{
-      throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');
+      $this->exception('Debe de asignar valor a las propiedades en primer lugar');
 
     }
 
   }
 
-
+private function exception($message = "Primero debe de buscar un estudiante")
+{
+  throw new \Exception($message);
+}
 
 }
