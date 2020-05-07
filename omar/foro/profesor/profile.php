@@ -17,7 +17,6 @@ $teacher = new Teacher(Session::id());
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Foro - Mi Perfil</title>
   <?php
-    Route::fontawasome();
     Route::includeFile('/foro/profesor/includes/layouts/links.php');
   ?>
 </head>
