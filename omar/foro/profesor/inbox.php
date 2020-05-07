@@ -84,6 +84,7 @@ $teacher = new Teacher(Session::id());
                   <div class="form-group">
                      <label for="respondMessage">Mensaje:</label>
                      <textarea id="respondMessage" class="form-control" name="message"></textarea>
+                     <div class="invalid-feedback">Escriba un mensaje</div>
                   </div>
                </div>
                <div class="modal-footer">

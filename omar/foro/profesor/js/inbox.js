@@ -172,13 +172,16 @@ $(document).ready(function () {
    $respondForm.submit(function (e) {
       e.preventDefault();
       const formData = $(this).serializeArray();
-      message.respondMessage = formData[0].value
-
-      $.post(includeThisFile(), { respondMessage: message }, res => {
-         delete message.respondMessage
-         $respondModal.modal('hide')
-      })
-
+      if(formData[0].value.length > 0){
+         
+         message.respondMessage = formData[0].value
+         $.post(includeThisFile(), { respondMessage: message }, res => {
+            delete message.respondMessage
+            $respondModal.modal('hide')
+         })
+      }else{
+         $("#respondMessage").addClass('is-invalid').focus()
+      }          
 
    })
 
