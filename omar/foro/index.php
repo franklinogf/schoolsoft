@@ -40,7 +40,7 @@ if (Session::is_logged(false)) {
          <div class="input-group-prepend">
             <div class="input-group-text"><i class="fas fa-user fa-sm"></i></div>
          </div>
-         <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" autofocus>
+         <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" autofocus>         
       </div>
 
       <label for="password" class="sr-only">Clave:</label>
