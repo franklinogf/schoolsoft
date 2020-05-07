@@ -17,7 +17,7 @@ global $student;
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse " id="navbarNavDropdown">
-    <ul class="navbar-nav  mr-auto ">
+    <ul class="navbar-nav  mx-auto ">
       <li class="nav-item  <?= ($pathFile === 'index' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/index.php') ?>"><i class="fas fa-house-user text-secondary"></i> Inicio</a>
       </li>
