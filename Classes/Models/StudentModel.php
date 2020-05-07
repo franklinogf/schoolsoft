@@ -48,7 +48,7 @@ class StudentModel extends School
   {
     $year = $this->info('year');
     $obj = parent::table('padres')
-      ->select('DISTINCT curso, descripcion')
+      ->select('DISTINCT id, curso, descripcion')
       ->where([
         ['year', $year],
         ['ss', $ss]

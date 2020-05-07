@@ -16,7 +16,7 @@ $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $__cssFile = str_replace('.php', '', $__file) . '.css';
 
-$__path = '/foro/profesor/css/' . $__cssFile;
+$__path = '/foro/estudiante/css/' . $__cssFile;
 
 if (Route::file_exists($__path)) {
 

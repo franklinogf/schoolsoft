@@ -18,7 +18,7 @@ Route::js('/js/app.js');
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $__jsFile = str_replace('.php', '', $__file) . '.js';
-$__path = '/foro/profesor/js/' . $__jsFile;
+$__path = '/foro/estudiante/js/' . $__jsFile;
 
 
 if (Route::file_exists($__path)) {
