@@ -235,6 +235,7 @@ $(document).ready(function () {
    </div>
    <p class="p-2 my-0 font-bree">${message.asunto}</p>
    <hr class="my-1">
+   <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>`)
 
       // change the message read status
