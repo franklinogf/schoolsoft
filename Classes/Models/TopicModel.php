@@ -29,7 +29,7 @@ class TopicModel extends School
     $obj = parent::table($this->table)->where([
       ['curso', $class],
       ['year', $year]
-    ])->get();
+    ])->orderBy('fecha DESC, hora DESC')->get();
     return $obj;
   }
 

@@ -39,7 +39,7 @@ $comments = $topic->comments();
         <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/estudiante/topics.php') ?>">
           <i class="far fa-comment"></i> Temas
         </a>
-      </div>      
+      </div>
       <div class="col-lg-8 d-flex justify-content-end align-items-end">
         <i class="fas fa-toggle-on fa-3x <?= ($topic->estado === 'a' ? 'text-success' : 'text-danger') ?> "></i>
       </div>
@@ -58,18 +58,18 @@ $comments = $topic->comments();
     </div>
 
     <div class="container mt-3 pb-5">
-      <?php if ($topic->estado === 'a') : ?>
-          <div class="form-group">
-            <label for="comment">Comentario nuevo</label>
-            <textarea class="form-control" id="comment" rows="3" required></textarea>
-            <div class="invalid-feedback">Por favor escriba algo</div> 
-          </div>
-          <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>      
+      <?php if ($topic->estado === 'a' && Util::date() <= $topic->desde) : ?>
+        <div class="form-group">
+          <label for="comment">Comentario nuevo</label>
+          <textarea class="form-control" id="comment" rows="3" required></textarea>
+          <div class="invalid-feedback">Por favor escriba algo</div>
+        </div>
+        <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>
       <?php endif ?>
 
 
-      <div id="commentsList" class="bg-white">
-        <?php if ($comments) : ?>
+      <?php if ($comments) : ?>
+        <div id="commentsList" class="bg-white">
           <?php foreach ($comments as $comment) : ?>
             <?php
             $student = new Student($comment->creador_id);
@@ -84,8 +84,8 @@ $comments = $topic->comments();
               </div>
             </div>
           <?php endforeach ?>
-        <?php endif ?>
-      </div>
+        </div>
+      <?php endif ?>
     </div>
 
   </div>

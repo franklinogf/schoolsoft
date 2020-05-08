@@ -24,7 +24,7 @@ $(document).ready(function () {
       $('#class').val(thisClass)
 
       $.post(includeThisFile(), { topicsByClass: _class }, res => {
-         if (res.data) {
+         if (res.response) {
             res.data.map(topic => {
                const thisRow = topicsTable.row.add({
                   0: topic.titulo,
@@ -32,20 +32,30 @@ $(document).ready(function () {
                   2: formatDate(topic.fecha),
                   3: formatTime(topic.hora),
                }).draw();
-
+               
                $(thisRow.node()).prop('id', topic.id)
-               $(thisRow.node()).addClass(topic.estado === 'a' ?'table-success':'table-danger')
+               var today = new Date()
+               today.setHours(0,0,0,0)
+               
+               let closeDate = new Date(topic.desde)
+               closeDate.setHours(0,0,0,0)
+
+               let status = topic.estado === 'a' ? 'table-success' : 'table-danger'
+               status = topic.estado === 'a' && closeDate <= today ? 'table-warning' : status
+               $(thisRow.node()).addClass(status)
 
             })
-         }
-         // hide first table and show second table
-         classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-            $('#newTopic').fadeToggle(250);
-            topicsTableWrapper.show('drop', { direction: "right" }, 400);
-            $("#header").animate({ opacity: 0 }, 250, () => {
-               $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+            // hide first table and show second table
+            classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
+               $('#newTopic').fadeToggle(250);
+               topicsTableWrapper.show('drop', { direction: "right" }, 400);
+               $("#header").animate({ opacity: 0 }, 250, () => {
+                  $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+               });
             });
-         });
+         } else {
+            alert("no hay temas en esta clase")
+         }
       },
          "json"
       );
@@ -54,7 +64,6 @@ $(document).ready(function () {
 
    $("#back").click((e) => {
       // hide second table and shows first table
-      $('#newTopic').fadeToggle(250);
       topicsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
          // Reset the variables
          sessionStorage.clear('class');
@@ -66,11 +75,7 @@ $(document).ready(function () {
       });
    })
 
-   $("#newTopic").click((e) => {
-      const modal = $('#myModal');
-      modal.modal('show');
-   })
-
+   
    $('.topicsTable tbody').on('click', 'tr', function () {
       const row = topicsTable.row(this)
       if (row.index() !== undefined) {
@@ -79,12 +84,5 @@ $(document).ready(function () {
          window.location.href = getBaseUrl('viewTopic.php?id=' + topicId)
       }
    });
-
-   // save the class into a session if a new topic is inserted
-   $('form').submit((e) => {
-      sessionStorage.setItem("class", _class);
-   })
-
-
 
 });
