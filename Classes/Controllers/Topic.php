@@ -31,6 +31,11 @@ class Topic extends TopicModel
     return $array;
   }
 
+  public function byClass($class)
+  {
+    return $this->getTopicsByClass($class);
+  }
+
   public function comments()
   {
     if (!isset($this->id)) {
@@ -44,7 +49,7 @@ class Topic extends TopicModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un tema');
     }
-    return $this->insertTopicComments($creatorId, $type, $this->id, $desc);
+    return $this->insertTopicComment($creatorId, $type, $this->id, $desc);
   }
 
   public function save()
