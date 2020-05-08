@@ -34,7 +34,15 @@ $(document).ready(function () {
                }).draw();
 
                $(thisRow.node()).prop('id', topic.id)
-               $(thisRow.node()).addClass(topic.estado === 'a' ?'table-success':'table-danger')
+               var today = new Date()
+               today.setHours(0,0,0,0)
+               
+               let closeDate = new Date(topic.desde)
+               closeDate.setHours(0,0,0,0)
+
+               let status = topic.estado === 'a' ? 'table-success' : 'table-danger'
+               status = topic.estado === 'a' && closeDate <= today ? 'table-warning' : status
+               $(thisRow.node()).addClass(status)
 
             })
          }
