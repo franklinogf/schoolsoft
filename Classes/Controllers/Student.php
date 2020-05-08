@@ -90,6 +90,13 @@ class Student extends StudentModel
     }
     return $this->getStudentClasses($this->ss);
   }
+  public function homeworks()
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getStudentHomeworks($this->ss);
+  }
 
   public function login($username, $password)
   {

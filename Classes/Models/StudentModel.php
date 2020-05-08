@@ -3,6 +3,7 @@
 namespace Classes\Models;
 
 use Classes\Controllers\School;
+use Classes\Controllers\Homework;
 
 class StudentModel extends School
 {
@@ -55,6 +56,17 @@ class StudentModel extends School
       ])->orderBy('curso')->get();
     return $obj;
   }
+  protected function getStudentHomeworks($ss)
+  {
+    $classes = $this->getStudentClasses($ss);
+
+    foreach ($classes as $class) {
+      $hw = new Homework();
+      $obj = $hw->findByClassForStudents($class->curso);
+      return $obj;
+    }
+  }
+
   protected function getStudentByUser($username)
   {
     $obj = parent::table($this->table)->where('usuario', $username)->first();
@@ -91,18 +103,18 @@ class StudentModel extends School
   {
     $year = $this->info('year');
     $obj = parent::table('foro_mensajes')->where([
-      ['enviado_por','<>', 'e'],
-      ['id_e', $id ],
-      ['leido_e','<>', 'si' ],
+      ['enviado_por', '<>', 'e'],
+      ['id_e', $id],
+      ['leido_e', '<>', 'si'],
       ['year', $year]
-   ])->get();
-    
+    ])->get();
+
     return count($obj);
   }
 
   protected function getLastStudentTopic($id)
   {
-    
+
     $year = $this->info('year');
     $obj =  parent::table('detalle_foro_entradas')
       ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
