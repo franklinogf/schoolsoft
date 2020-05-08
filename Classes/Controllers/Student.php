@@ -98,6 +98,14 @@ class Student extends StudentModel
     return $this->getStudentHomeworks($this->ss);
   }
 
+  public function doneHomework($id_hw)
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getStudentDoneHomeworkById($this->{$this->primary_key},$id_hw);
+  }
+
   public function login($username, $password)
   {
 

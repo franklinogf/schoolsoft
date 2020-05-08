@@ -67,6 +67,16 @@ class StudentModel extends School
     }
   }
 
+  protected function getStudentDoneHomeworkById($mt, $id_hw)
+  {
+    $obj = parent::table('tareas_enviadas')->where([
+      ['id_tarea', $id_hw],
+      ['id_estudiante', $mt],
+      ['year', $this->info('year')]
+    ])->first();
+    return $obj;
+  }
+
   protected function getStudentByUser($username)
   {
     $obj = parent::table($this->table)->where('usuario', $username)->first();
