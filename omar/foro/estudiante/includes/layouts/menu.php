@@ -23,10 +23,16 @@ global $student;
       </li>
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/classes.php') ?>">Mis Cursos</a>
-      </li>   
-      <li class="nav-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Tareas</a>
-      </li>   
+      </li>         
+      <li class="nav-item dropdown">
+        <a class="nav-link text-primary dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Tareas
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropDownInformes">
+          <a class="dropdown-item  <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Mis tareas</a>
+          <a class="dropdown-item" <?= ($pathFile === 'exams' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/exams.php') ?>">Examenes</a>
+        </div>
+      </li> 
       <li class="nav-item <?= ($pathFile === 'topics' ? 'active' : '') ?>">
         <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/topics.php') ?>">Foro</a>
       </li>       
