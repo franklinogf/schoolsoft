@@ -90,12 +90,12 @@ class Student extends StudentModel
     }
     return $this->getStudentClasses($this->ss);
   }
-  public function homeworks()
+  public function homeworks($date = null)
   {
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    return $this->getStudentHomeworks($this->ss);
+    return $this->getStudentHomeworks($this->ss,$date);
   }
 
   public function doneHomework($id_hw)

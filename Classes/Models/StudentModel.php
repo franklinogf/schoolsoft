@@ -56,13 +56,13 @@ class StudentModel extends School
       ])->orderBy('curso')->get();
     return $obj;
   }
-  protected function getStudentHomeworks($ss)
+  protected function getStudentHomeworks($ss,$date = null)
   {
     $classes = $this->getStudentClasses($ss);
 
     foreach ($classes as $class) {
       $hw = new Homework();
-      $obj = $hw->findByClassForStudents($class->curso);
+      $obj = $hw->findByClassForStudents($class->curso,$date);
       return $obj;
     }
   }

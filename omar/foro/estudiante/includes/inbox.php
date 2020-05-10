@@ -108,11 +108,11 @@ if (isset($_POST['getMessages'])) {
    $code = DB::table("foro_mensajes")->select('MAX(code) as maxCode')->first();
    $code = (int) $code->maxCode + 1;
 
-   $date = Util::dateTime();
+   $uniqueId = uniqid();
    $file = new File();
    foreach ($file->files as $file) {
-      $newName = "({$date}) $file->name";
-      if (File::upload($file, __MESSAGES_FILES_DIRECTORY, $newName)) {
+      $newName = "({$uniqueId}) $file->name";
+      if (File::upload($file, __STUDENT_MESSAGES_FILES_DIRECTORY, $newName)) {
          DB::table('T_mensajes_archivos')->insert([
             'nombre' => $newName,
             'mensaje_code' => $code

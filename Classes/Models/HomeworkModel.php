@@ -69,13 +69,14 @@ class HomeworkModel extends School
 
       return $obj;
    }
-   protected function getHomeworksByClassForStudents($class)
+   protected function getHomeworksByClassForStudents($class,$date = null)
    {
+      $date = $date ? $date : Util::date();
       $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
       ->join('cursos',"cursos.curso","=","{$this->table}.curso")
          ->where([
             ["{$this->table}.curso", $class],
-            ["{$this->table}.fec_out", '>=', Util::date()],
+            ["{$this->table}.fec_out", '>=', $date],
             ["cursos.year", $this->info('year')]
          ])
          ->orderBy("{$this->table}.fec_out", 'DESC')->get();  

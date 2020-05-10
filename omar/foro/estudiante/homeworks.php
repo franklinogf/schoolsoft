@@ -11,9 +11,7 @@ Session::is_logged();
 
 $student = new Student(Session::id());
 
-$homeworks = $student->homeworks();
-
-
+$homeworks = $student->homeworks(Util::daysBefore(5));
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -47,9 +45,9 @@ $homeworks = $student->homeworks();
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
                <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white' ?>
-               <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'danger'; ?>
+               <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'danger'; ?>
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
-                  <div class="card <?= $sent !== 'white' ? "border-{$expired}" : "" ?>">
+                  <div class="card <?= $sent !== 'white' && $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$homework->curso} - {$homework->desc}" ?>
                         <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
@@ -82,9 +80,7 @@ $homeworks = $student->homeworks();
                         <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
                         <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                      </div>
-                     <!-- <div class="card-footer bg-white"> -->
-                     <button type="button" class="btn btn-info btn-block rounded-0 sendHomework">Enviar tarea</button>
-                     <!-- </div> -->
+                     <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
                   </div>
 
                </div>
