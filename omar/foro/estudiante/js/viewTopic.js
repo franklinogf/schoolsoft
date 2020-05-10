@@ -1,5 +1,4 @@
-$(document).ready(function () {
-   const $modal = $("#myModal");
+$(document).ready(function () {  
    const urlParams = new URLSearchParams(window.location.search);
 
    $("#insertComment").click(e => {
