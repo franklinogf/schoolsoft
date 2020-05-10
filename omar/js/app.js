@@ -210,6 +210,7 @@ $(function () {
         'checked': false,
         'indeterminate': false
       });
+      modal.find('.existingFile').remove()
     })
   }
 
