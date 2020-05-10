@@ -131,7 +131,7 @@ function addExistingFile(name, id = false) {
   if (addFileBtn.nextAll().length > 0) {
     addFileBtn = addFileBtn.nextAll().last();
   }
-  addFileBtn.after(`<div class="input-group mt-3 w-75 mx-auto">
+  addFileBtn.after(`<div class="input-group mt-3 w-75 mx-auto existingFile">
   <input type="text" class="form-control bg-white" value="${name}" disabled >
   <div class="input-group-append">
      <button ${id !== false ? `data-file-id="${id}"` : ''} class="btn btn-danger delExistingFile" type="button"><i class="fas fa-trash-alt"></i></button>
