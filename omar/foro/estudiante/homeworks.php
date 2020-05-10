@@ -30,7 +30,7 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
    <?php
    Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
    ?>
-   <div class="container-lg mt-5 px-0">
+   <div class="container-lg mt-5 px-0 pb-5">
 
       <h1 class="text-center mb-3">Mis Tareas</h1>
       <?php if ($homeworks) : ?>
