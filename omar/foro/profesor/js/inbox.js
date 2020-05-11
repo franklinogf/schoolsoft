@@ -40,7 +40,7 @@ $(document).ready(function () {
          contentType: false,
          cache: false,
          processData: false,
-         success:function (res) {
+         success: function (res) {
             $newMessageModal.modal('hide')
          }
       });
@@ -143,7 +143,7 @@ $(document).ready(function () {
       $newMessageModal.modal('handleUpdate')
    })
 
-   $newMessageModal.on('click','.closeModal', function (e) {
+   $newMessageModal.on('click', '.closeModal', function (e) {
       console.log('cerrar');
       if ($("#newTitle").val().length > 0 ||
          $("#newSubject").val().length > 0 ||
@@ -151,7 +151,7 @@ $(document).ready(function () {
          if (confirm("Tiene cambios sin guardar, seguro quiere cerrarlo?")) {
             $newMessageModal.modal('hide')
          }
-      }else{
+      } else {
          $newMessageModal.modal('hide')
       }
 
@@ -172,16 +172,16 @@ $(document).ready(function () {
    $respondForm.submit(function (e) {
       e.preventDefault();
       const formData = $(this).serializeArray();
-      if(formData[0].value.length > 0){
-         
+      if (formData[0].value.length > 0) {
+
          message.respondMessage = formData[0].value
          $.post(includeThisFile(), { respondMessage: message }, res => {
             delete message.respondMessage
             $respondModal.modal('hide')
          })
-      }else{
+      } else {
          $("#respondMessage").addClass('is-invalid').focus()
-      }          
+      }
 
    })
 
@@ -196,7 +196,7 @@ $(document).ready(function () {
    })
 
    $newMessageBtn.click(function (e) {
-      $newMessageModal.modal('show')     
+      $newMessageModal.modal('show')
    })
 
 
@@ -235,6 +235,17 @@ $(document).ready(function () {
    </div>
    <p class="p-2 my-0 font-bree">${message.asunto}</p>
    <hr class="my-1">
+   ${message.archivos.length > 0 ? `
+   <div class="row row-cols-4 row-cols-lg-6"> 
+   ${message.archivos.map(file => {
+               return `<div class="col my-1">
+               <a href="${file.url}" data-toggle="tooltip" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download>
+                  ${file.icon}
+               </a>
+               </div>`
+            }).join('')}
+   </div>
+   <hr class="my-1">` : ''}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>`)
 

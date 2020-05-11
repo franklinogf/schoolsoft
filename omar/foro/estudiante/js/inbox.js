@@ -158,7 +158,6 @@ $(document).ready(function () {
       const $thisMessage = $(this)
       const index = messages.findIndex(message => message.id === $thisMessage.data('id'))
       message = messages[index]
-      console.log(message.enviadoPor);
       // show the messsage
       $message.html(`<div class="media p-2 mt-2">
       <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
@@ -188,7 +187,7 @@ $(document).ready(function () {
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
    
    `)
-   
+
 
       // change the message read status
       $.post(includeThisFile(), { changeStatus: message.id }, res => {
@@ -199,7 +198,7 @@ $(document).ready(function () {
       const $status = $thisMessage.find('.status')
       animateCSS($status, 'zoomOut faster', () => {
          $status.remove();
-      })      
+      })
    })
 
    $($messages).on('DOMSubtreeModified', () => {
@@ -215,7 +214,6 @@ $(document).ready(function () {
    // inbox
    function getMessages(type = 'inbound') {
       $.post(includeThisFile(), { getMessages: type }, res => {
-         console.log('res: ', res);
          if (res.response) {
             $messages.empty()
             messages = res.data
