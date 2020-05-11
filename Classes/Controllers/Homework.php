@@ -31,9 +31,14 @@ class Homework extends HomeworkModel
       return $this->getAllHomeworks();
    }
 
-   public function findByClass($class)
+   public function findByClassForTeacher($class)
    {
-      return $this->getHomeworksByClass($class);
+      return $this->getHomeworksByClassForTeachers($class);
+   }
+   
+   public function findByClassForStudents($class,$date = null)
+   {
+      return $this->getHomeworksByClassForStudents($class,$date);
    }
 
    public function findByTeacher($id,$class = false)

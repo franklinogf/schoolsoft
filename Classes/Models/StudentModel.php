@@ -3,6 +3,7 @@
 namespace Classes\Models;
 
 use Classes\Controllers\School;
+use Classes\Controllers\Homework;
 
 class StudentModel extends School
 {
@@ -48,13 +49,34 @@ class StudentModel extends School
   {
     $year = $this->info('year');
     $obj = parent::table('padres')
-      ->select('DISTINCT curso, descripcion')
+      ->select('DISTINCT id, curso, descripcion')
       ->where([
         ['year', $year],
         ['ss', $ss]
       ])->orderBy('curso')->get();
     return $obj;
   }
+  protected function getStudentHomeworks($ss,$date = null)
+  {
+    $classes = $this->getStudentClasses($ss);
+
+    foreach ($classes as $class) {
+      $hw = new Homework();
+      $obj = $hw->findByClassForStudents($class->curso,$date);
+      return $obj;
+    }
+  }
+
+  protected function getStudentDoneHomeworkById($mt, $id_hw)
+  {
+    $obj = parent::table('tareas_enviadas')->where([
+      ['id_tarea', $id_hw],
+      ['id_estudiante', $mt],
+      ['year', $this->info('year')]
+    ])->first();
+    return $obj;
+  }
+
   protected function getStudentByUser($username)
   {
     $obj = parent::table($this->table)->where('usuario', $username)->first();
@@ -85,6 +107,39 @@ class StudentModel extends School
       ['usuario', $username],
       ['clave', $password]
     ])->first();
+    return $obj;
+  }
+  protected function getUnreadMessages($id)
+  {
+    $year = $this->info('year');
+    $obj = parent::table('foro_mensajes')->where([
+      ['enviado_por', '<>', 'e'],
+      ['id_e', $id],
+      ['leido_e', '<>', 'si'],
+      ['year', $year]
+    ])->get();
+
+    return count($obj);
+  }
+
+  protected function getLastStudentTopic($id)
+  {
+
+    $year = $this->info('year');
+    $obj =  parent::table('detalle_foro_entradas')
+      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
+      ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
+      ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+      ->join('cursos', 'padres.curso', '=', 'cursos.curso')
+      ->join('year', 'year.ss', '=', 'padres.ss')
+      ->where([
+        ['year.mt', $id],
+        ['cursos.year', $year],
+        ['padres.year', $year],
+        ['foro_entradas.estado', 'a']
+      ])
+      ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
+
     return $obj;
   }
 

@@ -41,6 +41,19 @@ class Util
       return $date;
    }
 
+   public static function daysBefore($numberOfDays = 1)
+   {
+      $date = date('Y-m-d', strtotime("-{$numberOfDays} days", strtotime(date('Y-m-d'))));
+      return $date;
+   }
+
+   public static function daysAfter($numberOfDays = 1)
+   {
+      $date = date('Y-m-d', strtotime("+{$numberOfDays} days", strtotime(date('Y-m-d'))));
+      return $date;
+   }
+  
+
    public static function formatTime($time)
    {
 

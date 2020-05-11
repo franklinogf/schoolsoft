@@ -23,6 +23,16 @@ class TopicModel extends School
     return $obj;
   }
 
+  protected function getTopicsByClass($class)
+  {
+    $year = $this->info('year');
+    $obj = parent::table($this->table)->where([
+      ['curso', $class],
+      ['year', $year]
+    ])->orderBy('fecha DESC, hora DESC')->get();
+    return $obj;
+  }
+
 
   protected function getAllTopics()
   {
@@ -37,17 +47,19 @@ class TopicModel extends School
     return $obj;
   }
 
-  protected function insertTopicComments($id, $type, $id_topic, $desc)
+  protected function insertTopicComment($id, $type, $id_topic, $desc)
   {
-    $query = "INSERT INTO `detalle_foro_entradas` (`creador_id`,`tipo`,`entrada_id`,`descripcion`,`fecha`,`hora`,`year`)
-    VALUES (?,?,?,?,?,?,?)";
-    $db = $this->connect();
-    $stmt = $db->prepare($query);
     $year = $this->info('year');
-    $date = Util::date();
-    $time = Util::time();
-    $stmt->bind_param('isissss', $id, $type, $id_topic, $desc, $date, $time, $year);
-    $stmt->execute();
+
+    parent::table('detalle_foro_entradas')->insert([
+      "creador_id" => $id,
+      "tipo" => $type,
+      "entrada_id" => $id_topic,
+      "descripcion" => $desc,
+      "fecha" => Util::date(),
+      "hora" =>  Util::time(),
+      "year" => $year
+    ]);
   }
   protected function updateTopic($propsArray)
   {
