@@ -78,7 +78,7 @@ $comments = $topic->comments();
           <?php foreach ($comments as $comment) : ?>
             <?php
             $student = new Student($comment->creador_id);
-            $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : __NO_PROFILE_PICTURE;
+            $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : $student->profilePicture();
             ?>
             <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
               <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
