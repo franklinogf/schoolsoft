@@ -57,7 +57,7 @@ class PDF extends FPDF
 		$this->Cell(0, 5, $value2, 0, 1, "R");
 	}
 
-	public function Fill($red = __PDF_FILL_COLOR['red'], $green = __PDF_FILL_COLOR['green'], $blue =  __PDF_FILL_COLOR['blue'])
+	public function Fill($red = __PDF_FILL_COLOR_RED, $green = __PDF_FILL_COLOR_GREEN, $blue =  __PDF_FILL_COLOR_BLUE)
 	{
 		$this->SetFillColor($red, $green, $blue);
 	}

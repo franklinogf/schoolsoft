@@ -60,11 +60,10 @@ define('__LOGO_SIZE_H', 72);
 /* ----------------------------------- PDF ---------------------------------- */
 
 // RGB $pdf->SetFillColor(red,green,blue)
-define('__PDF_FILL_COLOR', [
-   'red' => 89,
-   'green' => 171,
-   'blue' => 227
-]);
+define('__PDF_FILL_COLOR_RED', 89);
+define('__PDF_FILL_COLOR_GREEN', 171);
+define('__PDF_FILL_COLOR_BLUE', 227);
+
 define('__PDF_LOGO_SIZE', 40);
 
 /* -------------------------------- time zone ------------------------------- */
