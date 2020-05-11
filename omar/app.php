@@ -28,9 +28,9 @@ define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, D
 /* -------------------------------------------------------------------------- */
 
 define('__TEACHER_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/teachers/'));
-define('__TEACHER_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . DIRECTORY_SEPARATOR . __TEACHER_PROFILE_PICTURE_PATH));
+define('__TEACHER_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . __TEACHER_PROFILE_PICTURE_PATH));
 define('__STUDENT_PROFILE_PICTURE_PATH', str_replace('/', DIRECTORY_SEPARATOR, '/pictures/students/'));
-define('__STUDENT_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . DIRECTORY_SEPARATOR . __STUDENT_PROFILE_PICTURE_PATH));
+define('__STUDENT_PROFILE_PICTURE_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . __STUDENT_PROFILE_PICTURE_PATH));
 define('__LOGO_PATH', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . '/logo/'));
 define('__TEACHER_MESSAGES_FILES_DIRECTORY', str_replace('/', DIRECTORY_SEPARATOR, 'documentos/mensaje/'));
 define('__TEACHER_MESSAGES_FILES_DIRECTORY_URL', str_replace('/', DIRECTORY_SEPARATOR, __SCHOOL_URL . DIRECTORY_SEPARATOR . __TEACHER_MESSAGES_FILES_DIRECTORY));
