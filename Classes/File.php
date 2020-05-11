@@ -8,22 +8,6 @@ class File
 {
    public $amount = 0;
    public $files = [];
-   public static $faIcons = [
-      "png" => '<i class="far fa-file-image"></i>',
-      "jpg" => '<i class="far fa-file-image"></i>',
-      "jpeg" => '<i class="far fa-file-image"></i>',
-      "gif" => '<i class="far fa-file-image"></i>',
-      "pdf" => '<i class="far fa-file-pdf"></i>',
-      "mp3" => '<i class="far fa-file-audio"></i>',
-      "mp4" => '<i class="far fa-file-video"></i>',
-      "xls" => '<i class="far fa-file-excel"></i>',
-      "xlsx" => '<i class="far fa-file-excel"></i>',
-      "ppt" => '<i class="far fa-file-powerpoint"></i>',
-      "pptx" => '<i class="far fa-file-powerpoint"></i>',
-      "doc" => '<i class="far fa-file-word"></i>',
-      "docx" => '<i class="far fa-file-word"></i>',
-      "zip" => '<i class="far fa-file-archive"></i>'
-   ];
    public static $fileIcon = '<i class="far fa-file-alt"></i>';
 
    public function __construct($file = 'file')
@@ -45,8 +29,8 @@ class File
             $this->amount = count($this->files);
          } else {
             if ($_FILES[$file]['name'] !== '') {
-                $this->files = Util::toObject($_FILES[$file]);
-                $this->amount = 1;
+               $this->files = Util::toObject($_FILES[$file]);
+               $this->amount = 1;
             }
          }
          return true;
@@ -104,11 +88,29 @@ class File
       return trim($fileName);
    }
 
-   public static function faIcon($extension)
+   public static function faIcon($extension, $size = false)
    {
+      $size = $size ? "fa-{$size}" : '';
+      $faIcons = [
+         "png" => "<i class='far fa-file-image {$size}'></i>",
+         "jpg" => "<i class='far fa-file-image {$size}'></i>",
+         "jpeg" => "<i class='far fa-file-image {$size}'></i>",
+         "gif" => "<i class='far fa-file-image {$size}'></i>",
+         "pdf" => "<i class='far fa-file-pdf {$size}'></i>",
+         "mp3" => "<i class='far fa-file-audio {$size}'></i>",
+         "mp4" => "<i class='far fa-file-video {$size}'></i>",
+         "xls" => "<i class='far fa-file-excel {$size}'></i>",
+         "xlsx" => "<i class='far fa-file-excel {$size}'></i>",
+         "ppt" => "<i class='far fa-file-powerpoint {$size}'></i>",
+         "pptx" => "<i class='far fa-file-powerpoint {$size}'></i>",
+         "doc" => "<i class='far fa-file-word {$size}'></i>",
+         "docx" => "<i class='far fa-file-word {$size}'></i>",
+         "zip" => "<i class='far fa-file-archive {$size}'></i>"
+      ];
+
       $faIcon = self::$fileIcon;
-      if (array_key_exists($extension, self::$faIcons)) {
-         $faIcon = self::$faIcons[$extension];
+      if (array_key_exists($extension, $faIcons)) {
+         $faIcon = $faIcons[$extension];
       }
       return $faIcon;
    }
