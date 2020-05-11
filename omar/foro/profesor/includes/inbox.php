@@ -36,30 +36,44 @@ if (isset($_POST['getMessages'])) {
          if ($message->enviado_por === 'e') {
             $student = new Student($message->id_e);
             $name = $student->fullName();
-            $foto = $student->profilePicture();
+            $profilePicture = $student->profilePicture();
             $info = $student->grado;
+            $path = __STUDENT_MESSAGES_FILES_DIRECTORY_URL;
          } else {
             $teacher = new Teacher($message->id_p);
             $name = $teacher->fullName();
-            $foto = $teacher->profilePicture();
-
+            $profilePicture = $teacher->profilePicture();          
             $info = $message->id_p === Session::id() ? 'yo' : 'profesor';
+            $path = __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
          }
+         $filesArray = [];
+         $files = DB::table('T_mensajes_archivos')
+            ->where('mensaje_code', $message->code)->get();
+         if ($files) {
+            foreach ($files as $i => $file) {
+               $filesArray[$i]['nombre'] = File::name($file->nombre, true);
+               $filesArray[$i]['url'] = $path.$file->nombre;
+               $filesArray[$i]['icon'] = File::faIcon(File::extension($file->nombre),'lg');
+              
+            }
+         }
+
          $data[] = [
+            'codigo' => $message->code,
             'id' => $message->id,
             'id_p' => $message->id_p,
             'id_e' => $message->id_e,
             'titulo' => $message->titulo,
             'asunto' => $message->asunto,
             'mensaje' => $message->mensaje,
+            'archivos' => $filesArray,
             'nombre' => $name,
-            'foto' => $foto,
-            'leido' => $message->leido_p,
+            'foto' => $profilePicture,
+            'leido' => $message->leido_e,
             'enviadoPor' => $message->enviado_por,
             'info' => $info,
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
-            'codigo' => $message->code,
             'year' => $message->year
 
          ];
@@ -100,10 +114,10 @@ if (isset($_POST['getMessages'])) {
    $code = DB::table("foro_mensajes")->select('MAX(code) as maxCode')->first();
    $code = (int) $code->maxCode + 1;
 
-   $date = Util::dateTime();
+   $uniqueId = uniqid();
    $file = new File();
    foreach ($file->files as $file) {
-      $newName = "({$date}) $file->name";
+      $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_MESSAGES_FILES_DIRECTORY, $newName)) {
          DB::table('T_mensajes_archivos')->insert([
             'nombre' => $newName,
