@@ -1,11 +1,19 @@
 //* --------------------------- functions --------------------------- *//
+// same style as the database
+function nl2br (str, is_xhtml) {
+  if (typeof str === 'undefined' || str === null) {
+      return '';
+  }
+  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
 // download file
-function downloadFile(url,name = false) {
+function downloadFile(url, name = false) {
   console.log(baseName(url));
   var a = document.createElement('a');
-  a.href ='/'+url;
+  a.href = '/' + url;
   a.download = ''
-  if(name){
+  if (name) {
     a.download = name;
   }
   document.body.append(a);
@@ -73,16 +81,19 @@ function formatDate(value) {
 }
 
 function formatTime(value) {
-  let [h, m, s] = value.split(':');
-  let p = 'AM'
+  if (value.indexOf('(') === -1) {
+    let [h, m, s] = value.split(':');
+    let p = 'AM'
 
-  if (h > 12) {
-    p = 'PM'
-    h -= 12
+    if (h > 12) {
+      p = 'PM'
+      h -= 12
+    }
+
+
+    return h + ':' + m + ':' + s + ' ' + p
   }
-
-
-  return h + ':' + m + ':' + s + ' ' + p
+  return value
 
 }
 

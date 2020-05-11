@@ -32,7 +32,7 @@ $teacher = new Teacher(Session::id());
 
     <?php
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
-    Route::includeFile('/foro/profesor/includes/tables/tablesHomeworks.php');
+    Route::includeFile('/foro/profesor/includes/tables/tableHomeworks.php');
     ?>
 
     

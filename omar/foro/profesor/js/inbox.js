@@ -239,7 +239,7 @@ $(document).ready(function () {
    <div class="row row-cols-4 row-cols-lg-6"> 
    ${message.archivos.map(file => {
                return `<div class="col my-1">
-               <a href="${file.url}" data-toggle="tooltip" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download>
+               <a href="${file.url}" data-toggle="tooltip" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
                </div>`

@@ -36,6 +36,14 @@ class Homework extends HomeworkModel
       return $this->getHomeworksByClassForTeachers($class);
    }
    
+   public function doneHomeworks()   
+   {
+      if (!isset($this->{$this->primary_key})) {
+         throw new \Exception('Primero debe de buscar una tarea');
+       }
+      return $this->getDoneHomeworksByHomeworkId($this->{$this->primary_key});
+   }
+   
    public function findByClassForStudents($class,$date = null)
    {
       return $this->getHomeworksByClassForStudents($class,$date);

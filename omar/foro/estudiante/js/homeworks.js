@@ -14,8 +14,8 @@ $(document).ready(function () {
     })
 
     // send messages
-    if (!doneHomeworkId) {
-      fd.append('doneHomework', true)
+    if (!doneHomeworkId) {     
+      fd.append('doneHomework', homeworkId)
       $.ajax({
         type: "POST",
         url: includeThisFile(),
@@ -32,6 +32,7 @@ $(document).ready(function () {
         }
       });
     } else {
+      console.log('editar tarea');
       fd.append('editDoneHomework', doneHomeworkId)
       $.ajax({
         type: "POST",

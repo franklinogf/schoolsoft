@@ -11,7 +11,10 @@ use Classes\Controllers\Homework;
 Server::is_post();
 if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['getDoneHomeworkById'];
-   if ($doneHw = DB::table('tareas_enviadas')->where('id_tarea', $id_doneHomework)->first()) {
+   if ($doneHw = DB::table('tareas_enviadas')->where([
+      ['id_tarea', $id_doneHomework],
+      ['id_estudiante', Session::id()],
+      ])->first()) {
       $files = DB::table('T_tareas_archivos')->where('id_tarea',$doneHw->id)->get();
       $array = [
          'response' => true,
@@ -27,7 +30,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
    echo Util::toJson($array);
 } else if (isset($_POST['doneHomework'])) {
 
-   $id_homework = $_POST['id_homework'];
+   $id_homework = $_POST['doneHomework'];
    $hw = new Homework($id_homework);
    $id_teacher = $hw->id2;
    $class = $hw->curso;

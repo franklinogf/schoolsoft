@@ -32,7 +32,7 @@ $(document).ready(function () {
               homeworksTableWrapper.show('drop', { direction: "right" }, 400);
             });
             $("#header").hide('drop', { direction: "left" }, 400, () => {
-              $("#header").text('Lista de estudiantes')
+              $("#header").text('Lista de tareas')
                 .show('drop', { direction: "right" }, 400);
             });
           }
