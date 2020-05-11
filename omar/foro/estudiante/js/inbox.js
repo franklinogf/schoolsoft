@@ -28,7 +28,7 @@ $(document).ready(function () {
          fd.append('file[]', input.files)
 
       })
-      
+
       // send messages
       $.ajax({
          type: "POST",
@@ -173,8 +173,22 @@ $(document).ready(function () {
    </div>
    <p class="p-2 my-0 font-bree">${message.asunto}</p>
    <hr class="my-1">
+   ${message.archivos.length > 0 ? `
+   <div class="row row-cols-4 row-cols-lg-6"> 
+   ${message.archivos.map(file => {
+               return `<div class="col my-1">
+               <a href="${file.url}" data-toggle="tooltip" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download>
+                  ${file.icon}
+               </a>
+               </div>`
+            }).join('')}
+   </div>
+   <hr class="my-1">` : ''}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
-   <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>`)
+   <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
+   
+   `)
+   
 
       // change the message read status
       $.post(includeThisFile(), { changeStatus: message.id }, res => {
@@ -185,8 +199,7 @@ $(document).ready(function () {
       const $status = $thisMessage.find('.status')
       animateCSS($status, 'zoomOut faster', () => {
          $status.remove();
-      })
-
+      })      
    })
 
    $($messages).on('DOMSubtreeModified', () => {
@@ -202,6 +215,7 @@ $(document).ready(function () {
    // inbox
    function getMessages(type = 'inbound') {
       $.post(includeThisFile(), { getMessages: type }, res => {
+         console.log('res: ', res);
          if (res.response) {
             $messages.empty()
             messages = res.data
