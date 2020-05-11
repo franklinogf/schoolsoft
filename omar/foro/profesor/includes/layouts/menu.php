@@ -45,9 +45,9 @@ global $teacher;
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownForo">
           <a class="dropdown-item <?= ($pathFile === 'topics' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/topics.php') ?>"><i class="far fa-comment text-secondary"></i> Temas</a>
-          <a class="dropdown-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>" href="#"><i class="fas fa-book-open text-secondary"></i> Tareas</a>
+          <a class="dropdown-item <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/homeworks.php') ?>"><i class="fas fa-book-open text-secondary"></i> Tareas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Tareas Recibidas</a>          
+          <a class="dropdown-item <?= ($pathFile === 'doneHomeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/doneHomeworks.php') ?>" href="#">Tareas Recibidas</a>          
         </div>
       </li>
     </ul>
