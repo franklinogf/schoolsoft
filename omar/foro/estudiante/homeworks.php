@@ -37,6 +37,22 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
          <div class="alert alert-warning mx-auto" role="alert">
             Las tareas se borrarán al día siguiente de la fecha de entrega o vencimiento.
          </div>
+         <div class="card mx-auto bg-gradient-light bg-light" style="max-width: 30rem">
+         <h6 class="card-header bg-gradient-info bg-info py-2">Leyenda</h6>
+            <div class="card-body p-2">
+               <div class="row text-center">                  
+                  <div class="col-6 col-sm-4">
+                     <i class="fas fa-circle text-white border rounded-circle border-dark"></i></h6> Tarea sin enviar
+                  </div>
+                  <div class="col-6 col-sm-4">
+                     <i class="fas fa-circle text-success"></i></h6> Tarea enviada
+                  </div>
+                  <div class="col-12 mt-2 col-sm-4 mt-sm-0">
+                     <i class="far fa-square text-danger"></i></h6> Tarea vencida
+                  </div>
+               </div>
+            </div>
+         </div>
       <?php endif ?>
    </div>
    <!-- homework list -->
@@ -44,10 +60,10 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
       <?php if ($homeworks) : ?>
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
-               <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white' ?>
+               <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white border rounded-circle border-dark' ?>
                <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'danger'; ?>
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
-                  <div class="card <?= $sent !== 'white' && $expired === 'danger' ? "border-{$expired}" : "" ?>">
+                  <div class="card <?= $sent !== 'white border rounded-circle border-dark' && $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$homework->curso} - {$homework->desc}" ?>
                         <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
