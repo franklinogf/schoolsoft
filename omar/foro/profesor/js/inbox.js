@@ -238,10 +238,11 @@ $(document).ready(function () {
    ${message.archivos.length > 0 ? `
    <div class="row row-cols-4 row-cols-lg-6"> 
    ${message.archivos.map(file => {
-               return `<div class="col my-1">
-               <a href="${file.url}" data-toggle="tooltip" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
+               return `<div class="col my-1 overflow-hidden text-truncate">
+               <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
+               <small title='${file.nombre}' class='text-muted'>${file.nombre}</small>
                </div>`
             }).join('')}
    </div>

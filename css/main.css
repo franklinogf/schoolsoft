@@ -144,3 +144,8 @@ body {
 .font-markazi {
   font-family: "Markazi Text", serif;
 }
+
+.profile-picture{
+  width: 250px;
+  height: 250px;
+}
