@@ -10,8 +10,11 @@ use Classes\Session;
 
 Session::is_logged();
 $student = new Student(Session::id());
-
 $topic = new Topic($_GET['id']);
+
+if (!isset($topic->id) || !isset($_GET['id'])) {
+  Route::error();
+}
 $teacher = new Teacher($topic->creador_id);
 $comments = $topic->comments();
 ?>

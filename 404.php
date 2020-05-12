@@ -22,9 +22,6 @@ use Classes\Route;
          <i class="fas fa-times fa-7x text-danger"></i>
          <h1>Pagina no encontrada</h1>
          <h2 class="text-danger">404</h2>
-         <?php if ($_SERVER["REQUEST_URI"] !== $_SERVER["SCRIPT_NAME"]) : ?>
-            <a href="<?php $_SERVER["REQUEST_URI"] ?>" class="btn btn-danger mt-3">Volver a la pagina anterior</a>
-         <?php endif ?>
       </div>
    </div>
 </body>

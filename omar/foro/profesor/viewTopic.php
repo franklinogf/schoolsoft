@@ -9,9 +9,12 @@ use Classes\Controllers\Teacher;
 use Classes\Session;
 
 Session::is_logged();
-
 $topic = new Topic($_GET['id']);
-$teacher = new Teacher($topic->creador_id);
+if (!isset($topic->id) || !isset($_GET['id'])) {
+  Route::error();
+}
+$teacher = new Teacher(Session::id());
+
 $comments = $topic->comments();
 ?>
 <!DOCTYPE html>
