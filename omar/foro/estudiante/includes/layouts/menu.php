@@ -29,8 +29,8 @@ global $student;
           Tareas
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
-          <a class="dropdown-item  <?= ($pathFile === 'homeworks' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Mis tareas</a>
-          <a class="dropdown-item" <?= ($pathFile === 'exams' ? 'active' : '') ?>" href="<?= Route::url('/foro/profesor/exams.php') ?>">Examenes</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Mis tareas</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/exams.php') ?>">Examenes</a>
         </div>
       </li> 
       <li class="nav-item <?= ($pathFile === 'topics' ? 'active' : '') ?>">
@@ -43,8 +43,8 @@ global $student;
           <?= isset($student) ? $student->nombre : 'username?'  ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/profile.php') ?>"><i class="far fa-id-card text-primary"></i> Mi Perfil</a>
-          <a class="dropdown-item  <?= ($pathFile === 'inbox' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/inbox.php') ?>"><i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $student->unreadMessages() ?></span></a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/profile.php') ?>"><i class="far fa-id-card text-primary"></i> Mi Perfil</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/inbox.php') ?>"><i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $student->unreadMessages() ?></span></a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> Cerrar Sesión</a>
         </div>
