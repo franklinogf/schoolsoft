@@ -37,10 +37,6 @@ th.checkbox {
   border-color: var(--info) !important;
 }
 
-a.nav-link {
-  mix-blend-mode: screen !important;
-}
-
 .hidden {
   display: none;
 }

@@ -6,6 +6,7 @@ use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
+$jqUI = true;
 $DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
@@ -15,7 +16,7 @@ $teacher = new Teacher(Session::id());
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Foro - Informe de Tareas</title>
+  <title>Foro - Informe de Tareas realizadas</title>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/links.php');
   ?>
@@ -28,10 +29,16 @@ $teacher = new Teacher(Session::id());
   ?>
   <div class="container mt-5 pb-5">
     <h1 id="header" class="text-center">Mis Cursos</h1>
+
     <?php
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
+    Route::includeFile('/foro/profesor/includes/tables/tableHomeworks.php');
     ?>
 
+    
+
+   
+    
   </div>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');

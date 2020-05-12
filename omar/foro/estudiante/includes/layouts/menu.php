@@ -19,13 +19,13 @@ global $student;
   <div class="collapse navbar-collapse " id="navbarNavDropdown">
     <ul class="navbar-nav  mr-auto ">
       <li class="nav-item  <?= ($pathFile === 'index' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/index.php') ?>"><i class="fas fa-house-user text-secondary"></i> Inicio</a>
+        <a class="nav-link" href="<?= Route::url('/foro/estudiante/index.php') ?>"><i class="fas fa-house-user text-primary"></i> Inicio</a>
       </li>
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/classes.php') ?>">Mis Cursos</a>
+        <a class="nav-link" href="<?= Route::url('/foro/estudiante/classes.php') ?>">Mis Cursos</a>
       </li>         
       <li class="nav-item dropdown">
-        <a class="nav-link text-primary dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Tareas
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
@@ -34,19 +34,19 @@ global $student;
         </div>
       </li> 
       <li class="nav-item <?= ($pathFile === 'topics' ? 'active' : '') ?>">
-        <a class="nav-link text-primary" href="<?= Route::url('/foro/estudiante/topics.php') ?>">Foro</a>
+        <a class="nav-link" href="<?= Route::url('/foro/estudiante/topics.php') ?>">Foro</a>
       </li>       
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item dropdown text-right">
-        <a class="nav-link text-primary dropdown-toggle" href="#" id="dropDownAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="dropDownAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <?= isset($student) ? $student->nombre : 'username?'  ?>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/profile.php') ?>"><i class="far fa-id-card text-secondary"></i> Mi Perfil</a>
-          <a class="dropdown-item  <?= ($pathFile === 'inbox' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/inbox.php') ?>"><i class="far fa-envelope text-secondary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $student->unreadMessages() ?></span></a>
+          <a class="dropdown-item <?= ($pathFile === 'profile' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/profile.php') ?>"><i class="far fa-id-card text-primary"></i> Mi Perfil</a>
+          <a class="dropdown-item  <?= ($pathFile === 'inbox' ? 'active' : '') ?>" href="<?= Route::url('/foro/estudiante/inbox.php') ?>"><i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $student->unreadMessages() ?></span></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-secondary"></i> Cerrar Sesión</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> Cerrar Sesión</a>
         </div>
       </li>
     </ul>

@@ -56,7 +56,9 @@ class Util
 
    public static function formatTime($time)
    {
-
+      if(strpos($time, '(') > -1){
+         return $time;
+      }
       $newTime = \date('g:i:s A', strtotime($time));
       return $newTime;
    }
