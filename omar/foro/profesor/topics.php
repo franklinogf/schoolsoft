@@ -33,6 +33,24 @@ $teacher = new Teacher(Session::id());
       <?php
       Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
       ?>
+       <!-- leyend -->
+       <div class="card mx-auto bg-gradient-light bg-light leyend hidden" style="max-width: 30rem">
+         <h6 class="card-header bg-gradient-info bg-info py-2">Leyenda</h6>
+         <div class="card-body p-2">
+            <div class="row text-center">
+               <div class="col-6 col-sm-4">
+               <i class="fas fa-square text-success"></i> Abierto
+               </div>
+               <div class="col-6 col-sm-4">
+               <i class="fas fa-square text-danger"></i> Cerrado
+               </div>
+               <div class="col-12 mt-2 col-sm-4 mt-sm-0">
+                  <i class="fas fa-square text-warning"></i> Pasado de fecha
+               </div>
+            </div>
+         </div>
+      </div>
+
 
       <!-- topics table -->
       <button id="newTopic" type="button" class="btn btn-secondary hidden"><i class="far fa-comment"></i> Nuevo tema </button>

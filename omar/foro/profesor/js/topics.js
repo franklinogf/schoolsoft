@@ -48,7 +48,7 @@ $(document).ready(function () {
          }
          // hide first table and show second table
          classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-            $('#newTopic').fadeToggle(250);
+            $('#newTopic,.leyend').fadeToggle(250);
             topicsTableWrapper.show('drop', { direction: "right" }, 400);
             $("#header").animate({ opacity: 0 }, 250, () => {
                $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
@@ -68,6 +68,7 @@ $(document).ready(function () {
          sessionStorage.clear('class');
          topicsTable.rows().remove();
          classesTableWrapper.show('drop', { direction: "left" }, 400);
+         $(".leyend").fadeToggle(250)
          $("#header").animate({ opacity: 0 }, 250, () => {
             $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
          });

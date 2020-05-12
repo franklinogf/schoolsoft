@@ -37,18 +37,19 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
          <div class="alert alert-warning mx-auto" role="alert">
             Las tareas se borrarán al día siguiente de la fecha de entrega o vencimiento.
          </div>
+         <!-- leyend -->
          <div class="card mx-auto bg-gradient-light bg-light" style="max-width: 30rem">
          <h6 class="card-header bg-gradient-info bg-info py-2">Leyenda</h6>
             <div class="card-body p-2">
                <div class="row text-center">                  
                   <div class="col-6 col-sm-4">
-                     <i class="fas fa-circle text-white border rounded-circle border-dark"></i></h6> Tarea sin enviar
+                     <i class="fas fa-circle text-white border rounded-circle border-dark"></i> Tarea sin enviar
                   </div>
                   <div class="col-6 col-sm-4">
-                     <i class="fas fa-circle text-success"></i></h6> Tarea enviada
+                     <i class="fas fa-circle text-success"></i> Tarea enviada
                   </div>
                   <div class="col-12 mt-2 col-sm-4 mt-sm-0">
-                     <i class="far fa-square text-danger"></i></h6> Tarea vencida
+                     <i class="far fa-square text-danger"></i> Tarea vencida
                   </div>
                </div>
             </div>
