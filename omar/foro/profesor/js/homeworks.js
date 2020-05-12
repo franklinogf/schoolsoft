@@ -103,9 +103,9 @@ $(document).ready(function () {
     $("#document_id").remove();
     $("#homeworkFormBtn").prop('name', 'addHomework');
     $("button.addFile").nextAll().remove()
-    $('input').val('');
+    $('input:not(input[type=radio])').val('');
     $('textarea').val('');
     $('select').val('');
-    $('input[type=radio],input[type=checkbox]').prop('checked', false);
+    $('input[type=radio]').prop('checked', false);
   }
 });
