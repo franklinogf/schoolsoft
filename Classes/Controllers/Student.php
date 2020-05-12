@@ -98,12 +98,29 @@ class Student extends StudentModel
     return $this->getStudentHomeworks($this->ss,$date);
   }
 
+  
   public function doneHomework($id_hw)
   {
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
     return $this->getStudentDoneHomeworkById($this->{$this->primary_key},$id_hw);
+  }
+
+  public function exams($date = null)
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getStudentExams($this->ss,$date);
+  }
+
+  public function doneExam($id_exam)
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getStudentDoneExamById($this->{$this->primary_key},$id_exam);
   }
 
   public function login($username, $password)

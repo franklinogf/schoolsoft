@@ -30,7 +30,7 @@ global $student;
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
           <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Mis tareas</a>
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/exams.php') ?>">Examenes</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/exams.php') ?>">Examenes</a>
         </div>
       </li> 
       <li class="nav-item <?= ($pathFile === 'topics' ? 'active' : '') ?>">

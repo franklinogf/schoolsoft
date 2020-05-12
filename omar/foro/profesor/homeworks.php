@@ -119,7 +119,7 @@ $classes = $teacher->classes();
          <?php foreach ($homeworks as $homework) : ?>
             <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
-               <div class="card border-<?=$expired?>">
+               <div class="card border-<?= $expired ?>">
                   <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= $homework->curso ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
                   <div class="card-body ">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
@@ -140,7 +140,7 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a data-file-id="<?= $file->id ?>" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL.$file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download="<?= File::name($file->nombre, true) ?>"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download="<?= File::name($file->nombre, true) ?>"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>

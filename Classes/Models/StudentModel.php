@@ -2,6 +2,7 @@
 
 namespace Classes\Models;
 
+use Classes\Controllers\Exam;
 use Classes\Controllers\School;
 use Classes\Controllers\Homework;
 
@@ -71,6 +72,27 @@ class StudentModel extends School
   {
     $obj = parent::table('tareas_enviadas')->where([
       ['id_tarea', $id_hw],
+      ['id_estudiante', $mt],
+      ['year', $this->info('year')]
+    ])->first();
+    return $obj;
+  }
+
+  protected function getStudentExams($ss,$date = null)
+  {
+    $classes = $this->getStudentClasses($ss);
+
+    foreach ($classes as $class) {
+      $exam = new Exam();
+      $obj = $exam->findByClassForStudents($class->curso,$date);
+      return $obj;
+    }
+  }
+
+  protected function getStudentDoneExamById($mt, $id_exam)
+  {
+    $obj = parent::table('t_examenes_terminados')->where([
+      ['id_examen', $id_exam],
       ['id_estudiante', $mt],
       ['year', $this->info('year')]
     ])->first();

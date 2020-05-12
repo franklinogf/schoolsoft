@@ -14,3 +14,6 @@ omar/foro/estudiante/enviartareas.php
 omar/foro/profesor/includes/tareaslista.php
 omar/foro/profesor/includes/tareasentregadas.php
 omar/foro/profesor/includes/tareas_archivos.php
+omar/foro/estudiante/examen.php
+omar/foro/estudiante/exameneslista.php
+omar/foro/estudiante/examenterminado.php

@@ -61,10 +61,10 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
       <?php if ($homeworks) : ?>
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
-               <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white border rounded-circle border-dark' ?>
+               <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white' ?>
                <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'danger'; ?>
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
-                  <div class="card <?= $sent !== 'white border rounded-circle border-dark' && $expired === 'danger' ? "border-{$expired}" : "" ?>">
+                  <div class="card <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$homework->curso} - {$homework->desc}" ?>
                         <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
