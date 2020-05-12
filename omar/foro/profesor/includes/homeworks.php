@@ -31,9 +31,10 @@ if (isset($_POST['getHomework'])) {
       'hora' => Util::time()
    ]);
 
-   $file = new File('file');
+   $file = new File('file'); 
+   $uniqueId = uniqid();
    foreach ($file->files as $file) {
-      $newName = "({$id_teacher}-{$document_id}) $file->name";
+      $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
          DB::table('T_archivos')->insert([
             'nombre' => $newName,
@@ -59,9 +60,10 @@ if (isset($_POST['getHomework'])) {
       'enviartarea' => $_POST["state"]
    ]);
 
-   $file = new File('file');
+   $file = new File();
+   $uniqueId = uniqid();
    foreach ($file->files as $file) {
-      $newName = "({$id_teacher}-{$document_id}) $file->name";
+      $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
          DB::table('T_archivos')->insert([
             'nombre' => $newName,
