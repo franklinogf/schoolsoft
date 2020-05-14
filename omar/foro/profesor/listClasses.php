@@ -13,12 +13,10 @@ $teacher = new Teacher(Session::id());
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Foro - Lista de clases</title>
+<head> 
   <?php
-  Route::includeFile('/foro/profesor/includes/layouts/links.php');
+  $title = "Lista de clases";
+  Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
 

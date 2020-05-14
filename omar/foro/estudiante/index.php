@@ -14,13 +14,10 @@ $lastTopic = $student->lastTopic();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Foro - Inicio</title>
-
+<head> 
   <?php
-  Route::includeFile('/foro/estudiante/includes/layouts/links.php');
+  $title = "Inicio";
+  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
   ?>
 </head>
 

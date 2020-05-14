@@ -14,14 +14,11 @@ $exams = $student->exams(Util::daysBefore(3));
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-   <title>Foro - Examenes</title>
-   <?php
-   Route::includeFile('/foro/estudiante/includes/layouts/links.php');
-   ?>
-
+<head> 
+  <?php
+  $title = "Examenes";
+  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+  ?>
 </head>
 
 <body class='pb-5'>

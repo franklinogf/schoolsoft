@@ -14,13 +14,11 @@ $student = new Student(Session::id());
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-   <title>Foro - Temas</title>
-   <?php
-   Route::includeFile('/foro/estudiante/includes/layouts/links.php');
-   ?>
+<head> 
+  <?php
+  $title = "Temas";
+  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+  ?>
 </head>
 
 <body>

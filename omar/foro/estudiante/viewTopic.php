@@ -21,13 +21,10 @@ $comments = $topic->comments();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Foro - <?= $topic->titulo ?></title>
-
+<head> 
   <?php
-  Route::includeFile('/foro/estudiante/includes/layouts/links.php');
+  $title = $topic->titulo;
+  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
   ?>
 </head>
 
