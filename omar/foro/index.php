@@ -29,11 +29,10 @@ if (Session::is_logged(false)) {
    <form class="form-signin" method='POST' action="<?= Route::url('/foro/includes/login.php') ?>">
       <img class="mb-4" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>">
       <h1 class="h3 mb-3 font-weight-normal ">Iniciar Sesión</h1>
-      <?php if (isset($_SESSION['errorLogin'])) : ?>
+      <?php if (Session::get('errorLogin')) : ?>
          <div class="alert alert-danger animated zoomIn" role="alert">
-            <strong>Error!</strong> <?= $_SESSION['errorLogin'] ?>
+            <strong>Error!</strong> <?= Session::get('errorLogin',true) ?>
          </div>
-         <?php unset($_SESSION['errorLogin']) ?>
       <?php endif ?>
       <label for="username" class="sr-only">Usuario:</label>
       <div class="input-group">
