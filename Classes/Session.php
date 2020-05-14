@@ -11,9 +11,16 @@ class Session
         $_SESSION[$name] = $value;
     }
 
-    public static function get($name)
+    public static function get($name, $delete = false)
     {
-        return $_SESSION[$name];
+        if (isset($_SESSION[$name])) {
+            $sessionValue = $_SESSION[$name];
+            if ($delete) {
+                self::delete($name);
+            }
+            return $sessionValue;
+        }
+        return false;
     }
 
     public static function delete($name)
