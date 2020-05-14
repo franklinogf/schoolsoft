@@ -10,9 +10,15 @@ class Session
     {
         $_SESSION[$name] = $value;
     }
+
     public static function get($name)
     {
         return $_SESSION[$name];
+    }
+
+    public static function delete($name)
+    {
+        unset($_SESSION[$name]);
     }
 
     public static function is_logged($reditect = true)
