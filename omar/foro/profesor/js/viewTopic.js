@@ -30,19 +30,30 @@ $(document).ready(function () {
          $commentInput.removeClass('is-invalid')
          $.post(includeThisFile(), { newComment: urlParams.get('id'), comment }, res => {
             $commentInput.val('')
-            $("#commentsList").prepend(`<div class="media mt-3 pt-3 px-3 border-primary-gradient-top animated fadeInDown">
-         <img src="${res.profilePicture}" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
-         <div class="media-body">
-           <h5 class="mt-0"><i class="fas fa-user-tie fa-xs"></i> ${res.fullName}</h5>
-           <p class="m-0 p-2">${comment}</p>
-           <p class="text-muted text-right">${res.date} ${res.time}</p>
-         </div>
-       </div>`)
+            $("#commentsList").prepend(`
+            <div class="media mt-3 pt-3 px-3 border-primary-gradient-top animated fadeInDown">
+               <img src="${res.profilePicture}" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
+               <div class="media-body">
+                  <h5 class="mt-0"><i class="fas fa-user-tie fa-xs"></i> ${res.fullName}</h5>
+                  <p class="m-0 p-2 text-break">${comment}</p>
+                  <p class="text-muted text-right">${res.date} ${res.time}</p>
+                  <button data-comment-id="${res.id}" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>
+               </div>
+            </div>`)
          }, 'json');
       } else {
          $commentInput.removeClass('is-invalid').addClass('is-invalid');
       }
    });
+
+   $(document).on('click', '.delComment', function (e) {
+      const commentId = $(this).data('commentId')
+      if(confirm('¿Seguro que quiere borrar este comentario?')){
+         animateCSS($(this).parents('.media'),'zoomOut',() => {
+            $(this).parents('.media').remove()
+         });
+      }
+   })
 
 
 

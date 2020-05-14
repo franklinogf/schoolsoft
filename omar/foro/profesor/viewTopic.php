@@ -20,7 +20,7 @@ $comments = $topic->comments();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = $topic->titulo;
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
@@ -62,19 +62,19 @@ $comments = $topic->comments();
       </div>
     </div>
 
-    <div class="container mt-3 pb-5">
+    <div class="mt-3 pb-5">
       <?php if ($topic->estado === 'a') : ?>
-          <div class="form-group">
-            <label for="comment">Comentario nuevo</label>
-            <textarea class="form-control" id="comment" rows="3" required></textarea>
-            <div class="invalid-feedback">Por favor escriba algo</div> 
-          </div>
-          <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>      
+        <div class="form-group">
+          <label for="comment">Comentario nuevo</label>
+          <textarea class="form-control" id="comment" rows="3" required></textarea>
+          <div class="invalid-feedback">Por favor escriba algo</div>
+        </div>
+        <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>
       <?php endif ?>
 
 
-      <div id="commentsList" class="bg-white">
-        <?php if ($comments) : ?>
+      <?php if ($comments) : ?>
+        <div id="commentsList" class="bg-white">
           <?php foreach ($comments as $comment) : ?>
             <?php
             $student = new Student($comment->creador_id);
@@ -83,14 +83,15 @@ $comments = $topic->comments();
             <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
               <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
               <div class="media-body">
-                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i>' . $student->fullName()) ?></h5>
-                <p class="m-0 p-2"><?= $comment->descripcion ?></p>
+                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i> ' . $student->fullName()) ?></h5>
+                <p class="m-0 mb-2 p-2 text-break"><?= $comment->descripcion ?></p>
                 <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
+                <button data-comment-id="<?= $comment->id ?>" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>
               </div>
             </div>
           <?php endforeach ?>
-        <?php endif ?>
-      </div>
+        </div>
+      <?php endif ?>
     </div>
 
 
