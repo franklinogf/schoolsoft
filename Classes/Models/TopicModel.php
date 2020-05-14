@@ -9,6 +9,7 @@ use Classes\Controllers\School;
 class TopicModel extends School
 {
   private $table = 'foro_entradas';
+  private $comments_table = 'detalle_foro_entradas';
   protected $primary_key = 'id';
 
   public function __construct()
@@ -65,6 +66,12 @@ class TopicModel extends School
   {
 
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
+  }
+
+  protected function deleteTopic($id_topic)
+  {
+    parent::table($this->table)->where('id',$id_topic)->delete();
+    parent::table($this->comments_table)->where('entrada_id',$id_topic)->delete();
   }
 
   protected function insertTopic($propsArray)

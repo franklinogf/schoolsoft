@@ -44,7 +44,14 @@ $comments = $topic->comments();
           <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
         </button>
       </div>
-      <div class="col-lg-4 d-flex justify-content-end align-items-end">
+      <?php if (!$comments) : ?>
+        <div class="col-lg-3">
+          <button data-topic-id="<?= $topic->id ?>" class="btn btn-danger btn-lg btn-block delTopic">
+            <i class="fas fa-trash-alt"></i> Borrar Tema
+          </button>
+        </div>
+      <?php endif ?>
+      <div class="<?= $comments ? 'col-lg-4' : 'col-lg-1' ?> d-flex justify-content-end align-items-end">
         <i class="fas fa-toggle-on fa-3x <?= ($topic->estado === 'a' ? 'text-success' : 'text-danger') ?> "></i>
       </div>
     </div>
@@ -86,7 +93,8 @@ $comments = $topic->comments();
                 <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i> ' . $student->fullName()) ?></h5>
                 <p class="m-0 mb-2 p-2 text-break"><?= $comment->descripcion ?></p>
                 <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
-                <button data-comment-id="<?= $comment->id ?>" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>
+                <!-- <button data-comment-id="<?php //echo $comment->id 
+                                              ?>" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button> -->
               </div>
             </div>
           <?php endforeach ?>
@@ -135,7 +143,7 @@ $comments = $topic->comments();
                 </div>
                 <div class="form-group col-6">
                   <label for="modalUntilDate">Disponible hasta:</label>
-                  <input type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= $topic->desde ?>">
+                  <input type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= $topic->desde !== '0000-00-00' ? $topic->desde : '' ?>">
                 </div>
 
               </div>

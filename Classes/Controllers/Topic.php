@@ -55,6 +55,14 @@ class Topic extends TopicModel
     return $this->insertTopicComment($creatorId, $type, $this->id, $desc);
   }
 
+  public function delete()
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un tema');
+    }
+    $this->deleteTopic($this->id);
+  }
+
   public function save()
   {
     // get self public class, no parents classes

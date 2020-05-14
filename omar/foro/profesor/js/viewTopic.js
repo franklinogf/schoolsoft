@@ -3,9 +3,6 @@ $(document).ready(function () {
    const urlParams = new URLSearchParams(window.location.search);
 
    $("#editTopicBtn").click(e => {
-
-      console.log('a: ', getBaseUrl("includes/viewTopic.php"));
-
       $.post(includeThisFile(), { topicById: urlParams.get('id') }, res => {
 
          if (res.response) {
@@ -30,14 +27,14 @@ $(document).ready(function () {
          $commentInput.removeClass('is-invalid')
          $.post(includeThisFile(), { newComment: urlParams.get('id'), comment }, res => {
             $commentInput.val('')
+            // `<button data-comment-id="${res.id}" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>`
             $("#commentsList").prepend(`
             <div class="media mt-3 pt-3 px-3 border-primary-gradient-top animated fadeInDown">
                <img src="${res.profilePicture}" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
                <div class="media-body">
                   <h5 class="mt-0"><i class="fas fa-user-tie fa-xs"></i> ${res.fullName}</h5>
                   <p class="m-0 p-2 text-break">${comment}</p>
-                  <p class="text-muted text-right">${res.date} ${res.time}</p>
-                  <button data-comment-id="${res.id}" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>
+                  <p class="text-muted text-right">${res.date} ${res.time}</p>                  
                </div>
             </div>`)
          }, 'json');
@@ -46,11 +43,23 @@ $(document).ready(function () {
       }
    });
 
+   $(document).on('click', '.delTopic', function (e) {
+      const topicId = $(this).data('topicId')
+      if (confirm('¿Seguro que quiere borrar este Tema?')) {
+         $.post(includeThisFile(), { delTopic: topicId }, () => {
+            window.location.href = getBaseUrl('topics.php')
+            
+         });
+      }
+   })
+
    $(document).on('click', '.delComment', function (e) {
       const commentId = $(this).data('commentId')
-      if(confirm('¿Seguro que quiere borrar este comentario?')){
-         animateCSS($(this).parents('.media'),'zoomOut',() => {
-            $(this).parents('.media').remove()
+      if (confirm('¿Seguro que quiere borrar este comentario?')) {
+         $.post(includeThisFile(), { delComment: commentId }, () => {
+            animateCSS($(this).parents('.media'), 'zoomOut', () => {
+               $(this).parents('.media').remove()
+            });
          });
       }
    })
