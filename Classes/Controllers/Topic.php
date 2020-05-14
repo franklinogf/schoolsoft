@@ -24,11 +24,14 @@ class Topic extends TopicModel
 
   public function findPK($pk)
   {
-    $array = $this->getTopicByPK($pk);
-    foreach ($array as $key => $value) {
-      $this->{$key} = $value;
+    if($array = $this->getTopicByPK($pk)){
+
+      foreach ($array as $key => $value) {
+        $this->{$key} = $value;
+      }
+      return $array;
     }
-    return $array;
+    return false;
   }
 
   public function byClass($class)

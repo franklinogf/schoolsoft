@@ -4,6 +4,7 @@ namespace Classes\Models;
 
 use Classes\Controllers\School;
 use Classes\Util;
+use stdClass;
 
 class ExamModel extends School
 {
@@ -20,7 +21,7 @@ class ExamModel extends School
    {
       $obj =  parent::table($this->table)
          ->where($this->primary_key, $pk)->first();
-      $this->getFiles($obj);
+      $this->getExamTopics($obj);
       return $obj;
    }
 
@@ -30,7 +31,7 @@ class ExamModel extends School
 
       $obj = parent::table($this->table)
          ->orderBy($this->primary_key, 'DESC')->get();
-      $this->getFiles($obj);
+      $this->getExamTopics($obj);
       return $obj;
    }
 
@@ -38,14 +39,13 @@ class ExamModel extends School
    {
       $hw = $this->getExamByPK($id);
       $doneHw = parent::table('tareas_enviadas')->where([
-         ['id_tarea',$id],
-         ['id_profesor',$hw->id2],
-         ['year',$this->info('year')]
+         ['id_tarea', $id],
+         ['id_profesor', $hw->id2],
+         ['year', $this->info('year')]
       ])->get();
-      $this->getFiles($doneHw,'id','t_tareas_archivos','id_tarea');
+      $this->getExamTopics($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
 
       return $doneHw;
-
    }
 
    protected function getExamsByTeacherId($id)
@@ -55,7 +55,7 @@ class ExamModel extends School
             ['id2', $id]
          ])
          ->orderBy($this->primary_key, 'DESC')->get();
-      $this->getFiles($obj);
+      $this->getExamTopics($obj);
       return $obj;
    }
    protected function getExamsByTeacherIdAndClass($id, $class)
@@ -66,7 +66,7 @@ class ExamModel extends School
             ['id2', $id]
          ])
          ->orderBy($this->primary_key, 'DESC')->get();
-      $this->getFiles($obj);
+      $this->getExamTopics($obj);
       return $obj;
    }
 
@@ -79,7 +79,7 @@ class ExamModel extends School
             ["cursos.year", $this->info('year')]
          ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
 
-      $this->getFiles($obj);
+      $this->getExamTopics($obj);
 
       return $obj;
    }
@@ -91,28 +91,47 @@ class ExamModel extends School
          ->where([
             ["{$this->table}.curso", $class],
             ["{$this->table}.fecha", '>=', $date],
-            ["{$this->table}.activo", 'si'],
+            // ["{$this->table}.activo", 'si'],
             ["cursos.year", $this->info('year')]
          ])
          ->orderBy("{$this->table}.fecha", 'DESC')->get();
-      // $this->getFiles($obj);
+      // $this->getExamTopics($obj);
 
       return $obj;
    }
 
-   protected function getFiles($obj,$whereVal = null,$table = 'T_archivos',$whereCol = null)
+   protected function getExamTopics($obj)
    {
-      $whereVal = !$whereVal ? $this->primary_key : $whereVal;
-      $whereCol = !$whereCol ? $whereVal : $whereCol;
+      $tables = [
+         'T_examen_fyv' => 'fvs',
+         'T_examen_selec' => 'selects',
+         'T_examen_parea' => 'pairs',
+         'T_examen_codigo_parea' => 'pairCodes',
+         'T_examen_linea' => 'lines',
+         'T_examen_pregunta' => 'qas'
+      ];
+
+      $titles = [
+         'fvs' => 'Falso y verdadero',
+         'selects' => 'Selecciona la respuesta correcta',
+         'pairs' => 'Parea',
+         'lines' => 'Llena la linea en blanco',
+         'qas' => 'Responde las preguntas correctamente'
+      ];
+
       if (is_object($obj)) {
          $obj = [$obj];
       }
-      foreach ($obj as $Exam) {
-         $files = parent::table($table)
-            ->where($whereCol, $Exam->{$whereVal})->get();
-         if ($files) {
-            foreach ($files as $file) {
-               $Exam->archivos[] = $file;
+      foreach ($obj as $exam) {
+         foreach ($tables as $table => $name) {
+            $objs = parent::table($table)
+               ->where('id_examen', $exam->id)->get();
+            $exam->{$name} = new stdClass();
+            $exam->{$name}->value = 0;
+            foreach ($objs as $obj) {
+               if(array_key_exists($name,$titles)) $exam->{$name}->title = $titles[$name];
+               if(array_key_exists('valor',$obj)) $exam->{$name}->value = $exam->{$name}->value + $obj->valor;
+               $exam->{$name}->topics[] = $obj;
             }
          }
       }
