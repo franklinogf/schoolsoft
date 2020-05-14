@@ -17,6 +17,8 @@ $student = new Student(Session::id());
 $student->nombre = $_POST['name'];
 $student->apellidos = $_POST['lastName'];
 $student->email = $_POST['email'];
+$student->cel = $_POST['cellPhone'];
+$student->comp = $_POST['cellCompany'];
 
 if ($_POST['password'] !== '') {
    $student->clave = $_POST['password'];

@@ -18,6 +18,8 @@ $teacher->nombre = $_POST['name'];
 $teacher->apellidos = $_POST['lastName'];
 $teacher->email1 = $_POST['email1'];
 $teacher->email2 = $_POST['email2'];
+$teacher->cel = $_POST['cellPhone'];
+$teacher->comp = $_POST['cellCompany'];
 
 if ($_POST['password'] !== '') {
    $teacher->clave = $_POST['password'];

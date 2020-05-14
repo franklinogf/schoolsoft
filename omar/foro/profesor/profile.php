@@ -41,17 +41,36 @@ $teacher = new Teacher(Session::id());
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="name">Nombre</label>
-              <input type="text" value='<?= $teacher->nombre ?>' class="form-control" name='name' id="name">
+              <input type="text" value='<?= $teacher->nombre ?>' class="form-control" name='name' id="name" required>
             </div>
             <div class="form-group col-md-6">
               <label for="lastname">Apellidos</label>
-              <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastName' id="lastname">
+              <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastName' id="lastname" required>
             </div>            
             <div class="form-group col-md-12">
               <label for="email1">E-mail Principal</label>
               <input type="email" value='<?= $teacher->email1 ?>' class="form-control" name='email1' id="email1">
               <label for="email2">E-mail Secundario</label>
               <input type="email" value='<?= $teacher->email2 ?>' class="form-control" name='email2' id="email2">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="cellPhone">Celular</label>
+              <input type="tel" value="<?= $teacher->cel ?>" class="form-control" id="cellPhone" name="cellPhone" pattern="[0-9]{10}" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="cellCompany">Compañia telefonica</label>
+              <select id="cellCompany" class="form-control" name="cellCompany">
+                <option <?= $teacher->comp === '' ? 'selected=""' :''?> value="">Seleciona una</option>
+                <option <?= $teacher->comp === 'T-Movil' ? 'selected=""' :''?> value="T-Movil">T-Mobile</option>
+                <option <?= $teacher->comp === 'AT&T' ? 'selected=""' :''?> value="AT&T">AT&T</option>
+                <option <?= $teacher->comp === 'Sprint' ? 'selected=""' :''?> value="Sprint">Sprint</option>
+                <option <?= $teacher->comp === 'Open M.' ? 'selected=""' :''?> value="Open M.">Open M.</option>
+                <option <?= $teacher->comp === 'Moviltar' ? 'selected=""' :''?> value="Movistar">Movistar</option>
+                <option <?= $teacher->comp === 'Claro' ? 'selected=""' :''?> value="Claro">Claro</option>
+                <option <?= $teacher->comp === 'Suncom' ? 'selected=""' :''?> value="Suncom">Suncom</option>
+                <option <?= $teacher->comp === 'Verizon' ? 'selected=""' :''?> value="Verizon">Verizon</option>
+                <option <?= $teacher->comp === 'Boost' ? 'selected=""' :''?> value="Boost">Boost Mobile</option>
+              </select>
             </div>
             <div class="form-group  col-md-6">
               <label for="pass1">Nueva Clave</label>
@@ -60,6 +79,7 @@ $teacher = new Teacher(Session::id());
               <input type="password" class="form-control pass" id="pass2">
               <div class="invalid-feedback">Las claves no coinciden</div>             
             </div>
+            
             <div class="form-group col-md-12">
               <button type="submit" class="btn btn-primary btn-lg btn-block">Guardar</button>
             </div>
