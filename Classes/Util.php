@@ -63,12 +63,12 @@ class Util
       return $newTime;
    }
 
-   public static function dump($var)
+   public static function dump($var,$exit = true)
    {
       echo '<pre>';
       \print_r($var);
       echo '<pre/>';
-      exit();
+      if($exit) exit();
    }
    public static function toObject($obj)
    {
