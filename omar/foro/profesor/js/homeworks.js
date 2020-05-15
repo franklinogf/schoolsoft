@@ -1,23 +1,14 @@
 $(document).ready(function () {
 
-// $(document).on('click','.downloadFIle',function (e) { 
-//   e.preventDefault()
-//   console.log($(this).prop('href'))
-//   downloadFile($(this).prop('href'))
-//   })
-$("#homeworkFormBtn").click(function (e) {   
-  $("#progressModal").modal('show')
-        count = 1;
-        timer = setInterval(() => {
-          if (count <= 100) {
-            $("#progressModal .progress-bar").prop('aria-valuenow', count).css('width', count + '%').text(count + '%')
-            count++;
-          }
-        }, 50);
- })
-
- $("form").submit(function (e) { 
-  //  e.preventDefault();
+  $("#homeworkFormBtn").click(function (e) {
+    $("#progressModal").modal('show')
+    count = 1;
+    timer = setInterval(() => {
+      if (count <= 100) {
+        $("#progressModal .progress-bar").prop('aria-valuenow', count).css('width', count + '%').text(count + '%')
+        count++;
+      }
+    }, 50);
   })
 
   $(".editHomework").click((e) => {
@@ -64,12 +55,12 @@ $("#homeworkFormBtn").click(function (e) {
     document_id = e.target.tagName === 'I' ? $(e.target).parent().data('homeworkId') : $(e.target).data('homeworkId');
     if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
       const homeworkCard = $(e.target).parents('.homework')
-      if($("#homework_id").length === 1 && homeworkCard.hasClass($("#homework_id").val()) ){
+      if ($("#homework_id").length === 1 && homeworkCard.hasClass($("#homework_id").val())) {
         clearForm()
       }
       $.post(includeThisFile(), { delHomework: document_id }, () => {
         animateCSS(homeworkCard, 'zoomOutDown', () => {
-          animateCSS(homeworkCard.nextAll(),'slideInUp')
+          animateCSS(homeworkCard.nextAll(), 'slideInUp')
           if (e.target.tagName === 'I') {
             $(e.target).parent().tooltip('hide')
           } else {
