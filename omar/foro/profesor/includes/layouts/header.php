@@ -16,7 +16,6 @@ if ($DataTable) Route::includeFile('/includes/datatable-css.php', true);
 Route::css("/css/main-bootstrap.css");
 Route::css("/css/main.css", true);
 
-
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $__cssFile = str_replace('.php', '', $__file) . '.css';

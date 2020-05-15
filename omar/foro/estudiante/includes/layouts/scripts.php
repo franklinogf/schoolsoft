@@ -3,6 +3,7 @@ global $jqUI;
 global $DataTable;
 
 use Classes\Route;
+
 ?>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
@@ -13,7 +14,8 @@ use Classes\Route;
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
-Route::js('/js/app.js');
+Route::js('/js/bootstrap-wysihtml5-0.0.2.min.js',true);
+Route::js('/js/app.js',true);
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
