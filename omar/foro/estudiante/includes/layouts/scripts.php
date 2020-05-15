@@ -14,7 +14,6 @@ use Classes\Route;
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
-Route::js('/js/bootstrap-wysihtml5-0.0.2.min.js',true);
 Route::js('/js/app.js',true);
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
