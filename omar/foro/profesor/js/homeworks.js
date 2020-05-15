@@ -5,6 +5,20 @@ $(document).ready(function () {
 //   console.log($(this).prop('href'))
 //   downloadFile($(this).prop('href'))
 //   })
+$("#homeworkFormBtn").click(function (e) {   
+  $("#progressModal").modal('show')
+        count = 1;
+        timer = setInterval(() => {
+          if (count <= 100) {
+            $("#progressModal .progress-bar").prop('aria-valuenow', count).css('width', count + '%').text(count + '%')
+            count++;
+          }
+        }, 50);
+ })
+
+ $("form").submit(function (e) { 
+  //  e.preventDefault();
+  })
 
   $(".editHomework").click((e) => {
     clearForm();

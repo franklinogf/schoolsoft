@@ -80,7 +80,7 @@ $(document).ready(function () {
         $("#progressModal").modal('show')
         count = 1;
         timer = setInterval(() => {
-          if (count < 100) {
+          if (count <= 100) {
             $("#progressModal .progress-bar").prop('aria-valuenow', count).css('width', count + '%').text(count + '%')
             count++;
           }
