@@ -338,6 +338,5 @@ $(function () {
     }
   });
 
-  // textarea
-  $("textarea.form-control").wysihtml5();
+
 });
