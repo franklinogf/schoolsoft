@@ -9,7 +9,6 @@ use Classes\Controllers\Teacher;
 Session::is_logged();
 $teacher = new Teacher(Session::id());
 $lastTopic = $teacher->lastTopic();
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

@@ -8,11 +8,12 @@ use Classes\Session;
 Session::is_logged();
 $DataTable = true;
 $teacher = new Teacher(Session::id());
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = "Salon Hogar";
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
@@ -32,7 +33,7 @@ $teacher = new Teacher(Session::id());
     Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
     ?>
 
-    <a href="#" class="btn btn-primary mt-2">Enviar usuarios a los padres</a>
+    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-primary mt-2">Enviar usuarios a los padres</a>
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -72,7 +73,17 @@ $teacher = new Teacher(Session::id());
   </div>
 
   </div>
-
+  <div id="progressModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
   ?>

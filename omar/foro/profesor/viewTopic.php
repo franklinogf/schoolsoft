@@ -9,8 +9,11 @@ use Classes\Controllers\Teacher;
 use Classes\Session;
 
 Session::is_logged();
+if (!isset($_GET['id'])) {
+  Route::error();
+}
 $topic = new Topic($_GET['id']);
-if (!isset($topic->id) || !isset($_GET['id'])) {
+if(!isset($topic->id)){
   Route::error();
 }
 $teacher = new Teacher(Session::id());

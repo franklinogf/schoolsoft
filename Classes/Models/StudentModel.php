@@ -111,7 +111,7 @@ class StudentModel extends School
     $year = $this->info('year');
 
     $obj = parent::table('padres')
-      ->select('year.*')
+      ->select('year.*,padres.descripcion')
       ->join('year', 'padres.ss', '=', 'year.ss')
       ->where([
         ['padres.curso', $class],

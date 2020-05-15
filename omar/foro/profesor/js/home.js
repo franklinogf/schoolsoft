@@ -52,7 +52,7 @@ $(document).ready(function () {
   $('#pass1,#pass2').change(() => {
     checkPasswords();
   });
- 
+
   $('form').submit(event => {
 
     if (!checkPasswords() || $('#username').val().length === 0) {
@@ -67,6 +67,31 @@ $(document).ready(function () {
     const modal = $(this);
     modal.find('input').val('')
       .removeClass('is-invalid is-valid');
+  })
+
+  let timer
+  $("#sendEmails").click(function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "get",
+      url: $(this).prop('href'),
+      beforeSend: function () {
+
+        $("#progressModal").modal('show')
+        count = 1;
+        timer = setInterval(() => {
+          if (count < 100) {
+            $("#progressModal .progress-bar").prop('aria-valuenow', count).css('width', count + '%').text(count + '%')
+            count++;
+          }
+        }, 50);
+      }
+    })
+      .done(function (data) {
+        $("#progressModal .progress-bar").prop('aria-valuenow', 100).css('width', '100%').text('100%')
+        clearInterval(timer);
+        $("#progressModal").modal('hide')
+      });
   })
 
 

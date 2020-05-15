@@ -1,4 +1,5 @@
 <?php
+
 namespace Classes;
 
 class Route
@@ -8,8 +9,8 @@ class Route
       $root = __ROOT;
       if (!$serverRoot) {
          $root = __ROOT_SCHOOL;
-      }      
-      return include $root . str_replace('/',DIRECTORY_SEPARATOR,$path);
+      }
+      return include $root . str_replace('/', DIRECTORY_SEPARATOR, $path);
    }
 
    public static function css($path, $serverRoot = false)
@@ -42,39 +43,42 @@ class Route
       }
    }
 
-   public static function jqUI(){
+   public static function jqUI()
+   {
       echo '<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>';
    }
 
-   public static function fontawasome(){
+   public static function fontawasome()
+   {
       echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
    }
 
-   public static function error(){
-      http_response_code(404); 
-      
-      include $_SERVER['DOCUMENT_ROOT']."/404.php"; 
+   public static function error()
+   {
+      http_response_code(404);
+
+      include Server::get('DOCUMENT_ROOT') . "/404.php";
       die();
    }
 
-   public static function url($path){
-      $newPath = __SCHOOL_URL.$path;
+   public static function url($path, $fullPath = false)
+   {
+      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL .  $path : __SCHOOL_URL . $path;
       return $newPath;
    }
 
-   public static function redirect($path = '',$rootSchool = true){
-      if($rootSchool){
+   public static function redirect($path = '', $rootSchool = true)
+   {
+      if ($rootSchool) {
          $newPath = __SUB_ROOT_URL;
       }
       $newPath .= $path;
-      header("Location: ".__SCHOOL_URL.$newPath);
+      header("Location: " . __SCHOOL_URL . $newPath);
    }
 
-   public static function back(){
-      
+   public static function back()
+   {
+
       return Server::get('HTTP_REFERER');
    }
- 
-   
-
 }

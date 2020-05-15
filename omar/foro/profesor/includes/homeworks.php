@@ -12,12 +12,12 @@ use Classes\DataBase\DB;
 Session::is_logged();
 Server::is_post();
 if (isset($_POST['getHomework'])) {
-   $document_id = $_POST['getHomework'];
-   $hw = new Homework($document_id);
+   $id_homework = $_POST['getHomework'];
+   $hw = new Homework($id_homework);
    echo Util::toJson($hw);
 } else if (isset($_POST['addHomework'])) {
    $id_teacher = Session::id();
-   $document_id = DB::table('tbl_documentos')->insertGetId([
+   $id_homework = DB::table('tbl_documentos')->insertGetId([
       'titulo' => $_POST["title"],
       'descripcion' => $_POST["description"],
       'id2' => $id_teacher,
@@ -38,17 +38,18 @@ if (isset($_POST['getHomework'])) {
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
          DB::table('T_archivos')->insert([
             'nombre' => $newName,
-            'id_documento' => $document_id
+            'id_documento' => $id_homework
          ]);
       }
    }
+   Route::includeFile('/foro/profesor/includes/email/mailHomeworks.php');
 
    Route::redirect('/profesor/homeworks.php');
 } else if (isset($_POST['editHomework'])) {
    $id_teacher = Session::id();
-   $document_id = $_POST['document_id'];
+   $id_homework = $_POST['document_id'];
 
-   DB::table('tbl_documentos')->where('id_documento', $document_id)->update([
+   DB::table('tbl_documentos')->where('id_documento', $id_homework)->update([
       'titulo' => $_POST["title"],
       'descripcion' => $_POST["description"],
       'fec_in' => $_POST["sinceDate"],
@@ -67,7 +68,7 @@ if (isset($_POST['getHomework'])) {
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
          DB::table('T_archivos')->insert([
             'nombre' => $newName,
-            'id_documento' => $document_id
+            'id_documento' => $id_homework
          ]);
       }
    }
@@ -75,20 +76,20 @@ if (isset($_POST['getHomework'])) {
    Route::redirect('/profesor/homeworks.php');
 } else if (isset($_POST['delHomework'])) {
 
-   $document_id = $_POST['delHomework'];
-   $homework = DB::table('tbl_documentos')->where('id_documento', $document_id)->first();
+   $id_homework = $_POST['delHomework'];
+   $homework = DB::table('tbl_documentos')->where('id_documento', $id_homework)->first();
 
    if ($homework->nombre_archivo !== '') {
       File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $homework->nombre_archivo);
    }
-   DB::table('tbl_documentos')->where('id_documento', $document_id)->delete();
+   DB::table('tbl_documentos')->where('id_documento', $id_homework)->delete();
 
-   $files = DB::table('T_archivos')->where('id_documento', $document_id)->get();
+   $files = DB::table('T_archivos')->where('id_documento', $id_homework)->get();
    if ($files) {
       foreach ($files as $file) {
          File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
       }
-      DB::table('T_archivos')->where('id_documento', $document_id)->delete();
+      DB::table('T_archivos')->where('id_documento', $id_homework)->delete();
    }
 } else if (isset($_POST['delExistingFile'])) {
 
