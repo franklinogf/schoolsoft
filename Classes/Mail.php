@@ -14,38 +14,44 @@ class Mail extends PHPMailer
 
    public function __construct($debug = false, $type = 'School')
    {
-      parent::__construct(true);
+      
       if ($type === 'School') {
          $school = new School();
+         $isSMTP = $school->info('host') === 'E' ? true : false;
          $email = $school->info('correo');
          $name = $school->info('colegio');
-         $isSMTP = $school->info('host') === 'E' ? true : false;
+         $replayToEmail = $email;
+         $replayToName = $name;
          $host = $school->info('host_smtp');
          $username = $school->info('email_smtp');
          $password = $school->info('clave_email');
          $port = $school->info('port');
       } else {
          $teacher = new Teacher(Session::id());
-         $email = $teacher->email1;
-         $name = $teacher->fullName();
          $isSMTP = $teacher->host === 'E' ? true : false;
-         $host = $teacher->host_smtp;
-         $username = $teacher->email_smtp;
-         $password = $teacher->clave_email;
-         $port = $teacher->port;
+         $email = !$isSMTP ? $teacher->email1 : $teacher->info('email_smtp');
+         $name = !$isSMTP ? $teacher->fullName() : $teacher->info('colegio');
+         $replayToEmail = $teacher->email1;
+         $replayToName = $teacher->fullName();
+         $host = $teacher->info('host_smtp');
+         $username = $teacher->info('email_smtp');
+         $password = $teacher->info('clave_email');
+         $port = $teacher->info('port');
+      }
+
+      if ($isSMTP) {
+         parent::__construct(true);
+         if ($debug)  $this->SMTPDebug = SMTP::DEBUG_SERVER;
+         $this->isSMTP();
+         $this->Host       = $host;
+         $this->SMTPAuth   = true;
+         $this->Username   = $username;
+         $this->Password   = $password;
+         $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+         $this->Port       =  $port;
       }
 
       $this->setFrom($email, $name);
-      if ($this->replyTo)  $this->addReplyTo($email, $name);
-      if ($isSMTP) {
-         if ($debug)  $this->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-         $this->isSMTP();                                            // Send using SMTP
-         $this->Host       = $host;          // Set the SMTP server to send through
-         $this->SMTPAuth   = true;                                   // Enable SMTP authentication
-         $this->Username   = $username;                     // SMTP username
-         $this->Password   = $password;                               // SMTP password
-         $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-         $this->Port       =  $port;
-      }
+      if ($this->replyTo)  $this->addReplyTo($replayToEmail, $replayToName);
    }
 }

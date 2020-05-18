@@ -9,7 +9,7 @@ use Classes\Session;
 use Classes\Util;
 
 Session::is_logged();
-$mail = new Mail();
+$mail = new Mail(true, "Teacher");
 $teacher = new Teacher(Session::id());
 
 $students = DB::table('year')->where([
@@ -34,17 +34,16 @@ foreach ($students as $student) {
       }
    }
 
-
-   $link = Route::url('/foro/',true);
+   $link = Route::url('/foro/', true);
    $schoolName = $teacher->info('colegio');
    $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
    $studentUser = $student->usuario;
    $studentPassword = $student->clave;
    $messageTitle = "Usuario y Clave";
 
-$mail->isHTML(true);
-$mail->Subject = "Acceso al foro";
-$mail->Body    = "
+   $mail->isHTML(true);
+   $mail->Subject = "Acceso al foro";
+   $mail->Body    = "
 <!DOCTYPE html>
 <html lang='es'>
 <head>
@@ -69,8 +68,10 @@ $mail->Body    = "
 </html>
 ";
 
-   if ($count > 0) {     
-      $mail->send();
+   if ($count > 0) {
+      if (!$mail->send()) {
+         echo "Error " .$mail->ErrorInfo;
+      }
    }
    $mail->ClearAddresses();
 }
