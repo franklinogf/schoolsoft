@@ -35,10 +35,10 @@ $(document).ready(function () {
 
                $(thisRow.node()).prop('id', topic.id)
                var today = new Date()
-               today.setHours(0,0,0,0)
-               
+               today.setHours(0, 0, 0, 0)
+
                let closeDate = new Date(topic.desde)
-               closeDate.setHours(0,0,0,0)
+               closeDate.setHours(0, 0, 0, 0)
 
                let status = topic.estado === 'a' ? 'table-success' : 'table-danger'
                status = topic.estado === 'a' && closeDate <= today ? 'table-warning' : status
@@ -62,6 +62,7 @@ $(document).ready(function () {
 
    $("#back").click((e) => {
       // hide second table and shows first table
+      _class = ''
       $('#newTopic').fadeToggle(250);
       topicsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
          // Reset the variables
