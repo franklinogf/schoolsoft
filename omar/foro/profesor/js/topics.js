@@ -20,7 +20,7 @@ $(document).ready(function () {
    });
 
    function getTopics(thisClass) {
-      _class = thisClass
+      _class = thisClass      
       $('#class').val(thisClass)
 
       $.post(includeThisFile(), { topicsByClass: _class }, res => {
@@ -67,7 +67,7 @@ $(document).ready(function () {
       topicsTableWrapper.hide('drop', { direction: "right" }, 400, () => {
          // Reset the variables
          sessionStorage.clear('class');
-         topicsTable.rows().remove();
+         $(topicsTable.rows().nodes()).remove();        
          classesTableWrapper.show('drop', { direction: "left" }, 400);
          $(".leyend").fadeToggle(250)
          $("#header").animate({ opacity: 0 }, 250, () => {
