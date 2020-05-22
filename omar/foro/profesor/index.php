@@ -13,7 +13,7 @@ $lastTopic = $teacher->lastTopic();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = "Inicio";
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
@@ -25,11 +25,20 @@ $lastTopic = $teacher->lastTopic();
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container-lg mt-lg-5  px-0">
-    <div class="jumbotron">
-      <div class="text-right">
-        <i class="far fa-clock d-inline-block text-secondary"></i>
-        <div class="react-clock d-inline-block"></div>
+    <div class="jumbotron pt-4">
+      <!-- clock and messages -->
+      <div class="d-flex justify-content-between mb-3">
+        <div>
+          <a class="btn btn-secondary" href="<?= Route::url('/foro/profesor/inbox.php') ?>">
+            <i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span>
+          </a>
+        </div>
+        <div>
+          <i class="far fa-clock d-inline-block text-secondary"></i>
+          <div class="react-clock d-inline-block"></div>
+        </div>
       </div>
+
       <h2><?= $teacher->genero === 'Femenino' ? 'Bienvenida' : 'Bienvenido' ?> <?= $teacher->fullName(); ?></h2>
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5">

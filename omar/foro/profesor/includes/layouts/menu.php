@@ -2,14 +2,10 @@
 use Classes\Controllers\School;
 use Classes\Route;
 
-
 $file = basename($_SERVER['SCRIPT_FILENAME']);
-
 $pathFile = str_replace('.php', '', $file);
-
-global $teacher;
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-secondary bg-secondary">
+<nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
     <a href="<?= Route::url('/foro/profesor/index.php') ?>"><img src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>"></a>
   </span>
@@ -48,21 +44,16 @@ global $teacher;
           <a class="dropdown-item" href="<?= Route::url('/foro/profesor/topics.php') ?>"><i class="far fa-comment text-primary"></i> Temas</a>
           <a class="dropdown-item" href="<?= Route::url('/foro/profesor/homeworks.php') ?>"><i class="fas fa-book-open text-primary"></i> Tareas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/doneHomeworks.php') ?>" href="#">Tareas Recibidas</a>          
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/doneHomeworks.php') ?>" href="#">Tareas Recibidas</a>
         </div>
       </li>
     </ul>
     <ul class="navbar-nav">
-      <li class="nav-item dropdown text-right">
-        <a class="nav-link dropdown-toggle" href="#" id="dropDownAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <?= isset($teacher) ? $teacher->nombre : 'username?'  ?>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownAccount">
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="far fa-id-card text-primary"></i> Mi Perfil</a>
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/inbox.php') ?>"><i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span></a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> Cerrar Sesión</a>
-        </div>
+      <li class="nav-item">
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="far fa-id-card text-primary"></i> Mi Perfil</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> Cerrar Sesión</a>
       </li>
     </ul>
 
