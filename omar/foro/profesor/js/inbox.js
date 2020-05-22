@@ -1,7 +1,7 @@
 $(document).ready(function () {
-   let _class = '';
-   const $classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
-   const $studentsTableWrapper = $(".studentsTable").parents('.dataTables_wrapper');
+   let _class = ''
+   const $classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper')
+   const $studentsTableWrapper = $(".studentsTable").parents('.dataTables_wrapper')
    const $messages = $("#messages")
    const $message = $("#message")
    const $messageOptions = $(".messageOption")
@@ -14,8 +14,8 @@ $(document).ready(function () {
    const $modalAlert = $("#modalAlert");
    let messages = []
    let message = []
-   getMessages();
-   $studentsTableWrapper.hide(0);
+   getMessages()
+   $studentsTableWrapper.hide(0)
 
    $("#newMessageModal form").submit(function (e) {
       e.preventDefault();
@@ -53,8 +53,8 @@ $(document).ready(function () {
    $(".classesTable tbody").on('click', 'tr', function () {
       const row = classesTable.row(this)
       if (row.index() !== undefined) {
-         const data = row.data();
-         _class = data[0];
+         const data = row.data()
+         _class = data[0]
          $.ajax({
             type: "POST",
             url: getBaseUrl('includes/classes.php'),
@@ -85,7 +85,7 @@ $(document).ready(function () {
 
                }
                else {
-                  alert('No existen estudiantes en esta clase');
+                  alert('No existen estudiantes en esta clase')
                }
             }
          });
@@ -99,9 +99,9 @@ $(document).ready(function () {
    $("#back").click((e) => {
       //   hide students and show classes
       animateCSS($studentsTableWrapper, 'zoomOut faster', () => {
-         $studentsTableWrapper.hide(0);
-         studentsTable.rows().remove();
-         $classesTableWrapper.show(0);
+         $studentsTableWrapper.hide(0)
+         studentsTable.rows().remove()
+         $classesTableWrapper.show(0)
          animateCSS($classesTableWrapper, 'zoomIn faster')
       })
    })
@@ -114,7 +114,7 @@ $(document).ready(function () {
          const plural = checked > 1 ? "estudiantes" : 'estudiante'
          $("#newMessageModal .studentsAmount").text(`Este correo se le enviara a ${checked} ${plural}`)
          animateCSS($studentsTableWrapper, 'zoomOut faster', () => {
-            $studentsTableWrapper.hide(0);
+            $studentsTableWrapper.hide(0)
 
             $newMessageForm.show(0, () => {
                animateCSS($newMessageForm, 'zoomIn faster')
@@ -191,7 +191,6 @@ $(document).ready(function () {
    $($message).on('click', '#respondBtn', function (e) {
       $respondModal.modal('show');
       $respondModal.find('.modal-title').text(`Responder a ${message.nombre}`)
-      // $respondModal.find('.title').val(message.titulo)
       $respondModal.find('#respondSubject').val(`RE: ${message.asunto}`)
    })
 
@@ -220,31 +219,51 @@ $(document).ready(function () {
    $($messages).on('click', 'div.card', function (e) {
       const $thisMessage = $(this)
       const index = messages.findIndex(message => message.id === $thisMessage.data('id'))
-      message = messages[index]
+      message = messages[index]      
       // show the messsage
-      $message.html(`<div class="media p-2 mt-2">
-      <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
-      <div class="media-body">
-         <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
-         <small class="text-muted font-weight-light">${message.fecha}</small>
-      </div>
-      ${message.enviadoPor !== 'p' ?
+      $message.html(`
+      <div class="row">
+         <div class="col-2 d-flex justify-content-center align-items-center">
+            <p class="m-0">Desde:</p>
+         </div>
+         <div class="col-10">
+            <div class="media p-2 mt-2">
+               <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <div class="media-body">
+                  <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
+                  <small class="text-muted font-weight-light">${message.fecha}</small>
+               </div>
+               ${message.enviadoPor !== 'p' ?
             `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
-         <i class="fas fa-reply text-primary"></i>
-      </button>`: ''}
-   </div>
-   <p class="p-2 my-0 font-bree">${message.asunto}</p>
+                     <i class="fas fa-reply text-primary"></i>
+                  </button>`: ''}
+            </div>
+         </div>
+         <div class="col-2 d-flex justify-content-center align-items-center">
+            <p class="m-0">Para:</p>
+         </div>
+         <div class="col-10">
+            ${message.to.length === 1 ? `
+            <div class="media p-2 mt-2">
+               <img src="${message.to[0].foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <div class="media-body">
+                  <p class="m-0"><strong>${message.to[0].nombre}</strong> <small>(${message.to[0].info})</small></p>
+               </div>        
+            </div>
+            `: `Enviado a ${message.to.length} estudiantes <a id="viewStudents" href="#" class="badge badge-primary">Ver</a>`}
+         </div>
+      </div>
+   <p class="p-2 mb-0 mt-3 font-bree">${message.asunto}</p>
    <hr class="my-1">
    ${message.archivos.length > 0 ? `
    <div class="row row-cols-4 row-cols-lg-6"> 
-   ${message.archivos.map(file => {
-               return `<div class="col my-1 overflow-hidden text-truncate">
+   ${message.archivos.map(file =>  `<div class="col my-1 overflow-hidden text-truncate">
                <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
                <small title='${file.nombre}' class='text-muted'>${file.nombre}</small>
                </div>`
-            }).join('')}
+            ).join('')}
    </div>
    <hr class="my-1">` : ''}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
@@ -263,6 +282,41 @@ $(document).ready(function () {
 
    })
 
+   $(document).on('click', "#viewStudents", () => {
+      $("body").append(`
+      <div class="modal fade" id="viewStudentsModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header bg-gradient-primary bg-primary">
+               <h5 class="modal-title">Lista de estudiantes</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               </div>
+               <div class="modal-body">
+               ${message.to.map(to =>`
+                  <div class="media p-2 mt-2">
+                     <img src="${to.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+                     <div class="media-body">
+                        <p class="m-0"><strong>${to.nombre}</strong></p>
+                     </div>        
+                  </div>
+               `).join('')}
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>               
+               </div>
+            </div>
+         </div>
+      </div>
+      `)
+      $("#viewStudentsModal").modal('show')
+   })
+
+   $(document).on('hidden.bs.modal','#viewStudentsModal', function (e) {
+      $("#viewStudentsModal").remove()
+   })
+
    $($messages).on('DOMSubtreeModified', () => {
       animateCSS($messages.children(), 'bounceInDown faster')
    })
@@ -275,10 +329,15 @@ $(document).ready(function () {
 
    // inbox
    function getMessages(type = 'inbound') {
-      $.post(includeThisFile(), { getMessages: type }, res => {
+      $messages.html(`
+      <div class="d-flex justify-content-center align-items-center h-100 font-bree">
+      Cargando...
+      </div>`)
+      $.post(includeThisFile(), { getMessages: type }, async res => {
          if (res.response) {
             $messages.empty()
-            messages = res.data
+            messages = await res.data
+            console.log('messages: ', messages);
             res.data.map(message => {
 
                $messages.append(`<div data-id="${message.id}" class="card w-100 rounded-0 pointer-cursor">

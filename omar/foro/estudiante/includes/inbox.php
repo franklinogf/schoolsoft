@@ -32,20 +32,18 @@ if (isset($_POST['getMessages'])) {
    if ($messages) {
 
       foreach ($messages as $message) {
-         $name = '';
-         if ($message->enviado_por === 'e') {
-            $student = new Student($message->id_e);
-            $name = $student->fullName();
-            $profilePicture = $student->profilePicture();
-            $info = $message->id_e === Session::id() ? 'yo' : 'profesor';
-            $path = __STUDENT_MESSAGES_FILES_DIRECTORY_URL;
-         } else {
-            $teacher = new Teacher($message->id_p);
-            $name = $teacher->fullName();
-            $profilePicture = $teacher->profilePicture();            
-            $info = "profesor";
-            $path = __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
-         }
+         $student = new Student($message->id_e);
+         $teacher = new Teacher($message->id_p);
+         $from = $message->enviado_por === 'e' ? 'student' : 'teacher';
+         $to = $message->enviado_por === 'e' ? 'teacher' : 'student';
+
+         $name = ${$from}->fullName();
+         $profilePicture = ${$from}->profilePicture();
+         $info = $message->enviado_por === 'e' ? 'yo' : 'profesor';
+         $path = $message->enviado_por === 'e' ? __STUDENT_MESSAGES_FILES_DIRECTORY_URL : __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
+         $toName = ${$to}->fullName();
+         $toProfilePicture = ${$to}->profilePicture();
+         $toInfo = $message->enviado_por === 'e' ? 'profesor' : $student->grado;
 
          $filesArray = [];
          $files = DB::table('T_mensajes_archivos')
@@ -53,9 +51,8 @@ if (isset($_POST['getMessages'])) {
          if ($files) {
             foreach ($files as $i => $file) {
                $filesArray[$i]['nombre'] = File::name($file->nombre, true);
-               $filesArray[$i]['url'] = $path.$file->nombre;
-               $filesArray[$i]['icon'] = File::faIcon(File::extension($file->nombre),'lg');
-              
+               $filesArray[$i]['url'] = $path . $file->nombre;
+               $filesArray[$i]['icon'] = File::faIcon(File::extension($file->nombre), 'lg');
             }
          }
 
@@ -69,10 +66,13 @@ if (isset($_POST['getMessages'])) {
             'mensaje' => $message->mensaje,
             'archivos' => $filesArray,
             'nombre' => $name,
+            'info' => $info,
             'foto' => $profilePicture,
+            'toNombre' => $toName,
+            'toInfo' => $toInfo,
+            'toFoto' => $toProfilePicture,
             'leido' => $message->leido_e,
             'enviadoPor' => $message->enviado_por,
-            'info' => $info,
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
             'year' => $message->year

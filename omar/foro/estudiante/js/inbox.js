@@ -158,23 +158,43 @@ $(document).ready(function () {
       const $thisMessage = $(this)
       const index = messages.findIndex(message => message.id === $thisMessage.data('id'))
       message = messages[index]
+      console.log('message: ', message);
       // show the messsage
-      $message.html(`<div class="media p-2 mt-2">
-      <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
-      <div class="media-body">
-         <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
-         <small class="text-muted font-weight-light">${message.fecha}</small>
-      </div>
-      ${message.enviadoPor !== 'e' ?
+      $message.html(`
+      <div class="row">
+         <div class="col-2 d-flex justify-content-center align-items-center">
+            <p class="m-0">Desde:</p>
+         </div>
+         <div class="col-10">
+            <div class="media p-2 mt-2">
+               <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <div class="media-body">
+                  <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
+                  <small class="text-muted font-weight-light">${message.fecha}</small>
+               </div>
+               ${message.enviadoPor !== 'e' ?
             `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
-         <i class="fas fa-reply text-primary"></i>
-      </button>`: ''}
-   </div>
-   <p class="p-2 my-0 font-bree">${message.asunto}</p>
-   <hr class="my-1">
-   ${message.archivos.length > 0 ? `
-   <div class="row row-cols-4 row-cols-lg-6"> 
-   ${message.archivos.map(file => {
+                     <i class="fas fa-reply text-primary"></i>
+                  </button>`: ''}
+            </div>
+         </div>
+         <div class="col-2 d-flex justify-content-center align-items-center">
+            <p class="m-0">Para:</p>
+         </div>
+         <div class="col-10">
+            <div class="media p-2 mt-2">
+               <img src="${message.toFoto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <div class="media-body">
+                  <p class="m-0"><strong>${message.toNombre}</strong> <small>(${message.toInfo})</small></p>
+               </div>        
+            </div>
+         </div>
+      </div>
+      <p class="p-2 my-0 font-bree">${message.asunto}</p>
+      <hr class="my-1">
+      ${message.archivos.length > 0 ? `
+      <div class="row row-cols-4 row-cols-lg-6"> 
+      ${message.archivos.map(file => {
                return `<div class="col my-1 overflow-hidden text-truncate">
                <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
@@ -214,12 +234,15 @@ $(document).ready(function () {
 
    // inbox
    function getMessages(type = 'inbound') {
-      $.post(includeThisFile(), { getMessages: type }, res => {
+      $messages.html(`
+      <div class="d-flex justify-content-center align-items-center h-100 font-bree">
+      Cargando...
+      </div>`)
+      $.post(includeThisFile(), { getMessages: type }, async res => {
          if (res.response) {
             $messages.empty()
-            messages = res.data
+            messages = await res.data
             res.data.map(message => {
-
                $messages.append(`<div data-id="${message.id}" class="card w-100 rounded-0 pointer-cursor">
                <div class="card-body p-2">
                   <p class="card-text mb-0 font-weight-bold">${message.nombre}</p>

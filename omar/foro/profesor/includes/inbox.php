@@ -30,31 +30,48 @@ if (isset($_POST['getMessages'])) {
    }
 
    if ($messages) {
-
       foreach ($messages as $message) {
-         $name = '';
-         if ($message->enviado_por === 'e') {
-            $student = new Student($message->id_e);
-            $name = $student->fullName();
-            $profilePicture = $student->profilePicture();
-            $info = $student->grado;
-            $path = __STUDENT_MESSAGES_FILES_DIRECTORY_URL;
+         $students = DB::table('foro_mensajes')->select('DISTINCT id_e as mt')->where([
+            ['code',$message->code],
+            ['enviado_por', 'p'],
+            ['id_p', Session::id()],
+            ['year', $school->info('year')]
+         ])->get();
+         $to = [];
+         $student = new Student($message->id_e);
+         $teacher = new Teacher($message->id_p);
+         $from = $message->enviado_por === 'p' ? 'teacher' : 'student';
+         
+         $name = ${$from}->fullName();
+         $profilePicture = ${$from}->profilePicture();
+         $info = $message->enviado_por === 'p' ? 'yo' : $student->grado;
+         $path = $message->enviado_por === 'p' ? __STUDENT_MESSAGES_FILES_DIRECTORY_URL : __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
+
+         if ($message->enviado_por === 'p') {
+            foreach ($students as $student) {
+               $student = new Student($student->mt);
+               $to[] = [
+                  "nombre" => $student->fullName(),
+                  "foto" => $student->profilePicture(),
+                  "info" => $student->grado
+               ];
+            }
          } else {
-            $teacher = new Teacher($message->id_p);
-            $name = $teacher->fullName();
-            $profilePicture = $teacher->profilePicture();          
-            $info = $message->id_p === Session::id() ? 'yo' : 'profesor';
-            $path = __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
+            $to[] = [
+               "nombre" => $teacher->fullName(),
+               "foto" => $teacher->profilePicture(),
+               "info" => "yo"
+            ];           
          }
+
          $filesArray = [];
          $files = DB::table('T_mensajes_archivos')
             ->where('mensaje_code', $message->code)->get();
          if ($files) {
             foreach ($files as $i => $file) {
                $filesArray[$i]['nombre'] = File::name($file->nombre, true);
-               $filesArray[$i]['url'] = $path.$file->nombre;
-               $filesArray[$i]['icon'] = File::faIcon(File::extension($file->nombre),'lg');
-              
+               $filesArray[$i]['url'] = $path . $file->nombre;
+               $filesArray[$i]['icon'] = File::faIcon(File::extension($file->nombre), 'lg');
             }
          }
 
@@ -69,9 +86,10 @@ if (isset($_POST['getMessages'])) {
             'archivos' => $filesArray,
             'nombre' => $name,
             'foto' => $profilePicture,
-            'leido' => $message->leido_e,
-            'enviadoPor' => $message->enviado_por,
             'info' => $info,
+            'leido' => $message->leido_p,
+            'enviadoPor' => $message->enviado_por,
+            'to' => Util::toObject($to),
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
             'year' => $message->year

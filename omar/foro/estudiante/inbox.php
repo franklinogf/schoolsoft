@@ -13,11 +13,11 @@ $student = new Student(Session::id());
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
-  <?php
-  $title = "Mensajes";
-  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
-  ?>
+<head>
+   <?php
+   $title = "Mensajes";
+   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+   ?>
 </head>
 
 <body>
@@ -103,8 +103,8 @@ $student = new Student(Session::id());
                </button>
             </div>
             <div class="modal-body custom-scroll">
-               <?php               
-               Route::includeFile('/foro/estudiante/includes/tables/tableClasses.php');               
+               <?php
+               Route::includeFile('/foro/estudiante/includes/tables/tableClasses.php');
                ?>
             </div>
             <form enctype="multipart/form-data">
@@ -143,11 +143,10 @@ $student = new Student(Session::id());
          </div>
       </div>
    </div>
-   
+
    <?php
    Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');
    ?>
-
 
 </body>
 
