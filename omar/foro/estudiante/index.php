@@ -30,7 +30,7 @@ $lastTopic = $student->lastTopic();
       <!-- clock and messages -->
       <div class="d-flex justify-content-between mb-3">
         <div>
-          <a class="btn btn-secondary" href="<?= Route::url('/foro/profesor/inbox.php') ?>">
+          <a class="btn btn-secondary" href="<?= Route::url('/foro/estudiante/inbox.php') ?>">
             <i class="far fa-envelope text-primary"></i> Mensajes <span class="badge badge-pill badge-info unreadMessages"><?= $student->unreadMessages() ?></span>
           </a>
         </div>
