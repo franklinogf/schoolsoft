@@ -41,6 +41,8 @@ $(document).ready(function () {
          cache: false,
          processData: false,
          success: function (res) {
+            const option = $(this).data('option')
+            getMessages(option);
             $newMessageModal.modal('hide')
          }
       });
@@ -100,7 +102,8 @@ $(document).ready(function () {
       //   hide students and show classes
       animateCSS($studentsTableWrapper, 'zoomOut faster', () => {
          $studentsTableWrapper.hide(0)
-         studentsTable.rows().remove()
+         studentsTable.rows().remove();
+         $(studentsTable.rows().nodes()).remove();
          $classesTableWrapper.show(0)
          animateCSS($classesTableWrapper, 'zoomIn faster')
       })
@@ -219,7 +222,7 @@ $(document).ready(function () {
    $($messages).on('click', 'div.card', function (e) {
       const $thisMessage = $(this)
       const index = messages.findIndex(message => message.id === $thisMessage.data('id'))
-      message = messages[index]      
+      message = messages[index]
       // show the messsage
       $message.html(`
       <div class="row">
@@ -257,7 +260,7 @@ $(document).ready(function () {
    <hr class="my-1">
    ${message.archivos.length > 0 ? `
    <div class="row row-cols-4 row-cols-lg-6"> 
-   ${message.archivos.map(file =>  `<div class="col my-1 overflow-hidden text-truncate">
+   ${message.archivos.map(file => `<div class="col my-1 overflow-hidden text-truncate">
                <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
@@ -294,7 +297,7 @@ $(document).ready(function () {
                </button>
                </div>
                <div class="modal-body">
-               ${message.to.map(to =>`
+               ${message.to.map(to => `
                   <div class="media p-2 mt-2">
                      <img src="${to.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                      <div class="media-body">
@@ -313,7 +316,7 @@ $(document).ready(function () {
       $("#viewStudentsModal").modal('show')
    })
 
-   $(document).on('hidden.bs.modal','#viewStudentsModal', function (e) {
+   $(document).on('hidden.bs.modal', '#viewStudentsModal', function (e) {
       $("#viewStudentsModal").remove()
    })
 
