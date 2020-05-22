@@ -160,12 +160,15 @@ $(document).ready(function () {
 
 
    })
+
    $newMessageModal.on('hidden.bs.modal', function (e) {
 
       $newMessageForm.hide(0)
       $studentsTableWrapper.hide(0)
       $classesTableWrapper.show(0)
       $("input.file").parents('.input-group').remove()
+      studentsTable.rows().remove();
+      $(studentsTable.rows().nodes()).remove();
 
    })
 
