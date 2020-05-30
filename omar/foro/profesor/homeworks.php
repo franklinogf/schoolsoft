@@ -70,7 +70,7 @@ $classes = $teacher->classes();
             </div>
 
             <div class="form-group mt-2">
-               <label class="d-block">Tarea disponible?</label>
+               <label class="d-block">Recibir archivos del estudiante?</label>
                <div class="custom-control custom-radio custom-control-inline">
                   <input class="custom-control-input" type="radio" name="state" id="radio1" value="si" required>
                   <label class="custom-control-label" for="radio1">Si</label>
@@ -79,6 +79,8 @@ $classes = $teacher->classes();
                   <input class="custom-control-input" type="radio" name="state" id="radio2" value="no">
                   <label class="custom-control-label" for="radio2">No</label>
                </div>
+               <small class="form-text text-info">Si: se puede recibir archivos del estudiante</small>
+               <small class="form-text text-info">No: (informativo) no se va a recibir archivos del estudiante</small>
             </div>
 
             <label>Links</label>

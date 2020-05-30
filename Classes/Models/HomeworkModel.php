@@ -91,6 +91,7 @@ class HomeworkModel extends School
          ->where([
             ["{$this->table}.curso", $class],
             ["{$this->table}.fec_out", '>=', $date],
+            ["{$this->table}.enviartarea",'si'],
             ["cursos.year", $this->info('year')]
          ])
          ->orderBy("{$this->table}.fec_out", 'DESC')->get();
