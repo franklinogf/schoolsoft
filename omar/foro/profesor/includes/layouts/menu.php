@@ -8,7 +8,9 @@ $pathFile = str_replace('.php', '', $file);
 ?>
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
-    <a href="<?= Route::url('/foro/profesor/index.php') ?>"><img class="img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>"></a>
+    <a href="<?= Route::url('/foro/profesor/index.php') ?>">
+      <img class="img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE ?>">
+    </a>
   </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

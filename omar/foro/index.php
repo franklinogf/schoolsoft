@@ -26,7 +26,7 @@ if (Session::is_logged(false)) {
 </head>
 
 <body class="text-center">
-   <img class="mb-4 img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGIN_LOGO_SIZE_W ?>" height="<?= __LOGIN_LOGO_SIZE_H ?>">
+   <img class="mb-4 img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGIN_LOGO_SIZE ?>">
    <form class="form-signin" method='POST' action="<?= Route::url('/foro/includes/login.php') ?>">
       <h1 class="h3 mb-3 font-weight-normal ">Iniciar Sesión</h1>
       <?php if (Session::get('errorLogin')) : ?>

@@ -54,11 +54,9 @@ define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARAT
 define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
 // regular is 72 x 72
-define('__LOGO_SIZE_W', 200);
-define('__LOGO_SIZE_H', 72);
+define('__LOGO_SIZE', 200);
 
-define('__LOGIN_LOGO_SIZE_W', 400);
-define('__LOGIN_LOGO_SIZE_H', 144);
+define('__LOGIN_LOGO_SIZE', 400);
 /* ----------------------------------- PDF ---------------------------------- */
 
 // RGB $pdf->SetFillColor(red,green,blue)
