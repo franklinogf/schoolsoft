@@ -57,6 +57,8 @@ define('__DEFAULT_LOGO', 'logo.gif');
 define('__LOGO_SIZE_W', 200);
 define('__LOGO_SIZE_H', 72);
 
+define('__LOGIN_LOGO_SIZE_W', 400);
+define('__LOGIN_LOGO_SIZE_H', 144);
 /* ----------------------------------- PDF ---------------------------------- */
 
 // RGB $pdf->SetFillColor(red,green,blue)
