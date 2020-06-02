@@ -10,6 +10,18 @@ textarea {
   resize: vertical !important; /* user can resize vertically, but width is fixed */
   min-height: 100px !important;
 }
+/* Menu links colors */
+#navbarNavDropdown > ul.navbar-nav > li > a{
+color:#ffffff !important;
+}
+#navbarNavDropdown > ul.navbar-nav > li > a:hover{
+  color:#ffffffcc !important;
+}
+#navbarNavDropdown > ul.navbar-nav > li.active > a{
+  color:var(--primary) !important;
+}
+
+
 
 th.checkbox {
   width: 2rem !important;
