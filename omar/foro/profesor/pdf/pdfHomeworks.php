@@ -29,7 +29,7 @@ $pdf->SetTitle("Tareas de $class->desc1");
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(0, 5, "$class->curso $class->desc1", 0, 1, 'C');
+$pdf->Cell(0, 5, "$class->curso - $class->desc1", 0, 1, 'C');
 $pdf->Ln(3);
 
 // table header
