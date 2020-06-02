@@ -1,4 +1,5 @@
 <?php
+
 use Classes\Controllers\School;
 use Classes\Route;
 
@@ -13,7 +14,7 @@ $pathFile = str_replace('.php', '', $file);
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse " id="navbarNavDropdown">
-    <ul class="navbar-nav  mr-auto ">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item  <?= ($pathFile === 'index' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/profesor/index.php') ?>"><i class="fas fa-house-user text-primary"></i> Inicio</a>
       </li>
