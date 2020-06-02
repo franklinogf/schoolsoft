@@ -56,7 +56,7 @@ if (Session::is_logged(false)) {
    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <?php
 
- Route::js('/js/app.js');
+ Route::js('/js/app.js',true);
  Route::js('/foro/js/login.js');
 ?>
 </body>
