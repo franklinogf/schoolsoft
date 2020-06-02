@@ -17,22 +17,22 @@ class PDF extends FPDF
 		if ($this->header) {
 			$school = new School();
 			// dafault values
-			$this->SetAuthor($school->info('colegio'), true);
+			$this->SetAuthor(utf8_decode($school->info('colegio')), true);
 			$this->setCreator('School Soft');
 			$this->SetAutoPageBreak(true, -15);
 			if (file_exists(__ROOT . School::logo())) {
 				$this->Image(__ROOT . School::logo(), 10, 10, __PDF_LOGO_SIZE);
 			}
 			$this->SetFont('Arial', 'B', 15);
-			$this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
+			$this->Cell(0, 5, utf8_decode($school->info('colegio')), 0, 1, 'C');
 			$this->SetFontSize(9);
 			if ($school->info('dir1') !== '') {
-				$this->Cell(0, 4, $school->info('dir1'), 0, 1, 'C');
+				$this->Cell(0, 4, utf8_decode($school->info('dir1')), 0, 1, 'C');
 			}
 			if ($school->info('dir2') !== '') {
-				$this->Cell(0, 4, $school->info('dir2'), 0, 1, 'C');
+				$this->Cell(0, 4, utf8_decode($school->info('dir2')), 0, 1, 'C');
 			}
-			$this->Cell(0, 4, $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
+			$this->Cell(0, 4, utf8_decode($school->info('pueblo1')) . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
 			$this->SetFontSize(8);
 			$this->Cell(0, 4, 'Tel: ' . $school->info('telefono') . ' Fax: ' . $school->info('fax'), 0, 1, 'C');
 			$this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
