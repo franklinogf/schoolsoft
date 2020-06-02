@@ -84,6 +84,10 @@ if (isset($_POST['getMessages'])) {
          'response' => true,
          'data' => $data
       ];
+   } else {
+      $array = [
+         'response' => false
+      ];
    }
 
 

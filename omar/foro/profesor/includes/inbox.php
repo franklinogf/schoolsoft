@@ -32,7 +32,7 @@ if (isset($_POST['getMessages'])) {
    if ($messages) {
       foreach ($messages as $message) {
          $students = DB::table('foro_mensajes')->select('DISTINCT id_e as mt')->where([
-            ['code',$message->code],
+            ['code', $message->code],
             ['enviado_por', 'p'],
             ['id_p', Session::id()],
             ['year', $school->info('year')]
@@ -41,7 +41,7 @@ if (isset($_POST['getMessages'])) {
          $student = new Student($message->id_e);
          $teacher = new Teacher($message->id_p);
          $from = $message->enviado_por === 'p' ? 'teacher' : 'student';
-         
+
          $name = ${$from}->fullName();
          $profilePicture = ${$from}->profilePicture();
          $info = $message->enviado_por === 'p' ? 'yo' : $student->grado;
@@ -61,7 +61,7 @@ if (isset($_POST['getMessages'])) {
                "nombre" => $teacher->fullName(),
                "foto" => $teacher->profilePicture(),
                "info" => "yo"
-            ];           
+            ];
          }
 
          $filesArray = [];
@@ -100,6 +100,10 @@ if (isset($_POST['getMessages'])) {
       $array = [
          'response' => true,
          'data' => $data
+      ];
+   } else {
+      $array = [
+         'response' => false
       ];
    }
 
