@@ -59,12 +59,12 @@ $classes = $teacher->classes();
                </div>
                <div class="col-12 col-lg-4 mt-2">
                   <label for="sinceDate">Fecha Inicial</label>
-                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" value="<?= Util::date('Y-m-d') ?>" required>
+                  <input class="form-control" type="date" name="sinceDate" id="sinceDate" min="<?= Util::date() ?>" value="<?= Util::date() ?>" required>
                   <small class="form-text text-info">La tarea estará disponible en esta fecha</small>
                </div>
                <div class="col-12 col-lg-4 mt-2">
                   <label for="untilDate">Fecha Final</label>
-                  <input class="form-control" type="date" name="untilDate" id="untilDate">
+                  <input class="form-control" type="date" name="untilDate" id="untilDate" min="<?= Util::date() ?>">
                   <small class="form-text text-info">La tarea dejara de estar disponible despues de esta fecha</small>
                </div>
             </div>
