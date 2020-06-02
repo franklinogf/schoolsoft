@@ -1,4 +1,5 @@
 <?php
+
 use Classes\Controllers\School;
 use Classes\Route;
 
@@ -7,7 +8,9 @@ $pathFile = str_replace('.php', '', $file);
 ?>
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
-    <a href="<?= Route::url('/foro/estudiante/index.php') ?>"><img src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE_W ?>" height="<?= __LOGO_SIZE_H ?>"></a>
+    <a href="<?= Route::url('/foro/estudiante/index.php') ?>">
+      <img src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE ?>">
+    </a>
   </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -19,7 +22,7 @@ $pathFile = str_replace('.php', '', $file);
       </li>
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/estudiante/classes.php') ?>">Mis Cursos</a>
-      </li>         
+      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Tareas
@@ -28,10 +31,10 @@ $pathFile = str_replace('.php', '', $file);
           <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/homeworks.php') ?>">Mis tareas</a>
           <a class="dropdown-item" href="<?= Route::url('/foro/estudiante/exams.php') ?>">Examenes</a>
         </div>
-      </li> 
+      </li>
       <li class="nav-item <?= ($pathFile === 'topics' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/estudiante/topics.php') ?>">Foro</a>
-      </li>       
+      </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
