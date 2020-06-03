@@ -23,6 +23,8 @@ class DB extends DataBase
   private static $orWhereCols = [];
   private static $orWhereValues = [];
   private static $orWhereOperators = [];
+  private static $whereRaw = "";
+  private static $whereRawValues = [];
   private static $innerJoinTable = [];
   private static $innerJoinCol1 = [];
   private static $innerJoinCol2 = [];
@@ -183,6 +185,14 @@ class DB extends DataBase
     return self::$instance;
   }
 
+  /* -------------------------------- Where Raw ------------------------------- */
+  public function whereRaw($query, $values)
+  {
+    self::$whereRaw = $query;
+    self::$whereRawValues = $values;
+    return self::$instance;
+  }
+
   /* ------------------------------- Inner join ------------------------------- */
 
   public function join($tableToJoin, $table1Col, $operator, $table2Col)
@@ -202,13 +212,13 @@ class DB extends DataBase
     self::$orderBy = ' ORDER BY ' . trim($col) . ' ' . trim($mode);
     return self::$instance;
   }
-  
+
   /* ----------------------------- group by filter ---------------------------- */
 
   public function groupBy($col)
   {
 
-    self::$groupBy = ' GROUP BY ' . trim($col) ;
+    self::$groupBy = ' GROUP BY ' . trim($col);
     return self::$instance;
   }
 
@@ -247,8 +257,13 @@ class DB extends DataBase
         $where .= ' OR ' . $col . ' ' . self::$orWhereOperators[$i] . ' ?';
       }
     }
+    
+    if (count(self::$whereRawValues) > 0) {
+      $where .= $where === '' ? ' WHERE ' : ' ';
+      $where .= self::$whereRaw;
+    }
 
-    self::$where = array_merge(self::$whereValues, self::$orWhereValues);
+    self::$where = array_merge(self::$whereValues, self::$orWhereValues, self::$whereRawValues);
 
     return $where;
   }
@@ -269,7 +284,7 @@ class DB extends DataBase
       }
     }
 
-    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$groupBy. self::$orderBy . ' ' . $other;
+    self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$groupBy . self::$orderBy . ' ' . $other;
   }
 
   /* ---------------- restore the DB class to the initial state --------------- */
@@ -289,6 +304,8 @@ class DB extends DataBase
     self::$orWhereCols = [];
     self::$orWhereValues = [];
     self::$orWhereOperators = [];
+    self::$whereRaw = "";
+    self::$whereRawValues = [];
     self::$innerJoinTable = [];
     self::$innerJoinCol1 = [];
     self::$innerJoinCol2 = [];
@@ -299,16 +316,13 @@ class DB extends DataBase
   public function dump()
   {
     $this->buildSelectQuery();
-    $result = $this->selectFromDB(self::$query, self::$where);   
-    if($result->num_rows == 1){
+    $result = $this->selectFromDB(self::$query, self::$where);
+    if ($result->num_rows == 1) {
       $obj = $result->fetch_assoc();
-      Util::dump($obj);     
-
-    }else if ($result->num_rows > 1) {
+      Util::dump($obj);
+    } else if ($result->num_rows > 1) {
       $obj = $result->fetch_all(MYSQLI_ASSOC);
-      Util::dump($obj);    
-     
+      Util::dump($obj);
     }
-   
   }
 }

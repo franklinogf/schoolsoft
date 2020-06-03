@@ -59,14 +59,14 @@ class StudentModel extends School
   }
   protected function getStudentHomeworks($ss, $date = null)
   {
-    $classes = $this->getStudentClasses($ss);  
+    $classes = $this->getStudentClasses($ss);
     $obj = [];
     foreach ($classes as $class) {
       $hw = new Homework();
-      if ($homework = $hw->findByClassForStudents($class->curso, $date))        
+      if ($homework = $hw->findByClassForStudents($class->curso, $date))
         $obj[] = $homework;
-      }
-      return call_user_func_array('array_merge', $obj);
+    }
+    return call_user_func_array('array_merge', $obj);
   }
 
   protected function getStudentDoneHomeworkById($mt, $id_hw)
