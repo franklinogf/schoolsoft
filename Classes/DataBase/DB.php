@@ -186,7 +186,7 @@ class DB extends DataBase
   }
 
   /* -------------------------------- Where Raw ------------------------------- */
-  public function whereRaw($query, $values)
+  public function whereRaw($query, $values = [])
   {
     self::$whereRaw = $query;
     self::$whereRawValues = $values;
@@ -258,7 +258,7 @@ class DB extends DataBase
       }
     }
     
-    if (count(self::$whereRawValues) > 0) {
+    if (self::$whereRaw !== "") {
       $where .= $where === '' ? ' WHERE ' : ' ';
       $where .= self::$whereRaw;
     }
@@ -283,7 +283,7 @@ class DB extends DataBase
         $join .= ' INNER JOIN ' . $table . ' ON ' . self::$innerJoinCol1[$i] . ' ' . self::$innerJoinOperator[$i] . ' ' . self::$innerJoinCol2[$i];
       }
     }
-
+    
     self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$groupBy . self::$orderBy . ' ' . $other;
   }
 
