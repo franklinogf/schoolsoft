@@ -160,8 +160,9 @@ class DataBase
   {
   
     $db = $this->connect();
-    if(!$stmt = $db->prepare($query)){      
-      throw new Exception("Error con el query $query");      
+    if(!$stmt = $db->prepare($query)){    
+        var_dump($whereArray);
+      throw new Exception("Error con el query $query ($db->error)");      
     }
 
     if (count($whereArray) > 0) {
