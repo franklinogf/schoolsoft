@@ -119,7 +119,7 @@ $classes = $teacher->classes();
             <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
                <div class="card border-<?= $expired ?>">
-                  <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= $homework->curso ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
+                  <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= "$homework->curso - $homework->desc" ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
                   <div class="card-body ">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
                      <p class="card-text"><?= $homework->descripcion ?></p>
