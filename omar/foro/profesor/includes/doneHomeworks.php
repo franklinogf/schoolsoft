@@ -14,7 +14,7 @@ Server::is_post();
 if (isset($_POST['homeworksByClass'])) {
    $class = $_POST['homeworksByClass'];
    $teacher = new Teacher(Session::id());
-   if ($data = $teacher->homeworks($class)) {
+   if ($data = $teacher->homeworks($class,false)) {
       $array = [
          'response' => true,
          'data' => $data         

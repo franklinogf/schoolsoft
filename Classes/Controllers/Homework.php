@@ -31,10 +31,10 @@ class Homework extends HomeworkModel
       return $this->getAllHomeworks();
    }
 
-   public function findByClassForTeacher($class)
-   {
-      return $this->getHomeworksByClassForTeachers($class);
-   }
+   // public function findByClassForTeacher($class)
+   // {
+   //    return $this->getHomeworksByClassForTeachers($class);
+   // }
    
    public function doneHomeworks()   
    {
@@ -49,13 +49,10 @@ class Homework extends HomeworkModel
       return $this->getHomeworksByClassForStudents($class,$date);
    }
 
-   public function findByTeacher($id,$class = false)
-   {
-     if(!$class){
-      return $this->getHomeworksByTeacherId($id);
-     }else{
-      return $this->getHomeworksByTeacherIdAndClass($id,$class);
-     }
+   public function findByTeacher($id,$class = false,$all=true)
+   {    
+      return $this->getHomeworksForTeachers($id,$class,$all);
+     
    }
 
    

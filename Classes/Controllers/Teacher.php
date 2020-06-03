@@ -14,7 +14,6 @@ class Teacher extends TeacherModel
     parent::__construct();
     if ($value !== '') {
       $this->findPK($value);
-      
     }
   }
 
@@ -47,7 +46,7 @@ class Teacher extends TeacherModel
     }
     return $this->getHomeStudents($this->grado);
   }
-  
+
   public function unreadMessages()
   {
     if (!isset($this->id)) {
@@ -65,9 +64,9 @@ class Teacher extends TeacherModel
     if ($this->foto_name != '') {
       $picturePath = __TEACHER_PROFILE_PICTURE_URL . $this->foto_name;
     } else {
-      if($this->genero === 'Femenino'){
+      if ($this->genero === 'Femenino') {
         $picturePath = __NO_PROFILE_PICTURE_TEACHER_FEMALE;
-      }else{
+      } else {
         $picturePath = __NO_PROFILE_PICTURE_TEACHER_MALE;
       }
     }
@@ -98,16 +97,12 @@ class Teacher extends TeacherModel
     }
     return $this->getTeachersTopics($this->id);
   }
-  public function homeworks($class = false)
+  public function homeworks($class = false, $all = true)
   {
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    if ($class) {
-      return $this->getTeachersHomeworksByClass($this->id, $class);
-    } else {
-      return $this->getTeachersHomeworks($this->id);
-    }
+    return $this->getTeachersHomeworks($this->id, $class, $all);
   }
 
 

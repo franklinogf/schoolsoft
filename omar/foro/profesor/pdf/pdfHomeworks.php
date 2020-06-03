@@ -1,6 +1,7 @@
 <?php
 require_once '../../../app.php';
 
+use Classes\Controllers\Homework;
 use Classes\Controllers\Student;
 use Classes\PDF;
 use Classes\Session;
@@ -11,17 +12,18 @@ use Classes\Util;
 Session::is_logged();
 
 $teacher = new Teacher(Session::id());
-
+// $hw = new Homework();
 $class = $_GET['class'];
+// $homeworks = $hw->findByTeacher(Session::id(),$class);
 // Homework info
-$homeworks = $teacher->homeworks($class);
+$homeworks = $teacher->homeworks($class,false);
 // Class info
 $class = DB::table('cursos')
    ->where([
       ['year', $teacher->info('year')],
       ['curso', $class]
    ])->first();
-// students info
+
 
 $pdf = new PDF();
 $pdf->AddPage();

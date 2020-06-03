@@ -52,19 +52,19 @@ class TeacherModel extends School
         ['fecha_baja', '0000-00-00']
       ])
       ->orderBy('apellidos')->get();
-      
+
     return $obj;
   }
   protected function getUnreadMessages($id)
   {
     $year = $this->info('year');
     $obj = parent::table('foro_mensajes')->where([
-      ['enviado_por','<>', 'p'],
-      ['id_p', $id ],
-      ['leido_p','<>', 'si' ],
+      ['enviado_por', '<>', 'p'],
+      ['id_p', $id],
+      ['leido_p', '<>', 'si'],
       ['year', $year]
-   ])->get();
-    
+    ])->get();
+
     return count($obj);
   }
 
@@ -114,16 +114,11 @@ class TeacherModel extends School
     return $obj;
   }
 
-  protected function getTeachersHomeworks($id)
+
+  protected function getTeachersHomeworks($id, $class = false, $all = true)
   {
-    $hw = new Homework();   
-    $obj = $hw->findByTeacher($id);
-    return $obj;
-  }
-  protected function getTeachersHomeworksByClass($id, $class)
-  {
-    $hw = new Homework();   
-    $obj = $hw->findByTeacher($id,$class);
+    $hw = new Homework();
+    $obj = $hw->findByTeacher($id, $class, $all);
     return $obj;
   }
 

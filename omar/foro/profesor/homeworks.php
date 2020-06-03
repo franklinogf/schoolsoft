@@ -16,11 +16,11 @@ $classes = $teacher->classes();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
-  <?php
-  $title = "Tareas";
-  Route::includeFile('/foro/profesor/includes/layouts/header.php');
-  ?>
+<head>
+   <?php
+   $title = "Tareas";
+   Route::includeFile('/foro/profesor/includes/layouts/header.php');
+   ?>
 </head>
 
 <body class='pb-5'>
