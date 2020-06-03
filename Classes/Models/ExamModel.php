@@ -43,7 +43,7 @@ class ExamModel extends School
          ['id_profesor', $hw->id2],
          ['year', $this->info('year')]
       ])->get();
-      $this->getExamTopics($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
+      $this->getExamTopics($doneHw, 'id', 'T_tareas_archivos', 'id_tarea');
 
       return $doneHw;
    }
