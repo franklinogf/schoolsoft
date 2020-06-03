@@ -154,12 +154,15 @@ class DataBase
     $result = $this->selectFromDB($query, $whereArray);
     $obj = $result->fetch_all(MYSQLI_ASSOC);
     return Util::toObject($obj);
-  }
+  }  
   // global select
   protected function selectFromDB($query, $whereArray)
   {
+  
     $db = $this->connect();
-    $stmt = $db->prepare($query);
+    if(!$stmt = $db->prepare($query)){      
+      throw new Exception("Error con el query $query");      
+    }
 
     if (count($whereArray) > 0) {
 
