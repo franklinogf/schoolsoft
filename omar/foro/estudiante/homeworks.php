@@ -64,7 +64,10 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
                   <div class="card <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$homework->curso} - {$homework->desc}" ?>
-                        <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
+                        <?php if($homework->enviartarea === 'si'): ?>
+                        <i class="fas fa-circle text-<?= $sent ?>"></i>
+                        <?php endif ?>
+                        </h6>
                      <div class="card-body ">
                         <h5 class="card-title"><?= $homework->titulo ?></h5>
                         <p class="card-text"><?= $homework->descripcion ?></p>
@@ -94,7 +97,9 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
                         <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
                         <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                      </div>
-                     <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
+                     <?php if($homework->enviartarea === 'si'): ?>
+                        <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
+                     <?php endif ?>
                   </div>
 
                </div>
