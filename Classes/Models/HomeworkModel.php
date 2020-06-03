@@ -88,11 +88,10 @@ class HomeworkModel extends School
       $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
          ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
          ->where([
-            ["{$this->table}.curso", $class],
-            ["{$this->table}.fec_out", '>=', $date],
+            ["{$this->table}.curso", $class],            
             ["{$this->table}.enviartarea", 'si'],
             ["cursos.year", $this->info('year')]
-         ])
+         ])->whereRaw("AND ({$this->table}.fec_out >= ? OR {$this->table}.fec_out = ?)", [$date,"0000-00-00"])
          ->orderBy("{$this->table}.fec_out", 'DESC')->get();
       $this->getFiles($obj);
       return $obj;
