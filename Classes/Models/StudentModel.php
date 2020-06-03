@@ -57,15 +57,16 @@ class StudentModel extends School
       ])->orderBy('curso')->get();
     return $obj;
   }
-  protected function getStudentHomeworks($ss,$date = null)
+  protected function getStudentHomeworks($ss, $date = null)
   {
-    $classes = $this->getStudentClasses($ss);
-
+    $classes = $this->getStudentClasses($ss);  
+    $obj = [];
     foreach ($classes as $class) {
       $hw = new Homework();
-      $obj = $hw->findByClassForStudents($class->curso,$date);
-      return $obj;
-    }
+      if ($homework = $hw->findByClassForStudents($class->curso, $date))        
+        $obj[] = $homework;
+      }
+      return call_user_func_array('array_merge', $obj);
   }
 
   protected function getStudentDoneHomeworkById($mt, $id_hw)
@@ -78,13 +79,13 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getStudentExams($ss,$date = null)
+  protected function getStudentExams($ss, $date = null)
   {
     $classes = $this->getStudentClasses($ss);
 
     foreach ($classes as $class) {
       $exam = new Exam();
-      $obj = $exam->findByClassForStudents($class->curso,$date);
+      $obj = $exam->findByClassForStudents($class->curso, $date);
       return $obj;
     }
   }

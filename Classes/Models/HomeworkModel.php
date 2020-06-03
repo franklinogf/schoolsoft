@@ -38,14 +38,13 @@ class HomeworkModel extends School
    {
       $hw = $this->getHomeworkByPK($id);
       $doneHw = parent::table('tareas_enviadas')->where([
-         ['id_tarea',$id],
-         ['id_profesor',$hw->id2],
-         ['year',$this->info('year')]
+         ['id_tarea', $id],
+         ['id_profesor', $hw->id2],
+         ['year', $this->info('year')]
       ])->get();
-      $this->getFiles($doneHw,'id','t_tareas_archivos','id_tarea');
+      $this->getFiles($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
 
       return $doneHw;
-
    }
 
    protected function getHomeworksByTeacherId($id)
@@ -91,16 +90,15 @@ class HomeworkModel extends School
          ->where([
             ["{$this->table}.curso", $class],
             ["{$this->table}.fec_out", '>=', $date],
-            ["{$this->table}.enviartarea",'si'],
+            ["{$this->table}.enviartarea", 'si'],
             ["cursos.year", $this->info('year')]
          ])
          ->orderBy("{$this->table}.fec_out", 'DESC')->get();
       $this->getFiles($obj);
-
       return $obj;
    }
 
-   protected function getFiles($obj,$whereVal = null,$table = 'T_archivos',$whereCol = null)
+   protected function getFiles($obj, $whereVal = null, $table = 'T_archivos', $whereCol = null)
    {
       $whereVal = !$whereVal ? $this->primary_key : $whereVal;
       $whereCol = !$whereCol ? $whereVal : $whereCol;
