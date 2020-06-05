@@ -36,7 +36,7 @@ $(document).ready(function () {
 				$("#description").val(res.descripcion);
         $("#class").val(res.curso);
 				$("#sinceDate").prop('readonly',true).val(res.fec_in === "0000-00-00" ? "" : res.fec_in);
-				$("#untilDate").val(res.fec_out === "0000-00-00" ? "" : res.fec_out);
+				$("#untilDate").prop('readonly',true).val(res.fec_out === "0000-00-00" ? "" : res.fec_out);
 				$("#radio1").prop("checked", res.enviartarea === "si" ? true : false);
 				$("#radio2").prop("checked", res.enviartarea === "si" ? false : true);
 				$("#link1").val(res.lin1);
