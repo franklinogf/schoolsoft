@@ -12,7 +12,6 @@ $(document).ready(function () {
       fd.append('file[]', input.files)
 
     })
-
     // send messages
     if (!doneHomeworkId) {     
       fd.append('doneHomework', homeworkId)
@@ -29,6 +28,7 @@ $(document).ready(function () {
             .addClass('text-success')
           animateCSS($status, 'fadeIn slow')
           $modal.modal('hide')
+          $(`.sendHomework[data-homework-id=${homeworkId}]`).prop({disabled:true,ariaDisabled:true})
         }
       });
     } else {
