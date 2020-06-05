@@ -98,7 +98,7 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
                         <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                      </div>
                      <?php if($homework->enviartarea === 'si'): ?>
-                        <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
+                        <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' && $sent !== "white" ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
                      <?php endif ?>
                   </div>
 
