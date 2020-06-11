@@ -30,7 +30,7 @@ class Login
             "user" => ['id' => $teacher->id],
             'type' => 'profesor'
          ];
-         Route::redirect('/home.php');
+         Route::redirect('/');
       } else {
          $_SESSION['errorLogin'] = self::$errorLoginMessage;
 
