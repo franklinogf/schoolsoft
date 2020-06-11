@@ -29,9 +29,11 @@ class Util
       $date = \date('Y-m-d');
       return $date;
    }
-   public static function time()
+   public static function time($format = false)
    {
       $date = \date('H:i:s');
+      if($format) $date = self::formatTime($date);
+
       return $date;
    }
 
