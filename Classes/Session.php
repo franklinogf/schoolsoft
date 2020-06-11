@@ -30,14 +30,22 @@ class Session
 
     public static function is_logged($redirect = true)
     {
-        if (!isset($_SESSION['logged'])) {
-            if ($redirect) {
-                Route::redirect();
+        $location = str_replace('/', "", __SUB_ROOT_URL);
+        $logged = false;
+        if (isset($_SESSION['logged'])) {
+            if ($_SESSION['logged']['location'] !== $location) {
+                $logged = false;
+            } else {
+                $logged = true;
             }
-            return false;
+        } else {
+            $logged = false;
         }
 
-        return true;
+        if ($redirect) {
+            Route::redirect();
+        }
+        return $logged;
     }
 
     public static function id()
@@ -55,16 +63,13 @@ class Session
         }
         return false;
     }
+    public static function location()
+    {
+        if (self::is_logged(false)) {
+            return $_SESSION['logged']['location'];
+        }
+        return false;
+    }
 
-    // public static function redirect()
-    // {
-    //     if (self::is_logged(false)) {
-    //         Route::redirect('/'.$_SESSION['logged']['type']);
-
-    //     }
-
-    // }
-
-
-
+    
 }
