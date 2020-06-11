@@ -28,10 +28,10 @@ class Session
         unset($_SESSION[$name]);
     }
 
-    public static function is_logged($reditect = true)
+    public static function is_logged($redirect = true)
     {
         if (!isset($_SESSION['logged'])) {
-            if ($reditect) {
+            if ($redirect) {
                 Route::redirect();
             }
             return false;
