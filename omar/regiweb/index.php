@@ -2,63 +2,69 @@
 require_once '../app.php';
 
 use Classes\Route;
-use Classes\Controllers\School;
+use Classes\Server;
 use Classes\Session;
+use Classes\Controllers\Teacher;
+use Classes\Util;
 
-if (Session::is_logged(false)) {
-   Route::redirect('/home.php');
-}
-
+Session::is_logged();
+$teacher = new Teacher(Session::id());
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>Regiweb - Iniciar Sesión</title>
-   <link rel="icon" href="<?= School::logo() ?>" />
-   <?php
-   Route::css("/css/main-bootstrap.css");
-   Route::css("/css/main.css", true);
-   Route::css("/css/login.css",true);
-   ?>
+    <?php
+    $title = "Información";
+    Route::includeFile('/regiweb/includes/layouts/header.php');
+    ?>
 </head>
 
-<body class="text-center">
-   <img class="mb-4 img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGIN_LOGO_SIZE ?>">
-   <form class="form-signin" method='POST' action="<?= Route::url('/regiweb/includes/login.php') ?>">
-      <h1 class="h3 mb-3 font-weight-normal ">Iniciar Sesión</h1>
-      <?php if (Session::get('errorLogin')) : ?>
-         <div class="alert alert-danger animated zoomIn" role="alert">
-            <strong>Error!</strong> <?= Session::get('errorLogin', true) ?>
-         </div>
-      <?php endif ?>
-      <label for="username" class="sr-only">Usuario:</label>
-      <div class="input-group">
-         <div class="input-group-prepend">
-            <div class="input-group-text"><i class="fas fa-user fa-sm"></i></div>
-         </div>
-         <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" autofocus>
-      </div>
+<body>
+    <div class="container-lg mt-lg-3  px-0">
+        <div class="text-center">
+            <img class="img-fluid my-4" width="400px" src="<?= Route::url('/images/logo-regiweb.gif', false, true) ?>" />
+        </div>
+        <div class="jumbotron pt-4 shadow">
+            <h1 class="text-center">Bienvenido al sistema</h1>
+            <hr class="my-4" />
+            <div class="row">
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">Nombre:</span>
+                </div>
+                <div class="col-6"><?= $teacher->fullName() ?></div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">ID:</span>
+                </div>
+                <div class="col-6"><?= $teacher->id ?></div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">Grupo:</span>
+                </div>
+                <div class="col-6"><?= $teacher->grupo ?></div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">Ultima entrada:</span>
+                </div>
+                <div class="col-6"><?= $teacher->ufecha ?></div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">Ip:</span>
+                </div>
+                <div class="col-6"><?= Server::get('REMOTE_ADDR') ?></div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-info">Hora:</span>
+                </div>
+                <div class="col-6"><?= Util::time(true) ?></div>
+            </div>
+            <hr class="my-4" />
+            <button class="btn btn-primary btn-block mt-5 mx-auto">Continuar</button>
+        </div>
+    </div>
+    <?php
+    $teacher->ufecha = Util::date();
+    $teacher->save();
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::js('/react-components/Clock.js', true);
+    ?>
 
-      <label for="password" class="sr-only">Clave:</label>
-      <div class="input-group">
-         <div class="input-group-prepend">
-            <div class="input-group-text"><i class="fas fa-key fa-sm"></i></div>
-         </div>
-         <input type="password" id="password" name="password" class="form-control mb-0" placeholder="Clave">
-      </div>
-
-      <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
-   </form>
-   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-   <?php
-
-   Route::js('/js/app.js', true);
-   Route::js('/js/login.js',true);
-   ?>
 </body>
 
 </html>
