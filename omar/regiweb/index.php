@@ -55,14 +55,13 @@ $teacher = new Teacher(Session::id());
                 <div class="col-6"><?= Util::time(true) ?></div>
             </div>
             <hr class="my-4" />
-            <button class="btn btn-primary btn-block mt-5 mx-auto">Continuar</button>
+            <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/regiweb/home.php') ?>">Continuar</a>
         </div>
     </div>
     <?php
     $teacher->ufecha = Util::date();
     $teacher->save();
     Route::includeFile('/includes/layouts/scripts.php', true);
-    Route::js('/react-components/Clock.js', true);
     ?>
 
 </body>

@@ -53,6 +53,7 @@ define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARAT
 // Language: es = Spanish, en = English
 define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
+define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
 // regular is 72 x 72
 define('__LOGO_SIZE', 200);
 
