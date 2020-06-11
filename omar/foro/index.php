@@ -21,7 +21,7 @@ if (Session::is_logged(false)) {
    <?php
    Route::css("/css/main-bootstrap.css");
    Route::css("/css/main.css", true);
-   Route::css("/foro/css/login.css");
+   Route::css("/css/login.css",true);
    ?>
 </head>
 
@@ -57,7 +57,7 @@ if (Session::is_logged(false)) {
    <?php
 
    Route::js('/js/app.js', true);
-   Route::js('/foro/js/login.js');
+   Route::js('/js/login.js',true);
    ?>
 </body>
 
