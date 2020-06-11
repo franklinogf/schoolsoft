@@ -42,8 +42,10 @@ class Session
             $logged = false;
         }
 
-        if ($redirect) {
-            Route::redirect();
+        if (!$logged) {
+            if ($redirect) {
+                Route::redirect();
+            }
         }
         return $logged;
     }
@@ -70,6 +72,4 @@ class Session
         }
         return false;
     }
-
-    
 }
