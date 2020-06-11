@@ -30,6 +30,15 @@ class DB extends DataBase
   private static $innerJoinCol2 = [];
   private static $innerJoinOperator = [];
 
+  /* ---------------------- Method to create a new table ---------------------- */
+
+  public function create($columns, $others = '')
+  {
+    $tableName = self::$table;
+    $query = "CREATE TABLE IF NOT EXISTS `{$tableName}` ({$columns}) {$others};";
+    $this->normalQuery($query);
+  }
+
   /* ---------------------------- select the table ---------------------------- */
 
   public static function table($table)
@@ -257,7 +266,7 @@ class DB extends DataBase
         $where .= ' OR ' . $col . ' ' . self::$orWhereOperators[$i] . ' ?';
       }
     }
-    
+
     if (self::$whereRaw !== "") {
       $where .= $where === '' ? ' WHERE ' : ' ';
       $where .= self::$whereRaw;
@@ -283,7 +292,7 @@ class DB extends DataBase
         $join .= ' INNER JOIN ' . $table . ' ON ' . self::$innerJoinCol1[$i] . ' ' . self::$innerJoinOperator[$i] . ' ' . self::$innerJoinCol2[$i];
       }
     }
-    
+
     self::$query = 'SELECT ' . self::$columns . ' FROM ' . self::$table . $join . $where . self::$groupBy . self::$orderBy . ' ' . $other;
   }
 

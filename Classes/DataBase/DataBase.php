@@ -29,7 +29,11 @@ class DataBase
 
     return $db;
   }
-
+  protected function normalQuery($query)
+  {
+    $db = $this->connect();
+    return $db->query($query);
+  }
   protected function deleteQuery($query, $valuesArray)
   {
 
@@ -124,7 +128,7 @@ class DataBase
       // php 7 version
       // $stmt->bind_param($bind, ...$valuesArray);
       if ($stmt->execute()) {
-        
+
         if ($insertId === true) {
           return $stmt->insert_id;
         }
@@ -154,15 +158,15 @@ class DataBase
     $result = $this->selectFromDB($query, $whereArray);
     $obj = $result->fetch_all(MYSQLI_ASSOC);
     return Util::toObject($obj);
-  }  
+  }
   // global select
   protected function selectFromDB($query, $whereArray)
   {
-  
+
     $db = $this->connect();
-    if(!$stmt = $db->prepare($query)){    
-        var_dump($whereArray);
-      throw new Exception("Error con el query $query ($db->error)");      
+    if (!$stmt = $db->prepare($query)) {
+      var_dump($whereArray);
+      throw new Exception("Error con el query $query ($db->error)");
     }
 
     if (count($whereArray) > 0) {
