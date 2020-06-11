@@ -75,7 +75,7 @@ $teacher = new Teacher(Session::id());
   </div>
   
   <?php
-  Route::includeFile('/foro/profesor/includes/layouts/progressBar.php');
+  Route::includeFile('/includes/layouts/progressBar.php', true);
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
   ?>
 </body>
