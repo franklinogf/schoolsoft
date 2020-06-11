@@ -61,14 +61,19 @@ class Route
       die();
    }
 
-   public static function url($path, $fullPath = false)
+   public static function url($path, $fullPath = false, $serverRoot = false)
    {
-      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL .  $path : __SCHOOL_URL . $path;
+      $root = '';
+      if (!$serverRoot) {
+         $root = __SCHOOL_URL;
+      }
+      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL .  $path : $root . $path;
       return $newPath;
    }
 
-   public static function redirect($path = '', $rootSchool = true)
+   public static function redirect($path = '/login.php', $rootSchool = true)
    {
+      $newPath = "";
       if ($rootSchool) {
          $newPath = __SUB_ROOT_URL;
       }
