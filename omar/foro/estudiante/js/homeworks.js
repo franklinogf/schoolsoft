@@ -14,6 +14,7 @@ $(document).ready(function () {
     })
     // send messages
     if (!doneHomeworkId) {     
+      console.log("Nueva tarea");
       fd.append('doneHomework', homeworkId)
       $.ajax({
         type: "POST",
@@ -23,12 +24,13 @@ $(document).ready(function () {
         cache: false,
         processData: false,
         success: function (res) {
+          console.log("response:",res)
           $status = $(`.homework.${homeworkId}`).find('.fa-circle')
           $status.removeClass('text-white')
             .addClass('text-success')
           animateCSS($status, 'fadeIn slow')
           $modal.modal('hide')
-          $(`.sendHomework[data-homework-id=${homeworkId}]`).prop({disabled:true,ariaDisabled:true})
+          // $(`.sendHomework[data-homework-id=${homeworkId}]`).prop({disabled:true,ariaDisabled:true})
         }
       });
     } else {

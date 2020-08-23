@@ -20,13 +20,13 @@ if (isset($_POST['getMessages'])) {
          ['enviado_por', '<>', 'p'],
          ['id_p', Session::id()],
          ['year', $school->info('year')]
-      ])->orderBy('fecha DESC, hora DESC')->get();
+         ])->orderBy('fecha DESC, hora DESC')->get();
    } else {
       $messages = DB::table('foro_mensajes')->where([
          ['enviado_por', 'p'],
          ['id_p', Session::id()],
          ['year', $school->info('year')]
-      ])->groupBy('code')->orderBy('fecha DESC, hora DESC')->get();
+         ])->groupBy('code')->orderBy('fecha DESC, hora DESC')->get();
    }
 
    if ($messages) {
@@ -51,21 +51,21 @@ if (isset($_POST['getMessages'])) {
             foreach ($students as $student) {
                $student = new Student($student->mt);
                $to[] = [
-                  "nombre" => $student->fullName(),
+                  "nombre" => strtoupper($student->fullName()),
                   "foto" => $student->profilePicture(),
                   "info" => $student->grado
                ];
             }
          } else {
             $to[] = [
-               "nombre" => $teacher->fullName(),
+               "nombre" => strtoupper($teacher->fullName()),
                "foto" => $teacher->profilePicture(),
                "info" => "yo"
             ];
          }
 
          $filesArray = [];
-         $files = DB::table('T_mensajes_archivos')
+         $files = DB::table('t_mensajes_archivos')
             ->where('mensaje_code', $message->code)->get();
          if ($files) {
             foreach ($files as $i => $file) {
@@ -84,7 +84,7 @@ if (isset($_POST['getMessages'])) {
             'asunto' => $message->asunto,
             'mensaje' => $message->mensaje,
             'archivos' => $filesArray,
-            'nombre' => $name,
+            'nombre' => strtoupper($name),
             'foto' => $profilePicture,
             'info' => $info,
             'leido' => $message->leido_p,
@@ -141,7 +141,7 @@ if (isset($_POST['getMessages'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_MESSAGES_FILES_DIRECTORY, $newName)) {
-         DB::table('T_mensajes_archivos')->insert([
+         DB::table('t_mensajes_archivos')->insert([
             'nombre' => $newName,
             'mensaje_code' => $code
          ]);

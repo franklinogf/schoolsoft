@@ -225,11 +225,11 @@ $(document).ready(function () {
                   <small class="text-muted font-weight-light">${message.fecha}</small>
                </div>
                ${
-					message.enviadoPor !== "p" &&
+					message.enviadoPor !== "p" ?
 					`<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-				}
+				: ""}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
@@ -288,14 +288,15 @@ $(document).ready(function () {
 			$status.remove();
 		});
 	});
-
+	
 	$(document).on("click", "#viewStudents", () => {
+		console.log(message.to)
 		$("body").append(`
       <div class="modal fade" id="viewStudentsModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <div class="modal-header bg-gradient-primary bg-primary">
-               <h5 class="modal-title">Lista de estudiantes</h5>
+               <h5 class="modal-title">Lista de estudiantes del grado <span class="badge badge-secondary">${message.to[0].info}</span> </h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -307,7 +308,7 @@ $(document).ready(function () {
                   <div class="media p-2 mt-2">
                      <img src="${to.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                      <div class="media-body">
-                        <p class="m-0"><strong>${to.nombre}</strong></p>
+                        <p class="m-0"><strong>${to.nombre.toUpperCase()}</strong></p>
                      </div>        
                   </div>
                `
@@ -347,6 +348,7 @@ $(document).ready(function () {
 			includeThisFile(),
 			{ getMessages: type },
 			async (res) => {
+				console.log(res.data)
 				if (res.response) {
 					$messages.empty();
 					messages = await res.data;
@@ -355,7 +357,7 @@ $(document).ready(function () {
 							message.id
 						}" class="card w-100 rounded-0 pointer-cursor">
                <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">${message.nombre}</p>
+                  <p class="card-text mb-0 font-weight-bold">${message.nombre.toUpperCase()}</p>
                   <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${
 						message.fecha
 					}</small><small>${message.hora}</small></p>

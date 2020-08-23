@@ -3,12 +3,20 @@ require_once '../app.php';
 
 use Classes\Route;
 use Classes\Controllers\School;
+use Classes\DataBase\DB;
 use Classes\Session;
 
 if (Session::is_logged(false)) {
    Route::redirect('/' . Session::type());
 }
+// MODIFICACIONES A LA BASE DE DATOS
+DB::table("t_mensajes_archivos")->create("
+`id` int(11) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `mensaje_code` int(11) DEFAULT NULL"
+);
 
+DB::table("tareas_enviadas")->alter("DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE")
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

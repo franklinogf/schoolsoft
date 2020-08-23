@@ -39,6 +39,12 @@ class DB extends DataBase
     $this->normalQuery($query);
   }
 
+  public function alter($query){
+    $tableName = self::$table;
+    $q = "ALTER TABLE `{$tableName}` {$query}";
+    $this->normalQuery($q);
+  }
+
   /* ---------------------------- select the table ---------------------------- */
 
   public static function table($table)

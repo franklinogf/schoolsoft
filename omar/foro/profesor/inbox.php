@@ -1,9 +1,13 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Controllers\Student;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
+use Classes\DataBase\DB;
+use Classes\File;
+use Classes\Util;
 
 Session::is_logged();
 $DataTable = true;
@@ -13,11 +17,11 @@ $teacher = new Teacher(Session::id());
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
-  <?php
-  $title = "Mensajes";
-  Route::includeFile('/foro/profesor/includes/layouts/header.php');
-  ?>
+<head>
+   <?php
+   $title = "Mensajes";
+   Route::includeFile('/foro/profesor/includes/layouts/header.php');
+   ?>
 </head>
 
 <body>

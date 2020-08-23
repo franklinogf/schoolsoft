@@ -26,7 +26,6 @@ $exams = $student->exams(Util::daysBefore(3));
    Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
    ?>
    <div class="container-lg mt-5 px-0 pb-5">
-
       <h1 class="text-center mb-3">Mis Examenes</h1>
       <?php if ($exams) : ?>
          <!-- leyend -->
@@ -63,6 +62,7 @@ $exams = $student->exams(Util::daysBefore(3));
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($exams as $exam) : ?>
                <?php $doneExam = $student->doneExam($exam->id) ?>
+               <?php $points = ($doneExam->puntos + $doneExam->bonos) ?>
                <?php $sent = $doneExam ? 'success' : 'white' ?>
                <?php $expired = $exam->fecha >= Util::date() ? '' : 'danger'; ?>
                <div class="col mb-4 exam <?= $exam->id ?>">
@@ -73,6 +73,7 @@ $exams = $student->exams(Util::daysBefore(3));
                      <div class="card-body ">
                         <h5 class="card-title"><?= $exam->titulo ?></h5>
                         <p class="card-text"><?= "Valor: $exam->valor" ?></p>
+                        <p class="card-text"><span class="<?= ($points >= $exam->valor*0.70) ? "text-success" :"text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : ""?></span></p>
 
                      </div>
                      <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-between">

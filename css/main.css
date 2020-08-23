@@ -157,3 +157,7 @@ body {
   width: 250px;
   height: 250px;
 }
+
+.blur{
+  filter: blur(10px);
+ }

@@ -15,7 +15,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
       ['id_tarea', $id_doneHomework],
       ['id_estudiante', Session::id()],
       ])->first()) {
-      $files = DB::table('T_tareas_archivos')->where('id_tarea',$doneHw->id)->get();
+      $files = DB::table('t_tareas_archivos')->where('id_tarea',$doneHw->id)->get();
       $array = [
          'response' => true,
          'data' => $doneHw,
@@ -52,7 +52,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __STUDENT_HOMEWORKS_DIRECTORY, $newName)) {
-         DB::table('T_tareas_archivos')->insert([
+         DB::table('t_tareas_archivos')->insert([
             'nombre' => $newName,
             'id_tarea' => $id_doneHomework
          ]);
@@ -72,7 +72,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __STUDENT_HOMEWORKS_DIRECTORY, $newName)) {
-         DB::table('T_tareas_archivos')->insert([
+         DB::table('t_tareas_archivos')->insert([
             'nombre' => $newName,
             'id_tarea' => $id_doneHomework
          ]);
@@ -82,10 +82,10 @@ if (isset($_POST['getDoneHomeworkById'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('T_tareas_archivos')->where('id', $file_id)->first();
+   $file = DB::table('t_tareas_archivos')->where('id', $file_id)->first();
 
    File::delete(__STUDENT_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('T_tareas_archivos')->where('id', $file_id)->delete();
+   DB::table('t_tareas_archivos')->where('id', $file_id)->delete();
 }
 

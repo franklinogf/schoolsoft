@@ -18,7 +18,7 @@ $student = new Student(Session::id());
 $exam = new Exam($id_exam);
 
 //save done Exam
-$id_doneExam = DB::table('t_examenes_terminados')->insertGetId([
+$id_doneExam = DB::table('T_examenes_terminados')->insertGetId([
    "id_examen" => $id_exam,
    "id_estudiante" => $student->mt,
    "ss_estudiante" => $student->ss,
@@ -28,7 +28,7 @@ $id_doneExam = DB::table('t_examenes_terminados')->insertGetId([
 
 
 foreach ($_POST['fv'] as $id => $answer) {
-   $insertsArray['t_examen_terminado_fyv'][] = [
+   $insertsArray['T_examen_terminado_fyv'][] = [
       "id_examen" => $id_doneExam,
       "id_estudiante" => $student->mt,
       "ss_estudiante" => $student->ss,
@@ -38,7 +38,7 @@ foreach ($_POST['fv'] as $id => $answer) {
 }
 
 foreach ($_POST['select'] as $id => $answer) {
-   $insertsArray['t_examen_terminado_selec'][] = [
+   $insertsArray['T_examen_terminado_selec'][] = [
       "id_examen" => $id_doneExam,
       "id_estudiante" => $student->mt,
       "ss_estudiante" => $student->ss,
@@ -49,7 +49,7 @@ foreach ($_POST['select'] as $id => $answer) {
 
 
 foreach ($_POST['pair'] as $id => $answer) {
-   $insertsArray['t_examen_terminado_parea'][] = [
+   $insertsArray['T_examen_terminado_parea'][] = [
       "id_examen" => $id_doneExam,
       "id_estudiante" => $student->mt,
       "ss_estudiante" => $student->ss,
@@ -60,7 +60,7 @@ foreach ($_POST['pair'] as $id => $answer) {
 
 
 foreach ($_POST['line'] as $id => $answers) {
-   $insertsArray['t_examen_terminado_linea'][$id] = [
+   $insertsArray['T_examen_terminado_linea'][$id] = [
       "id_examen" => $id_doneExam,
       "id_estudiante" => $student->mt,
       "ss_estudiante" => $student->ss,
@@ -68,12 +68,12 @@ foreach ($_POST['line'] as $id => $answers) {
    ];
    foreach ($answers as $i => $answer) {
       $index = $i + 1;
-      $insertsArray['t_examen_terminado_linea'][$id]["respuesta{$index}"] = $answer;
+      $insertsArray['T_examen_terminado_linea'][$id]["respuesta{$index}"] = $answer;
    }
 }
 
 foreach ($_POST['qa'] as $id => $answer) {
-   $insertsArray['t_examen_terminado_pregunta'][] = [
+   $insertsArray['T_examen_terminado_pregunta'][] = [
       "id_examen" => $id_doneExam,
       "id_estudiante" => $student->mt,
       "ss_estudiante" => $student->ss,

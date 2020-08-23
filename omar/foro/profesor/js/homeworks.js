@@ -5,7 +5,7 @@ $(document).ready(function () {
 		timer = setInterval(() => {
 			console.log("count: ", count);
 			if (count > 100) {
-        clearInterval(timer);
+				clearInterval(timer);
 			} else {
 				$("#progressModal .progress-bar")
 					.prop("aria-valuenow", count)
@@ -34,9 +34,9 @@ $(document).ready(function () {
 				);
 				$("#title").val(res.titulo);
 				$("#description").val(res.descripcion);
-        $("#class").val(res.curso);
-				$("#sinceDate").prop('readonly',true).val(res.fec_in === "0000-00-00" ? "" : res.fec_in);
-				$("#untilDate").prop('readonly',true).val(res.fec_out === "0000-00-00" ? "" : res.fec_out);
+				$("#class").val(res.curso);
+				$("#sinceDate").prop('readonly', true).val(res.fec_in === "0000-00-00" ? "" : res.fec_in);
+				$("#untilDate").prop('readonly', true).val(res.fec_out === "0000-00-00" ? "" : res.fec_out);
 				$("#radio1").prop("checked", res.enviartarea === "si" ? true : false);
 				$("#radio2").prop("checked", res.enviartarea === "si" ? false : true);
 				$("#link1").val(res.lin1);

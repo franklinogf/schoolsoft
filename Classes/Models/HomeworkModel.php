@@ -42,7 +42,7 @@ class HomeworkModel extends School
          ['id_profesor', $hw->id2],
          ['year', $this->info('year')]
       ])->get();
-      $this->getFiles($doneHw, 'id', 'T_tareas_archivos', 'id_tarea');
+      $this->getFiles($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
 
       return $doneHw;
    }

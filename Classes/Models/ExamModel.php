@@ -8,9 +8,9 @@ use stdClass;
 
 class ExamModel extends School
 {
-   private $table = 't_examenes';
+   private $table = 'T_examenes';
    protected $primary_key = 'id';
-   const TABLE = 't_examenes';
+   const TABLE = 'T_examenes';
 
    public function __construct()
    {
@@ -43,7 +43,7 @@ class ExamModel extends School
          ['id_profesor', $hw->id2],
          ['year', $this->info('year')]
       ])->get();
-      $this->getExamTopics($doneHw, 'id', 'T_tareas_archivos', 'id_tarea');
+      $this->getExamTopics($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
 
       return $doneHw;
    }

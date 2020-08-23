@@ -90,7 +90,7 @@ $student = new Student(Session::id());
             Información importante
           </h6>
           <div class="card-body">
-            <p class="text-monospace">ID: <span class="badge badge-info"><?= $student->id ?> </span></p>
+            <p class="text-monospace">ID: <span class="badge badge-info"><?= $student->mt ?> </span></p>
             <p class="text-monospace">Usuario: <span class="badge badge-info"><?= $student->usuario ?></span></p>
             <p class="text-monospace">Grado: <span class="badge badge-info"><?= $student->grado ?></span></p>
           </div>

@@ -66,7 +66,11 @@ class StudentModel extends School
       if ($homework = $hw->findByClassForStudents($class->curso, $date))
         $obj[] = $homework;
     }
-    return call_user_func_array('array_merge', $obj);
+    if(count($obj) > 0){
+      return call_user_func_array('array_merge', $obj);
+    }else{
+      return [];
+    }
   }
 
   protected function getStudentDoneHomeworkById($mt, $id_hw)
@@ -92,7 +96,7 @@ class StudentModel extends School
 
   protected function getStudentDoneExamById($mt, $id_exam)
   {
-    $obj = parent::table('t_examenes_terminados')->where([
+    $obj = parent::table('T_examenes_terminados')->where([
       ['id_examen', $id_exam],
       ['id_estudiante', $mt],
       ['year', $this->info('year')]

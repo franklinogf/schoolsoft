@@ -104,7 +104,9 @@ class DataBase
     if ($this->isMultiArray($valuesArray)) {
 
       foreach ($valuesArray as $key => $array) {
-        $stmt = $db->prepare($query[$key]);
+        if (!$stmt = $db->prepare($query[$key])){
+          echo "error " . $db->error . "<br/>";
+        }
         $bind =  str_repeat('s', count($array));
         // php 5 version
         $refs = [];

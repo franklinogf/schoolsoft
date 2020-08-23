@@ -29,15 +29,16 @@ $topicNumber = 1;
 
 <body class='pb-5'>
    <div class="container-lg mt-md-5 px-0 pb-5">
+   <button id="startExam" class="btn btn-primary mx-auto d-block my-2">Empezar examen</button>
       <div class="jumbotron py-4">
-         <div class="container bg-white px-3 py-5 p-md-5 shadow">
+         <div class="container bg-white px-3 py-5 p-md-5 shadow blur">
 
             <h1 class="text-center mb-5"><?= $exam->titulo ?></h1>
             <form method="POST" action="<?= Route::url('/foro/estudiante/includes/takeExam.php') ?>" class="needs-validation" novalidate>
                <input type="hidden" name="id_exam" value="<?= $id_exam ?>">
                <?php if (isset($exam->fvs->topics)) : ?>
                   <!-- FV -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - {$exam->fvs->title}" ?> <span class="badge badge-info"><?= $exam->fvs->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - "?><?= $exam->desc1 === 'si' ? $exam->desc1_1 :$exam->fvs->title ?> <span class="badge badge-info"><?= $exam->fvs->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->fvs->topics as $topic) : ?>
                      <div class="form-group">
@@ -56,7 +57,7 @@ $topicNumber = 1;
 
                <?php if (isset($exam->selects->topics)) : ?>
                   <!-- SELECT -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - {$exam->selects->title}" ?> <span class="badge badge-info"><?= $exam->selects->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - "?><?= $exam->desc2 === 'si' ? $exam->desc2_1 :$exam->selects->title ?><span class="badge badge-info"><?= $exam->selects->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->selects->topics as $topic) : ?>
                      <p class="font-weight-bold"><?= "$count) $topic->pregunta"; ?></p>
@@ -80,7 +81,7 @@ $topicNumber = 1;
 
                <?php if (isset($exam->pairs->topics)) : ?>
                   <!-- PAIRS -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - {$exam->pairs->title}" ?> <span class="badge badge-info"><?= $exam->pairs->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - "?><?= $exam->desc3 === 'si' ? $exam->desc3_1 :$exam->pairs->title ?><span class="badge badge-info"><?= $exam->pairs->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->pairs->topics as $topic) : ?>
                      <div class="form-group row">
@@ -101,11 +102,11 @@ $topicNumber = 1;
 
                <?php if (isset($exam->lines->topics)) : ?>
                   <!-- LINES -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - {$exam->lines->title}" ?> <span class="badge badge-info"><?= $exam->lines->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - "?><?= $exam->desc4 === 'si' ? $exam->desc4_1 :$exam->lines->title ?> <span class="badge badge-info"><?= $exam->lines->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->lines->topics as $topic) : ?>
                      <?php
-                     $question = $topic->pregunta;
+                     $question = utf8_decode($topic->pregunta);
                      $question = str_replace('___', "
                   <input class='form-control form-control-sm d-inline mt-2 rounded-0 border-top-0 border-left-0 border-right-0 border-dark shadow-sm' 
                   style='width:10em' 
@@ -124,7 +125,7 @@ $topicNumber = 1;
                <?php if (isset($exam->qas->topics)) : ?>
                   <!-- QA -->
 
-                  <h4 class="mt-3"><?= "{$topicNumber} - {$exam->qas->title}" ?> <span class="badge badge-info"><?= $exam->qas->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - "?><?= $exam->desc5 === 'si' ? $exam->desc5_1 :$exam->qas->title ?> <span class="badge badge-info"><?= $exam->qas->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->qas->topics as $topic) : ?>
                      <div class="form-group">

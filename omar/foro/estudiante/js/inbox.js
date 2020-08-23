@@ -166,10 +166,10 @@ $(document).ready(function () {
                </div>
                ${
 					message.enviadoPor !== "e"
-						&& `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
+						? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-				}
+				: ''}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
@@ -191,7 +191,7 @@ $(document).ready(function () {
       <p class="p-2 my-0 font-bree">${message.asunto}</p>
       <hr class="my-1">
       ${
-			message.archivos.length > 0 &&
+			message.archivos.length > 0 ?
 			`
       <div class="row row-cols-4 row-cols-lg-6"> 
       ${message.archivos
@@ -206,7 +206,7 @@ $(document).ready(function () {
 			.join("")}
    </div>
    <hr class="my-1">`
-		}  
+		: ""}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
    
@@ -263,9 +263,9 @@ $(document).ready(function () {
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
                   <p class="card-text text-right">${
-						message.leido !== "si" &&
+						message.leido !== "si" ?
 						'<small class="badge badge-success rounded-0 status">Nuevo</small>'
-					}</p>
+					: ""}</p>
                </div>
             </div>`);
 					});

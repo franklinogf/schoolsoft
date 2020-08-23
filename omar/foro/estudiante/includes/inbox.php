@@ -46,7 +46,7 @@ if (isset($_POST['getMessages'])) {
          $toInfo = $message->enviado_por === 'e' ? 'profesor' : $student->grado;
 
          $filesArray = [];
-         $files = DB::table('T_mensajes_archivos')
+         $files = DB::table('t_mensajes_archivos')
             ->where('mensaje_code', $message->code)->get();
          if ($files) {
             foreach ($files as $i => $file) {
@@ -65,10 +65,10 @@ if (isset($_POST['getMessages'])) {
             'asunto' => $message->asunto,
             'mensaje' => $message->mensaje,
             'archivos' => $filesArray,
-            'nombre' => $name,
+            'nombre' => strtoupper($name),
             'info' => $info,
             'foto' => $profilePicture,
-            'toNombre' => $toName,
+            'toNombre' => strtoupper($toName),
             'toInfo' => $toInfo,
             'toFoto' => $toProfilePicture,
             'leido' => $message->leido_e,
@@ -132,7 +132,7 @@ if (isset($_POST['getMessages'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __STUDENT_MESSAGES_FILES_DIRECTORY, $newName)) {
-         DB::table('T_mensajes_archivos')->insert([
+         DB::table('t_mensajes_archivos')->insert([
             'nombre' => $newName,
             'mensaje_code' => $code
          ]);

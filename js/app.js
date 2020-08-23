@@ -98,17 +98,22 @@ function formatTime(value) {
 }
 
 function getBaseUrl(fileName = '') {
-  var re = new RegExp(/^.*\//);
+  let re = new RegExp(/^.*\//);
   return re.exec(window.location.href) + fileName;
 }
+function getFileName(path = '') {
+  let fileName = path.replace(/^.*[\\\/]/, '')
+  return fileName;
+}
+
 
 function includeThisFile() {
-  const phpFile = getBaseUrl() + 'includes/' + baseName(window.location.href) + '.php'
+  let phpFile = getBaseUrl() + 'includes/' + baseName(window.location.href) + '.php'
   return phpFile
 }
 
 function baseName(str) {
-  var base = new String(str).substring(str.lastIndexOf('/') + 1);
+  let base = new String(str).substring(str.lastIndexOf('/') + 1);
   if (base.lastIndexOf(".") != -1) {
     base = base.substring(0, base.lastIndexOf("."));
   }
@@ -247,11 +252,11 @@ $(function () {
       }, 500);
     });
 
-    $(document).on('change', 'input.file', e => {
+    $(document).on('change', 'input.file', function() {
       //get the file name   
-      var fileName = baseName($(e.target).val());
+      var fileName = getFileName($(this).val());
       //replace the "Seleccionar archivo" label
-      $(e.target).next('.custom-file-label').html(fileName)
+      $(this).next('.custom-file-label').html(fileName)
     })
 
     $(document).on('click', 'button.delFile', e => {

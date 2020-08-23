@@ -46,9 +46,9 @@ define('__LANG', 'es');
 define('__DEFAULT_LOGO', 'logo.gif');
 define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
 // regular is 72 x 72
-define('__LOGO_SIZE', 200);
+define('__LOGO_SIZE', 100);
 
-define('__LOGIN_LOGO_SIZE', 400);
+define('__LOGIN_LOGO_SIZE', 200);
 /* ----------------------------------- PDF ---------------------------------- */
 
 // RGB $pdf->SetFillColor(red,green,blue)
