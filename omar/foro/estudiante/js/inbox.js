@@ -229,11 +229,11 @@ $(document).ready(function () {
 		});
 	});
 
-	$($messages).on("DOMSubtreeModified", () => {
+	$($messages).on("MutationObserver", () => {
 		animateCSS($messages.children(), "bounceInDown faster");
 	});
 
-	$($message).on("DOMSubtreeModified", () => {
+	$($message).on("MutationObserver", () => {
 		const effect = window.innerWidth > 768 ? "bounceInLeft" : "bounceInDown";
 		animateCSS($message.children(), `${effect} faster`);
 	});
