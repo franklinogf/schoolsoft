@@ -9,7 +9,11 @@ use Classes\Session;
 if (Session::is_logged(false)) {
    Route::redirect('/' . Session::type());
 }
-// MODIFICACIONES A LA BASE DE DATOS
+
+/* -------------------------------------------------------------------------- */
+/*                           DATABASE MODIFICATIONS                           */
+/* -------------------------------------------------------------------------- */
+
 DB::table("t_mensajes_archivos")->create("
 `id` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
