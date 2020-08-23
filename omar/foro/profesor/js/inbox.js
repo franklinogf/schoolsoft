@@ -329,11 +329,11 @@ $(document).ready(function () {
 		$("#viewStudentsModal").remove();
 	});
 
-	$($messages).on("MutationObserver", () => {
+	$($messages).on("DOMSubtreeModified", () => {
 		animateCSS($messages.children(), "bounceInDown faster");
 	});
 
-	$($message).on("MutationObserver", () => {
+	$($message).on("DOMSubtreeModified", () => {
 		const effect = window.innerWidth > 768 ? "bounceInLeft" : "bounceInDown";
 		animateCSS($message.children(), `${effect} faster`);
 	});
