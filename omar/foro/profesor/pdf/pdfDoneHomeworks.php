@@ -28,7 +28,7 @@ $students = $students->findByClass($homework->curso);
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle("Tarea de $class->desc1");
+$pdf->SetTitle("Tarea de ".utf8_decode($class->desc1));
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
@@ -36,7 +36,7 @@ $pdf->Cell(0, 5, $homework->titulo, 0, 1, 'C');
 $pdf->Ln(3);
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->splitCells("Curso: $class->curso - $class->desc1", $teacher->fullName());
+$pdf->splitCells(utf8_decode("Curso: $class->curso - $class->desc1"), $teacher->fullName());
 // table header
 $pdf->SetFont('Arial', 'B', 13);
 $pdf->Cell(10, 7, "", "LTB", 0, "C", true);
