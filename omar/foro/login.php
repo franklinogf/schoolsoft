@@ -16,11 +16,17 @@ if (Session::is_logged(false)) {
 
 DB::table("t_mensajes_archivos")->create("
 `id` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `mensaje_code` int(11) DEFAULT NULL"
+`nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+`mensaje_code` int(11) DEFAULT NULL"
 );
 
-DB::table("tareas_enviadas")->alter("DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE")
+DB::table("tareas_enviadas")->alter("DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE");
+
+DB::table("t_mensajes_links")->create("
+`id` INT NOT NULL AUTO_INCREMENT ,
+`link` TEXT NOT NULL ,
+`nombre` VARCHAR(150) NULL , PRIMARY KEY (`id`)");
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
