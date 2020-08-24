@@ -348,7 +348,6 @@ $(document).ready(function () {
 			includeThisFile(),
 			{ getMessages: type },
 			async (res) => {
-				console.log(res.data)
 				if (res.response) {
 					$messages.empty();
 					messages = await res.data;
