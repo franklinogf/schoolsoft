@@ -227,6 +227,7 @@ $(function () {
         'indeterminate': false
       });
       modal.find('.fileInput').remove()
+      modal.find('.linkGroup').remove()
     })
   }
 
