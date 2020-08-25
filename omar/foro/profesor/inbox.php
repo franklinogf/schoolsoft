@@ -97,7 +97,7 @@ $teacher = new Teacher(Session::id());
    </div>
 
    <div id="newMessageModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg" role="dialog">
+      <div class="modal-dialog modal-lg" role="dialog">
          <input type="hidden" name="id_message">
          <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -114,25 +114,28 @@ $teacher = new Teacher(Session::id());
                ?>
             </div>
             <form enctype="multipart/form-data">
-               <div class="modal-body">
+               <div class="modal-body custom-scroll">
 
                   <div class="form hidden">
                      <p class="studentsAmount text-info font-bree"></p>
                      <div class="form-group row">
                         <label for="newTitle" class="col-form-label col-md-2">Titulo:</label>
                         <div class="col-md-10">
-                           <input id="newTitle" class="form-control" type="text" name="title">
+                           <input id="newTitle" class="form-control" type="text" name="title" required>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label for="newSubject" class="col-form-label col-md-2">Asunto:</label>
                         <div class="col-md-10">
-                           <input id="newSubject" class="form-control" type="text" name="subject">
+                           <input id="newSubject" class="form-control" type="text" name="subject" required>
                         </div>
                      </div>
                      <div class="form-group">
                         <label for="newMessage">Mensaje:</label>
-                        <textarea id="newMessage" class="form-control" name="message"></textarea>
+                        <textarea id="newMessage" class="form-control" name="message" require></textarea>
+                     </div>
+                     <div class="container">
+                        <button id="addLink" class="btn btn-secondary mb-3">Agregar Link</button>
                      </div>
                      <div class="container">
                         <button type="button" class="btn btn-primary mx-auto d-block addFile">Agregar archivo</button>

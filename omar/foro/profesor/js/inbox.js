@@ -17,36 +17,67 @@ $(document).ready(function () {
 	getMessages();
 	$studentsTableWrapper.hide(0);
 
-	$("#newMessageModal form").submit(function (e) {
+	$(document).on("click", ".delLink", function (e) {
 		e.preventDefault();
-		const fd = new FormData(this);
-		const students = $(studentsTable.rows().nodes())
-			.find("[type='checkbox'].check:checked")
-			.serializeArray();
-		const files = $('[name="file[]"]');
-		fd.append("newMessage", true);
-		// append the students list
-		students.map((studentInput) => {
-			fd.append("students[]", studentInput.value);
-		});
-		// append files
-		files.map((input) => {
-			fd.append("file[]", input.files);
-		});
-		// send messages
-		$.ajax({
-			type: "POST",
-			url: includeThisFile(),
-			data: fd,
-			contentType: false,
-			cache: false,
-			processData: false,
-			success: function (res) {
-				const option = $(this).data("option");
-				getMessages(option);
-				$newMessageModal.modal("hide");
-			},
-		});
+		if ($(this).parent().children()[0].value.length > 0) {
+			if (confirm("Seguro desea eliminar este link?")) {
+				animateCSS($(this).parent(), "fadeOutUp faster", () => {
+					$(this).parent().remove();
+				});
+			}
+		} else {
+			animateCSS($(this).parent(), "fadeOutUp faster", () => {
+				$(this).parent().remove();
+			});
+		}
+	});
+
+	$("#addLink").click(function (e) {
+		e.preventDefault();
+		$(this).parent().append(`
+		<div class="form-group form-inline row linkGroup animated fadeInDown faster">
+			<input class="form-control my-1 col-7" type="url" required name="link[]" placeholder="https://www.ejemplo.com">
+			<input class="form-control my-1 col-4" type="text" name="linkName[]" placeholder="Titulo (opcional)">
+			<button class="btn btn-danger delLink col-1" type="button"><i class="fas fa-trash-alt"></i></button>
+		</div>
+		`);
+	});
+
+	$("#newMessageModal form").submit(function (e) {
+		if ($(this)[0].checkValidity() === false) {
+			e.preventDefault();
+			e.stopPropagation();
+		} else {
+			e.preventDefault();
+			const fd = new FormData(this);
+			const students = $(studentsTable.rows().nodes())
+				.find("[type='checkbox'].check:checked")
+				.serializeArray();
+			const files = $('[name="file[]"]');
+			fd.append("newMessage", true);
+			// append the students list
+			students.map((studentInput) => {
+				fd.append("students[]", studentInput.value);
+			});
+			// append files
+			files.map((input) => {
+				fd.append("file[]", input.files);
+			});
+			// send messages
+			$.ajax({
+				type: "POST",
+				url: includeThisFile(),
+				data: fd,
+				contentType: false,
+				cache: false,
+				processData: false,
+				success: function (res) {
+					const option = $(this).data("option");
+					getMessages(option);
+					$newMessageModal.modal("hide");
+				},
+			});
+		}
 	});
 
 	$(".classesTable tbody").on("click", "tr", function () {
@@ -207,6 +238,7 @@ $(document).ready(function () {
 		const $thisMessage = $(this);
 		const index = messages.findIndex((message) => message.id === $thisMessage.data("id"));
 		message = messages[index];
+		console.log(message);
 		// show the messsage
 		$message.html(`
       <div class="row">
@@ -225,11 +257,12 @@ $(document).ready(function () {
                   <small class="text-muted font-weight-light">${message.fecha}</small>
                </div>
                ${
-					message.enviadoPor !== "p" ?
-					`<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
+					message.enviadoPor !== "p"
+						? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-				: ""}
+						: ""
+				}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
@@ -253,8 +286,8 @@ $(document).ready(function () {
    <p class="p-2 mb-0 mt-3 font-bree">${message.asunto}</p>
    <hr class="my-1">
    ${
-		message.archivos.length > 0 ?
-		`
+		message.archivos.length > 0
+			? `
    <div class="row row-cols-4 row-cols-lg-6"> 
    ${message.archivos
 		.map(
@@ -268,9 +301,34 @@ $(document).ready(function () {
 		.join("")}
    </div>
    <hr class="my-1">`
-   : ""}  
+			: ""
+   }  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
-   <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>`);
+   <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
+
+   ${
+		message.links.length > 0
+			? `
+   <div class="container fixed-bottom position-absolute mb-2">
+		<div class="list-group">
+	${message.links
+		.map(
+			(link) => `
+			<a href="${
+				link.link
+			}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
+				${link.nombre || link.link}
+			</a>
+	`
+		)
+		.join("")}
+		</div>
+	<div>
+   `
+			: ""
+   }
+   
+   `);
 
 		// change the message read status
 		$.post(
@@ -288,15 +346,17 @@ $(document).ready(function () {
 			$status.remove();
 		});
 	});
-	
+
 	$(document).on("click", "#viewStudents", () => {
-		console.log(message.to)
+		console.log(message.to);
 		$("body").append(`
       <div class="modal fade" id="viewStudentsModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <div class="modal-header bg-gradient-primary bg-primary">
-               <h5 class="modal-title">Lista de estudiantes del grado <span class="badge badge-secondary">${message.to[0].info}</span> </h5>
+               <h5 class="modal-title">Lista de estudiantes del grado <span class="badge badge-secondary">${
+					message.to[0].info
+				}</span> </h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -306,7 +366,9 @@ $(document).ready(function () {
 					.map(
 						(to) => `
                   <div class="media p-2 mt-2">
-                     <img src="${to.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+                     <img src="${
+							to.foto
+						}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                      <div class="media-body">
                         <p class="m-0"><strong>${to.nombre.toUpperCase()}</strong></p>
                      </div>        
@@ -348,6 +410,7 @@ $(document).ready(function () {
 			includeThisFile(),
 			{ getMessages: type },
 			async (res) => {
+				console.log(res);
 				if (res.response) {
 					$messages.empty();
 					messages = await res.data;
@@ -363,9 +426,10 @@ $(document).ready(function () {
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
                   <p class="card-text text-right">${
-						message.leido !== "si" ?
-						'<small class="badge badge-success rounded-0 status">Nuevo</small>'
-					:""}</p>
+						message.leido !== "si"
+							? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
+							: ""
+					}</p>
                </div>
             </div>`);
 					});

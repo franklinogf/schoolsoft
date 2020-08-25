@@ -169,7 +169,8 @@ $(document).ready(function () {
 						? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-				: ''}
+						: ""
+				}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
@@ -191,8 +192,8 @@ $(document).ready(function () {
       <p class="p-2 my-0 font-bree">${message.asunto}</p>
       <hr class="my-1">
       ${
-			message.archivos.length > 0 ?
-			`
+			message.archivos.length > 0
+				? `
       <div class="row row-cols-4 row-cols-lg-6"> 
       ${message.archivos
 			.map((file) => {
@@ -206,10 +207,31 @@ $(document).ready(function () {
 			.join("")}
    </div>
    <hr class="my-1">`
-		: ""}  
+				: ""
+		}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
-   
+		${
+			message.links.length > 0
+				? `
+		<div class="container fixed-bottom position-absolute mb-2">
+			<div class="list-group">
+		${message.links
+			.map(
+				(link) => `
+				<a href="${
+					link.link
+				}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
+					${link.nombre || link.link}
+				</a>
+		`
+			)
+			.join("")}
+			</div>
+		<div>
+		`
+				: ""
+		}
    `);
 
 		// change the message read status
@@ -248,6 +270,7 @@ $(document).ready(function () {
 			includeThisFile(),
 			{ getMessages: type },
 			async (res) => {
+				console.log(res);
 				if (res.response) {
 					$messages.empty();
 					messages = await res.data;
@@ -263,9 +286,10 @@ $(document).ready(function () {
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
                   <p class="card-text text-right">${
-						message.leido !== "si" ?
-						'<small class="badge badge-success rounded-0 status">Nuevo</small>'
-					: ""}</p>
+						message.leido !== "si"
+							? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
+							: ""
+					}</p>
                </div>
             </div>`);
 					});

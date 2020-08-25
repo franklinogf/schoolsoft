@@ -60,7 +60,7 @@ foreach ($students as $student) {
 <ul style='list-style: none;'>
 	<li>Usuario: <b>{$studentUser}</b></li>
    <li style='margin-top: 10px;'>Clave: <b>{$studentPassword}</b></li><br>   
-   <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}'>Acceso al Foro</a></li>
+   <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Acceso al Foro</a></li>
    <br><br>
 </ul>
 <hr>

@@ -57,7 +57,7 @@ foreach ($students as $student) {
    <br>
    <p>El estudiante: <b>$studentName tiene una nueva tarea de {$student->descripcion}</b></p>
 
-   <p>Link: </b><a href='{$link}'>Acceso al Foro</a></p>
+   <p>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Acceso al Foro</a></p>
 </body>
 </html>
 ";

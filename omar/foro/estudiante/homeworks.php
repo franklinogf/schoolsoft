@@ -142,6 +142,7 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
       </div>
    </div>
    <?php
+   Route::includeFile('/includes/layouts/progressBar.php', true);
    Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');
    ?>
 </body>

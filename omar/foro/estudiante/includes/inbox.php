@@ -30,8 +30,8 @@ if (isset($_POST['getMessages'])) {
    }
 
    if ($messages) {
-
       foreach ($messages as $message) {
+         $links = DB::table('t_mensajes_links')->where("mensaje_code", $message->code)->get();
          $student = new Student($message->id_e);
          $teacher = new Teacher($message->id_p);
          $from = $message->enviado_por === 'e' ? 'student' : 'teacher';
@@ -44,6 +44,14 @@ if (isset($_POST['getMessages'])) {
          $toName = ${$to}->fullName();
          $toProfilePicture = ${$to}->profilePicture();
          $toInfo = $message->enviado_por === 'e' ? 'profesor' : $student->grado;
+
+         $linksArray = [];
+         foreach ($links as $link) {
+            $linksArray = [
+               "link" => $link->link,
+               "nombre" => $link->nombre
+            ];
+         }
 
          $filesArray = [];
          $files = DB::table('t_mensajes_archivos')
@@ -73,6 +81,7 @@ if (isset($_POST['getMessages'])) {
             'toFoto' => $toProfilePicture,
             'leido' => $message->leido_e,
             'enviadoPor' => $message->enviado_por,
+            'links' => Util::toObject($links),
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
             'year' => $message->year

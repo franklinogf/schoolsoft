@@ -20,17 +20,18 @@ if (isset($_POST['getMessages'])) {
          ['enviado_por', '<>', 'p'],
          ['id_p', Session::id()],
          ['year', $school->info('year')]
-         ])->orderBy('fecha DESC, hora DESC')->get();
+      ])->orderBy('fecha DESC, hora DESC')->get();
    } else {
       $messages = DB::table('foro_mensajes')->where([
          ['enviado_por', 'p'],
          ['id_p', Session::id()],
          ['year', $school->info('year')]
-         ])->groupBy('code')->orderBy('fecha DESC, hora DESC')->get();
+      ])->groupBy('code')->orderBy('fecha DESC, hora DESC')->get();
    }
 
    if ($messages) {
       foreach ($messages as $message) {
+         $links = DB::table('t_mensajes_links')->where("mensaje_code", $message->code)->get();
          $students = DB::table('foro_mensajes')->select('DISTINCT id_e as mt')->where([
             ['code', $message->code],
             ['enviado_por', 'p'],
@@ -63,6 +64,13 @@ if (isset($_POST['getMessages'])) {
                "info" => "yo"
             ];
          }
+         $linksArray = [];
+         foreach ($links as $link) {
+            $linksArray = [
+               "link" => $link->link,
+               "nombre" => $link->nombre
+            ];
+         }
 
          $filesArray = [];
          $files = DB::table('t_mensajes_archivos')
@@ -90,6 +98,7 @@ if (isset($_POST['getMessages'])) {
             'leido' => $message->leido_p,
             'enviadoPor' => $message->enviado_por,
             'to' => Util::toObject($to),
+            'links' => Util::toObject($links),
             'fecha' => Util::formatDate($message->fecha, true, true),
             'hora' => Util::formatTime($message->hora),
             'year' => $message->year
@@ -135,6 +144,14 @@ if (isset($_POST['getMessages'])) {
    $subject = $_POST['subject'];
    $code = DB::table("foro_mensajes")->select('MAX(code) as maxCode')->first();
    $code = (int) $code->maxCode + 1;
+
+   foreach ($_POST['link'] as $index => $link) {
+      DB::table("t_mensajes_links")->insert([
+         "link" => $link,
+         "nombre" => $_POST["linkName"][$index] !== "" ? $_POST["linkName"][$index] : null,
+         "mensaje_code" => $code
+      ]);
+   }
 
    $uniqueId = uniqid();
    $file = new File();
