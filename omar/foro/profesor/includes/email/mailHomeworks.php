@@ -35,7 +35,7 @@ foreach ($students as $student) {
    }
 
 
-   $link = Route::url('/foro/', true);
+   $link = Route::url('/foro/login.php', true);
    $schoolName = $teacher->info('colegio');
    $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
    $messageTitle = "Tarea del curso {$homework->curso}";
