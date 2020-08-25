@@ -174,6 +174,16 @@ function fileExtension(fileName) {
 }
 
 $(function () {
+  // Ajax session check
+  $( document ).ajaxStart(function() {
+    const path = getBaseUrl().split('/').slice(0,5).join("/");
+  $.get(path+"/includes/sessionCheck.php",res => {
+    console.log(res);
+    if(res === "Expired"){
+      window.location.href = path+"/includes/logout.php";
+    }
+  })
+  });
   // Data table global configuration
   if ($.fn.dataTable) {
     $.extend($.fn.dataTable.defaults, {
