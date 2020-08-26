@@ -104,7 +104,7 @@ class HomeworkModel extends School
       return $obj;
    }
 
-   protected function getFiles($obj, $whereVal = null, $table = 'T_archivos', $whereCol = null)
+   protected function getFiles($obj, $whereVal = null, $table = 't_archivos', $whereCol = null)
    {
       $whereVal = !$whereVal ? $this->primary_key : $whereVal;
       $whereCol = !$whereCol ? $whereVal : $whereCol;

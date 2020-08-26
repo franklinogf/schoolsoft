@@ -2,36 +2,9 @@ $(document).ready(function () {
 	const $modal = $("#myModal");
 	let homeworkId = null;
 	let doneHomeworkId = null;
-	let completed = false;
 
 	$("#myModal form").submit(function (e) {
 		e.preventDefault();
-		$("#progressModal").modal("show");
-		count = 1;
-		timer = setInterval(() => {			
-			if (count > 99) {
-        count = 99
-        if (completed) {
-          clearInterval(timer);
-					$("#progressModal").modal("hide");
-				}
-			} else {        
-				if (completed) {
-					$("#progressModal .progress-bar")
-						.prop("aria-valuenow", 100)
-						.css("width", "100%")
-						.text("100%");					
-					$("#progressModal").modal("hide");
-          
-				}
-			}
-
-			$("#progressModal .progress-bar")
-				.prop("aria-valuenow", count)
-				.css("width", count + "%")
-				.text(count + "%");
-			count++;
-		}, 50);
 
 		const fd = new FormData(this);
 		const files = $('[name="file[]"]');
@@ -50,14 +23,27 @@ $(document).ready(function () {
 				contentType: false,
 				cache: false,
 				processData: false,
-				complete: function (res) {
-					completed = true;
-				},
+				xhr: function () {
+					var xhr = $.ajaxSettings.xhr();
+					xhr.upload.onprogress = function (e) {
+						// For uploads
+						if (e.lengthComputable) {
+							$("#progressModal").modal("show");
+							let progress =Math.round((e.loaded / e.total) * 100)
+							$("#progressModal .progress-bar")
+								.prop("aria-valuenow", progress)
+								.css("width", progress + "%")
+								.text(progress + "%");
+						}
+					};
+					return xhr;
+				},				
 				success: function (res) {
 					console.log("response:", res);
 					$status = $(`.homework.${homeworkId}`).find(".fa-circle");
 					$status.removeClass("text-white").addClass("text-success");
 					animateCSS($status, "fadeIn slow");
+					$("#progressModal").modal("hide");
 					$modal.modal("hide");
 					// $(`.sendHomework[data-homework-id=${homeworkId}]`).prop({disabled:true,ariaDisabled:true})
 				},
@@ -72,12 +58,26 @@ $(document).ready(function () {
 				contentType: false,
 				cache: false,
 				processData: false,
-				complete: function (res) {
-					completed = true
+				xhr: function () {
+					var xhr = $.ajaxSettings.xhr();
+					xhr.upload.onprogress = function (e) {
+						// For uploads
+						if (e.lengthComputable) {
+							$("#progressModal").modal("show");
+							let progress =Math.round((e.loaded / e.total) * 100)
+							$("#progressModal .progress-bar")
+								.prop("aria-valuenow", progress)
+								.css("width", progress + "%")
+								.text(progress + "%");
+						}
+					};
+					return xhr;
 				},
 				success: function (res) {
+					$("#progressModal").modal("hide");
 					$modal.modal("hide");
-				},
+				}
+				
 			});
 		}
 	});

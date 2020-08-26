@@ -36,7 +36,7 @@ if (isset($_POST['getHomework'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
-         DB::table('T_archivos')->insert([
+         DB::table('t_archivos')->insert([
             'nombre' => $newName,
             'id_documento' => $id_homework
          ]);
@@ -66,7 +66,7 @@ if (isset($_POST['getHomework'])) {
    foreach ($file->files as $file) {
       $newName = "({$uniqueId}) $file->name";
       if (File::upload($file, __TEACHER_HOMEWORKS_DIRECTORY, $newName)) {
-         DB::table('T_archivos')->insert([
+         DB::table('t_archivos')->insert([
             'nombre' => $newName,
             'id_documento' => $id_homework
          ]);
@@ -84,20 +84,20 @@ if (isset($_POST['getHomework'])) {
    }
    DB::table('tbl_documentos')->where('id_documento', $id_homework)->delete();
 
-   $files = DB::table('T_archivos')->where('id_documento', $id_homework)->get();
+   $files = DB::table('t_archivos')->where('id_documento', $id_homework)->get();
    if ($files) {
       foreach ($files as $file) {
          File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
       }
-      DB::table('T_archivos')->where('id_documento', $id_homework)->delete();
+      DB::table('t_archivos')->where('id_documento', $id_homework)->delete();
    }
 } else if (isset($_POST['delExistingFile'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('T_archivos')->where('id', $file_id)->first();
+   $file = DB::table('t_archivos')->where('id', $file_id)->first();
 
    File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('T_archivos')->where('id', $file_id)->delete();
+   DB::table('t_archivos')->where('id', $file_id)->delete();
 }

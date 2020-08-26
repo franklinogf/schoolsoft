@@ -71,9 +71,25 @@ $(document).ready(function () {
 				contentType: false,
 				cache: false,
 				processData: false,
+				xhr: function () {
+					var xhr = $.ajaxSettings.xhr();
+					xhr.upload.onprogress = function (e) {
+						// For uploads
+						if (e.lengthComputable) {
+							$("#progressModal").modal("show");
+							let progress =Math.round((e.loaded / e.total) * 100)
+							$("#progressModal .progress-bar")
+								.prop("aria-valuenow", progress)
+								.css("width", progress + "%")
+								.text(progress + "%");
+						}
+					};
+					return xhr;
+				},
 				success: function (res) {
 					const option = $(this).data("option");
 					getMessages(option);
+					$("#progressModal").modal("hide");					
 					$newMessageModal.modal("hide");
 				},
 			});

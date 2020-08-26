@@ -92,7 +92,7 @@ $(document).ready(function () {
                   <div class="card-body">
                     ${nl2br(doneHw.nota)}  
                     ${
-						doneHw.archivos &&
+						doneHw.archivos ?
 						`
                     <hr class="my-2"/>                     
                     <div class="row row-cols-4 row-cols-lg-6"> 
@@ -107,7 +107,7 @@ $(document).ready(function () {
 							.join("")}
                     </div> 
                     `
-					}           
+					:""}           
                   </div>
               </div>
             </div>

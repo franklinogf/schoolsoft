@@ -29,7 +29,7 @@ DB::table("t_mensajes_links")->create("
 `nombre` VARCHAR(150) NULL ,
 `mensaje_code` INT NOT NULL,
  PRIMARY KEY (`id`)");
-
+DB::table('T_archivos')->alter("RENAME TO t_archivos");
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
