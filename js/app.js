@@ -68,7 +68,7 @@ function formatDate(value) {
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     const date = new Date(value);
-
+    date.setDate(date.getDate() + 1)
     const day = date.getDate()
     const month = months[date.getMonth()];
     const year = date.getFullYear()

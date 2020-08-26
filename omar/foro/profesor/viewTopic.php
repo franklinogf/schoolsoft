@@ -38,7 +38,7 @@ $comments = $topic->comments();
 
     <div class="row mt-3">
       <div class="col-lg-4">
-        <a class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
+        <a id="back" class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
           <i class="far fa-comment"></i> Temas
         </a>
       </div>

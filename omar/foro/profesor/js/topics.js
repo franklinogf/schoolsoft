@@ -24,6 +24,7 @@ $(document).ready(function () {
       $('#class').val(thisClass)
 
       $.post(includeThisFile(), { topicsByClass: _class }, res => {
+         console.log(res);
          if (res.data) {
             res.data.map(topic => {
                const thisRow = topicsTable.row.add({
@@ -57,6 +58,7 @@ $(document).ready(function () {
       },
          "json"
       );
+      sessionStorage.clear('class');
 
    }
 

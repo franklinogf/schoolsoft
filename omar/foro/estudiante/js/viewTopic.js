@@ -1,6 +1,12 @@
 $(document).ready(function () {  
    const urlParams = new URLSearchParams(window.location.search);
+   const _class = sessionStorage.getItem('class');
+   sessionStorage.clear('class');
 
+   $("#back").click(function(){
+      sessionStorage.setItem("class", _class);
+   })
+   
    $("#insertComment").click(e => {
       const $commentInput = $("#comment");
       const comment = $commentInput.val()

@@ -2,6 +2,13 @@ $(document).ready(function () {
    const $modal = $("#myModal");
    const urlParams = new URLSearchParams(window.location.search);
 
+   const _class = sessionStorage.getItem('class');
+   sessionStorage.clear('class');
+
+   $("#back").click(function(){
+      sessionStorage.setItem("class", _class);
+   })
+
    $("#editTopicBtn").click(e => {
       $.post(includeThisFile(), { topicById: urlParams.get('id') }, res => {
 
