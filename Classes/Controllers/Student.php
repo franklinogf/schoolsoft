@@ -75,6 +75,13 @@ class Student extends StudentModel
     }
     return $this->getLastStudentTopic($this->{$this->primary_key});
   }
+  public function lastCommentedTopic()
+  {
+    if (!isset($this->{$this->primary_key})) {
+      $this->exception();
+    }
+    return $this->getLastCommentedStudentTopic($this->{$this->primary_key});
+  }
   public function unreadMessages()
   {
     if (!isset($this->{$this->primary_key})) {

@@ -153,6 +153,26 @@ class StudentModel extends School
   {
 
     $year = $this->info('year');
+    $obj =  parent::table('foro_entradas')
+      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
+      ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+      ->join('cursos', 'padres.curso', '=', 'cursos.curso')
+      ->join('year', 'year.ss', '=', 'padres.ss')
+      ->where([
+        ['year.mt', $id],
+        ['cursos.year', $year],
+        ['padres.year', $year],
+        ['foro_entradas.estado', 'a']
+      ])
+      ->orderBy('foro_entradas.fecha DESC, foro_entradas.hora DESC')->first();
+
+    return $obj;
+  }
+
+  protected function getLastCommentedStudentTopic($id)
+  {
+
+    $year = $this->info('year');
     $obj =  parent::table('detalle_foro_entradas')
       ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
       ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')

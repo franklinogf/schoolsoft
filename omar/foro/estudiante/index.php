@@ -8,8 +8,8 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $student = new Student(Session::id());
+$lastCommentedTopic = $student->lastCommentedTopic();
 $lastTopic = $student->lastTopic();
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -40,19 +40,39 @@ $lastTopic = $student->lastTopic();
         </div>
       </div>
       <h2><?= $student->genero === 'F' ? 'Bienvenida' : 'Bienvenido' ?> <?= $student->fullName(); ?></h2>
+      <!-- last topic -->
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5">
           <h4 class="card-header bg-gradient-info bg-info">
-            Ultimo tema comentado
+            Ultimo tema creado
           </h4>
           <div class="card-body border-info">
             <h5 class="card-title"><?= $lastTopic->titulo ?></h5>
-            <p class="card-text text-monospace"> El ultimo comentario se ha hecho en el curso <?= "{$lastTopic->curso} ({$lastTopic->desc1})" ?> </p>
+            <p class="card-text text-monospace">En el curso <?= "{$lastTopic->curso} ({$lastTopic->desc1})" ?> </p>
+            <p class="card-text text-warning"><small>Estara disponible hasta el <?= Util::formatDate($lastTopic->desde, true, true) ?></small> </p>
             <a class="btn btn-primary" href="viewTopic.php?id=<?= $lastTopic->id ?>">Ir al tema</a>
           </div>
           <div class="card-footer text-muted d-flex justify-content-between">
             <span><?= Util::formatDate($lastTopic->fecha, true, true) ?></span>
             <span><?= Util::formatTime($lastTopic->hora) ?></span>
+          </div>
+        </div>    
+
+      <?php endif ?>
+      <!-- last commented topic -->
+      <?php if ($lastCommentedTopic) : ?>
+        <div class="card mx-auto mt-5">
+          <h4 class="card-header bg-gradient-info bg-info">
+            Ultimo tema comentado
+          </h4>
+          <div class="card-body border-info">
+            <h5 class="card-title"><?= $lastCommentedTopic->titulo ?></h5>
+            <p class="card-text text-monospace"> El ultimo comentario se ha hecho en el curso <?= "{$lastCommentedTopic->curso} ({$lastCommentedTopic->desc1})" ?> </p>
+            <a class="btn btn-primary" href="viewTopic.php?id=<?= $lastCommentedTopic->id ?>">Ir al tema</a>
+          </div>
+          <div class="card-footer text-muted d-flex justify-content-between">
+            <span><?= Util::formatDate($lastCommentedTopic->fecha, true, true) ?></span>
+            <span><?= Util::formatTime($lastCommentedTopic->hora) ?></span>
           </div>
         </div>
       <?php else : ?>

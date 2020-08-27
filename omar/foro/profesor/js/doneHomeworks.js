@@ -66,7 +66,6 @@ $(document).ready(function () {
 				includeThisFile(),
 				{ doneHomeworksByHomeworkId: homeworkId },
 				(res) => {
-					console.log(res);
 					if (res.response) {
 						$modal.find(".modal-title").text(data[0]);
 						$modal.find(".modal-body").html(`
@@ -92,8 +91,8 @@ $(document).ready(function () {
                   <div class="card-body">
                     ${nl2br(doneHw.nota)}  
                     ${
-						doneHw.archivos ?
-						`
+						doneHw.archivos
+							? `
                     <hr class="my-2"/>                     
                     <div class="row row-cols-4 row-cols-lg-6"> 
                       ${doneHw.archivos
@@ -107,7 +106,8 @@ $(document).ready(function () {
 							.join("")}
                     </div> 
                     `
-					:""}           
+							: ""
+					}           
                   </div>
               </div>
             </div>
