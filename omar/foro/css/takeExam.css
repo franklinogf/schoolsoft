@@ -1,0 +1,32 @@
+polygon {
+	stroke: var(--secondary);
+	stroke-width: 0.5rem;
+	stroke-dasharray: 50, 10;
+	stroke-dashoffset: 0;
+	fill: none;
+	animation: border 5s linear infinite;
+}
+
+@keyframes border {
+	to {
+		stroke-dashoffset: -300;
+	}
+}
+
+#timer {
+	position: absolute;
+	top: 10px;
+	left: 40px;
+}
+
+.rectangule {
+	width: 100px;
+	height: 50px;
+}
+
+#timeRectangule {
+	position: fixed;
+	top: 5rem;
+    right: 5rem;
+    z-index: 9999;
+}

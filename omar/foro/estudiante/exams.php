@@ -14,18 +14,24 @@ $exams = $student->exams(Util::daysBefore(3));
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
-  <?php
-  $title = "Examenes";
-  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
-  ?>
+<head>
+   <?php
+   $title = "Examenes";
+   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+   ?>
 </head>
 
 <body class='pb-5'>
    <?php
    Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
    ?>
-   <div class="container-lg mt-5 px-0 pb-5">
+   <div class="container-lg mt-5 px-0 pb-5">      
+      <?php if(__SCHOOL_URL === "/demo"): ?>
+         <div id="deleteExam" class="d-none">
+         <input type="text" id="examId">
+         <button class="btn btn-outline-danger"> Borrar </button>
+      </div>
+         <?php endif ?>
       <h1 class="text-center mb-3">Mis Examenes</h1>
       <?php if ($exams) : ?>
          <!-- leyend -->
@@ -73,7 +79,7 @@ $exams = $student->exams(Util::daysBefore(3));
                      <div class="card-body ">
                         <h5 class="card-title"><?= $exam->titulo ?></h5>
                         <p class="card-text"><?= "Valor: $exam->valor" ?></p>
-                        <p class="card-text"><span class="<?= ($points >= $exam->valor*0.70) ? "text-success" :"text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : ""?></span></p>
+                        <p class="card-text"><span class="<?= ($points >= $exam->valor * 0.70) ? "text-success" : "text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : "" ?></span></p>
 
                      </div>
                      <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-between">
