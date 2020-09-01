@@ -91,10 +91,10 @@ class ExamModel extends School
          ->where([
             ["{$this->table}.curso", $class],
             ["{$this->table}.fecha", '>=', $date],
-            // ["{$this->table}.activo", 'si'],
+            ["{$this->table}.activo", 'si'],
             ["cursos.year", $this->info('year')]
          ])
-         ->orderBy("{$this->table}.fecha", 'DESC')->get();
+         ->orderBy("{$this->table}.fecha", 'DESC')->first();
       // $this->getExamTopics($obj);
 
       return $obj;
