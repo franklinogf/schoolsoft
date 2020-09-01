@@ -111,7 +111,7 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    $fullName = strtoupper(strtolower("{$this->nombre} {$this->apellidos}"));
+    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}",'UTF-8');
     return $fullName;
   }
 

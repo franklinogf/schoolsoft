@@ -47,7 +47,7 @@ class Student extends StudentModel
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    $fullName = strtoupper(strtolower("{$this->nombre} {$this->apellidos}"));
+    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}",'UTF-8');
     return $fullName;
   }
   public function profilePicture()
