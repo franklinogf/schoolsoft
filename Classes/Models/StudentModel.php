@@ -86,12 +86,15 @@ class StudentModel extends School
   protected function getStudentExams($ss, $date = null)
   {
     $classes = $this->getStudentClasses($ss);
-
+    $obj = [];
     foreach ($classes as $class) {
       $exam = new Exam();
-      $obj = $exam->findByClassForStudents($class->curso, $date);
-      return $obj;
+      $studenExam = $exam->findByClassForStudents($class->curso, $date);
+      if($studenExam){
+        $obj[] = $studenExam;
+      }
     }
+    return $obj;
   }
 
   protected function getStudentDoneExamById($mt, $id_exam)
