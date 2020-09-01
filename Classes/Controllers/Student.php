@@ -47,7 +47,7 @@ class Student extends StudentModel
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    $fullName = ucwords(strtolower("{$this->nombre} {$this->apellidos}"));
+    $fullName = strtoupper(strtolower("{$this->nombre} {$this->apellidos}"));
     return $fullName;
   }
   public function profilePicture()
