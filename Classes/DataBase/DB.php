@@ -142,7 +142,7 @@ class DB extends DataBase
   public function find($value, $col = 'id')
   {
 
-    self::where($col, $value);
+    $this->where($col, $value);
     $this->buildSelectQuery();
     $obj = $this->selectOne(self::$query, self::$where);
     $this->closeDB();
@@ -242,6 +242,10 @@ class DB extends DataBase
   public function get()
   {
     $this->buildSelectQuery();
+    // echo "<pre>";
+    // var_dump(self::$where);
+    // echo "</pre>";
+    // echo self::$query. '<br>';
     $obj = $this->selectAll(self::$query, self::$where);
     $this->closeDB();
     return $obj;
