@@ -2,6 +2,7 @@
 
 namespace Classes\DataBase;
 
+use Classes\Session;
 use mysqli;
 use Exception;
 use Classes\Util;
@@ -71,7 +72,7 @@ class DataBase
     call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
     // php 7 version
     // $stmt->bind_param($bind, ...$valuesArray);
-    $stmt->execute();
+    if (Session::is_logged(false)) $stmt->execute();
   }
 
   // Insert row into tables 
@@ -104,7 +105,7 @@ class DataBase
     if ($this->isMultiArray($valuesArray)) {
 
       foreach ($valuesArray as $key => $array) {
-        if (!$stmt = $db->prepare($query[$key])){
+        if (!$stmt = $db->prepare($query[$key])) {
           echo "error " . $db->error . "<br/>";
         }
         $bind =  str_repeat('s', count($array));
@@ -116,7 +117,7 @@ class DataBase
         call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
         // // php 7 version
         // $stmt->bind_param($bind, ...$array);
-        $stmt->execute();
+        if (Session::is_logged(false)) $stmt->execute();
       }
     } else {
       $stmt = $db->prepare($query[0]);
@@ -129,14 +130,15 @@ class DataBase
       call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
       // php 7 version
       // $stmt->bind_param($bind, ...$valuesArray);
-      if ($stmt->execute()) {
-
-        if ($insertId === true) {
-          return $stmt->insert_id;
+      if (Session::is_logged(false)) {
+        if ($stmt->execute()) {
+          if ($insertId === true) {
+            return $stmt->insert_id;
+          }
+          return true;
+        } else {
+          throw new Exception($stmt->error);
         }
-        return true;
-      } else {
-        throw new Exception($stmt->error);
       }
     }
   }
