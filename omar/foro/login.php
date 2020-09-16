@@ -31,6 +31,24 @@ DB::table("t_mensajes_links")->create("
  PRIMARY KEY (`id`)");
 DB::table('T_archivos')->alter("RENAME TO t_archivos");
 DB::table('T_tareas_archivos')->alter("RENAME TO t_tareas_archivos");
+
+DB::table('T_examenes')->alter("
+ADD `desc1` CHAR(2) NOT NULL DEFAULT 'no' AFTER `activo`,
+ADD `desc1_1` TEXT NULL DEFAULT NULL AFTER `desc1`,
+ADD `desc2` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc1_1`,
+ADD `desc2_1` TEXT NULL DEFAULT NULL AFTER `desc2`,
+ADD `desc3` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc2_1`,
+ADD `desc3_1` TEXT NULL DEFAULT NULL AFTER `desc3`,
+ADD `desc4` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc3_1`,
+ADD `desc4_1` TEXT NULL DEFAULT NULL AFTER `desc4`,
+ADD `desc5` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc4_1`,
+ADD `desc5_1` TEXT NULL DEFAULT NULL AFTER `desc5`
+");
+
+/* -------------------------------------------------------------------------- */
+/*                         END DATABASE MODIFICATIONS                         */
+/* -------------------------------------------------------------------------- */
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
