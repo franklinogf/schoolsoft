@@ -52,14 +52,14 @@ if (isset($_POST['getMessages'])) {
             foreach ($students as $student) {
                $student = new Student($student->mt);
                $to[] = [
-                  "nombre" => strtoupper($student->fullName()),
+                  "nombre" => $student->fullName(),
                   "foto" => $student->profilePicture(),
                   "info" => $student->grado
                ];
             }
          } else {
             $to[] = [
-               "nombre" => strtoupper($teacher->fullName()),
+               "nombre" => $teacher->fullName(),
                "foto" => $teacher->profilePicture(),
                "info" => "yo"
             ];
@@ -92,7 +92,7 @@ if (isset($_POST['getMessages'])) {
             'asunto' => $message->asunto,
             'mensaje' => $message->mensaje,
             'archivos' => $filesArray,
-            'nombre' => strtoupper($name),
+            'nombre' => $name,
             'foto' => $profilePicture,
             'info' => $info,
             'leido' => $message->leido_p,

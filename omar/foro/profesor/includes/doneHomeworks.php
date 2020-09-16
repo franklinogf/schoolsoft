@@ -31,7 +31,7 @@ if (isset($_POST['homeworksByClass'])) {
    foreach ($doneHws as $key => $doneHw) {
       $student = new Student($doneHw->id_estudiante);
       $data[$key]['id'] = $doneHw->id;
-      $data[$key]['nombre'] = strtoupper($student->fullName());
+      $data[$key]['nombre'] = $student->fullName();
       $data[$key]['nota'] = $doneHw->nota;
       $data[$key]['fecha'] = Util::formatDate($doneHw->fecha, true);
       $data[$key]['hora'] = Util::formatTime($doneHw->hora);
