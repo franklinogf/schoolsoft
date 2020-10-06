@@ -7,15 +7,21 @@ use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Exam;
 use Classes\Controllers\Student;
-use Classes\Util;
 
-Session::is_logged();
+
 Server::is_post();
-
+$studentId = $_POST['id_student'];
 $insertsArray = [];
 $id_exam = $_POST['id_exam'];
-$student = new Student(Session::id());
+$student = new Student($studentId);
 $exam = new Exam($id_exam);
+if (!Session::is_logged(false)) {
+    $_SESSION['logged'] = [
+   'location' => "foro",
+   "user" => ['id' => $student->mt],
+   'type' => 'estudiante'
+];
+}
 
 //save done Exam
 $id_doneExam = DB::table('T_examenes_terminados')->insertGetId([

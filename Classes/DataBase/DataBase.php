@@ -169,7 +169,7 @@ class DataBase
 
     $db = $this->connect();
     if (!$stmt = $db->prepare($query)) {
-      var_dump($whereArray);
+      // var_dump($whereArray);
       throw new Exception("Error con el query $query ($db->error)");
     }
 
@@ -195,7 +195,7 @@ class DataBase
     $stmt->close();
     return $result;
   }
-  // check if the array given is a assosiative array
+  // check if the array given is a associative  array
   protected function isMultiArray($array)
   {
     $rv = array_filter($array, 'is_array');

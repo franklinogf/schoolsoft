@@ -66,9 +66,9 @@ class StudentModel extends School
       if ($homework = $hw->findByClassForStudents($class->curso, $date))
         $obj[] = $homework;
     }
-    if(count($obj) > 0){
+    if (count($obj) > 0) {
       return call_user_func_array('array_merge', $obj);
-    }else{
+    } else {
       return [];
     }
   }
@@ -83,14 +83,14 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getStudentExams($ss, $date = null)
+  protected function getStudentExams($ss, $date = null, $time = false)
   {
     $classes = $this->getStudentClasses($ss);
     $obj = [];
     foreach ($classes as $class) {
       $exam = new Exam();
-      $studenExam = $exam->findByClassForStudents($class->curso, $date);
-      if($studenExam){
+      $studenExam = $exam->findByClassForStudents($class->curso, $date, $time);
+      if ($studenExam) {
         $obj[] = $studenExam;
       }
     }

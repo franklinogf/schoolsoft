@@ -9,7 +9,6 @@ class Student extends StudentModel
 {
   public function __construct($value = '')
   {
-
     parent::__construct();
     if ($value !== '') {
 
@@ -47,7 +46,7 @@ class Student extends StudentModel
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}",'UTF-8');
+    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}", 'UTF-8');
     return $fullName;
   }
   public function profilePicture()
@@ -102,24 +101,24 @@ class Student extends StudentModel
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    return $this->getStudentHomeworks($this->ss,$date);
+    return $this->getStudentHomeworks($this->ss, $date);
   }
 
-  
+
   public function doneHomework($id_hw)
   {
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    return $this->getStudentDoneHomeworkById($this->{$this->primary_key},$id_hw);
+    return $this->getStudentDoneHomeworkById($this->{$this->primary_key}, $id_hw);
   }
 
-  public function exams($date = null)
+  public function exams($date = null, $time = false)
   {
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    return $this->getStudentExams($this->ss,$date);
+    return $this->getStudentExams($this->ss, $date, $time);
   }
 
   public function doneExam($id_exam)
@@ -127,7 +126,7 @@ class Student extends StudentModel
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    return $this->getStudentDoneExamById($this->{$this->primary_key},$id_exam);
+    return $this->getStudentDoneExamById($this->{$this->primary_key}, $id_exam);
   }
 
   public function login($username, $password)

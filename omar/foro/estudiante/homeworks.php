@@ -8,7 +8,6 @@ use Classes\Session;
 use Classes\Controllers\Student;
 
 Session::is_logged();
-
 $student = new Student(Session::id());
 
 $homeworks = $student->homeworks(Util::daysBefore(5));

@@ -83,19 +83,34 @@ class ExamModel extends School
 
       return $obj;
    }
-   protected function getExamsByClassForStudents($class, $date = null)
+   protected function getExamsByClassForStudents($class, $date = null, $time = false)
    {
       $date = $date ? $date : Util::date();
-      $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
-         ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
-         ->where([
-            ["{$this->table}.curso", $class],
-            ["{$this->table}.fecha", '>=', $date],
-            ["{$this->table}.activo", 'si'],
-            ["cursos.year", $this->info('year')]
-         ])
-         ->orderBy("{$this->table}.fecha", 'DESC')->first();
-      // $this->getExamTopics($obj);
+      if($time){
+         $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
+            ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
+            ->where([
+               ["{$this->table}.curso", $class],
+               ["{$this->table}.activo", 'si'],
+               ["cursos.year", $this->info('year')],
+               ["{$this->table}.fecha", $date]
+            ])
+            ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final",[
+               Util::time(),
+               Util::time()
+            ])
+            ->orderBy("{$this->table}.fecha", 'DESC')->first();          
+         }else{
+            $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
+               ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
+               ->where([
+                  ["{$this->table}.curso", $class],
+                  ["{$this->table}.activo", 'si'],
+                  ["cursos.year", $this->info('year')],
+                  ["{$this->table}.fecha", '>=', $date]
+               ])
+               ->orderBy("{$this->table}.fecha", 'DESC')->first();
+      }     
 
       return $obj;
    }
@@ -129,8 +144,8 @@ class ExamModel extends School
             $exam->{$name} = new stdClass();
             $exam->{$name}->value = 0;
             foreach ($objs as $obj) {
-               if(array_key_exists($name,$titles)) $exam->{$name}->title = $titles[$name];
-               if(array_key_exists('valor',$obj)) $exam->{$name}->value = $exam->{$name}->value + $obj->valor;
+               if (array_key_exists($name, $titles)) $exam->{$name}->title = $titles[$name];
+               if (array_key_exists('valor', $obj)) $exam->{$name}->value = $exam->{$name}->value + $obj->valor;
                $exam->{$name}->topics[] = $obj;
             }
          }

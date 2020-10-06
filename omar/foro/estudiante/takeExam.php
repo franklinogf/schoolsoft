@@ -35,11 +35,7 @@ $topicNumber = 1;
             <polygon points="0,0 100,0 100,50 0,50" />
          </svg>
          <p id="timer" class="text-primary font-weight-bold"><?= $exam->tiempo ?></p>
-      </div>
-      <!-- <div class="spinner-border text-primary" role="status">   
-               
-         <span class="sr-only">Loading...</span>
-      </div> -->
+      </div>     
       <div id="menuButtons">
          <button id="askForExam" class="btn btn-primary mx-auto d-block my-2">Empezar examen</button>
          <a href="<?= Route::url('/foro/estudiante/exams.php') ?>" class="btn btn-secondary mx-auto d-block my-2">No estoy listo</a>
@@ -47,16 +43,17 @@ $topicNumber = 1;
       <div class="jumbotron py-4 blur">
          <div class="container bg-white px-3 py-5 p-md-5 shadow">
 
-            <h1 class="text-center mb-5"><?= $exam->titulo ?></h1>
+            <h1 class="text-center mb-5"><?= utf8_decode($exam->titulo) ?></h1>
             <form method="POST" action="<?= Route::url('/foro/estudiante/includes/takeExam.php') ?>" class="needs-validation" novalidate>
                <input type="hidden" name="id_exam" value="<?= $id_exam ?>">
+               <input type="hidden" name="id_student" value="<?= $student->mt ?>">
                <?php if (isset($exam->fvs->topics)) : ?>
                   <!-- FV -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc1 === 'si' ? $exam->desc1_1 : $exam->fvs->title ?> <span class="badge badge-info"><?= $exam->fvs->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc1 === 'si' ? utf8_decode($exam->desc1_1) : utf8_decode($exam->fvs->title) ?> <span class="badge badge-info"><?= $exam->fvs->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->fvs->topics as $topic) : ?>
                      <div class="form-group">
-                        <label class="font-weight-bold" for="fv<?= $count ?>"><?= "$count) $topic->pregunta"; ?></label>
+                        <label class="font-weight-bold" for="fv<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta"); ?></label>
                         <select id="fv<?= $count ?>" class="form-control" name="fv[<?= $topic->id ?>]" required>
                            <option value="" selected>Selecciona la respuesta</option>
                            <option value="v">Verdadero</option>
@@ -71,17 +68,17 @@ $topicNumber = 1;
 
                <?php if (isset($exam->selects->topics)) : ?>
                   <!-- SELECT -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc2 === 'si' ? $exam->desc2_1 : $exam->selects->title ?><span class="badge badge-info"><?= $exam->selects->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc2 === 'si' ? utf8_decode($exam->desc2_1) : utf8_decode($exam->selects->title) ?><span class="badge badge-info"><?= $exam->selects->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->selects->topics as $topic) : ?>
-                     <p class="font-weight-bold"><?= "$count) $topic->pregunta"; ?></p>
+                     <p class="font-weight-bold"><?= utf8_decode("$count) $topic->pregunta"); ?></p>
                      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                         <?php for ($i = 1; $i <= 8; $i++) : ?>
                            <?php if (!empty($topic->{"respuesta{$i}"})) : ?>
                               <div class="col form-group">
                                  <div class="custom-control custom-radio">
                                     <input type="radio" id="select<?= "{$count}_{$i}" ?>" name="select[<?= "{$topic->id}" ?>]" class="custom-control-input" value="<?= "{$i}" ?>" required>
-                                    <label class="custom-control-label" for="select<?= "{$count}_{$i}" ?>"><?= $topic->{"respuesta{$i}"} ?></label>
+                                    <label class="custom-control-label" for="select<?= "{$count}_{$i}" ?>"><?= utf8_decode($topic->{"respuesta{$i}"}) ?></label>
                                  </div>
                               </div>
                            <?php endif ?>
@@ -95,15 +92,15 @@ $topicNumber = 1;
 
                <?php if (isset($exam->pairs->topics)) : ?>
                   <!-- PAIRS -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc3 === 'si' ? $exam->desc3_1 : $exam->pairs->title ?><span class="badge badge-info"><?= $exam->pairs->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc3 === 'si' ? utf8_decode($exam->desc3_1) : utf8_decode($exam->pairs->title) ?><span class="badge badge-info"><?= $exam->pairs->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->pairs->topics as $topic) : ?>
                      <div class="form-group row">
-                        <label class="col-8" for="pair<?= $count ?>"><?= "$count) $topic->pregunta"; ?></label>
+                        <label class="col-8" for="pair<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta"); ?></label>
                         <select id="pair<?= $count ?>" class="form-control col-4" name="pair[<?= $topic->id ?>]" required>
                            <option value="" selected>Selecciona la respuesta</option>
                            <?php foreach ($exam->pairCodes->topics as $answer) : ?>
-                              <option value="<?= $answer->id ?>"><?= $answer->respuesta ?></option>
+                              <option value="<?= $answer->id ?>"><?= utf8_decode($answer->respuesta) ?></option>
                            <?php endforeach ?>
                         </select>
 
@@ -116,7 +113,7 @@ $topicNumber = 1;
 
                <?php if (isset($exam->lines->topics)) : ?>
                   <!-- LINES -->
-                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc4 === 'si' ? $exam->desc4_1 : $exam->lines->title ?> <span class="badge badge-info"><?= $exam->lines->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc4 === 'si' ? utf8_decode($exam->desc4_1) : utf8_decode($exam->lines->title) ?> <span class="badge badge-info"><?= $exam->lines->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->lines->topics as $topic) : ?>
                      <?php
@@ -139,11 +136,11 @@ $topicNumber = 1;
                <?php if (isset($exam->qas->topics)) : ?>
                   <!-- QA -->
 
-                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc5 === 'si' ? $exam->desc5_1 : $exam->qas->title ?> <span class="badge badge-info"><?= $exam->qas->value ?></span></h4>
+                  <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc5 === 'si' ? utf8_decode($exam->desc5_1) : utf8_decode($exam->qas->title) ?> <span class="badge badge-info"><?= $exam->qas->value ?></span></h4>
                   <?php $count = 1 ?>
                   <?php foreach ($exam->qas->topics as $topic) : ?>
                      <div class="form-group">
-                        <label class="font-weight-bold" for="qa<?= $count ?>"><?= "$count) $topic->pregunta"; ?></label>
+                        <label class="font-weight-bold" for="qa<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta"); ?></label>
                         <textarea class="form-control normal" id="qa<?= $count ?>" name="qa[<?= $topic->id ?>]" required></textarea>
                      </div>
                      <?php $count++ ?>

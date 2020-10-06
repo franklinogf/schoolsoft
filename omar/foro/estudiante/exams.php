@@ -9,7 +9,7 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $student = new Student(Session::id());
-$exams = $student->exams(Util::daysBefore(3));
+$exams = $student->exams(Util::date(),true);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -25,13 +25,13 @@ $exams = $student->exams(Util::daysBefore(3));
    <?php
    Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
    ?>
-   <div class="container-lg mt-5 px-0 pb-5">      
-      <?php if(__SCHOOL_URL === "/demo"): ?>
+   <div class="container-lg mt-5 px-0 pb-5">
+      <?php if (__SCHOOL_URL === "/demo") : ?>
          <div id="deleteExam" class="d-none">
-         <input type="text" id="examId">
-         <button class="btn btn-outline-danger"> Borrar </button>
-      </div>
-         <?php endif ?>
+            <input type="text" id="examId">
+            <button class="btn btn-outline-danger"> Borrar </button>
+         </div>
+      <?php endif ?>
       <h1 class="text-center mb-3">Mis Examenes</h1>
       <?php if ($exams) : ?>
          <!-- leyend -->
@@ -66,8 +66,8 @@ $exams = $student->exams(Util::daysBefore(3));
    <div class="container">
       <?php if ($exams) : ?>
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <?php foreach ($exams as $exam) : ?>
-               <?php $doneExam = $student->doneExam($exam->id) ?>
+            <?php foreach ($exams as $exam) : ?>              
+               <?php $doneExam = $student->doneExam($exam->id); ?>
                <?php $points = ($doneExam->puntos + $doneExam->bonos) ?>
                <?php $sent = $doneExam ? 'success' : 'white' ?>
                <?php $expired = $exam->fecha >= Util::date() ? '' : 'danger'; ?>
@@ -77,7 +77,7 @@ $exams = $student->exams(Util::daysBefore(3));
                         <?= "{$exam->curso} - {$exam->desc}" ?>
                         <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
                      <div class="card-body ">
-                        <h5 class="card-title"><?= $exam->titulo ?></h5>
+                        <h5 class="card-title"><?= utf8_decode($exam->titulo) ?></h5>
                         <p class="card-text"><?= "Valor: $exam->valor" ?></p>
                         <p class="card-text"><span class="<?= ($points >= $exam->valor * 0.70) ? "text-success" : "text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : "" ?></span></p>
 
@@ -88,7 +88,7 @@ $exams = $student->exams(Util::daysBefore(3));
                      </div>
                      <button type="button" data-exam-id="<?= $exam->id ?>" class="btn btn-info btn-block rounded-0 takeExam" <?= $expired === 'danger' || $sent === 'success' ? "aria-disabled='true' disabled" : "" ?>>Tomar Examen</button>
                   </div>
-               </div>
+               </div>               
             <?php endforeach ?>
 
          </div> <!-- end row -->
