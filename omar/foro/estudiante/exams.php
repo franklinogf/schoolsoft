@@ -9,7 +9,8 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $student = new Student(Session::id());
-$exams = $student->exams(Util::date(),true);
+$exams = $student->exams();
+// Util::dump($exams);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -63,32 +64,50 @@ $exams = $student->exams(Util::date(),true);
    </div>
 
    <!-- Exam list -->
-   <div class="container">
-      <?php if ($exams) : ?>
+   <?php if ($exams) : ?>
+      <div class="container">
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <?php foreach ($exams as $exam) : ?>              
-               <?php $doneExam = $student->doneExam($exam->id); ?>
-               <?php $points = ($doneExam->puntos + $doneExam->bonos) ?>
-               <?php $sent = $doneExam ? 'success' : 'white' ?>
-               <?php $expired = $exam->fecha >= Util::date() ? '' : 'danger'; ?>
+            <?php foreach ($exams as $exam) : ?>
+               <?php
+               $doneExam = $student->doneExam($exam->id);
+               $points = ($doneExam->puntos + $doneExam->bonos);
+               $sent = $doneExam ? true : false;
+               $expired = $exam->fecha >= Util::date() ? false : true;
+               if ($expired || $sent || Util::date() < $exam->fecha) {
+                  $disabled = true;
+               } elseif (Util::date() === $exam->fecha) {
+                  if (Util::time() >= $exam->hora && Util::time() <= $exam->hora_final) {
+                     $disabled = false;
+                  } else {
+                     $disabled = true;
+                  }
+               }
+               ?>
                <div class="col mb-4 exam <?= $exam->id ?>">
-                  <div class="card h-100 <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
+                  <div class="card h-100 <?= $expired ? "border-danger" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$exam->curso} - {$exam->desc}" ?>
-                        <i class="fas fa-circle text-<?= $sent ?>"></i></h6>
+                        <i class="fas fa-circle text-<?= $sent ? 'success' : 'white' ?>"></i></h6>
                      <div class="card-body ">
                         <h5 class="card-title"><?= utf8_decode($exam->titulo) ?></h5>
                         <p class="card-text"><?= "Valor: $exam->valor" ?></p>
-                        <p class="card-text"><span class="<?= ($points >= $exam->valor * 0.70) ? "text-success" : "text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : "" ?></span></p>
+                        <p class="card-text">
+                           <a href="<?= Route::url("/foro/estudiante/includes/pdf/pdfExam.php?examenId={$exam->id}") ?>" target="_blank">
+                              <span class="<?= ($points >= $exam->valor * 0.70) ? "text-success" : "text-danger" ?>"><?= $points > 0 ? "Puntos conseguidos: $points" : "" ?></span>
+                           </a>
+                        </p>
 
                      </div>
                      <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-between">
-                        <small class="text-primary blend-screen"><?= Util::formatDate($exam->fecha, true) ?></small>
-                        <small class="text-primary blend-screen"><?= (strpos($exam->hora, '(') > -1 ? $exam->hora  : Util::formatTime($exam->hora)) ?></small>
+                        <small class="text-white"><?= Util::formatDate($exam->fecha, true) ?></small>
+                        <small class="text-white blend-screen">
+                           <span class="text-info"><?= (strpos($exam->hora, '(') > -1 ? $exam->hora  : Util::formatTime($exam->hora)) ?></span> -
+                           <span class="text-danger"><?= Util::formatTime($exam->hora_final) ?> </span>
+                        </small>
                      </div>
-                     <button type="button" data-exam-id="<?= $exam->id ?>" class="btn btn-info btn-block rounded-0 takeExam" <?= $expired === 'danger' || $sent === 'success' ? "aria-disabled='true' disabled" : "" ?>>Tomar Examen</button>
+                     <button type="button" data-exam-id="<?= $exam->id ?>" class="btn btn-info btn-block rounded-0 takeExam" <?= $disabled  ? "aria-disabled='true' disabled" : "" ?>>Tomar Examen</button>
                   </div>
-               </div>               
+               </div>
             <?php endforeach ?>
 
          </div> <!-- end row -->
@@ -96,8 +115,8 @@ $exams = $student->exams(Util::date(),true);
          <div class="alert alert-info mx-auto" role="alert">
             No tienes examenes pendientes! <i class="far fa-laugh-beam"></i>
          </div>
-      <?php endif ?>
-   </div><!-- end container -->
+      </div><!-- end container -->
+   <?php endif ?>
 
    <?php
    Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');

@@ -99,7 +99,7 @@ class ExamModel extends School
                Util::time(),
                Util::time()
             ])
-            ->orderBy("{$this->table}.fecha", 'DESC')->first();          
+            ->orderBy("{$this->table}.fecha", 'DESC')->get();          
          }else{
             $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
                ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
@@ -109,7 +109,7 @@ class ExamModel extends School
                   ["cursos.year", $this->info('year')],
                   ["{$this->table}.fecha", '>=', $date]
                ])
-               ->orderBy("{$this->table}.fecha", 'DESC')->first();
+               ->orderBy("{$this->table}.fecha", 'DESC')->get();
       }     
 
       return $obj;

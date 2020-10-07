@@ -89,10 +89,12 @@ class StudentModel extends School
     $obj = [];
     foreach ($classes as $class) {
       $exam = new Exam();
-      $studenExam = $exam->findByClassForStudents($class->curso, $date, $time);
-      if ($studenExam) {
-        $obj[] = $studenExam;
+      $studentExam = $exam->findByClassForStudents($class->curso, $date, $time);
+     if($studentExam){
+      foreach ($studentExam as $exam) {
+        $obj[] = $exam;
       }
+     }
     }
     return $obj;
   }

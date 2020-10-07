@@ -91,7 +91,8 @@ ADD `desc5_1` TEXT NULL DEFAULT NULL AFTER `desc5`
          <input type="password" id="password" name="password" class="form-control mb-0" placeholder="Clave">
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>
+      <button class="btn btn-md btn-primary btn-block mt-2" type="submit">Continuar</button>
+      <a class="btn btn-sm btn-secondary btn-block mt-2" href="<?= Route::url('') ?>">Pagina Principal</a>
       <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
    </form>
    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
