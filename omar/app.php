@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'database.php';
+require_once 'config.php';
 /* -------------------------------------------------------------------------- */
 /*                              Root directories                              */
 /* -------------------------------------------------------------------------- */
@@ -12,6 +13,7 @@ define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__))); # /ho
 define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL)))); # /demo
 $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
 define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, DIRECTORY_SEPARATOR, 1)))); #  /foro
+define('__SCHOOL_ACRONYM', str_replace('/', '', __SCHOOL_URL)); # demo
 
 
 /* -------------------------------------------------------------------------- */
@@ -37,41 +39,7 @@ define('__NO_PROFILE_PICTURE_STUDENT_MALE', str_replace('/', DIRECTORY_SEPARATOR
 define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-girl.png'));
 
 
-/* -------------------------------------------------------------------------- */
-/*                                   Config                                   */
-/* -------------------------------------------------------------------------- */
 
-// Language: es = Spanish, en = English
-define('__LANG', 'es');
-define('__DEFAULT_LOGO', 'logo.gif');
-define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
-// regular is 72 x 72
-define('__LOGO_SIZE', 200);
-
-define('__LOGIN_LOGO_SIZE', 400);
-/* ----------------------------------- PDF ---------------------------------- */
-
-// RGB $pdf->SetFillColor(red,green,blue)
-define('__PDF_FILL_COLOR_RED', 89);
-define('__PDF_FILL_COLOR_GREEN', 171);
-define('__PDF_FILL_COLOR_BLUE', 227);
-
-define('__PDF_LOGO_SIZE', 40);
-
-/* -------------------------------- time zone ------------------------------- */
-
-/** For the United States:
- * Eastern ........... America/New_York
- * Central ........... America/Chicago
- * Mountain .......... America/Denver
- * Mountain no DST ... America/Phoenix
- * Pacific ........... America/Los_Angeles
- * Alaska ............ America/Anchorage
- * Hawaii ............ America/Adak
- * Hawaii no DST ..... Pacific/Honolulu
- * Puerto Rico ....... America/Puerto_Rico*/
-
-date_default_timezone_set("America/Puerto_Rico");
 
 
 include __ROOT . '/autoload.php';
