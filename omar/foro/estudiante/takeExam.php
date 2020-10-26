@@ -74,7 +74,7 @@ $topicNumber = 1;
                      <p class="font-weight-bold"><?= utf8_decode("$count) $topic->pregunta"); ?></p>
                      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                         <?php for ($i = 1; $i <= 8; $i++) : ?>
-                           <?php if (!empty($topic->{"respuesta{$i}"})) : ?>
+                           <?php if (!empty($topic->{"respuesta{$i}"}) || $topic->{"respuesta{$i}"} === "0") : ?>
                               <div class="col form-group">
                                  <div class="custom-control custom-radio">
                                     <input type="radio" id="select<?= "{$count}_{$i}" ?>" name="select[<?= "{$topic->id}" ?>]" class="custom-control-input" value="<?= "{$i}" ?>" required>

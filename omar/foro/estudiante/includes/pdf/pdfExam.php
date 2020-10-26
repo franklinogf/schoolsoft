@@ -33,6 +33,7 @@ $teacher = new Teacher($exam->id_maestro);
 $student = new Student(Session::id());
 $doneExam = $student->doneExam($exam->id);
 $pdf = new PDF();
+$pdf->SetTitle(utf8_decode($exam->titulo) . " - " . $student->fullName());
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true, 10);
 
@@ -54,7 +55,7 @@ $pdf->Cell(35, 7, $student->grado, 'B', 1, 'C');
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 18);
 
-$pdf->MultiCell(0, 5, $exam->titulo, '0', "C");
+$pdf->MultiCell(0, 5, utf8_decode($exam->titulo), '0', "C");
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Ln(2);
 if ($points >= ($exam->valor * 0.70)) {
@@ -77,7 +78,10 @@ if (isset($exam->fvs->topics)) {
 	$pdf->SetFont('Arial', '', 12);
 	$count = 1;
 	foreach ($exam->fvs->topics as $topic) {
-		$done = DB::table('T_examen_terminado_fyv')->where('id_pregunta', $topic->id)->first();
+		$done = DB::table('T_examen_terminado_fyv')->where([
+			['id_examen', $doneExam->id],
+			['id_pregunta', $topic->id]
+		])->first();
 		if ($topic->respuesta == $done->respuesta) {
 			green();
 		} else {
@@ -100,7 +104,10 @@ if (isset($exam->selects->topics)) {
 	$pdf->SetFont('Arial', '', 12);
 	$count = 1;
 	foreach ($exam->selects->topics as $topic) {
-		$done = DB::table('T_examen_terminado_selec')->where('id_pregunta', $topic->id)->first();
+		$done = DB::table('T_examen_terminado_selec')->where([
+			['id_examen', $doneExam->id],
+			['id_pregunta', $topic->id]
+		])->first();
 		$pdf->Cell(10, 5, "$count.", 0, 0, "R");
 		$pdf->MultiCell(0, 5, utf8_decode($topic->pregunta));
 		$pdf->Ln(3);
@@ -137,7 +144,10 @@ if (isset($exam->pairs->topics)) {
 		$lettersArray[$answer->id] = Exam::$letters[$index + 1];
 	}
 	foreach ($exam->pairs->topics as $topic) {
-		$done = DB::table('T_examen_terminado_parea')->where('id_pregunta', $topic->id)->first();
+		$done = DB::table('T_examen_terminado_parea')->where([
+			['id_examen', $doneExam->id],
+			['id_pregunta', $topic->id]
+		])->first();
 		$done2 = DB::table('T_examen_codigo_parea')->find($done->respuesta);
 		$response = $topic->respuesta_c;
 		if ($response == $done2->id) {
@@ -166,7 +176,10 @@ if (isset($exam->lines->topics)) {
 	$pdf->SetFont('Arial', '', 12);
 	$count = 1;
 	foreach ($exam->lines->topics as $index => $topic) {
-		$done = DB::table('T_examen_terminado_linea')->where('id_pregunta', $topic->id)->first();
+		$done = DB::table('T_examen_terminado_linea')->where([
+			['id_examen', $doneExam->id],
+			['id_pregunta', $topic->id]
+		])->first();
 		$pdf->Cell(10, 5, "$count.", 0, 0, "R");
 		$quest = str_replace("___", '~ ', $topic->pregunta);
 		$words = explode(" ", $quest);
@@ -197,7 +210,10 @@ if (isset($exam->qas->topics)) {
 	$pdf->SetFont('Arial', '', 12);
 	$count = 1;
 	foreach ($exam->qas->topics as $topic) {
-		$done = DB::table('T_examen_terminado_pregunta')->where('id_pregunta', $topic->id)->first();
+		$done = DB::table('T_examen_terminado_pregunta')->where([
+			['id_examen', $doneExam->id],
+			['id_pregunta', $topic->id]
+		])->first();
 		$pdf->Cell(10, 5, "$count.", 0, 0, "R");
 		$pdf->MultiCell(0, 5, utf8_decode($topic->pregunta), 0, 1);
 		$pdf->Ln(3);

@@ -9,7 +9,7 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $student = new Student(Session::id());
-$exams = $student->exams();
+$exams = $student->exams(Util::daysBefore(30));
 // Util::dump($exams);
 ?>
 <!DOCTYPE html>
