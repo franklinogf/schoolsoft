@@ -33,7 +33,8 @@ $teacher = new Teacher(Session::id());
     Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
     ?>
 
-    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-primary mt-2">Enviar usuarios a los padres</a>
+    <a id="createUsers"  href="<?= Route::url('/foro/profesor/includes/createUsers.php') ?>" class="btn btn-primary mt-2">Crear usuarios automaticamente</a>
+    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-secondary mt-2">Enviar usuarios a los padres</a>
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -73,7 +74,7 @@ $teacher = new Teacher(Session::id());
   </div>
 
   </div>
-  
+
   <?php
   Route::includeFile('/includes/layouts/progressBar.php', true);
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
