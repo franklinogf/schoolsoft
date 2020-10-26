@@ -145,12 +145,14 @@ if (isset($_POST['getMessages'])) {
    $code = DB::table("foro_mensajes")->select('MAX(code) as maxCode')->first();
    $code = (int) $code->maxCode + 1;
 
-   foreach ($_POST['link'] as $index => $link) {
-      DB::table("t_mensajes_links")->insert([
-         "link" => $link,
-         "nombre" => $_POST["linkName"][$index] !== "" ? $_POST["linkName"][$index] : null,
-         "mensaje_code" => $code
-      ]);
+   if(isset($_POST['link'])){
+      foreach ($_POST['link'] as $index => $link) {
+         DB::table("t_mensajes_links")->insert([
+            "link" => $link,
+            "nombre" => $_POST["linkName"][$index] !== "" ? $_POST["linkName"][$index] : null,
+            "mensaje_code" => $code
+         ]);
+      }
    }
 
    $uniqueId = uniqid();

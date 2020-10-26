@@ -12,6 +12,7 @@ $(document).ready(function () {
 	const $newMessageModal = $("#newMessageModal");
 	const $newMessageForm = $newMessageModal.find(".form");
 	const $modalAlert = $("#modalAlert");
+	const $progressModal = $("#progressModal");
 	let messages = [];
 	let message = [];
 	getMessages();
@@ -75,8 +76,7 @@ $(document).ready(function () {
 					var xhr = $.ajaxSettings.xhr();
 					xhr.upload.onprogress = function (e) {
 						// For uploads
-						if (e.lengthComputable) {
-							$("#progressModal").modal("show");
+						if (e.lengthComputable) {							
 							let progress =Math.round((e.loaded / e.total) * 100)
 							$("#progressModal .progress-bar")
 								.prop("aria-valuenow", progress)
@@ -86,12 +86,18 @@ $(document).ready(function () {
 					};
 					return xhr;
 				},
-				success: function (res) {
+				beforeSend: function (){
+					$progressModal.modal("show");
+				},
+				complete: function (res) {
+					console.log($progressModal);
 					const option = $(this).data("option");
 					getMessages(option);
-					$("#progressModal").modal("hide");					
+										
 					$newMessageModal.modal("hide");
-				},
+					setTimeout(function () { $progressModal.modal("hide"); }, 500);
+				}
+				
 			});
 		}
 	});
