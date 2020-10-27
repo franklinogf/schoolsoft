@@ -6,9 +6,6 @@ use Classes\Session;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
 
-Server::is_post();
-
-
 
 $teacher = new Teacher(Session::id());
 $students = $teacher->homeStudents();
