@@ -23,7 +23,8 @@ if (!Session::is_logged(false)) {
 ];
 }
 
-//save done Exam
+if(!$student->doneExam($id_exam)){
+   //save done Exam
 $id_doneExam = DB::table('T_examenes_terminados')->insertGetId([
    "id_examen" => $id_exam,
    "id_estudiante" => $student->mt,
@@ -99,6 +100,7 @@ if (isset($_POST['qa'])) {
 
 foreach ($insertsArray as $table => $data) {
    DB::table($table)->insert($data);
+}
 }
 
 Session::set("examTaken", "Examen realizado con exito");
