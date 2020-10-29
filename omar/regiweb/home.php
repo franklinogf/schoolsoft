@@ -2,10 +2,8 @@
 require_once '../app.php';
 
 use Classes\Route;
-use Classes\Server;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\Util;
 
 Session::is_logged();
 $teacher = new Teacher(Session::id());
