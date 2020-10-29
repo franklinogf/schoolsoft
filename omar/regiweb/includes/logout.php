@@ -5,4 +5,4 @@ use Classes\Route;
 
 session_destroy();
 
-Route::redirect('/regiweb/login.php',false);
+Route::redirect();
