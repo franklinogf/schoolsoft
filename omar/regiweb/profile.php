@@ -118,7 +118,7 @@ $teacher = new Teacher(Session::id());
           </div>
         </div>
         <!-- .Personal Information -->
-        <div class="row col-12 offset-lg-1 col-lg-5 p-0">
+        <div class="col-12 offset-lg-1 col-lg-5 p-0">
           <!-- Address -->
           <div class="card col-12 p-3 mt-2 mt-lg-0">
             <h5 class="card-title mb-1">Direcciones</h5>
