@@ -24,7 +24,7 @@ $pathFile = str_replace('.php', '', $file);
         <a class="nav-link" href="<?= Route::url('/regiweb/options.php') ?>">Opciones</a>
       </li> 
       <li class="nav-item <?= ($pathFile === 'reports' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/regiweb/reports.php') ?>">Informes</a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/reports/') ?>">Informes</a>
       </li> 
     </ul>
     <ul class="navbar-nav">
