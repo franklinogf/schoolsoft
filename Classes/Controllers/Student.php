@@ -33,6 +33,7 @@ class Student extends StudentModel
     }
     return $this;
   }
+
   public function findBySS($ss)
   {
     $array = $this->getStudentBySS($ss);
@@ -41,6 +42,7 @@ class Student extends StudentModel
     }
     return $this;
   }
+
   public function fullName()
   {
     if (!isset($this->{$this->primary_key})) {

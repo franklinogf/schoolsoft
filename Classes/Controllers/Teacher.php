@@ -38,6 +38,14 @@ class Teacher extends TeacherModel
     }
     return $this->getTeacherClasses($this->id);
   }
+  
+  public function credits($class)
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    return $this->getTeacherCredits($this->id, $class);
+  }
 
   public function homeStudents()
   {
@@ -111,7 +119,7 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}",'UTF-8');
+    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}", 'UTF-8');
     return $fullName;
   }
 

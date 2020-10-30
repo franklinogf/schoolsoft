@@ -41,6 +41,17 @@ class TeacherModel extends School
       ])->orderBy('curso', 'ASC')->get();
     return $obj;
   }
+  protected function getTeacherCredits($id,$class)
+  {
+    $year = $this->info('year');
+    $obj =  parent::table('padres')->select('SUM(credito) as creditos')
+      ->where([
+        ['curso', $class],
+        ['year', $year],
+        ['id', $id]
+      ])->first();
+    return $obj->creditos;
+  }
 
   protected function getHomeStudents($grade)
   {
