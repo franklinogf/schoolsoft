@@ -90,11 +90,11 @@ class StudentModel extends School
     foreach ($classes as $class) {
       $exam = new Exam();
       $studentExam = $exam->findByClassForStudents($class->curso, $date, $time);
-     if($studentExam){
-      foreach ($studentExam as $exam) {
-        $obj[] = $exam;
+      if ($studentExam) {
+        foreach ($studentExam as $exam) {
+          $obj[] = $exam;
+        }
       }
-     }
     }
     return $obj;
   }
@@ -116,19 +116,32 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getStudentsByClass($class)
+  protected function getStudentsByClass($class, $summer = false)
   {
     $year = $this->info('year');
+    if (!$summer) {
 
-    $obj = parent::table('padres')
-      ->join('year', 'padres.ss', '=', 'year.ss')
-      ->where([
+      $where = [
         ['padres.curso', $class],
         ['year.year', $year],
         ['padres.year', $year],
         ['padres.baja', ''],
         ['year.fecha_baja', '0000-00-00']
-      ])->orderBy('year.apellidos')->get();
+      ];
+    } else {
+      $where = [
+        ['padres.curso', $class],
+        ['year.year', $year],
+        ['padres.year', $year],
+        ['padres.baja', ''],
+        ['year.fecha_baja', '0000-00-00'],
+        ['padres.verano', $summer]
+      ];
+    }
+
+    $obj = parent::table('padres')
+      ->join('year', 'padres.ss', '=', 'year.ss')
+      ->where($where)->orderBy('year.apellidos')->get();
 
     return $obj;
   }
