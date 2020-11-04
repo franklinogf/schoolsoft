@@ -150,9 +150,9 @@ class Student extends StudentModel
   {
     return $this->getStudentByUser($username);
   }
-  public function findByClass($class,$summer = false)
+  public function findByClass($class, $table = 'padres', $summer = false)
   {
-    return $this->getStudentsByClass($class,$summer);
+    return $this->getStudentsByClass($class, $table, $summer);
   }
 
   public function save()

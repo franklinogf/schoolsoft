@@ -116,31 +116,28 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getStudentsByClass($class, $summer = false)
+  protected function getStudentsByClass($class, $table = 'padres', $summer = false)
   {
     $year = $this->info('year');
     if (!$summer) {
 
       $where = [
-        ['padres.curso', $class],
+        ["$table.curso", $class],
         ['year.year', $year],
-        ['padres.year', $year],
-        ['padres.baja', ''],
-        ['year.fecha_baja', '0000-00-00']
+        ["$table.year", $year],
+        ["$table.baja", ''],
       ];
     } else {
       $where = [
-        ['padres.curso', $class],
+        ["$table.curso", $class],
         ['year.year', $year],
-        ['padres.year', $year],
-        ['padres.baja', ''],
-        ['year.fecha_baja', '0000-00-00'],
-        ['padres.verano', $summer]
+        ["$table.year", $year],
+        ["$table.baja", ''],
+        ["$table.verano", $summer]
       ];
     }
 
-    $obj = parent::table('padres')
-      ->join('year', 'padres.ss', '=', 'year.ss')
+    $obj = parent::table("$table")->join('year', "$table.ss", '=', 'year.ss')
       ->where($where)->orderBy('year.apellidos')->get();
 
     return $obj;
