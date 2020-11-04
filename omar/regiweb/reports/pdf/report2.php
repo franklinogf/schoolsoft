@@ -47,6 +47,8 @@ $pdf->SetTitle('Notas 2');
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(0,5,"Notas 2",0,1,'C');
+$pdf->Ln(3);
 $pdf->Cell(50, 5, 'Profesor', 1, 0, 'C', true);
 $pdf->Cell(18, 5, 'Curso', 1, 0, 'C', true);
 $pdf->Cell(40, 5, utf8_decode('Descripción'), 1, 0, 'C', true);
