@@ -34,7 +34,8 @@ class TeacherModel extends School
   protected function getTeacherClasses($id)
   {
     $year = $this->info('year');
-    $obj =  parent::table('cursos')
+    $desc = (__LANG === "es") ? "desc1" : "desc2";
+    $obj =  parent::table('cursos')->select("*,{$desc} as desc1")
       ->where([
         ['year', $year],
         ['id', $id]
