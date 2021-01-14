@@ -10,21 +10,33 @@ Session::is_logged();
 
 $teacher = new Teacher(Session::id());
 
-$students = DB::table('year')
-	->where([
-		['grado', $teacher->grado],
-		['year', $teacher->info('year')],
-		['fecha_baja', '0000-00-00']
-	])->orderBy('apellidos')->get();
+
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle('Lista de Usuarios');
+$pdf->SetTitle('Lista de usuarios');
 $pdf->Fill();
 
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->splitCells("Salon Hogar: $teacher->grado", $teacher->fullName());
+$pdf->Cell(0, 5, "Lista de usuarios", 0, 1, 'C');
+$pdf->Ln(3);
+if (!__COSEY) {
+	$students = DB::table('year')
+		->where([
+			['grado', $teacher->grado],
+			['year', $teacher->info('year')],
+			['fecha_baja', '0000-00-00']
+		])->orderBy('apellidos')->get();
+	$pdf->splitCells("Salon Hogar: $teacher->grado", $teacher->fullName());
+} else {
+	$students = DB::table('year')
+		->where([
+			['year', $teacher->info('year')],
+			['fecha_baja', '0000-00-00']
+		])->orderBy('apellidos')->get();
+	$pdf->Cell(0, 5, $teacher->fullName(), 0, 1);
+}
 // table header
 $pdf->SetFont('Arial', 'B', 13);
 $pdf->Cell(10, 7, "", "LTB", 0, "C", true);
@@ -40,7 +52,7 @@ $num = 1;
 foreach ($students as $student) {
 
 	$pdf->Cell(10, 5, $num, 1, 0, "R");
-	$pdf->Cell(15, 5, $student->id, 1, 0, "C");
+	$pdf->Cell(15, 5, (__COSEY) ? $student->mt : $student->id, 1, 0, "C");
 	$pdf->Cell(60, 5, ucwords(utf8_decode($student->apellidos)), 1);
 	$pdf->Cell(40, 5, ucwords(utf8_decode($student->nombre)), 1);
 	$pdf->Cell(35, 5, $student->usuario, 1, 0, "C");

@@ -4,7 +4,7 @@ $(document).ready(function () {
 	const classesTableWrapper = $(".classesTable").parents(".dataTables_wrapper");
 	const studentsTableWrapper = $(".studentsTable").parents(".dataTables_wrapper");
 	studentsTableWrapper.hide(0);
-
+	
 	$(".classesTable tbody").on("click", "tr", function () {
 		const row = classesTable.row(this);
 		if (row.index() !== undefined) {

@@ -26,7 +26,7 @@ foreach ($classes as $class) {
 		->where([
 			['year', $year],
 			['curso', $class]
-		])->first();
+		])->cosey(false)->first();
 
 	$pdf->AddPage();
 	$pdf->SetFont('Arial', 'B', 12);

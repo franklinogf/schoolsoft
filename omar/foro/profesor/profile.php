@@ -45,13 +45,15 @@ $teacher = new Teacher(Session::id());
             <div class="card-body">
               <p class="text-monospace">ID: <span class="badge badge-info"><?= $teacher->id ?> </span></p>
               <p class="text-monospace">Usuario: <span class="badge badge-info"><?= $teacher->usuario ?></span></p>
-              <p class="text-monospace">Salon Hogar: <span class="badge badge-info"><?= $teacher->grado ?></span></p>
+              <?php if (!__COSEY) : ?>
+                <p class="text-monospace">Salon Hogar: <span class="badge badge-info"><?= $teacher->grado ?></span></p>
+              <?php endif ?>
               <p class="text-monospace">Total de estudiantes: <span class="badge badge-info"><?= sizeof($teacher->homeStudents()) ?></span></p>
             </div>
           </div>
         </div>
       </div>
-      <hr class="mb-3"/>
+      <hr class="mb-3" />
       <div class="row">
         <div class="form-row">
           <div class="form-group col-md-6">

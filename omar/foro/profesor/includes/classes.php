@@ -25,7 +25,7 @@ if (isset($_POST['studentsByClass'])) {
       $array = [
          'response' => true,
          'data' => [
-            'id'=> $student->id,
+            'id'=> (__COSEY) ? $student->mt : $student->id,
             'nombre' => $student->fullName(),
             'usuario'=> $student->usuario,
             'grado'=> $student->grado,

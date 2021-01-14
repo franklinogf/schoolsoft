@@ -230,6 +230,7 @@ $(document).ready(function () {
 	});
 
 	$($message).on("click", "#respondBtn", function (e) {
+		console.log(message);
 		$respondModal.modal("show");
 		$respondModal.find(".modal-title").text(`Responder a ${message.nombre}`);
 		$respondModal.find("#respondSubject").val(`RE: ${message.asunto}`);

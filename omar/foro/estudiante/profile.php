@@ -6,7 +6,6 @@ use Classes\Session;
 use Classes\Controllers\Student;
 
 Session::is_logged();
-
 $student = new Student(Session::id());
 ?>
 <!DOCTYPE html>

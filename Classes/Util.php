@@ -6,7 +6,8 @@ class Util
 {
    public static function formatDate($date, $month = false, $largeMonth = false)
    {
-      $format = '%d-%m-%Y';
+      if($date !== '0000-00-00'){
+         $format = '%d-%m-%Y';
       if ($month) {
          if (is_bool($month)) {
             $format = '%d %b %Y';
@@ -22,6 +23,7 @@ class Util
       \setlocale(LC_ALL, 'es_ES');
       $newDate = strftime($format, strtotime($date));
       return $newDate;
+      }
    }
 
    public static function date()

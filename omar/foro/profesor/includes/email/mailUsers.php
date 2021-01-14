@@ -20,11 +20,17 @@ $students = DB::table('year')->where([
 ])->orderBy('apellidos')->get();
 
 foreach ($students as $student) {
-   $parents = DB::table('madre')->where('id', $student->id)->first();
-   $emails = [
-      ['correo' => $parents->email_p, 'nombre' => $parents->padre],
-      ['correo' => $parents->email_m, 'nombre' => $parents->madre]
-   ];
+   if (__COSEY) {
+      $emails = [
+         ['correo' => $student->emailp, 'nombre' => $student->nombre_padre]
+      ];
+   } else {
+      $parents = DB::table('madre')->where('id', $student->id)->first();
+      $emails = [
+         ['correo' => $parents->email_p, 'nombre' => $parents->padre],
+         ['correo' => $parents->email_m, 'nombre' => $parents->madre]
+      ];
+   }
    $emails = Util::toObject($emails);
    $count = 0;
    foreach ($emails as $email) {

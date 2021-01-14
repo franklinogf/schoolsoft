@@ -19,7 +19,7 @@ class StudentModel extends School
 
   protected function getStudentByPK($pk)
   {
-    $obj = parent::table($this->table)
+    $obj = parent::table($this->table, !__COSEY)
       ->where($this->primary_key, $pk)->first();
 
     return $obj;
@@ -75,7 +75,7 @@ class StudentModel extends School
 
   protected function getStudentDoneHomeworkById($mt, $id_hw)
   {
-    $obj = parent::table('tareas_enviadas')->where([
+    $obj = parent::table('tareas_enviadas', !__COSEY)->where([
       ['id_tarea', $id_hw],
       ['id_estudiante', $mt],
       ['year', $this->info('year')]
@@ -101,7 +101,7 @@ class StudentModel extends School
 
   protected function getStudentDoneExamById($mt, $id_exam)
   {
-    $obj = parent::table('T_examenes_terminados')->where([
+    $obj = parent::table('T_examenes_terminados',!__COSEY)->where([
       ['id_examen', $id_exam],
       ['id_estudiante', $mt],
       ['year', $this->info('year')]
@@ -145,16 +145,18 @@ class StudentModel extends School
 
   protected function studentLogin($username, $password)
   {
-    $obj = parent::table($this->table)->where([
+    $year = $this->info('year');
+    $obj = parent::table($this->table, !__COSEY)->where([
       ['usuario', $username],
-      ['clave', $password]
+      ['clave', $password],
+      ['year', $year]
     ])->first();
     return $obj;
   }
   protected function getUnreadMessages($id)
   {
     $year = $this->info('year');
-    $obj = parent::table('foro_mensajes')->where([
+    $obj = parent::table('foro_mensajes', !__COSEY)->where([
       ['enviado_por', '<>', 'e'],
       ['id_e', $id],
       ['leido_e', '<>', 'si'],
@@ -168,18 +170,31 @@ class StudentModel extends School
   {
 
     $year = $this->info('year');
-    $obj =  parent::table('foro_entradas')
-      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
-      ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
-      ->join('cursos', 'padres.curso', '=', 'cursos.curso')
-      ->join('year', 'year.ss', '=', 'padres.ss')
-      ->where([
-        ['year.mt', $id],
-        ['cursos.year', $year],
-        ['padres.year', $year],
-        ['foro_entradas.estado', 'a']
-      ])
-      ->orderBy('foro_entradas.fecha DESC, foro_entradas.hora DESC')->first();
+    if (__COSEY) {
+      $obj =  parent::table('foro_entradas', !__COSEY)
+        ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
+        ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+        ->join('year', 'year.ss', '=', 'padres.ss')
+        ->where([
+          ['year.mt', $id],
+          ['padres.year', $year],
+          ['foro_entradas.estado', 'a']
+        ])
+        ->orderBy('foro_entradas.fecha DESC, foro_entradas.hora DESC')->first();
+    } else {
+      $obj =  parent::table('foro_entradas')
+        ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
+        ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+        ->join('cursos', 'padres.curso', '=', 'cursos.curso')
+        ->join('year', 'year.ss', '=', 'padres.ss')
+        ->where([
+          ['year.mt', $id],
+          ['cursos.year', $year],
+          ['padres.year', $year],
+          ['foro_entradas.estado', 'a']
+        ])
+        ->orderBy('foro_entradas.fecha DESC, foro_entradas.hora DESC')->first();
+    }
 
     return $obj;
   }
@@ -188,19 +203,33 @@ class StudentModel extends School
   {
 
     $year = $this->info('year');
-    $obj =  parent::table('detalle_foro_entradas')
-      ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
-      ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
-      ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
-      ->join('cursos', 'padres.curso', '=', 'cursos.curso')
-      ->join('year', 'year.ss', '=', 'padres.ss')
-      ->where([
-        ['year.mt', $id],
-        ['cursos.year', $year],
-        ['padres.year', $year],
-        ['foro_entradas.estado', 'a']
-      ])
-      ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
+    if (__COSEY) {
+      $obj =  parent::table('detalle_foro_entradas', !__COSEY)
+        ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
+        ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
+        ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+        ->join('year', 'year.ss', '=', 'padres.ss')
+        ->where([
+          ['year.mt', $id],
+          ['padres.year', $year],
+          ['foro_entradas.estado', 'a']
+        ])
+        ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
+    } else {
+      $obj =  parent::table('detalle_foro_entradas')
+        ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
+        ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
+        ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
+        ->join('cursos', 'padres.curso', '=', 'cursos.curso')
+        ->join('year', 'year.ss', '=', 'padres.ss')
+        ->where([
+          ['year.mt', $id],
+          ['cursos.year', $year],
+          ['padres.year', $year],
+          ['foro_entradas.estado', 'a']
+        ])
+        ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
+    }
 
     return $obj;
   }

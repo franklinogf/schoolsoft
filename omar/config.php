@@ -4,7 +4,7 @@
 /* -------------------------------------------------------------------------- */
 
 // Language: es = Spanish, en = English
-define('__LANG', 'es');
+define('__LANG', 'en');
 define('__DEFAULT_LOGO', 'logo.gif');
 define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
 // regular is 72 x 72

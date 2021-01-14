@@ -11,11 +11,11 @@ use Classes\Controllers\Homework;
 Server::is_post();
 if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['getDoneHomeworkById'];
-   if ($doneHw = DB::table('tareas_enviadas')->where([
+   if ($doneHw = DB::table('tareas_enviadas',!__COSEY)->where([
       ['id_tarea', $id_doneHomework],
       ['id_estudiante', Session::id()],
       ])->first()) {
-      $files = DB::table('t_tareas_archivos')->where('id_tarea',$doneHw->id)->get();
+      $files = DB::table('t_tareas_archivos',!__COSEY)->where('id_tarea',$doneHw->id)->get();
       $array = [
          'response' => true,
          'data' => $doneHw,
@@ -63,7 +63,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['editDoneHomework'];  
    $note = $_POST['note'];
 
-   DB::table('tareas_enviadas')->where('id',$id_doneHomework)->update([      
+   DB::table('tareas_enviadas',!__COSEY)->where('id',$id_doneHomework)->update([      
       "nota" => $note    
    ]);
 
@@ -82,10 +82,10 @@ if (isset($_POST['getDoneHomeworkById'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('t_tareas_archivos')->where('id', $file_id)->first();
+   $file = DB::table('t_tareas_archivos',!__COSEY)->where('id', $file_id)->first();
 
    File::delete(__STUDENT_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('t_tareas_archivos')->where('id', $file_id)->delete();
+   DB::table('t_tareas_archivos',!__COSEY)->where('id', $file_id)->delete();
 }
 

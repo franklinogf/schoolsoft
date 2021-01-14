@@ -7,12 +7,12 @@ class Lang
 
     private static $translation = [];
     private static $menuTranslation = [];
-    public static $select = (__LANG === 'es') ? 'Seleccionar' : 'Select';
-    public static $continue = (__LANG === 'es') ? 'Continuar' : 'Continue';
-    public static $grade = (__LANG === 'es') ? 'Curso' : 'Grade';
-    public static $score = (__LANG === 'es') ? 'Nota' : 'Grade';
-    public static $trimester = (__LANG === 'es') ? 'Trimestre' : 'Trimester';
-    public static $page = (__LANG === 'es') ? 'Pagina' : 'Page';
+    // public static $select = (__LANG === 'es') ? 'Seleccionar' : 'Select';
+    // public static $continue = (__LANG === 'es') ? 'Continuar' : 'Continue';
+    // public static $grade = (__LANG === 'es') ? 'Curso' : 'Grade';
+    // public static $score = (__LANG === 'es') ? 'Nota' : 'Grade';
+    // public static $trimester = (__LANG === 'es') ? 'Trimestre' : 'Trimester';
+    // public static $page = (__LANG === 'es') ? 'Pagina' : 'Page';
 
     public static function addTranslation($translationArray)
     {

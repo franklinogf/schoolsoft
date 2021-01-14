@@ -23,9 +23,9 @@ $pathFile = str_replace('.php', '', $file);
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/profesor/classes.php') ?>">Mis Cursos</a>
       </li>
-      <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/foro/profesor/home.php') ?>">Salon Hogar</a>
-      </li>
+        <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
+          <a class="nav-link" href="<?= Route::url('/foro/profesor/home.php') ?>">Salon Hogar</a>
+        </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Informes
@@ -35,7 +35,9 @@ $pathFile = str_replace('.php', '', $file);
           <a class="dropdown-item" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas</a>
           <a class="dropdown-item" href="<?= Route::url('/foro/profesor/doneHomeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas entregadas</a>
           <div class="dropdown-divider"></div>
+          <?php if (!__COSEY) : ?>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-primary"></i> Salon Hogar</a>
+          <?php endif ?>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>"><i class="far fa-file-pdf text-primary"></i></i> Lista de Usuarios</a>
         </div>
       </li>

@@ -16,13 +16,14 @@ $school = new School();
 if (isset($_POST['getMessages'])) {
    $data = [];
    if ($_POST['getMessages'] === 'inbound') {
-      $messages = DB::table('foro_mensajes')->where([
+      
+      $messages = DB::table('foro_mensajes',!__COSEY)->where([
          ['enviado_por', '<>', 'e'],
          ['id_e', Session::id()],
          ['year', $school->info('year')]
       ])->orderBy('fecha DESC, hora DESC')->get();
    } else {
-      $messages = DB::table('foro_mensajes')->where([
+      $messages = DB::table('foro_mensajes',!__COSEY)->where([
          ['enviado_por', 'e'],
          ['id_e', Session::id()],
          ['year', $school->info('year')]
@@ -31,7 +32,7 @@ if (isset($_POST['getMessages'])) {
 
    if ($messages) {
       foreach ($messages as $message) {
-         $links = DB::table('t_mensajes_links')->where("mensaje_code", $message->code)->get();
+         $links = DB::table('t_mensajes_links',!__COSEY)->where("mensaje_code", $message->code)->get();
          $student = new Student($message->id_e);
          $teacher = new Teacher($message->id_p);
          $from = $message->enviado_por === 'e' ? 'student' : 'teacher';
@@ -54,7 +55,7 @@ if (isset($_POST['getMessages'])) {
          }
 
          $filesArray = [];
-         $files = DB::table('t_mensajes_archivos')
+         $files = DB::table('t_mensajes_archivos',!__COSEY)
             ->where('mensaje_code', $message->code)->get();
          if ($files) {
             foreach ($files as $i => $file) {
@@ -133,7 +134,7 @@ if (isset($_POST['getMessages'])) {
    $title = $_POST['title'];
    $message = $_POST['message'];
    $subject = $_POST['subject'];
-   $code = DB::table("foro_mensajes")->select('MAX(code) as maxCode')->first();
+   $code = DB::table("foro_mensajes",!__COSEY)->select('MAX(code) as maxCode')->first();
    $code = (int) $code->maxCode + 1;
 
    $uniqueId = uniqid();
@@ -165,7 +166,7 @@ if (isset($_POST['getMessages'])) {
 
    $message_id = $_POST['changeStatus'];
 
-   DB::table('foro_mensajes')->where('id', $message_id)->update(['leido_e' => 'si']);
+   DB::table('foro_mensajes',!__COSEY)->where('id', $message_id)->update(['leido_e' => 'si']);
    $student = new Student(Session::id());
    $array = [
       'unreadMessages' => $student->unreadMessages()

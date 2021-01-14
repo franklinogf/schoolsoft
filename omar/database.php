@@ -16,3 +16,10 @@ define('__DB_NAME', "demo");
 // define('__USERNAME', "admin_democol");
 // define('__PASSWORD', "Amc123456");
 // define('__DB_NAME', "admin_democol");
+
+/* ----------------------------- COSEY DATABASE ---------------------------- */
+
+// define('__HOST', "localhost");
+// define('__USERNAME', "admin_cosey_c");
+// define('__PASSWORD', "Amc123456");
+// define('__DB_NAME', "admin_cosey_c");

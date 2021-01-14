@@ -20,14 +20,14 @@ class TopicModel extends School
   protected function getTopicByPK($pk)
   {
 
-    $obj = parent::table($this->table)->where($this->primary_key, $pk)->first();
+    $obj = parent::table($this->table,!__COSEY)->where($this->primary_key, $pk)->first();
     return $obj;
   }
 
   protected function getTopicsByClass($class)
   {
     $year = $this->info('year');
-    $obj = parent::table($this->table)->where([
+    $obj = parent::table($this->table,!__COSEY)->where([
       ['curso', $class],
       ['year', $year]
     ])->orderBy('fecha DESC, hora DESC')->get();
@@ -38,13 +38,13 @@ class TopicModel extends School
   protected function getAllTopics()
   {
     $year = $this->info('year');
-    $obj = parent::table($this->table)->where('year', $year)->orderBy('fecha')->get();
+    $obj = parent::table($this->table,!__COSEY)->where('year', $year)->orderBy('fecha')->get();
     return $obj;
   }
 
   protected function getTopicComments($id)
   {
-    $obj = parent::table('detalle_foro_entradas')->where('entrada_id', $id)->orderBy('fecha DESC,hora DESC')->get();
+    $obj = parent::table('detalle_foro_entradas',!__COSEY)->where('entrada_id', $id)->orderBy('fecha DESC,hora DESC')->get();
     return $obj;
   }
 
@@ -70,8 +70,8 @@ class TopicModel extends School
 
   protected function deleteTopic($id_topic)
   {
-    parent::table($this->table)->where('id',$id_topic)->delete();
-    parent::table($this->comments_table)->where('entrada_id',$id_topic)->delete();
+    parent::table($this->table,!__COSEY)->where('id',$id_topic)->delete();
+    parent::table($this->comments_table,!__COSEY)->where('entrada_id',$id_topic)->delete();
   }
 
   protected function insertTopic($propsArray)

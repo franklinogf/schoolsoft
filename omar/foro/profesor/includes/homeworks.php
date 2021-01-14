@@ -49,7 +49,7 @@ if (isset($_POST['getHomework'])) {
    $id_teacher = Session::id();
    $id_homework = $_POST['document_id'];
 
-   DB::table('tbl_documentos')->where('id_documento', $id_homework)->update([
+   DB::table('tbl_documentos',!__COSEY)->where('id_documento', $id_homework)->update([
       'titulo' => $_POST["title"],
       'descripcion' => $_POST["description"],
       'fec_in' => $_POST["sinceDate"],
@@ -77,27 +77,27 @@ if (isset($_POST['getHomework'])) {
 } else if (isset($_POST['delHomework'])) {
 
    $id_homework = $_POST['delHomework'];
-   $homework = DB::table('tbl_documentos')->where('id_documento', $id_homework)->first();
+   $homework = DB::table('tbl_documentos',!__COSEY)->where('id_documento', $id_homework)->first();
 
    if ($homework->nombre_archivo !== '') {
       File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $homework->nombre_archivo);
    }
-   DB::table('tbl_documentos')->where('id_documento', $id_homework)->delete();
+   DB::table('tbl_documentos',!__COSEY)->where('id_documento', $id_homework)->delete();
 
    $files = DB::table('t_archivos')->where('id_documento', $id_homework)->get();
    if ($files) {
       foreach ($files as $file) {
          File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
       }
-      DB::table('t_archivos')->where('id_documento', $id_homework)->delete();
+      DB::table('t_archivos',!__COSEY)->where('id_documento', $id_homework)->delete();
    }
 } else if (isset($_POST['delExistingFile'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('t_archivos')->where('id', $file_id)->first();
+   $file = DB::table('t_archivos',!__COSEY)->where('id', $file_id)->first();
 
    File::delete(__TEACHER_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('t_archivos')->where('id', $file_id)->delete();
+   DB::table('t_archivos',!__COSEY)->where('id', $file_id)->delete();
 }

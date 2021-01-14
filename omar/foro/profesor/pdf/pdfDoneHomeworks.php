@@ -14,10 +14,11 @@ $teacher = new Teacher(Session::id());
 
 $homeworkId = $_GET['id'];
 // Homework info
-$homework = DB::table('tbl_documentos')
+$homework = DB::table('tbl_documentos',!__COSEY)
    ->where('id_documento', $homeworkId)->first();
 // Class info
-$class = DB::table('cursos')
+$desc = (__COSEY) ? "descripcion" : "desc1";
+$class = DB::table('padres',!__COSEY)->select("curso,{$desc} as desc1")
    ->where([
       ['year', $teacher->info('year')],
       ['curso', $homework->curso]
@@ -28,7 +29,7 @@ $students = $students->findByClass($homework->curso);
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle("Tarea de ".utf8_decode($class->desc1));
+$pdf->SetTitle("Tarea de ". utf8_decode($class->desc1));
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
@@ -50,7 +51,7 @@ $pdf->SetFont('Arial', '', 10);
 
 $num = 1;
 foreach ($students as $student) {
-   $doneHomework = DB::table('tareas_enviadas')->where([
+   $doneHomework = DB::table('tareas_enviadas',!__COSEY)->where([
       ['id_tarea', $homeworkId],
       ['id_estudiante', $student->mt]
    ])->first();
