@@ -42,7 +42,7 @@ foreach ($students as $student) {
    }
 
 
-   $link = Route::url('/foro/login.php', true);
+   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoft.com'.Route::url('/foro/login.php');
    $schoolName = $teacher->info('colegio');
    $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
    $messageTitle = "Tarea del curso {$homework->curso}";
@@ -59,12 +59,12 @@ foreach ($students as $student) {
 </head>
 <body>
    <center><h1>{$schoolName}</h1></center>
-   <center><h2>{$messageTitle}</h2></center>
+   <center><h2>".utf8_decode($messageTitle)."</h2></center>
    <br>
    <br>
-   <p>El estudiante: <b>$studentName tiene una nueva tarea de {$student->descripcion}</b></p>
+   <p>El estudiante: <b>".utf8_decode($studentName)." tiene una nueva tarea de ".utf8_decode($student->descripcion)."</b></p>
 
-   <p>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Acceso al Foro</a></p>
+   <p>Link: <a href='$link'>Acceso al Foro</a></p>
 </body>
 </html>
 ";
