@@ -243,12 +243,13 @@ $(function () {
 
   // add file button
   if ($("button.addFile").length > 0) {
-
+    $("button.addFile").before("<small class='d-block text-center text-danger'>Favor de no poner puntos <b>(.)</b> ni comas <b>(,)</b> en los nombres de los archivos</small>")
     $("button.addFile").click(e => {
       let thisBtn = $(e.target);
       if (thisBtn.nextAll().length > 0) {
         thisBtn = thisBtn.nextAll().last();
       }
+      
       thisBtn.after(`<div class="input-group mt-3 w-75 mx-auto fileInput animated fadeInUp faster">
     <div class="custom-file">
        <input type="file" class="custom-file-input file" name="file[]">
