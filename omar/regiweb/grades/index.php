@@ -65,7 +65,7 @@ Lang::addTranslation($TRANS);
             </div>
         </div>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= Route::url('/regiweb/grades/enterGrades.php') ?>" method="post" target="_blank">
+            <form action="<?= Route::url('/regiweb/grades/enterGrades.php') ?>" method="post">
                 <div class="mx-auto" style="width: 20rem;">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
