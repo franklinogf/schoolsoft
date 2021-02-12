@@ -219,75 +219,75 @@ $teacher = new Teacher(Session::id());
           </div>
           <!-- .Other Information -->
         </div>
-        <!-- .Row -->        
+        <!-- .Row -->
       </div>
       <!-- .Row -->
       <!-- Accordion -->
       <div class="accordion mt-2 p-0" id="profileAccordion">
-          <div class="card">
-            <div class="card-header bg-white" id="clubsHead">
-              <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#clubs" aria-expanded="true" aria-controls="clubs">
-                  Clubes
-                </button>
-              </h2>
-            </div>
-            <div id="clubs" class="collapse" aria-labelledby="clubsHead" data-parent="#profileAccordion">
-              <div class="card-body">
-                <div class="form-row">
-                  <?php for ($i = 1; $i <= 5; $i++) : ?>
-                    <div class="form-row col-12 mb-2">
-                      <div class="form-group col-3">
-                        <label for="<?= "club$i" ?>">Nombre</label>
-                        <input class="form-control" type="text" name="<?= "club$i" ?>" id="<?= "club$i" ?>" value="<?= $teacher->{"club$i"} ?>" />
-                      </div>
-                      <div class="form-group col-3">
-                        <label for="<?= "pre$i" ?>">Presidente</label>
-                        <input class="form-control" type="text" name="<?= "pre$i" ?>" id="<?= "pre$i" ?>" value="<?= $teacher->{"pre$i"} ?>" />
-                      </div>
-                      <div class="form-group col-3">
-                        <label for="<?= "vi$i" ?>">Vice Presidente</label>
-                        <input class="form-control" type="text" name="<?= "vi$i" ?>" id="<?= "vi$i" ?>" value="<?= $teacher->{"vi$i"} ?>" />
-                      </div>
-                      <div class="form-group col-3">
-                        <label for="<?= "se$i" ?>">Secretario(a)</label>
-                        <input class="form-control" type="text" name="<?= "se$i" ?>" id="<?= "se$i" ?>" value="<?= $teacher->{"se$i"} ?>" />
-                      </div>
-                    </div>
-                  <?php endfor ?>
-                </div>
-              </div>
-            </div>
+        <div class="card">
+          <div class="card-header bg-white" id="clubsHead">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#clubs" aria-expanded="true" aria-controls="clubs">
+                Clubes
+              </button>
+            </h2>
           </div>
-          <div class="card">
-            <div class="card-header bg-white" id="licencesHead">
-              <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#licences" aria-expanded="true" aria-controls="licences">
-                  Licencias
-                </button>
-              </h2>
-            </div>
-            <div id="licences" class="collapse" aria-labelledby="licencesHead" data-parent="#profileAccordion">
-              <div class="card-body">
-                <div class="form-row">
-                  <?php for ($i = 1; $i <= 4; $i++) : ?>
-                    <div class="form-row col-12 mb-2">
-                      <input type="text" class="form-control mr-3 col-6" value="<?= $teacher->{"lic$i"} ?>" disabled>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="<?= "lp$i" ?>" value="Si" <?= $teacher->{"lp$i"} === 'Si' ? "checked" : "checked" ?> disabled>
-                        <label class="form-check-label" for="<?= "lp$i" ?>">
-                          Exp.
-                        </label>
-                      </div>
-                      <input class="form-control ml-3 col-2" type="date" id="<?= "fex$i" ?>" value="<?= $teacher->{"fex$i"} ?>" disabled />
+          <div id="clubs" class="collapse" aria-labelledby="clubsHead" data-parent="#profileAccordion">
+            <div class="card-body">
+              <div class="form-row">
+                <?php for ($i = 1; $i <= 5; $i++) : ?>
+                  <div class="form-row col-12 mb-2">
+                    <div class="form-group col-3">
+                      <label for="<?= "club$i" ?>">Nombre</label>
+                      <input class="form-control" type="text" name="<?= "club$i" ?>" id="<?= "club$i" ?>" value="<?= $teacher->{"club$i"} ?>" />
                     </div>
-                  <?php endfor ?>
-                </div>
+                    <div class="form-group col-3">
+                      <label for="<?= "pre$i" ?>">Presidente</label>
+                      <input class="form-control" type="text" name="<?= "pre$i" ?>" id="<?= "pre$i" ?>" value="<?= $teacher->{"pre$i"} ?>" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="<?= "vi$i" ?>">Vice Presidente</label>
+                      <input class="form-control" type="text" name="<?= "vi$i" ?>" id="<?= "vi$i" ?>" value="<?= $teacher->{"vi$i"} ?>" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="<?= "se$i" ?>">Secretario(a)</label>
+                      <input class="form-control" type="text" name="<?= "se$i" ?>" id="<?= "se$i" ?>" value="<?= $teacher->{"se$i"} ?>" />
+                    </div>
+                  </div>
+                <?php endfor ?>
               </div>
             </div>
           </div>
         </div>
-        <!-- .Accordion -->
+        <div class="card">
+          <div class="card-header bg-white" id="licencesHead">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left text-dark font-weight-bold" type="button" data-toggle="collapse" data-target="#licences" aria-expanded="true" aria-controls="licences">
+                Licencias
+              </button>
+            </h2>
+          </div>
+          <div id="licences" class="collapse" aria-labelledby="licencesHead" data-parent="#profileAccordion">
+            <div class="card-body">
+              <div class="form-row">
+                <?php for ($i = 1; $i <= 4; $i++) : ?>
+                  <div class="form-row col-12 mb-2">
+                    <input type="text" class="form-control mr-3 col-6" value="<?= $teacher->{"lic$i"} ?>" disabled>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="<?= "lp$i" ?>" value="Si" <?= $teacher->{"lp$i"} === 'Si' ? "checked" : "checked" ?> disabled>
+                      <label class="form-check-label" for="<?= "lp$i" ?>">
+                        Exp.
+                      </label>
+                    </div>
+                    <input class="form-control ml-3 col-2" type="date" id="<?= "fex$i" ?>" value="<?= $teacher->{"fex$i"} ?>" disabled />
+                  </div>
+                <?php endfor ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- .Accordion -->
       <div class="mt-3">
         <button type="submit" class="btn btn-primary btn-lg btn-block">Guardar</button>
       </div>
