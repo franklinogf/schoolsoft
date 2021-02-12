@@ -72,7 +72,7 @@ Lang::addTranslation($TRANS);
                             <label class="input-group-text" for="class"><?= Lang::$grade ?></label>
                         </div>
                         <select name="class" class="custom-select" id="class" required>
-                            <option value="" selected><?= Lang::$select."..." ?></option>
+                            <option value="" selected><?= Lang::$select . "..." ?></option>
                             <?php foreach ($classes as $class) : ?>
                                 <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                             <?php endforeach ?>
@@ -83,7 +83,7 @@ Lang::addTranslation($TRANS);
                             <label class="input-group-text" for="tri"><?= Lang::$trimester ?></label>
                         </div>
                         <select name="tri" class="custom-select" id="tri" required>
-                            <option value="" selected><?= Lang::$select."..." ?></option>
+                            <option value="" selected><?= Lang::$select . "..." ?></option>
                             <option value="Trimestre-1">Trimestre 1</option>
                             <option value="Trimestre-2">Trimestre 2</option>
                             <option value="Trimestre-3">Trimestre 3</option>
@@ -96,13 +96,19 @@ Lang::addTranslation($TRANS);
                             <label class="input-group-text" for="tra"><?= Lang::plural(Lang::$page) ?></label>
                         </div>
                         <select name="tra" class="custom-select" id="tra" required>
-                            <option value="" selected><?= Lang::$select."..." ?></option>
+                            <option value="" selected><?= Lang::$select . "..." ?></option>
                             <option value="Notas">Notas</option>
                             <option value="Pruebas-Cortas">Pruebas Cortas</option>
                             <option value="Trab-Diarios">Trabajos Diarios</option>
+                            <?php if ($teacher->info('etd') === 'SI') : ?>
+                                <option value="Trab-Diarios2">Trabajos Diarios 2</option>
+                            <?php endif ?>
                             <option value="Trab-Libreta">Trabajos de Libreta</option>
+                            <?php if ($teacher->info('etd') === 'SI') : ?>
+                                <option value="Trab-Libreta2">Trabajos de Libreta 2</option>
+                            <?php endif ?>
                             <option value="Cond-Asis">Conducta y Asistencia</option>
-                            <option value="Finales">Finales</option>
+                            <option value="Ex-Final">Examen Final</option>
                             <option value="V-Nota">V. Nota</option>
                         </select>
                     </div>
