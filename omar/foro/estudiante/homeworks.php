@@ -10,16 +10,16 @@ use Classes\Controllers\Student;
 Session::is_logged();
 $student = new Student(Session::id());
 
-$homeworks = $student->homeworks(Util::daysBefore(5));
+$homeworks = $student->homeworks();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
-  <?php
-  $title = "Tareas";
-  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
-  ?>
+<head>
+   <?php
+   $title = "Tareas";
+   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+   ?>
 </head>
 
 <body class='pb-5'>
@@ -35,9 +35,9 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
          </div>
          <!-- leyend -->
          <div class="card mx-auto bg-gradient-light bg-light" style="max-width: 30rem">
-         <h6 class="card-header bg-gradient-info bg-info py-2">Leyenda</h6>
+            <h6 class="card-header bg-gradient-info bg-info py-2">Leyenda</h6>
             <div class="card-body p-2">
-               <div class="row text-center">                  
+               <div class="row text-center">
                   <div class="col-6 col-sm-4">
                      <i class="fas fa-circle text-white border rounded-circle border-dark"></i> Tarea sin enviar
                   </div>
@@ -58,15 +58,16 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
                <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white' ?>
+               <?php $cantSend = Util::date() >= $homework->fec_in  ? true : false ?>
                <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'danger'; ?>
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
                   <div class="card <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
                         <?= "{$homework->curso} - {$homework->desc}" ?>
-                        <?php if($homework->enviartarea === 'si'): ?>
-                        <i class="fas fa-circle text-<?= $sent ?>"></i>
+                        <?php if ($homework->enviartarea === 'si') : ?>
+                           <i class="fas fa-circle text-<?= $sent ?>"></i>
                         <?php endif ?>
-                        </h6>
+                     </h6>
                      <div class="card-body ">
                         <h5 class="card-title"><?= $homework->titulo ?></h5>
                         <p class="card-text"><?= $homework->descripcion ?></p>
@@ -83,7 +84,7 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
                            </div>
                         <?php endif ?>
 
-                        <?php if (property_exists($homework, 'archivos')) : ?>
+                        <?php if (property_exists($homework, 'archivos') && $cantSend) : ?>
                            <div class="btn-group-vertical w-100 mt-2">
                               <?php foreach ($homework->archivos as $i => $file) : ?>
                                  <a data-file-id="<?= $file->id ?>" target="_blank" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
@@ -96,8 +97,8 @@ $homeworks = $student->homeworks(Util::daysBefore(5));
                         <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
                         <small class="text-primary blend-screen"><?= (strpos($homework->hora, '(') > -1 ? $homework->hora  : Util::formatTime($homework->hora)) ?></small>
                      </div>
-                     <?php if($homework->enviartarea === 'si'): ?>
-                        <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' && $sent !== "white" ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
+                     <?php if ($homework->enviartarea === 'si') : ?>
+                        <button type="button" data-homework-id="<?= $homework->id_documento ?>" class="btn btn-info btn-block rounded-0 sendHomework" <?= $expired === 'danger' && $sent !== "white" || !$cantSend ? "aria-disabled='true' disabled" : "" ?>>Enviar tarea</button>
                      <?php endif ?>
                   </div>
 
