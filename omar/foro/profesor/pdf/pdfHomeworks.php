@@ -35,11 +35,11 @@ if(__COSEY){
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle("Tareas de $class->desc1");
+$pdf->SetTitle("Tareas de $class->desc1",true);
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(0, 5, "$class->curso - $class->desc1", 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_decode("$class->curso - $class->desc1"), 0, 1, 'C');
 $pdf->Ln(3);
 
 // table header
