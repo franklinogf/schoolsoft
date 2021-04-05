@@ -53,8 +53,8 @@ class PDF extends FPDF
 
 	public function splitCells($value1, $value2)
 	{
-		$this->Cell(0, 5, $value1, 0, 0, "L");
-		$this->Cell(0, 5, $value2, 0, 1, "R");
+		$this->Cell(0, 5, utf8_decode($value1), 0, 0, "L");
+		$this->Cell(0, 5, utf8_decode($value2), 0, 1, "R");
 	}
 
 	public function Fill($red = __PDF_FILL_COLOR_RED, $green = __PDF_FILL_COLOR_GREEN, $blue =  __PDF_FILL_COLOR_BLUE)
