@@ -14,11 +14,11 @@ $teacher = new Teacher(Session::id());
 
 $homeworkId = $_GET['id'];
 // Homework info
-$homework = DB::table('tbl_documentos',!__COSEY)
+$homework = DB::table('tbl_documentos', !__COSEY)
    ->where('id_documento', $homeworkId)->first();
 // Class info
-$desc = (__COSEY) ? "descripcion" : "desc1";
-$class = DB::table('padres',!__COSEY)->select("curso,{$desc} as desc1")
+// $desc = (__COSEY) ? "descripcion" : "desc1";
+$class = DB::table('padres', !__COSEY)->select("curso,descripcion")
    ->where([
       ['year', $teacher->info('year')],
       ['curso', $homework->curso]
@@ -29,15 +29,15 @@ $students = $students->findByClass($homework->curso);
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle("Tarea de ". utf8_decode($class->desc1));
+$pdf->SetTitle("Tarea de $class->descripcion",true);
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(0, 5, $homework->titulo, 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_decode($homework->titulo), 0, 1, 'C');
 $pdf->Ln(3);
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->splitCells(utf8_decode("Curso: $class->curso - $class->desc1"), $teacher->fullName());
+$pdf->splitCells("Curso: $class->curso - $class->descripcion", $teacher->fullName());
 // table header
 $pdf->SetFont('Arial', 'B', 13);
 $pdf->Cell(10, 7, "", "LTB", 0, "C", true);
@@ -51,7 +51,7 @@ $pdf->SetFont('Arial', '', 10);
 
 $num = 1;
 foreach ($students as $student) {
-   $doneHomework = DB::table('tareas_enviadas',!__COSEY)->where([
+   $doneHomework = DB::table('tareas_enviadas', !__COSEY)->where([
       ['id_tarea', $homeworkId],
       ['id_estudiante', $student->mt]
    ])->first();
