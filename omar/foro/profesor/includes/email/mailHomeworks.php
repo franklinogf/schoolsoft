@@ -43,7 +43,7 @@ foreach ($students as $student) {
    }
 
 
-   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoft.com'.Route::url('/foro/login.php');
+   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoftpr.com'.Route::url('/foro/login.php');
    $schoolName = $teacher->info('colegio');
    $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
    $messageTitle = "Tarea del curso {$homework->curso}";

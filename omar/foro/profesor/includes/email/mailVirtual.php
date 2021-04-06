@@ -46,7 +46,7 @@ foreach ($students as $student) {
    $messageTitle = utf8_decode("Salón virtual para $subjectCode");
    $date = Util::formatDate($virtualClass->fecha);
    $time = Util::formatDate($virtualClass->hora);
-   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoft.com'.Route::url('/foro/login.php');
+   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoftpr.com'.Route::url('/foro/login.php');
 
    $mail->isHTML(true);
    $mail->Subject = utf8_decode("Salón virtual para $subjectCode");
