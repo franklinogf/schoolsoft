@@ -3,8 +3,8 @@
 use Classes\DataBase\DB;
 
 global $teacher;
-global $virtual;
 global $tableClassesCheckbox;
+global $virtual;
 ?>
 <!-- classes table -->
 <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
@@ -34,15 +34,6 @@ global $tableClassesCheckbox;
 
          ?>
             <tr <?= $virtualClass ? "class='table-success'" : '' ?>>
-               <?php if ($tableClassesCheckbox) : ?>
-                  <td>
-                     <div class="custom-control custom-checkbox">
-                        <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
-                        <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
-                     </div>
-                  </td>
-               <?php endif ?>
-
                <td><?= $class->curso ?></td>
                <td><?= $class->desc1 ?></td>
             </tr>
