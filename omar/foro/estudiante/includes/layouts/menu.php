@@ -23,6 +23,9 @@ $pathFile = str_replace('.php', '', $file);
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/estudiante/classes.php') ?>">Mis Cursos</a>
       </li>
+      <li class="nav-item <?= ($pathFile === 'virtual' ? 'active' : '') ?>">
+        <a class="nav-link" href="<?= Route::url('/foro/estudiante/virtual.php') ?>">Salón Virtual</a>
+      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Tareas

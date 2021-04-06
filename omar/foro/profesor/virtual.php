@@ -21,14 +21,14 @@ $teacher = new Teacher(Session::id());
 
 <body>
 
-  <?php
-  $virtual = true;
+  <?php  
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
     <h1 id="header" class="text-center">Salón Virtual</h1>
 
     <?php
+    $virtual = true;
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
     ?>
 
