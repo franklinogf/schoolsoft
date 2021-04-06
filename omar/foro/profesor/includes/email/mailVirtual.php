@@ -61,7 +61,8 @@ foreach ($students as $student) {
 <center><h2>$schoolName</h2></center>
 <center><h3>$messageTitle</h3></center>
 <h4>{$virtualClass->titulo}</h4>
-<p>Tiene una nueva clase virtual</a></p>
+<p>Tiene una nueva clase virtual</p>
+<p><b>Profesor:</b> {$teacher->fullName()}</p>
 <hr>
 <p>Fecha: $date</p>
 <p>Hora: $time</p>
