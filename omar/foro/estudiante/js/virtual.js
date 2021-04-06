@@ -28,23 +28,17 @@ $(document).ready(function () {
 				},
 				dataType: 'json',
 				complete: function (response) {
-					console.log(response)
-					if (response.responseJSON) {
+					if (response.responseJSON.response) {
 						const data = response.responseJSON.data;
 						$("#virtualModal").find('.modal-body').html(`
-			<div class="alert alert-primary" role="alert">
-				<h4 class="alert-heading">${data.title}</h4>
-				<p>Para acceder al curso virtual haga <a href="${data.link}" class="alert-link" target="_blank">click aquí</a></p>
-				<hr>
-				<p>Fecha: ${formatDate(data.date)}</p>
-				<p>Hora: ${formatTime(data.time)}</p>
-				<small class="text-muted">Si no le funciona el enlace, copie y pegue este enlace en el navegador: ${data.link} </small>
-			</div>
-			`)
-
-
-
-
+						<div class="alert alert-primary" role="alert">
+							<h4 class="alert-heading">${data.title}</h4>
+							<p>Para acceder al curso virtual haga <a href="#" class="alert-link linkBtn">click aquí</a></p>
+							<hr>
+							<p>Fecha: ${formatDate(data.date)}</p>
+							<p>Hora: ${formatTime(data.time)}</p>
+						</div>
+						`)
 					}
 				}
 			});
@@ -52,9 +46,11 @@ $(document).ready(function () {
 		}
 	});
 
-
-
-
+$(document).on('click','.linkBtn',function (e) { 
+	e.preventDefault();
+	console.log("on btn pressed")
+	
+ })
 
 
 });
