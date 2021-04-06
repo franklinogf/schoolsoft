@@ -43,12 +43,13 @@ class Student extends StudentModel
     return $this;
   }
 
-  public function fullName()
+  public function fullName($utf8Decode = false)
   {
     if (!isset($this->{$this->primary_key})) {
       $this->exception();
     }
-    $fullName = mb_strtoupper("{$this->nombre} {$this->apellidos}", 'UTF-8');
+    $fullName = $utf8Decode ? utf8_decode("{$this->nombre} {$this->apellidos}")
+      : mb_strtoupper("{$this->nombre} {$this->apellidos}", 'UTF-8');
     return $fullName;
   }
   public function profilePicture()
