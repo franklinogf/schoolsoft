@@ -19,16 +19,22 @@ if (isset($_POST['find'])) {
       ['id_profesor', $_POST['teacherId']],
    ])->first();
 
-   $array = [
-      'response' => true,
-      'data' => [
-         "id" => $virtualClass->id,
-         'link' => $virtualClass->link,
-         'title' => $virtualClass->titulo,
-         'date' => $virtualClass->fecha,
-         'time' => $virtualClass->hora,
-      ]
-   ];
+   if($virtualClass){
+      $array = [
+         'response' => true,
+         'data' => [
+            "id" => $virtualClass->id,
+            'link' => $virtualClass->link,
+            'title' => $virtualClass->titulo,
+            'date' => $virtualClass->fecha,
+            'time' => $virtualClass->hora,
+         ]
+      ];
+   }else{
+      $array = [
+         'response' => false
+      ];
+   }
 
    echo Util::toJson($array);
 } 
