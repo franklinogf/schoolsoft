@@ -1,5 +1,9 @@
 <?php
+
+use Classes\DataBase\DB;
+
 global $teacher;
+global $virtual;
 global $tableClassesCheckbox;
 ?>
 <!-- classes table -->
@@ -20,18 +24,43 @@ global $tableClassesCheckbox;
    </thead>
    <tbody>
       <?php foreach ($teacher->classes() as $class) : ?>
-         <tr>
-            <?php if ($tableClassesCheckbox) : ?>
-               <td>
-                  <div class="custom-control custom-checkbox">
-                     <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
-                     <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
-                  </div>
-               </td>
-            <?php endif ?>
-            <td><?= $class->curso ?></td>
-            <td><?= $class->desc1 ?></td>
-         </tr>
+         <?php
+         if ($virtual) :
+            $virtualClass = DB::table('virtual')->where([
+               ['curso', $class->curso],
+               ['year', $teacher->info('year')],
+               ['id_profesor', $teacher->id],
+            ])->first();
+
+         ?>
+            <tr <?= $virtualClass ? "class='table-success'" : '' ?>>
+               <?php if ($tableClassesCheckbox) : ?>
+                  <td>
+                     <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
+                        <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
+                     </div>
+                  </td>
+               <?php endif ?>
+
+               <td><?= $class->curso ?></td>
+               <td><?= $class->desc1 ?></td>
+            </tr>
+         <?php else : ?>
+            <tr>
+               <?php if ($tableClassesCheckbox) : ?>
+                  <td>
+                     <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
+                        <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
+                     </div>
+                  </td>
+               <?php endif ?>
+
+               <td><?= $class->curso ?></td>
+               <td><?= $class->desc1 ?></td>
+            </tr>
+         <?php endif ?>
       <?php endforeach ?>
    </tbody>
    <tfoot>

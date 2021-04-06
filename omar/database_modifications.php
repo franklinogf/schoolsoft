@@ -39,6 +39,17 @@ ADD `desc5` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc4_1`,
 ADD `desc5_1` TEXT NULL DEFAULT NULL AFTER `desc5`
 ");
 
+/* ---------------------- table for the virtual classes --------------------- */
+DB::table("virtual")->create("
+`id` INT NOT NULL AUTO_INCREMENT ,
+`id_profesor` INT NOT NULL ,
+`curso` VARCHAR(10) NOT NULL ,
+`link` TEXT NOT NULL ,
+`titulo` VARCHAR(150) NULL ,
+`fecha` DATE NOT NULL,
+`hora` TIME NOT NULL,
+`year` VARCHAR(5) NOT NULL,
+ PRIMARY KEY (`id`)");
 /* -------------------------------------------------------------------------- */
 /*                         END DATABASE MODIFICATIONS                         */
 /* -------------------------------------------------------------------------- */
