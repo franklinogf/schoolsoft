@@ -1,6 +1,9 @@
 <?php
+
+use Classes\DataBase\DB;
 global $student;
 global $tableClassesCheckbox;
+global $virtual;
 ?>
 <!-- classes table -->
 <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
@@ -20,18 +23,36 @@ global $tableClassesCheckbox;
    </thead>
    <tbody>
       <?php foreach ($student->classes() as $class) : ?>
-         <tr data-id="<?= $class->id ?>">
-            <?php if ($tableClassesCheckbox) : ?>
-               <td>
-                  <div class="custom-control custom-checkbox">
-                     <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
-                     <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
-                  </div>
-               </td>
+
+         <?php
+         if ($virtual) :
+            $virtualClass = DB::table('virtual')->where([
+               ['curso', $class->curso],
+               ['year', $student->info('year')],
+               ['id_profesor', $class->id],
+            ])->first();
+
+         ?>
+            <?php if ($virtualClass) : ?>
+               <tr data-teacher-id="<?= $class->id ?>">
+                  <td><?= $class->curso ?></td>
+                  <td><?= $class->descripcion ?></td>
+               </tr>
             <?php endif ?>
-            <td><?= $class->curso ?></td>
-            <td><?= $class->descripcion ?></td>
-         </tr>
+         <?php else : ?>
+            <tr data-id="<?= $class->id ?>">
+               <?php if ($tableClassesCheckbox) : ?>
+                  <td>
+                     <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input check bg-success" type="checkbox" id="<?= $class->curso ?>" name="class[]" value="<?= $class->curso ?>">
+                        <label class=" custom-control-label" for="<?= $class->curso ?>"></label>
+                     </div>
+                  </td>
+               <?php endif ?>
+               <td><?= $class->curso ?></td>
+               <td><?= $class->descripcion ?></td>
+            </tr>
+         <?php endif ?>
       <?php endforeach ?>
    </tbody>
    <tfoot>
