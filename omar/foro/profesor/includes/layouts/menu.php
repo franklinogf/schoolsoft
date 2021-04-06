@@ -23,7 +23,7 @@ $pathFile = str_replace('.php', '', $file);
       <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/profesor/classes.php') ?>">Mis Cursos</a>
       </li>
-      <li class="nav-item <?= ($pathFile === 'classes' ? 'active' : '') ?>">
+      <li class="nav-item <?= ($pathFile === 'virtual' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/foro/profesor/virtual.php') ?>">Salón Virtual</a>
       </li>
       <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
