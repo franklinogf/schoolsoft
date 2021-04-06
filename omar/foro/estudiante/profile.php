@@ -33,7 +33,7 @@ $student = new Student(Session::id());
             <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
             <input type="file" hidden name="picture" id="picture" accept="image/jpg,image/png,image/gif,image/jpeg">
           </div>
-        </form>
+        
       </div>
       <div class="offset-lg-2 col-lg-4 col-sm-12 mt-sm-3">
         <hr class="d-lg-none d-sm-block" />
@@ -96,6 +96,7 @@ $student = new Student(Session::id());
         </div>
       </div>
     </div>
+    </form>
   </div>
 
 
