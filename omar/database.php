@@ -10,12 +10,19 @@
 // define('__PASSWORD', "");
 // define('__DB_NAME', "demo");
 
-/* ----------------------------- REMOTE DATABASE ---------------------------- */
+/* ----------------------------- DEMO DATABASE ----------------------------- */
 
-define('__HOST', "schoolsoftpr.com");
+define('__HOST', "localhost");
 define('__USERNAME', "admin_democol");
 define('__PASSWORD', "Amc123456");
 define('__DB_NAME', "admin_democol");
+
+/* ----------------------------- REMOTE DATABASE ---------------------------- */
+
+// define('__HOST', "schoolsoftpr.com");
+// define('__USERNAME', "admin_democol");
+// define('__PASSWORD', "Amc123456");
+// define('__DB_NAME', "admin_democol");
 
 /* ----------------------------- COSEY DATABASE ---------------------------- */
 
