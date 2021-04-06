@@ -58,21 +58,21 @@ $teacher = new Teacher(Session::id());
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="name">Nombre</label>
-            <input type="text" value='<?= $teacher->nombre ?>' class="form-control" name='name' id="name" required>
+            <input type="text" value='<?= $teacher->nombre ?>' class="form-control" name='name' id="name" required autocomplete="nope">
           </div>
           <div class="form-group col-md-6">
             <label for="lastname">Apellidos</label>
-            <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastName' id="lastname" required>
+            <input type="text" value='<?= $teacher->apellidos ?>' class="form-control" name='lastName' id="lastname" required autocomplete="nope">
           </div>
           <div class="form-group col-md-12">
             <label for="email1">E-mail Principal</label>
-            <input type="email" value='<?= $teacher->email1 ?>' class="form-control" name='email1' id="email1">
+            <input type="email" value='<?= $teacher->email1 ?>' class="form-control" name='email1' id="email1" autocomplete="nope">
             <label for="email2">E-mail Secundario</label>
-            <input type="email" value='<?= $teacher->email2 ?>' class="form-control" name='email2' id="email2">
+            <input type="email" value='<?= $teacher->email2 ?>' class="form-control" name='email2' id="email2" autocomplete="nope">
           </div>
           <div class="form-group col-md-6">
             <label for="cellPhone">Celular</label>
-            <input type="tel" value="<?= $teacher->cel ?>" class="form-control" id="cellPhone" name="cellPhone" pattern="[0-9]{10}" />
+            <input type="tel" value="<?= $teacher->cel ?>" class="form-control" id="cellPhone" name="cellPhone" pattern="[0-9]{10}" autocomplete="nope">
           </div>
           <div class="form-group col-md-6">
             <label for="cellCompany">Compañia telefonica</label>
@@ -91,9 +91,9 @@ $teacher = new Teacher(Session::id());
           </div>
           <div class="form-group  col-md-6">
             <label for="pass1">Nueva Clave</label>
-            <input type="password" class="form-control pass" name='password' id="pass1">
+            <input type="password" class="form-control pass" name='password' id="pass1" autocomplete="nope">
             <label for="pass2">Confirmar Clave</label>
-            <input type="password" class="form-control pass" id="pass2">
+            <input type="password" class="form-control pass" id="pass2" autocomplete="nope">
             <div class="invalid-feedback">Las claves no coinciden</div>
           </div>
 

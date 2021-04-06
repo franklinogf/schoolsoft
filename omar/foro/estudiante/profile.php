@@ -55,19 +55,19 @@ $student = new Student(Session::id());
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="name">Nombre</label>
-          <input type="text" value='<?= $student->nombre ?>' class="form-control" name='name' id="name" required>
+          <input type="text" value='<?= $student->nombre ?>' class="form-control" name='name' id="name" required autocomplete="nope">
         </div>
         <div class="form-group col-md-6">
           <label for="lastname">Apellidos</label>
-          <input type="text" value='<?= $student->apellidos ?>' class="form-control" name='lastName' id="lastname" required>
+          <input type="text" value='<?= $student->apellidos ?>' class="form-control" name='lastName' id="lastname" required autocomplete="nope">
         </div>
         <div class="form-group col-md-12">
           <label for="email">E-mail</label>
-          <input type="email" value='<?= $student->email ?>' class="form-control" name='email' id="email">
+          <input type="email" value='<?= $student->email ?>' class="form-control" name='email' id="email" autocomplete="nope">
         </div>
         <div class="form-group col-md-6">
           <label for="cellPhone">Celular</label>
-          <input type="tel" value="<?= $student->cel ?>" class="form-control" id="cellPhone" name="cellPhone" pattern="[0-9]{10}" />
+          <input type="tel" value="<?= $student->cel ?>" class="form-control" id="cellPhone" name="cellPhone" pattern="[0-9]{10}" autocomplete="nope">
         </div>
         <div class="form-group col-md-6">
           <label for="cellCompany">Compañia telefonica</label>
@@ -86,9 +86,9 @@ $student = new Student(Session::id());
         </div>
         <div class="form-group  col-md-6">
           <label for="pass1">Nueva Clave</label>
-          <input type="password" class="form-control pass" name='password' id="pass1">
+          <input type="password" class="form-control pass" name='password' id="pass1" autocomplete="nope">
           <label for="pass2">Confirmar Clave</label>
-          <input type="password" class="form-control pass" id="pass2">
+          <input type="password" class="form-control pass" id="pass2" autocomplete="nope">
           <div class="invalid-feedback">Las claves no coinciden</div>
         </div>
         <div class="form-group col-md-12">
