@@ -19,18 +19,22 @@ if (isset($_POST['find'])) {
       ['id_profesor', $teacher->id],
    ])->first();
 
-   $array = [
-      'response' => true,
-      'data' => [
-         "id" => $virtualClass->id,
-         'link' => $virtualClass->link,
-         'title' => $virtualClass->titulo,
-         'date' => $virtualClass->fecha,
-         'time' => $virtualClass->hora,
-      ]
-   ];
-
+   if($virtualClass){
+      $array = [
+         'response' => true,
+         'data' => [
+            "id" => $virtualClass->id,
+            'link' => $virtualClass->link,
+            'title' => $virtualClass->titulo,
+            'date' => $virtualClass->fecha,
+            'time' => $virtualClass->hora,
+         ]
+      ];
+   }else {
+      $array = ['response' => false];
+   }
    echo Util::toJson($array);
+
 } else if (isset($_POST['add'])) {
    $id =  DB::table('virtual')->insertGetId([
       'link' => $_POST['link'],
@@ -54,4 +58,8 @@ if (isset($_POST['find'])) {
          'fecha' => $_POST['date'],
          'hora' => $_POST['time'],
       ]);
+}
+else if (isset($_POST['delete'])) {   
+   DB::table('virtual')->where('id', $_POST['delete'])
+      ->delete();
 }
