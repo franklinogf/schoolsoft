@@ -1,4 +1,5 @@
 <?php
+require_once '../../../../app.php';
 
 use Classes\Controllers\Homework;
 use Classes\Controllers\Student;
