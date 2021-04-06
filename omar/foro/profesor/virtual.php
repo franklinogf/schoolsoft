@@ -35,7 +35,7 @@ $teacher = new Teacher(Session::id());
 
     <!-- Modal -->
     <div id="virtualModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="virtualModal" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <form class="needs-validation" novalidate>
           <div class="modal-content">
             <div class="modal-header">
@@ -54,13 +54,13 @@ $teacher = new Teacher(Session::id());
                 <input type="text" class="form-control" id="title" required>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-6">
                   <div class="form-group">
                     <label for="date">Fecha</label>
                     <input type="date" class="form-control" id="date" required>
                   </div>
                 </div>
-                <div class="col">
+                <div class="col-6">
                   <div class="form-group">
                     <label for="time">Hora</label>
                     <input type="time" class="form-control" id="time" required>
@@ -70,11 +70,26 @@ $teacher = new Teacher(Session::id());
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger hidden">Eliminar</button>
               <button type="submit" id="virtualBtn" class="btn btn-primary">Guardar</button>
             </div>
           </div>
           <input type="hidden" id="virtualId">
         </form>
+      </div>
+    </div>
+    <!-- alert delete modal -->
+    <div id="deleteModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-content border-danger">
+            <div class="modal-body">
+            Esta seguro que desea eliminarla?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="button" id="virtualDelBtn" class="btn btn-sm btn-danger">Aceptar</button>
+            </div>
+          </div>
       </div>
     </div>
   </div>
