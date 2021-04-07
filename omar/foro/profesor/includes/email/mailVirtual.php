@@ -45,9 +45,12 @@ foreach ($students as $student) {
    $schoolName = $teacher->info('colegio');
    $messageTitle = utf8_decode("Salón virtual para $subjectCode");
    $date = Util::formatDate($virtualClass->fecha);
-   $time = Util::formatDate($virtualClass->hora);
-   $link = (__COSEY) ? 'https://www.cosey.org'. Route::url('/foro/login.php')  : 'https://www.schoolsoftpr.com'.Route::url('/foro/login.php');
-
+   $time = Util::formatTime($virtualClass->hora);
+   $password = $virtualClass->clave !== '' ? "<p>Clave para entrar a la sala: {$virtualClass->clave}</p>" : '';
+   $information = $virtualClass->informacion !== '' ? utf8_decode("<p><b>Información importante:</b> <br> {$virtualClass->informacion}</p>") : '';
+   $link = (__COSEY) ? 'https://www.cosey.org' . Route::url('/foro/login.php')  : 'https://www.schoolsoftpr.com' . Route::url('/foro/login.php');
+   $studentFullName = utf8_decode("$student->nombre $student->apellidos");
+   $teacherFullName = utf8_decode("$teacher->nombre $teacher->apellidos");
    $mail->isHTML(true);
    $mail->Subject = utf8_decode("Salón virtual para $subjectCode");
    $mail->Body    = "<!DOCTYPE html>
@@ -57,17 +60,20 @@ foreach ($students as $student) {
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <title>Salón Virtual</title>
 </head>
-<body>
-<center><h2>$schoolName</h2></center>
-<center><h3>$messageTitle</h3></center>
-<h4>{$virtualClass->titulo}</h4>
-<p>Tiene una nueva clase virtual</p>
-<p><b>Profesor:</b> {$teacher->fullName()}</p>
-<hr>
-<p>Fecha: $date</p>
-<p>Hora: $time</p>
-<p><a href='$link'>Acceder al Foro</a></p>
-</body>
+   <body>
+      <center><h2>$schoolName</h2></center>
+      <center><h3>$messageTitle</h3></center>
+      <h4>{$virtualClass->titulo}</h4>
+      <p>$studentFullName</p>
+      <p>Tiene una nueva clase virtual</p>
+      <p><b>Profesor:</b> {$teacher->fullName(true)}</p>
+      <hr>
+      <p>Fecha: <b>$date</b></p>
+      <p>Hora: <b>$time</b></p>
+      $password
+      $information
+      <p><a href='$link'>Acceder al Foro</a></p>
+   </body>
 </html>
 ";
 
