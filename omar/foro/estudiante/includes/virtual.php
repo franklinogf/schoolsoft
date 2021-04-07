@@ -17,9 +17,10 @@ if (isset($_POST['find'])) {
       ['curso', $_POST['find']],
       ['year', $student->info('year')],
       ['id_profesor', $_POST['teacherId']],
+      ['activo', true],
    ])->first();
 
-   if($virtualClass){
+   if ($virtualClass) {
       $array = [
          'response' => true,
          'data' => [
@@ -30,11 +31,27 @@ if (isset($_POST['find'])) {
             'time' => $virtualClass->hora,
          ]
       ];
-   }else{
+   } else {
       $array = [
          'response' => false
       ];
    }
 
    echo Util::toJson($array);
-} 
+} else if (isset($_POST['asis'])) {
+   $virtualAsis = DB::table("asistencia_virtual")->where([
+      ["id_virtual", $_POST['asis']],
+      ["ss_estudiante" , $student->ss],
+      ["year", $student->info('year')]
+   ])->first();
+
+   if (!$virtualAsis) {
+      DB::table("asistencia_virtual")->insert([
+         "id_virtual" => $_POST['asis'],
+         "ss_estudiante" => $student->ss,
+         "fecha" => Util::date(),
+         "hora" => Util::time(),
+         "year" => $student->info('year'),
+      ]);
+   }
+}

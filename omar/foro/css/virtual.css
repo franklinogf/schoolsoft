@@ -1,0 +1,7 @@
+.linkBtn {
+    cursor:pointer;
+}
+
+.linkBtn:hover{
+    text-decoration: underline;
+}

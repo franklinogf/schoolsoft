@@ -3,6 +3,7 @@ require_once '../../app.php';
 
 use Classes\Route;
 use Classes\Session;
+use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 
 Session::is_logged();
