@@ -7,21 +7,24 @@ use Classes\DataBase\DB;
 /*                           DATABASE MODIFICATIONS                           */
 /* -------------------------------------------------------------------------- */
 
-DB::table("t_mensajes_archivos")->create("
+DB::table("t_mensajes_archivos")->create(
+    "
 `id` INT NOT NULL AUTO_INCREMENT,
 `nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
 `mensaje_code` int(11) DEFAULT NULL,
 PRIMARY KEY (`id`)"
 );
 
-DB::table("tareas_enviadas")->alter("DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE");
+DB::table("tareas_enviadas")->alter("
+DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE
+");
 
 DB::table("t_mensajes_links")->create("
 `id` INT NOT NULL AUTO_INCREMENT ,
 `link` TEXT NOT NULL ,
 `nombre` VARCHAR(150) NULL ,
 `mensaje_code` INT NOT NULL,
- PRIMARY KEY (`id`)");
+PRIMARY KEY (`id`)");
 DB::table('T_archivos')->alter("RENAME TO t_archivos");
 DB::table('T_tareas_archivos')->alter("RENAME TO t_tareas_archivos");
 
@@ -46,10 +49,22 @@ DB::table("virtual")->create("
 `curso` VARCHAR(10) NOT NULL ,
 `link` TEXT NOT NULL ,
 `titulo` VARCHAR(150) NULL ,
+`clave` VARCHAR(150) NULL ,
+`informacion` TEXT NULL ,
 `fecha` DATE NOT NULL,
 `hora` TIME NOT NULL,
 `year` VARCHAR(5) NOT NULL,
- PRIMARY KEY (`id`)");
+`activo` BOOLEAN NOT NULL DEFAULT TRUE,
+PRIMARY KEY (`id`)");
+
+DB::table("asistencia_virtual")->create("
+`id` INT NOT NULL AUTO_INCREMENT ,
+`id_virtual` INT NOT NULL ,
+`ss_estudiante` VARCHAR(150) NOT NULL ,
+`fecha` DATE NOT NULL,
+`hora` TIME NOT NULL,
+`year` VARCHAR(5) NOT NULL,
+PRIMARY KEY (`id`)");
 /* -------------------------------------------------------------------------- */
 /*                         END DATABASE MODIFICATIONS                         */
 /* -------------------------------------------------------------------------- */
