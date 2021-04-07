@@ -53,6 +53,10 @@ $teacher = new Teacher(Session::id());
                 <label for="title">Titulo</label>
                 <input type="text" class="form-control" id="title" required>
               </div>
+              <div class="form-group">
+                <label for="password">Clave para la sala</label>
+                <input type="text" class="form-control" id="password">
+              </div>
               <div class="row">
                 <div class="col-6">
                   <div class="form-group">
@@ -66,6 +70,10 @@ $teacher = new Teacher(Session::id());
                     <input type="time" class="form-control" id="time" required>
                   </div>
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="information">Información para los estudiantes</label>
+                <textarea class="form-control" id="information"></textarea>
               </div>
             </div>
             <div class="modal-footer">

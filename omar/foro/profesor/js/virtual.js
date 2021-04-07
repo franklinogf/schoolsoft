@@ -24,6 +24,8 @@ $(document).ready(function () {
 						$('#title').val(data.title)
 						$('#date').val(data.date)
 						$('#time').val(data.time)
+						$('#password').val(data.password)
+						$('#information').val(data.information)
 						$('#virtualId').val(data.id)
 						$("#virtualModal .btn-danger").removeClass('hidden')
 						virtualId = data.id
@@ -53,6 +55,8 @@ $(document).ready(function () {
 						title: $('#title').val(),
 						date: $('#date').val(),
 						time: $('#time').val(),
+						password: $('#password').val(),
+						information: $('#information').val(),
 					},
 					dataType: 'json',
 					complete: function (response) {
@@ -89,6 +93,8 @@ $(document).ready(function () {
 						title: $('#title').val(),
 						date: $('#date').val(),
 						time: $('#time').val(),
+						password: $('#password').val(),
+						information: $('#information').val(),
 					},
 					dataType: 'json',
 					complete: function (response) {
@@ -144,17 +150,6 @@ $(document).ready(function () {
 		$("#virtualModal .btn-danger").addClass('hidden')
 		virtualId = ''
 
-	}
-
-	function loadingBtn(btn, clear = '') {
-		if (clear.length === 0) {
-			btn.prop('disabled', true).html(`
-			<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-			Cargando...
-			`)
-		} else {
-			btn.prop('disabled', false).text(clear)
-		}
 	}
 
 });

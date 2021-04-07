@@ -1,4 +1,14 @@
 //* --------------------------- functions --------------------------- *//
+function loadingBtn(btn, clear = '',text = 'Cargando...') {
+  if (clear.length === 0) {
+    btn.addClass('disabled').prop('disabled', true).html(`
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    ${text}
+    `)
+  } else {
+    btn.removeClass('disabled').prop('disabled', false).text(clear)
+  }
+}
 // same style as the database
 function nl2br(str, is_xhtml) {
   if (typeof str === 'undefined' || str === null) {
