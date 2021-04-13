@@ -160,3 +160,9 @@ body {
 	pointer-events: none;
 	cursor: not-allowed;
 }
+
+tr.disabled{
+	pointer-events: none;
+	opacity: .5;
+	
+}
