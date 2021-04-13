@@ -19,4 +19,5 @@ omar/foro/estudiante/exameneslista.php
 omar/foro/estudiante/examenterminado.php
 omar/foro/profesor/email_tareas.php
 omar/foro/profesor/email_users.php
-omar/regiweb/ent_notas.php
+ent_notas.php
+ins_notas.php
