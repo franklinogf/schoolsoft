@@ -1,8 +1,8 @@
 $(document).ready(function () {
   let _class = '';
   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
-  const homeworksTableWrapper = $(".homeworksTable").parents('.dataTables_wrapper');
-  homeworksTableWrapper.hide(0);
+  const virtualClassesTableWrapper = $(".virtualClassesTable").parents('.dataTables_wrapper');
+  virtualClassesTableWrapper.hide(0);
 
   $('.classesTable tbody').on('click', 'tr', function () {
     $('.classesTable tbody tr').addClass('disabled')
@@ -13,31 +13,32 @@ $(document).ready(function () {
       $.ajax({
         type: "POST",
         url: includeThisFile(),
-        data: { 'homeworksByClass': _class },
+        data: { 'virtualByClass': _class },
         dataType: "json",
         complete: (res) => {
           res = res.responseJSON
           if (res.response === true) {
-            res.data.map(homework => {
-              const thisRow = homeworksTable.row.add({
-                0: homework.titulo,
-                1: formatDate(homework.fec_out)
+            res.data.map(virtual => {
+              const thisRow = virtualClassesTable.row.add({
+                0: virtual.titulo,
+                1: formatDate(virtual.fecha),
+                2: formatTime(virtual.hora),
               }).draw();
 
-              $(thisRow.node()).prop('id', homework.id_documento)
+              $(thisRow.node()).prop('id', virtual.id)
 
             })
 
             classesTableWrapper.hide('drop', { direction: "left" }, 400, () => {
-              homeworksTableWrapper.show('drop', { direction: "right" }, 400);
+              virtualClassesTableWrapper.show('drop', { direction: "right" }, 400);
             });
             $("#header").hide('drop', { direction: "left" }, 400, () => {
-              $("#header").text('Lista de tareas')
+              $("#header").text('Lista de clases virtuales')
                 .show('drop', { direction: "right" }, 400);
             });
           }
           else {
-            alert('No existen tareas en esta clase');
+            alert('No existen clases virtuales con este clase');
           }
           $('.classesTable tbody tr').removeClass('disabled')
         }
@@ -48,8 +49,8 @@ $(document).ready(function () {
   });
 
   $("#back").click((e) => {
-    homeworksTableWrapper.hide('drop', { direction: "right" }, 400, () => {
-      homeworksTable.rows().remove();
+    virtualClassesTableWrapper.hide('drop', { direction: "right" }, 400, () => {
+      virtualClassesTable.rows().remove();
       classesTableWrapper.show('drop', { direction: "left" }, 400);
     });
     $("#header").hide('drop', { direction: "right" }, 400, () => {
@@ -58,12 +59,12 @@ $(document).ready(function () {
     });
   })
 
-  $('.homeworksTable tbody').on('click', 'tr', function () {
-    const row = homeworksTable.row(this)
+  $('.virtualClassesTable tbody').on('click', 'tr', function () {
+    const row = virtualClassesTable.row(this)
     if (row.index() !== undefined) {
-      // const data = row.data();
-      const homeworkId = $(row.node()).prop('id');
-      openWindowWithPost(getBaseUrl('pdf/pdfDoneHomeworks.php'), { id: homeworkId })
+      const virtualId = $(row.node()).prop('id');
+      console.log(virtualId)
+      openWindowWithPost(getBaseUrl('pdf/pdfVirtual.php'), { id: virtualId })
     }
   });
 

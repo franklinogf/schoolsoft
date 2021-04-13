@@ -1,5 +1,4 @@
 <!-- homework table -->
-
 <table class="homeworksTable table table-striped table-hover cell-border w-100 shadow">
    <thead class="bg-gradient-primary bg-primary border-0">
       <tr>

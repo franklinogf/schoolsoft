@@ -1,5 +1,5 @@
 <?php
-require_once '../../app.php';
+require_once '../../../app.php';
 
 use Classes\Route;
 use Classes\Session;
@@ -15,7 +15,7 @@ $teacher = new Teacher(Session::id());
 
 <head> 
   <?php
-  $title = "Lista de clases";
+  $title = "Informe de estudiantes por curso";
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -26,7 +26,7 @@ $teacher = new Teacher(Session::id());
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center">Lista de cursos </h1>
+    <h1 class="text-center">Lista de estudiantes por curso</h1>
     <!-- classes table -->
     <form action="<?= Route::url('/foro/profesor/pdf/pdfClasses.php') ?>" method="POST" target="pdfClasses">
       <table class="classesTable table table-striped table-hover cell-border w-100 shadow">

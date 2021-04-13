@@ -1,12 +1,11 @@
 <?php
-require_once '../../app.php';
+require_once '../../../app.php';
 
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
-$jqUI = true;
 $DataTable = true;
 $teacher = new Teacher(Session::id());
 ?>
@@ -15,7 +14,7 @@ $teacher = new Teacher(Session::id());
 
 <head> 
   <?php
-  $title = "Informe de tareas realizadas";
+  $title = "Informe de tareas";
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -26,17 +25,11 @@ $teacher = new Teacher(Session::id());
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 id="header" class="text-center">Mis Cursos</h1>
-
+    <h1 id="header" class="text-center">Lista de tareas</h1>
     <?php
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
-    Route::includeFile('/foro/profesor/includes/tables/tableHomeworks.php');
     ?>
 
-    
-
-   
-    
   </div>
   <?php
   Route::includeFile('/foro/profesor/includes/layouts/scripts.php');

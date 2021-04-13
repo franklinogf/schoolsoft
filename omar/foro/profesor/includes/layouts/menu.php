@@ -34,9 +34,10 @@ $pathFile = str_replace('.php', '', $file);
           Informes
         </a>
         <div class="dropdown-menu" aria-labelledby="dropDownInformes">
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/listClasses.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de estudiantes por curso</a>
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/homeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas</a>
-          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/doneHomeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas entregadas</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/reports/classesList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de estudiantes por curso</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/reports/homeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/reports/doneHomeworksList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de tareas entregadas</a>
+          <a class="dropdown-item" href="<?= Route::url('/foro/profesor/reports/virtualList.php') ?>"><i class="far fa-list-alt text-primary"></i> Lista de clases virtuales</a>
           <div class="dropdown-divider"></div>
           <?php if (!__COSEY) : ?>
             <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-primary"></i> Salon Hogar</a>
