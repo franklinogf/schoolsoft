@@ -1,5 +1,5 @@
 //* --------------------------- functions --------------------------- *//
-function loadingBtn(btn, clear = '',text = 'Cargando...') {
+function loadingBtn(btn, clear = '', text = 'Cargando...') {
   if (clear.length === 0) {
     btn.addClass('disabled').prop('disabled', true).html(`
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -108,9 +108,22 @@ function formatTime(value) {
 }
 
 function getBaseUrl(fileName = '') {
-  let re = new RegExp(/^.*\//);
-  return re.exec(window.location.href) + fileName;
+  // let re = new RegExp(/^.*\//);
+  // return re.exec(window.location.href) + fileName;
+
+  let newPath = ''
+  let loc = window.location.pathname
+  loc = loc.substring(1)
+  const dirs = loc.split('/', 3);
+  dirs.forEach(dir => {
+    if (dir !== '') {
+      newPath += dir + '/'
+    }
+  });
+  return window.origin + '/' + newPath + fileName
+
 }
+
 function getFileName(path = '') {
   let fileName = path.replace(/^.*[\\\/]/, '')
   return fileName;
@@ -130,6 +143,25 @@ function baseName(str) {
   return base;
 }
 
+function openWindowWithPost(url, data) {
+  var form = document.createElement("form");
+  form.target = "_blank";
+  form.method = "POST";
+  form.action = url;
+  form.style.display = "none";
+
+  for (var key in data) {
+      var input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
 // check input passwords
 function checkPasswords(pass1 = '#pass1', pass2 = '#pass2', bothClass = '.pass') {
 
@@ -185,14 +217,14 @@ function fileExtension(fileName) {
 
 $(function () {
   // Ajax session check
-  $( document ).ajaxStart(function() {
-    const path = getBaseUrl().split('/').slice(0,5).join("/");
-  $.get(path+"/includes/sessionCheck.php",res => {
-    console.log(res);
-    if(res === "Expired"){
-      window.location.href = path+"/includes/logout.php";
-    }
-  })
+  $(document).ajaxStart(function () {
+    const path = getBaseUrl().split('/').slice(0, 5).join("/");
+    $.get(path + "/includes/sessionCheck.php", res => {
+      console.log(res);
+      if (res === "Expired") {
+        window.location.href = path + "/includes/logout.php";
+      }
+    })
   });
   // Data table global configuration
   if ($.fn.dataTable) {
@@ -234,6 +266,9 @@ $(function () {
 
     // Topics table custom info
     if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
+
+    // Topics table custom info
+    if ($('.virtualClassesTable')) virtualClassesTable = $('.virtualClassesTable').DataTable();
   }
   // delete everything when the modal hides
 
@@ -259,7 +294,7 @@ $(function () {
       if (thisBtn.nextAll().length > 0) {
         thisBtn = thisBtn.nextAll().last();
       }
-      
+
       thisBtn.after(`<div class="input-group mt-3 w-75 mx-auto fileInput animated fadeInUp faster">
     <div class="custom-file">
        <input type="file" class="custom-file-input file" name="file[]">
@@ -274,7 +309,7 @@ $(function () {
       }, 500);
     });
 
-    $(document).on('change', 'input.file', function() {
+    $(document).on('change', 'input.file', function () {
       //get the file name   
       var fileName = getFileName($(this).val());
       //replace the "Seleccionar archivo" label
