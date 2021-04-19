@@ -74,7 +74,7 @@ Lang::addTranslation($TRANS);
                         <select name="class" class="custom-select" id="class" required>
                             <option value="" selected><?= Lang::$select . "..." ?></option>
                             <?php foreach ($classes as $class) : ?>
-                                <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                                <option data-verano=<?= $class->verano === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -82,35 +82,51 @@ Lang::addTranslation($TRANS);
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="tri"><?= Lang::$trimester ?></label>
                         </div>
-                        <select name="tri" class="custom-select" id="tri" required>
+                        <select class="custom-select" id="tri" required>
                             <option value="" selected><?= Lang::$select . "..." ?></option>
-                            <option value="Trimestre-1">Trimestre 1</option>
-                            <option value="Trimestre-2">Trimestre 2</option>
-                            <option value="Trimestre-3">Trimestre 3</option>
-                            <option value="Trimestre-4">Trimestre 4</option>
-                            <option value="Verano">Verano</option>
+                             <!-- if decimals are active -->
+                            <?php if ($teacher->info('cppd') === 'Si') : ?>
+                                <option value="Trimestre-1">Trimestre 1</option>
+                                <option value="Trimestre-3">Trimestre 3</option>
+                                <option value="Verano" disabled>Verano</option>
+                            <?php else : ?>
+                                <option value="Trimestre-1">Trimestre 1</option>
+                                <option value="Trimestre-2">Trimestre 2</option>
+                                <option value="Trimestre-3">Trimestre 3</option>
+                                <option value="Trimestre-4">Trimestre 4</option>
+                                <option value="Verano" disabled>Verano</option>
+                            <?php endif ?>
                         </select>
+                        <input type="hidden" name="tri" id="hiddenTri">
+
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="tra"><?= Lang::plural(Lang::$page) ?></label>
                         </div>
-                        <select name="tra" class="custom-select" id="tra" required>
+                        <select class="custom-select" id="tra" required>
                             <option value="" selected><?= Lang::$select . "..." ?></option>
-                            <option value="Notas">Notas</option>
-                            <option value="Pruebas-Cortas">Pruebas Cortas</option>
-                            <option value="Trab-Diarios">Trabajos Diarios</option>
-                            <?php if ($teacher->info('etd') === 'SI') : ?>
-                                <option value="Trab-Diarios2">Trabajos Diarios 2</option>
+                            <!-- if decimals are active -->
+                            <?php if ($teacher->info('cppd') === 'Si') : ?>
+                                <option value="Notas">Notas</option>
+                                <option value="V-Nota" disabled>V. Nota</option>
+                            <?php else : ?>
+                                <option value="Notas">Notas</option>
+                                <option value="Pruebas-Cortas">Pruebas Cortas</option>
+                                <option value="Trab-Diarios">Trabajos Diarios</option>
+                                <?php if ($teacher->info('etd') === 'SI') : ?>
+                                    <option value="Trab-Diarios2">Trabajos Diarios 2</option>
+                                <?php endif ?>
+                                <option value="Trab-Libreta">Trabajos de Libreta</option>
+                                <?php if ($teacher->info('etd') === 'SI') : ?>
+                                    <option value="Trab-Libreta2">Trabajos de Libreta 2</option>
+                                <?php endif ?>
+                                <option value="Cond-Asis">Conducta y Asistencia</option>
+                                <option value="Ex-Final">Examen Final</option>
+                                <option value="V-Nota" disabled>V. Nota</option>
                             <?php endif ?>
-                            <option value="Trab-Libreta">Trabajos de Libreta</option>
-                            <?php if ($teacher->info('etd') === 'SI') : ?>
-                                <option value="Trab-Libreta2">Trabajos de Libreta 2</option>
-                            <?php endif ?>
-                            <option value="Cond-Asis">Conducta y Asistencia</option>
-                            <option value="Ex-Final">Examen Final</option>
-                            <option value="V-Nota">V. Nota</option>
                         </select>
+                        <input type="hidden" name="tra" id="hiddenTra">
                     </div>
                     <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= Lang::$continue ?>">
                 </div>
