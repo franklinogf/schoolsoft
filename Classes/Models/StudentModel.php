@@ -120,7 +120,6 @@ class StudentModel extends School
   {
     $year = $this->info('year');
     if (!$summer) {
-
       $where = [
         ["$table.curso", $class],
         ['year.year', $year],
@@ -133,7 +132,7 @@ class StudentModel extends School
         ['year.year', $year],
         ["$table.year", $year],
         ["$table.baja", ''],
-        ["$table.verano", $summer]
+        ["$table.verano", '2']
       ];
     }
 
