@@ -218,11 +218,12 @@ function fileExtension(fileName) {
 $(function () {
   // Ajax session check
   $(document).ajaxStart(function () {
-    const path = getBaseUrl().split('/').slice(0, 5).join("/");
-    $.get(path + "/includes/sessionCheck.php", res => {
+    const sessionPath = getBaseUrl().split('/').slice(0, 3).join("/");
+    const logoutPath = getBaseUrl().split('/').slice(0, 5).join("/");
+    $.get(sessionPath + "/includes/sessionCheck.php", res => {
       console.log(res);
       if (res === "Expired") {
-        window.location.href = path + "/includes/logout.php";
+        window.location.href = logoutPath + "/includes/logout.php";
       }
     })
   });
