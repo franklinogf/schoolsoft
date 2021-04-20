@@ -129,8 +129,12 @@ class DB extends DataBase
     $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
     $values = array_merge($valuesArray, self::$whereValues);
 
-    $this->updateQuery($query, $values);
+    if($this->updateQuery($query, $values)){
+      $this->closeDB();
+      return true;
+    }
     $this->closeDB();
+    return false;
   }
   public function delete()
   {

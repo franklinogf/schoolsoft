@@ -72,7 +72,13 @@ class DataBase
     call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
     // php 7 version
     // $stmt->bind_param($bind, ...$valuesArray);
-    if (Session::is_logged(false)) $stmt->execute();
+    if (Session::is_logged(false)) {
+
+      if ($stmt->execute()) {
+        return true;
+      }
+      return false;
+    }
   }
 
   // Insert row into tables 
