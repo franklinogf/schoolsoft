@@ -41,7 +41,7 @@ class StudentModel extends School
     $year = $this->info('year');
     $obj = parent::table($this->table)->where([
       ['year', $year],
-      ['baja', '']
+      ['fecha_baja', '0000-00-00']
     ])->orderBy('apellidos')->get();
     return $obj;
   }
