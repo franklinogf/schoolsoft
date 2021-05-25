@@ -51,7 +51,7 @@ Lang::addTranslation($TRANS);
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-2">
                 <div class="col mb-3">
-                    <a href="#" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION1') ?></a>
+                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION1') ?></a>
                 </div>
                 <div class="col mb-3">
                     <a href="#" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION2') ?></a>
