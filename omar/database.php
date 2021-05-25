@@ -30,3 +30,9 @@ define('__DB_NAME', "admin_democol");
 // define('__USERNAME', "admin_cosey_c");
 // define('__PASSWORD', "Amc123456");
 // define('__DB_NAME', "admin_cosey_c");
+
+/* ---------------------- Personal Database for School ---------------------- */
+// define('__HOST', "localhost");
+// define('__USERNAME', "admin_cst");
+// define('__PASSWORD', "Amc123456");
+// define('__DB_NAME', "admin_cst");
