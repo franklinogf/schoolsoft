@@ -31,6 +31,54 @@ $notes = [
     'F' => 0,
     'O' => 0
 ];
+$_info = [
+    'Trimestre-1' => [
+        'totalGrade' => 'nota1',
+        'grades' => [1, 10],
+        'values' => [
+            'tdia' => 'td1',
+            'tlib' => 'tl1',
+            'pcor' => 'pc1',
+            'tpa' => 'tpa1',
+            'tdp' => 'por1'
+        ]
+    ],
+    'Trimestre-2' => [
+        'totalGrade' => 'nota2',
+        'grades' => [11, 20],
+        'values' => [
+            'tdia' => 'td2',
+            'tlib' => 'tl2',
+            'pcor' => 'pc2',
+            'tpa' => 'tpa2',
+            'tdp' => 'por2'
+        ]
+    ],
+    'Trimestre-3' => [
+        'totalGrade' => 'nota3',
+        'grades' => [21, 30],
+        'values' => [
+            'tdia' => 'td3',
+            'tlib' => 'tl3',
+            'pcor' => 'pc3',
+            'tpa' => 'tpa3',
+            'tdp' => 'por3'
+        ]
+    ],
+    'Trimestre-4' => [
+        'totalGrade' => 'nota4',
+        'grades' => [31, 40],
+        'values' => [
+            'tdia' => 'td4',
+            'pcor' => 'pc4',
+            'tlib' => 'tl4',
+            'tpa' => 'tpa4',
+            'tdp' => 'por4'
+        ]
+    ]
+
+
+];
 
 $fields = [
     "Trimestre-1" => "nota1",
@@ -38,6 +86,7 @@ $fields = [
     "Trimestre-3" => "nota3",
     "Trimestre-4" => "nota4"
 ];
+$thisReport = $_info[$_trimester];
 
 $pdf = new PDF();
 $pdf->footer = false;
@@ -47,7 +96,7 @@ $pdf->SetTitle('Notas');
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(0,5,"Notas",0,1,'C');
+$pdf->Cell(0, 5, "Notas", 0, 1, 'C');
 $pdf->Ln(3);
 $pdf->Cell(50, 5, 'Profesor', 1, 0, 'C', true);
 $pdf->Cell(18, 5, 'Curso', 1, 0, 'C', true);
@@ -70,7 +119,7 @@ $pdf->Ln(3);
 
 $pdf->SetFont('Arial', 'B', 9);
 $pdf->Cell(50, 5, 'Apellidos', 1, 0, 'C', true);
-$pdf->Cell(40, 5, 'Nombre', 1, 0, 'C', true);
+$pdf->Cell(35, 5, 'Nombre', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'N1', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'N2', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'N3', 1, 0, 'C', true);
@@ -83,29 +132,24 @@ $pdf->Cell(7, 5, 'N9', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'Bon', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'T-L', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'T-D', 1, 0, 'C', true);
+$pdf->Cell(7, 5, 'P-C', 1, 0, 'C', true);
 $pdf->Cell(7, 5, 'TPA', 1, 0, 'C', true);
-$pdf->Cell(7, 5, '%', 1, 0, 'C', true);
+$pdf->Cell(7, 5, 'TDP', 1, 0, 'C', true);
 $pdf->Cell(10, 5, 'Nota', 1, 1, 'C', true);
 
 $pdf->SetFont('Arial', '', 7);
 foreach ($students as $student) {
     $pdf->Cell(50, 5, utf8_decode($student->apellidos), 1);
-    $pdf->Cell(40, 5, utf8_decode($student->nombre), 1);
-    $pdf->Cell(7, 5, $student->not1, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not2, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not3, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not4, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not5, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not6, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not7, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not8, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not9, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->not10, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->tl1, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->td1, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->tpa1, 1, 0, 'C');
-    $pdf->Cell(7, 5, $student->por1, 1, 0, 'C');
-    $pdf->Cell(10, 5, $student->nota1, 1, 1, 'C');
+    $pdf->Cell(35, 5, utf8_decode($student->nombre), 1);
+    for ($i = $thisReport['grades'][0]; $i <= $thisReport['grades'][1]; $i++) {
+        $pdf->Cell(7, 5, $student->{"not$i"}, 1, 0, 'C');       
+    }
+    $pdf->Cell(7, 5, $student->{$thisReport['values']['tlib']}, 1, 0, 'C');
+    $pdf->Cell(7, 5, $student->{$thisReport['values']['tdia']}, 1, 0, 'C');
+    $pdf->Cell(7, 5, $student->{$thisReport['values']['pcor']}, 1, 0, 'C');
+    $pdf->Cell(7, 5, $student->{$thisReport['values']['tpa']}, 1, 0, 'C');
+    $pdf->Cell(7, 5, $student->{$thisReport['values']['tdp']}, 1, 0, 'C');
+    $pdf->Cell(10, 5, $student->{$thisReport['totalGrade']}, 1, 1, 'C');
 
     if ($student->{$fields[$_trimester]} >= $teacher->info("vala")) {
         $notes['A']++;
@@ -147,7 +191,7 @@ $value = DB::table('valores')->where([
     ['curso', $_class],
     ['trimestre', $_trimester],
     ['nivel', $_report],
-    ['year',$teacher->info('year')]
+    ['year', $teacher->info('year')]
 ])->first();
 
 if ($value) {
