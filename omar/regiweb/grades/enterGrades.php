@@ -17,7 +17,7 @@ $_report = $_POST['tra'];
 
 $teacher = new Teacher(Session::id());
 $year = $teacher->info('year');
-$cppd = $teacher->info('cppd') === 'Si';
+$optionCppd = $teacher->info('cppd') === 'Si';
 $_value = DB::table('valores')
     ->where([
         ['curso', $_class],
@@ -31,6 +31,7 @@ $gradeInfo = DB::table('padres')->where([
     ['curso', $_class],
     ['year', $year],
 ])->first();
+$optionLetter = $gradeInfo->letra === "ON";
 
 $_schoolInfo = [
     'Trimestre-1' => [
@@ -58,7 +59,7 @@ $_schoolInfo = [
         'dates' => ['fechav1', 'fechav2']
     ]
 ];
-if ($cppd) {
+if ($optionCppd) {
     $_info = [
         "Notas" => [
             'table' => 'padres',
@@ -428,14 +429,7 @@ function findValue($table, $student)
     <?php
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
-    <!-- Required hidden inputs -->
-    <input type="hidden" id="report" value="<?= $_report ?>">
-    <input type="hidden" id="cppd" value="<?= $cppd ?>">
-    <input type="hidden" id="valueA" value="<?= $teacher->info('vala') ?>">
-    <input type="hidden" id="valueB" value="<?= $teacher->info('valb') ?>">
-    <input type="hidden" id="valueC" value="<?= $teacher->info('valc') ?>">
-    <input type="hidden" id="valueD" value="<?= $teacher->info('vald') ?>">
-    <input type="hidden" id="valueF" value="<?= $teacher->info('valf') ?>">
+
 
     <div class="container-lg mt-lg-3 px-0">
         <div class="card border-info">
@@ -466,21 +460,24 @@ function findValue($table, $student)
             </div>
         </div>
 
-        <?php if ($_report === 'Notas' || $_report === 'V-Nota') : ?>
+        <?php
+        if ($_report === 'Notas' || $_report === 'V-Nota') :
+            $letterNumber = $_report === 'Notas' ? '9' : '7';
+        ?>
             <div class="card border-secondary mt-2">
                 <div class="card-body">
-                    <div class="row row-cols-1">
+                    <div id="options" class="row row-cols-1">
                         <div class="col">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="letter" value="ON" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="letter">Pasar a letras</label>
+                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
+                                <label class="custom-control-label" for="letra">Pasar a letras</label>
                             </div>
                             <small>Está opción se aplica en la columna <b><?= $_report === 'Notas' ? 'Nota-9' : 'Nota-7' ?></b> exclusivamente.</small>
                         </div>
                         <div class="col mt-2">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="convert" value="ON" disabled>
-                                <label class="custom-control-label" for="convert">Conversión</label>
+                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
+                                <label class="custom-control-label" for="pal">Conversión</label>
                             </div>
                             <small>Está opción es para convertir de numero a letra.</small>
                         </div>
@@ -488,8 +485,8 @@ function findValue($table, $student)
                             <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="finish" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
-                                        <label class="custom-control-label" for="finish">Aviso Terminar</label>
+                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
+                                        <label class="custom-control-label" for="<?= $_end ?>">Aviso Terminar</label>
                                     </div>
                                     <small>Cuando termine el trimestre marque está Opción.</small>
                                 </div>
@@ -518,15 +515,41 @@ function findValue($table, $student)
             </div>
         <?php endif ?>
     </div>
-
+    <!-- loading spinner -->
+    <div class="loading text-center my-3">
+        <h3 class="font-weight-bolder">Calculando Notas</h3>
+        <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
+    </div>
     <div class="container-fluid">
         <!-- Students list -->
-        <div class="table-responsive my-3 shadow">
-            <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2') : ?>
-                <div class="loading text-center mb-3">
-                    <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
-                </div>
-                <form action="<?= Route::url('/regiweb/grades/includes/enterGrades.php') ?>" method="POST">
+        <form id="form" action="<?= Route::url('/regiweb/grades/includes/enterGrades.php') ?>" method="POST">
+            <!-- Required hidden inputs -->
+            <input type="hidden" name="report" id="report" value="<?= $_report ?>">
+            <input type="hidden" name="trimester" id="trimester" value="<?= $_trimester ?>">
+            <input type="hidden" name="table" id="table" value="<?= $_thisReport['table'] ?>">
+            <input type="hidden" name="subject" id="subject" value="<?= $_class ?>">
+            <input type="hidden" name="optionCppd" id="optionCppd" value="<?= $optionCppd ?>">
+            <input type="hidden" name="valueA" id="valueA" value="<?= $teacher->info('vala') ?>">
+            <input type="hidden" name="valueB" id="valueB" value="<?= $teacher->info('valb') ?>">
+            <input type="hidden" name="valueC" id="valueC" value="<?= $teacher->info('valc') ?>">
+            <input type="hidden" name="valueD" id="valueD" value="<?= $teacher->info('vald') ?>">
+            <input type="hidden" name="valueF" id="valueF" value="<?= $teacher->info('valf') ?>">
+            <div class="table-responsive my-3 shadow">
+                <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2') : ?>
+                    <!-- Required hidden inputs -->
+                    <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
+                    <input type="hidden" name="tpa" id="tpa" value="<?= $_values['tpa'] ?>">
+                    <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
+                    <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
+                    <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
+
+
+                    <?php if ($_report === 'Notas' || $_report === 'V-Nota' && !$optionCppd) : ?>
+                        <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
+                        <input type="hidden" name="tlib" id="tlib" value="<?= $_values['tlib'] ?>">
+                        <input type="hidden" name="pcor" id="pcor" value="<?= $_values['pcor'] ?>">
+                    <?php endif ?>
+
                     <table class="table table-sm table-hover bg-white">
                         <thead class="thead-dark text-center">
                             <tr>
@@ -561,13 +584,13 @@ function findValue($table, $student)
                                         <?php
                                         // important information for the values
                                         // Only on Notas and when "Cambiar Porciento a Punto Decimal" is not activated
-                                        if ($_report === 'Notas' && !$cppd) :
+                                        if ($_report === 'Notas' && !$optionCppd) :
                                             if ($gradeInfo->nota_por === "2") {
-                                                $_student =  findValue('padres2', $student);
+                                                $_student =  findValue($_info['Trab-Diarios']['table'], $student);
                                                 $tdia = $_student->{$_values['tdp']};
-                                                $_student =  findValue('padres6', $student);
+                                                $_student =  findValue($_info['Trab-Libreta']['table'], $student);                                                
                                                 $tlib = $_student->{$_values['tdp']};
-                                                $_student =  findValue('padres4', $student);
+                                                $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
                                                 $pcor = $_student->{$_values['tdp']};
                                             } else {
                                                 $tdia = $student->{$_values['tdia']} ? '100' : '';
@@ -579,27 +602,27 @@ function findValue($table, $student)
                                             <input type="hidden" class="_tlib" value="<?= $tlib ?>">
                                             <input type="hidden" class="_pcor" value="<?= $pcor ?>">
                                         <?php endif; ?>
+                                        <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
                                     <td>
                                         <?= utf8_decode("$student->apellidos $student->nombre"); ?>
-                                        <input type="hidden" name="ss[]" value="<?= $student->ss ?>">
                                     </td>
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
-                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade[$student->ss][]" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
+                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
                                     <?php endfor ?>
-                                    <?php if ($_report === 'V-Nota' && !$cppd) : ?>
-                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade[$student->ss][]" ?>" value="<?= $student->not10 ?>" disabled></td>
+                                    <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
+                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->not10 ?>" disabled></td>
                                     <?php endif ?>
                                     <?php if ($_values !== null) : ?>
                                         <?php foreach ($_values as $name => $value) : ?>
-                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "[$student->ss]" ?>" value=<?= $student->{$value} ?>></td>
+                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $student->{$value} ?>></td>
                                         <?php endforeach ?>
                                     <?php endif ?>
-                                    <td><input class="form-control-plaintext text-center totalGrade" readonly type="text" name="totalGrade[<?= $student->ss ?>]" value=<?= $student->{$_options['totalGrade']} ?>></td>
+                                    <td><input class="form-control-plaintext text-center totalGrade" readonly type="text" name="totalGrade-<?= $student->ss ?>" value=<?= $student->{$_options['totalGrade']} ?>></td>
                                     <?php if ($_report === 'V-Nota') : ?>
-                                        <td><input class="form-control text-center" type="text" name="con[<?= $student->ss ?>]" value=<?= $student->{$_options['others'][0]} ?>></td>
-                                        <td><input class="form-control text-center" type="text" name="asis[<?= $student->ss ?>]" value=<?= $student->{$_options['others'][1]} ?>></td>
-                                        <td><input class="form-control text-center" type="text" name="tar[<?= $student->ss ?>]" value=<?= $student->{$_options['others'][2]} ?>></td>
+                                        <td><input class="form-control text-center" type="text" name="con-<?= $student->ss ?>" value=<?= $student->{$_options['others'][0]} ?>></td>
+                                        <td><input class="form-control text-center" type="text" name="asis-<?= $student->ss ?>" value=<?= $student->{$_options['others'][1]} ?>></td>
+                                        <td><input class="form-control text-center" type="text" name="tar-<?= $student->ss ?>" value=<?= $student->{$_options['others'][2]} ?>></td>
                                     <?php endif ?>
                                 </tr>
                             <?php endforeach ?>
@@ -621,15 +644,19 @@ function findValue($table, $student)
                             <tbody>
                                 <?php foreach ($students as $index => $student) : ?>
                                     <tr>
-                                        <th scope="row"><?= $index + 1 ?></th>
+                                        <th scope="row">
+                                            <?= $index + 1 ?>
+                                            <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                                        </th>
                                         <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "" ?>" value=<?= $student->{$_options[0]} ?>></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "" ?>" value=<?= $student->{$_options[1]} ?>></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "" ?>" value=<?= $student->{$_options[2]} ?>></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "" ?>" value=<?= $student->{$_options[3]} ?>></td>
+                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "con-{$student->ss}" ?>" value="<?= $student->{$_options[0]} ?>"></td>
+                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "aus-{$student->ss}" ?>" value="<?= $student->{$_options[1]} ?>"></td>
+                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "tar-{$student->ss}" ?>" value="<?= $student->{$_options[2]} ?>"></td>
+                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "de-{$student->ss}" ?>" value="<?= $student->{$_options[3]} ?>"></td>
                                     <?php endforeach ?>
                             </tbody>
                         </table>
+                       
 
                     </div>
                 <?php elseif ($_report === 'Ex-Final') : ?>
@@ -646,9 +673,12 @@ function findValue($table, $student)
                                 <tbody>
                                     <?php foreach ($students as $index => $student) : ?>
                                         <tr>
-                                            <th scope="row"><?= $index + 1 ?></th>
+                                            <th scope="row">
+                                                <?= $index + 1 ?>
+                                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                                            </th>
                                             <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
-                                            <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text" name="<?= "" ?>" value=<?= $student->{$_options} ?>></td>
+                                            <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text" name="<?= "ex-{$student->ss}" ?>" value="<?= $student->{$_options} ?>"></td>
                                         <?php endforeach ?>
                                 </tbody>
                             </table>
@@ -660,17 +690,17 @@ function findValue($table, $student)
                 <?php endif ?>
 
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
-                </form>
                 <?php if ($_options !== null) : ?>
-                    <?php if (Util::date() < $teacher->info($_dates[1]) && $teacher->fechas === 1 && ($teacher->tri === $_trimesterNumber || $teacher->tri === 5)) : ?>
-                        <button class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button>
+                    <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5) : ?>
+                        <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button>
                     <?php else : ?>
                         <h4 class="text-center text-danger">Lo Sentimos, La fecha Ha Vencido o la Selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.</h4>
                     <?php endif ?>
                 <?php endif ?>
-        </div>
+            </div>
+        </form>
         <!-- end Students list -->
-        <?php if ($_report !== 'Notas' || $_report !== 'V-Notas' || $_report !== 'Ex-Final' || $_report !== 'Cond-Asis') : ?>
+        <?php if ($_report !== 'Notas' && $_report !== 'V-Notas' && $_report !== 'Ex-Final' && $_report !== 'Cond-Asis') : ?>
             <h2 class="text-center text-info mb-0">*Recuerde ir a la pagina de notas y darle a grabar para tener los promédios correctos.*</h2>
         <?php endif ?>
         <!-- Values -->
@@ -690,16 +720,16 @@ function findValue($table, $student)
                             <div class="form-row">
                                 <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
                                 <?php for ($i = 1; $i <= $cant; $i++) : ?>
-                                    <div class="form-row col-12 mb-2">
-                                        <div class="form-group col-8">
+                                    <div class="form-row col-12 col-md-8 mb-2">
+                                        <div class="form-group col-12">
                                             <label for="<?= "tema$i" ?>">Tema <?= $i ?></label>
                                             <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
                                         </div>
-                                        <div class="form-group col-1 text-center">
+                                        <div class="form-group col-4 col-md-2 text-center">
                                             <label for="<?= "val$i" ?>">Valor</label>
                                             <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
                                         </div>
-                                        <div class="form-group col-3">
+                                        <div class="form-group col-8 col-md-3">
                                             <label for="<?= "fec$i" ?>">Fecha</label>
                                             <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
                                         </div>
