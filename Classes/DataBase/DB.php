@@ -236,10 +236,10 @@ class DB extends DataBase
     return self::$instance;
   }
 
-  public function cosey($active)
+  public function cosey($active = false)
   {
 
-    self::$cosey = false;
+    self::$cosey = $active;
     return self::$instance;
   }
 
@@ -250,6 +250,17 @@ class DB extends DataBase
 
     self::$groupBy = ' GROUP BY ' . trim($col);
     return self::$instance;
+  }
+
+  /* ----------------------------- echo the query ----------------------------- */
+  public function echo()
+  {
+    $this->buildSelectQuery();
+    echo self::$query. "<br/> ";
+    var_dump(self::$where);
+    echo "<hr/>";
+    
+    
   }
 
   /* ---------------------------- get multiple rows --------------------------- */
