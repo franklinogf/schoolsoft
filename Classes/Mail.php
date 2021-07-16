@@ -47,7 +47,7 @@ class Mail extends PHPMailer
          $this->SMTPAuth   = true;
          $this->Username   = $username;
          $this->Password   = $password;
-         $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+         $this->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
          $this->Port       =  $port;
       }
 
