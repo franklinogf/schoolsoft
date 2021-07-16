@@ -16,15 +16,15 @@ $TRANS = [
     "es" => [
         "PAGE_TITLE" => 'Cursos',
         "OPTION1" => 'Entrada de asistencias',
-        "OPTION2" => 'Informe de ausencias diaria',
-        "OPTION3" => 'Informe de asistencias por curso',
+        "OPTION2" => 'Informe de asistencias diaria',
+        "OPTION3" => 'Informe de asistencias',
         "OPTION4" => 'Preescolar',
     ],
     "en" => [
         "PAGE_TITLE" => 'Grades',
         "OPTION1" => 'Assists entry',
         "OPTION2" => 'Daily absence report',
-        "OPTION3" => 'Attendance report by course',
+        "OPTION3" => 'Attendance report',
         "OPTION4" => 'Preschool',
     ]
 ];
@@ -54,10 +54,10 @@ Lang::addTranslation($TRANS);
                     <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION1') ?></a>
                 </div>
                 <div class="col mb-3">
-                    <a href="#" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION2') ?></a>
+                    <a href="dailyAttendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= Lang::translation('OPTION2') ?></a>
                 </div>
                 <div class="col">
-                    <a href="#" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION3') ?></a>
+                    <a href="attendance_report.php" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION3') ?></a>
                 </div>
                 <div class="col">
                     <a href="#" class="btn btn-outline-light btn-block btn-lg"><?= Lang::translation('OPTION4') ?></a>
@@ -69,10 +69,10 @@ Lang::addTranslation($TRANS);
                 <div class="mx-auto" style="width: 20rem;">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="class"><?= Lang::$grade ?></label>
+                            <label class="input-group-text" for="class"><?= Lang::$trans['grade'] ?></label>
                         </div>
                         <select name="class" class="custom-select" id="class" required>
-                            <option value="" selected><?= Lang::$select . "..." ?></option>
+                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
                             <?php foreach ($classes as $class) : ?>
                                 <option data-verano=<?= $class->verano === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                             <?php endforeach ?>
@@ -80,11 +80,11 @@ Lang::addTranslation($TRANS);
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="tri"><?= Lang::$trimester ?></label>
+                            <label class="input-group-text" for="tri"><?= Lang::$trans['trimester'] ?></label>
                         </div>
                         <select class="custom-select" id="tri" required>
-                            <option value="" selected><?= Lang::$select . "..." ?></option>
-                             <!-- if decimals are active -->
+                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
+                            <!-- if decimals are active -->
                             <?php if ($teacher->info('cppd') === 'Si') : ?>
                                 <option value="Trimestre-1">Trimestre 1</option>
                                 <option value="Trimestre-3">Trimestre 3</option>
@@ -102,10 +102,10 @@ Lang::addTranslation($TRANS);
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="tra"><?= Lang::plural(Lang::$page) ?></label>
+                            <label class="input-group-text" for="tra"><?= Lang::plural(Lang::$trans['page']) ?></label>
                         </div>
                         <select class="custom-select" id="tra" required>
-                            <option value="" selected><?= Lang::$select . "..." ?></option>
+                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
                             <!-- if decimals are active -->
                             <?php if ($teacher->info('cppd') === 'Si') : ?>
                                 <option value="Notas">Notas</option>
@@ -128,7 +128,7 @@ Lang::addTranslation($TRANS);
                         </select>
                         <input type="hidden" name="tra" id="hiddenTra">
                     </div>
-                    <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= Lang::$continue ?>">
+                    <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= Lang::$trans['continue'] ?>">
                 </div>
             </form>
 
