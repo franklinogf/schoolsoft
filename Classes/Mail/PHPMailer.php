@@ -19,7 +19,11 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-namespace PHPMailer\PHPMailer;
+namespace Classes\Mail;
+
+use Classes\Mail\Exception;
+use Classes\Mail\SMTP;
+use Classes\Mail\OAuth;
 
 /**
  * PHPMailer - PHP email creation and transport class.
