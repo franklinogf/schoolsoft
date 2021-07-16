@@ -111,7 +111,7 @@ if (isset($_POST['student'])) {
     } else {
         Session::set('emailSent', "Se ha enviado el correo electronico a $messagesSent de $totalStudents estudiantes ($mail->ErrorInfo)");
     }
-} else {
+} else if($_POST['admin']) {
     $adminUser = $_POST['admin'];
     $admin = new School($adminUser); //admin by user
     $mail->addAddress($admin->info('correo'));
@@ -121,6 +121,9 @@ if (isset($_POST['student'])) {
         Session::set('emailSent', 'Se ha enviado el correo electronico');
     }
     $mail->ClearAddresses();
+}else if($_POST['deleteMessage']){
+    $messageId = $_POST['deleteMessage'];
+    DB::table('T_correos_guardados')->where('id',$messageId)->delete();
 }
 
 
