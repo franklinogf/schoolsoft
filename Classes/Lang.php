@@ -7,21 +7,17 @@ class Lang
 
     private static $translation = [];
     private static $menuTranslation = [];
-    public static $select = '';
-    public static $continue = '';
-    public static $grade = '';
-    public static $score = '';
-    public static $trimester = '';
-    public static $page = '';
+    public static $trans = [];
+   
 
     private static function init()
     {
-        self::$select = (__LANG === 'es') ? 'Seleccionar' : 'Select';
-        self::$continue = (__LANG === 'es') ? 'Continuar' : 'Continue';
-        self::$grade = (__LANG === 'es') ? 'Curso' : 'Grade';
-        self::$score = (__LANG === 'es') ? 'Nota' : 'Grade';
-        self::$trimester = (__LANG === 'es') ? 'Trimestre' : 'Trimester';
-        self::$page = (__LANG === 'es') ? 'Pagina' : 'Page';
+        self::$trans['select'] = (__LANG === 'es') ? 'Seleccionar' : 'Select';
+        self::$trans['continue'] = (__LANG === 'es') ? 'Continuar' : 'Continue';
+        self::$trans['grade'] = (__LANG === 'es') ? 'Curso' : 'Grade';
+        self::$trans['score'] = (__LANG === 'es') ? 'Nota' : 'Grade';
+        self::$trans['trimester'] = (__LANG === 'es') ? 'Trimestre' : 'Trimester';
+        self::$trans['page'] = (__LANG === 'es') ? 'Pagina' : 'Page';
     }
     public static function addTranslation($translationArray)
     {
