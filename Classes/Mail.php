@@ -51,7 +51,7 @@ class Mail extends PHPMailer
          $this->Port       =  $port;
       }
 
-      $this->setFrom($email, $name);
-      if ($this->replyTo)  $this->addReplyTo($replayToEmail, $replayToName);
+      $this->setFrom($email, utf8_decode($name));
+      if ($this->replyTo)  $this->addReplyTo($replayToEmail, utf8_decode($replayToName));
    }
 }
