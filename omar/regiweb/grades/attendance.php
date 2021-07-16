@@ -26,6 +26,7 @@ $attendanceOption = $teacher->info('asist');
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 px-0">
+        <h1 class="text-center mt-2">Entrada de asistencia</h1>
         <!-- Required info -->
         <input type="hidden" id="attendanceOption" value="<?= $attendanceOption ?>">
         <div class="d-flex justify-content-center">
@@ -40,7 +41,7 @@ $attendanceOption = $teacher->info('asist');
                     <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-class="<?= $class->curso ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $class->desc1 ?>"><?= $class->curso ?></button>
                 <?php endforeach ?>
             </div>
-        <?php elseif ($attendanceOption === "2") :        
+        <?php elseif ($attendanceOption === "2") :
             $grades = DB::table('year')
                 ->select('DISTINCT grado')
                 ->where('year', $teacher->info('year'))
