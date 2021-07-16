@@ -114,8 +114,9 @@ function getBaseUrl(fileName = '') {
   let newPath = ''
   let loc = window.location.pathname
   loc = loc.substring(1)
-  const dirs = loc.split('/', 3);
-  dirs.forEach(dir => {
+  const dirs = loc.split('/');
+  var newDirs = dirs.slice(0, dirs.length - 1)
+  newDirs.forEach(dir => {
     if (dir !== '') {
       newPath += dir + '/'
     }
@@ -290,7 +291,8 @@ $(function () {
   // add file button
   if ($("button.addFile").length > 0) {
     $("button.addFile").before("<small class='d-block text-center text-danger'>Favor de no poner puntos <b>(.)</b> ni comas <b>(,)</b> en los nombres de los archivos</small>")
-    $("button.addFile").click(e => {
+    $("button.addFile").click(function(e) {
+      e.preventDefault();
       let thisBtn = $(e.target);
       if (thisBtn.nextAll().length > 0) {
         thisBtn = thisBtn.nextAll().last();

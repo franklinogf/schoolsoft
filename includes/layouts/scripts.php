@@ -13,15 +13,15 @@ use Classes\Route;
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
-Route::js('/js/app.js',true);
+Route::js('/js/app.js', true);
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $__jsFile = str_replace('.php', '', $__file) . '.js';
-$__path = __SUB_ROOT_URL.'/js/' . $__jsFile;
+// $__path = __SUB_ROOT_URL.'/js/' . $__jsFile;
 
-
+$root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
+$__path = dirname($root) . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $__jsFile;
 if (Route::file_exists($__path)) {
-
    Route::js($__path);
 }
