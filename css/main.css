@@ -166,3 +166,8 @@ tr.disabled{
 	opacity: .5;
 	
 }
+
+/* smooth scroll for animation */
+html{
+	scroll-behavior: smooth;
+}
