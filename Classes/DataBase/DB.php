@@ -111,6 +111,7 @@ class DB extends DataBase
   public function insertGetId($insertArray)
   {
     return $this->insert($insertArray, true);
+    
   }
 
   public function update($updateArray)
@@ -253,13 +254,13 @@ class DB extends DataBase
   }
 
   /* ----------------------------- echo the query ----------------------------- */
-  public function echo()
+  public function display($exit = false)
   {
     $this->buildSelectQuery();
     echo self::$query. "<br/> ";
     var_dump(self::$where);
     echo "<hr/>";
-    
+    if($exit) exit;
     
   }
 
