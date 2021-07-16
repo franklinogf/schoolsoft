@@ -106,7 +106,9 @@ function formatTime(value) {
   return value
 
 }
-
+function getRootUrl(){ 
+  return window.origin 
+}
 function getBaseUrl(fileName = '') {
   // let re = new RegExp(/^.*\//);
   // return re.exec(window.location.href) + fileName;
@@ -215,8 +217,10 @@ function fileExtension(fileName) {
   const extension = fileName.substring(fileName.lastIndexOf('.'))
   return extension.trim()
 }
-
+$.getScript(getRootUrl()+'/js/jquery.mask.min.js', function(){
 $(function () {
+  //Only Numbers
+  $('.onlyNumbers').mask('(000)000-0000')
   // Ajax session check
   $(document).ajaxStart(function () {
     const sessionPath = getBaseUrl().split('/').slice(0, 3).join("/");
@@ -405,3 +409,4 @@ $(function () {
 
 
 });
+})
