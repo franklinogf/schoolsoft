@@ -21,7 +21,7 @@ if (!$mail->send()) {
 
 function phoneAddress($phone, $company)
 {
-	$phoneAddress = $phone;
+	$phoneAddress = preg_replace('/[^\d]/', '', $phone);
 	if ($company == "AT&T") {
 		$phoneAddress .= "@txt.att.net";
 	}
