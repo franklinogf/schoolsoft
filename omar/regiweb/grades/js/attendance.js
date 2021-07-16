@@ -4,8 +4,8 @@ $(function () {
     let _oldDate = ''
     let _grade = ''
     let _class = ''
-    const _attendanceOption = $("#attendanceOption").val()
-    let date = $("#date").val()
+    const _attendanceOption = $("#attendanceOption").val() //from ADMIN page
+    let date = $("#date").val() 
     if (_attendanceOption === "1") {
         fillTable({
             getStudents: _attendanceOption,
@@ -94,7 +94,6 @@ $(function () {
             data: dataJson,
             dataType: "json",
             complete: function (res) {
-                console.log('res:', res)
                 const response = res.responseJSON
                 const newDate = new Date(date);
                 newDate.setDate(newDate.getDate() + 1)
@@ -103,8 +102,9 @@ $(function () {
                 $("#studentsList .table tbody").text('')
                if(response.response){
                 response.data.forEach((student, index) => {
-                    if (dataJson.attendanceOption === '3') {
-                        attendanceValue = response.attendance[student.ss]
+                    // get the value depending on the option marked on ADMIN
+                    if (_attendanceOption === '3') {                        
+                        attendanceValue = response.attendance[`${student.ss}`]
                     } else {
                         attendanceValue = student[`d${day}`]
                     }
