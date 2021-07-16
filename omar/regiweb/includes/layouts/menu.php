@@ -42,7 +42,7 @@ Lang::addMenuTranslation($TRANS);
         <a class="nav-link" href="<?= Route::url('/regiweb/grades/') ?>"><?= Lang::menuTranslation('GRADES') ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'options' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/regiweb/options.php') ?>"><?= Lang::menuTranslation('OPTIONS') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/options') ?>"><?= Lang::menuTranslation('OPTIONS') ?></a>
       </li> 
       <li class="nav-item <?= ($pathFile === 'reports' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/regiweb/reports/') ?>"><?= Lang::menuTranslation('REPORTS') ?></a>
