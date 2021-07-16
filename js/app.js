@@ -217,9 +217,14 @@ function fileExtension(fileName) {
   const extension = fileName.substring(fileName.lastIndexOf('.'))
   return extension.trim()
 }
+function scrollWindow(tagName) {
+ const element = document.querySelector(tagName).getBoundingClientRect()
+  window.scroll(element.x,element.y)
+}
+
 $.getScript(getRootUrl()+'/js/jquery.mask.min.js', function(){
-$(function () {
-  //Only Numbers
+$(function () {  
+  //Masked Inputs
   $('.onlyNumbers').mask('(000)000-0000')
   // Ajax session check
   $(document).ajaxStart(function () {
