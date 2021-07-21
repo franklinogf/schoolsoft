@@ -297,7 +297,7 @@ $teacher = new Teacher(Session::id());
 
   <?php
   Route::includeFile('/includes/layouts/progressBar.php', true);
-  Route::includeFile('/regiweb/includes/layouts/scripts.php');
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 </body>
 
