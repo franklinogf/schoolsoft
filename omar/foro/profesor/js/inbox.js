@@ -16,7 +16,7 @@ $(document).ready(function () {
 	let messages = [];
 	let message = [];
 	getMessages();
-	
+
 	$studentsTableWrapper.hide();
 
 
@@ -78,8 +78,8 @@ $(document).ready(function () {
 					var xhr = $.ajaxSettings.xhr();
 					xhr.upload.onprogress = function (e) {
 						// For uploads
-						if (e.lengthComputable) {							
-							let progress =Math.round((e.loaded / e.total) * 100)
+						if (e.lengthComputable) {
+							let progress = Math.round((e.loaded / e.total) * 100)
 							$("#progressModal .progress-bar")
 								.prop("aria-valuenow", progress)
 								.css("width", progress + "%")
@@ -88,24 +88,24 @@ $(document).ready(function () {
 					};
 					return xhr;
 				},
-				beforeSend: function (){
+				beforeSend: function () {
 					$progressModal.modal("show");
 				},
 				complete: function (res) {
 					console.log($progressModal);
 					const option = $(this).data("option");
 					getMessages(option);
-										
+
 					$newMessageModal.modal("hide");
 					setTimeout(function () { $progressModal.modal("hide"); }, 500);
 				}
-				
+
 			});
 		}
 	});
 
 	$(".classesTable tbody").on("click", "tr", function () {
-		const row = classesTable.row(this);		
+		const row = classesTable.row(this);
 		if (row.index() !== undefined) {
 			studentsTable.rows().remove()
 			const data = row.data();
@@ -272,31 +272,27 @@ $(document).ready(function () {
          </div>
          <div class="col-10">
             <div class="media p-2 mt-2">
-               <img src="${
-					message.foto
-				}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <img src="${message.foto
+			}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                <div class="media-body">
-                  <p class="m-0"><strong>${
-						message.nombre
-					}</strong> <small>(${message.info})</small></p>
+                  <p class="m-0"><strong>${message.nombre
+			}</strong> <small>(${message.info})</small></p>
                   <small class="text-muted font-weight-light">${message.fecha}</small>
                </div>
-               ${
-					message.enviadoPor !== "p"
-						? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
+               ${message.enviadoPor !== "p"
+				? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-						: ""
-				}
+				: ""
+			}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
             <p class="m-0">Para:</p>
          </div>
          <div class="col-10">
-            ${
-				message.to.length === 1
-					? `
+            ${message.to.length === 1
+				? `
             <div class="media p-2 mt-2">
                <img src="${message.to[0].foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                <div class="media-body">
@@ -304,54 +300,51 @@ $(document).ready(function () {
                </div>        
             </div>
             `
-					: `Enviado a ${message.to.length} estudiantes <a id="viewStudents" href="#" class="badge badge-primary">Ver</a>`
+				: `Enviado a ${message.to.length} estudiantes <a id="viewStudents" href="#" class="badge badge-primary">Ver</a>`
 			}
          </div>
       </div>
    <p class="p-2 mb-0 mt-3 font-bree">${message.asunto}</p>
    <hr class="my-1">
-   ${
-		message.archivos.length > 0
-			? `
+   ${message.archivos.length > 0
+				? `
    <div class="row row-cols-4 row-cols-lg-6"> 
    ${message.archivos
-		.map(
-			(file) => `<div class="col my-1 overflow-hidden text-truncate">
+					.map(
+						(file) => `<div class="col my-1 overflow-hidden text-truncate">
                <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
                <small title='${file.nombre}' class='text-muted'>${file.nombre}</small>
                </div>`
-		)
-		.join("")}
+					)
+					.join("")}
    </div>
    <hr class="my-1">`
-			: ""
-   }  
+				: ""
+			}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
 
-   ${
-		message.links.length > 0
-			? `
+   ${message.links.length > 0
+				? `
    <div class="container fixed-bottom position-absolute mb-2">
 		<div class="list-group">
 	${message.links
-		.map(
-			(link) => `
-			<a href="${
-				link.link
-			}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
+					.map(
+						(link) => `
+			<a href="${link.link
+							}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
 				${link.nombre || link.link}
 			</a>
 	`
-		)
-		.join("")}
+					)
+					.join("")}
 		</div>
 	<div>
    `
-			: ""
-   }
+				: ""
+			}
    
    `);
 
@@ -379,28 +372,25 @@ $(document).ready(function () {
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <div class="modal-header bg-gradient-primary bg-primary">
-               <h5 class="modal-title">Lista de estudiantes del grado <span class="badge badge-secondary">${
-					message.to[0].info
-				}</span> </h5>
+               <h5 class="modal-title">Lista de estudiantes del grado <span class="badge badge-secondary">${message.to[0].info}</span> </h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
                </div>
                <div class="modal-body">
                ${message.to
-					.map(
-						(to) => `
+				.map(
+					(to) => `
                   <div class="media p-2 mt-2">
-                     <img src="${
-							to.foto
+                     <img src="${to.foto
 						}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                      <div class="media-body">
                         <p class="m-0"><strong>${to.nombre.toUpperCase()}</strong></p>
                      </div>        
                   </div>
                `
-					)
-					.join("")}
+				)
+				.join("")}
                </div>
                <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>               
@@ -440,21 +430,15 @@ $(document).ready(function () {
 					$messages.empty();
 					messages = await res.data;
 					res.data.map((message) => {
-						$messages.append(`<div data-id="${
-							message.id
-						}" class="card w-100 rounded-0 pointer-cursor">
+						$messages.append(`<div data-id="${message.id}" class="card w-100 rounded-0 pointer-cursor">
                <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">${message.to.length > 1 ? `Enviado a ${message.to.length} estudiantes` :message.to[0].nombre}</p>
-                  <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${
-						message.fecha
-					}</small><small>${message.hora}</small></p>
+                  <p class="card-text mb-0 font-weight-bold">${type === 'inbound' ? message.nombre : message.to.length > 1 ? `Enviado a ${message.to.length} estudiantes` : message.to[0].nombre}</p>
+                  <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${message.fecha}</small><small>${message.hora}</small></p>
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
-                  <p class="card-text text-right">${
-						message.leido !== "si"
-							? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
-							: ""
-					}</p>
+                  <p class="card-text text-right">${message.leido !== "si"
+								? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
+								: ""}</p>
                </div>
             </div>`);
 					});

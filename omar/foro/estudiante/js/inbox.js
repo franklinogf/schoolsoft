@@ -155,22 +155,16 @@ $(document).ready(function () {
          </div>
          <div class="col-10">
             <div class="media p-2 mt-2">
-               <img src="${
-					message.foto
-				}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                <div class="media-body">
-                  <p class="m-0"><strong>${
-						message.nombre
-					}</strong> <small>(${message.info})</small></p>
+                  <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
                   <small class="text-muted font-weight-light">${message.fecha}</small>
                </div>
-               ${
-					message.enviadoPor !== "e"
-						? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
+               ${message.enviadoPor !== "e"
+				? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
-						: ""
-				}
+				: ""}
             </div>
          </div>
          <div class="col-2 d-flex justify-content-center align-items-center">
@@ -178,60 +172,53 @@ $(document).ready(function () {
          </div>
          <div class="col-10">
             <div class="media p-2 mt-2">
-               <img src="${
-					message.toFoto
-				}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <img src="${message.toFoto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
                <div class="media-body">
-                  <p class="m-0"><strong>${
-						message.toNombre
-					}</strong> <small>(${message.toInfo})</small></p>
+                  <p class="m-0"><strong>${message.toNombre}</strong> <small>(${message.toInfo})</small></p>
                </div>        
             </div>
          </div>
       </div>
       <p class="p-2 my-0 font-bree">${message.asunto}</p>
       <hr class="my-1">
-      ${
-			message.archivos.length > 0
+      ${message.archivos.length > 0
 				? `
       <div class="row row-cols-4 row-cols-lg-6"> 
       ${message.archivos
-			.map((file) => {
-				return `<div class="col my-1 overflow-hidden text-truncate">
+					.map((file) => {
+						return `<div class="col my-1 overflow-hidden text-truncate">
                <a href="${file.url}" title='${file.nombre}' class="btn btn-outline-dark btn-block btn-sm p-2" download="${file.nombre}">
                   ${file.icon}
                </a>
                <small title='${file.nombre}' class='text-muted'>${file.nombre}</small>
                </div>`;
-			})
-			.join("")}
+					})
+					.join("")}
    </div>
    <hr class="my-1">`
 				: ""
-		}  
+			}  
    <h5 class='text-center mt-2'>${message.titulo}</h5>
    <p class="p-2 mt-1 message-text font-markazi">${message.mensaje}</p>
-		${
-			message.links.length > 0
+		${message.links.length > 0
 				? `
 		<div class="container fixed-bottom position-absolute mb-2">
 			<div class="list-group">
 		${message.links
-			.map(
-				(link) => `
-				<a href="${
-					link.link
-				}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
+					.map(
+						(link) => `
+				<a href="${link.link
+							}" class="list-group-item list-group-item-action list-group-item-secondary px-2 py-1" target="_blank">
 					${link.nombre || link.link}
 				</a>
 		`
-			)
-			.join("")}
+					)
+					.join("")}
 			</div>
 		<div>
 		`
 				: ""
-		}
+			}
    `);
 
 		// change the message read status
@@ -275,21 +262,15 @@ $(document).ready(function () {
 					$messages.empty();
 					messages = await res.data;
 					res.data.map((message) => {
-						$messages.append(`<div data-id="${
-							message.id
-						}" class="card w-100 rounded-0 pointer-cursor">
+						$messages.append(`<div data-id="${message.id}" class="card w-100 rounded-0 pointer-cursor">
                <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">${message.nombre}</p>
-                  <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${
-						message.fecha
-					}</small><small>${message.hora}</small></p>
+                  <p class="card-text mb-0 font-weight-bold">${type === 'inbound' ? message.nombre : message.toNombre}</p>
+                  <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${message.fecha}</small><small>${message.hora}</small></p>
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
-                  <p class="card-text text-right">${
-						message.leido !== "si"
-							? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
-							: ""
-					}</p>
+                  <p class="card-text text-right">${message.leido !== "si"
+								? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
+								: ""}</p>
                </div>
             </div>`);
 					});
