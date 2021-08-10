@@ -1,7 +1,7 @@
 $(document).ready(function () {
   let _class = '';
 
-  const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
+  const classesTableWrapper = $(".classesTable").parents('.table_wrap');
    
 
   $('.classesTable tbody').on('click', 'tr', function () {

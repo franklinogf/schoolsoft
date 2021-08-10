@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	const $classesTableWrapper = $(".classesTable").parents(".dataTables_wrapper");
+	const $classesTableWrapper = $(".classesTable").parents(".table_wrap");
 	const $messages = $("#messages");
 	const $message = $("#message");
 	const $messageOptions = $(".messageOption");
