@@ -1,8 +1,8 @@
 $(document).ready(function () {
    let _class = '';
 
-   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
-   const topicsTableWrapper = $(".topicsTable").parents('.dataTables_wrapper');
+   const classesTableWrapper = $(".classesTable").parents('.table_wrap');
+   const topicsTableWrapper = $(".topicsTable").parents('.table_wrap');
    topicsTableWrapper.hide(0);
 
 

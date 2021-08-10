@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	let _class = "";
-	const classesTableWrapper = $(".classesTable").parents(".dataTables_wrapper");
-	const homeworksTableWrapper = $(".homeworksTable").parents(".dataTables_wrapper");
+	const classesTableWrapper = $(".classesTable").parents(".table_wrap");
+	const homeworksTableWrapper = $(".homeworksTable").parents(".table_wrap");
 	const $modal = $("#myModal");
 	homeworksTableWrapper.hide(0);
 

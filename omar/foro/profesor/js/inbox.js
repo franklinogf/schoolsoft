@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	let _class = "";
-	const $classesTableWrapper = $(".classesTable").parents(".dataTables_wrapper");
-	const $studentsTableWrapper = $(".studentsTable").parents(".dataTables_wrapper");
+	const $classesTableWrapper = $(".classesTable").parents(".table_wrap");
+	const $studentsTableWrapper = $(".studentsTable").parents(".table_wrap");
 	const $messages = $("#messages");
 	const $message = $("#message");
 	const $messageOptions = $(".messageOption");
@@ -16,7 +16,9 @@ $(document).ready(function () {
 	let messages = [];
 	let message = [];
 	getMessages();
-	$studentsTableWrapper.hide(0);
+	
+	$studentsTableWrapper.hide();
+
 
 	$(document).on("click", ".delLink", function (e) {
 		e.preventDefault();
@@ -103,8 +105,9 @@ $(document).ready(function () {
 	});
 
 	$(".classesTable tbody").on("click", "tr", function () {
-		const row = classesTable.row(this);
+		const row = classesTable.row(this);		
 		if (row.index() !== undefined) {
+			studentsTable.rows().remove()
 			const data = row.data();
 			_class = data[0];
 			$.ajax({
@@ -155,7 +158,6 @@ $(document).ready(function () {
 
 	$("#newMessageModal .continueBtn").click((e) => {
 		//  hide students and show form
-
 		const checked = $(studentsTable.rows().nodes()).find("[type='checkbox'].check:checked")
 			.length;
 		if (checked > 0) {

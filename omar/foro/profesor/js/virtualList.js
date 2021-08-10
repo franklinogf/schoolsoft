@@ -1,7 +1,7 @@
 $(document).ready(function () {
   let _class = '';
-  const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
-  const virtualClassesTableWrapper = $(".virtualClassesTable").parents('.dataTables_wrapper');
+  const classesTableWrapper = $(".classesTable").parents('.table_wrap');
+  const virtualClassesTableWrapper = $(".virtualClassesTable").parents('.table_wrap');
   virtualClassesTableWrapper.hide(0);
 
   $('.classesTable tbody').on('click', 'tr', function () {
