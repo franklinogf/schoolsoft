@@ -444,7 +444,7 @@ $(document).ready(function () {
 							message.id
 						}" class="card w-100 rounded-0 pointer-cursor">
                <div class="card-body p-2">
-                  <p class="card-text mb-0 font-weight-bold">${message.nombre.toUpperCase()}</p>
+                  <p class="card-text mb-0 font-weight-bold">${message.to.length > 1 ? `Enviado a ${message.to.length} estudiantes` :message.to[0].nombre}</p>
                   <p class="card-text mb-0 text-muted d-flex justify-content-between"><small>${
 						message.fecha
 					}</small><small>${message.hora}</small></p>
