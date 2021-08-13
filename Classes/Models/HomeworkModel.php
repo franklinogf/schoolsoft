@@ -72,7 +72,8 @@ class HomeworkModel extends School
    protected function getHomeworksForTeachers($id, $class = false, $all = true)
    {
       $whereArray = [
-         ["{$this->table}.id2", $id]
+         ["{$this->table}.id2", $id],
+         ["{$this->table}.year", $this->info('year')]
       ];
       if ($class) {
          array_push($whereArray, ["{$this->table}.curso", $class]);
@@ -115,6 +116,7 @@ class HomeworkModel extends School
             ->where([
                ["{$this->table}.curso", $class],
                ["cursos.year", $this->info('year')],
+               ["{$this->table}.year", $this->info('year')],
             ])
             ->whereRaw("AND ({$this->table}.fec_out >=  ? OR {$this->table}.fec_out = ?)", [Util::date(), "0000-00-00"])
             ->orderBy("{$this->table}.fec_out ASC")->get();

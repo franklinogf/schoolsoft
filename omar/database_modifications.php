@@ -7,6 +7,25 @@ use Classes\DataBase\DB;
 /*                           DATABASE MODIFICATIONS                           */
 /* -------------------------------------------------------------------------- */
 
+/* ----------------------------- homeworks table ---------------------------- */
+DB::table("tbl_documentos")->alter("
+ADD `year` CHAR(5) NULL AFTER `hora`
+");
+DB::table('tbl_documentos')->where([
+    ["fec_in",'>=','2020-08-01'],
+    ["fec_in",'<=','2021-06-30'],
+])
+->update([
+    "year"=>'20-21'
+]);
+DB::table('tbl_documentos')->where([
+    ["fec_in",'>=','2021-08-01'],
+    ["fec_in",'<=','2022-06-30'],
+])
+->update([
+    "year"=>'21-22'
+]);
+
 DB::table("t_mensajes_archivos")->create(
     "
 `id` INT NOT NULL AUTO_INCREMENT,

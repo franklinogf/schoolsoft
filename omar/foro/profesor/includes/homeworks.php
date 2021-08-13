@@ -2,6 +2,7 @@
 require_once '../../../app.php';
 
 use Classes\Controllers\Homework;
+use Classes\Controllers\School;
 use Classes\File;
 use Classes\Util;
 use Classes\Route;
@@ -17,6 +18,7 @@ if (isset($_POST['getHomework'])) {
    echo Util::toJson($hw);
 } else if (isset($_POST['addHomework'])) {
    $id_teacher = Session::id();
+   $school = new School();
    $id_homework = DB::table('tbl_documentos')->insertGetId([
       'titulo' => $_POST["title"],
       'descripcion' => $_POST["description"],
@@ -28,6 +30,7 @@ if (isset($_POST['getHomework'])) {
       'lin2' => $_POST["link2"],
       'lin3' => $_POST["link3"],
       'enviartarea' => $_POST["state"],
+      'year' => $school->info('year'),
       'hora' => Util::time()
    ]);
 
