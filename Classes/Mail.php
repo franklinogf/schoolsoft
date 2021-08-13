@@ -41,7 +41,7 @@ class Mail extends PHPMailer
 
       if ($isSMTP) {
          parent::__construct(true);
-         if ($debug)  $this->SMTPDebug = SMTP::DEBUG_SERVER;
+         $this->SMTPDebug = ($debug) ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
          $this->isSMTP();
          $this->Host       = $host;
          $this->SMTPAuth   = true;
