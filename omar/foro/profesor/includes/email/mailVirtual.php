@@ -12,7 +12,7 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 Server::is_post();
-$mail = new Mail();
+$mail = new Mail(true, 'Teacher');
 $teacher = new Teacher(Session::id());
 $virtualId = $_POST['id'];
 $virtualClass = DB::table('virtual')->where('id', $virtualId)->first();
