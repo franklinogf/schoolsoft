@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../app.php';
+require_once '../../../app.php';
 
 use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
