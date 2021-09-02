@@ -1,5 +1,5 @@
 <?php
-require_once '../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
@@ -25,7 +25,7 @@ foreach ($students as $student) {
          ['correo' => $student->emailp, 'nombre' => $student->nombre_padre]
       ];
    } else {
-      $parents = DB::table('madre')->where('id', $student->id)->first();
+      $parents = DB::table('madre')->where(['id', $student->id])->first();
       $emails = [
          ['correo' => $parents->email_p, 'nombre' => $parents->padre],
          ['correo' => $parents->email_m, 'nombre' => $parents->madre]

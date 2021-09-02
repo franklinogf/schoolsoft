@@ -1,5 +1,5 @@
 <?php
-require_once '../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\Mail;
 use Classes\Util;
@@ -79,6 +79,8 @@ foreach ($students as $student) {
 
    if ($count > 0) {
       $mail->send();
+   }else{
+      echo "Se han enviado $count";
    }
    $mail->ClearAddresses();
 }
