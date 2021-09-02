@@ -85,13 +85,16 @@ $(document).ready(function () {
             count++;
           }
         }, 50);
-      }
-    })
-      .done(function (data) {
+      },
+      complete: function (data) {
+        console.log(data)
         $("#progressModal .progress-bar").prop('aria-valuenow', 100).css('width', '100%').text('100%')
         clearInterval(timer);
         $("#progressModal").modal('hide')
-      });
+      }
+
+    })
+
   })
 
 
