@@ -89,6 +89,10 @@ function formatDate(value) {
   return '';
 
 }
+function getDate(){
+  const todayDate = new Date().toISOString().slice(0, 10)
+  return todayDate
+}
 
 function formatTime(value) {
   if (value.indexOf('(') === -1) {
