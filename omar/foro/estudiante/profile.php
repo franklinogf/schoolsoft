@@ -63,7 +63,7 @@ $student = new Student(Session::id());
         </div>
         <div class="form-group col-md-12">
           <label for="email">E-mail</label>
-          <input type="email" value='<?= $student->email ?>' class="form-control" name='email' id="email" autocomplete="nope">
+          <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" value='<?= $student->email ?>' class="form-control" name='email' id="email" autocomplete="nope">
         </div>
         <div class="form-group col-md-6">
           <label for="cellPhone">Celular</label>
