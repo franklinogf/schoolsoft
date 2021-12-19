@@ -8,7 +8,7 @@ use Classes\Controllers\School;
 
 class PDF extends FPDF
 {
-    public $footer = true;
+    public $footer = 15;
     public $header = true;
     public $headerFirstPage = false;
     public $logo = true;
@@ -77,7 +77,7 @@ class PDF extends FPDF
             } else {
                 $footer = 'Page ' . $this->PageNo() . ' of {nb} ' . ' | ' . Util::formatDate(Util::date(), true, true);
             }
-            $this->SetY(-15);
+            $this->SetY(-$this->footer);
             $this->SetFont('Arial', 'I', 8);
             $this->Cell(0, 10, $footer, 0, 0, 'C');
         }
