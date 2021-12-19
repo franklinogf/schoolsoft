@@ -141,6 +141,20 @@ class StudentModel extends School
 
     return $obj;
   }
+  protected function getStudentsByGrade($grade, $table = 'year')
+  {
+    $year = $this->info('year');
+    $where = [
+      ["$table.grado", $grade],     
+      ["$table.year", $year],
+      ["$table.fecha_baja", '0000-00-00'],
+    ];
+   
+
+    $obj = parent::table("$table")->where($where)->orderBy('year.apellidos')->get();
+
+    return $obj;
+  }
 
   protected function studentLogin($username, $password)
   {
