@@ -52,10 +52,10 @@ class ExamModel extends School
    {
       $obj = parent::table($this->table,!__COSEY)
          ->where([
-            ['id2', $id]
+            ['id_maestro', $id]
          ])
          ->orderBy($this->primary_key, 'DESC')->get();
-      $this->getExamTopics($obj);
+      // $this->getExamTopics($obj);
       return $obj;
    }
    protected function getExamsByTeacherIdAndClass($id, $class)
@@ -63,10 +63,10 @@ class ExamModel extends School
       $obj = parent::table($this->table,!__COSEY)
          ->where([
             ['curso', $class],
-            ['id2', $id]
+            ['id_maestro', $id]
          ])
          ->orderBy($this->primary_key, 'DESC')->get();
-      $this->getExamTopics($obj);
+      // $this->getExamTopics($obj);
       return $obj;
    }
 
