@@ -5,8 +5,12 @@ function loadingBtn(btn, clear = '', text = 'Cargando...') {
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     ${text}
     `)
+      btn.prevAll('.btn').prop('disabled', true)
+      btn.nextAll('.btn').prop('disabled', true)
   } else {
     btn.removeClass('disabled').prop('disabled', false).text(clear)
+      btn.prevAll('.btn').prop('disabled', false)
+      btn.nextAll('.btn').prop('disabled', false)
   }
 }
 // same style as the database
@@ -138,7 +142,8 @@ function getFileName(path = '') {
 
 
 function includeThisFile() {
-  let phpFile = getBaseUrl() + 'includes/' + baseName(window.location.href) + '.php'
+  const fileName = baseName(window.location.href) === '' ? 'index' : baseName(window.location.href)
+  let phpFile = getBaseUrl() + 'includes/' + fileName + '.php'
   return phpFile
 }
 
