@@ -3,7 +3,6 @@ require_once '../../app.php';
 
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
@@ -40,17 +39,17 @@ $options = [
     [
         'title' => 'Informes',
         'buttons' => [
-            ['name' => 'Informe de labor', 'link' => '#'],
-            ['name' => 'Informe de Notas', 'link' => '#'],
-            ['name' => 'Informe cambios de notas', 'link' => '#'],
-            ['name' => 'Listado de 100', 'link' => '#'],
-            ['name' => 'Lista de promedios', 'link' => '#'],
+            ['name' => 'Informe de labor', 'link' => './reports/labor.php'],
+            ['name' => 'Informe de Notas', 'link' => './reports/grades.php'],
+            ['name' => 'Informe cambios de notas', 'link' => './reports/pdf/gradesChanges.php'],
+            ['name' => 'Listado de 100', 'link' => './reports/pdf/100.php'],
+            ['name' => 'Lista de promedios', 'link' => './reports/pdf/averages.php'],
         ]
     ],
     [
         'title' => 'Otros',
         'buttons' => [
-            ['name' => 'Generador de Examen', 'link' => '#'],
+            ['name' => 'Generador de Examen', 'link' => './exam/'],
             ['name' => 'Crear Asignación', 'link' => '#'],
             ['name' => 'Mi Registro', 'link' => '#'],
             ['name' => 'Crear clase diaria', 'link' => '#'],
@@ -111,9 +110,9 @@ $options = [
         </div>
     </div>
 
-</body>
 <?php
 Route::includeFile('/includes/layouts/scripts.php', true);
 ?>
+</body>
 
 </html>
