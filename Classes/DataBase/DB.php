@@ -32,25 +32,32 @@ class DB extends DataBase
   private static $innerJoinOperator = [];
   private static $cosey = true;
 
+
   /* ---------------------- Method to create a new table ---------------------- */
 
   public function create($columns, $others = '')
   {
     $tableName = self::$table;
     $query = "CREATE TABLE IF NOT EXISTS `{$tableName}` ({$columns}) {$others};";
-    $this->normalQuery($query);
+    $this->query($query);
   }
 
   public function alter($query)
   {
     $tableName = self::$table;
     $q = "ALTER TABLE `{$tableName}` {$query}";
-    $this->normalQuery($q);
+    $this->query($q);
+  }
+
+  /* -------------------------------- Raw Query ------------------------------- */
+  public function query($query)
+  {
+    return $this->normalQuery($query);
   }
 
   /* ---------------------------- select the table ---------------------------- */
 
-  public static function table($table,$cosey = true)
+  public static function table($table, $cosey = true)
   {
     self::$instance = new self;
     self::$table = trim($table);
@@ -111,7 +118,6 @@ class DB extends DataBase
   public function insertGetId($insertArray)
   {
     return $this->insert($insertArray, true);
-    
   }
 
   public function update($updateArray)
@@ -130,7 +136,7 @@ class DB extends DataBase
     $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
     $values = array_merge($valuesArray, self::$whereValues);
 
-    if($this->updateQuery($query, $values)){
+    if ($this->updateQuery($query, $values)) {
       $this->closeDB();
       return true;
     }
@@ -257,11 +263,10 @@ class DB extends DataBase
   public function display($exit = false)
   {
     $this->buildSelectQuery();
-    echo self::$query. "<br/> ";
+    echo self::$query . "<br/> ";
     var_dump(self::$where);
     echo "<hr/>";
-    if($exit) exit;
-    
+    if ($exit) exit;
   }
 
   /* ---------------------------- get multiple rows --------------------------- */
@@ -311,11 +316,11 @@ class DB extends DataBase
     self::$where = array_merge(self::$whereValues, self::$orWhereValues, self::$whereRawValues);
     if (__COSEY) {
       $obj = $this->selectOne("SELECT escuela,centro FROM profesor WHERE id = ?", [Session::id()]);
-     if(!$obj){
-       $obj  = $this->selectOne("SELECT escuela,centro FROM year WHERE mt = ?", [Session::id()]);
-     }
+      if (!$obj) {
+        $obj  = $this->selectOne("SELECT escuela,centro FROM year WHERE mt = ?", [Session::id()]);
+      }
       if (self::$cosey) {
-        return $where . " AND ".self::$table.".escuela = '$obj->escuela' AND ".self::$table.". centro = '$obj->centro'";
+        return $where . " AND " . self::$table . ".escuela = '$obj->escuela' AND " . self::$table . ". centro = '$obj->centro'";
       }
     }
     return $where;
