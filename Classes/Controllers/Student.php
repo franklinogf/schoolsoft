@@ -156,6 +156,11 @@ class Student extends StudentModel
     return $this->getStudentsByClass($class, $table, $summer);
   }
 
+  public function findByGrade($grade, $table = 'year')
+  {
+    return $this->getStudentsByGrade($grade, $table);
+  }
+
   public function save()
   {
     // get self public class, no parents classes
@@ -163,9 +168,7 @@ class Student extends StudentModel
     if (count($propsArray) > 0) {
       if (isset($this->{$this->primary_key})) {
         $this->updateStudent($propsArray);
-      } else {
-        echo 'insert <hr>';
-      }
+      } 
     } else {
       $this->exception('Debe de asignar valor a las propiedades en primer lugar');
     }
