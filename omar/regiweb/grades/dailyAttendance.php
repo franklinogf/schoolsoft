@@ -77,7 +77,7 @@ $teacher = new Teacher(Session::id());
                     </div>
                 </div>
             </div>
-            <input class="btn btn-primary mx-auto d-block my-3" type="submit" value="<?= Lang::$continue ?>">
+            <input class="btn btn-primary mx-auto d-block my-3" type="submit" value="<?= Lang::$trans['continue'] ?>">
         </form>
 
     </div>
