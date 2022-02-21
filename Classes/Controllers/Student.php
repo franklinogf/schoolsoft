@@ -28,10 +28,13 @@ class Student extends StudentModel
   public function findPK($pk)
   {
     $array = $this->getStudentByPK($pk);
-    foreach ($array as $key => $value) {
-      $this->{$key} = $value;
+    if ($array) {
+      foreach ($array as $key => $value) {
+        $this->{$key} = $value;
+      }
+      return $this;
     }
-    return $this;
+    return false;
   }
 
   public function findBySS($ss)
@@ -45,18 +48,18 @@ class Student extends StudentModel
 
   public function fullName($utf8Decode = false)
   {
-    if (!isset($this->{$this->primary_key})) {
-      $this->exception();
-    }
+    // if (!isset($this->{$this->primary_key})) {
+    //   $this->exception();
+    // }
     $fullName = $utf8Decode ? utf8_decode("{$this->nombre} {$this->apellidos}")
       : mb_strtoupper("{$this->nombre} {$this->apellidos}", 'UTF-8');
     return $fullName;
   }
   public function profilePicture()
   {
-    if (!isset($this->{$this->primary_key})) {
-      $this->exception();
-    }
+    // if (!isset($this->{$this->primary_key})) {
+    //   $this->exception();
+    // }
 
     if ($this->imagen != '') {
       $picturePath = __STUDENT_PROFILE_PICTURE_URL . $this->imagen;
@@ -168,7 +171,7 @@ class Student extends StudentModel
     if (count($propsArray) > 0) {
       if (isset($this->{$this->primary_key})) {
         $this->updateStudent($propsArray);
-      } 
+      }
     } else {
       $this->exception('Debe de asignar valor a las propiedades en primer lugar');
     }

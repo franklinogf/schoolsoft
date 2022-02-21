@@ -50,12 +50,14 @@ if (isset($_POST['getMessages'])) {
 
          if ($message->enviado_por === 'p') {
             foreach ($students as $student) {
-               $student = new Student($student->mt);
-               $to[] = [
-                  "nombre" => $student->fullName(),
-                  "foto" => $student->profilePicture(),
-                  "info" => $student->grado
-               ];
+               $stu = new Student($student->mt);               
+               if($estu){
+                  $to[] = [
+                     "nombre" => $stu->fullName(),
+                     "foto" => $stu->profilePicture(),
+                     "info" => $stu->grado
+                  ];
+               }
             }
          } else {
             $to[] = [
