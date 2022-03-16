@@ -352,7 +352,7 @@ if (isset($_POST['searchExam'])) {
                     ['id_estudiante', $studentId]
                 ])->first();
                 for ($i = 1; $i <= 5; $i++) {
-                    if($topic->{"respuesta$i"} !== ''){
+                    if ($topic->{"respuesta$i"} !== '') {
                         $correct = strtolower($topic->{"respuesta$i"}) == strtolower($done->{"respuesta$i"}) ? true : false;
                     }
                 }
@@ -373,4 +373,71 @@ if (isset($_POST['searchExam'])) {
         DB::table("T_examenes_terminados")->where('id', $doneExamId)->update(["puntos" => $examTotalPoints]);
     }
     echo $examTotalPoints;
+} else if (isset($_POST['passPoints'])) {
+    $examId = $_POST['passPoints'];
+    $exam = new Exam($examId);
+    $class = $exam->curso;
+    $year = $exam->info('year');
+    $doneExamsSS = DB::table('T_examenes_terminados')->select('DISTINCT ss_estudiante')->where([
+        ['id_examen', $examId],
+        ['curso', $class],
+        ['year', $year]
+    ])->get();
+    foreach ($doneExamsSS as $doneExamSS) {
+        $ss = $doneExamSS->ss_estudiante;
+        $doneExam = DB::table('T_examenes_terminados')->whereRaw("id_examen='$examId' AND ss_estudiante='$ss' AND curso='$class' AND year='$year' AND count = (SELECT MAX(count) FROM T_examenes_terminados WHERE id_examen='$examId' AND ss_estudiante='$ss' AND curso='$class' AND year='$year')")->first();
+        $value = DB::table('valores')->whereRaw("curso='$class' AND (nota1 ='$examId' OR nota2 ='$examId' OR nota3 ='$examId' OR nota4 ='$examId' OR nota5 ='$examId' OR nota6 ='$examId' OR nota7 ='$examId' OR nota8 ='$examId' OR nota9 ='$examId' OR nota10 ='$examId')")->first();
+        $table = $value->nivel === 'Notas' ? 'padres' : 'padres4';
+
+        if ($value->trimestre === 'Trimestre-1') {
+            $totalValue = 0;
+        } elseif ($value->trimestre === 'Trimestre-2') {
+            $totalValue = 9;
+        } elseif ($value->trimestre === 'Trimestre-3') {
+            $totalValue = 18;
+        } elseif ($value->trimestre === 'Trimestre-4') {
+            $totalValue = 27;
+        }
+        if ($value->nota1 == $examId) {
+            $note = 1;
+        } elseif ($value->nota2 == $examId) {
+            $note = 2;
+        } elseif ($value->nota3 == $examId) {
+            $note = 3;
+        } elseif ($value->nota4 == $examId) {
+            $note = 4;
+        } elseif ($value->nota5 == $examId) {
+            $note = 5;
+        } elseif ($value->nota6 == $examId) {
+            $note = 6;
+        } elseif ($value->nota7 == $examId) {
+            $note = 7;
+        } elseif ($value->nota8 == $examId) {
+            $note = 8;
+        } elseif ($value->nota9 == $examId) {
+            $note = 9;
+        } elseif ($value->nota10 == $examId) {
+            $note = 10;
+        }
+
+        $totalValue += $note;
+        $points = $doneExam->puntos + $doneExam->bonos;
+        $points = !isset($_POST['passPorcent']) ? number_format(($points /$exam->valor * 100),0) : $points;
+        $examValue = !isset($_POST['passPorcent']) ? $exam->valor : '100';
+        $examValue2 = !isset($_POST['passPorcent']) ? '0' : '100';
+        DB::table('valores')->where('id', $value->id)->update([
+            "val{$totalValue}" => $examValue
+        ]);
+        DB::table('T_examenes')->where('id', $examId)->update([
+            "valor2" => $examValue
+        ]);
+        DB::table($table)->where([
+            ['curso', $doneExam->curso],
+            ['ss',$doneExam->ss_estudiante],
+            ['year',$year]
+        ])->update([
+            "not{$totalValue}" => $points
+        ]);
+    }
+    echo Util::toJson($points);
 }

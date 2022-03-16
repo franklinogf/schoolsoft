@@ -31,6 +31,25 @@ $(function () {
             }
         );
     })
+    // 
+    $("#correctExamsButton2").click(function () {
+        loadingBtn($("#correctExamsButton2"), '', 'Pasando puntos...')
+        $.post(includeThisFile(), { passPoints: _examInfo.id },
+            function (data, textStatus, jqXHR) {
+                console.log('passPoints: ', data)
+                loadingBtn($("#correctExamsButton2"), 'Pasar puntos')
+            }
+        );
+    })
+    $("#correctExamsButton3").click(function () {
+        loadingBtn($("#correctExamsButton3"), '', 'Pasando porcentajes...')
+        $.post(includeThisFile(), { passPoints: _examInfo.id, passPorcent: true },
+            function (data, textStatus, jqXHR) {
+                console.log('passPorcent: ', data)
+                loadingBtn($("#correctExamsButton3"), 'Pasar porcentajes')
+            }
+        );
+    })
 
     /* ----------------------------- Grades options ----------------------------- */
     $("#gradeOptionsSearchButton").click(function (e) {
