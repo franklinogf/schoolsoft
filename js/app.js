@@ -276,6 +276,9 @@ $(function () {
 
     });
     // Classes table custom info
+    if ($('#correctExamsTable')) correctExamsTable = $("#correctExamsTable").DataTable();
+    
+    // Classes table custom info
     if ($('.classesTable')) classesTable = $(".classesTable").DataTable();
 
     // Students table custom info
