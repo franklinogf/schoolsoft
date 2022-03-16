@@ -439,5 +439,4 @@ if (isset($_POST['searchExam'])) {
             "not{$totalValue}" => $points
         ]);
     }
-    echo Util::toJson($points);
 }
