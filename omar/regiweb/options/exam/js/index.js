@@ -8,6 +8,30 @@ $(function () {
     // enable new and search buttons when page charge
     $('[data-target="#newExamModal"], [data-target="#searchExamModal"]').prop('disabled', false)
 
+    // console.log(correctExamsTable)
+    /* ----------------------------- Correct Examns ----------------------------- */
+    // Fill done exams students
+    $('#correctExamsModal').on('show.bs.modal', function (event) {
+
+        correctExams()
+    })
+    $('#correctExamsModal').on('hide.bs.modal', function (event) {
+        $("#correctExamsModal .modal-footer button").prop('disabled', true)
+        correctExamsTable.rows().remove()
+
+    })
+    // Correct Exams
+    $("#correctExamsButton").click(function () {
+        loadingBtn($("#correctExamsButton"), '', 'Corrigiendo...')
+        $.post(includeThisFile(), { correctExams: _examInfo.id },
+            function (data, textStatus, jqXHR) {
+                console.log('correctExam: ', data)
+                loadingBtn($("#correctExamsButton"), 'Corregir examenes')
+                correctExams();
+            }
+        );
+    })
+
     /* ----------------------------- Grades options ----------------------------- */
     $("#gradeOptionsSearchButton").click(function (e) {
         e.preventDefault()
@@ -81,7 +105,7 @@ $(function () {
                 examId: _examInfo.id
             },
                 function (data) {
-                    _gradeOptionsSearched.gradeOptions = 'edit'                    
+                    _gradeOptionsSearched.gradeOptions = 'edit'
                     loadingBtn($("#gradeOptionsButton"), 'Guardar')
                 });
         }
@@ -446,6 +470,27 @@ $(function () {
     /* -------------------------------------------------------------------------- */
     /*                                  Functions                                 */
     /* -------------------------------------------------------------------------- */
+
+    function correctExams() {
+        $.post(includeThisFile(), { fillCorrectExams: _examInfo.id, grade: _examInfo.curso },
+            function (data, textStatus, jqXHR) {
+                if (data.response) {
+                    $("#correctExamsModal .modal-footer button").prop('disabled', false)
+                    correctExamsTable.rows().remove()
+                    data.data.map((student) => {
+                        const totalPoints = student.puntos + student.bonos;
+                        const thisRow = correctExamsTable.row.add({
+                            0: `${student.nombre} ${student.apellidos}`,
+                            1: student.terminado_el,
+                            2: totalPoints,
+                            3: ((totalPoints / _examInfo.valor) * 100).toFixed(0) + '%'
+                        }).draw()
+                    })
+                }
+            },
+            "json"
+        );
+    }
     function resetButton() {
         $(`#option${_optionNumber}Add`).text("Agregar").data('action', 'save').removeData('questionId').prop('disabled', false).removeClass('disabled')
         if (_optionNumber === 3) {

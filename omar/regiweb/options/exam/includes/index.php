@@ -252,7 +252,7 @@ if (isset($_POST['searchExam'])) {
             'type' => $type
         ];
     }
-    
+
     echo Util::toJson($array);
 } else if (isset($_POST['gradeOptions'])) {
     $action = $_POST['gradeOptions'];
@@ -286,4 +286,91 @@ if (isset($_POST['searchExam'])) {
         DB::table('valores')->where('id', $_POST['optionId'])->update($dataArray);
     }
     echo Util::toJson($dataArray);
+} else if (isset($_POST['fillCorrectExams'])) {
+    $examId = $_POST['fillCorrectExams'];
+    $examGrade = $_POST['grade'];
+    $data = DB::table('T_examenes_terminados')
+        ->select('year.nombre,year.apellidos,year.mt,T_examenes_terminados.id,T_examenes_terminados.terminado_el,T_examenes_terminados.puntos,T_examenes_terminados.bonos')
+        ->join('year', 'year.mt', '=', 'T_examenes_terminados.id_estudiante')->where([
+            ['curso', $examGrade],
+            ['id_examen', $examId]
+        ])->get();
+    $array = [];
+    if ($data) {
+        $array = [
+            'response' => true,
+            'data' => $data
+        ];
+    } else {
+        $array = ['response' => false];
+    }
+    echo Util::toJson($array);
+} else if (isset($_POST['correctExams'])) {
+    $examId = $_POST['correctExams'];
+    $exam = new Exam($examId);
+    $doneExams = DB::table('T_examenes_terminados')->where('id_examen', $examId)->get();
+    $examTotalPoints = 0;
+    foreach ($doneExams as $doneExam) {
+        $doneExamId = $doneExam->id;
+        $studentId = $doneExam->id_estudiante;
+
+        if (isset($exam->fvs->topics)) {
+            foreach ($exam->fvs->topics as $topic) {
+                $done = DB::table('T_examen_terminado_fyv')->where([
+                    ['id_examen', $doneExamId],
+                    ['id_pregunta', $topic->id],
+                    ['id_estudiante', $studentId]
+                ])->first();
+                $examTotalPoints += $topic->respuesta == $done->respuesta ? $topic->valor : 0;
+            }
+        }
+        if (isset($exam->selects->topics)) {
+            foreach ($exam->selects->topics as $topic) {
+                $done = DB::table('T_examen_terminado_selec')->where([
+                    ['id_examen', $doneExamId],
+                    ['id_pregunta', $topic->id],
+                    ['id_estudiante', $studentId]
+                ])->first();
+                $examTotalPoints += $topic->correcta == $done->respuesta ? $topic->valor : 0;
+            }
+        }
+        if (isset($exam->pairs->topics)) {
+            foreach ($exam->pairs->topics as $topic) {
+                $done = DB::table('T_examen_terminado_parea')->where([
+                    ['id_examen', $doneExamId],
+                    ['id_pregunta', $topic->id],
+                    ['id_estudiante', $studentId]
+                ])->first();
+                $examTotalPoints += $topic->respuesta_c == $done->respuesta ? $topic->valor : 0;
+            }
+        }
+        if (isset($exam->lines->topics)) {
+            foreach ($exam->lines->topics as $topic) {
+                $done = DB::table('T_examen_terminado_linea')->where([
+                    ['id_examen', $doneExamId],
+                    ['id_pregunta', $topic->id],
+                    ['id_estudiante', $studentId]
+                ])->first();
+                for ($i = 1; $i <= 5; $i++) {
+                    if($topic->{"respuesta$i"} !== ''){
+                        $correct = strtolower($topic->{"respuesta$i"}) == strtolower($done->{"respuesta$i"}) ? true : false;
+                    }
+                }
+                $examTotalPoints += $correct ? $topic->valor : 0;
+            }
+        }
+        if (isset($exam->qas->topics)) {
+            foreach ($exam->qas->topics as $topic) {
+                $done = DB::table('T_examen_terminado_pregunta')->where([
+                    ['id_examen', $doneExamId],
+                    ['id_pregunta', $topic->id],
+                    ['id_estudiante', $studentId]
+                ])->first();
+                $examTotalPoints += $done->puntos_ganados ? $done->puntos_ganados : 0;
+            }
+        }
+
+        DB::table("T_examenes_terminados")->where('id', $doneExamId)->update(["puntos" => $examTotalPoints]);
+    }
+    echo $examTotalPoints;
 }

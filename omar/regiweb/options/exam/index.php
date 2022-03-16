@@ -74,7 +74,7 @@ $exams = $exams->findByTeacher($teacher->id);
                         <button type="button" class="btn btn-outline-primary btn-block text-dark" disabled>Corregir preguntas</button>
                     </div>
                     <div class="col-12 my-1">
-                        <button type="button" class="btn btn-outline-primary btn-block text-dark" disabled>Corregir examen</button>
+                        <button type="button" class="btn btn-outline-primary btn-block text-dark" data-toggle="modal" data-target="#correctExamsModal" disabled>Corregir examen</button>
                     </div>
                 </row>
             </div>
@@ -640,7 +640,6 @@ $exams = $exams->findByTeacher($teacher->id);
                         </div>
                         <div class="col-12">
                             <button id="gradeOptionsSearchButton" class="btn btn-primary btn-block">Buscar</button>
-                            
                         </div>
                     </div>
                     <div class="mt-3 row">
@@ -681,7 +680,51 @@ $exams = $exams->findByTeacher($teacher->id);
             </div>
         </div>
     </div>
+    <!-- correctExamsModal -->
+    <div class="modal fade" id="correctExamsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="correctExamsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="correctExamsModalLabel">Estudiantes que han tomado el examen</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="table_wrap">
+                        <table id="correctExamsTable" class="table table-striped table-hover cell-border w-100 shadow">
+                            <thead class="bg-gradient-primary bg-primary border-0">
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th>Fecha</th>
+                                    <th>Puntos</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-gradient-secondary bg-secondary">
+                                    <th>Estudiante</th>
+                                    <th>Fecha</th>
+                                    <th>Puntos</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button id="correctExamsButton" type="button" class="btn btn-primary" disabled>Corregir examenes</button>
+                    <button id="correctExamsButton2" type="button" class="btn btn-info" disabled>Pasar puntos</button>
+                    <button id="correctExamsButton3" type="button" class="btn btn-info" disabled>Pasar porcentajes</button>
+                    <button id="correctExamsButton4" type="button" class="btn btn-warning" disabled>Dar oportunidad</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php
+    $DataTable = true;
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
 </body>

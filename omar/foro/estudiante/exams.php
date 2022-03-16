@@ -70,7 +70,9 @@ $exams = $student->exams(Util::daysBefore(30));
             <?php foreach ($exams as $exam) : ?>
                <?php
                $doneExam = $student->doneExam($exam->id);
-               $points = ($doneExam->puntos + $doneExam->bonos);
+              
+                  $points = $doneExam ? ($doneExam->puntos + $doneExam->bonos) : '';
+               
                $sent = $doneExam ? true : false;
                $expired = $exam->fecha >= Util::date() ? false : true;
                if ($expired || $sent || Util::date() < $exam->fecha) {
