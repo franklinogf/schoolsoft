@@ -51,6 +51,43 @@ $(function () {
         );
     })
 
+    // View Exam
+    $("#correctExamsTable tbody").on('click', 'tr', function (e) {
+
+        const studentMt = $(this).data('mt')
+        if (studentMt !== undefined) {
+            console.log('studentMt:', studentMt)
+            $("#viewExamModal").modal('show')
+            loadingBtn($("#viewExamModal .modal-body"))
+
+            $.post("./includes/correctedExam.php",{examId:_examInfo.id,studentMt},
+                function (data, textStatus, jqXHR) {
+                    $("#viewExamModal .modal-body").html(data)
+                }
+            );
+    //         $("#viewExamModal .modal-body").html(`
+    //     <div class="container bg-white px-3 py-5 p-md-5 shadow">
+    //     ${_examInfo.fvs.topics ? `        
+    //           <h4 class="mt-3">${topicNumber++} - ${_examInfo.desc1 === 'si' ? _examInfo.desc1_1 : _examInfo.fvs.title} <span class="badge badge-info">${_examInfo.fvs.value}</span></h4>
+    //           ${_examInfo.fvs.topics.map((topic, index) => {
+    //             count = index + 1
+    //             return `              
+    //           <div class="form-group">
+    //             <label class="font-weight-bold" for="fv${count}"> ${count}) ${topic.pregunta}</label>
+    //             <select id="fv${count}" class="form-control readonly">
+    //                 <option value="" selected>Selecciona la respuesta</option>
+    //                 <option value="v">Verdadero</option>
+    //                 <option value="f">Falso</option>
+    //             </select>
+    //         </div>`}).join('')}                          
+    //              `  : ''}
+           
+
+    //  </div>`)
+
+        }
+    })
+
     /* ----------------------------- Grades options ----------------------------- */
     $("#gradeOptionsSearchButton").click(function (e) {
         e.preventDefault()
@@ -490,6 +527,7 @@ $(function () {
     /*                                  Functions                                 */
     /* -------------------------------------------------------------------------- */
 
+
     function correctExams() {
         $.post(includeThisFile(), { fillCorrectExams: _examInfo.id, grade: _examInfo.curso },
             function (data, textStatus, jqXHR) {
@@ -504,6 +542,7 @@ $(function () {
                             2: totalPoints,
                             3: ((totalPoints / _examInfo.valor) * 100).toFixed(0) + '%'
                         }).draw()
+                        $(thisRow.node()).data('mt', student.mt)
                     })
                 }
             },

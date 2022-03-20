@@ -69,11 +69,8 @@ $exams = $exams->findByTeacher($teacher->id);
                     </div>
                     <div class="col-6 my-1">
                         <button type="button" class="btn btn-outline-primary btn-block text-dark" disabled>Imprimir informe de examen</button>
-                    </div>
+                    </div>                   
                     <div class="col-6 my-1">
-                        <button type="button" class="btn btn-outline-primary btn-block text-dark" disabled>Corregir preguntas</button>
-                    </div>
-                    <div class="col-12 my-1">
                         <button type="button" class="btn btn-outline-primary btn-block text-dark" data-toggle="modal" data-target="#correctExamsModal" disabled>Corregir examen</button>
                     </div>
                 </row>
@@ -719,6 +716,19 @@ $exams = $exams->findByTeacher($teacher->id);
                     <button id="correctExamsButton2" type="button" class="btn btn-info" disabled>Pasar puntos</button>
                     <button id="correctExamsButton3" type="button" class="btn btn-info" disabled>Pasar porcentajes</button>
                     <button id="correctExamsButton4" type="button" class="btn btn-warning" disabled>Dar oportunidad</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="viewExamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="viewExamModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">               
+                <div class="modal-body">                    
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                                  
                 </div>
             </div>
         </div>

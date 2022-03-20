@@ -14,7 +14,8 @@ $teacher = new Teacher(Session::id());
 
 if (isset($_POST['searchExam'])) {
     $examId = $_POST['searchExam'];
-    $exam = DB::table('T_examenes')->where('id', $examId)->first();
+    // $exam = DB::table('T_examenes')->where('id', $examId)->first();
+    $exam = new Exam($examId);
     echo Util::toJson($exam);
 } else if (isset($_POST['changeTitle'])) {
     $examId = $_POST['examId'];
@@ -422,7 +423,7 @@ if (isset($_POST['searchExam'])) {
 
         $totalValue += $note;
         $points = $doneExam->puntos + $doneExam->bonos;
-        $points = !isset($_POST['passPorcent']) ? number_format(($points /$exam->valor * 100),0) : $points;
+        $points = !isset($_POST['passPorcent']) ? number_format(($points / $exam->valor * 100), 0) : $points;
         $examValue = !isset($_POST['passPorcent']) ? $exam->valor : '100';
         $examValue2 = !isset($_POST['passPorcent']) ? '0' : '100';
         DB::table('valores')->where('id', $value->id)->update([
@@ -433,10 +434,14 @@ if (isset($_POST['searchExam'])) {
         ]);
         DB::table($table)->where([
             ['curso', $doneExam->curso],
-            ['ss',$doneExam->ss_estudiante],
-            ['year',$year]
+            ['ss', $doneExam->ss_estudiante],
+            ['year', $year]
         ])->update([
             "not{$totalValue}" => $points
         ]);
     }
+} else if (isset($_POST['viewExam'])) {
+    $examId = $_POST['viewExam'];
+    $exam = new Exam($examId);
+    echo Util::toJson($exam);
 }
