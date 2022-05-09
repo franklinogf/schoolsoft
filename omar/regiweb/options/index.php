@@ -41,24 +41,24 @@ $options = [
         'buttons' => [
             ['name' => 'Informe de labor', 'link' => './reports/labor.php'],
             ['name' => 'Informe de Notas', 'link' => './reports/grades.php'],
-            ['name' => 'Informe cambios de notas', 'link' => './reports/pdf/gradesChanges.php'],
-            ['name' => 'Listado de 100', 'link' => './reports/pdf/100.php'],
-            ['name' => 'Lista de promedios', 'link' => './reports/pdf/averages.php'],
+            ['name' => 'Informe cambios de notas', 'link' => './reports/pdf/gradesChanges.php', 'target' => '_blank'],
+            ['name' => 'Listado de 100', 'link' => './reports/100.php'],
+            ['name' => 'Lista de promedios', 'link' => './reports/pdf/averages.php', 'target' => '_blank'],
         ]
     ],
     [
         'title' => 'Otros',
         'buttons' => [
             ['name' => 'Generador de Examen', 'link' => './exam/'],
-            ['name' => 'Crear Asignación', 'link' => '#'],
-            ['name' => 'Mi Registro', 'link' => '#'],
-            ['name' => 'Crear clase diaria', 'link' => '#'],
-            ['name' => 'Documentos', 'link' => '#'],
+            ['name' => 'Crear Asignación', 'link' => './homeworks'],
+            // ['name' => 'Mi Registro', 'link' => '#'],
+            // ['name' => 'Crear clase diaria', 'link' => '#'],
+            ['name' => 'Documentos', 'link' => './documents/'],
             ['name' => 'Notas por examen', 'link' => '#'],
-            ['name' => 'Planilla de disciplina', 'link' => '#'],
-            ['name' => 'Planilla de uniformes', 'link' => '#'],
+            // ['name' => 'Planilla de disciplina', 'link' => '#'],
+            // ['name' => 'Planilla de uniformes', 'link' => '#'],
             ['name' => 'Curva de notas', 'link' => '#'],
-            ['name' => 'Clasificación de notas', 'link' => '#'],
+            ['name' => 'Clasificación de notas', 'link' => './pdf/pdfNoteClasification.php' , 'target' => '_blank'],
         ]
     ]
 
@@ -96,7 +96,7 @@ $options = [
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button) : ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" <?= $button['target'] ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -110,9 +110,9 @@ $options = [
         </div>
     </div>
 
-<?php
-Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+    <?php
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    ?>
 </body>
 
 </html>
