@@ -1,5 +1,5 @@
 $(function () {
-    let _examInfo = null
+    let _examInfo = {}
     let _optionNumber = null
     let _deleteId = null
     let _type = null
@@ -8,8 +8,76 @@ $(function () {
     // enable new and search buttons when page charge
     $('[data-target="#newExamModal"], [data-target="#searchExamModal"]').prop('disabled', false)
 
-    // console.log(correctExamsTable)
+    $("#deleteExamButton").click(function(e){
+        loadingBtn($("#deleteExamButton"),'','Eliminando...')
+        console.log('delete Clicked')
+        $.post(includeThisFile(), {deleteExam:_examInfo.id},
+        function (data, textStatus, jqXHR) {
+                window.location.reload()
+            }
+        );
+    })
+
+
+    $(document).on('change','.optionCheck',function(e){
+       
+        const optionChecked = $(this).prop('checked')
+        const option = $(this).data('check')
+       $.post(includeThisFile(), {optionChecked,option,examId:_examInfo.id},
+           function (data) {
+               if(optionChecked){
+                   _examInfo[option] = 'si'
+               }else{
+                _examInfo[option] = 'no'
+               }
+           }
+       );
+    })
+    $(document).on('change','.optionDescription',function(e){
+       
+        const optionDescription = $(this).val()
+        const desc = $(this).data('desc')
+       $.post(includeThisFile(), {optionDescription,desc,examId:_examInfo.id},
+           function (data) {
+               console.log('desc: ',data) 
+               _examInfo[desc] = optionDescription         
+           }
+       );
+    })
+
     /* ----------------------------- Correct Examns ----------------------------- */
+    $(document).on('change', '.qaValue', function (e) {
+        const value = $(this).val()
+        const qaId = $(this).data('id')
+        const max = +$(this).prop('max')
+        if (value >= 0 && value <= max) {
+            loadingBtn($("#viewExamModal > div > div > div.modal-footer > button"), '', '')
+            const examGainedPoint = $("#examGainedPoint").val()
+            const doneExamId = $("#doneExamId").val()
+            let qaTotal = 0
+            $.each($('.qaValue'), function (index, el) {
+                qaTotal += +$(el).val()
+            });
+            $("#qaTotal").text(qaTotal)
+            const totalExam = +examGainedPoint + qaTotal
+            $(".totalExam").text(totalExam)
+            $.post(includeThisFile(), { qa: qaId, value, totalExam, doneExamId }, function (data) {
+                console.log('guardado ', data)
+                loadingBtn($("#viewExamModal > div > div > div.modal-footer > button"), 'Cerrar')
+                correctExams()
+            });
+
+        } else {
+            if (value === 0) {
+                $(this).val(0)
+            } else if (value > max) {
+                $(this).val(max)
+            }
+        }
+    })
+
+
+
     // Fill done exams students
     $('#correctExamsModal').on('show.bs.modal', function (event) {
 
@@ -60,30 +128,30 @@ $(function () {
             $("#viewExamModal").modal('show')
             loadingBtn($("#viewExamModal .modal-body"))
 
-            $.post("./includes/correctedExam.php",{examId:_examInfo.id,studentMt},
+            $.post("./includes/correctedExam.php", { examId: _examInfo.id, studentMt },
                 function (data, textStatus, jqXHR) {
                     $("#viewExamModal .modal-body").html(data)
                 }
             );
-    //         $("#viewExamModal .modal-body").html(`
-    //     <div class="container bg-white px-3 py-5 p-md-5 shadow">
-    //     ${_examInfo.fvs.topics ? `        
-    //           <h4 class="mt-3">${topicNumber++} - ${_examInfo.desc1 === 'si' ? _examInfo.desc1_1 : _examInfo.fvs.title} <span class="badge badge-info">${_examInfo.fvs.value}</span></h4>
-    //           ${_examInfo.fvs.topics.map((topic, index) => {
-    //             count = index + 1
-    //             return `              
-    //           <div class="form-group">
-    //             <label class="font-weight-bold" for="fv${count}"> ${count}) ${topic.pregunta}</label>
-    //             <select id="fv${count}" class="form-control readonly">
-    //                 <option value="" selected>Selecciona la respuesta</option>
-    //                 <option value="v">Verdadero</option>
-    //                 <option value="f">Falso</option>
-    //             </select>
-    //         </div>`}).join('')}                          
-    //              `  : ''}
-           
+            //         $("#viewExamModal .modal-body").html(`
+            //     <div class="container bg-white px-3 py-5 p-md-5 shadow">
+            //     ${_examInfo.fvs.topics ? `        
+            //           <h4 class="mt-3">${topicNumber++} - ${_examInfo.desc1 === 'si' ? _examInfo.desc1_1 : _examInfo.fvs.title} <span class="badge badge-info">${_examInfo.fvs.value}</span></h4>
+            //           ${_examInfo.fvs.topics.map((topic, index) => {
+            //             count = index + 1
+            //             return `              
+            //           <div class="form-group">
+            //             <label class="font-weight-bold" for="fv${count}"> ${count}) ${topic.pregunta}</label>
+            //             <select id="fv${count}" class="form-control readonly">
+            //                 <option value="" selected>Selecciona la respuesta</option>
+            //                 <option value="v">Verdadero</option>
+            //                 <option value="f">Falso</option>
+            //             </select>
+            //         </div>`}).join('')}                          
+            //              `  : ''}
 
-    //  </div>`)
+
+            //  </div>`)
 
         }
     })
@@ -399,6 +467,7 @@ $(function () {
 
             console.log('dataToSend:', dataToSend)
             $.post(includeThisFile(), dataToSend, function (data) {
+                console.log('addAnwser:', data)
                 loadingBtn($(this), 'Agregar')
                 clearInputs()
                 fillOption()
@@ -434,26 +503,39 @@ $(function () {
     $("#newExamButton").click(function (e) {
         e.preventDefault()
         if ($("#newExamTitle").val() !== '') {
-            $("#newExamTitle").removeClass('is-invalid')
-            loadingBtn($(this), '', 'Creando...')
-            $.post(includeThisFile(), {
-                newExam: true,
-                title: $("#newExamTitle").val(),
-                grade: $("#newExamGrade").val()
-            },
-                function (data) {
-                    _examInfo.id = data.examId
-                    _examInfo.titulo = data.title
-                    _examInfo.curso = data.grade
-                    _examInfo.fecha = data.date
-                    _examInfo.activo = 'no'
-                    _examInfo.ver_nota = 'no'
-                    $("#searchExamId").prepend(`<option value='${_examInfo.id}' selected>${_examInfo.titulo}</option>`)
+            $.post(includeThisFile(), { checkTitle: $("#newExamTitle").val() },
+                function (dataTitle) {
+                    $("#newExamTitle").removeClass('is-invalid')
+                    loadingBtn($(this), '', 'Creando...')
+                    if (dataTitle.exists) {
+                        alert("Este titulo ya existe!\nUtilice otro titulo para el examen")
+                        $("#newExamTitle").val('').focus()
+                    } else {
+                        $.post(includeThisFile(), {
+                            newExam: true,
+                            title: $("#newExamTitle").val(),
+                            grade: $("#newExamGrade").val()
+                        },
+                            function (data) {
+                                console.log('newExam:', data)
+
+                                _examInfo.id = data.examId
+                                _examInfo.titulo = data.title
+                                _examInfo.curso = data.grade
+                                _examInfo.fecha = data.date
+                                _examInfo.activo = 'no'
+                                _examInfo.ver_nota = 'no'
+                                console.log(_examInfo)
+                                $("#searchExamId").prepend(`<option value='${_examInfo.id}' selected>${_examInfo.titulo}</option>`)
+                                $("#newExamModal,#infoExamModal").modal('hide')
+                                loadMenu()
+                            },
+                            'json'
+                        );
+                    }
                     loadingBtn($(this), 'Crear')
-                    $("#newExamModal,#infoExamModal").modal('hide')
-                    loadMenu()
                 },
-                'json'
+                "json"
             );
         } else {
             $("#newExamTitle").addClass('is-invalid')
@@ -491,7 +573,6 @@ $(function () {
             const exam = $.parseJSON(data)
             _examInfo = exam
             console.log('_examInfo:', _examInfo)
-
             loadMenu();
             $("#searchExamModal").modal('hide')
         });
@@ -505,9 +586,18 @@ $(function () {
             $.post(includeThisFile(), {
                 'changeTitle': title,
                 examId: _examInfo.id
-            }, function () {
-                $(`#searchExamId option[value=${_examInfo.id}]`).text(title)
-            });
+            }, function (data) {
+                console.log(data.exists)
+                if (data.exists) {
+                    console.log('exists')
+                    alert("Este titulo ya existe!\nUtilice otro titulo para el examen")
+                    $("#title").val($("#title").data('title'))
+                } else {
+                    console.log('no exists')
+                    $("#title").data('title', title)
+                    $(`#searchExamId option[value=${_examInfo.id}]`).text(title)
+                }
+            }, 'json');
         } else {
             $(this).addClass('is-invalid')
         }
@@ -659,6 +749,7 @@ $(function () {
 
                 } else {
                     optionElement.html("<h3 class='text-center text-muted'>No hay preguntas creadas</h3>")
+                    $("#option3CreatedAnswers").html("<h3 class='text-center text-muted'>No hay respuestas creadas</h3>")
                 }
             }, 'json');
 
@@ -666,7 +757,7 @@ $(function () {
 
     function loadMenu() {
         loadingBtn($('.amount,.value'))
-        $("#menuButtons button,#settingsButtons button,#title").prop("disabled", true)
+        $("#menuButtons button,#settingsButtons button,#title,.printExam").prop("disabled", true)
         let examTotalAmount = 0;
         let examTotalValue = 0;
         $.post(includeThisFile(), {
@@ -684,8 +775,9 @@ $(function () {
             $("#examTotalAmount").text(`cantidad: ${examTotalAmount}`)
             $("#examTotalValue").text(`valor: ${examTotalValue}`)
             // Enabled buttons and title
-            $("#title").prop("disabled", false).val(_examInfo.titulo)
-            $("#menuButtons button,#settingsButtons button").prop("disabled", false)
+            $("#title").prop("disabled", false).val(_examInfo.titulo).data('title', _examInfo.titulo)
+            $("#menuButtons button,#settingsButtons button,.printExam").prop("disabled", false)
+            $(".printExamId").val(_examInfo.id)
             updateExamTotal(examTotalValue)
         });
     }

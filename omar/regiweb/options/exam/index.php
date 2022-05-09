@@ -5,7 +5,6 @@ use Classes\Controllers\Exam;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\DataBase\DB;
 
 Session::is_logged();
 
@@ -32,6 +31,14 @@ $exams = $exams->findByTeacher($teacher->id);
         <h1 class="text-center my-3">Generador de examen</h1>
         <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#newExamModal" disabled>Nuevo examen</button>
         <button class="btn btn-info text-dark" type="button" data-toggle="modal" data-target="#searchExamModal" disabled>Buscar Examen</button>
+        <form action="<?= Route::url('/regiweb/options/exam/pdf/printExam.php') ?>" method="POST" class="float-right" target="printExam">
+            <input type="hidden" name="printExamId" class="printExamId">
+            <select class="printExam" name="paperSize" required disabled>
+                <option value="A4" selected>Carta</option>
+                <option value="Legal">Hoja Legal</option>
+            </select>
+            <button class="btn btn-secondary printExam" type="submit" disabled>Imprimir examen</button>
+        </form>
 
         <div class="row">
             <div class="col-12">
@@ -68,8 +75,11 @@ $exams = $exams->findByTeacher($teacher->id);
                         <button type="button" class="btn btn-outline-primary btn-block text-dark" data-toggle="modal" data-target="#gradeOptionsModal" disabled>Opciones de Notas</button>
                     </div>
                     <div class="col-6 my-1">
-                        <button type="button" class="btn btn-outline-primary btn-block text-dark" disabled>Imprimir informe de examen</button>
-                    </div>                   
+                        <form action="<?= Route::url('/regiweb/options/exam/pdf/doneExams.php') ?>" method="POST" target="doneExamPdf">
+                            <input type="hidden" name="printExamId" class="printExamId">
+                            <button type="submit" class="btn btn-outline-primary btn-block text-dark" disabled>Imprimir informe de examen</button>
+                        </form>
+                    </div>
                     <div class="col-6 my-1">
                         <button type="button" class="btn btn-outline-primary btn-block text-dark" data-toggle="modal" data-target="#correctExamsModal" disabled>Corregir examen</button>
                     </div>
@@ -112,10 +122,10 @@ $exams = $exams->findByTeacher($teacher->id);
                                 <div class="input-group-prepend">
                                     <div class="input-group-text py-0">
                                         <label for="option1Check" style="margin-bottom: 0px;">Usar este titulo para el tema</label>
-                                        <input class="mx-2" type="checkbox" aria-label="Checkbox for following text input" id="option1Check" name="option1Check" value="si" data-target='option1Description'>
+                                        <input class="mx-2 optionCheck" data-check='desc1' type="checkbox" aria-label="Checkbox for following text input" id="option1Check" name="option1Check" value="si" data-target='option1Description'>
                                     </div>
                                 </div>
-                                <input id="option1Description" name="option1Desciption" type="text" class="form-control" aria-label="Text input with checkbox" disabled>
+                                <input id="option1Description" name="option1Description" type="text" class="form-control optionDescription" data-desc='desc1_1' aria-label="Text input with checkbox" disabled>
                             </div>
                         </div>
 
@@ -209,10 +219,10 @@ $exams = $exams->findByTeacher($teacher->id);
                                 <div class="input-group-prepend">
                                     <div class="input-group-text py-0">
                                         <label for="option2Check" style="margin-bottom: 0px;">Usar este titulo para el tema</label>
-                                        <input class="mx-2" type="checkbox" aria-label="Checkbox for following text input" id="option2Check" name="option2Check" value="si" data-target='option2Description'>
+                                        <input class="mx-2 optionCheck" data-check='desc2' type="checkbox" aria-label="Checkbox for following text input" id="option2Check" name="option2Check" value="si" data-target='option2Description'>
                                     </div>
                                 </div>
-                                <input id="option2Description" name="option2Desciption" type="text" class="form-control" aria-label="Text input with checkbox" disabled>
+                                <input id="option2Description" name="option2Description" type="text" class="form-control optionDescription" data-desc='desc2_1' aria-label="Text input with checkbox" disabled>
                             </div>
                         </div>
 
@@ -272,10 +282,10 @@ $exams = $exams->findByTeacher($teacher->id);
                                 <div class="input-group-prepend">
                                     <div class="input-group-text py-0">
                                         <label for="option3Check" style="margin-bottom: 0px;">Usar este titulo para el tema</label>
-                                        <input class="mx-2" type="checkbox" aria-label="Checkbox for following text input" id="option3Check" name="option3Check" value="si" data-target='option3Description'>
+                                        <input class="mx-2 optionCheck" data-check='desc3' type="checkbox" aria-label="Checkbox for following text input" id="option3Check" name="option3Check" value="si" data-target='option3Description'>
                                     </div>
                                 </div>
-                                <input id="option3Description" name="option3Desciption" type="text" class="form-control" aria-label="Text input with checkbox" disabled>
+                                <input id="option3Description" name="option3Description" type="text" class="form-control optionDescription" data-desc='desc3_1' aria-label="Text input with checkbox" disabled>
                             </div>
                         </div>
 
@@ -331,10 +341,10 @@ $exams = $exams->findByTeacher($teacher->id);
                                 <div class="input-group-prepend">
                                     <div class="input-group-text py-0">
                                         <label for="option4Check" style="margin-bottom: 0px;">Usar este titulo para el tema</label>
-                                        <input class="mx-2" type="checkbox" aria-label="Checkbox for following text input" id="option4Check" name="option4Check" value="si" data-target='option4Description'>
+                                        <input class="mx-2 optionCheck" data-check='desc4' type="checkbox" aria-label="Checkbox for following text input" id="option4Check" name="option4Check" value="si" data-target='option4Description'>
                                     </div>
                                 </div>
-                                <input id="option4Description" name="option4Desciption" type="text" class="form-control" aria-label="Text input with checkbox" disabled>
+                                <input id="option4Description" name="option4Description" type="text" class="form-control optionDescription" data-desc='desc4_1' aria-label="Text input with checkbox" disabled>
                             </div>
                         </div>
 
@@ -381,10 +391,10 @@ $exams = $exams->findByTeacher($teacher->id);
                                 <div class="input-group-prepend">
                                     <div class="input-group-text py-0">
                                         <label for="option5Check" style="margin-bottom: 0px;">Usar este titulo para el tema</label>
-                                        <input class="mx-2" type="checkbox" aria-label="Checkbox for following text input" id="option5Check" name="option5Check" value="si" data-target='option5Description'>
+                                        <input class="mx-2 optionCheck" data-check='desc5' type="checkbox" aria-label="Checkbox for following text input" id="option5Check" name="option5Check" value="si" data-target='option5Description'>
                                     </div>
                                 </div>
-                                <input id="option5Description" name="option5Desciption" type="text" class="form-control" aria-label="Text input with checkbox" disabled>
+                                <input id="option5Description" name="option5Description" type="text" class="form-control optionDescription" data-desc='desc5_1' aria-label="Text input with checkbox" disabled>
                             </div>
                         </div>
 
@@ -553,6 +563,7 @@ $exams = $exams->findByTeacher($teacher->id);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#duplicateExamModal">Duplicar Examen</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteExamModal">Eliminar Examen</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button id="infoExamButton" type="submit" class="btn btn-primary">Guardar</button>
                     </div>
@@ -696,7 +707,7 @@ $exams = $exams->findByTeacher($teacher->id);
                                 </tr>
                             </thead>
                             <tbody>
-                                
+
                             </tbody>
                             <tfoot>
                                 <tr class="bg-gradient-secondary bg-secondary">
@@ -723,12 +734,25 @@ $exams = $exams->findByTeacher($teacher->id);
 
     <div class="modal fade" id="viewExamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="viewExamModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">               
-                <div class="modal-body">                    
+            <div class="modal-content">
+                <div class="modal-body bg-light">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>                                  
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteExamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="deleteExamModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <div class="modal-body">
+                    <p>Desea eliminar este examen?</p>
+                </div>
+                <div class="modal-footer border-danger">
+                    <button class="btn btn-danger" id="deleteExamButton">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>

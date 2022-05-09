@@ -12,6 +12,8 @@ Session::is_logged();
 Server::is_post();
 $teacher = new Teacher(Session::id());
 
+
+
 if (isset($_POST['searchExam'])) {
     $examId = $_POST['searchExam'];
     // $exam = DB::table('T_examenes')->where('id', $examId)->first();
@@ -20,19 +22,35 @@ if (isset($_POST['searchExam'])) {
 } else if (isset($_POST['changeTitle'])) {
     $examId = $_POST['examId'];
     $title = trim($_POST['changeTitle']);
-    if (DB::table('T_examenes')->where('id', $examId)->update([
-        'titulo' => $title
-    ])) {
-        echo "Title changed";
+
+    if (titleExists($title, $teacher->id)) {
+        $array = ['exists' => true];
     } else {
-        echo "Error changing title";
+        DB::table('T_examenes')->where('id', $examId)->update([
+            'titulo' => $title
+        ]);
+        $array = ['exists' => false];
     }
+    echo Util::toJson($array);
+} else if(isset($_POST['checkTitle'])){
+    $title = trim( $_POST['checkTitle']);
+    if (titleExists($title, $teacher->id)) {
+        $array = ['exists' => true];
+    } else {       
+        $array = ['exists' => false];
+    }
+    echo Util::toJson($array);
+
 } else if (isset($_POST['menu'])) {
     $examId = $_POST['menu'];
     $array = [];
     foreach (Exam::$tables as $table) {
-        $option = DB::table($table)->where('id_examen', $examId)->get();
-        $array[] = ['amount' => sizeof($option), 'value' => array_sum(array_column($option, 'valor'))];
+        $options = DB::table($table)->where('id_examen', $examId)->get();
+        $value = 0;
+        foreach ($options as $option) {
+            $value += (int) $option->valor;
+        }
+        $array[] = ['amount' => sizeof($options), 'value' => $value];
     }
 
     echo Util::toJson($array);
@@ -48,12 +66,12 @@ if (isset($_POST['searchExam'])) {
         $data2 = null;
     }
     $array = [];
-    if ($data) {
+    if ($data || $data2) {
         $array = [
             'response' => true,
             'data' => [$data, $data2]
         ];
-    } else {
+    }else {
         $array = ['response' => false];
     }
     echo Util::toJson($array);
@@ -123,10 +141,14 @@ if (isset($_POST['searchExam'])) {
     DB::table(Exam::$allTables[3])->where('id', $answerId)->update(["respuesta" => trim($_POST['answer'])]);
 } else if (isset($_POST['addAnswer'])) {
     $examId = $_POST['addAnswer'];
-    DB::table(Exam::$allTables[3])->insert([
+    if(DB::table(Exam::$allTables[3])->insert([
         "respuesta" => trim($_POST['answer']),
         "id_examen" => $examId,
-    ]);
+    ])){
+        echo "Si";
+    }else{
+        echo "No";
+    }
 } else if (isset($_POST['deleteQuestion'])) {
     $questionId = $_POST['deleteQuestion'];
     $optionNumber = (int)$_POST['optionNumber'];
@@ -444,4 +466,61 @@ if (isset($_POST['searchExam'])) {
     $examId = $_POST['viewExam'];
     $exam = new Exam($examId);
     echo Util::toJson($exam);
+} else if (isset($_POST['qa'])) {
+    $qaId = $_POST['qa'];
+    $value = $_POST['value'];
+    $totalExam = $_POST['totalExam'];
+    $doneExamId = $_POST['doneExamId'];
+    DB::table('T_examen_terminado_pregunta')->where('id', $qaId)->update([
+        'puntos_ganados' => $value
+    ]);
+    DB::table('T_examenes_terminados')->where('id', $doneExamId)->update([
+        'puntos' => $totalExam
+    ]);
+}else if (isset($_POST['optionChecked'])){
+    $optionChecked = $_POST['optionChecked'];
+    $option = $_POST['option'];
+    $examId = $_POST['examId'];
+if($optionChecked === 'true'){
+    $checked = 'si';
+}else{
+    $checked = 'no';
+}
+DB::table("T_examenes")->where("id",$examId)->update([
+    $option => $checked
+]);
+
+}
+else if (isset($_POST['optionDescription'])){
+    $optionDescription = $_POST['optionDescription'];
+    $desc = $_POST['desc'];
+    $examId = $_POST['examId'];
+DB::table("T_examenes")->where("id",$examId)->update([
+    $desc => $optionDescription
+]);
+
+}else if(isset($_POST['deleteExam'])){
+    $examId = $_POST['deleteExam'];
+    DB::table('T_examenes')->where("id",$examId)->delete();
+    foreach(Exam::$allTables as $table){
+        DB::table($table)->where("id_examen",$examId)->delete();
+    }
+
+}
+
+
+
+
+// functions
+function titleExists($title, $teacherId)
+{
+    $examTitle = DB::table('T_examenes')->where([
+        ['id_maestro', $teacherId],
+        ['titulo', $title]
+    ])->first();
+    if ($examTitle) {
+        return true;
+    } else {
+        return false;
+    }
 }

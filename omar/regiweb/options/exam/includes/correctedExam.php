@@ -17,7 +17,7 @@ $doneExam = $student->doneExam($examId);
 $doneExamId = $doneExam->id;
 $exam = new Exam($examId);
 $topicNumber = 1;
-
+$examGainedPoints = 0;
 // var_dump($doneExam);
 
 function isCorrect($q, $a, $css = true)
@@ -39,7 +39,7 @@ function isCorrect($q, $a, $css = true)
 </head>
 <div class="container bg-white px-3 py-2 shadow">
 
-   <h2 class="text-center mb-5"><?= $exam->titulo ?> <span class="badge badge-info">(<?= $doneExam->puntos ?>/<?= $exam->valor ?>)</span></h2>
+   <h2 class="text-center mb-5"><?= $exam->titulo ?> <span class="badge badge-info">(<span class="totalExam"><?= $doneExam->puntos ?></span>/<?= $exam->valor ?>)</span></h2>
    <?php if (isset($exam->fvs->topics)) :
       $total = 0;
    ?>
@@ -63,7 +63,9 @@ function isCorrect($q, $a, $css = true)
             </select>
          </div>
          <?php $count++; ?>
-      <?php endforeach ?>
+      <?php endforeach;
+       $examGainedPoints += $total;
+      ?>
       <?php $topicNumber++; ?>
       <!-- END FV -->
       <p class="text-primary">Total: <b><?= $total ?></b></p>
@@ -99,7 +101,9 @@ function isCorrect($q, $a, $css = true)
             <?php endfor ?>
          </div>
          <?php $count++; ?>
-      <?php endforeach ?>
+      <?php endforeach;
+       $examGainedPoints += $total;
+      ?>
       <?php $topicNumber++; ?>
       <!-- END SELECT -->
       <p class="text-primary">Total: <b><?= $total ?></b></p>
@@ -120,7 +124,7 @@ function isCorrect($q, $a, $css = true)
          ])->first();
          $total += isCorrect($done->respuesta, $topic->respuesta_c, false) ? $topic->valor : 0;
       ?>
-         <div class="form-group row">
+         <div class="form-row">
             <select id="pair<?= $count ?>" class="form-control col-2" disabled>
                <option value="" selected>Sin respuesta</option>
                <?php foreach ($exam->pairCodes->topics as $index => $answer) : ?>
@@ -128,7 +132,6 @@ function isCorrect($q, $a, $css = true)
                <?php endforeach ?>
             </select>
             <label for="pair<?= $count ?>" class="col-4 <?= isCorrect($done->respuesta, $topic->respuesta_c) ?>"><?= utf8_decode("$count) $topic->pregunta"); ?> <span>(<?= $topic->valor ?>)</span></label>
-
          </div>
          <?php $count++; ?>
       <?php endforeach ?>
@@ -162,11 +165,13 @@ function isCorrect($q, $a, $css = true)
             if (strpos($word, '___') > -1) {
                $total += isCorrect($done->{"respuesta$count"}, $topic->{"respuesta$count"}, false) ? $topic->valor : 0;
                $class = isCorrect($done->{"respuesta$count"}, $topic->{"respuesta$count"});
-               $question .= " <input class='{$class} form-control form-control-sm d-inline mt-2 rounded-0 border-top-0 border-left-0 border-right-0 border-dark shadow-sm' 
-               style='width:10em' 
-               type='text'
-               value='{$done->{"respuesta$count"}}'
-               disabled>";
+               $question .= " <u class='{$class}'>{$done->{"respuesta$count"}}</u>
+               ";
+               // $question .= " <input class='{$class} form-control form-control-sm d-inline mt-2 rounded-0 border-top-0 border-left-0 border-right-0 border-dark shadow-sm' 
+               // style='width:10em' 
+               // type='text'
+               // value='{$done->{"respuesta$count"}}'
+               // disabled>";
                $count++;
             } else {
                $question .= " $word";
@@ -177,7 +182,9 @@ function isCorrect($q, $a, $css = true)
          <p><?= "$count) $question"; ?> <span>(<?= $topic->valor ?>)</span></p>
 
          <?php $count++ ?>
-      <?php endforeach ?>
+      <?php endforeach;
+       $examGainedPoints += $total;
+      ?>
       <?php $topicNumber++ ?>
       <!-- END LINES -->
       <p class="text-primary">Total: <b><?= $total ?></b></p>
@@ -186,31 +193,38 @@ function isCorrect($q, $a, $css = true)
 
 
    <?php if (isset($exam->qas->topics)) :
-      $total = 0;
+
    ?>
       <!-- QA -->
 
       <h4 class="mt-3"><?= "{$topicNumber} - " ?><?= $exam->desc5 === 'si' ? utf8_decode($exam->desc5_1) : utf8_decode($exam->qas->title) ?> <span class="badge badge-info"><?= $exam->qas->value ?></span></h4>
-      <?php $count = 1 ?>
-      <?php foreach ($exam->qas->topics as $topic) :
+      <?php
+      $count = 1;
+      $totalPoints = 0;
+      foreach ($exam->qas->topics as $topic) :
          $done = DB::table('T_examen_terminado_pregunta')->where([
             ['id_examen', $doneExamId],
             ['id_pregunta', $topic->id],
             ['id_estudiante', $studentMt]
          ])->first();
+         $totalPoints += $done->puntos_ganados;
       ?>
          <div class="form-group">
-            <label class="font-weight-bold float-left" for="qa<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta") . " (0/$topic->valor)"; ?></label>
+            <label class="font-weight-bold float-left" for="qa<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta") . " $topic->valor"; ?></label>
 
-            <input class="qaValue" style="width: 4rem;" type="number" class="form-control form-control-sm d-inline float-right" min='0' max="<?= $topic->valor ?>">
+            <input class="qaValue float-right" data-id='<?= $done->id ?>' style="width: 4rem;" type="number" class="form-control form-control-sm d-inline float-right" min='0' max="<?= $topic->valor ?>" value="<?= $done->puntos_ganados ?>">
             <textarea class="form-control normal" id="qa<?= $count ?>" disabled></textarea>
          </div>
          <?php $count++ ?>
       <?php endforeach ?>
       <?php $topicNumber++ ?>
       <!-- END QA -->
-      <p class="text-primary">Total: <b><?= $total ?></b></p>
+      <p class="text-primary">Total: <b id="qaTotal"><?= $totalPoints ?></b></p>
    <?php endif ?>
+   <input type="hidden" id="examGainedPoint" value="<?= $examGainedPoints ?>">
+   <input type="hidden" id="doneExamId" value="<?= $doneExam->id ?>">
+
+   <p>Total de puntos: <b id="totalExam" class="totalExam"><?= $doneExam->puntos ?></b></p>
 
 
 </div>
