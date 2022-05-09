@@ -37,6 +37,8 @@ define('__NO_PROFILE_PICTURE_TEACHER_MALE', str_replace('/', DIRECTORY_SEPARATOR
 define('__NO_PROFILE_PICTURE_TEACHER_FEMALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-teacher.png'));
 define('__NO_PROFILE_PICTURE_STUDENT_MALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-boy.png'));
 define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARATOR, '/images/no-picture-girl.png'));
+define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
+define('__DEFAULT_LOGO_SCHOOLSOFT', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-schoolsoft.gif'));
 
 // Cosey 
 define('__COSEY', false);
