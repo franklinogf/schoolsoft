@@ -1,5 +1,6 @@
 <?php
 require_once '../app.php';
+require_once '../database_modifications.php';
 
 use Classes\Route;
 use Classes\Controllers\School;
@@ -21,7 +22,7 @@ if (Session::is_logged(false)) {
    <?php
    Route::css("/css/main-bootstrap.css");
    Route::css("/css/main.css", true);
-   Route::css("/css/login.css",true);
+   Route::css("/css/login.css", true);
    ?>
 </head>
 
@@ -52,13 +53,13 @@ if (Session::is_logged(false)) {
 
       <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Continuar</button>
       <a class="btn btn-sm btn-secondary btn-block mt-2" href="<?= Route::url('') ?>">Pagina Principal</a>
-      <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+      <p class="mt-5 mb-3 text-muted">&copy; <?= date('Y') ?></p>
    </form>
    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
    <?php
 
    Route::js('/js/app.js', true);
-   Route::js('/js/login.js',true);
+   Route::js('/js/login.js', true);
    ?>
 </body>
 

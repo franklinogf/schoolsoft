@@ -52,7 +52,8 @@ if (Session::is_logged(false)) {
 
       <button class="btn btn-md btn-primary btn-block mt-2" type="submit">Continuar</button>
       <a class="btn btn-sm btn-secondary btn-block mt-2" href="<?= Route::url('') ?>">Pagina Principal</a>
-      <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+      <p class="text-monospace text-center text-white">Derechos reservados &copy; <?= date('Y') ?></p>
+
    </form>
    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
    <?php
