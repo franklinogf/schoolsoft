@@ -16,6 +16,7 @@ $students = $students->findByGrade($grade);
 
 
 $pdf = new PDF();
+$pdf->SetTitle('Lista de promedios');
 $pdf->addPage();
 $pdf->Fill();
 $pdf->SetFont('Times', 'B', 12);
