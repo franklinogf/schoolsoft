@@ -18,6 +18,8 @@ $_report = $_POST['tra'];
 $teacher = new Teacher(Session::id());
 $year = $teacher->info('year');
 $optionCppd = $teacher->info('cppd') === 'Si';
+$sumTrimester = $teacher->info('sutri') === 'NO'; //NO === SI
+$_trimesterNumber = (int) substr($_trimester, -1);
 $_value = DB::table('valores')
     ->where([
         ['curso', $_class],
@@ -402,6 +404,7 @@ $_thisReport = $_info[$_report];
 $students = new Student();
 $students = $students->findByClass($_class, $_thisReport['table'], $_report === 'V-Nota' ? true : false);
 
+
 // functions
 function findValue($table, $student)
 {
@@ -413,6 +416,20 @@ function findValue($table, $student)
         ['ss', $student->ss],
         ['year', $year]
     ])->first();
+}
+function findTotal($type,$student)
+{
+    global $_info;
+    global $_report;
+    $tpaTotal = 0;
+    global $_trimesterNumber;
+    if ($_trimesterNumber === 2 || $_trimesterNumber === 4) {
+         $lastTrimester = $_trimesterNumber - 1;
+            $t = $_info[$_report]["Trimestre-$lastTrimester"]['values'][$type];
+            $tpaTotal += (int)$student->{$t};
+        
+    }
+    return $tpaTotal;
 }
 ?>
 <!DOCTYPE html>
@@ -534,6 +551,7 @@ function findValue($table, $student)
             <input type="hidden" name="valueC" id="valueC" value="<?= $teacher->info('valc') ?>">
             <input type="hidden" name="valueD" id="valueD" value="<?= $teacher->info('vald') ?>">
             <input type="hidden" name="valueF" id="valueF" value="<?= $teacher->info('valf') ?>">
+            <input type="hidden" name="sumTrimester" id="sumTrimester" value="<?= $sumTrimester ?>">
             <div class="table-responsive my-3 shadow">
                 <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2') : ?>
                     <!-- Required hidden inputs -->
@@ -588,7 +606,7 @@ function findValue($table, $student)
                                             if ($gradeInfo->nota_por === "2") {
                                                 $_student =  findValue($_info['Trab-Diarios']['table'], $student);
                                                 $tdia = $_student->{$_values['tdp']};
-                                                $_student =  findValue($_info['Trab-Libreta']['table'], $student);                                                
+                                                $_student =  findValue($_info['Trab-Libreta']['table'], $student);
                                                 $tlib = $_student->{$_values['tdp']};
                                                 $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
                                                 $pcor = $_student->{$_values['tdp']};
@@ -598,6 +616,10 @@ function findValue($table, $student)
                                                 $pcor = $student->{$_values['pcor']} ? '100' : '';
                                             }
                                         ?>
+                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4) ) : ?>
+                                                <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa',$student) ?>">
+                                                <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp',$student) ?>">
+                                            <?php endif ?>
                                             <input type="hidden" class="_tdia" value="<?= $tdia ?>">
                                             <input type="hidden" class="_tlib" value="<?= $tlib ?>">
                                             <input type="hidden" class="_pcor" value="<?= $pcor ?>">
@@ -656,7 +678,7 @@ function findValue($table, $student)
                                     <?php endforeach ?>
                             </tbody>
                         </table>
-                       
+
 
                     </div>
                 <?php elseif ($_report === 'Ex-Final') : ?>

@@ -87,20 +87,49 @@ if (isset($_POST['changeValue'])) {
         ['curso', $subjectCode],
         ['year', $year],
     ])->update([$type => $value === 'true' ? 'ON' : '']);
-    
 } else if (isset($_POST['submitForm'])) {
     $data = Util::toObject($_POST['data']);
     $_subjectCode = $data->subject[0];
     $_table = $data->table[0];
-    if ($data->report[0] !== 'Cond-Asis' && $data->report[0] !== 'Cond-Asis') {
+    $_report = $data->report[0];
+    $_sumTrimester = $data->sumTrimester[0];
+    if ($_report !== 'Cond-Asis' && $_report !== 'Cond-Asis') {
         $_values = $_info['Notas'][$data->trimester[0]]['values'];
         // foreach student ss
         foreach ($data->ss as $ss) {
             $_gradeStart = (int) $data->gradeStart[0];
             $inputsGrades = [];
+            $studentData = DB::table($_table)
+                ->where([
+                    ['ss', $ss],
+                    ['curso', $_subjectCode],
+                    ['year', $teacher->info('year')]
+                ])->first();
             // each grade
-            foreach ($data->{"grade-$ss"} as $key => $grade) {
+            foreach ($data->{"grade-$ss"} as $index => $grade) {
                 $inputsGrades["not$_gradeStart"] = $grade;
+                // Para el Informe cambio de notas
+                $newNote = $grade;
+                $noteIndex = $index + 1;
+                $lastNote = $studentData->{"not$_gradeStart"};
+                if ($newNote !== $lastNote && $lastNote !== '') {
+                    echo "$ss New Note = $newNote lastNote = $lastNote \n";
+
+                    DB::table('tarjeta_cambios')->insert([
+                        'id' => $teacher->id,
+                        'fecha' => Util::date(),
+                        'hora' => Util::time(),
+                        'ip' => Util::getIp(),
+                        'curso' => $_subjectCode,
+                        'nt1' => $newNote,
+                        'nt2' => $lastNote,
+                        'cual' => $noteIndex,
+                        'ss' => $ss,
+                        'year' => $teacher->info('year'),
+                        'tri' => $data->trimester[0],
+                        'pag' => $_report
+                    ]);
+                }
                 $_gradeStart++;
             }
 
@@ -111,7 +140,7 @@ if (isset($_POST['changeValue'])) {
                 [$data->totalGrade[0] => $data->{"totalGrade-$ss"}[0]]
             );
 
-            if ($data->report[0] === 'Notas') {
+            if ($_report === 'Notas') {
                 $allInputs = array_merge(
                     $allInputs,
                     [$data->tdia[0] => $data->{"tdia-$ss"}[0]],
@@ -129,7 +158,7 @@ if (isset($_POST['changeValue'])) {
                 ])
                 ->update($allInputs)
                 &&
-                $data->report[0] !== 'Notas'
+                $_report !== 'Notas'
             ) {
                 DB::table('padres')
                     ->where([
@@ -138,16 +167,97 @@ if (isset($_POST['changeValue'])) {
                         ['year', $teacher->info('year')]
                     ])
                     ->update([
-                        $_values[$_reports[$data->report[0]]] => $data->{"tpa-$ss"}[0]
+                        $_values[$_reports[$_report]] => $data->{"tpa-$ss"}[0]
                     ]);
             } else {
-                var_dump($allInputs);
+                $studentData = DB::table($_table)
+                    ->where([
+                        ['ss', $ss],
+                        ['curso', $_subjectCode],
+                        ['year', $teacher->info('year')]
+                    ])->first();
+                // Suma de trimestre
+                if (!$_sumTrimester) {
+                    if ($data->trimester[0] === 'Trimestre-1' || $data->trimester[0] === 'Trimestre-2') {
+                        $note1 = 'nota1';
+                        $note2 = 'nota2';
+                        $sem = 'sem1';
+                    } else {
+                        $note1 = 'nota3';
+                        $note2 = 'nota4';
+                        $sem = 'sem2';
+                    }
+                    // Semester 1 or Semester 2 Notes
+                    $div = 0;
+                    $div += $studentData->{$note1} !== '' ? 1 : 0;
+                    $div += $studentData->{$note2} !== '' ? 1 : 0;
+                    $semNote = $div !== 0 ? round((+$studentData->{$note1} + +$studentData->{$note2}) / $div) : '';
+
+
+                    // // Final Note
+                    // $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
+                    // $sem2 = $sem === 'sem2' ? $semNote : $studentData->sem2;
+                    // $div = 0;
+                    // $div += $sem1 !== '' ? 1 : 0;
+                    // $div += $sem2 !== '' ? 1 : 0;
+                    // $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
+
+                    // $updateSem = [
+                    //     $sem => $semNote,
+                    //     'final' => $semFinalNote
+                    // ];
+                    // DB::table($_table)
+                    //     ->where([
+                    //         ['ss', $ss],
+                    //         ['curso', $_subjectCode],
+                    //         ['year', $teacher->info('year')]
+                    //     ])->update($updateSem);
+                    // var_dump($updateSem);
+                } else {
+                    if ($data->trimester[0] === 'Trimestre-2') {
+                        $note = 'nota2';
+                        $sem = 'sem1';
+                    } else if ($data->trimester[0] === 'Trimestre-4') {
+                        $note = 'nota4';
+                        $sem = 'sem2';
+                    }
+                    $semNote = round(+$studentData->{$note});
+                    // // Final Note
+                    // $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
+                    // $sem2 = $sem === 'sem2' ? $semNote : $studentData->sem2;
+                    // $div = 0;
+                    // $div += $sem1 !== '' ? 1 : 0;
+                    // $div += $sem2 !== '' ? 1 : 0;
+                    // $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
+                    // $updateSem = [
+                    //     $sem => $semNote,
+                    //     'final' => $semFinalNote
+                    // ];
+                }
+                // Final Note
+                $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
+                $sem2 = $sem === 'sem2' ? $semNote : $studentData->sem2;
+                $div = 0;
+                $div += $sem1 !== '' ? 1 : 0;
+                $div += $sem2 !== '' ? 1 : 0;
+                $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
+                $updateSem = [
+                    $sem => $semNote,
+                    'final' => $semFinalNote
+                ];
+                DB::table($_table)
+                    ->where([
+                        ['ss', $ss],
+                        ['curso', $_subjectCode],
+                        ['year', $teacher->info('year')]
+                    ])->update($updateSem);
+                var_dump($updateSem);
             }
         }
     } else {
-        $_values = $_info[$data->report[0]][$data->trimester[0]];
+        $_values = $_info[$_report][$data->trimester[0]];
         foreach ($data->ss as $ss) {
-            if ($data->report[0] === 'Cond-Asis') {
+            if ($_report === 'Cond-Asis') {
                 $updateArray = [
                     $_values[0] => $data->{"con-$ss"}[0],
                     $_values[1] => $data->{"aus-$ss"}[0],

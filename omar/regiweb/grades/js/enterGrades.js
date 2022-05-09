@@ -3,12 +3,14 @@ $(function () {
     /* ---------------------------------- vars ---------------------------------- */
     $(".loading").hide()
     const _cppd = !!+$("#optionCppd").val()
+    const _sumTrimester = !!+$("#sumTrimester").val()
+    const _trimester = $("#trimester").val()
     let _letter = $("#letra").prop('checked')
     const _report = $("#report").val()
     const _subjectCode = $("#subject").val()
     const _noteType = $("#noteType1").prop('checked') ? 1 : 2
     const _allGrades = $(".table tbody tr")
-    if($("#save")[0]) $("input:disabled").prop('disabled', false)
+    if ($("#save")[0]) $("input:disabled").prop('disabled', false)
 
     init()
 
@@ -87,7 +89,7 @@ $(function () {
             },
             dataType: 'json',
         })
-        
+
 
     })
 
@@ -95,25 +97,25 @@ $(function () {
 
     $("#letra").change(function () {
         _letter = $("#letra").prop('checked')
-       if(_letter){
-        $("#optionLetter").val($("#letra").val())
-       }else{
-           $("#optionLetter").val('0');
-       }
-       init()
+        if (_letter) {
+            $("#optionLetter").val($("#letra").val())
+        } else {
+            $("#optionLetter").val('0');
+        }
+        init()
     })
     $("#pal").change(function () {
-       
-       init()
+
+        init()
     })
-    
+
 
     /* -------------------------------- functions ------------------------------- */
     function init() {
         $.each(_allGrades, function (index, tr) {
             calculate($(tr), _cppd)
         });
-        
+
     }
     // option convert number to letters
     function NumberToLetter(value) {
@@ -136,12 +138,12 @@ $(function () {
         return (/[a-zA-Z]/).test(value)
     }
     function calculate(parentTr, cppd = false) {
-        let tpaTotal = 0
-        let tdpTotal = 0
         const parentAllGrades = parentTr.find('.grade')
         const tpa = parentTr.find('.tpa')
         const tdp = parentTr.find('.tdp')
         const totalGrade = parentTr.find('.totalGrade')
+        let tpaTotal = _sumTrimester && (_trimester === 'Trimestre-2' || _trimester === 'Trimestre-4') ? +parentTr.find('._tpaTotal').val() : null
+        let tdpTotal = _sumTrimester && (_trimester === 'Trimestre-2' || _trimester === 'Trimestre-4') ? +parentTr.find('._tdpTotal').val() : 0
 
         if (cppd) {
             const _A = +$("#valueA").val()
@@ -192,12 +194,13 @@ $(function () {
             const _pcor = parentTr.find('._pcor')
 
             $.each(parentAllGrades, function (index, grade) {
-                if ($(grade).val()) {
+                if ($(grade).val() !== '') {
                     if (index !== parentAllGrades.length - 1) {
                         const tdpInput = $("#values").find(`#val${index + 1}`)
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
                             tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                            console.log('tdpTotal:', tdpTotal)
                         }
                     } else {
                         tpaTotal += +$(grade).val()
@@ -206,18 +209,26 @@ $(function () {
 
             });
             // tpa
-            tpaTotal += tdia.val() ? +tdia.val() : 0
-            tpaTotal += tlib.val() ? +tlib.val() : 0
-            tpaTotal += pcor.val() ? +pcor.val() : 0
+            if (tdia.val()) {
+                tpaTotal += +tdia.val()
+            }
+            if (tlib.val()) {
+                tpaTotal += +tlib.val()
+            }
+            if (pcor.val()) {
+                tpaTotal += +pcor.val()
+            }
+            // tpaTotal += tdia.val() ? +tdia.val() : 0
+            // tpaTotal += tlib.val() ? +tlib.val() : 0
+            // tpaTotal += pcor.val() ? +pcor.val() : 0
 
             // tdp
             tdpTotal += _tdia.val() && tdia.val() ? +_tdia.val() : 0
             tdpTotal += _tlib.val() && tlib.val() ? +_tlib.val() : 0
             tdpTotal += _pcor.val() && pcor.val() ? +_pcor.val() : 0
-
-            tpa.val(tpaTotal || '')
+            tpa.val(tpaTotal !== '' ? tpaTotal : '')
             tdp.val(tdpTotal || '')
-            
+
             // Grade total 
             let gradeTotal
             if (_report === 'Notas') {
@@ -225,8 +236,7 @@ $(function () {
             } else {
                 gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100
             }
-            totalGrade.val(Math.round(gradeTotal) || '')
-
+            totalGrade.val(isFinite(gradeTotal) ? Math.round(gradeTotal) : '')
             if (_letter) {
                 const numberLetter = +$("#letra").val() - 1;
                 const grade = parentTr.find('.grade').eq(numberLetter)
@@ -240,14 +250,14 @@ $(function () {
                 } else {
                     notLetterGrades.prop('readonly', false)
                 }
-            }else{
-                _allGrades.find('.grade').prop('readonly',false);
+            } else {
+                _allGrades.find('.grade').prop('readonly', false);
             }
         }
         if ($('#pal').prop('checked')) {
             $.each($(".totalGrade"), function (index, totalInput) {
                 $(totalInput).val(NumberToLetter($(totalInput).val()))
             })
-        } 
+        }
     }
 });
