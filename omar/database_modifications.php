@@ -84,6 +84,9 @@ DB::table("asistencia_virtual")->create("
 `hora` TIME NOT NULL,
 `year` VARCHAR(5) NOT NULL,
 PRIMARY KEY (`id`)");
-/* -------------------------------------------------------------------------- */
-/*                         END DATABASE MODIFICATIONS                         */
-/* -------------------------------------------------------------------------- */
+
+/* --------------------------- notes changes table -------------------------- */
+DB::table('tarjeta_cambios')->alter("
+ ADD `id2` INT NOT NULL AUTO_INCREMENT COMMENT 'autoincrement' FIRST, 
+ ADD PRIMARY KEY (`id2`);");
+
