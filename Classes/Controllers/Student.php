@@ -48,7 +48,7 @@ class Student extends StudentModel
 
   public function findById($id, $table = 'year')
   {
-    return $this->getStudentById($id, $table);
+    return $this->getStudentsById($id, $table);
   }
 
   public function fullName($utf8Decode = false)
