@@ -158,6 +158,10 @@ class Student extends StudentModel
   {
     return $this->getStudentsByClass($class, $table, $summer);
   }
+  public function findByCurs2($ss, $table = 'padres', $summer = false)
+  {
+    return $this->getStudentsByCurs($ss, $table, $summer);
+  }
 
   public function findByGrade($grade, $table = 'year')
   {

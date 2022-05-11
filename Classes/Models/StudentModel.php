@@ -141,6 +141,32 @@ class StudentModel extends School
 
     return $obj;
   }
+
+  protected function getStudentsByCurs($ss, $table = 'padres', $summer = false)
+  {
+    $year = $this->info('year');
+    if (!$summer) {
+      $where = [
+        ["$table.ss", $ss],
+        ['year.year', $year],
+        ["$table.year", $year],
+        ["$table.baja", ''],
+      ];
+    } else {
+      $where = [
+        ["$table.curso", $ss],
+        ['year.year', $year],
+        ["$table.year", $year],
+        ["$table.baja", ''],
+        ["$table.verano", '2']
+      ];
+    }
+
+    $obj = parent::table("$table")->join('year', "$table.ss", '=', 'year.ss')
+      ->where($where)->orderBy('year.apellidos')->get();
+
+    return $obj;
+  }
   protected function getStudentsByGrade($grade, $table = 'year')
   {
     $year = $this->info('year');
