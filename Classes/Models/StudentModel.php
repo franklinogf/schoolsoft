@@ -25,14 +25,24 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getStudentBySS($ss)
+  protected function getStudentBySS($ss, $table)
   {
 
     $year = $this->info('year');
-    $obj = parent::table($this->table)->where([
+    $obj = parent::table($table)->where([
       ['year', $year],
       ['ss', $ss]
     ])->first();
+    return $obj;
+  }
+
+  protected function getStudentsById($id, $table)
+  {
+    $year = $this->info('year');
+    $obj = parent::table($table)->where([
+      ['year', $year],
+      ['id', $id]
+    ])->get();
     return $obj;
   }
 
@@ -101,7 +111,7 @@ class StudentModel extends School
 
   protected function getStudentDoneExamById($mt, $id_exam)
   {
-    $obj = parent::table('T_examenes_terminados',!__COSEY)->where([
+    $obj = parent::table('T_examenes_terminados', !__COSEY)->where([
       ['id_examen', $id_exam],
       ['id_estudiante', $mt],
       ['year', $this->info('year')]
@@ -171,11 +181,11 @@ class StudentModel extends School
   {
     $year = $this->info('year');
     $where = [
-      ["$table.grado", $grade],     
+      ["$table.grado", $grade],
       ["$table.year", $year],
       ["$table.fecha_baja", '0000-00-00'],
     ];
-   
+
 
     $obj = parent::table("$table")->where($where)->orderBy('year.apellidos')->get();
 

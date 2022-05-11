@@ -37,13 +37,18 @@ class Student extends StudentModel
     return false;
   }
 
-  public function findBySS($ss)
+  public function findBySS($ss, $table = 'year')
   {
-    $array = $this->getStudentBySS($ss);
+    $array = $this->getStudentBySS($ss, $table);
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
     return $this;
+  }
+
+  public function findById($id, $table = 'year')
+  {
+    return $this->getStudentById($id, $table);
   }
 
   public function fullName($utf8Decode = false)
