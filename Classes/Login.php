@@ -2,23 +2,34 @@
 
 namespace Classes;
 
-use Classes\Controllers\Teacher;
+use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
+use Classes\Controllers\Teacher;
 
 class Login
 {
    private static $errorLoginMessage = "No coincide con los datos, intentelo otra vez";
+   
    public static function login($request, $location)
    {
       self::{$location}($request);
-      // if ($location === 'foro') {
-      //    // php 5 version
-      //    // (new self)->foro($request);
-      //    // php 7 version 
-      //    self::foro($request);
-      // } else if ($location === 'regiweb') {         
-      //    self::regiweb($request);
-      // }
+   }
+
+   private static function parents($request)
+   {
+      $parents = new Parents();
+      if ($parents->login(trim($request['username']), trim($request['password']))->logged === true) {
+
+         $_SESSION['logged'] = [
+            'location' => "parents",
+            "user" => ['id' => $parents->id],
+         ];
+         Route::redirect('/');
+      } else {
+         $_SESSION['errorLogin'] = self::$errorLoginMessage;
+
+         Route::redirect();
+      }
    }
    private static function regiweb($request)
    {
