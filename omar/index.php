@@ -35,7 +35,7 @@ $school = new School();
                     <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Regiweb</a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg">Padres</a>
+                    <a href="<?= Route::url('/parents/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Padres</a>
                 </div>
                 <div class="col mb-2 px-1">
                     <a href="<?= Route::url('/foro/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Foro</a>
