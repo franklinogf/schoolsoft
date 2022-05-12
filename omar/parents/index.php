@@ -21,7 +21,7 @@ $parents = new Parents(Session::id());
 </head>
 
 <body>
-    <div class="container-lg mt-lg-3  px-0">
+    <div class="container mt-3">
         <div class="text-center">
             <img class="img-fluid my-4" width="400px" src="<?= __DEFAULT_LOGO_REGIWEB ?>" />
         </div>
