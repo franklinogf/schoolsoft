@@ -60,9 +60,10 @@ class DataBase
   }
   protected function updateQuery($query, $valuesArray)
   {
-
     $db = $this->connect();
-    $stmt = $db->prepare($query);
+    if (!$stmt = $db->prepare($query)) {
+      $this->exception($db->error);
+    }
     $bind =  str_repeat('s', count($valuesArray));
     // php 5 version
     $refs = array();
@@ -207,5 +208,10 @@ class DataBase
     $rv = array_filter($array, 'is_array');
     if (count($rv) > 0) return true;
     return false;
+  }
+
+  private function exception($message)
+  {
+    throw new \Exception($message);
   }
 }
