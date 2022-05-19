@@ -12,14 +12,14 @@ $pathFile = str_replace('.php', '', $file);
 $TRANS = [
   "es" => [
     "GRADES" => 'Notas',
-    "ASSISTANCE" => 'Asistencia',
+    "ATTENDANCE" => 'Asistencia',
     "OPTIONS" => 'Opciones',
     "PROFILE" => 'Mi Perfil',
     "LOG_OUT" => 'Cerrar Sesión',
   ],
   "en" => [
     "GRADES" => 'Grades',
-    "ASSISTANCE" => 'Asistencia',
+    "ATTENDANCE" => 'Attendance',
     "OPTIONS" => 'Options',
     "PROFILE" => 'My profile',
     "LOG_OUT" => 'Log out',
@@ -42,8 +42,8 @@ Lang::addMenuTranslation($TRANS);
       <li class="nav-item <?= ($pathFile === 'grades' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/parents/grades') ?>"><?= Lang::menuTranslation('GRADES') ?></a>
       </li> 
-      <li class="nav-item <?= ($pathFile === 'assistance' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/parents/assistance/') ?>"><?= Lang::menuTranslation('ASSISTANCE') ?></a>
+      <li class="nav-item <?= ($pathFile === 'attendance' ? 'active' : '') ?>">
+        <a class="nav-link" href="<?= Route::url('/parents/attendance/') ?>"><?= Lang::menuTranslation('ATTENDANCE') ?></a>
       </li> 
       <li class="nav-item <?= ($pathFile === 'options' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/parents/options/') ?>"><?= Lang::menuTranslation('OPTIONS') ?></a>
