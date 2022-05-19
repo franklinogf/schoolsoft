@@ -200,7 +200,6 @@ $(function () {
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
                             tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
-                            console.log('tdpTotal:', tdpTotal)
                         }
                     } else {
                         tpaTotal += +$(grade).val()
@@ -236,7 +235,9 @@ $(function () {
             } else {
                 gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100
             }
-            totalGrade.val(isFinite(gradeTotal) ? Math.round(gradeTotal) : '')
+            console.log(isNaN(gradeTotal))
+            // totalGrade.val(!isNaN(gradeTotal) ? Math.round(gradeTotal) : '')
+            totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null ? Math.round(gradeTotal) : '')
             if (_letter) {
                 const numberLetter = +$("#letra").val() - 1;
                 const grade = parentTr.find('.grade').eq(numberLetter)
