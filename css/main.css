@@ -25,10 +25,6 @@ th.checkbox {
 	width: 2rem !important;
 }
 
-.table tbody tr {
-	cursor: pointer !important;
-}
-
 .bg-secondary.custom-control-input:checked ~ .custom-control-label::before,
 .bg-secondary.custom-control-input:indeterminate ~ .custom-control-label::before {
 	background: var(--secondary) !important;
