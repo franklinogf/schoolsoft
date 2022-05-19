@@ -27,7 +27,7 @@ $school = new School();
     </header>
     <main class="bg-light">
         <div class="container d-flex align-items-center justify-content-center" style='height:15rem'>
-            <div class="row row-cols-4 w-100">
+            <div class="row row-cols-2 row-cols-md-4 w-100">
                 <div class="col mb-2 px-1">
                     <a href="#" class="btn btn-primary btn-block shadow-lg">Administración</a>
                 </div>
