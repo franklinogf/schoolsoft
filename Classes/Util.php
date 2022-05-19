@@ -4,6 +4,20 @@ namespace Classes;
 
 class Util
 {
+   public static $attendanceCodes = [
+      "1" => ['type' => 'A', 'description' => 'Situación en el hogar'],
+      "2" => ['type' => 'A', 'description' => 'Determinación del hogar (viaje)'],
+      "3" => ['type' => 'A', 'description' => 'Actividad con padres (open house)'],
+      "4" => ['type' => 'A', 'description' => 'Enfermedad'],
+      "5" => ['type' => 'A', 'description' => 'Cita'],
+      "6" => ['type' => 'A', 'description' => 'Actividad educativa del colegio'],
+      "7" => ['type' => 'A', 'description' => 'Sin excusa del hogar'],
+      "8" => ['type' => 'T', 'description' => 'Sin excusa del hogar'],
+      "9" => ['type' => 'T', 'description' => 'Situación en el hogar'],
+      "10" => ['type' => 'T', 'description' => 'Problema en la transportación'],
+      "11" => ['type' => 'T', 'description' => 'Enfermedad'],
+      "12" => ['type' => 'T', 'description' => 'Cita']
+   ];
    public static function studentProfilePicture($student)
    {
       if ($student->imagen != '') {
