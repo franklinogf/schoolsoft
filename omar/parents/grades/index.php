@@ -40,7 +40,7 @@ $parents = new Parents(Session::id());
                     <?php endforeach ?>
                 </select>
             </div>
-            <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled>Tarjeta de notas</button>
+            <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled>Notas diaras</button>
         </form>
     </div>
     <?php
