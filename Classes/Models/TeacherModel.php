@@ -30,7 +30,11 @@ class TeacherModel extends School
     $obj =  parent::table($this->table)->orderBy('apellidos')->get();
     return $obj;
   }
-
+  protected function getTeacherByGrade($grade)
+  {
+    $obj = parent::table('profesor')->where('grado', $grade)->first();
+    return $obj;
+  }
   protected function getTeacherClasses($id)
   {
     $year = $this->info('year');

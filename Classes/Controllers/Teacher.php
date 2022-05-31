@@ -30,6 +30,10 @@ class Teacher extends TeacherModel
     }
     return $this;
   }
+  public function findByGrade($grade)
+  {
+    return $this->getTeacherByGrade($grade);
+  }
 
   public function classes()
   {
