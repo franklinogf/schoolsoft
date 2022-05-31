@@ -18,6 +18,75 @@ class Util
       "11" => ['type' => 'T', 'description' => 'Enfermedad'],
       "12" => ['type' => 'T', 'description' => 'Cita']
    ];
+
+   public static function numberToLetter($value)
+   {
+      if ($value == '') {
+         return '';
+      }
+      if ($value >= 88) {
+         return 'A';
+      } else if ($value >= 78 && $value <= 87) {
+         return 'B';
+      } else if ($value >= 68 && $value <= 77) {
+         return 'C';
+      } else if ($value >= 60 && $value <= 67) {
+         return 'D';
+      } else  if ($value < 60) {
+         return 'F';
+      }
+   }
+   public static function smallNumberToLetter($value)
+   {
+      if ($value == '') {
+         return '';
+      }
+      if ($value == 4) {
+         return 'A';
+      } else if ($value >= 3 && $value <= 3.9) {
+         return 'B';
+      } else if ($value >= 2 && $value <= 2.9) {
+         return 'C';
+      } else if ($value >= 1 && $value <= 1.9) {
+         return 'D';
+      } else  if ($value < 1) {
+         return 'F';
+      }
+   }
+   public static function letterToNumber($value)
+   {
+      if ($value == '') {
+         return '';
+      }
+      if ($value == 'A') {
+         return 4;
+      } elseif ($value == 'B') {
+         return 3;
+      } elseif ($value == 'C') {
+         return 2;
+      } elseif ($value == 'D') {
+         return 1;
+      } elseif ($value == 'F') {
+         return 0;
+      }
+   }
+   public static function numberToSmallNumber($value)
+   {
+      if ($value == '') {
+         return '';
+      }
+      if ($value >= 88) {
+         return 4;
+      } else if ($value >= 78 && $value <= 87) {
+         return 3;
+      } else if ($value >= 68 && $value <= 77) {
+         return 2;
+      } else if ($value >= 60 && $value <= 67) {
+         return 1;
+      } else  if ($value < 60) {
+         return 0;
+      }
+   }
    public static function studentProfilePicture($student)
    {
       if ($student->imagen != '') {
