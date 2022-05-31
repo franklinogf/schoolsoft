@@ -42,7 +42,7 @@ $documents = DB::table('T_ing')
                                     <span>Grado inicial: <?= $document->grado_desde ?></span>
                                     <span>Grado final: <?= $document->grado_hasta ?></span>
                                 </p>
-                                <a data-id="<?= $document->id ?>" href="<?= "admin/ing/files/$document->archivo" ?>" class="btn btn-sm btn-primary btn-block download" title="Descargar archivo">Descargar</a>
+                                <a data-id="<?= $document->id ?>" href="<?= Route::url("/admin/ing/files/$document->archivo") ?>" class="btn btn-sm btn-primary btn-block download" title="Descargar archivo">Descargar</a>
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <small class="text-muted">Fecha inicial: <?= $document->fecha_desde ?></small>
