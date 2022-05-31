@@ -59,8 +59,9 @@ class StudentModel extends School
   protected function getStudentClasses($ss)
   {
     $year = $this->info('year');
+    $desc = __LANG === 'es' ? 'descripcion' : 'desc2';
     $obj = parent::table('padres')
-      ->select('DISTINCT id, curso, descripcion')
+      ->select("DISTINCT id, curso, $desc as descripcion")
       ->where([
         ['year', $year],
         ['ss', $ss]
