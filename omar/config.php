@@ -4,7 +4,7 @@
 /* -------------------------------------------------------------------------- */
 
 // Language: es = Spanish, en = English
-define('__LANG', 'es');
+define('__LANG', 'en');
 define('__DEFAULT_LOGO', 'logo.gif');
 // regular is 72 x 72
 define('__LOGO_SIZE', 100);
