@@ -6,7 +6,6 @@ use Classes\Controllers\Parents;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
-use Classes\Util;
 
 Session::is_logged();
 Server::is_post();

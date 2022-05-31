@@ -28,7 +28,7 @@ $parents = new Parents(Session::id());
   ?>
   <div class="container mt-5">
     <h1 class="text-center">Mi Perfil <i class="far fa-id-card"></i></h1>
-    <form action="<?= Route::url('/parents/includes/profiles.php') ?>" method="POST">
+    <form action="<?= Route::url('/parents/includes/profile.php') ?>" method="POST">
       <div class="row mt-3">
         <div class="offset-lg-4 col-lg-4 col-sm-12 mt-sm-3">
           <hr class="d-lg-none d-sm-block" />
