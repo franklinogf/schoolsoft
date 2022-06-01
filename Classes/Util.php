@@ -5,18 +5,18 @@ namespace Classes;
 class Util
 {
    public static $attendanceCodes = [
-      "1" => ['type' => 'A', 'description' => 'Situación en el hogar'],
-      "2" => ['type' => 'A', 'description' => 'Determinación del hogar (viaje)'],
-      "3" => ['type' => 'A', 'description' => 'Actividad con padres (open house)'],
-      "4" => ['type' => 'A', 'description' => 'Enfermedad'],
-      "5" => ['type' => 'A', 'description' => 'Cita'],
-      "6" => ['type' => 'A', 'description' => 'Actividad educativa del colegio'],
-      "7" => ['type' => 'A', 'description' => 'Sin excusa del hogar'],
-      "8" => ['type' => 'T', 'description' => 'Sin excusa del hogar'],
-      "9" => ['type' => 'T', 'description' => 'Situación en el hogar'],
-      "10" => ['type' => 'T', 'description' => 'Problema en la transportación'],
-      "11" => ['type' => 'T', 'description' => 'Enfermedad'],
-      "12" => ['type' => 'T', 'description' => 'Cita']
+      "1" => ['type' => 'A', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
+      "2" => ['type' => 'A', 'description' => ['es' => 'Determinación del hogar (viaje)', 'en' => 'Determination of the home (travel)']],
+      "3" => ['type' => 'A', 'description' => ['es' => 'Actividad con padres (open house)', 'en' => 'Activity with parents (open house)']],
+      "4" => ['type' => 'A', 'description' => ['es' => 'Enfermedad', 'en' => 'Disease']],
+      "5" => ['type' => 'A', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
+      "6" => ['type' => 'A', 'description' => ['es' => 'Actividad educativa del colegio', 'en' => 'School activity']],
+      "7" => ['type' => 'A', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
+      "8" => ['type' => 'T', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
+      "9" => ['type' => 'T', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
+      "10" => ['type' => 'T', 'description' => ['es' => 'Problema en la transportación', 'en' => 'Problem with transportation']],
+      "11" => ['type' => 'T', 'description' => ['es' => 'Enfermedad', 'en' => 'Disease']],
+      "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
    ];
 
    public static function numberToLetter($value)
