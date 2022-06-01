@@ -1,10 +1,21 @@
 <?php
 require_once 'app.php';
 
-use Classes\Controllers\School;
+use Classes\Lang;
 use Classes\Route;
+use Classes\Controllers\School;
 
 $school = new School();
+$lang = new Lang([
+    ['Administración', 'administración'],
+    ["Regiweb", 'Regiweb'],
+    ["Padres", 'Parents'],
+    ["Foro", 'Foro'],
+    ["Calendario", 'Calendar'],
+    ["Solicitudes", 'Requests'],
+    ["Documentos", "Documents"],
+    ["Cafeteria", "Cafeteria"]
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -16,6 +27,7 @@ $school = new School();
     <title><?= $school->info('colegio') ?></title>
     <link rel="icon" href="<?= School::logo() ?>" />
     <?php Route::css("/css/main-bootstrap.css") ?>
+    <?php Route::fontawasome(); ?>
 </head>
 
 <body>
@@ -29,28 +41,28 @@ $school = new School();
         <div class="container d-flex align-items-center justify-content-center" style='height:15rem'>
             <div class="row row-cols-2 row-cols-md-4 w-100">
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg">Administración</a>
+                    <a href="<?= Route::url('/ss_admin.htm') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Administración") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Regiweb</a>
+                    <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Regiweb") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/parents/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Padres</a>
+                    <a href="<?= Route::url('/parents/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Padres") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/foro/login.php') ?>" class="btn btn-primary btn-block shadow-lg">Foro</a>
+                    <a href="<?= Route::url('/foro/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Foro") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg">Calendario</a>
+                    <a href="<?= Route::url('/calendarix/calendar.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Calendario") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg">Solicitudes</a>
+                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Solicitudes") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg">Documentos</a>
+                    <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Documentos") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg">Cafeteria</a>
+                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafeteria") ?></a>
                 </div>
             </div>
         </div>
@@ -84,7 +96,8 @@ $school = new School();
                             <p class="card-text"><?= $school->info('dir1') ?></p>
                             <p class="card-text"><?= $school->info('dir3') ?></p>
                             <p class="card-text"><?= $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1') ?></p>
-                            <p class="card-text">Teléfono: <?= $school->info('telefono') ?> / Fax: <?= $school->info('fax') ?></p>
+                            <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->info('telefono') ?></p>
+                            <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->info('fax') ?></p>
                         </div>
                     </div>
                 </div>
@@ -95,7 +108,8 @@ $school = new School();
                                 <p class="card-text"><?= $school->info('dir2') ?></p>
                                 <p class="card-text"><?= $school->info('dir4') ?></p>
                                 <p class="card-text"><?= $school->info('pueblo2') . ', ' . $school->info('esta2') . ' ' . $school->info('zip2') ?></p>
-                                <p class="card-text">Teléfono: <?= $school->info('telefono') ?> / Fax: <?= $school->info('fax') ?></p>
+                                <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->info('telefono') ?></p>
+                                <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->info('fax') ?></p>
                             </div>
                         </div>
                     </div>
@@ -103,7 +117,7 @@ $school = new School();
             </div>
         </div>
         <img class="img-fluid position-absolute" src="<?= __DEFAULT_LOGO_SCHOOLSOFT ?>" alt="School Logo" style='width:15rem;top:50px;right:15px;'>
-        <p class="text-monospace text-center text-white">Derechos reservados &copy; <?= date('Y') ?></p>
+        <p class="text-monospace text-center text-white mt-5 mb-0"><?= $lang->translation('Derechos reservados') ?> &copy; <?= date('Y') ?></p>
     </footer>
 
 </body>
