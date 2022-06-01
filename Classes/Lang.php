@@ -7,7 +7,7 @@ class Lang
 
     private $translations = [];
 
-     public function __construct(array $translation = [])
+    public function __construct(array $translation = [])
     {
         if (count($translation) > 0) {
             $this->addTranslation($translation);
@@ -23,8 +23,8 @@ class Lang
         ];
         $this->addTranslation($defaultTranslations);
     }
-
-    private function addTranslation(array $translationArray)
+    // can be used after initialization
+    public function addTranslation(array $translationArray)
     {
         foreach ($translationArray as $translation) {
             $this->translations[strtolower($translation[0])]['es'] = $translation[0];
