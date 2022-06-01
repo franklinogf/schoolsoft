@@ -1,13 +1,17 @@
 <?php
+use Classes\Lang;
 use Classes\Route;
 use Classes\Controllers\School;
 
 global $DataTable;
 global $title;
+$lang = new Lang([
+    ["Padres","Parents"],
+]);
 ?>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>Padress <?= $title ? "- {$title}":'' ?></title>
+<title><?= $lang->translation("Padres") ?> <?= $title ? "- {$title}":'' ?></title>
 <link rel="icon" href="<?= School::logo() ?>" />
 <?php
 

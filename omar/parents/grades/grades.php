@@ -6,6 +6,7 @@ use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
+use Classes\Lang;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
@@ -62,7 +63,7 @@ $_info = [
         'table' => 'padres',
         'conduct' => 'con',
         'absence' => 'aus',
-        'delay' => 'tar'
+        'tardy' => 'tar'
     ],
     "Totales" => [
         'table' => 'padres',
@@ -70,17 +71,48 @@ $_info = [
         'semester2' => ['nota3', 'nota4', 'sem2'],
     ]
 ];
+
 $thisReport = $_info[$report][$trimester];
 $otherReports = $_info[$report]["values"];
 $trimesterNumber = substr($trimester, -1);
 $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
+
+$lang = new Lang([
+    ["Selección de notas", "Selection of grades"],
+    ["Tarjeta de notas por curso", "Grades card per class"],
+    ["Estás Notas No Necesariamente Son Finales, Pueden Cambiar", "These notes are not necessarily final, they can change"],
+    ['Nota', "Grade"],
+    ["Valor", "Value"],
+    ["Fecha", "Date"],
+    ["Tema", "Subject"],
+    ["Notas", "Grades"],
+    ["Pruebas cortas", "Short tests"],
+    ["Trabajos diarios", "Daily homework"],
+    ["Trabajos de libreta", "Book work"],
+    ["Aun no tiene notas en este trimestre", "Has no grades in this trimester yet"],
+    ["Notas trimestrales", "Quarterly notes"],
+    ["Curso", "Class"],
+    ["Conducta", "Behavior"],
+    ["Mensaje", "Message"],
+    ["Conducta y Asistencia", "Behavior and attendance"],
+    ["Con", "Beh"],
+    ['Aus', 'Abs'],
+    ['Tar', "Tar"],
+    ["Conducta", "Behavior"],
+    ["Ausencia", "Absence"],
+    ["Tardanza", "Tardy"],
+    ["Totales por curso", "Total per class"],
+    ["Primer Semestre","First semester"],
+    ["Segundo Semestre","Second semester"]
+]);
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = "Selección de notas";
+    $title = $lang->translation("Selección de notas");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -89,12 +121,12 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
     <?php
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
-    <div class="container mt-3">
+    <div class="container mt-3 mb-5">
         <?php if ($report === 'Notas') : ?>
-            <h1 class="text-center my-2">Tarjeta de notas por curso</h1>
+            <h1 class="text-center my-2"><?= $lang->translation("Tarjeta de notas por curso") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
-            <p class="text-center"><?= str_replace('-', ' ', $trimester) ?></p>
-            <p class="text-center text-info">Estás Notas No Necesariamente Son Finales, Pueden Cambiar</p>
+            <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
+            <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
             <div class="accordion my-4" id="classesAccordion">
                 <?php foreach ($student->classes() as $class) : ?>
                     <div class="card">
@@ -121,16 +153,16 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                                     ['year', $year]
                                 ])->first();
                                 ?>
-                                <h5><?= $report ?></h5>
+                                <h5><?= $lang->translation($report) ?></h5>
                                 <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
                                     <table class="table table-bordered table-sm">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nota</th>
-                                                <th>Valor</th>
-                                                <th>Fecha</th>
-                                                <th>Tema</th>
+                                                <th><?= $lang->translation("Nota") ?></th>
+                                                <th><?= $lang->translation("Valor") ?></th>
+                                                <th><?= $lang->translation("Fecha") ?></th>
+                                                <th><?= $lang->translation("Tema") ?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -154,7 +186,7 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                                         </tbody>
                                     </table>
                                 <?php else : ?>
-                                    <p>Aun no tiene <?= $report ?> en este trimestre</p>
+                                    <p><?= $lang->translation("Aun no tiene notas en este trimestre") ?></p>
                                 <?php endif ?>
                                 <!-- Others grades -->
                                 <?php foreach ($otherReports as $other) :
@@ -170,15 +202,15 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                                         ['year', $year]
                                     ])->first();
                                 ?>
-                                    <h5><?= $other['title'] ?></h5>
+                                    <h5><?= $lang->translation($other['title']) ?></h5>
                                     <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
                                         <table class="table table-bordered table-sm">
                                             <thead class="thead-light">
                                                 <th>#</th>
-                                                <th>Nota</th>
-                                                <th>Valor</th>
-                                                <th>Fecha</th>
-                                                <th>Tema</th>
+                                                <th><?= $lang->translation("Nota") ?></th>
+                                                <th><?= $lang->translation("Valor") ?></th>
+                                                <th><?= $lang->translation("Fecha") ?></th>
+                                                <th><?= $lang->translation("Tema") ?></th>
                                             </thead>
                                             <tbody>
                                                 <?php
@@ -201,7 +233,7 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                                             </tbody>
                                         </table>
                                     <?php else : ?>
-                                        <p>Aun no tiene notas de <?= $other['title'] ?> en este trimestre</p>
+                                        <p><?= $lang->translation("Aun no tiene notas en este trimestre") ?></p>
                                     <?php endif ?>
                                 <?php endforeach ?>
                             </div>
@@ -210,16 +242,16 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                 <?php endforeach ?>
             </div>
         <?php elseif ($report === 'Trimestral') : ?>
-            <h1 class="text-center my-2">Notas trimestrales</h1>
+            <h1 class="text-center my-2"><?= $lang->translation("Notas trimestrales") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
-            <p class="text-center"><?= str_replace('-', ' ', $trimester) ?></p>
+            <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
             <table class="table table-bordered table-sm">
                 <thead class="thead-light text-center">
                     <tr>
-                        <th>Curso</th>
-                        <th>Nota</th>
-                        <th>Conducta</th>
-                        <th>Mensaje</th>
+                        <th><?= $lang->translation("Curso") ?></th>
+                        <th><?= $lang->translation("Nota") ?></th>
+                        <th><?= $lang->translation("Conducta") ?></th>
+                        <th><?= $lang->translation("Mensaje") ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -240,30 +272,33 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                 </tbody>
             </table>
         <?php elseif ($report === 'Cond-Asis') : ?>
-            <h1 class="text-center my-2">Conducta y Asistencia</h1>
+            <h1 class="text-center my-2"><?= $lang->translation("Conducta y Asistencia") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
+            <p class="my-0"><small class="text-muted"><?= $lang->translation("Con") ?> = <?= $lang->translation("Conducta") ?></small></p>
+            <p class="my-0"><small class="text-muted"><?= $lang->translation("Aus") ?> = <?= $lang->translation("Ausencia") ?></small></p>
+            <p class="my-0"><small class="text-muted"><?= $lang->translation("Tar") ?> = <?= $lang->translation("Tardanza") ?></small></p>
             <table class="table table-bordered table-sm">
                 <thead class="thead-light text-center">
                     <tr>
-                        <th class="align-middle" rowspan="2">Curso</th>
-                        <th colspan="3">Trimestre 1</th>
-                        <th colspan="3">Trimestre 2</th>
-                        <th colspan="3">Trimestre 3</th>
-                        <th colspan="3">Trimestre 4</th>
+                        <th class="align-middle" rowspan="2"><?= $lang->translation("Curso") ?></th>
+                        <th colspan="3"><?= $lang->translation("Trimestre") ?> 1</th>
+                        <th colspan="3"><?= $lang->translation("Trimestre") ?> 2</th>
+                        <th colspan="3"><?= $lang->translation("Trimestre") ?> 3</th>
+                        <th colspan="3"><?= $lang->translation("Trimestre") ?> 4</th>
                     </tr>
                     <tr>
-                        <th>Con</th>
-                        <th>Aus</th>
-                        <th>Tar</th>
-                        <th>Con</th>
-                        <th>Aus</th>
-                        <th>Tar</th>
-                        <th>Con</th>
-                        <th>Aus</th>
-                        <th>Tar</th>
-                        <th>Con</th>
-                        <th>Aus</th>
-                        <th>Tar</th>
+                        <th><?= $lang->translation("Con") ?></th>
+                        <th><?= $lang->translation("Aus") ?></th>
+                        <th><?= $lang->translation("Tar") ?></th>
+                        <th><?= $lang->translation("Con") ?></th>
+                        <th><?= $lang->translation("Aus") ?></th>
+                        <th><?= $lang->translation("Tar") ?></th>
+                        <th><?= $lang->translation("Con") ?></th>
+                        <th><?= $lang->translation("Aus") ?></th>
+                        <th><?= $lang->translation("Tar") ?></th>
+                        <th><?= $lang->translation("Con") ?></th>
+                        <th><?= $lang->translation("Aus") ?></th>
+                        <th><?= $lang->translation("Tar") ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -279,22 +314,22 @@ $totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
                             <?php for ($i = 1; $i <= 4; $i++) : ?>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]['conduct'] . $i} ?></td>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]['absence'] . $i} ?></td>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]['delay'] . $i} ?></td>
+                                <td class="text-center"><?= $fatherTable->{$_info[$report]['tardy'] . $i} ?></td>
                             <?php endfor ?>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
             </table>
         <?php else : ?>
-            <h1 class="text-center my-2">Totales por curso</h1>
+            <h1 class="text-center my-2"><?= $lang->translation("Totales por curso") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
-            <p class="text-center text-info">Estás Notas No Necesariamente Son Finales, Pueden Cambiar</p>
+            <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
             <table class="table table-bordered table-sm">
                 <thead class="thead-light text-center">
                     <tr>
-                        <th class="align-middle" rowspan="2">Curso</th>
-                        <th colspan="<?= $sumTrimester ? '2' : '3' ?>">Primer Semestre</th>
-                        <th colspan="<?= $sumTrimester ? '2' : '3' ?>">Segundo Semestre</th>
+                        <th class="align-middle" rowspan="2"><?= $lang->translation("Curso") ?></th>
+                        <th colspan="<?= $sumTrimester ? '2' : '3' ?>"><?= $lang->translation("Primer Semestre") ?></th>
+                        <th colspan="<?= $sumTrimester ? '2' : '3' ?>"><?= $lang->translation("Segundo Semestre") ?></th>
                     </tr>
                     <tr>
                         <?php if ($sumTrimester) : ?>

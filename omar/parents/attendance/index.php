@@ -1,11 +1,12 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Parents;
-use Classes\DataBase\DB;
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Util;
+use Classes\DataBase\DB;
+use Classes\Controllers\Parents;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
@@ -19,13 +20,24 @@ if (isset($_POST['student'])) {
         ['year', $year]
     ])->orderBy('fecha DESC')->get();
 }
+$lang = new Lang([
+    ["Informe de asistencia", "Attendance report"],
+    ["Estudiantes", "Students"],
+    ["Asistencias", "Attendance"],
+    ["Fecha", "Date"],
+    ["Descripción","Description"],
+    ["No tiene información","Has no information"],
+    ["Ausencias", "Absence"],
+    ["Tardanzas","Tardy"]
+    
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = "Asistencia";
+    $title = $lang->translation('Asistencias');
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -35,17 +47,17 @@ if (isset($_POST['student'])) {
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container mt-3">
-        <h1 class="text-center my-2">Informe de asistencia</h1>
+        <h1 class="text-center my-2"><?= $lang->translation("Informe de asistencia") ?></h1>
         <form target="_self" method="POST">
             <div class="form-row">
-                <label class="font-weight-bold col-12" for="student">Estudiantes</label>
+                <label class="font-weight-bold col-12" for="student"><?= $lang->translation("Estudiantes") ?></label>
                 <select name="student" id="student" class="form-control col-12 col-lg-6">
                     <?php foreach ($students as $kid) : ?>
                         <option <?= isset($_POST['student']) && $_POST['student'] === "$kid->ss,$kid->year" ? 'selected=""' : '' ?> value="<?= "$kid->ss,$kid->year" ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado [$kid->year]" ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
-            <button id="attendanceBtn" type="submit" class="btn btn-primary mt-3">Asistencias</button>
+            <button id="attendanceBtn" type="submit" class="btn btn-primary mt-3"><?= $lang->translation("Asistencias") ?></button>
         </form>
 
         <div class="mt-5">
@@ -53,8 +65,8 @@ if (isset($_POST['student'])) {
                 <thead class="thead-light text-center">
                     <tr>
                         <th></th>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
+                        <th><?= $lang->translation("Fecha") ?></th>
+                        <th><?= $lang->translation("Descripción") ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +78,7 @@ if (isset($_POST['student'])) {
                             <tr>
                                 <td class="text-center"><?= $count ?></td>
                                 <td class="text-center"><?= $attendance->fecha ?></td>
-                                <td><?= Util::$attendanceCodes[$attendance->codigo]['description'] ?></td>
+                                <td><?= Util::$attendanceCodes[$attendance->codigo]['description'][__LANG] ?></td>
                             </tr>
                         <?php $count++;
                             $codes[0] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'A' ? 1 : 0;
@@ -74,7 +86,7 @@ if (isset($_POST['student'])) {
                         endforeach ?>
                     <?php else : ?>
                         <tr>
-                            <td class="text-center" colspan="3">No tiene información</td>
+                            <td class="text-center" colspan="3"><?= $lang->translation("No tiene información") ?></td>
                         </tr>
                     <?php endif ?>
                 </tbody>
@@ -84,8 +96,8 @@ if (isset($_POST['student'])) {
                 <table class="table table-bordered table-sm">
                     <thead class="thead-light text-center">
                         <tr>
-                            <th>Ausencias</th>
-                            <th>Tardanzas</th>
+                            <th><?= $lang->translation("Ausencias") ?></th>
+                            <th><?= $lang->translation("Tardanzas") ?></th>
                         </tr>
                     </thead>
                     <tbody>

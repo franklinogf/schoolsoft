@@ -4,6 +4,7 @@ require_once '../../../app.php';
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
+use Classes\Lang;
 use Classes\PDF;
 use Classes\Server;
 use Classes\Session;
@@ -16,16 +17,22 @@ $student = new Student($_POST['studentSS']);
 $teacher = new Teacher();
 $teacher = $teacher->findByGrade($student->grado);
 
+$lang = new Lang([
+    ["Tarjeta de notas","Grades card"],
+    ["Este documento no es oficial.","This document is not official."],
+    ['Informe de notas','Grades report']
+]);
+
 $pdf = new PDF();
-$pdf->SetTitle('Tarjeta de notas');
+$pdf->SetTitle($lang->translation("Tarjeta de notas"));
 $pdf->Fill();
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 40);
 $pdf->SetTextColor(255, 192, 203);
-$pdf->RotatedText(65, 235, 'Este documento no es oficial.', 65);
+$pdf->RotatedText(65, 235, $lang->translation('Este documento no es oficial.'), 65);
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', 'B', 20);
-$pdf->Cell(0, 5, 'Grades Report', 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Informe de notas"), 0, 1, 'C');
 $pdf->Ln(10);
 
 $pdf->SetFont('Arial', '', 12);

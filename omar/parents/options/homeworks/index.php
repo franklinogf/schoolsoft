@@ -2,6 +2,7 @@
 require_once '../../../app.php';
 
 use Classes\File;
+use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
@@ -10,6 +11,13 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
+$lang = new Lang([
+    ['Tareas', 'Homeworks'],
+    ['Tareas asignadas por estudiante','Tasks assigned by student'],
+    ['No tiene tareas pendientes!','Has no pending tasks!'],
+    ["Archivo","File"],
+    ["Link","Link"]
+]);
 
 ?>
 <!DOCTYPE html>
@@ -17,7 +25,7 @@ $parents = new Parents(Session::id());
 
 <head>
     <?php
-    $title = "Tareas";
+    $title = $lang->translation("Tareas");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -27,7 +35,7 @@ $parents = new Parents(Session::id());
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-4">Tareas asignadas por estudiante</h1>
+        <h1 class="text-center my-4"><?= $lang->translation("Tareas asignadas por estudiante") ?></h1>
         <?php foreach ($parents->kids() as $kid) :
             $student = new Student($kid->mt);
             $homeworks = $student->homeworks();
@@ -57,7 +65,7 @@ $parents = new Parents(Session::id());
                                         <div class="btn-group btn-group-sm w-100 mt-2">
                                             <?php for ($i = 1; $i <= 3; $i++) : ?>
                                                 <?php if ($homework->{"lin{$i}"} !== '') : ?>
-                                                    <a href="<?= $homework->{"lin{$i}"} ?>" target="_blank" data-toggle="tooltip" title='<?= $homework->{"lin{$i}"} ?>' class="btn btn-outline-info px-1"><i class="fas fa-external-link-alt"></i> Link <?= $i ?> </a>
+                                                    <a href="<?= $homework->{"lin{$i}"} ?>" target="_blank" data-toggle="tooltip" title='<?= $homework->{"lin{$i}"} ?>' class="btn btn-outline-info px-1"><i class="fas fa-external-link-alt"></i> <?= $lang->translation("Link") ?> <?= $i ?> </a>
                                                 <?php endif ?>
                                             <?php endfor ?>
                                         </div>
@@ -66,7 +74,7 @@ $parents = new Parents(Session::id());
                                     <?php if (property_exists($homework, 'archivos') && $cantSend) : ?>
                                         <div class="btn-group-vertical w-100 mt-2">
                                             <?php foreach ($homework->archivos as $i => $file) : ?>
-                                                <a data-file-id="<?= $file->id ?>" target="_blank" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
+                                                <a data-file-id="<?= $file->id ?>" target="_blank" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download><?= File::faIcon(File::extension($file->nombre)) . $lang->translation("Archivo") . ($i + 1) ?> </a>
                                             <?php endforeach ?>
                                         </div>
                                     <?php endif ?>
@@ -84,7 +92,7 @@ $parents = new Parents(Session::id());
                 </div> <!-- end row -->
             <?php else : ?>
                 <div class="alert alert-info mx-auto" role="alert">
-                    No tiene tareas pendientes! <i class="far fa-laugh-beam"></i>
+                    <?= $lang->translation("No tiene tareas pendientes!") ?> <i class="far fa-laugh-beam"></i>
                 </div>
             <?php endif ?>
 
