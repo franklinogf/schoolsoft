@@ -12,39 +12,39 @@ Session::is_logged();
 $parents = new Parents(Session::id());
 $lang = new Lang([
   ["Mi Perfil", "My profile"],
-  ["Información importante","Important information"],
-  ["Usuario:","User:"],
-  ["Información de la Madre","Mother's information"],
-  ["Nombre Completo","Full name"],
-  ["Ex alumno","Ex student"],
-  ["SI","YES"],
-  ["Correo electrónico","Email"],
-  ["Teléfono residencial","Residential telephone"],
-  ["Celular","Cellphone"],
-  ["Compañia telefonica","Cellphone company"],
-  ["Solo usar números","Only use numbers"],
-  ["Dirección Postal","Postal Address"],
-  ["Dirección","Address"],
-  ["Ciudad","City"],
-  ["Estado","State"],
-  ["Codigo Postal","Postal Code"],
-  ["Información del trabajo","Job information"],
-  ["Compañia","Company"],
-  ["Posición","Position"],
-  ["Teléfono","Telephone"],
-  ["Opciones de correo electrónico y SMS","Email and SMS options"],
-  ["Recibir correo electrónico","Receive Email"],
-  ["Recibir SMS","Receive SMS"],
-  ["Información del Padre","Father's information"],
-  ["Esta opción de SMS se aplica a su contrato o tarifa de mensajes de textos recibidos a su celular.","This SMS option is applied to your contract or text messagge rate received to your cell phone."],
-  ["Teléfono de emergencia","Emergency phone"],
-  ["Nueva contraseña","New Password"],
-  ["Confirmar contraseña","Confirm Password"],
-  ["Las contraseñas no coinciden","Passwords do not match"],
-  ["Información de los hijos","Children's information"],
-  ["Grado:","Grade:"],
-  ["Fecha de nacimiento:","Date of Birth:"],
-  ["Guardar","Save"],
+  ["Información importante", "Important information"],
+  ["Usuario:", "User:"],
+  ["Información de la Madre", "Mother's information"],
+  ["Nombre Completo", "Full name"],
+  ["Ex alumno", "Ex student"],
+  ["SI", "YES"],
+  ["Correo electrónico", "Email"],
+  ["Teléfono residencial", "Residential telephone"],
+  ["Celular", "Cellphone"],
+  ["Compañia telefonica", "Cellphone company"],
+  ["Solo usar números", "Only use numbers"],
+  ["Dirección Postal", "Postal Address"],
+  ["Dirección", "Address"],
+  ["Ciudad", "City"],
+  ["Estado", "State"],
+  ["Codigo Postal", "Postal Code"],
+  ["Información del trabajo", "Job information"],
+  ["Compañia", "Company"],
+  ["Posición", "Position"],
+  ["Teléfono", "Telephone"],
+  ["Opciones de correo electrónico y SMS", "Email and SMS options"],
+  ["Recibir correo electrónico", "Receive Email"],
+  ["Recibir SMS", "Receive SMS"],
+  ["Información del Padre", "Father's information"],
+  ["Esta opción de SMS se aplica a su contrato o tarifa de mensajes de textos recibidos a su celular.", "This SMS option is applied to your contract or text messagge rate received to your cell phone."],
+  ["Teléfono de emergencia", "Emergency phone"],
+  ["Nueva contraseña", "New Password"],
+  ["Confirmar contraseña", "Confirm Password"],
+  ["Las contraseñas no coinciden", "Passwords do not match"],
+  ["Información de los hijos", "Children's information"],
+  ["Grado:", "Grade:"],
+  ["Fecha de nacimiento:", "Date of Birth:"],
+  ["Guardar", "Save"],
 ]);
 
 ?>
@@ -103,7 +103,7 @@ $lang = new Lang([
             <div class="form-group col-12">
               <label for="residentialPhoneM"><?= $lang->translation("Teléfono residencial") ?></label>
               <input type="tel" value='<?= $parents->tel_m ?>' class="form-control" name='residentialPhoneM' id="residentialPhoneM" pattern="[0-9]{10}">
-            <small class="text-muted"><?= $lang->translation("Solo usar números") ?></small>
+              <small class="text-muted"><?= $lang->translation("Solo usar números") ?></small>
             </div>
             <div class="form-group col-md-6">
               <label for="cellPhoneM"><?= $lang->translation("Celular") ?></label>
@@ -297,7 +297,7 @@ $lang = new Lang([
             <div class="col">
               <div class="card">
                 <div class="card-body">
-                  <img src="<?= Util::studentProfilePicture($kid) ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3" alt="Profile Picture" width="150" height="150">
+                  <img src="<?= Util::studentProfilePicture($kid) ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
                   <h6 class="card-title"><?= "$kid->nombre $kid->apellidos" ?></h6>
                   <p class="card-text"><?= $lang->translation("Grado:") ?> <?= $kid->grado ?></p>
                   <p class="card-text"><?= $lang->translation("Fecha de nacimiento:") ?> <?= $kid->fecha ?></p>
