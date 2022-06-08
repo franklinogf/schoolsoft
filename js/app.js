@@ -1,17 +1,30 @@
 //* --------------------------- functions --------------------------- *//
-function loadingBtn(btn, clear = '', text = 'Cargando...') {
+function loadingBtn(btn, clear = '', text = __LANG === 'es' ? 'Cargando...' : 'Loading...') {
   if (clear.length === 0) {
     btn.addClass('disabled').prop('disabled', true).html(`
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     ${text}
     `)
-      btn.prevAll('.btn').prop('disabled', true)
-      btn.nextAll('.btn').prop('disabled', true)
+    btn.prevAll('.btn').prop('disabled', true)
+    btn.nextAll('.btn').prop('disabled', true)
   } else {
     btn.removeClass('disabled').prop('disabled', false).text(clear)
-      btn.prevAll('.btn').prop('disabled', false)
-      btn.nextAll('.btn').prop('disabled', false)
+    btn.prevAll('.btn').prop('disabled', false)
+    btn.nextAll('.btn').prop('disabled', false)
   }
+}
+// scroll the view to a htmlElement
+function scrollToElement(htmlElement, offset = 0) {
+  $("html").animate(
+    {
+      scrollTop: $(htmlElement).offset().top - offset,
+    },
+    500,
+    () => {
+      animateCSS(htmlElement, "pulse");
+    }
+  )
+console.log(`Scrolled to element ${htmlElement}`)
 }
 // same style as the database
 function nl2br(str, is_xhtml) {
@@ -79,7 +92,8 @@ function animateCSS(element, animationName, callback) {
 function formatDate(value) {
 
   if (value !== '0000-00-00') {
-    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const months = __LANG === 'es' ? ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const date = new Date(value);
     date.setDate(date.getDate() + 1)
@@ -93,7 +107,7 @@ function formatDate(value) {
   return '';
 
 }
-function getDate(){
+function getDate() {
   const todayDate = new Date().toISOString().slice(0, 10)
   return todayDate
 }
@@ -114,8 +128,8 @@ function formatTime(value) {
   return value
 
 }
-function getRootUrl(){ 
-  return window.origin 
+function getRootUrl() {
+  return window.origin
 }
 function getBaseUrl(fileName = '') {
   // let re = new RegExp(/^.*\//);
@@ -163,11 +177,11 @@ function openWindowWithPost(url, data) {
   form.style.display = "none";
 
   for (var key in data) {
-      var input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = data[key];
-      form.appendChild(input);
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = data[key];
+    form.appendChild(input);
   }
 
   document.body.appendChild(form);
@@ -227,203 +241,211 @@ function fileExtension(fileName) {
   return extension.trim()
 }
 function scrollWindow(tagName) {
- const element = document.querySelector(tagName).getBoundingClientRect()
-  window.scroll(element.x,element.y)
+  const element = document.querySelector(tagName).getBoundingClientRect()
+  window.scroll(element.x, element.y)
 }
 
-$.getScript(getRootUrl()+'/js/jquery.mask.min.js', function(){
-$(function () {  
-  //Masked Inputs
-  $('.onlyNumbers').mask('(000)000-0000')
-  // Ajax session check
-  $(document).ajaxStart(function () {
-    const sessionPath = getBaseUrl().split('/').slice(0, 3).join("/");
-    const logoutPath = getBaseUrl().split('/').slice(0, 5).join("/");
-    $.get(sessionPath + "/includes/sessionCheck.php", res => {
-      console.log(res);
-      if (res === "Expired") {
-        window.location.href = logoutPath + "/includes/logout.php";
-      }
-    })
-  });
-  // Data table global configuration
-  if ($.fn.dataTable) {
-    $.extend($.fn.dataTable.defaults, {
-      "language": {
-        "decimal": ".",
-        "emptyTable": "No hay datos disponibles",
-        "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
-        "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
-        "infoFiltered": "(Filtrado de un total de _MAX_ )",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "No se encontraron datos",
-        "paginate": {
-          "first": "Primera",
-          "last": "Ultima",
-          "next": "Siguente",
-          "previous": "Anterior"
-        },
-        "aria": {
-          "sortAscending": ": Activar para ordernar la columna de forma ascendente",
-          "sortDescending": ": Activar para ordernar la columna de forma descendente"
+$.getScript(getRootUrl() + '/js/jquery.mask.min.js', function () {
+  $(function () {
+    //Masked Inputs
+    $('.onlyNumbers').mask('(000)000-0000')
+    // Ajax session check
+    $(document).ajaxStart(function () {
+      const sessionPath = getBaseUrl().split('/').slice(0, 3).join("/");
+      const logoutPath = getBaseUrl().split('/').slice(0, 5).join("/");
+      $.get(sessionPath + "/includes/sessionCheck.php", res => {
+        console.log(res);
+        if (res === "Expired") {
+          window.location.href = logoutPath + "/includes/logout.php";
         }
-      },
-      "pageLength": 10,
-      "lengthChange": false,
-      "ordering": false
-
+      })
     });
-    // Classes table custom info
-    if ($('#correctExamsTable')) correctExamsTable = $("#correctExamsTable").DataTable();
-    
-    // Classes table custom info
-    if ($('.classesTable')) classesTable = $(".classesTable").DataTable();
+    // Data table global configuration
+    if ($.fn.dataTable) {
+      if (__LANG === 'es') {
+        $.extend($.fn.dataTable.defaults, {
+          "language": {
+            "decimal": ".",
+            "emptyTable": "No hay datos disponibles",
+            "info": "Mostrando _START_ de _END_ de un total de _TOTAL_",
+            "infoEmpty": "Mostrando 0 de 0 de un total de 0 ",
+            "infoFiltered": "(Filtrado de un total de _MAX_ )",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "No se encontraron datos",
+            "paginate": {
+              "first": "Primera",
+              "last": "Ultima",
+              "next": "Siguente",
+              "previous": "Anterior"
+            },
+            "aria": {
+              "sortAscending": ": Activar para ordernar la columna de forma ascendente",
+              "sortDescending": ": Activar para ordernar la columna de forma descendente"
+            }
+          },
+          "pageLength": 10,
+          "lengthChange": false,
+          "ordering": false
 
-    // Students table custom info
-    if ($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
-
-    // Homework table custom info
-    if ($('.homeworksTable')) homeworksTable = $('.homeworksTable').DataTable();
-
-    // Topics table custom info
-    if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
-
-    // Topics table custom info
-    if ($('.virtualClassesTable')) virtualClassesTable = $('.virtualClassesTable').DataTable();
-  }
-  // delete everything when the modal hides
-
-  if ($('.modal').length > 0) {
-    $('.modal').on('hidden.bs.modal', function (e) {
-      const modal = $(this);
-      modal.find('input').val('');
-      modal.find('textarea').val('');
-      modal.find('input[type=radio],input[type=checkbox]').prop({
-        'checked': false,
-        'indeterminate': false
-      });
-      modal.find('.fileInput').remove()
-      modal.find('.linkGroup').remove()
-    })
-  }
-
-  // add file button
-  if ($("button.addFile").length > 0) {
-    $("button.addFile").before("<small class='d-block text-center text-danger'>Favor de no poner puntos <b>(.)</b> ni comas <b>(,)</b> en los nombres de los archivos</small>")
-    $("button.addFile").click(function(e) {
-      e.preventDefault();
-      let thisBtn = $(e.target);
-      if (thisBtn.nextAll().length > 0) {
-        thisBtn = thisBtn.nextAll().last();
+        });
+      } else {
+        $.extend($.fn.dataTable.defaults, {
+          "pageLength": 10,
+          "lengthChange": false,
+          "ordering": false
+        });
       }
+      // Classes table custom info
+      if ($('#correctExamsTable')) correctExamsTable = $("#correctExamsTable").DataTable();
 
-      thisBtn.after(`<div class="input-group mt-3 w-75 mx-auto fileInput animated fadeInUp faster">
+      // Classes table custom info
+      if ($('.classesTable')) classesTable = $(".classesTable").DataTable();
+
+      // Students table custom info
+      if ($('.studentsTable')) studentsTable = $('.studentsTable').DataTable();
+
+      // Homework table custom info
+      if ($('.homeworksTable')) homeworksTable = $('.homeworksTable').DataTable();
+
+      // Topics table custom info
+      if ($('.topicsTable')) topicsTable = $('.topicsTable').DataTable();
+
+      // Topics table custom info
+      if ($('.virtualClassesTable')) virtualClassesTable = $('.virtualClassesTable').DataTable();
+    }
+    // delete everything when the modal hides
+
+    if ($('.modal').length > 0) {
+      $('.modal').on('hidden.bs.modal', function (e) {
+        const modal = $(this);
+        modal.find('input').val('');
+        modal.find('textarea').val('');
+        modal.find('input[type=radio],input[type=checkbox]').prop({
+          'checked': false,
+          'indeterminate': false
+        });
+        modal.find('.fileInput').remove()
+        modal.find('.linkGroup').remove()
+      })
+    }
+
+    // add file button
+    if ($("button.addFile").length > 0) {
+      $("button.addFile").before(__LANG === 'es' ? "<small class='d-block text-center text-danger'>Favor de no poner puntos <b>(.)</b> ni comas <b>(,)</b> en los nombres de los archivos</small>" : "<small class='d-block text-center text-danger'>Please do not put periods <b>(.)</b> or commas <b>(,)</b> in file names</small>")
+      $("button.addFile").click(function (e) {
+        e.preventDefault();
+        let thisBtn = $(e.target);
+        if (thisBtn.nextAll().length > 0) {
+          thisBtn = thisBtn.nextAll().last();
+        }
+
+        thisBtn.after(`<div class="input-group mt-3 w-75 mx-auto fileInput animated fadeInUp faster">
     <div class="custom-file">
        <input type="file" class="custom-file-input file" name="file[]">
-       <label class="custom-file-label text-nowrap overflow-hidden">Seleccionar Archivo</label>
+       <label class="custom-file-label text-nowrap overflow-hidden">${__LANG === "es" ? "Seleccionar Archivo" : "Select File"}</label>
     </div>
     <div class="input-group-append">
        <button class="btn btn-danger delFile" type="button"><i class="fas fa-trash-alt"></i></button>
     </div>
  </div>`)
-      setTimeout(() => {
-        $(e.target).nextAll().last().removeClass('animated fadeInUp faster');
-      }, 500);
-    });
+        setTimeout(() => {
+          $(e.target).nextAll().last().removeClass('animated fadeInUp faster');
+        }, 500);
+      });
 
-    $(document).on('change', 'input.file', function () {
-      //get the file name   
-      var fileName = getFileName($(this).val());
-      //replace the "Seleccionar archivo" label
-      $(this).next('.custom-file-label').html(fileName)
-    })
-
-    $(document).on('click', 'button.delFile', e => {
-      if ($(e.target).parents('.input-group-append').prev().children('input.file').val() !== '') {
-        if (!confirm("¿Seguro que quiere eliminar este archivo?")) {
-          return false
-        }
-      }
-      animateCSS($(e.target).parents('.input-group'), 'fadeOutDown faster', () => {
-        $(e.target).parents('.input-group').remove()
+      $(document).on('change', 'input.file', function () {
+        //get the file name   
+        var fileName = getFileName($(this).val());
+        //replace the "Seleccionar archivo" label
+        $(this).next('.custom-file-label').html(fileName)
       })
 
-    })
+      $(document).on('click', 'button.delFile', e => {
+        if ($(e.target).parents('.input-group-append').prev().children('input.file').val() !== '') {
+          if (!confirm(__LANG === 'es' ? "¿Seguro que quiere eliminar este archivo?" : 'Are you sure you want to delete this file?')) {
+            return false
+          }
+        }
+        animateCSS($(e.target).parents('.input-group'), 'fadeOutDown faster', () => {
+          $(e.target).parents('.input-group').remove()
+        })
 
-  }
-  // end add file
+      })
 
-  // enable tooltips  
-  if ($('[data-toggle="tooltip"]').length > 0) {
-    $('[data-toggle="tooltip"]').tooltip()
-  }
-
-  /* ------------------------- Global checkbox system ------------------------- */
-  // check all
-  $("table tr").on('change', "[type='checkbox'].checkAll", function () {
-    let rows
-    if ($(this).parents('table.studentsTable').length > 0) {
-      rows = studentsTable.rows();
-    } else if ($(this).parents('table.classesTable').length > 0) {
-      rows = classesTable.rows();
     }
-    if ($(this).prop("checked")) {
-      $("[type='checkbox'].checkAll").prop({
-        "indeterminate": false,
-        "checked": true
-      });
-      $(rows.nodes()).find("[type='checkbox'].check").prop("checked", true);
+    // end add file
 
-    } else {
-      $(rows.nodes()).find("[type='checkbox'].check").prop("checked", false);
-      $("[type='checkbox'].checkAll").prop({
-        "indeterminate": false,
-        "checked": false
-      });
+    // enable tooltips  
+    if ($('[data-toggle="tooltip"]').length > 0) {
+      $('[data-toggle="tooltip"]').tooltip()
     }
-  });
-  // single check
-  $("table tbody").on('change', "[type='checkbox'].check", function () {
-    let rows
-    if ($(this).parents('table.studentsTable').length > 0) {
-      rows = studentsTable.rows();
-    } else if ($(this).parents('table.classesTable').length > 0) {
-      rows = classesTable.rows();
-    }
-    const noCheked = $(rows.nodes()).find("[type='checkbox'].check").length
-    const checked = $(rows.nodes()).find("[type='checkbox'].check:checked").length
-    if (checked === 0) {
-      $("[type='checkbox'].checkAll").prop("checked", false);
-      $("[type='checkbox'].checkAll").prop("indeterminate", false);
-    } else if (checked === noCheked) {
-      $("[type='checkbox'].checkAll").prop("indeterminate", false);
-      $("[type='checkbox'].checkAll").prop("checked", true);
-      $('.alert').addClass('invisible');
-    } else {
-      $('.alert').addClass('invisible');
-      $("[type='checkbox'].checkAll").prop("indeterminate", true);
-    }
-  });
 
-  // Datatable
-  $("table tbody").on("click", "tr", function () {
-    if ($(this).find("[type='checkbox'].check").length > 0) {
-      let row;
+    /* ------------------------- Global checkbox system ------------------------- */
+    // check all
+    $("table tr").on('change', "[type='checkbox'].checkAll", function () {
+      let rows
       if ($(this).parents('table.studentsTable').length > 0) {
-        row = studentsTable.row(this);
+        rows = studentsTable.rows();
       } else if ($(this).parents('table.classesTable').length > 0) {
-        row = classesTable.row(this);
+        rows = classesTable.rows();
       }
-      if (row.index() !== undefined) {
-        const check = $("[type='checkbox'].check").eq($(this).index());
-        check.prop('checked', !check.prop('checked'));
-        check.change();
+      if ($(this).prop("checked")) {
+        $("[type='checkbox'].checkAll").prop({
+          "indeterminate": false,
+          "checked": true
+        });
+        $(rows.nodes()).find("[type='checkbox'].check").prop("checked", true);
+
+      } else {
+        $(rows.nodes()).find("[type='checkbox'].check").prop("checked", false);
+        $("[type='checkbox'].checkAll").prop({
+          "indeterminate": false,
+          "checked": false
+        });
       }
-    }
+    });
+    // single check
+    $("table tbody").on('change', "[type='checkbox'].check", function () {
+      let rows
+      if ($(this).parents('table.studentsTable').length > 0) {
+        rows = studentsTable.rows();
+      } else if ($(this).parents('table.classesTable').length > 0) {
+        rows = classesTable.rows();
+      }
+      const noCheked = $(rows.nodes()).find("[type='checkbox'].check").length
+      const checked = $(rows.nodes()).find("[type='checkbox'].check:checked").length
+      if (checked === 0) {
+        $("[type='checkbox'].checkAll").prop("checked", false);
+        $("[type='checkbox'].checkAll").prop("indeterminate", false);
+      } else if (checked === noCheked) {
+        $("[type='checkbox'].checkAll").prop("indeterminate", false);
+        $("[type='checkbox'].checkAll").prop("checked", true);
+        $('.alert').addClass('invisible');
+      } else {
+        $('.alert').addClass('invisible');
+        $("[type='checkbox'].checkAll").prop("indeterminate", true);
+      }
+    });
+
+    // Datatable
+    $("table tbody").on("click", "tr", function () {
+      if ($(this).find("[type='checkbox'].check").length > 0) {
+        let row;
+        if ($(this).parents('table.studentsTable').length > 0) {
+          row = studentsTable.row(this);
+        } else if ($(this).parents('table.classesTable').length > 0) {
+          row = classesTable.row(this);
+        }
+        if (row.index() !== undefined) {
+          const check = $("[type='checkbox'].check").eq($(this).index());
+          check.prop('checked', !check.prop('checked'));
+          check.change();
+        }
+      }
+    });
+
+
   });
-
-
-});
 })
