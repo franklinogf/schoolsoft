@@ -44,6 +44,10 @@ class Lang
         return $this->translations[strtolower(utf8_decode($text))][__LANG];
     }
 
+    public function trimesterTranslation($text){
+       return str_replace('Trimestre', $this->translation("Trimestre"), str_replace('-', ' ', $text));
+    }
+
     // public static function translation($text)
     // {
     //     if (self::$translation !== null) {
