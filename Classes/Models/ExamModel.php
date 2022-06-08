@@ -163,13 +163,23 @@ class ExamModel extends School
          'T_examen_pregunta' => 'qas'
       ];
 
-      $titles = [
-         'fvs' => 'Falso y verdadero',
-         'selects' => 'Selecciona la respuesta correcta',
-         'pairs' => 'Parea',
-         'lines' => 'Llena la linea en blanco',
-         'qas' => 'Responde las preguntas correctamente'
-      ];
+      if(__LANG === "es"){
+         $titles = [
+            'fvs' => 'Falso y verdadero',
+            'selects' => 'Selecciona la respuesta correcta',
+            'pairs' => 'Parea',
+            'lines' => 'Llena la linea en blanco',
+            'qas' => 'Responde las preguntas correctamente'
+         ];
+      }else{
+         $titles = [
+            'fvs' => 'False and true',
+            'selects' => 'Select the correct answer',
+            'pairs' => 'Match',
+            'lines' => 'Fill the blank line',
+            'qas' => 'Answer the questions correctly'
+         ];
+      }
 
       if (is_object($obj)) {
          $obj = [$obj];
