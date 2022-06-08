@@ -1,4 +1,5 @@
 $(function () {
+
     $('#savedMessages .btn-primary').click(function (e) {
         e.preventDefault()
         const id = $(this).data('id')
@@ -6,6 +7,7 @@ $(function () {
         $("#title").val(savedMessage.find('.title').text())
         $("#subject").val(savedMessage.find('.subject').text())
         $("#message").val(savedMessage.find('.message').text())
+        scrollToElement('form',50);
     });
 
 
@@ -14,7 +16,7 @@ $(function () {
             $('#form').submit();
         } else {
             e.preventDefault();
-            alert("CODIGO CAPTCHA INCORRECTO");
+            alert(`${__LANG === 'es' ? 'El código no es correcto' : 'The code is not correct'}`);
             $('#code').addClass('is-invalid').val('').focusin();
         }
     });
@@ -23,7 +25,7 @@ $(function () {
         event.preventDefault();
         const messageCard = $(this).parents('.col');
         const messageId = $(this).data("id");
-        if (confirm("Esta seguro que desea borrar este mensaje?")) {
+        if (confirm(`${__LANG === 'es' ? '¿Estás seguro de que quieres eliminar este mensaje?' : 'Are you sure you want to delete this message?'}`)) {
             $.ajax({
                 type: "POST",
                 url: includeThisFile(),

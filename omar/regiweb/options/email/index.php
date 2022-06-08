@@ -11,23 +11,12 @@ Session::is_logged();
 $teacher = new Teacher(Session::id());
 $admins = DB::table('colegio')->select('usuario')->get();
 
-/* ------------------------------- Transaltion ------------------------------ */
-$TRANS = [
-    "es" => [
-        "PAGE_TITLE" => 'Enviar correo electronico',
-        "OPTION1" => 'Estudiantes',
-        "OPTION2" => 'Cursos',
-        "OPTION3" => 'Administradores',
-    ],
-    "en" => [
-        "PAGE_TITLE" => 'Send E-mail',
-        "OPTION1" => 'Students',
-        "OPTION2" => 'Classes',
-        "OPTION3" => 'Admins',
-    ]
-];
-
-Lang::addTranslation($TRANS);
+$lang = new Lang([
+    ['Enviar correo electrónico', 'Send e-mail'],
+    ['Estudiantes', 'Students'],
+    ['Cursos', 'Classes'],
+    ['Administradores', 'Administrators'],
+]);
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +24,7 @@ Lang::addTranslation($TRANS);
 
 <head>
     <?php
-    $title = Lang::translation('PAGE_TITLE');
+    $title = $lang->translation("Enviar correo electrónico");
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -45,17 +34,17 @@ Lang::addTranslation($TRANS);
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= Lang::translation('PAGE_TITLE') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation("Enviar correo electrónico") ?></h1>
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-3">
                 <div class="col mb-3 mb-md-0">
-                    <button data-id="students" class="btn btn-outline-light btn-block btn-lg options"><?= Lang::translation('OPTION1') ?></button>
+                    <button data-id="students" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Estudiantes") ?></button>
                 </div>
                 <div class="col mb-3 mb-md-0">
-                    <button data-id="grades" class="btn btn-outline-light btn-block btn-lg options"><?= Lang::translation('OPTION2') ?></button>
+                    <button data-id="grades" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Cursos") ?></button>
                 </div>
                 <div class="col">
-                    <button data-id="admins" class="btn btn-outline-light btn-block btn-lg options"><?= Lang::translation('OPTION3') ?></button>
+                    <button data-id="admins" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Administradores") ?></button>
                 </div>
             </div>
         </div>
@@ -70,10 +59,10 @@ Lang::addTranslation($TRANS);
 
                     <div id='students' class="input-group mb-3 option hidden">
                         <div class="input-group-prepend">
-                            <label class="input-group-text"><?= Lang::translation('OPTION1') ?></label>
+                            <label class="input-group-text"><?= $lang->translation("Estudiantes") ?></label>
                         </div>
                         <select name="student" class="custom-select" required>
-                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
+                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                             <?php foreach ($teacher->homeStudents() as $student) : ?>
                                 <option value="<?= $student->ss ?>"><?= "$student->apellidos, $student->nombre" ?></option>
                             <?php endforeach ?>
@@ -82,10 +71,10 @@ Lang::addTranslation($TRANS);
 
                     <div id='grades' class="input-group mb-3 option hidden">
                         <div class="input-group-prepend">
-                            <label class="input-group-text"><?= Lang::translation('OPTION2') ?></label>
+                            <label class="input-group-text"><?= $lang->translation("Cursos") ?></label>
                         </div>
                         <select name="grade" class="custom-select" required>
-                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
+                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                             <?php foreach ($teacher->classes() as $class) : ?>
                                 <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                             <?php endforeach ?>
@@ -94,10 +83,10 @@ Lang::addTranslation($TRANS);
 
                     <div id='admins' class="input-group mb-3 option hidden">
                         <div class="input-group-prepend">
-                            <label class="input-group-text"><?= Lang::translation('OPTION3') ?></label>
+                            <label class="input-group-text"><?= $lang->translation("Administradores") ?></label>
                         </div>
                         <select name="admin" class="custom-select" required>
-                            <option value="" selected><?= Lang::$trans['select'] . "..." ?></option>
+                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                             <?php foreach ($admins as $admin) : ?>
                                 <option value="<?= $admin->usuario ?>"><?= "$admin->usuario" ?></option>
                             <?php endforeach ?>
@@ -106,7 +95,7 @@ Lang::addTranslation($TRANS);
 
                 </div>
 
-                <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= Lang::$trans['continue'] ?>">
+                <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
         </div>
         </form>
 

@@ -2,6 +2,7 @@
 require_once '../../../app.php';
 
 use Classes\PDF;
+use Classes\Lang;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Student;
@@ -14,22 +15,34 @@ $teacher = new Teacher(Session::id());
 $student = new Student;
 $students = $student->findByGrade($teacher->grado);
 $gradesNumbers = [[1, 10], [11, 20], [21, 30], [31, 40]];
+
+
+$lang = new Lang([
+    ["Clasificación de notas", "Grades classification"],
+    ["Informe de Clasificación de Notas", "Grades classification report"],
+    ["GRADO", "GRADE"],
+    ["AÑO", "YEAR"],
+    ["Nombre del estudiante", "Student name"],
+   
+]);
+
+
 $pdf = new PDF();
-$pdf->SetTitle('Clasificación de notas', true);
+$pdf->SetTitle($lang->translation("Clasificación de notas"), true);
 $pdf->AddPage('L');
 $pdf->SetLeftMargin(5);
 $pdf->SetAutoPageBreak(true, 10);
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 17);
-$pdf->Cell(0, 5, utf8_decode('Informe de Clasificación de Notas'), 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Informe de Clasificación de Notas"), 0, 1, 'C');
 $pdf->Ln(2);
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, utf8_decode("GRADO $teacher->grado / AÑO {$teacher->info('year')}"), 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("GRADO") . " $teacher->grado / " . $lang->translation("AÑO") . " " . $teacher->info('year'), 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(90, 7, 'Nombre del estudiante', 1, 0, 'C', true);
+$pdf->Cell(110, 7, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
 $pdf->Cell(8, 7, 'A-1', 1, 0, 'C', true);
 $pdf->Cell(8, 7, 'B-1', 1, 0, 'C', true);
 $pdf->Cell(8, 7, 'C-1', 1, 0, 'C', true);
@@ -115,7 +128,7 @@ foreach ($students as $student) {
     ]);
     // echo "<hr>";
 
-    $pdf->Cell(90, 7, "$student->nombre $student->apellidos", 1);
+    $pdf->Cell(110, 7, "$student->nombre $student->apellidos", 1);
     $pdf->Cell(8, 7, $grades[1]['A'], 1, 0, 'C');
     $pdf->Cell(8, 7, $grades[1]['B'], 1, 0, 'C');
     $pdf->Cell(8, 7, $grades[1]['C'], 1, 0, 'C');

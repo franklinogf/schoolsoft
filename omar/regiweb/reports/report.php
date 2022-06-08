@@ -1,9 +1,25 @@
 <?php
+
 require_once '../../app.php';
+use Classes\Lang;
 
 $_class = $_POST['class'];
 $_trimester = $_POST['tri'];
 $_report = $_POST['tra'];
+
+$lang = new Lang([
+    ["Profesor","Teacher"],
+    ["Apellidos","Surnames"],
+    ["Nombre","Name"],
+    ["Descripción","Description"],
+    ["Creditos","Credits"],
+    ["Total Est.","Total Stu."],
+    ["Fecha","Date"],
+    ["Tema","Topic"],
+    ["Valor","Value"],
+    ["Otros","Others"],
+    ["Distribución de notas","Grades distribution"],
+]);
 
 switch ($_report) {
     case 'Notas':
@@ -15,19 +31,19 @@ switch ($_report) {
     break;
 
     case 'Trab-Diarios':
-        $_title = "Trabajos Diaros";
+        $_title = "Trabajos diarios";
         $_table = "padres2";
         require_once 'pdf/report3.php';
     break;
     
     case 'Trab-Libreta':
-        $_title = "Trabajos de Libreta";
+        $_title = "Trabajos de libreta";
         $_table = "padres3";
         require_once 'pdf/report3.php';
     break;
 
     case 'Pruebas-Cortas':
-        $_title = "Pruebas Cortas";
+        $_title = "Pruebas cortas";
         $_table = "padres4";
         require_once 'pdf/report3.php';
     break;
@@ -45,7 +61,7 @@ switch ($_report) {
     break;
 
     case 'V-Nota':
-    $_title = "Nota de verano";
+    $_title = "Notas de verano";
     $_table = "padres";
     require_once 'pdf/report4.php';
 

@@ -6,6 +6,7 @@ use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
+use Classes\Lang;
 use Classes\Server;
 
 Server::is_post();
@@ -15,6 +16,15 @@ $year = $teacher->info('year');
 $grade = $teacher->grado;
 $students = new Student();
 $students = $students->findByGrade($grade);
+
+$lang = new Lang([
+    ["Listado de 100", "List of 100"],
+    ["GRADO", "GRADE"],
+    ["AÑO", "YEAR"],
+    ["Estudiante", "Student"],
+    ["Cantidad", "Amount"],
+
+]);
 
 $_info = [
     "Notas" => [
@@ -161,23 +171,23 @@ foreach ($_students as $student) {
     // echo "</pre>";
 
     $pdf = new PDF();
-    $pdf->SetTitle("Listado de 100");
+    $pdf->SetTitle($lang->translation("Listado de 100"));
     $pdf->addPage();
     $pdf->Fill();
     $pdf->SetFont('Times', 'B', 12);
-    $pdf->Cell(0, 5, utf8_decode('Listado de 100 o más'), 0, 1, 'C');
+    $pdf->Cell(0, 5, $lang->translation("Listado de 100"), 0, 1, 'C');
     $pdf->Ln(5);
-    $pdf->Cell(0, 5, utf8_decode("GRADO $teacher->grado / AÑO $year"), 0, 1, 'C');
+    $pdf->Cell(0, 5, $lang->translation("GRADO") . " $teacher->grado / " . $lang->translation("AÑO") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(15);
     $pdf->Cell(20, 5, '#', 1, 0, 'C', true);
-    $pdf->Cell(100, 5, 'Estudiante', 1, 0, 'C', true);
-    $pdf->Cell(30, 5, 'Cantidad', 1, 1, 'C', true);
+    $pdf->Cell(100, 5, $lang->translation("Estudiante"), 1, 0, 'C', true);
+    $pdf->Cell(30, 5, $lang->translation("Cantidad"), 1, 1, 'C', true);
     $count = 1;
     foreach ($_students as $student) {
         $pdf->Cell(15);
-        $pdf->Cell(20, 5, $count,1,0,'C');
+        $pdf->Cell(20, 5, $count, 1, 0, 'C');
         $pdf->Cell(100, 5, $student['fullName'], 1);
         $pdf->Cell(30, 5, $student['cantidad'], 1, 1, 'C');
         $count++;

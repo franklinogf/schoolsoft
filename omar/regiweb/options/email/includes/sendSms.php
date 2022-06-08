@@ -1,11 +1,15 @@
 <?php
 require_once '../../../../app.php';
 
+use Classes\Lang;
 use Classes\Mail;
 
+$lang = new Lang([
+	["Tiene un correo nuevo de parte de", "You have a new email from"]
+]);
 $mail = new Mail(true, "Teacher");
 
-$mail->body = "Tiene un correo nuevo de parte de $schoolName";
+$mail->body = $lang->translation("Tiene un correo nuevo de parte de") . " $schoolName";
 
 if ($compa1) {
 

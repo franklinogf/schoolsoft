@@ -2,20 +2,28 @@
 
 require_once '../../../../app.php';
 
-use Classes\Controllers\School;
 use Classes\File;
+use Classes\Lang;
 use Classes\Mail;
+use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
+use Classes\Controllers\School;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
-use Classes\Route;
-use Classes\Util;
 
 Session::is_logged();
 Server::is_post();
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+    ["Error al enviar el correo electrónico", "Failed to send email"],
+    ["Se ha enviado el correo electrónico", "Email has been sent"],
+    ["Se ha enviado el correo electrónico a todos los estudiantes", "Email has been sent to all students"],
+    ["Se ha enviado el correo electrónico a", "The email has been sent to"],
+    ["de", "of"],
+    ["estudiantes", "students"],
+]);
 $messageTitle = utf8_decode($_REQUEST['title']);
 $messageBody = utf8_decode($_REQUEST['message']);
 $messageSubject = utf8_decode($_REQUEST['subject']);
@@ -76,9 +84,9 @@ if (isset($_POST['student'])) {
     }
     // send email
     if (!$mail->send()) {
-        Session::set('emailSent', "Error al enviar el correo electronico ($mail->ErrorInfo)");
+        Session::set('emailSent', $lang->translation("Error al enviar el correo electrónico") . " ($mail->ErrorInfo)");
     } else {
-        Session::set('emailSent', 'Se ha enviado el correo electronico');
+        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico"));
     }
     $mail->ClearAddresses();
 } else if (isset($_POST['grade'])) {
@@ -107,23 +115,23 @@ if (isset($_POST['student'])) {
         }
     }
     if ($messagesSent === $totalStudents) {
-        Session::set('emailSent', 'Se ha enviado el correo electronico a todos los estudiantes');
+        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a todos los estudiantes"));
     } else {
-        Session::set('emailSent', "Se ha enviado el correo electronico a $messagesSent de $totalStudents estudiantes ($mail->ErrorInfo)");
+        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a") . " $messagesSent " . $lang->translation("de") . " $totalStudents " . $lang->translation("estudiantes") . " ($mail->ErrorInfo)");
     }
-} else if($_POST['admin']) {
+} else if ($_POST['admin']) {
     $adminUser = $_POST['admin'];
     $admin = new School($adminUser); //admin by user
     $mail->addAddress($admin->info('correo'));
     if (!$mail->send()) {
-        Session::set('emailSent', "Error al enviar el correo electronico ($mail->ErrorInfo)");
+        Session::set('emailSent', $lang->translation("Error al enviar el correo electrónico") . " ($mail->ErrorInfo)");
     } else {
-        Session::set('emailSent', 'Se ha enviado el correo electronico');
+        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico"));
     }
     $mail->ClearAddresses();
-}else if($_POST['deleteMessage']){
+} else if ($_POST['deleteMessage']) {
     $messageId = $_POST['deleteMessage'];
-    DB::table('T_correos_guardados')->where('id',$messageId)->delete();
+    DB::table('T_correos_guardados')->where('id', $messageId)->delete();
 }
 
 

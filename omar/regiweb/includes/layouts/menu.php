@@ -25,7 +25,14 @@ $TRANS = [
   ]
 ];
 
-Lang::addMenuTranslation($TRANS);
+$lang = new Lang([
+  ['Notas', 'Grades'],
+  ['Opciones', 'Options'],
+  ['Informes', 'Reports'],
+  ['Mi Perfil', 'My profile'],
+  ['Cerrar Sesión', 'Sign off'],
+]);
+
 ?>
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
@@ -39,21 +46,21 @@ Lang::addMenuTranslation($TRANS);
   <div class="collapse navbar-collapse " id="navbarNavDropdown">
     <ul class="navbar-nav mr-auto">      
       <li class="nav-item <?= ($pathFile === 'grades' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/regiweb/grades/') ?>"><?= Lang::menuTranslation('GRADES') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/grades/') ?>"><?= $lang->translation('Notas') ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'options' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/regiweb/options') ?>"><?= Lang::menuTranslation('OPTIONS') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/options') ?>"><?= $lang->translation('Opciones') ?></a>
       </li> 
       <li class="nav-item <?= ($pathFile === 'reports' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/regiweb/reports/') ?>"><?= Lang::menuTranslation('REPORTS') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/reports/') ?>"><?= $lang->translation('Informes') ?></a>
       </li> 
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="<?= Route::url('/regiweb/profile.php') ?>"><i class="far fa-id-card text-primary"></i> <?= Lang::menuTranslation('PROFILE') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/profile.php') ?>"><i class="far fa-id-card text-primary"></i> <?= $lang->translation('Mi Perfil') ?></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?= Route::url('/regiweb/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> <?= Lang::menuTranslation('LOG_OUT') ?></a>
+        <a class="nav-link" href="<?= Route::url('/regiweb/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> <?= $lang->translation('Cerrar sesión') ?></a> 
       </li>
     </ul>
 

@@ -1,7 +1,8 @@
 <?php
-require_once '../../../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\PDF;
+use Classes\Lang;
 use Classes\Server;
 use Classes\Session;
 use Classes\Controllers\Exam;
@@ -15,7 +16,13 @@ $examId = $_POST['printExamId'];
 $exam = new Exam($examId);
 $topicNumber = 1;
 $paperSize = $_POST['paperSize'];
-
+$lang = new Lang([
+	["Nombre:","Name:"],
+	['Fecha:','Date:'],
+	["Grado:","Grade:"],
+	["Valor","Value"],
+	["puntos","points"],
+]);
 function decode($text)
 {
 	return iconv('UTF-8', 'windows-1252', $text);
@@ -27,19 +34,19 @@ $pdf->AddPage();
 $pdf->SetAutoPageBreak(true,10);
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(20, 7, "Nombre: ", 0, 0, "L");
+$pdf->Cell(20, 7, $lang->translation("Nombre:"), 0, 0, "L");
 $pdf->Cell(80, 7, '', 'B', 0, 'L');
 $pdf->Cell(25, 7, '', 0, 0, 'L');
-$pdf->Cell(18, 7, 'Fecha: ', 0, 0, 'L');
+$pdf->Cell(18, 7, $lang->translation("Fecha:"), 0, 0, 'L');
 $pdf->Cell(35, 7, '', 'B', 1, 'L');
 $pdf->Cell(100, 7, decode($teacher->fullName()), 0, 0, "L");
 $pdf->Cell(25, 7, '', 0, 0, 'L');
-$pdf->Cell(18, 7, 'Grado: ', 0, 0, 'L');
+$pdf->Cell(18, 7, $lang->translation("Grado:"), 0, 0, 'L');
 $pdf->Cell(35, 7, '', 'B', 1, 'L');
 
 $pdf->Cell(20, 5, "", 0, 1, "L");
 $pdf->Cell(85, 5, '', 0, 0, 'L');
-$pdf->Cell(18, 5, 'Valor: ______/' . $exam->valor . ' puntos', 0, 1, 'C');
+$pdf->Cell(18, 5, $lang->translation("Valor").": ______/$exam->valor ". $lang->translation("puntos"), 0, 1, 'C');
 
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(0, 10, decode($exam->titulo), 0, 1, 'C');

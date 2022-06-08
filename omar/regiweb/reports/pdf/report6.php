@@ -24,31 +24,38 @@ $students = $students->findByClass($_class);
 
 list($grade, $section) = explode("-", $data->grado);
 
+$lang->AddTranslation([
+    ["Semestre porciento","Semester porcent"],
+    ["NOTA","GRADE"]
+]);
+
 $titles = [
-    ["NTA-1", "40%", "C-1", "NTA-2", "40%", "C-2", "EXF", "20%", "NOTA"],
-    ["NTA-1", "45%", "C-1", "NTA-2", "45%", "C-2", "EXF", "10%", "NOTA"]
+    ["NTA-1", "40%", "C-1", "NTA-2", "40%", "C-2", "EXF", "20%", $lang->translation("NOTA")],
+    ["NTA-1", "45%", "C-1", "NTA-2", "45%", "C-2", "EXF", "10%", $lang->translation("NOTA")]
 ];
 $percentNotes = [
     [0.40, 0.20],
     [0.45, 0.10]
 ];
 $number = ($grade > 8) ? 0 : 1;
+
+
 $pdf = new PDF();
 $pdf->footer = false;
 $pdf->SetLeftMargin(5);
 $pdf->AddPage();
-$pdf->SetTitle('Semestre Porciento');
+$pdf->SetTitle($lang->translation("Semestre porciento"));
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(0,5,"Semestre Porciento",0,1,'C');
+$pdf->Cell(0,5,$lang->translation("Semestre porciento"),0,1,'C');
 $pdf->Ln(3);
-$pdf->Cell(50, 5, 'Profesor', 1, 0, 'C', true);
-$pdf->Cell(18, 5, 'Curso', 1, 0, 'C', true);
-$pdf->Cell(40, 5, utf8_decode('Descripción'), 1, 0, 'C', true);
-$pdf->Cell(20, 5, 'Creditos', 1, 0, 'C', true);
-$pdf->Cell(20, 5, 'Total Est.', 1, 0, 'C', true);
-$pdf->Cell(25, 5, 'Fecha', 1, 1, 'C', true);
+$pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
+$pdf->Cell(18, 5, $lang->translation("Curso"), 1, 0, 'C', true);
+$pdf->Cell(40, 5, $lang->translation("Descripción"), 1, 0, 'C', true);
+$pdf->Cell(20, 5, $lang->translation("Creditos"), 1, 0, 'C', true);
+$pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
+$pdf->Cell(25, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->Cell(50, 5, utf8_decode($teacher->fullName()), 1, 0, 'C');
@@ -61,8 +68,8 @@ $pdf->Cell(25, 5, Util::formatDate(Util::date()), 1, 1, 'C');
 $pdf->Ln(3);
 
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->Cell(45, 5, 'Apellidos', 1, 0, 'C', true);
-$pdf->Cell(35, 5, 'Nombre', 1, 0, 'C', true);
+$pdf->Cell(45, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
+$pdf->Cell(35, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
 foreach ($titles[$number] as $index => $title) {
     if (sizeof($titles[$number]) === $index + 1) {
 

@@ -1,13 +1,14 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
+use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
-use Classes\DataBase\DB;
-use Classes\Util;
 
 Session::is_logged();
 Server::is_post();
@@ -417,27 +418,68 @@ function findValue($table, $student)
         ['year', $year]
     ])->first();
 }
-function findTotal($type,$student)
+function findTotal($type, $student)
 {
     global $_info;
     global $_report;
     $tpaTotal = 0;
     global $_trimesterNumber;
     if ($_trimesterNumber === 2 || $_trimesterNumber === 4) {
-         $lastTrimester = $_trimesterNumber - 1;
-            $t = $_info[$_report]["Trimestre-$lastTrimester"]['values'][$type];
-            $tpaTotal += (int)$student->{$t};
-        
+        $lastTrimester = $_trimesterNumber - 1;
+        $t = $_info[$_report]["Trimestre-$lastTrimester"]['values'][$type];
+        $tpaTotal += (int)$student->{$t};
     }
     return $tpaTotal;
 }
+
+$lang = new Lang([
+    ["Entrada de notas", 'Enter grades'],
+    ["Curso:", "Class:"],
+    ["Trimestre:", "Trimester:"],
+    ["Entrando notas a:", "Entering grades to:"],
+    ["Tipo de nota:", "Type of grade:"],
+    ["Fecha de inicio:", "Start date:"],
+    ["Fecha de cierre:", "Closing date:"],
+    ["Total de estudiantes:", "Total students:"],
+    ["Porciento", "Percent"],
+    ["Suma", "Sum"],
+    ["Pasar a letras", "Convert to letters"],
+    ["Está opción se aplica en la columna", "This option is applied in the column"],
+    ["Nota", "Grade"],
+    ["exclusivamente.", "exclusively."],
+    ["Conversión", "Conversion"],
+    ['Está opción es para convertir de numero a letra.', 'This option is to convert from numbers to letters.'],
+    ["Aviso terminar", "Notice finish"],
+    ["Cuando termine el trimestre marque está Opción.", "When the trimester ends mark this option."],
+    ["¿Quieres que estas notas sean?", "Do you want these grades to be?"],
+    ["Calculando notas", "Calculating grades"],
+    ["Nombre del estudiante", 'Student name'],
+    ["TPA", "TPA"],
+    ["TDP", "TDP"],
+    ["Conducta", "Behavior"],
+    ["Ausencias", "Absence"],
+    ["Tardanzas", "Tardy"],
+    ["Deméritos", "Demerits"],
+    ["Nota del Examen Final", "Final exam grade"],
+    ["Los examenes finales solo estan en el trimestre 2 y trimestre 4", "The final exams are only in trimester 2 and trimester 4"],
+    ["Volver", "Back"],
+    ["Guardar", "Save"],
+    ["Lo Sentimos, La fecha Ha Vencido o la selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.", "Sorry, the date has expired or the selection of the trimester is invalid. Try it again or contact the administration."],
+    ["Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.", "Remember to go to the grades page and save it to have the correct averages."],
+    ["Valores", "Values"],
+    ["Tema", "Topic"],
+    ["Valor", "Value"],
+    ["Fecha", "Date"]
+
+]);
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = "Entrada de notas";
+    $title = $lang->translation('Entrada de notas');
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -453,25 +495,25 @@ function findTotal($type,$student)
             <div class="card-body">
                 <div class="row row-cols-1 row-cols-md-3">
                     <div class="col">
-                        <p class="text-monospace">Curso: <span class="badge badge-info"><?= $_class ?> </span></p>
+                        <p class="text-monospace"><?= $lang->translation("Curso:") ?> <span class="badge badge-info"><?= $_class ?> </span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Trimestre: <span class="badge badge-info"><?= $_trimester ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Trimestre:") ?> <span class="badge badge-info"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $_trimester)) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Total de estudiantes: <span class="badge badge-info"><?= sizeof($students) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes:") ?> <span class="badge badge-info"><?= sizeof($students) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Entrando notas a: <span class="badge badge-info"><?= $_thisReport['title'] ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Entrando notas a:") ?> <span class="badge badge-info"><?= $lang->translation($_thisReport['title']) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Fecha de inicio: <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[0]), true) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de inicio:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[0]), true) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Fecha de cierre: <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace">Tipo de nota: <span class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? 'Porciento' : 'Suma' ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span></p>
                     </div>
                 </div>
             </div>
@@ -487,25 +529,25 @@ function findTotal($type,$student)
                         <div class="col">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="letra">Pasar a letras</label>
+                                <label class="custom-control-label" for="letra"><?= $lang->translation("Pasar a letras") ?></label>
                             </div>
-                            <small>Está opción se aplica en la columna <b><?= $_report === 'Notas' ? 'Nota-9' : 'Nota-7' ?></b> exclusivamente.</small>
+                            <small><?= $lang->translation("Está opción se aplica en la columna") ?> <b><?= $_report === 'Notas' ? $lang->translation("Nota") . '-9' : $lang->translation("Nota") . '-7' ?></b> <?= $lang->translation("exclusivamente.") ?></small>
                         </div>
                         <div class="col mt-2">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="pal">Conversión</label>
+                                <label class="custom-control-label" for="pal"><?= $lang->translation("Conversión") ?></label>
                             </div>
-                            <small>Está opción es para convertir de numero a letra.</small>
+                            <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
                         </div>
                         <?php if ($_end) : ?>
                             <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
-                                        <label class="custom-control-label" for="<?= $_end ?>">Aviso Terminar</label>
+                                        <label class="custom-control-label" for="<?= $_end ?>"><?= $lang->translation("Aviso terminar") ?></label>
                                     </div>
-                                    <small>Cuando termine el trimestre marque está Opción.</small>
+                                    <small><?= $lang->translation("Cuando termine el trimestre marque está Opción.") ?></small>
                                 </div>
                             <?php endif ?>
                         <?php endif ?>
@@ -517,14 +559,14 @@ function findTotal($type,$student)
                 <div class="card-body">
                     <div class="row row-cols-1">
                         <div class="col">
-                            <h4>¿Quieres que estas notas sean?</h4>
+                            <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1" <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="noteType1">Porciento</label>
+                                <label class="custom-control-label" for="noteType1"><?= $lang->translation("Porciento") ?></label>
                             </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="noteType2" class="custom-control-input" name="noteType" value="2" <?= $gradeInfo->nota_por === "2" ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="noteType2">Suma</label>
+                                <label class="custom-control-label" for="noteType2"><?= $lang->translation("Suma") ?></label>
                             </div>
                         </div>
                     </div>
@@ -534,7 +576,7 @@ function findTotal($type,$student)
     </div>
     <!-- loading spinner -->
     <div class="loading text-center my-3">
-        <h3 class="font-weight-bolder">Calculando Notas</h3>
+        <h3 class="font-weight-bolder"><?= $lang->translation("Calculando notas") ?></h3>
         <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
     </div>
     <div class="container-fluid">
@@ -572,25 +614,25 @@ function findTotal($type,$student)
                         <thead class="thead-dark text-center">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col" style="width: 19rem;">Nombre del estudiante</th>
+                                <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
                                 <?php
                                 $amountOfGrades = $_report === 'V-Nota' ? 7 : ($_options['grades'][1]) - ($_options['grades'][0]);
                                 for ($i = 1; $i <= $amountOfGrades; $i++) :
                                 ?>
-                                    <th scope="col"><?= "Nota {$i}" ?></th>
+                                    <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
                                 <?php endfor ?>
                                 <?php if ($_columns !== null) : ?>
                                     <?php foreach ($_columns as $column) : ?>
                                         <th scope="col"><?= $column ?></th>
                                     <?php endforeach ?>
                                 <?php endif ?>
-                                <th scope="col">TPA</th>
-                                <th scope="col">TDP</th>
-                                <th scope="col">Nota</th>
+                                <th scope="col"><?= $lang->translation("TPA") ?></th>
+                                <th scope="col"><?= $lang->translation("TDP") ?></th>
+                                <th scope="col"><?= $lang->translation("Nota") ?></th>
                                 <?php if ($_report === 'V-Nota') : ?>
-                                    <th scope="col">Conducta</th>
-                                    <th scope="col">Ausencias</th>
-                                    <th scope="col">Tardanzas</th>
+                                    <th scope="col"><?= $lang->translation("Conducta") ?></th>
+                                    <th scope="col"><?= $lang->translation("Ausencias") ?></th>
+                                    <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
                                 <?php endif ?>
                             </tr>
                         </thead>
@@ -616,9 +658,9 @@ function findTotal($type,$student)
                                                 $pcor = $student->{$_values['pcor']} ? '100' : '';
                                             }
                                         ?>
-                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4) ) : ?>
-                                                <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa',$student) ?>">
-                                                <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp',$student) ?>">
+                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
+                                                <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
+                                                <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
                                             <?php endif ?>
                                             <input type="hidden" class="_tdia" value="<?= $tdia ?>">
                                             <input type="hidden" class="_tlib" value="<?= $tlib ?>">
@@ -656,11 +698,11 @@ function findTotal($type,$student)
                             <thead class="thead-dark text-center">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col" style="width: 19rem;">Nombre del estudiante</th>
-                                    <th scope="col">Conducta</th>
-                                    <th scope="col">Ausencias</th>
-                                    <th scope="col">Tardanzas</th>
-                                    <th scope="col">Deméritos</th>
+                                    <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
+                                    <th scope="col"><?= $lang->translation("Conducta") ?></th>
+                                    <th scope="col"><?= $lang->translation("Ausencias") ?></th>
+                                    <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
+                                    <th scope="col"><?= $lang->translation("Deméritos") ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -688,8 +730,8 @@ function findTotal($type,$student)
                                 <thead class="thead-dark text-center">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col" style="width: 19rem;">Nombre del estudiante</th>
-                                        <th scope="col">Nota del Examen Final</th>
+                                        <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
+                                        <th scope="col"><?= $lang->translation("Nota del Examen Final") ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -705,8 +747,8 @@ function findTotal($type,$student)
                                 </tbody>
                             </table>
                         <?php else : ?>
-                            <h1 class="display-3 text-center">Los examenes finales solo estan en el Trimestre 2 y Trimestre 4</h1>
-                            <button class="btn btn-primary d-block mx-auto mb-3" onclick="javascript:history.back()">Volver</button>
+                            <h1 class="display-3 text-center"><?= $lang->translation("Los examenes finales solo estan en el trimestre 2 y trimestre 4") ?></h1>
+                            <button class="btn btn-primary d-block mx-auto mb-3" onclick="javascript:history.back()"><?= $lang->translation("Volver") ?></button>
                         <?php endif ?>
                     </div>
                 <?php endif ?>
@@ -714,16 +756,16 @@ function findTotal($type,$student)
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
                 <?php if ($_options !== null) : ?>
                     <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5) : ?>
-                        <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button>
+                        <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
                     <?php else : ?>
-                        <h4 class="text-center text-danger">Lo Sentimos, La fecha Ha Vencido o la Selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.</h4>
+                        <h4 class="text-center text-danger"><?= $lang->translation("Lo Sentimos, La fecha Ha Vencido o la selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.") ?></h4>
                     <?php endif ?>
                 <?php endif ?>
             </div>
         </form>
         <!-- end Students list -->
         <?php if ($_report !== 'Notas' && $_report !== 'V-Notas' && $_report !== 'Ex-Final' && $_report !== 'Cond-Asis') : ?>
-            <h2 class="text-center text-info mb-0">*Recuerde ir a la pagina de notas y darle a grabar para tener los promédios correctos.*</h2>
+            <h2 class="text-center text-info mb-0">*<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*</h2>
         <?php endif ?>
         <!-- Values -->
         <div class="container my-5">
@@ -732,7 +774,7 @@ function findTotal($type,$student)
                     <div class="card-header bg-secondary" id="valuesHead">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
-                                Valores
+                                <?= $lang->translation("Valores") ?>
                             </button>
                         </h2>
                     </div>
@@ -744,15 +786,15 @@ function findTotal($type,$student)
                                 <?php for ($i = 1; $i <= $cant; $i++) : ?>
                                     <div class="form-row col-12 col-md-8 mb-2">
                                         <div class="form-group col-12">
-                                            <label for="<?= "tema$i" ?>">Tema <?= $i ?></label>
+                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?> <?= $i ?></label>
                                             <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
                                         </div>
                                         <div class="form-group col-4 col-md-2 text-center">
-                                            <label for="<?= "val$i" ?>">Valor</label>
+                                            <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
                                             <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
                                         </div>
                                         <div class="form-group col-8 col-md-3">
-                                            <label for="<?= "fec$i" ?>">Fecha</label>
+                                            <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
                                             <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
                                         </div>
                                     </div>

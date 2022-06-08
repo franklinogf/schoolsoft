@@ -1,21 +1,32 @@
 <?php
 require_once '../app.php';
 
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\Util;
 
 Session::is_logged();
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+    ["Información","Information"],
+    ["Bienvenido", "Welcome"],
+    ["Nombre:", "Name:"],
+    ["ID:", "ID:"],
+    ["Grupo:", "Group:"],
+    ["Ultima Entrada:", "Last entry:"],
+    ["IP:", "IP:"],
+    ["Hora:", "Time:"],
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = "Información";
+    $title = $lang->translation("Información");
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -26,36 +37,36 @@ $teacher = new Teacher(Session::id());
             <img class="img-fluid my-4" width="400px" src="<?= Route::url('/images/logo-regiweb.gif', false, true) ?>" />
         </div>
         <div class="jumbotron pt-4 shadow">
-            <h1 class="text-center">Bienvenido al sistema</h1>
+            <h1 class="text-center"><?= $lang->translation("Bienvenido") ?></h1>
             <hr class="my-4" />
             <div class="row">
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">Nombre:</span>
+                    <span class="badge badge-info"><?= $lang->translation("Nombre:") ?></span>
                 </div>
                 <div class="col-6"><?= $teacher->fullName() ?></div>
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">ID:</span>
+                    <span class="badge badge-info"><?= $lang->translation("ID:") ?></span>
                 </div>
                 <div class="col-6"><?= $teacher->id ?></div>
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">Grupo:</span>
+                    <span class="badge badge-info"><?= $lang->translation("Grupo:") ?></span>
                 </div>
                 <div class="col-6"><?= $teacher->grupo ?></div>
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">Ultima entrada:</span>
+                    <span class="badge badge-info"><?= $lang->translation("Ultima entrada:") ?></span>
                 </div>
                 <div class="col-6"><?= $teacher->ufecha ?></div>
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">Ip:</span>
+                    <span class="badge badge-info"><?= $lang->translation("IP:") ?></span>
                 </div>
                 <div class="col-6"><?= Server::get('REMOTE_ADDR') ?></div>
                 <div class="col-6 text-right">
-                    <span class="badge badge-info">Hora:</span>
+                    <span class="badge badge-info"><?= $lang->translation("Hora:") ?></span>
                 </div>
                 <div class="col-6"><?= Util::time(true) ?></div>
             </div>
             <hr class="my-4" />
-            <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/regiweb/home.php') ?>">Continuar</a>
+            <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/regiweb/home.php') ?>"><?= $lang->translation("Continuar") ?></a>
         </div>
     </div>
     <?php

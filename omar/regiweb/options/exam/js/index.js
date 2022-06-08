@@ -8,41 +8,41 @@ $(function () {
     // enable new and search buttons when page charge
     $('[data-target="#newExamModal"], [data-target="#searchExamModal"]').prop('disabled', false)
 
-    $("#deleteExamButton").click(function(e){
-        loadingBtn($("#deleteExamButton"),'','Eliminando...')
+    $("#deleteExamButton").click(function (e) {
+        loadingBtn($("#deleteExamButton"), '', __LANG === "es" ? "Eliminando..." : "Deleting...")
         console.log('delete Clicked')
-        $.post(includeThisFile(), {deleteExam:_examInfo.id},
-        function (data, textStatus, jqXHR) {
+        $.post(includeThisFile(), { deleteExam: _examInfo.id },
+            function (data, textStatus, jqXHR) {
                 window.location.reload()
             }
         );
     })
 
 
-    $(document).on('change','.optionCheck',function(e){
-       
+    $(document).on('change', '.optionCheck', function (e) {
+
         const optionChecked = $(this).prop('checked')
         const option = $(this).data('check')
-       $.post(includeThisFile(), {optionChecked,option,examId:_examInfo.id},
-           function (data) {
-               if(optionChecked){
-                   _examInfo[option] = 'si'
-               }else{
-                _examInfo[option] = 'no'
-               }
-           }
-       );
+        $.post(includeThisFile(), { optionChecked, option, examId: _examInfo.id },
+            function (data) {
+                if (optionChecked) {
+                    _examInfo[option] = 'si'
+                } else {
+                    _examInfo[option] = 'no'
+                }
+            }
+        );
     })
-    $(document).on('change','.optionDescription',function(e){
-       
+    $(document).on('change', '.optionDescription', function (e) {
+
         const optionDescription = $(this).val()
         const desc = $(this).data('desc')
-       $.post(includeThisFile(), {optionDescription,desc,examId:_examInfo.id},
-           function (data) {
-               console.log('desc: ',data) 
-               _examInfo[desc] = optionDescription         
-           }
-       );
+        $.post(includeThisFile(), { optionDescription, desc, examId: _examInfo.id },
+            function (data) {
+                console.log('desc: ', data)
+                _examInfo[desc] = optionDescription
+            }
+        );
     })
 
     /* ----------------------------- Correct Examns ----------------------------- */
@@ -63,7 +63,7 @@ $(function () {
             $(".totalExam").text(totalExam)
             $.post(includeThisFile(), { qa: qaId, value, totalExam, doneExamId }, function (data) {
                 console.log('guardado ', data)
-                loadingBtn($("#viewExamModal > div > div > div.modal-footer > button"), 'Cerrar')
+                loadingBtn($("#viewExamModal > div > div > div.modal-footer > button"), __LANG === 'es' ? "Cerrar" : "Close")
                 correctExams()
             });
 
@@ -90,31 +90,31 @@ $(function () {
     })
     // Correct Exams
     $("#correctExamsButton").click(function () {
-        loadingBtn($("#correctExamsButton"), '', 'Corrigiendo...')
+        loadingBtn($("#correctExamsButton"), '', __LANG === "es" ? "Corrigiendo..." : "Correcting...")
         $.post(includeThisFile(), { correctExams: _examInfo.id },
             function (data, textStatus, jqXHR) {
                 console.log('correctExam: ', data)
-                loadingBtn($("#correctExamsButton"), 'Corregir examenes')
+                loadingBtn($("#correctExamsButton"), __LANG === "es" ? "Corregir examenes" : "Correct examns")
                 correctExams();
             }
         );
     })
     // 
     $("#correctExamsButton2").click(function () {
-        loadingBtn($("#correctExamsButton2"), '', 'Pasando puntos...')
+        loadingBtn($("#correctExamsButton2"), '', __LANG === "es" ? "Pasando puntos..." : "Passing points...")
         $.post(includeThisFile(), { passPoints: _examInfo.id },
             function (data, textStatus, jqXHR) {
                 console.log('passPoints: ', data)
-                loadingBtn($("#correctExamsButton2"), 'Pasar puntos')
+                loadingBtn($("#correctExamsButton2"), __LANG === "es" ? "Pasar puntos" : "Pass points")
             }
         );
     })
     $("#correctExamsButton3").click(function () {
-        loadingBtn($("#correctExamsButton3"), '', 'Pasando porcentajes...')
+        loadingBtn($("#correctExamsButton3"), '', __LANG === "es" ? "Pasando porcentajes..." : "Passing percentages...")
         $.post(includeThisFile(), { passPoints: _examInfo.id, passPorcent: true },
             function (data, textStatus, jqXHR) {
                 console.log('passPorcent: ', data)
-                loadingBtn($("#correctExamsButton3"), 'Pasar porcentajes')
+                loadingBtn($("#correctExamsButton3"), __LANG === "es" ? "Pasar porcentajes" : "Pass percentages")
             }
         );
     })
@@ -133,25 +133,6 @@ $(function () {
                     $("#viewExamModal .modal-body").html(data)
                 }
             );
-            //         $("#viewExamModal .modal-body").html(`
-            //     <div class="container bg-white px-3 py-5 p-md-5 shadow">
-            //     ${_examInfo.fvs.topics ? `        
-            //           <h4 class="mt-3">${topicNumber++} - ${_examInfo.desc1 === 'si' ? _examInfo.desc1_1 : _examInfo.fvs.title} <span class="badge badge-info">${_examInfo.fvs.value}</span></h4>
-            //           ${_examInfo.fvs.topics.map((topic, index) => {
-            //             count = index + 1
-            //             return `              
-            //           <div class="form-group">
-            //             <label class="font-weight-bold" for="fv${count}"> ${count}) ${topic.pregunta}</label>
-            //             <select id="fv${count}" class="form-control readonly">
-            //                 <option value="" selected>Selecciona la respuesta</option>
-            //                 <option value="v">Verdadero</option>
-            //                 <option value="f">Falso</option>
-            //             </select>
-            //         </div>`}).join('')}                          
-            //              `  : ''}
-
-
-            //  </div>`)
 
         }
     })
@@ -159,7 +140,7 @@ $(function () {
     /* ----------------------------- Grades options ----------------------------- */
     $("#gradeOptionsSearchButton").click(function (e) {
         e.preventDefault()
-        loadingBtn($("#gradeOptionsSearchButton"), '', 'Buscando...')
+        loadingBtn($("#gradeOptionsSearchButton"), '', __LANG === "es" ? "Buscando..." : "Searching...")
         $.post(includeThisFile(), {
             gradeOptionsSearch: true,
             grade: $("#gradeOptionsModalGrade").val(),
@@ -167,7 +148,7 @@ $(function () {
             type: $("#gradeOptionsType").val()
         },
             function (data) {
-                loadingBtn($("#gradeOptionsSearchButton"), 'Buscar')
+                loadingBtn($("#gradeOptionsSearchButton"), __LANG === "es" ? "Buscar" : "Search")
                 if (data.response) {
                     const gradeOptions = data.data
                     let selectedBefore = ''
@@ -214,7 +195,7 @@ $(function () {
     $("#gradeOptionsButton").click(function (e) {
         e.preventDefault()
         if (_gradeOptionsSearched) {
-            loadingBtn($("#gradeOptionsButton"), '', 'Guardando...')
+            loadingBtn($("#gradeOptionsButton"), '', __LANG === "es" ? "Guardando..." : "Saving...")
             dataToSend = {};
             dataToSend['selected'] = $("[name=gradeOptionsSelected]:checked").length > 0 ? $("[name=gradeOptionsSelected]:checked").val() : ''
             for (let index = 1; index <= 10; index++) {
@@ -230,7 +211,7 @@ $(function () {
             },
                 function (data) {
                     _gradeOptionsSearched.gradeOptions = 'edit'
-                    loadingBtn($("#gradeOptionsButton"), 'Guardar')
+                    loadingBtn($("#gradeOptionsButton"), __LANG === "es" ? "Guardar" : "Save")
                 });
         }
     })
@@ -262,7 +243,7 @@ $(function () {
         if ($(this)[0].checkValidity() === false) {
             $(this).addClass('was-validated')
         } else {
-            loadingBtn($("#infoExamButton"), '', 'Guardando...')
+            loadingBtn($("#infoExamButton"), '', __LANG === "es" ? "Guardando..." : "Saving...")
             $.post(includeThisFile(), {
                 examInfo: _examInfo.id,
                 grade: $("#infoExamGrade").val(),
@@ -281,7 +262,7 @@ $(function () {
                     _examInfo.tiempo = $("#infoExamTime").val()
                     _examInfo.ver_nota = $("#infoExamPreviewGrade1").prop('checked') ? 'si' : 'no'
                     _examInfo.activo = $("#infoExamAvailability1").prop('checked') ? 'si' : 'no'
-                    loadingBtn($("#infoExamButton"), 'Guardar')
+                    loadingBtn($("#infoExamButton"), __LANG === "es" ? "Guardar" : "Save")
                 });
         }
     })
@@ -324,10 +305,10 @@ $(function () {
                     ...dataToSend,
                     addQuestion: _examInfo.id,
                 }
-                loadingBtn($(this), '', 'Guardando...')
+                loadingBtn($(this), '', __LANG === "es" ? "Guardando..." : "Saving...")
 
             } else {
-                loadingBtn($(this), '', 'Actualizando...')
+                loadingBtn($(this), '', __LANG === "es" ? "Actualizando..." : "Updating...")
                 dataToSend = {
                     ...dataToSend,
                     editQuestion: $(this).data('questionId'),
@@ -335,14 +316,14 @@ $(function () {
             }
 
             $.post(includeThisFile(), dataToSend, function (data) {
-                loadingBtn($(this), 'Agregar')
+                loadingBtn($(this), __LANG === "es" ? "Agregar" : "Add")
                 clearInputs()
                 fillOption()
                 loadMenu()
 
             });
         } else {
-            $(this).addClass('border-danger').after('<div class="alert alert-danger mt-2" role="alert">Debe de llenar todos los campos!</div>')
+            $(this).addClass('border-danger').after(`<div class="alert alert-danger mt-2" role="alert">${__LANG === "es" ? "Debe de llenar todos los campos!" : "You must fill in all the fields!"}</div>`)
         }
     })
 
@@ -356,7 +337,7 @@ $(function () {
                 itemId = $("#option4Add").data('questionId')
                 itemValue = $(".optionModal.show").find(`.item[data-id=${itemId}]`).find(`.itemAnswer${index}`).val()
             }
-            answersInput += `<input id="option4Answer${index}" name="option4Answer${index}" placeholder="respuesta ${index}" ${isEditing ? `value="${itemValue ?? ''}"` : ''} type="text" class="form-control" required>`
+            answersInput += `<input id="option4Answer${index}" name="option4Answer${index}" placeholder="${__LANG === 'es' ? 'respuesta' : 'answer'} ${index}" ${isEditing ? `value="${itemValue ?? ''}"` : ''} type="text" class="form-control" required>`
         }
         $("#option4Answers").html(answersInput)
     })
@@ -400,7 +381,7 @@ $(function () {
     })
 
     $("#deleteButton").click(function (e) {
-        loadingBtn($("#deleteButton"), '', 'Eliminando...')
+        loadingBtn($("#deleteButton"), '', __LANG === "es" ? "Eliminando..." : "Deleting...")
         $.post(includeThisFile(), {
             optionNumber: _optionNumber,
             deleteQuestion: _deleteId,
@@ -410,7 +391,7 @@ $(function () {
                 fillOption()
                 loadMenu()
                 $("#deleteModal").modal('hide')
-                loadingBtn($("#deleteButton"), 'Eliminar')
+                loadingBtn($("#deleteButton"), __LANG === "es" ? "Eliminar" : "Delete")
             });
     })
 
@@ -455,10 +436,10 @@ $(function () {
                     ...dataToSend,
                     addAnswer: _examInfo.id,
                 }
-                loadingBtn($(this), '', 'Guardando...')
+                loadingBtn($(this), '', __LANG === "es" ? "Guardando..." : "Saving...")
 
             } else {
-                loadingBtn($(this), '', 'Actualizando...')
+                loadingBtn($(this), '', __LANG === "es" ? "Actualizando..." : "Updating...")
                 dataToSend = {
                     ...dataToSend,
                     editAnswer: $(this).data('answerId'),
@@ -468,14 +449,14 @@ $(function () {
             console.log('dataToSend:', dataToSend)
             $.post(includeThisFile(), dataToSend, function (data) {
                 console.log('addAnwser:', data)
-                loadingBtn($(this), 'Agregar')
+                loadingBtn($(this), __LANG === "es" ? "Agregar" : "Add")
                 clearInputs()
                 fillOption()
                 loadMenu()
 
             });
         } else {
-            $(this).addClass('border-danger').after('<div class="alert alert-danger mt-2" role="alert">Debe de llenar todos los campos!</div>')
+            $(this).addClass('border-danger').after(`<div class="alert alert-danger mt-2" role="alert">${__LANG === 'es' ? "Debe de llenar todos los campos!" : "You must fill in all the fields!"}</div>`)
         }
     })
 
@@ -506,9 +487,9 @@ $(function () {
             $.post(includeThisFile(), { checkTitle: $("#newExamTitle").val() },
                 function (dataTitle) {
                     $("#newExamTitle").removeClass('is-invalid')
-                    loadingBtn($(this), '', 'Creando...')
+                    loadingBtn($(this), '', __LANG === "es" ? "Creando..." : "Creating...")
                     if (dataTitle.exists) {
-                        alert("Este titulo ya existe!\nUtilice otro titulo para el examen")
+                        alert(__LANG === 'es' ? 'Ya existe un examen con ese nombre' : 'There is an exam with that name')
                         $("#newExamTitle").val('').focus()
                     } else {
                         $.post(includeThisFile(), {
@@ -533,7 +514,7 @@ $(function () {
                             'json'
                         );
                     }
-                    loadingBtn($(this), 'Crear')
+                    loadingBtn($(this), __LANG === "es" ? "Crear" : "Create")
                 },
                 "json"
             );
@@ -545,7 +526,7 @@ $(function () {
     /* ----------------------------- Duplicate exam ----------------------------- */
     $("#duplicateExamButton").click(function (e) {
         e.preventDefault();
-        loadingBtn($(this), '', 'Duplicando...')
+        loadingBtn($(this), '', __LANG === "es" ? "Duplicando..." : "Duplicating...")
         $.post(includeThisFile(), {
             duplicateExam: _examInfo.id,
             title: $("#duplicateExamTitle").val(),
@@ -553,7 +534,7 @@ $(function () {
         },
             function (data) {
                 console.log('duplicate:', data)
-                loadingBtn($(this), 'Duplicar Examen')
+                loadingBtn($(this), __LANG === "es" ? "Duplicar examen" : "Duplicate exam")
                 _examInfo = data
                 $("#searchExamId").prepend(`<option value='${_examInfo.id}' selected>${_examInfo.titulo}</option>`)
                 $("#infoExamModal,#duplicateExamModal").modal('hide')
@@ -564,12 +545,12 @@ $(function () {
 
     /* ---------------------------- Search exam by Id --------------------------- */
     $("#searchExamBtn").click(function (e) {
-        loadingBtn($("#searchExamBtn"), '', 'Buscando...')
+        loadingBtn($("#searchExamBtn"), '', __LANG === "es" ? "Buscando..." : "Searching...")
         const examId = $("#searchExamId").val()
         $.post(includeThisFile(), {
             searchExam: examId
         }, function (data) {
-            loadingBtn($("#searchExamBtn"), 'Buscar')
+            loadingBtn($("#searchExamBtn"), __LANG === "es" ? "Buscar" : "Search")
             const exam = $.parseJSON(data)
             _examInfo = exam
             console.log('_examInfo:', _examInfo)
@@ -590,7 +571,7 @@ $(function () {
                 console.log(data.exists)
                 if (data.exists) {
                     console.log('exists')
-                    alert("Este titulo ya existe!\nUtilice otro titulo para el examen")
+                    alert(__LANG === 'es' ? 'Ya existe un examen con ese nombre' : 'There is an exam with that name')
                     $("#title").val($("#title").data('title'))
                 } else {
                     console.log('no exists')
@@ -640,9 +621,9 @@ $(function () {
         );
     }
     function resetButton() {
-        $(`#option${_optionNumber}Add`).text("Agregar").data('action', 'save').removeData('questionId').prop('disabled', false).removeClass('disabled')
+        $(`#option${_optionNumber}Add`).text(__LANG === "es" ? "Agregar" : "Add").data('action', 'save').removeData('questionId').prop('disabled', false).removeClass('disabled')
         if (_optionNumber === 3) {
-            $(`#option3AddCode`).text("Agregar").data('action', 'save').removeData('answerId').prop('disabled', false).removeClass('disabled')
+            $(`#option3AddCode`).text(__LANG === "es" ? "Agregar" : "Add").data('action', 'save').removeData('answerId').prop('disabled', false).removeClass('disabled')
         }
     }
     function clearInputs() {
@@ -714,9 +695,9 @@ $(function () {
                             ${_optionNumber === 5 ? `<input type='hidden' class='itemLines' value='${el.lineas}'>` : ''}
                    <span class="float-right">
                        ${hasCorrectAnswer ? `<span class="badge badge-secondary">respuesta: <span class="itemAnswer">${correctAnswer}</span></span>` : ''}
-                       <span class="badge badge-secondary">valor: <span class="itemValue">${el.valor}</span></span>
-                       <a href="#" class="badge badge-info text-light editQuestion" data-id="${el.id}">Editar</a>
-                       <a href="#" class="badge badge-danger text-light deleteQuestion" data-id="${el.id}">Borrar</a>
+                       <span class="badge badge-secondary">${__LANG === 'es' ? "valor" : "value"}: <span class="itemValue">${el.valor}</span></span>
+                       <a href="#" class="badge badge-info text-light editQuestion" data-id="${el.id}">${__LANG === "es" ? "Editar" : "Edit"}</a>
+                       <a href="#" class="badge badge-danger text-light deleteQuestion" data-id="${el.id}">${__LANG === "es" ? "Borrar" : "Delete"}</a>
                    </span>
                </li>`
                             optionElement.append(html)
@@ -732,8 +713,8 @@ $(function () {
                    <span class="text-monospace itemTitle">${el.respuesta}</span>
                    <span class="float-right">
                        <span class="badge badge-secondary">id: ${el.id}</span>
-                       <a href="#" class="badge badge-info text-light editAnswer" data-id="${el.id}">Editar</a>
-                       <a href="#" class="badge badge-danger text-light deleteAnswer" data-id="${el.id}">Borrar</a>
+                       <a href="#" class="badge badge-info text-light editAnswer" data-id="${el.id}">${el.id}">${__LANG === "es" ? "Editar" : "Edit"}</a>
+                       <a href="#" class="badge badge-danger text-light deleteAnswer" data-id="${el.id}">${el.id}">${__LANG === "es" ? "Borrar" : "Delete"}</a>
                    </span>
                </li>`
                             const option = `<option value='${el.id}'>${el.respuesta}</option>`
@@ -744,12 +725,12 @@ $(function () {
 
                     } else {
 
-                        $("#option3CreatedAnswers").html("<h3 class='text-center text-muted'>No hay preguntas creadas</h3>")
+                        $("#option3CreatedAnswers").html(`<h3 class='text-center text-muted'>${__LANG === 'es' ? "No hay preguntas creadas" : "No questions created"}</h3>`)
                     }
 
                 } else {
-                    optionElement.html("<h3 class='text-center text-muted'>No hay preguntas creadas</h3>")
-                    $("#option3CreatedAnswers").html("<h3 class='text-center text-muted'>No hay respuestas creadas</h3>")
+                    optionElement.html(`<h3 class='text-center text-muted'>${__LANG === 'es' ? "No hay preguntas creadas" : "No questions created"}</h3>`)
+                    $("#option3CreatedAnswers").html(`<h3 class='text-center text-muted'>${ __LANG === 'es' ? "No hay respuestas creadas" : "No answers created"}</h3>`)
                 }
             }, 'json');
 
@@ -768,12 +749,12 @@ $(function () {
                 examTotalAmount += menu.amount;
                 examTotalValue += menu.value;
                 const option = index + 1
-                $(`.option${option}`).children().children('.amount').text(`cantidad: ${menu.amount}`)
-                $(`.option${option}`).children().children('.value').text(`valor: ${menu.value}`)
+                $(`.option${option}`).children().children('.amount').text(`${__LANG === 'es' ? "cantidad" : 'amount'}: ${menu.amount}`)
+                $(`.option${option}`).children().children('.value').text(`${__LANG === 'es' ? 'valor' : 'value'}: ${menu.value}`)
             });
 
-            $("#examTotalAmount").text(`cantidad: ${examTotalAmount}`)
-            $("#examTotalValue").text(`valor: ${examTotalValue}`)
+            $("#examTotalAmount").text(`${__LANG === 'es' ? "cantidad" : 'amount'}: ${examTotalAmount}`)
+            $("#examTotalValue").text(`${__LANG === 'es' ? 'valor' : 'value'}: ${examTotalValue}`)
             // Enabled buttons and title
             $("#title").prop("disabled", false).val(_examInfo.titulo).data('title', _examInfo.titulo)
             $("#menuButtons button,#settingsButtons button,.printExam").prop("disabled", false)

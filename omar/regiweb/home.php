@@ -1,12 +1,16 @@
 <?php
 require_once '../app.php';
 
+use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+    ['Conectate desde cualquier parte del Mundo.', "Connect from anywhere in the world."]
+])
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -23,7 +27,7 @@ $teacher = new Teacher(Session::id());
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3  px-0">
-        <h1 class="display-4 mt-5">Conectate desde cualquier parte del Mundo.</h1>
+        <h1 class="display-4 mt-5"><?= $lang->translation("Conectate desde cualquier parte del Mundo.") ?></h1>
         <img class="img-fluid mx-auto d-block mt-5 mt-lg-4 w-25" src="/images/globe.gif" />
     </div>
     <?php

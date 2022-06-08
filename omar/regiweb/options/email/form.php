@@ -30,24 +30,22 @@ $savedMessages = DB::table('T_correos_guardados')->where([
     ['id_profesor', $teacher->id]
 ])->orderBy('id DESC')->get();
 /* ------------------------------- Transaltion ------------------------------ */
-$TRANS = [
-    "es" => [
-        "PAGE_TITLE" => "Enviar correo a $_titleValue",
-        "OPTION1" => 'Titulo',
-        "OPTION2" => 'Asunto',
-        "OPTION3" => 'Mensaje',
-        "OPTION4" => 'Archivos',
-    ],
-    "en" => [
-        "PAGE_TITLE" => "Send E-mail to $_titleValue",
-        "OPTION1" => 'Titulo',
-        "OPTION2" => 'Subject',
-        "OPTION3" => 'Message',
-        "OPTION4" => 'Files',
-    ]
-];
+$lang = new Lang([
+    ["Enviar correo a $_titleValue", "Send E-mail to $_titleValue"],
+    ['Titulo', 'Title'],
+    ['Asunto', 'Subject'],
+    ['Mensaje', 'Message'],
+    ['Archivos', 'Files'],
+    ["Agregar archivo", "Add file"],
+    ["Guardar este mensaje", "Save this message"],
+    ["(Se Guarda sin archivos)", "(Will be save without files)"],
+    ["Notificar por SMS", "Notify by SMS"],
+    ["Atrás", "Back"],
+    ["Mensajes guardados", "Saved messages"],
+    ['Usar', 'Use'],
+    ['Borrar', 'Delete'],
 
-Lang::addTranslation($TRANS);
+]);
 
 ?>
 <!DOCTYPE html>
@@ -55,7 +53,7 @@ Lang::addTranslation($TRANS);
 
 <head>
     <?php
-    $title = Lang::translation('PAGE_TITLE');
+    $title = $lang->translation("Enviar correo a $_titleValue");
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -65,7 +63,7 @@ Lang::addTranslation($TRANS);
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= Lang::translation('PAGE_TITLE') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation("Enviar correo a $_titleValue") ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded">
             <form action="<?= Route::url('/regiweb/options/email/includes/form.php') ?>" method="post" enctype="multipart/form-data">
                 <?php if (isset($_POST['student'])) : ?>
@@ -77,56 +75,56 @@ Lang::addTranslation($TRANS);
                 <?php endif ?>
                 <div class="input-group mb-3 option">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="title"><?= Lang::translation('OPTION1') ?></label>
+                        <label class="input-group-text" for="title"><?= $lang->translation("Titulo") ?></label>
                     </div>
                     <input class="form-control" type="text" name="title" id="title" required>
                 </div>
                 <div class="input-group mb-3 option">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="subject"><?= Lang::translation('OPTION2') ?></label>
+                        <label class="input-group-text" for="subject"><?= $lang->translation("Asunto") ?></label>
                     </div>
                     <input class="form-control" type="text" name="subject" id="subject" required>
                 </div>
                 <div class="input-group mb-3 option">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="message"><?= Lang::translation('OPTION3') ?></label>
+                        <label class="input-group-text" for="message"><?= $lang->translation("Mensaje") ?></label>
                     </div>
                     <textarea class="form-control" name="message" id="message" required> </textarea>
                 </div>
                 <div class="form-group">
-                    <label for="addFile"><?= Lang::translation('OPTION4') ?></label>
-                    <button class="btn btn-secondary d-block mx-auto addFile" id="addFile">Agregar archivo</button>
+                    <label for="addFile"><?= $lang->translation("Archivos") ?></label>
+                    <button class="btn btn-secondary d-block mx-auto addFile" id="addFile"><?= $lang->translation("Agregar archivo") ?></button>
                 </div>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="saveMessage" name="saveMessage">
-                    <label class="custom-control-label" for="saveMessage">Guardar este mensaje</label>
-                    <small class="text-info">(Se Guarda sin archivos)</small>
+                    <label class="custom-control-label" for="saveMessage"><?= $lang->translation("Guardar este mensaje") ?></label>
+                    <small class="text-info"><?= $lang->translation("(Se Guarda sin archivos)") ?></small>
                 </div>
                 <?php if (!isset($_POST['admin'])) : ?>
                     <div class="custom-control custom-checkbox ">
                         <input type="checkbox" class="custom-control-input" id="sms" name="sms">
-                        <label class="custom-control-label" for="sms">Notificar por SMS</label>
+                        <label class="custom-control-label" for="sms"><?= $lang->translation("Notificar por SMS") ?></label>
                     </div>
                 <?php endif ?>
                 <div class="row my-3">
                     <div class="col-6 text-right">
-                        <img src="<?= $_SESSION['captcha']['image_src'] ?>" alt="captcha">
+                        <img src="<?= $_SESSION['captcha']['image_src'] ?>" alt="captcha" style="width:120px;">
                         <input type="hidden" id="cap" value="<?= $_SESSION['captcha']['code'] ?>">
                     </div>
                     <div class="col-6 col-md-3 d-flex">
-                        <input class="form-control align-self-center" id="code" required type="text">
+                        <input class="form-control form-control-sm align-self-center" id="code" required type="text">
                     </div>
                 </div>
                 <div class="text-center">
-                    <a href="index.php" class="btn btn-secondary">Atrás</a>
-                    <input class="btn btn-primary" type="submit" value="<?= Lang::$trans['continue'] ?>">
+                    <a href="index.php" class="btn btn-secondary"><?= $lang->translation("Atrás") ?></a>
+                    <input class="btn btn-primary" type="submit" value="<?= $lang->translation("Continuar"); ?>">
                 </div>
         </div>
         </form>
 
         <?php if (sizeof($savedMessages) > 0) : ?>
             <div class="mt-5">
-                <h4 class="text-center mb-4">Mensajes guardados</h4>
+                <h4 class="text-center mb-4"><?= $lang->translation("Mensajes guardados") ?></h4>
                 <div id="savedMessages" class="row row-cols-2 row-cols-md-3">
                     <?php foreach ($savedMessages as $message) : ?>
                         <div class="col mb-4">
@@ -138,8 +136,8 @@ Lang::addTranslation($TRANS);
                                 </div>
 
                                 <div class="card-body">
-                                    <button class="btn btn-primary">Usar</button>
-                                    <button data-id="<?= $message->id ?>" class="btn btn-danger delete">Borrar</button>
+                                    <button class="btn btn-primary"><?= $lang->translation("Usar") ?></button>
+                                    <button data-id="<?= $message->id ?>" class="btn btn-danger delete"><?= $lang->translation("Borrar") ?></button>
                                 </div>
                             </div>
                         </div>

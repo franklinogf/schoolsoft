@@ -39,28 +39,33 @@ $columns = [
 ];
 
 $titles = [
-    "Semestre-1" => ["T-1", "C-1", "T-2", "C-2", 'Exa', 'Nota'],
-    "Semestre-2" => ["T-3", "C-3", "T-4", "C-4", 'Exa', 'Nota'],
+    "Semestre-1" => ["T-1", "C-1", "T-2", "C-2", 'Exa', $lang->translation('Nota')],
+    "Semestre-2" => ["T-3", "C-3", "T-4", "C-4", 'Exa', $lang->translation('Nota')],
     "V-Nota" => ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'Bn', 'TPA', '%', 'Nta', 'Con', 'Au', 'Ta', 'Com']
 ];
+
+$lang->AddTranslation([
+    ["Semestre 1", "Semester 1"],
+    ["Semestre 2", "Semester 2"],
+]);
 
 $pdf = new PDF();
 $pdf->footer = false;
 $pdf->SetLeftMargin(5);
 $pdf->AddPage();
-$pdf->SetTitle($_title);
+$pdf->SetTitle($lang->translation($_title));
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(0,5,$_title,0,1,'C');
+$pdf->Cell(0, 5, $lang->translation($_title), 0, 1, 'C');
 $pdf->Ln(3);
-$pdf->Cell(50, 5, 'Profesor', 1, 0, 'C', true);
-$pdf->Cell(18, 5, 'Curso', 1, 0, 'C', true);
-$pdf->Cell(40, 5, utf8_decode('Descripción'), 1, 0, 'C', true);
-$pdf->Cell(20, 5, 'Creditos', 1, 0, 'C', true);
-$pdf->Cell(20, 5, 'Total Est.', 1, 0, 'C', true);
-$pdf->Cell(25, 5, 'Trimestre', 1, 0, 'C', true);
-$pdf->Cell(25, 5, 'Fecha', 1, 1, 'C', true);
+$pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
+$pdf->Cell(18, 5, $lang->translation("Curso"), 1, 0, 'C', true);
+$pdf->Cell(40, 5, $lang->translation("Descripción"), 1, 0, 'C', true);
+$pdf->Cell(20, 5, $lang->translation("Creditos"), 1, 0, 'C', true);
+$pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
+$pdf->Cell(25, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
+$pdf->Cell(25, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
 
 $pdf->SetFont('Arial', '', 7);
 $pdf->Cell(50, 5, utf8_decode($teacher->fullName()), 1, 0, 'C');
@@ -68,14 +73,14 @@ $pdf->Cell(18, 5, $data->curso, 1, 0, 'C');
 $pdf->Cell(40, 5, utf8_decode($data->descripcion), 1, 0, 'C');
 $pdf->Cell(20, 5, $teacher->credits($_class), 1, 0, 'C');
 $pdf->Cell(20, 5, count($students), 1, 0, 'C');
-$pdf->Cell(25, 5, $_trimester, 1, 0, 'C');
+$pdf->Cell(25, 5, $lang->trimesterTranslation($_trimester), 1, 0, 'C');
 $pdf->Cell(25, 5, Util::formatDate(Util::date()), 1, 1, 'C');
 
 $pdf->Ln(3);
 
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->Cell(50, 5, 'Apellidos', 1, 0, 'C', true);
-$pdf->Cell(40, 5, 'Nombre', 1, 0, 'C', true);
+$pdf->Cell(50, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
+$pdf->Cell(40, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
 foreach ($titles[$_report] as $index => $title) {
     if (count($titles[$_report]) === ($index + 1)) {
         $pdf->Cell(10, 5, $title, 1, 1, 'C', true);
@@ -121,13 +126,12 @@ $value = DB::table('valores')->where([
 if ($value) {
     $pdf->Ln(3);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(20, 4, 'Fecha', 1, 0, 'C', true);
-    $pdf->Cell(70, 4, 'Tema', 1, 0, 'C', true);
-    $pdf->Cell(10, 4, 'Valor', 1, 0, 'C', true);
-    $pdf->Cell(20, 4, 'Fecha', 1, 0, 'C', true);
-    $pdf->Cell(70, 4, 'Tema', 1, 0, 'C', true);
-    $pdf->Cell(10, 4, 'Valor', 1, 1, 'C', true);
-
+    $pdf->Cell(20, 4, $lang->translation("Fecha"), 1, 0, 'C', true);
+    $pdf->Cell(70, 4, $lang->translation("Tema"), 1, 0, 'C', true);
+    $pdf->Cell(10, 4, $lang->translation("Valor"), 1, 0, 'C', true);
+    $pdf->Cell(20, 4, $lang->translation("Fecha"), 1, 0, 'C', true);
+    $pdf->Cell(70, 4, $lang->translation("Tema"), 1, 0, 'C', true);
+    $pdf->Cell(10, 4, $lang->translation("Valor"), 1, 1, 'C', true);
     $pdf->SetFont('Arial', '', 7);
     for ($i = 1; $i <= 5; $i++) {
         $first = $i * 1;
