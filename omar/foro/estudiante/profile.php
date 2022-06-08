@@ -26,7 +26,7 @@ $student = new Student(Session::id());
     <h1 class="text-center">Mi Perfil <i class="far fa-id-card"></i></h1>
     <div class="row mt-5">
       <div class="col-lg-6 col-sm-12">
-        <form action="<?= Route::url('/foro/estudiante/includes/profiles.php') ?>" method="POST" enctype="multipart/form-data">
+        <form action="<?= Route::url('/foro/estudiante/includes/profile.php') ?>" method="POST" enctype="multipart/form-data">
           <img src="<?= $student->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
           <div class="form-group text-center mt-2">
             <button id="pictureBtn" type='button' class="btn btn-secondary">Cambiar Foto</button>
