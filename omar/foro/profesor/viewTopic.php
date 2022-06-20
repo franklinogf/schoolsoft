@@ -162,7 +162,7 @@ $comments = $topic->comments();
   </div>
 
   <?php
-  Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

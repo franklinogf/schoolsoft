@@ -63,7 +63,7 @@ $teacher = new Teacher(Session::id());
 
   </div>
   <?php
-  Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

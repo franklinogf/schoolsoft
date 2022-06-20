@@ -108,7 +108,7 @@ $teacher = new Teacher(Session::id());
 
   <?php
   Route::includeFile('/includes/layouts/progressBar.php', true);
-  Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 </body>
 

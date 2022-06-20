@@ -64,7 +64,7 @@ $lastTopic = $teacher->lastTopic();
     </div>
   </div>
   <?php
-  Route::includeFile('/foro/profesor/includes/layouts/scripts.php');
+  Route::includeFile('/includes/layouts/scripts.php', true);
   Route::js('/react-components/Clock.js', true);
   ?>
 
