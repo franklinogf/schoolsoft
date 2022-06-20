@@ -8,6 +8,7 @@ global $__tableDataInfo;
 global $__dataPk;
 global $__tableDataCheckboxName;
 global $__tableDataName;
+global $__tableDataButton;
 
 $defaultTableDataInfo = [
     [
@@ -23,7 +24,7 @@ $__tableDataInfo = $__tableDataInfo ?: $defaultTableDataInfo;
 $__tableDataCheckBoxName = $__tableDataCheckboxName ?: '';
 $__tableDataName = $__tableDataName ?: '';
 $__tableDataCheckbox = $__tableDataCheckbox ?: false;
-$lang = new Lang();
+$__tableDataButton = $__tableDataButton !== null ? $__tableDataButton : true;
 ?>
 <!-- default table -->
 
@@ -83,6 +84,11 @@ $lang = new Lang();
                     </th>
                 <?php endforeach ?>
             </tr>
+            <?php if ($__tableDataCheckbox && $__tableDataButton === true) : ?>
+                <tr>
+                    <td colspan="<?= sizeof($__tableDataInfo) + 1 ?>"><button type="submit" class="btn btn-block btn-primary"><?= __LANG === 'es' ? 'Continuar' : 'Continue' ?></button></td>
+                </tr>
+            <?php endif ?>
         </tfoot>
     </table>
 </div>
