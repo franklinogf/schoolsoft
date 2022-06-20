@@ -602,6 +602,7 @@ $(function () {
     function correctExams() {
         $.post(includeThisFile(), { fillCorrectExams: _examInfo.id, grade: _examInfo.curso },
             function (data, textStatus, jqXHR) {
+                $("#correctExamsModal .modal-footer button:eq(0)").prop('disabled', false)
                 if (data.response) {
                     $("#correctExamsModal .modal-footer button").prop('disabled', false)
                     correctExamsTable.rows().remove()
