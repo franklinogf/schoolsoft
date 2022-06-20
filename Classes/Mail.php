@@ -18,33 +18,31 @@ class Mail extends PHPMailer
       if ($type === 'School' || $type === 'Teacher') {
          $school = new School();
          $isSMTP = $school->info('host') === 'E' ? true : false;
-         $email = $school->info('correo');
          $name = $school->info('colegio');
-         $replayToEmail = $email;
+         $fromEmail = $replayToEmail = $school->info('correo');
          $replayToName = $name;
-         $host = $school->info('host_smtp');
-         $username = $school->info('email_smtp');
-         $password = $school->info('clave_email');
-         $port = $school->info('port');
          if ($type === 'Teacher') {
             $teacher = new Teacher(Session::id());
             $replayToEmail = $teacher->email1;
             $replayToName = $teacher->fullName();
          }
-
          if ($isSMTP) {
+            $host = $school->info('host_smtp');
+            $fromEmail = $school->info('email_smtp');
+            $password = $school->info('clave_email');
+            $port = $school->info('port');
             parent::__construct(true);
-            $this->SMTPDebug = ($debug) ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
             $this->isSMTP();
+            $this->SMTPDebug = ($debug) ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
             $this->Host       = $host;
             $this->SMTPAuth   = true;
-            $this->Username   = $username;
+            $this->Username   = $fromEmail;
             $this->Password   = $password;
-            $this->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->Port       =  $port;
          }
 
-         $this->setFrom($email, utf8_decode($name));
+         $this->setFrom($fromEmail, utf8_decode($name));
          if ($this->replyTo)  $this->addReplyTo($replayToEmail, utf8_decode($replayToName));
       }
    }
