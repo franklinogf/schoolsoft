@@ -11,15 +11,28 @@ use Classes\Util;
 
 Session::is_logged();
 Route::includeFile('/simple-php-captcha/simple-php-captcha.php', true);
-$_SESSION['captcha'] = simple_php_captcha();
+Session::set("captcha", simple_php_captcha());
+
 $teacher = new Teacher(Session::id());
-if (isset($_POST['student'])) {
-    $_ss = $_POST['student'];
-    $student = new Student($_ss);
-    $_titleValue = $student->fullName();
-} else if (isset($_POST['grade'])) {
-    $_grade = $_POST['grade'];
-    $_titleValue =  __LANG === 'es' ? "todos los estudiantes del grado $_grade" : "all the students of the grade $_grade";
+if (isset($_POST['students'])) {
+    $studentsAmount = sizeof($_POST['students']);
+    if ($studentsAmount > 1) {
+        $_titleValue = __LANG === 'es' ? "$studentsAmount estudiantes" : "$studentsAmount students";
+    } else {
+        $_mt = $_POST['students'][0];
+        $student = new Student($_mt);
+        $_titleValue = $student->fullName();
+    }
+    Session::set('students', $_POST['students']);
+} else if (isset($_POST['classes'])) {
+    $classesAmount = sizeof($_POST['classes']);
+    if ($classesAmount > 1) {
+        $_titleValue =  __LANG === 'es' ? "todos los estudiantes de $classesAmount grados" : "all the students of $classesAmount classes";
+    } else {
+        $_grade = $_POST['classes'][0];
+        $_titleValue =  __LANG === 'es' ? "todos los estudiantes del grado $_grade" : "all the students of the grade $_grade";
+    }
+    Session::set('classes', $_POST['classes']);
 } else {
     $_user = $_POST['admin'];
     $_titleValue =  __LANG === 'es' ? "al administrador $_user" : "to the admin $_user";
@@ -29,6 +42,7 @@ $savedMessages = DB::table('T_correos_guardados')->where([
     ['colegio', $teacher->usuario],
     ['id_profesor', $teacher->id]
 ])->orderBy('id DESC')->get();
+
 /* ------------------------------- Transaltion ------------------------------ */
 $lang = new Lang([
     ["Enviar correo a $_titleValue", "Send E-mail to $_titleValue"],
@@ -66,10 +80,10 @@ $lang = new Lang([
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation("Enviar correo a $_titleValue") ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded">
             <form action="<?= Route::url('/regiweb/options/email/includes/form.php') ?>" method="post" enctype="multipart/form-data">
-                <?php if (isset($_POST['student'])) : ?>
-                    <input type="hidden" name="student" value="<?= $_POST['student'] ?>">
-                <?php elseif (isset($_POST['grade'])) : ?>
-                    <input type="hidden" name="grade" value="<?= $_POST['grade'] ?>">
+                <?php if (isset($_POST['students'])) : ?>
+                    <input type="hidden" name="studentsAmount" value="<?= $studentsAmount ?>" />
+                <?php elseif (isset($_POST['classes'])) : ?>
+                    <input type="hidden" name="classesAmount" value="<?= $classesAmount ?>" />
                 <?php else : ?>
                     <input type="hidden" name="admin" value="<?= $_POST['admin'] ?>">
                 <?php endif ?>

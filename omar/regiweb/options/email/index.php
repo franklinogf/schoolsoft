@@ -41,7 +41,7 @@ $lang = new Lang([
                     <button data-id="students" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Estudiantes") ?></button>
                 </div>
                 <div class="col mb-3 mb-md-0">
-                    <button data-id="grades" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Cursos") ?></button>
+                    <button data-id="classes" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Cursos") ?></button>
                 </div>
                 <div class="col">
                     <button data-id="admins" class="btn btn-outline-light btn-block btn-lg options"><?= $lang->translation("Administradores") ?></button>
@@ -54,46 +54,52 @@ $lang = new Lang([
             </div>
         <?php endif ?>
         <div id="value" class="container bg-white shadow-lg py-3 rounded hidden">
-            <form action="<?= Route::url('/regiweb/options/email/form.php') ?>" method="post">
-                <div class="mx-auto" style="width: 20rem;">
+            <form id="form" action="<?= Route::url('/regiweb/options/email/form.php') ?>" method="post">
 
-                    <div id='students' class="input-group mb-3 option hidden">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text"><?= $lang->translation("Estudiantes") ?></label>
-                        </div>
-                        <select name="student" class="custom-select" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
-                            <?php foreach ($teacher->homeStudents() as $student) : ?>
-                                <option value="<?= $student->ss ?>"><?= "$student->apellidos, $student->nombre" ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-
-                    <div id='grades' class="input-group mb-3 option hidden">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text"><?= $lang->translation("Cursos") ?></label>
-                        </div>
-                        <select name="grade" class="custom-select" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
-                            <?php foreach ($teacher->classes() as $class) : ?>
-                                <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-
-                    <div id='admins' class="input-group mb-3 option hidden">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text"><?= $lang->translation("Administradores") ?></label>
-                        </div>
-                        <select name="admin" class="custom-select" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
-                            <?php foreach ($admins as $admin) : ?>
-                                <option value="<?= $admin->usuario ?>"><?= "$admin->usuario" ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-
+                <div id="students" class="mb-3 option hidden">
+                    <?php
+                    $__tableData = $teacher->homeStudents();
+                    $__tableDataCheckbox = true;
+                    $__tableDataName = 'students';
+                    Route::includeFile('/includes/layouts/table.php', true)
+                    ?>
                 </div>
+
+                <div id="classes" class="mb-3 option hidden">
+                    <?php
+                    $__tableData = $teacher->classes();
+                    $__tableDataCheckbox = true;
+                    $__tableDataName = 'classes';
+                    $__tableDataInfo = [
+                        [
+                            'title' => ["es" => "Curso", 'en' => "Class"],
+                            'values' => ['curso']
+                        ],
+                        [
+                            'title' => ["es" => "Descripción", 'en' => "Description"],
+                            'values' => ['desc1']
+                        ]
+                    ];
+                    $__dataPk = 'curso';
+                    Route::includeFile('/includes/layouts/table.php', true)
+                    ?>
+                </div>
+
+
+
+                <div id='admins' class="input-group mb-3 option hidden mx-auto" style="width: 20rem;">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text"><?= $lang->translation("Administradores") ?></label>
+                    </div>
+                    <select name="admin" class="custom-select" required>
+                        <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
+                        <?php foreach ($admins as $admin) : ?>
+                            <option value="<?= $admin->usuario ?>"><?= "$admin->usuario" ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+
+
 
                 <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
         </div>
@@ -106,6 +112,7 @@ $lang = new Lang([
 
     </div>
     <?php
+    $DataTable = true;
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
 

@@ -23,17 +23,20 @@ $lang = new Lang([
     ["Se ha enviado el correo electrónico a", "The email has been sent to"],
     ["de", "of"],
     ["estudiantes", "students"],
+    ["No tiene correo electrónico registrado", "No email registered"],
+    ["Ningun estudiante tiene correo electrónico registrado", "None of the students has an email registered"],
 ]);
+$__lang =  __LANG;
 $messageTitle = utf8_decode($_REQUEST['title']);
-$messageBody = utf8_decode($_REQUEST['message']);
+$messageBody = nl2br(utf8_decode($_REQUEST['message']));
 $messageSubject = utf8_decode($_REQUEST['subject']);
 $schoolName = $teacher->info('colegio');
-$mail = new Mail(true, "Teacher");
+$mail = new Mail(false, "Teacher");
 $mail->isHTML(true);
 $mail->Subject = $messageSubject;
 $mail->Body    = "
     <!DOCTYPE html>
-    <html lang='es'>
+    <html lang='{$__lang}'>
     <head>
       <meta charset='UTF-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -66,59 +69,102 @@ $file = new File();
 foreach ($file->files as $file) {
     $mail->addAttachment($file->tmp_name, $file->name);
 }
-
-if (isset($_POST['student'])) {
-    $ss = $_POST['student'];
-    $student = new Student($ss);
-
-    $mother = DB::table('madre')->select('madre,padre,email_m,email_p,cel_com_m,cel_m,cel_com_p,cel_p')
-        ->where([
-            ['id', $student->id]
-        ])->first();
-
-    if ($mother->email_m !== "") {
-        $mail->addAddress($mother->email_m);
-    }
-    if ($mother->email_p !== "") {
-        $mail->addAddress($mother->email_p);
-    }
-    // send email
-    if (!$mail->send()) {
-        Session::set('emailSent', $lang->translation("Error al enviar el correo electrónico") . " ($mail->ErrorInfo)");
-    } else {
-        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico"));
-    }
-    $mail->ClearAddresses();
-} else if (isset($_POST['grade'])) {
-    $grade = $_POST['grade'];
-    $students = DB::table('padres')->where([
-        ['id', $teacher->id],
-        ['curso', $grade],
-        ['year', $teacher->info('year')],
-        ['baja', '']
-    ])->get();
+if (isset($_POST['studentsAmount'])) {
+    $studentsAmount = (int)$_POST['studentsAmount'];
+    $students = Session::get('students', true);
     $messagesSent = 0;
-    $totalStudents = sizeof($students);
-    foreach ($students as $student) {
+    foreach ($students as $mt) {
+        $emailAmount = 0;
+        $student = new Student($mt);
         $mother = DB::table('madre')->select('madre,padre,email_m,email_p,cel_com_m,cel_m,cel_com_p,cel_p')
-            ->where('id', $student->id2)->first();
+            ->where([
+                ['id', $student->id]
+            ])->first();
+
         if ($mother->email_m !== "") {
             $mail->addAddress($mother->email_m);
+            $emailAmount++;
         }
         if ($mother->email_p !== "") {
             $mail->addAddress($mother->email_p);
+            $emailAmount++;
         }
-        // send email
-        if ($mail->send()) {
-            $messagesSent++;
-            $mail->ClearAddresses();
+
+        if ($emailAmount > 0) {
+            // send email
+            if ($mail->send()) {
+                $messagesSent++;
+                $mail->ClearAddresses();
+            }
         }
     }
-    if ($messagesSent === $totalStudents) {
-        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a todos los estudiantes"));
+
+    if ($messagesSent === $studentsAmount) {
+        if ($studentsAmount === 1) {
+            Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico"));
+        } else {
+            Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a todos los estudiantes"));
+        }
+    } else if ($messagesSent > 0) {
+        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a") . " $messagesSent " . $lang->translation("de") . " $studentsAmount " . $lang->translation("estudiantes"));
     } else {
-        Session::set('emailSent', $lang->translation("Se ha enviado el correo electrónico a") . " $messagesSent " . $lang->translation("de") . " $totalStudents " . $lang->translation("estudiantes") . " ($mail->ErrorInfo)");
+        if ($studentsAmount === 1) {
+            if ($emailAmount > 0) {
+                Session::set('emailSent', $lang->translation("Error al enviar el correo electrónico") . " ($mail->ErrorInfo)");
+            } else {
+                Session::set('emailSent', $lang->translation("No tiene correo electrónico registrado"));
+            }
+        } else {
+
+            Session::set('emailSent', $lang->translation("Ningun estudiante tiene correo electrónico registrado"));
+        }
     }
+} else if (isset($_POST['classesAmount'])) {
+    // $classesAmount = (int)$_POST['classesAmount'];
+    $classes = Session::get('classes', true);
+    $messagesSent = [];
+    $totalStudents = [];
+    foreach ($classes as $class) {
+        $messagesSent[$class] = 0;
+        $students = DB::table('padres')->where([
+            ['id', $teacher->id],
+            ['curso', $class],
+            ['year', $teacher->info('year')],
+            ['baja', '']
+        ])->get();
+        $totalStudents[$class] = sizeof($students);
+        foreach ($students as $student) {
+            $emailAmount = 0;
+            $mother = DB::table('madre')->select('madre,padre,email_m,email_p,cel_com_m,cel_m,cel_com_p,cel_p')
+                ->where('id', $student->id2)->first();
+
+            if ($mother->email_m !== "") {
+                $mail->addAddress($mother->email_m);
+                $emailAmount++;
+            }
+            if ($mother->email_p !== "") {
+                $mail->addAddress($mother->email_p);
+                $emailAmount++;
+            }
+            // send email
+            if ($emailAmount > 0) {
+                if ($mail->send()) {
+                    $messagesSent[$class]++;
+                    $mail->ClearAddresses();
+                }
+            }
+        }
+    }
+    foreach ($classes as $class) {
+        if ($messagesSent[$class] === $totalStudents[$class]) {
+            $emailSentSession .= $lang->translation("Se ha enviado el correo electrónico a todos los estudiantes") . '<br>';
+        } else if ($messagesSent[$class] > 0) {
+            $emailSentSession .= $class . ': ' . $lang->translation("Se ha enviado el correo electrónico a") . " $messagesSent[$class] " . $lang->translation("de") . " $totalStudents[$class] " . $lang->translation("estudiantes") . "<br>";
+        } else {
+            $emailSentSession .= $class . ': ' . $lang->translation("Ningun estudiante tiene correo electrónico registrado") . "<br>";
+        }
+    }
+    Session::set('emailSent', $emailSentSession);
 } else if ($_POST['admin']) {
     $adminUser = $_POST['admin'];
     $admin = new School($adminUser); //admin by user
@@ -137,10 +183,10 @@ if (isset($_POST['student'])) {
 
 // send and sms notification when it's marked
 if (isset($_POST['sms'])) {
-    $compa1 = $mother->cel_com_m;
-    $celular1 = $mother->cel_m;
-    $compa2 = $mother->cel_com_p;
-    $celular2 = $mother->cel_p;
+    $companie1 = $mother->cel_com_m;
+    $cellPhone1 = $mother->cel_m;
+    $companie2 = $mother->cel_com_p;
+    $cellPhone2 = $mother->cel_p;
     $mail->ClearAddresses();
     include_once('sendSms.php');
 }
