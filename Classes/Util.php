@@ -185,6 +185,35 @@ class Util
    {
       return ["AT&T", "T-Movil", "Sprint", "Open M.", "Claro", "Verizon", "Suncom", "Boost"];
    }
+   public static function phoneAddress($phone, $company)
+{
+    $phoneAddress = preg_replace('/[^\d]/', '', $phone);
+    if ($company == "AT&T") {
+        $phoneAddress .= "@txt.att.net";
+    }
+    if ($company == "T-Movil") {
+        $phoneAddress .= "@tmomail.net";
+    }
+    if ($company == "Sprint") {
+        $phoneAddress .= "@messaging.sprintpcs.com";
+    }
+    if ($company == "Open M.") {
+        $phoneAddress .= "@email.openmobilepr.com";
+    }
+    if ($company == "Claro") {
+        $phoneAddress .= "@mms.claropr.com";
+    }
+    if ($company == "Verizon") {
+        $phoneAddress .= "@vtext.com";
+    }
+    if ($company == "Suncom") {
+        $phoneAddress .= "@tms.suncom.com";
+    }
+    if ($company == "Boost") {
+        $phoneAddress .= "@myboostmobile.com";
+    }
+    return $phoneAddress;
+}
 
    public static function getIp()
    {
