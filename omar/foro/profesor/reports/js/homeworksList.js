@@ -1,4 +1,5 @@
 $(document).ready(function () {  
+  console.log('yes')
 
   $('.classesTable tbody').on('click', 'tr', function () {
     const row = classesTable.row(this)
