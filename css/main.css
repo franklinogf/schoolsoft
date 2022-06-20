@@ -6,6 +6,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Markazi+Text&display=swap");
 
+.dataTables_filter {
+	float: right;
+}
 textarea {
 	resize: vertical !important; /* user can resize vertically, but width is fixed */
 	min-height: 100px !important;
@@ -107,6 +110,10 @@ body {
 	border-bottom: 5px solid;
 }
 
+.table-pointer tbody tr td {
+	cursor: pointer;
+}
+
 .pointer-cursor {
 	cursor: pointer;
 }
@@ -157,13 +164,12 @@ body {
 	cursor: not-allowed;
 }
 
-tr.disabled{
+tr.disabled {
 	pointer-events: none;
-	opacity: .5;
-	
+	opacity: 0.5;
 }
 
 /* smooth scroll for animation */
-html{
+html {
 	scroll-behavior: smooth;
 }
