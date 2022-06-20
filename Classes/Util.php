@@ -118,7 +118,7 @@ class Util
                throw new \Exception('Introducir "true" o un formato de fecha correcto como (%d-%m-%Y)');
             }
          }
-         \setlocale(LC_ALL, 'es_ES');
+         \setlocale(LC_ALL, __LANG === 'es' ? 'es_ES' : 'en_EN');
          $newDate = strftime($format, strtotime($date));
          return $newDate;
       }
