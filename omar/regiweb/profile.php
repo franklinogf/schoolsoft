@@ -2,6 +2,7 @@
 require_once '../app.php';
 
 use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
@@ -150,15 +151,9 @@ $lang = new Lang([
               <label for="cellCompany"><?= $lang->translation("Compañia telefonica") ?></label>
               <select id="cellCompany" class="form-control" name="cellCompany">
                 <option <?= $teacher->comp === '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Selecionar") ?></option>
-                <option <?= $teacher->comp === 'T-Movil' ? 'selected=""' : '' ?> value="T-Movil">T-Mobile</option>
-                <option <?= $teacher->comp === 'AT&T' ? 'selected=""' : '' ?> value="AT&T">AT&T</option>
-                <option <?= $teacher->comp === 'Sprint' ? 'selected=""' : '' ?> value="Sprint">Sprint</option>
-                <option <?= $teacher->comp === 'Open M.' ? 'selected=""' : '' ?> value="Open M.">Open M.</option>
-                <option <?= $teacher->comp === 'Moviltar' ? 'selected=""' : '' ?> value="Movistar">Movistar</option>
-                <option <?= $teacher->comp === 'Claro' ? 'selected=""' : '' ?> value="Claro">Claro</option>
-                <option <?= $teacher->comp === 'Suncom' ? 'selected=""' : '' ?> value="Suncom">Suncom</option>
-                <option <?= $teacher->comp === 'Verizon' ? 'selected=""' : '' ?> value="Verizon">Verizon</option>
-                <option <?= $teacher->comp === 'Boost' ? 'selected=""' : '' ?> value="Boost">Boost Mobile</option>
+                <?php foreach (Util::phoneCompanies() as $company) : ?>
+                  <option <?= $teacher->comp === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
+                <?php endforeach ?>
               </select>
             </div>
             <div class="form-group  col-md-6">
