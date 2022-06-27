@@ -4,6 +4,7 @@ namespace Classes\Models;
 
 use Classes\Controllers\Homework;
 use Classes\Controllers\School;
+use Classes\Controllers\Student;
 use Classes\Models\StudentModel;
 
 class TeacherModel extends School
@@ -46,8 +47,8 @@ class TeacherModel extends School
           ['id', $id]
         ])->orderBy('curso', 'ASC')->get();
     } else {
-      $desc = (__LANG === "es") ? "desc1" : "desc2";
-      $obj =  parent::table('cursos')->select("*,{$desc} as desc1")
+      $desc = (__LANG === "es") ? "descripcion" : "desc2";
+      $obj =  parent::table('padres')->select("DISTINCT curso, {$desc} as desc1")
         ->where([
           ['year', $year],
           ['id', $id]
@@ -65,6 +66,13 @@ class TeacherModel extends School
         ['id', $id]
       ])->first();
     return $obj->creditos;
+  }
+
+  protected function getAllTeacherStudents($id, $table = 'padres')
+  {
+    $year = $this->info('year');
+    $students = new Student();
+    return $students->findById($id, $table);
   }
 
   protected function getHomeStudents($grade)
