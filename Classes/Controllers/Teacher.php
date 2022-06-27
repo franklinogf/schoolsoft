@@ -34,6 +34,14 @@ class Teacher extends TeacherModel
   {
     return $this->getTeacherByGrade($grade);
   }
+  //get all the students of a teacher from padres table
+  public function getAllStudents($table = 'padres')
+  {
+    if (!isset($this->id)) {
+      throw new \Exception('Primero debe de buscar un profesor');
+    }
+    return $this->getAllTeacherStudents($this->id, $table);
+  }
 
   public function classes()
   {
