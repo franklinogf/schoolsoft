@@ -1,6 +1,7 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
@@ -9,13 +10,18 @@ Session::is_logged();
 $jqUI = true;
 $DataTable = true;
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+['Tareas recibidas', 'Homeworks received'],
+['Mis cursos', 'My classes'],
+['Cerrar', 'Close'],
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head> 
   <?php
-  $title = "Tareas Recibidas";
+  $title = $lang->translation('Tareas recibidas');
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -26,7 +32,7 @@ $teacher = new Teacher(Session::id());
    Route::includeFile('/foro/profesor/includes/layouts/menu.php');
    ?>
    <div class="container mt-5 pb-5">
-      <h1 id="header" class="text-center">Mis Cursos</h1>
+      <h1 id="header" class="text-center"><?= $lang->translation("Mis cursos") ?></h1>
 
       <?php
       Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
@@ -49,7 +55,7 @@ $teacher = new Teacher(Session::id());
                   
                </div>
                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cerrar") ?></button>
                </div>
 
             </div>

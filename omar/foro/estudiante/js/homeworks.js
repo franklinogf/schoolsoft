@@ -105,7 +105,7 @@ $(document).ready(function () {
 	$(document).on("click", "button.delExistingFile", function (e) {
 		const fileId = $(this).data("fileId");
 
-		if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
+		if (confirm(__LANG === 'es' ? '¿Seguro que quiere eliminar este archivo?' : 'Are you sure you want to delete this file?')) {
 			$.post(includeThisFile(), { delExistingFile: fileId }, () => {
 				animateCSS($(this).parents(".input-group"), "zoomOut", () => {
 					$(this).parents(".input-group").remove();

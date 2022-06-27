@@ -15,9 +15,8 @@ $options = [
         'buttons' => [
             ['name' => ["es" => 'Correo electrónico', "en" => "Email"], 'link' => 'email/'],
             ['name' => ["es" => 'Mensaje de texto', "en" => "SMS"], 'link' => 'sms/'],
-            ['name' => ["es" => 'Mensaje Nuevo', "en" => "New message"], 'link' => '#'],
-            ['name' => ["es" => 'Mensajes Enviados', "en" => "Messages sent"], 'link' => '#'],
-            ['name' => ["es" => 'Mensajes de padres', "en" => "Parents messages"], 'link' => '#'],
+            ['name' => ["es" => 'Mensajes', "en" => "Inbox"], 'link' => 'inbox/'],
+            // ['name' => ["es" => 'Mensajes de padres', "en" => "Parents messages"], 'link' => '#'],
         ]
     ],
     // [

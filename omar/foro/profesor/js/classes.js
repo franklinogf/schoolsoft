@@ -4,7 +4,7 @@ $(document).ready(function () {
 	const classesTableWrapper = $(".classesTable").parents(".table_wrap");
 	const studentsTableWrapper = $(".studentsTable").parents(".table_wrap");
 	studentsTableWrapper.hide(0);
-	
+
 	$(".classesTable tbody").on("click", "tr", function () {
 		const row = classesTable.row(this);
 		if (row.index() !== undefined) {
@@ -34,11 +34,11 @@ $(document).ready(function () {
 						});
 						$("#header").hide("drop", { direction: "left" }, 400, () => {
 							$("#header")
-								.text("Lista de estudiantes")
+								.text(__LANG === 'es' ? 'Lista de estudiantes' : 'Students list')
 								.show("drop", { direction: "right" }, 400);
 						});
 					} else {
-						alert("No existen estudiantes en esta clase");
+						alert(__LANG === 'es' ? 'No existen estudiantes en esta clase' : 'There are no students in this class');
 					}
 				},
 			});
@@ -51,7 +51,7 @@ $(document).ready(function () {
 			classesTableWrapper.show("drop", { direction: "left" }, 400);
 		});
 		$("#header").hide("drop", { direction: "right" }, 400, () => {
-			$("#header").text("Mis Cursos").show("drop", { direction: "left" }, 400);
+			$("#header").text(__LANG === 'es' ? 'Mis Cursos' : 'My classes').show("drop", { direction: "left" }, 400);
 		});
 	});
 
@@ -72,7 +72,7 @@ $(document).ready(function () {
 						const username =
 							res.data.usuario &&
 							`<span class="badge badge-secondary">${res.data.usuario}</span>`;
-						modal.find(".modal-title").html(`Perfil del estudiante ${username}`);
+						modal.find(".modal-title").html(__LANG === 'es' ? 'Perfil del estudiante ' : 'Student profile ' + username);
 						modal.find("#profilePicture").prop("src", res.data.foto);
 						modal.find("#name").text(`${res.data.nombre}`);
 						modal.find("#grade").text(res.data.grado);

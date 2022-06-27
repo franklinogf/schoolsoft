@@ -1,24 +1,41 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Student;
+use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
-use Classes\Controllers\Topic;
-use Classes\Controllers\Teacher;
 use Classes\Session;
+use Classes\Controllers\Topic;
+use Classes\Controllers\Student;
+use Classes\Controllers\Teacher;
 
 Session::is_logged();
 if (!isset($_GET['id'])) {
   Route::error();
 }
 $topic = new Topic($_GET['id']);
-if(!isset($topic->id)){
+if (!isset($topic->id)) {
   Route::error();
 }
 $teacher = new Teacher(Session::id());
 
 $comments = $topic->comments();
+$lang = new Lang([
+  ['Temas', 'Topics'],
+  ['Editar tema', 'Edit topic'],
+  ['Eliminar tema', 'Delete topic'],
+  ['Comentario nuevo', 'New comment'],
+  ['Por favor escriba algo', 'Please write something'],
+  ['Comentar', 'Comment'],
+  ['Modificar tema', 'Update topic'],
+  ['Titulo', 'Title'],
+  ['Descripción del tema', 'Topic description'],
+  ['¿Tema disponible?', 'Available topic?'],
+  ['Si', 'Yes'],
+  ['Disponible hasta', 'Available to'],
+  ['Cerrar', 'Close'],
+  ['Guardar', 'Save'],
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,18 +56,18 @@ $comments = $topic->comments();
     <div class="row mt-3">
       <div class="col-lg-4">
         <a id="back" class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/profesor/topics.php') ?>">
-          <i class="far fa-comment"></i> Temas
+          <i class="far fa-comment"></i> <?= $lang->translation("Temas") ?>
         </a>
       </div>
       <div class="col-lg-4">
         <button type="button" id="editTopicBtn" class="btn btn-outline-primary btn-lg btn-block mb-3">
-          <i class="fas fa-edit fa-flip-horizontal"></i> Editar tema
+          <i class="fas fa-edit fa-flip-horizontal"></i> <?= $lang->translation("Editar tema") ?>
         </button>
       </div>
       <?php if (!$comments) : ?>
         <div class="col-lg-3">
           <button data-topic-id="<?= $topic->id ?>" class="btn btn-danger btn-lg btn-block delTopic">
-            <i class="fas fa-trash-alt"></i> Borrar Tema
+            <i class="fas fa-trash-alt"></i> <?= $lang->translation("Eliminar Tema") ?>
           </button>
         </div>
       <?php endif ?>
@@ -75,11 +92,11 @@ $comments = $topic->comments();
     <div class="mt-3 pb-5">
       <?php if ($topic->estado === 'a') : ?>
         <div class="form-group">
-          <label for="comment">Comentario nuevo</label>
+          <label for="comment"><?= $lang->translation("Comentario nuevo") ?></label>
           <textarea class="form-control" id="comment" rows="3" required></textarea>
-          <div class="invalid-feedback">Por favor escriba algo</div>
+          <div class="invalid-feedback"><?= $lang->translation("Por favor escriba algo") ?></div>
         </div>
-        <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>
+        <button class="btn btn-primary" id="insertComment" type="submit"><?= $lang->translation("Comentar") ?></button>
       <?php endif ?>
 
 
@@ -112,7 +129,7 @@ $comments = $topic->comments();
       <div class="modal-dialog modal-lg" role="dialog">
         <div class="modal-content">
           <div class="modal-header bg-primary">
-            <h5 class="modal-title">Modificar tema</h5>
+            <h5 class="modal-title"><?= $lang->translation("Modificar tema") ?></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -122,21 +139,21 @@ $comments = $topic->comments();
               <input type="hidden" name="id_topic" id="id_topic" value="<?= $topic->id ?>">
               <div class="form-row">
                 <div class="form-group col-12">
-                  <label for="modalTitle">Titulo del tema:</label>
+                  <label for="modalTitle"><?= $lang->translation("Titulo") ?></label>
                   <input type="text" class="form-control" name='title' id="modalTitle" value="<?= $topic->titulo ?>">
                 </div>
                 <div class="form-group  col-12">
-                  <label for="modalDescription">Descripcion del tema</label>
+                  <label for="modalDescription"><?= $lang->translation("Descripción del tema") ?></label>
                   <textarea class="form-control" name="description" id="modalDescription" rows="3" required><?= $topic->descripcion ?></textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-6">
-                  <label class="d-block">Tema disponible?</label>
+                  <label class="d-block"><?= $lang->translation("¿Tema disponible?") ?></label>
 
                   <div class="custom-control custom-radio custom-control-inline">
                     <input class="custom-control-input" type="radio" name="state" id="radio1" value="a" <?= ($topic->estado === 'a' ? 'checked' : '') ?>>
-                    <label class="custom-control-label" for="radio1">Si</label>
+                    <label class="custom-control-label" for="radio1"><?= $lang->translation("Si") ?></label>
                   </div>
                   <div class="custom-control custom-radio custom-control-inline">
                     <input class="custom-control-input" type="radio" name="state" id="radio2" value="c" <?= ($topic->estado === 'c' ? 'checked' : '') ?>>
@@ -145,15 +162,15 @@ $comments = $topic->comments();
 
                 </div>
                 <div class="form-group col-6">
-                  <label for="modalUntilDate">Disponible hasta:</label>
+                  <label for="modalUntilDate"><?= $lang->translation("Disponible hasta") ?></label>
                   <input type="date" class="form-control" name='untilDate' id="modalUntilDate" min='<?= Util::date() ?>' value="<?= $topic->desde !== '0000-00-00' ? $topic->desde : '' ?>">
                 </div>
 
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" name="editTopic" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cerrar") ?></button>
+              <button type="submit" name="editTopic" class="btn btn-primary"><?= $lang->translation("Guardar") ?></button>
             </div>
           </form>
         </div>

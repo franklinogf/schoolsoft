@@ -1,6 +1,7 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
@@ -9,13 +10,17 @@ use Classes\Controllers\Student;
 Session::is_logged();
 $DataTable = true;
 $student = new Student(Session::id());
+$lang = new Lang([
+['Salón Virtual','Virtual classroom'],
+['Cerrar','Close']
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
   <?php
-  $title = "Salón Virtual";
+  $title = $lang->translation('Salón Virtual');
   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
   ?>
 </head>
@@ -26,7 +31,7 @@ $student = new Student(Session::id());
   Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 id="header" class="text-center">Salón Virtual</h1>
+    <h1 id="header" class="text-center"><?= $lang->translation("Salón Virtual") ?></h1>
 
     <?php
     $virtual = true;
@@ -49,7 +54,7 @@ $student = new Student(Session::id());
               
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cerrar") ?></button>
             </div>
           </div>
           <input type="hidden" id="virtualId">
@@ -59,7 +64,7 @@ $student = new Student(Session::id());
 
   </div>
   <?php
-  Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');
+   Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

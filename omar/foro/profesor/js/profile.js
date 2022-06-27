@@ -12,7 +12,7 @@ $(document).ready(function () {
 			if (valid) {
 				$("#pictureCancel").removeAttr("hidden");
 			} else if (valid === false) {
-				alert("Solo se aceptan imagenes");
+				alert(__LANG === 'es' ? 'El archivo seleccionado no es una imagen' : 'The selected file is not an image');
 			}
 		} else {
 			$(".profile-picture").prop("src", prevPicture);

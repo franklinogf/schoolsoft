@@ -30,7 +30,7 @@ $(document).ready(function () {
           oneMinuteTime--
           $("#timer").text(oneMinuteTime)
           if (oneMinuteTime === 0) {
-            alert("Se ha acabo el tiempo, se ha guardado su progreso, Examen terminado!")
+            alert(__LANG === 'es' ? 'El tiempo se ha agotado' : 'The time has expired')
             clearInterval(timerOnMinute)
             exit = true;
             showFinished = false;
@@ -49,14 +49,12 @@ $(document).ready(function () {
 
   document.addEventListener("fullscreenchange", function (e) {
     if (document.fullscreenElement) {
-      console.log(`Entered fullscreen mode.`);
     } else {
       if (showFinished) {
-        alert("Se ha terminado el examen");
+        alert(__LANG === 'es' ? 'El examen se ha finalizado' : 'The exam has finished');
       }
       exit = true;
       $("form").submit();
-      console.log("Leaving full-screen mode.");
     }
   });
 

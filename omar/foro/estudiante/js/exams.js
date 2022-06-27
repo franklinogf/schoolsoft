@@ -1,5 +1,6 @@
 $(document).ready(function () {
   $(document).keydown(function (e) {
+    //CTRL + space
     if (e.ctrlKey && e.which === 32) {
       $("#deleteExam").toggleClass("d-none");
     }

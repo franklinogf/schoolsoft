@@ -1,11 +1,19 @@
 <?php
+
+use Classes\Lang;
 global $tableStudentsCheckbox;
 global $students;
+
+$lang = new Lang([
+['Estudiante','Student'],
+['Usuario','Username'],
+['Atrás','Go back']
+]);
 ?>
 <!-- Students table -->
 
 <div class="table_wrap">
-   <table class="studentsTable table table-striped table-hover cell-border w-100 shadow">
+   <table class="studentsTable table table-striped table-hover cell-border w-100 shadow table-pointer">
       <thead class="bg-gradient-primary bg-primary border-0">
          <tr>
             <?php if ($tableStudentsCheckbox) : ?>
@@ -16,8 +24,8 @@ global $students;
                   </div>
                </th>
             <?php endif ?>
-            <th>Estudiante</th>
-            <th>Usuario</th>
+            <th><?= $lang->translation("Estudiante") ?></th>
+            <th><?= $lang->translation("Usuario") ?></th>
          </tr>
       </thead>
       <tbody>
@@ -40,17 +48,17 @@ global $students;
                   </div>
                </th>
             <?php endif ?>
-            <th>Estudiante</th>
-            <th>Usuario</th>
+            <th><?= $lang->translation("Estudiante") ?></th>
+            <th><?= $lang->translation("Usuario") ?></th>
          </tr>
          <?php if (!$students) : ?>
             <tr class="bg-gradient-light bg-light">
-               <td colspan="<?= $tableStudentsCheckbox ? '3' : '2' ?>"><button id="back" type="button" class="btn btn-block btn-primary">Atrás</button></td>
+               <td colspan="<?= $tableStudentsCheckbox ? '3' : '2' ?>"><button id="back" type="button" class="btn btn-block btn-primary"><?= $lang->translation("Atrás") ?></button></td>
             </tr>
          <?php endif ?>
          <?php if ($tableStudentsCheckbox) : ?>
             <tr class="bg-gradient-light bg-light">
-               <td colspan="3"><button type="button" class="btn btn-block btn-primary continueBtn">Continuar</button></td>
+               <td colspan="3"><button type="button" class="btn btn-block btn-primary continueBtn"><?= $lang->translation("Continuar") ?></button></td>
             </tr>
          <?php endif ?>
       </tfoot>

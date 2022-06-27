@@ -1,13 +1,27 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
 use Classes\Route;
-use Classes\Controllers\Teacher;
 use Classes\Session;
+use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $DataTable = true;
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+  ['Salón Hogar', 'Home classroom'],
+  ['Crear usuarios automaticamente', 'Create users automatically'],
+  ['Enviar usuarios a los padres', 'Send users to parents'],
+  ['Usuario', 'User'],
+  ['Ya existe este usuario', 'This user already exists'],
+  ['Usuario disponible', 'User available'],
+  ['Nueva contraseña', 'New password'],
+  ['Confirmar contraseña', 'Confirm password'],
+  ['Las contraseñas no coinciden', 'The passwords do not match'],
+  ['Cerrar', 'Close'],
+  ['Guardar', 'Save'],
+]);
 
 ?>
 <!DOCTYPE html>
@@ -15,7 +29,7 @@ $teacher = new Teacher(Session::id());
 
 <head>
   <?php
-  $title = "Salon Hogar";
+  $title = $lang->translation("Salón Hogar");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -26,15 +40,15 @@ $teacher = new Teacher(Session::id());
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center">Mi Salon Hogar</h1>
+    <h1 class="text-center"><?= $lang->translation("Salón Hogar") ?></h1>
 
     <?php
     $students = $teacher->homeStudents();
     Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
     ?>
 
-    <a id="createUsers"  href="<?= Route::url('/foro/profesor/includes/createUsers.php') ?>" class="btn btn-primary mt-2">Crear usuarios automaticamente</a>
-    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-secondary mt-2">Enviar usuarios a los padres</a>
+    <a id="createUsers" href="<?= Route::url('/foro/profesor/includes/createUsers.php') ?>" class="btn btn-primary mt-2"><?= $lang->translation("Crear usuarios automaticamente") ?></a>
+    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-secondary mt-2"><?= $lang->translation("Enviar usuarios a los padres") ?></a>
 
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -50,23 +64,23 @@ $teacher = new Teacher(Session::id());
             <div class="modal-body">
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="username">Usuario</label>
+                  <label for="username"><?= $lang->translation("Usuario") ?></label>
                   <input type="text" class="form-control" name='username' id="username">
-                  <div class="invalid-feedback">Ya existe este usuario</div>
-                  <div class="valid-feedback">Usuario disponible</div>
+                  <div class="invalid-feedback"><?= $lang->translation("Ya existe este usuario") ?></div>
+                  <div class="valid-feedback"><?= $lang->translation("Usuario disponible") ?></div>
                 </div>
                 <div class="form-group  col-md-6">
-                  <label for="pass1">Nueva Clave</label>
+                  <label for="pass1"><?= $lang->translation("Nueva contraseña") ?></label>
                   <input type="password" class="form-control pass" name='password' id="pass1">
-                  <label for="pass2">Confirmar Clave</label>
+                  <label for="pass2"><?= $lang->translation("Confirmar contraseña") ?></label>
                   <input type="password" class="form-control pass" id="pass2">
-                  <div class="invalid-feedback">Las claves no coinciden</div>
+                  <div class="invalid-feedback"><?= $lang->translation("Las contraseñas no coinciden") ?></div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" name="changeStudentUser" id="changeStudentUser" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cerrar") ?></button>
+              <button type="submit" name="changeStudentUser" id="changeStudentUser" class="btn btn-primary"><?= $lang->translation("Guardar") ?></button>
             </div>
         </form>
       </div>

@@ -32,12 +32,12 @@ $(document).ready(function () {
               homeworksTableWrapper.show('drop', { direction: "right" }, 400);
             });
             $("#header").hide('drop', { direction: "left" }, 400, () => {
-              $("#header").text('Lista de tareas')
+              $("#header").text(__LANG === 'es' ? 'Lista de tareas': 'Homeworks list')
                 .show('drop', { direction: "right" }, 400);
             });
           }
           else {
-            alert('No existen tareas en esta clase');
+            alert(__LANG === 'es' ? 'No existen tareas en esta clase': 'There are no homeworks in this class');
           }
           $('.classesTable tbody tr').removeClass('disabled')
         }

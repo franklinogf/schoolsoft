@@ -2,11 +2,11 @@
 require_once '../../../app.php';
 
 use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Teacher;
-use Classes\Util;
 
 Session::is_logged();
 $teacher = new Teacher(Session::id());
@@ -61,7 +61,8 @@ $lang = new Lang([
 
                 <div id="students" class="mb-3 option hidden">
                     <?php
-                    $__tableData = $teacher->homeStudents();
+
+                    $__tableData = $teacher->getAllStudents();
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'students';
                     Route::includeFile('/includes/layouts/table.php', true)
@@ -107,7 +108,6 @@ $lang = new Lang([
                     </div>
                 </div>
 
-                <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
         </div>
         </form>
 

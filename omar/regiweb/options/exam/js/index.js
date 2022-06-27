@@ -714,8 +714,8 @@ $(function () {
                    <span class="text-monospace itemTitle">${el.respuesta}</span>
                    <span class="float-right">
                        <span class="badge badge-secondary">id: ${el.id}</span>
-                       <a href="#" class="badge badge-info text-light editAnswer" data-id="${el.id}">${el.id}">${__LANG === "es" ? "Editar" : "Edit"}</a>
-                       <a href="#" class="badge badge-danger text-light deleteAnswer" data-id="${el.id}">${el.id}">${__LANG === "es" ? "Borrar" : "Delete"}</a>
+                       <a href="#" class="badge badge-info text-light editAnswer" data-id="${el.id}">${__LANG === "es" ? "Editar" : "Edit"}</a>
+                       <a href="#" class="badge badge-danger text-light deleteAnswer" data-id="${el.id}">${__LANG === "es" ? "Borrar" : "Delete"}</a>
                    </span>
                </li>`
                             const option = `<option value='${el.id}'>${el.respuesta}</option>`

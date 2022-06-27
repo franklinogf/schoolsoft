@@ -1,12 +1,13 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Student;
+use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
-use Classes\Controllers\Topic;
-use Classes\Controllers\Teacher;
 use Classes\Session;
+use Classes\Controllers\Topic;
+use Classes\Controllers\Student;
+use Classes\Controllers\Teacher;
 
 Session::is_logged();
 if (!isset($_GET['id'])) {
@@ -19,6 +20,16 @@ if(!isset($topic->id)){
 $student = new Student(Session::id());
 $teacher = new Teacher($topic->creador_id);
 $comments = $topic->comments();
+$lang = new Lang([
+  ['Temas', 'Topics'],  
+  ['Comentario nuevo', 'New comment'],
+  ['Por favor escriba algo', 'Please write something'],
+  ['Comentar', 'Comment'],
+  
+  
+  
+  
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,7 +50,7 @@ $comments = $topic->comments();
     <div class="row mt-3">
       <div class="col-lg-4">
         <a id="back" class="btn btn-outline-secondary btn-lg btn-block mb-3" href="<?= Route::url('/foro/estudiante/topics.php') ?>">
-          <i class="far fa-comment"></i> Temas
+          <i class="far fa-comment"></i> <?= $lang->translation("Temas") ?>
         </a>
       </div>
       <div class="col-lg-8 d-flex justify-content-end align-items-end">
@@ -62,15 +73,14 @@ $comments = $topic->comments();
     <div class="container mt-3 pb-5">
       <?php if ($topic->estado === 'a' && Util::date() <= $topic->desde) : ?>
         <div class="form-group">
-          <label for="comment">Comentario nuevo</label>
+          <label for="comment"><?= $lang->translation("Comentario nuevo") ?></label>
           <textarea class="form-control" id="comment" rows="3" required></textarea>
-          <div class="invalid-feedback">Por favor escriba algo</div>
+          <div class="invalid-feedback"><?= $lang->translation("Por favor escriba algo") ?></div>
         </div>
-        <button class="btn btn-primary" id="insertComment" type="submit">Comentar</button>
+        <button class="btn btn-primary" id="insertComment" type="submit"><?= $lang->translation("Comentar") ?></button>
       <?php endif ?>
 
 
-      <?php if ($comments) : ?>
         <div id="commentsList" class="bg-white">
           <?php foreach ($comments as $comment) : ?>
             <?php
@@ -87,13 +97,12 @@ $comments = $topic->comments();
             </div>
           <?php endforeach ?>
         </div>
-      <?php endif ?>
     </div>
 
   </div>
 
   <?php
-  Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');
+   Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

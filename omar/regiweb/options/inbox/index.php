@@ -1,5 +1,5 @@
 <?php
-require_once '../../app.php';
+require_once '../../../app.php';
 
 use Classes\File;
 use Classes\Lang;
@@ -34,7 +34,7 @@ $lang = new Lang([
    ["Agregar archivo", "Add file"],
    ["Atrás", "Go back"],
    ["Cerrar", "Close"],
-   ["Enviar", "Send"],
+   ["Enviar", "Submit"],
    ["Debe de seleccionar al menos uno", "You must select at least one"],
 ]);
 ?>
@@ -43,14 +43,14 @@ $lang = new Lang([
 
 <head>
    <?php
-   $title = $lang->translation("Mensajes");
-   Route::includeFile('/foro/profesor/includes/layouts/header.php');
+   $title = $lang->translation("Mensajes");;
+   Route::includeFile('/regiweb/includes/layouts/header.php');
    ?>
 </head>
 
 <body>
    <?php
-   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
+   Route::includeFile('/regiweb/includes/layouts/menu.php');
    ?>
 
    <div class="container mt-5 pb-5">

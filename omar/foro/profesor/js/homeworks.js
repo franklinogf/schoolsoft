@@ -68,7 +68,7 @@ $(document).ready(function () {
 			e.target.tagName === "I"
 				? $(e.target).parent().data("homeworkId")
 				: $(e.target).data("homeworkId");
-		if (confirm("¿Esta seguro de que desea borrar esta tarea?")) {
+		if (confirm(__LANG === 'es' ? '¿Está seguro de eliminar esta tarea?' : 'Are you sure you want to delete this homework?')) {
 			const homeworkCard = $(e.target).parents(".homework");
 			if ($("#homework_id").length === 1 && homeworkCard.hasClass($("#homework_id").val())) {
 				clearForm();
@@ -93,7 +93,7 @@ $(document).ready(function () {
 				? $(e.target).parent().data("fileId")
 				: $(e.target).data("fileId");
 
-		if (confirm("¿Seguro que quiere eliminar este archivo de la base de datos?")) {
+		if (confirm(__LANG === 'es' ? '¿Está seguro de eliminar este archivo?' : 'Are you sure you want to delete this file?')) {
 			$.post(includeThisFile(), { delExistingFile: fileId }, () => {
 				animateCSS($(e.target).parents(".input-group"), "zoomOut", () => {
 					$(e.target).parents(".input-group").remove();
@@ -115,7 +115,7 @@ $(document).ready(function () {
 			// rename the files
 			const files = $(e.target).children();
 			files.map((i, file) => {
-				file.text = `Archivo ${i + 1}`;
+				file.text = `${__LANG === 'es' ? 'Archivo' : 'File'} ${i + 1}`;
 			});
 		}
 	});

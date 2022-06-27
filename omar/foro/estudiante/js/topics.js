@@ -1,8 +1,8 @@
 $(document).ready(function () {
    let _class = '';
 
-   const classesTableWrapper = $(".classesTable").parents('.table_wrap');
-   const topicsTableWrapper = $(".topicsTable").parents('.table_wrap');
+   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
+   const topicsTableWrapper = $(".topicsTable").parents('.dataTables_wrapper');
    topicsTableWrapper.hide(0);
 
 
@@ -32,13 +32,13 @@ $(document).ready(function () {
                   2: formatDate(topic.fecha),
                   3: formatTime(topic.hora),
                }).draw();
-               
+
                $(thisRow.node()).prop('id', topic.id)
                var today = new Date()
-               today.setHours(0,0,0,0)
-               
+               today.setHours(0, 0, 0, 0)
+
                let closeDate = new Date(topic.desde)
-               closeDate.setHours(0,0,0,0)
+               closeDate.setHours(0, 0, 0, 0)
 
                let status = topic.estado === 'a' ? 'table-success' : 'table-danger'
                status = topic.estado === 'a' && closeDate <= today ? 'table-warning' : status
@@ -51,11 +51,11 @@ $(document).ready(function () {
                $('#newTopic,.leyend').fadeToggle(250);
                topicsTableWrapper.show('drop', { direction: "right" }, 400);
                $("#header").animate({ opacity: 0 }, 250, () => {
-                  $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+                  $("#header").text(__LANG === 'es' ? 'Lista de temas' : 'List of topics').animate({ opacity: 1 }, 250);
                });
             });
          } else {
-            alert("no hay temas en esta clase")
+            alert(__LANG === 'es' ? 'No hay temas en esta clase' : 'There are no topics in this class')
          }
       },
          "json"
@@ -72,12 +72,12 @@ $(document).ready(function () {
          classesTableWrapper.show('drop', { direction: "left" }, 400);
          $(".leyend").fadeToggle(250)
          $("#header").animate({ opacity: 0 }, 250, () => {
-            $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
+            $("#header").text(__LANG === 'es' ? 'Mis Cursos' : 'My classes').animate({ opacity: 1 }, 250);
          });
       });
    })
 
-   
+
    $('.topicsTable tbody').on('click', 'tr', function () {
       const row = topicsTable.row(this)
       if (row.index() !== undefined) {

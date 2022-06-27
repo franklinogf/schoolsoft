@@ -1,14 +1,19 @@
 <?php
 
+use Classes\Lang;
 use Classes\DataBase\DB;
 
 global $student;
 global $tableClassesCheckbox;
 global $virtual;
+$lang = new Lang([
+   ['Curso', 'Class'],
+   ['Descripción', 'Description'],
+]);
 ?>
 <!-- classes table -->
 <div class="table_wrap">
-   <table class="classesTable table table-striped table-hover cell-border w-100 shadow">
+   <table class="classesTable table table-striped table-hover cell-border w-100 shadow table-pointer">
       <thead class="bg-gradient-primary bg-primary border-0">
          <tr>
             <?php if ($tableClassesCheckbox) : ?>
@@ -19,8 +24,8 @@ global $virtual;
                   </div>
                </th>
             <?php endif ?>
-            <th>Curso</th>
-            <th>Descripción</th>
+            <th><?= $lang->translation("Curso") ?></th>
+            <th><?= $lang->translation("Descripción") ?></th>
          </tr>
       </thead>
       <tbody>
@@ -67,12 +72,12 @@ global $virtual;
                   </div>
                </th>
             <?php endif ?>
-            <th>Curso</th>
-            <th>Descripción</th>
+            <th><?= $lang->translation("Curso") ?></th>
+            <th><?= $lang->translation("Descripción") ?></th>
          </tr>
          <?php if ($tableClassesCheckbox) : ?>
             <tr class="bg-gradient-light bg-light">
-               <td colspan="3"><button type="submit" class="btn btn-block btn-primary">Continuar</button></td>
+               <td colspan="3"><button type="submit" class="btn btn-block btn-primary"><?= $lang->translation("Continuar") ?></button></td>
             </tr>
          <?php endif ?>
       </tfoot>

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	let _class = "";
-	const classesTableWrapper = $(".classesTable").parents(".table_wrap");
-	const homeworksTableWrapper = $(".homeworksTable").parents(".table_wrap");
+	const classesTableWrapper = $(".classesTable").parents(".dataTables_wrapper");
+	const homeworksTableWrapper = $(".homeworksTable").parents(".dataTables_wrapper");
 	const $modal = $("#myModal");
 	homeworksTableWrapper.hide(0);
 
@@ -16,6 +16,7 @@ $(document).ready(function () {
 				data: { homeworksByClass: _class },
 				dataType: "json",
 				success: (res) => {
+					console.log('res:', res)
 					if (res.response === true) {
 						res.data.map((homework) => {
 							const thisRow = homeworksTable.row
@@ -36,11 +37,11 @@ $(document).ready(function () {
 						});
 						$("#header").hide("drop", { direction: "left" }, 400, () => {
 							$("#header")
-								.text("Lista de tareas")
+								.text(__LANG === 'es' ? 'Lista de tareas' : 'Homework list')
 								.show("drop", { direction: "right" }, 400);
 						});
 					} else {
-						alert("No existen tareas en esta clase");
+						alert(__LANG === 'es' ? "No existen tareas en esta clase" : "There are no homeworks in this class");
 					}
 				},
 			});
@@ -53,7 +54,7 @@ $(document).ready(function () {
 			classesTableWrapper.show("drop", { direction: "left" }, 400);
 		});
 		$("#header").hide("drop", { direction: "right" }, 400, () => {
-			$("#header").text("Mis Cursos").show("drop", { direction: "left" }, 400);
+			$("#header").text(__LANG === 'es' ? 'Mis Cursos' : 'My classes').show("drop", { direction: "left" }, 400);
 		});
 	});
 
@@ -118,7 +119,7 @@ $(document).ready(function () {
         `);
 						$modal.modal("show");
 					} else {
-						alert("Ningun estudiante a entregado esta tarea");
+						alert(__LANG === 'es' ? "Ningun estudiante a entregado esta tarea" : "No students have done this homework");
 					}
 				},
 				"json"

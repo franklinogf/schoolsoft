@@ -15,7 +15,7 @@ Session::is_logged();
 Server::is_post();
 global $id_homework;
 
-$mail = new Mail(true, 'Teacher');
+$mail = new Mail(false, 'Teacher');
 $teacher = new Teacher(Session::id());
 $homework = new Homework($id_homework);
 $students = new Student();
@@ -43,37 +43,53 @@ foreach ($students as $student) {
    }
 
 
-   $link = (__COSEY) ? 'https://www.cosey.org' . Route::url('/foro/login.php')  : 'https://www.schoolsoftpr.com' . Route::url('/foro/login.php');
+   $link =  Route::url('/foro/login.php', true);
    $schoolName = $teacher->info('colegio');
-   $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
-   $messageTitle = "Tarea del curso {$homework->curso}";
+   $studentName = utf8_decode("{$student->id} {$student->nombre} {$student->apellidos}");
+   $messageTitle = utf8_decode(__LANG === 'es' ? 'Tarea de ' : 'Homework of ' . $homework->curso);
 
    $mail->isHTML(true);
-   $mail->Subject = "Nueva tarea";
-   $mail->Body    = "
-<!DOCTYPE html>
-<html lang='es'>
-<head>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>Tarea</title>
-</head>
-<body>
-   <center><h1>{$schoolName}</h1></center>
-   <center><h2>" . utf8_decode($messageTitle) . "</h2></center>
-   <br>
-   <br>
-   <p>El estudiante: <b>" . utf8_decode($studentName) . " tiene una nueva tarea de " . utf8_decode($student->descripcion) . "</b></p>
-
-   <p>Link: <a href='$link'>Acceso al Foro</a></p>
-</body>
-</html>
-";
+   $mail->Subject = __LANG === 'es' ? 'Nueva tarea' : 'New homework';
+   $mail->Body = __LANG === 'es' ? "
+   <!DOCTYPE html>
+   <html lang='es'>
+   <head>
+     <meta charset='UTF-8'>
+     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+     <title>Tarea</title>
+   </head>
+   <body>
+      <center><h1>{$schoolName}</h1></center>
+      <center><h2>$messageTitle</h2></center>
+      <br>
+      <br>
+      <p>El estudiante <b>$studentName tiene una nueva tarea de " . utf8_decode($student->descripcion) . "</b></p>
+   
+      <p>Link: <a href='$link'>Forum</a></p>
+   </body>
+   </html>
+   " : "
+   <!DOCTYPE html>
+   <html lang='en'>
+   <head>
+     <meta charset='UTF-8'>
+     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+     <title>Homework</title>
+   </head>
+   <body>
+      <center><h1>{$schoolName}</h1></center>
+      <center><h2>$messageTitle</h2></center>
+      <br>
+      <br>
+      <p>The student <b>$studentName has a new homework of " . utf8_decode($student->descripcion) . "</b></p>
+   
+      <p>Link: <a href='$link'>Foro</a></p>
+   </body>
+   </html>
+   ";
 
    if ($count > 0) {
       $mail->send();
-   }else{
-      echo "Se han enviado $count";
    }
    $mail->ClearAddresses();
 }

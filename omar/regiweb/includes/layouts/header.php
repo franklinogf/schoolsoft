@@ -19,8 +19,9 @@ Route::css("/css/main.css", true);
 $__file = basename($_SERVER['SCRIPT_FILENAME']);
 
 $__cssFile = str_replace('.php', '', $__file) . '.css';
-
-$__path = '/regiweb/css/' . $__cssFile;
+$root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
+$__path = dirname($root) . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . $__cssFile;
+// $__path = '/regiweb/css/' . $__cssFile;
 
 if (Route::file_exists($__path)) {
 

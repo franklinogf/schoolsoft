@@ -58,7 +58,7 @@ $lang = new Lang([
 
                 <div id="students" class="mb-3 option hidden">
                     <?php
-                    $__tableData = $teacher->homeStudents();
+                    $__tableData = $teacher->getAllStudents();
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'students';
                     Route::includeFile('/includes/layouts/table.php', true)
@@ -99,9 +99,6 @@ $lang = new Lang([
                     </select>
                 </div>
 
-
-
-                <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
         </div>
         </form>
 

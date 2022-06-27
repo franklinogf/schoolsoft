@@ -9,7 +9,7 @@ $(document).ready(function () {
 			const data = row.data()
 			subjectCode = data[0]
 			$("#virtualModal").modal('show')
-			$("#virtualModal").find('.modal-title').text(`Salón virtual para ${subjectCode}`)
+			$("#virtualModal").find('.modal-title').text(__LANG === 'es' ? 'Salón virtual para ' : 'Virtual classroom for ' + subjectCode)
 			$.ajax({
 				type: "POST",
 				url: includeThisFile(),
@@ -29,9 +29,9 @@ $(document).ready(function () {
 						$('#virtualId').val(data.id)
 						$("#virtualModal .btn-danger").removeClass('hidden')
 						virtualId = data.id
-						loadingBtn($('#virtualBtn'), 'Modificar')
+						loadingBtn($('#virtualBtn'), __LANG === 'es' ? 'Modificar' : 'Update')
 					} else {
-						loadingBtn($('#virtualBtn'), 'Guardar')
+						loadingBtn($('#virtualBtn'), __LANG === 'es' ? 'Crear' : 'Create')
 					}
 				}
 			});
@@ -61,7 +61,7 @@ $(document).ready(function () {
 					dataType: 'json',
 					complete: function (response) {
 						loadingBtn($('#virtualBtn'), 'Modificar')
-						loadingBtn($('#virtualModal .btn-secondary'),'Cerrar')
+						loadingBtn($('#virtualModal .btn-secondary'), 'Cerrar')
 						const data = response.responseJSON.data;
 						$('#virtualId').val(data.id)
 						$(row.selector.rows).addClass('table-success')
@@ -76,7 +76,7 @@ $(document).ready(function () {
 							},
 							complete: function (response) {
 								console.log('responseEmail:', response)
-			
+
 							}
 						});
 					}
@@ -98,8 +98,8 @@ $(document).ready(function () {
 					},
 					dataType: 'json',
 					complete: function (response) {
-						loadingBtn($('#virtualBtn'), 'Modificar')
-						loadingBtn($('#virtualModal .btn-secondary'),'Cerrar')
+						loadingBtn($('#virtualBtn'), __LANG === 'es' ? 'Modificar' : 'Update')
+						loadingBtn($('#virtualModal .btn-secondary'), 'Cerrar')
 
 					}
 				});
@@ -133,20 +133,20 @@ $(document).ready(function () {
 					$("#deleteModal").modal('hide')
 					$(row.selector.rows).removeClass('table-success')
 					reset()
-					loadingBtn($('#virtualDelBtn'), 'Aceptar')
-					loadingBtn($('#deleteModal .btn-secondary'), 'Cancelar')
+					loadingBtn($('#virtualDelBtn'), __LANG === 'es' ? 'Aceptar' : 'Accept')
+					loadingBtn($('#deleteModal .btn-secondary'), __LANG === 'es' ? 'Cancelar' : 'Cancel')
 
 				}
 			});
 		} else {
-			alert('VirtualId esta en blanco, contacte con el soporte')
+			alert(__LANG === 'es' ? 'VirtualId esta vacio, contacte con el soporte' : 'VirtualId is empty, contact with support')
 		}
 	});
 
 	function reset() {
 		$("form").removeClass('was-validated').trigger("reset");
 		$("#virtualId").val('')
-		loadingBtn($("#virtualBtn"),'Guardar')
+		loadingBtn($("#virtualBtn"), __LANG === 'es' ? 'Guardar' : 'Save')
 		$("#virtualModal .btn-danger").addClass('hidden')
 		virtualId = ''
 

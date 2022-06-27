@@ -56,7 +56,7 @@ $(document).ready(function () {
 					if (res.response === true) {
 						$newMessageModal
 							.find(".toTeacher")
-							.text(`Enviar mensaje a ${res.data.nombre} ${res.data.apellidos}`);
+							.text(`${__LANG === 'es' ? 'Enviar mensaje a' : 'Send message to'} ${res.data.nombre} ${res.data.apellidos}`);
 						//   hide classes and show form
 						animateCSS($classesTableWrapper, "zoomOut faster", () => {
 							$classesTableWrapper.hide(0);
@@ -85,7 +85,7 @@ $(document).ready(function () {
 			$("#newSubject").val().length > 0 ||
 			$("#newMessage").val().length > 0
 		) {
-			if (confirm("Tiene cambios sin guardar, seguro quiere cerrarlo?")) {
+			if (confirm(__LANG === 'es' ? '¿Estás seguro de que quieres salir sin enviar el mensaje?' : 'Are you sure you want to exit without sending the message?')) {
 				$newMessageModal.modal("hide");
 			}
 		} else {
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 	$($message).on("click", "#respondBtn", function (e) {
 		$respondModal.modal("show");
-		$respondModal.find(".modal-title").text(`Responder a ${message.nombre}`);
+		$respondModal.find(".modal-title").text(`${__LANG == 'es' ? 'Responder a' : 'Respond to'} ${message.nombre}`);
 		// $respondModal.find('.title').val(message.titulo)
 		$respondModal.find("#respondSubject").val(`RE: ${message.asunto}`);
 	});
@@ -137,7 +137,7 @@ $(document).ready(function () {
 			getMessages(option);
 			animateCSS($message.children(), `bounceOutLeft faster`, () => {
 				$message.html(`<div class="d-flex justify-content-center align-items-center h-100 font-bree">
-            Seleccione un mensaje
+            ${__LANG === 'es' ? 'Seleccione un mensaje' : 'Select a message'}
          </div>`);
 			});
 		}
@@ -151,17 +151,17 @@ $(document).ready(function () {
 		$message.html(`
       <div class="row">
          <div class="col-2 d-flex justify-content-center align-items-center">
-            <p class="m-0">Desde:</p>
+            <p class="m-0">${__LANG === 'es' ? 'Desde' : 'From'}:</p>
          </div>
          <div class="col-10">
             <div class="media p-2 mt-2">
-               <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <img src="${message.foto}" class="align-self-start mr-2 rounded-circle" alt="Profile picture" width="52" height="52">
                <div class="media-body">
                   <p class="m-0"><strong>${message.nombre}</strong> <small>(${message.info})</small></p>
                   <small class="text-muted font-weight-light">${message.fecha}</small>
                </div>
                ${message.enviadoPor !== "e"
-				? `<button id="respondBtn" title="Responder" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
+				? `<button id="respondBtn" title="${__LANG === 'es' ? 'Responder' : 'Answer'}" class="btn btn-secondary btn-sm" data-toggle="tooltip" type="button">
                      <i class="fas fa-reply text-primary"></i>
                   </button>`
 				: ""}
@@ -172,7 +172,7 @@ $(document).ready(function () {
          </div>
          <div class="col-10">
             <div class="media p-2 mt-2">
-               <img src="${message.toFoto}" class="align-self-start mr-2 rounded-circle" alt="Profile Picture" width="52" height="52">
+               <img src="${message.toFoto}" class="align-self-start mr-2 rounded-circle" alt="Profile picture" width="52" height="52">
                <div class="media-body">
                   <p class="m-0"><strong>${message.toNombre}</strong> <small>(${message.toInfo})</small></p>
                </div>        
@@ -251,7 +251,7 @@ $(document).ready(function () {
 	function getMessages(type = "inbound") {
 		$messages.html(`
       <div class="d-flex justify-content-center align-items-center h-100 font-bree">
-      Cargando...
+      ${__LANG === 'es' ? 'Cargando' : 'Loading'}...
       </div>`);
 		$.post(
 			includeThisFile(),
@@ -269,7 +269,7 @@ $(document).ready(function () {
                   <p class="card-text mb-0 text-truncate font-markazi">${message.asunto}</p>
                   <p class="card-text mb-0 text-truncate font-weight-light">${message.mensaje}</p>
                   <p class="card-text text-right">${message.leido !== "si"
-								? '<small class="badge badge-success rounded-0 status">Nuevo</small>'
+								? `<small class="badge badge-success rounded-0 status">${__LANG === 'es' ? 'Nuevo' : 'New'}</small>`
 								: ""}</p>
                </div>
             </div>`);
@@ -277,7 +277,7 @@ $(document).ready(function () {
 				} else {
 					$messages.html(`
             <div class="d-flex justify-content-center align-items-center h-100 font-bree">
-                  No tiene mensajes
+                 ${__LANG === 'es' ? 'No hay mensajes' : 'No messages'}
                </div>`);
 				}
 			},

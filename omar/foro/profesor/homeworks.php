@@ -1,13 +1,39 @@
 <?php
 require_once '../../app.php';
 
+use Classes\File;
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\File;
-use Classes\Util;
 
 Session::is_logged();
+$lang = new Lang([
+   ["Tareas", "Homeworks"],
+   ["Mis tareas", "My homeworks"],
+   ["Si el PDF es muy grande entre a esta", "If the PDF is too large, click this"],
+   ['pagina', 'website'],
+   ['para comprimir', 'to compress'],
+   ["Titulo", "Title"],
+   ["Descripción", "Description"],
+   ["Curso", "Class"],
+   ["Fecha Inicial", "Initial date"],
+   ["La tarea estará disponible en esta fecha", "The homework will be available on this date"],
+   ["Fecha Final", "Final date"],
+   ["La tarea dejara de estar disponible despues de esta fecha", "The homework will stop being available after this date"],
+   ["¿Recibir archivos del estudiante?", "Receive student files?"],
+   ["Si", "Yes"],
+   ["Si: se puede recibir archivos del estudiante", "Yes: Student files can be received"],
+   ["No: no se va a recibir archivos del estudiante (informativo)", "No: Student files are not going to be received (informative)"],
+   ["Agregar archivo", "Add file"],
+   ["Guardar", "Save"],
+   ["Al guardar la tarea se le enviara un correo a los padres", "When saving the homework, an email will be sent to the parents"],
+   ["Editar", "Edit"],
+   ["Eliminar", "Delete"],
+   ["Archivo", "File"],
+   ["Sin fecha de finalización","No final date"],
+]);
 
 $teacher = new Teacher(Session::id());
 $homeworks = $teacher->homeworks();
@@ -18,7 +44,7 @@ $classes = $teacher->classes();
 
 <head>
    <?php
-   $title = "Tareas";
+   $title = $lang->translation("Tareas");
    Route::includeFile('/foro/profesor/includes/layouts/header.php');
    ?>
 </head>
@@ -29,58 +55,58 @@ $classes = $teacher->classes();
    ?>
    <div class="container-lg mt-5 px-0">
 
-      <h1 class="text-center mb-3">Mis Tareas</h1>
+      <h1 class="text-center mb-3"><?= $lang->translation("Mis Tareas") ?></h1>
 
       <div class="alert alert-warning mx-auto" role="alert">
-         Si el PDF es muy grande entre a esta <a class="alert-link" href="https://www.ilovepdf.com/es/comprimir_pdf" target="_blank">pagina</a> para comprimir.
+         <?= $lang->translation("Si el PDF es muy grande entre a esta") ?> <a class="alert-link" href="https://www.ilovepdf.com/es/comprimir_pdf" target="_blank"><?= $lang->translation("pagina") ?></a> <?= $lang->translation("para comprimir") ?>.
       </div>
 
       <form method="POST" action="<?= Route::url('/foro/profesor/includes/homeworks.php') ?>" enctype="multipart/form-data">
          <div class="jumbotron py-4">
             <div class="form-group">
-               <label for="title">Titulo</label>
+               <label for="title"><?= $lang->translation("Titulo") ?></label>
                <input class="form-control" type="text" name="title" id="title" required>
             </div>
 
             <div class="form-group mt-2">
-               <label for="description">Descripción</label>
+               <label for="description"><?= $lang->translation("Descripción") ?></label>
                <textarea class="form-control" name="description" id="description"></textarea>
             </div>
 
             <div class="form-row">
                <div class="col-6 col-lg-4 mt-2">
-                  <label for="class">Curso</label>
+                  <label for="class"><?= $lang->translation("Curso") ?></label>
                   <select class="form-control" name="class" id="class">
-                     <option value="">Seleccionar Curso</option>
+                     <option value=""><?= $lang->translation("Seleccionar") ?></option>
                      <?php foreach ($classes as $class) : ?>
                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                      <?php endforeach ?>
                   </select>
                </div>
                <div class="col-12 col-lg-4 mt-2">
-                  <label for="sinceDate">Fecha Inicial</label>
+                  <label for="sinceDate"><?= $lang->translation("Fecha Inicial") ?></label>
                   <input class="form-control" type="date" name="sinceDate" id="sinceDate" min="<?= Util::date() ?>" value="<?= Util::date() ?>" required>
-                  <small class="form-text text-info">La tarea estará disponible en esta fecha</small>
+                  <small class="form-text text-info"><?= $lang->translation("La tarea estará disponible en esta fecha") ?></small>
                </div>
                <div class="col-12 col-lg-4 mt-2">
-                  <label for="untilDate">Fecha Final</label>
+                  <label for="untilDate"><?= $lang->translation("Fecha Final") ?></label>
                   <input class="form-control" type="date" name="untilDate" id="untilDate" min="<?= Util::date() ?>">
-                  <small class="form-text text-info">La tarea dejara de estar disponible despues de esta fecha</small>
+                  <small class="form-text text-info"><?= $lang->translation("La tarea dejara de estar disponible despues de esta fecha") ?></small>
                </div>
             </div>
 
             <div class="form-group mt-2">
-               <label class="d-block">Recibir archivos del estudiante?</label>
+               <label class="d-block"><?= $lang->translation("¿Recibir archivos del estudiante?") ?></label>
                <div class="custom-control custom-radio custom-control-inline">
                   <input class="custom-control-input" type="radio" name="state" id="radio1" value="si" required>
-                  <label class="custom-control-label" for="radio1">Si</label>
+                  <label class="custom-control-label" for="radio1"><?= $lang->translation("Si") ?></label>
                </div>
                <div class="custom-control custom-radio custom-control-inline">
                   <input class="custom-control-input" type="radio" name="state" id="radio2" value="no">
                   <label class="custom-control-label" for="radio2">No</label>
                </div>
-               <small class="form-text text-info">Si: se puede recibir archivos del estudiante</small>
-               <small class="form-text text-info">No: (informativo) no se va a recibir archivos del estudiante</small>
+               <small class="form-text text-info"><?= $lang->translation("Si: se puede recibir archivos del estudiante") ?></small>
+               <small class="form-text text-info"><?= $lang->translation("No: no se va a recibir archivos del estudiante (informativo)") ?></small>
             </div>
 
             <label>Links</label>
@@ -97,17 +123,17 @@ $classes = $teacher->classes();
             </div>
 
             <div class="form-group my-3">
-               <button type='button' class="btn btn-secondary addFile d-block mx-auto">Agregar archivo</button>
+               <button type='button' class="btn btn-secondary addFile d-block mx-auto"><?= $lang->translation("Agregar archivo") ?></button>
             </div>
 
             <div class="form-group mb-0 mt-5">
-               <button id="homeworkFormBtn" type='submit' class="btn btn-primary btn-block" name="addHomework">Guardar</button>
+               <button id="homeworkFormBtn" type='submit' class="btn btn-primary btn-block" name="addHomework"><?= $lang->translation("Guardar") ?></button>
             </div>
 
          </div>
       </form>
       <div class="alert alert-warning mx-auto" role="alert">
-         Al guardar la tarea se le enviara un correo a los padres.
+         <?= $lang->translation("Al guardar la tarea se le enviara un correo a los padres") ?>.
       </div>
    </div>
    <!-- homework list -->
@@ -125,7 +151,7 @@ $classes = $teacher->classes();
                      <p class="card-text"><?= $homework->descripcion ?></p>
                   </div>
                   <div class="card-footer bg-white">
-                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? "Fecha final: " . Util::formatDate($homework->fec_out, true) : 'Sin fecha de finalización' ?></small>
+                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? $lang->translation("Fecha final") . ": " . Util::formatDate($homework->fec_out, true) : $lang->translation("Sin fecha de finalización"); ?></small>
                      <?php if (!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)) : ?>
                         <div class="btn-group btn-group-sm w-100 mt-2">
                            <?php for ($i = 1; $i <= 3; $i++) : ?>
@@ -139,7 +165,7 @@ $classes = $teacher->classes();
                      <?php if (property_exists($homework, 'archivos')) : ?>
                         <div class="btn-group-vertical w-100 mt-2">
                            <?php foreach ($homework->archivos as $i => $file) : ?>
-                              <a data-file-id="<?= $file->id ?>" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download="<?= File::name($file->nombre, true) ?>"><?= File::faIcon(File::extension($file->nombre)) . " Archivo " . ($i + 1) ?> </a>
+                              <a data-file-id="<?= $file->id ?>" href="<?= __TEACHER_HOMEWORKS_DIRECTORY_URL . $file->nombre ?>" data-toggle="tooltip" title='<?= File::name($file->nombre, true) ?>' class="btn btn-outline-dark btn-sm downloadFIle" download="<?= File::name($file->nombre, true) ?>"><?= File::faIcon(File::extension($file->nombre)) . " " . $lang->translation("Archivo") . " " . ($i + 1) ?> </a>
                            <?php endforeach ?>
                         </div>
                      <?php endif ?>
@@ -148,10 +174,10 @@ $classes = $teacher->classes();
                   <div class="card-footer text-center bg-white">
                      <div class="row row-cols-2">
                         <div class="col">
-                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Editar" class="btn btn-info btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="<?= $lang->translation("Editar") ?>" class="btn btn-info btn-sm btn-block editHomework"><i class="fas fa-edit"></i></button>
                         </div>
                         <div class="col">
-                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="Eliminar" class="btn btn-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
+                           <button data-homework-id="<?= $homework->id_documento ?>" data-toggle="tooltip" title="<?= $lang->translation("Eliminar") ?>" class="btn btn-danger btn-sm btn-block delHomework"><i class="fas fa-trash-alt"></i></button>
                         </div>
                      </div>
                   </div>

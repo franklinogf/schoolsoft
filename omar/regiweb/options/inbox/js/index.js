@@ -112,7 +112,7 @@ $(document).ready(function () {
 			_class = data[0];
 			$.ajax({
 				type: "POST",
-				url: getBaseUrl("includes/classes.php"),
+				url: includeThisFile(),
 				data: { studentsByClass: _class },
 				dataType: "json",
 				success: (res) => {

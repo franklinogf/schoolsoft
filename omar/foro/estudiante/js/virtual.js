@@ -8,11 +8,11 @@ $(document).ready(function () {
 			const subjectCode = data[0]
 			teacherId = row.selector.rows.attributes[0].nodeValue
 			$("#virtualModal").modal('show')
-			$("#virtualModal").find('.modal-title').text(`Salón virtual para ${subjectCode}`)
+			$("#virtualModal").find('.modal-title').text(`${__LANG === 'es' ? 'Salón virtual para' : 'Virtual classroom for'} ${subjectCode}`)
 			$("#virtualModal").find('.modal-body').html(`
 			<div class="text-center">
                 <div class="spinner-border" role="status">
-                  <span class="sr-only">Loading...</span>
+                  <span class="sr-only">${__LANG === 'es' ? 'Cargando' : 'Loading'}...</span>
                 </div>
               </div>
 			`)
@@ -31,10 +31,10 @@ $(document).ready(function () {
 						$("#virtualModal").find('.modal-body').html(`
 						<div class="alert alert-primary" role="alert">
 							<h4 class="alert-heading">${data.title}</h4>
-							<p>Para acceder al curso virtual haga <a href="#" data-link="${data.link}" class="alert-link linkBtn">click aquí</a></p>
+							<p>${__LANG === 'es' ? 'Para acceder al curso virtual haga' : 'To access the virtual classroom'} <a href="#" data-link="${data.link}" class="alert-link linkBtn">${__LANG === 'es' ? 'click aquí' : 'click here'}</a></p>
 							<hr>
-							<p>Fecha: ${formatDate(data.date)}</p>
-							<p>Hora: ${formatTime(data.time)}</p>
+							<p>${__LANG === 'es' ? 'Fecha' : 'Date'}: ${formatDate(data.date)}</p>
+							<p>${__LANG === 'es' ? 'Hora' : 'Time'}: ${formatTime(data.time)}</p>
 						</div>
 						`)
 					}
@@ -53,14 +53,14 @@ $(document).ready(function () {
 			data: {
 				asis: virtualId,
 			},
-			complete: function (response) { 
-				window.open(linkBtn.data('link'),'_blank')
-				loadingBtn(linkBtn,'click Aqui')
+			complete: function (response) {
+				window.open(linkBtn.data('link'), '_blank')
+				loadingBtn(linkBtn, __LANG === 'es' ? 'click aquí' : 'click Here')
 
-			 }
+			}
 		});
 	})
 
-	
+
 
 });

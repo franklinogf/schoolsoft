@@ -1,6 +1,7 @@
 <?php
 require_once '../../../app.php';
 
+use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
@@ -9,13 +10,21 @@ Session::is_logged();
 $jqUI = true;
 $DataTable = true;
 $teacher = new Teacher(Session::id());
+$lang = new Lang([
+["Informe de clases virtuales",'Virtual classes report'],
+['Lista de clases virtuales','Virtual classes list'],
+['Titulo', 'Title'],
+['Fecha','Date'],
+['Hora','Time'],
+['Atrás','Go back']
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
   <?php
-  $title = "Informe de clases virtuales";
+  $title = $lang->translation("Informe de clases virtuales");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -26,7 +35,7 @@ $teacher = new Teacher(Session::id());
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 id="header" class="text-center">Lista de clases virtuales</h1>
+    <h1 id="header" class="text-center"><?= $lang->translation("Lista de clases virtuales") ?></h1>
 
     <?php
     Route::includeFile('/foro/profesor/includes/tables/tableClasses.php');
@@ -36,9 +45,9 @@ $teacher = new Teacher(Session::id());
       <table class="virtualClassesTable table table-striped table-hover cell-border w-100 shadow">
         <thead class="bg-gradient-primary bg-primary border-0">
           <tr>
-            <th>Titulo</th>
-            <th>Fecha</th>
-            <th>Hora</th>
+            <th><?= $lang->translation("Titulo") ?></th>
+            <th><?= $lang->translation("Fecha") ?></th>
+            <th><?= $lang->translation("Hora") ?></th>
           </tr>
         </thead>
         <tbody>
@@ -46,12 +55,12 @@ $teacher = new Teacher(Session::id());
         </tbody>
         <tfoot>
           <tr class="bg-gradient-secondary bg-secondary">
-            <th>Titulo</th>
-            <th>Fecha</th>
-            <th>Hora</th>
+            <th><?= $lang->translation("Titulo") ?></th>
+            <th><?= $lang->translation("Fecha") ?></th>
+            <th><?= $lang->translation("Hora") ?></th>
           </tr>
           <tr class="bg-gradient-light bg-light">
-            <td colspan="3"><button id="back" type="button" class="btn btn-block btn-primary">Atrás</button></td>
+            <td colspan="3"><button id="back" type="button" class="btn btn-block btn-primary"><?= $lang->translation("Atrás") ?></button></td>
           </tr>
         </tfoot>
       </table>

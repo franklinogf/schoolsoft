@@ -1,8 +1,8 @@
 $(document).ready(function () {
    let _class = '';
 
-   const classesTableWrapper = $(".classesTable").parents('.table_wrap');
-   const topicsTableWrapper = $(".topicsTable").parents('.table_wrap');
+   const classesTableWrapper = $(".classesTable").parents('.dataTables_wrapper');
+   const topicsTableWrapper = $(".topicsTable").parents('.dataTables_wrapper');
    topicsTableWrapper.hide(0);
 
 
@@ -52,7 +52,7 @@ $(document).ready(function () {
             $('#newTopic,.leyend').fadeToggle(250);
             topicsTableWrapper.show('drop', { direction: "right" }, 400);
             $("#header").animate({ opacity: 0 }, 250, () => {
-               $("#header").text('Lista de temas').animate({ opacity: 1 }, 250);
+               $("#header").text(__LANG === 'es' ? 'Lista de temas' : 'List of topics').animate({ opacity: 1 }, 250);
             });
          });
       },
@@ -74,7 +74,7 @@ $(document).ready(function () {
          classesTableWrapper.show('drop', { direction: "left" }, 400);
          $(".leyend").fadeToggle(250)
          $("#header").animate({ opacity: 0 }, 250, () => {
-            $("#header").text('Mis Cursos').animate({ opacity: 1 }, 250);
+            $("#header").text(__LANG === 'es' ? 'Mis Cursos' : 'My classes').animate({ opacity: 1 }, 250);
          });
       });
    })

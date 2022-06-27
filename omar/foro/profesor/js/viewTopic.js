@@ -34,7 +34,6 @@ $(document).ready(function () {
          $commentInput.removeClass('is-invalid')
          $.post(includeThisFile(), { newComment: urlParams.get('id'), comment }, res => {
             $commentInput.val('')
-            // `<button data-comment-id="${res.id}" class="btn btn-sm btn-danger mb-3 d-block ml-auto delComment">Borrar <i class="fas fa-trash-alt fa-sm"></i></button>`
             $("#commentsList").prepend(`
             <div class="media mt-3 pt-3 px-3 border-primary-gradient-top animated fadeInDown">
                <img src="${res.profilePicture}" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
@@ -52,7 +51,7 @@ $(document).ready(function () {
 
    $(document).on('click', '.delTopic', function (e) {
       const topicId = $(this).data('topicId')
-      if (confirm('¿Seguro que quiere borrar este Tema?')) {
+      if (confirm(__LANG === 'es' ? '¿Seguro que quiere borrar este Tema?' : 'Are you sure you want to delete this topic?')) {
          $.post(includeThisFile(), { delTopic: topicId }, () => {
             window.location.href = getBaseUrl('topics.php')
             
@@ -62,7 +61,7 @@ $(document).ready(function () {
 
    $(document).on('click', '.delComment', function (e) {
       const commentId = $(this).data('commentId')
-      if (confirm('¿Seguro que quiere borrar este comentario?')) {
+      if (confirm(__LANG === 'es' ? '¿Seguro que quiere borrar este Comentario?' : 'Are you sure you want to delete this comment?')) {
          $.post(includeThisFile(), { delComment: commentId }, () => {
             animateCSS($(this).parents('.media'), 'zoomOut', () => {
                $(this).parents('.media').remove()

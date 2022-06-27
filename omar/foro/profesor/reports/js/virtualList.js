@@ -33,12 +33,12 @@ $(document).ready(function () {
               virtualClassesTableWrapper.show('drop', { direction: "right" }, 400);
             });
             $("#header").hide('drop', { direction: "left" }, 400, () => {
-              $("#header").text('Lista de clases virtuales')
+              $("#header").text(__LANG === 'es'? 'Lista de clases virtuales': 'Virtual classes list')
                 .show('drop', { direction: "right" }, 400);
             });
           }
           else {
-            alert('No existen clases virtuales con este clase');
+            alert(__LANG === 'es' ? 'No existen clases virtuales con este clase': 'There are no virtual classes for this class');
           }
           $('.classesTable tbody tr').removeClass('disabled')
         }
@@ -54,7 +54,7 @@ $(document).ready(function () {
       classesTableWrapper.show('drop', { direction: "left" }, 400);
     });
     $("#header").hide('drop', { direction: "right" }, 400, () => {
-      $("#header").text('Mis Cursos')
+      $("#header").text(__LANG === 'es' ? 'Mis Cursos': 'My classes')
         .show('drop', { direction: "left" }, 400);
     });
   })

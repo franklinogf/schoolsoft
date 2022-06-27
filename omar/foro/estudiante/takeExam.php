@@ -1,12 +1,13 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Exam;
-use Classes\Route;
-use Classes\Session;
-use Classes\Controllers\Student;
-use Classes\Server;
+use Classes\Lang;
 use Classes\Util;
+use Classes\Route;
+use Classes\Server;
+use Classes\Session;
+use Classes\Controllers\Exam;
+use Classes\Controllers\Student;
 
 Session::is_logged();
 Server::is_post();
@@ -16,13 +17,30 @@ $student = new Student(Session::id());
 $exam = new Exam($id_exam);
 $topicNumber = 1;
 // Util::dump($exam);
+$lang = new Lang([
+['Empezar examen','Start exam'],
+['Examen','Exam'],
+['No estoy listo','I am not ready'],
+['Verdadero','True'],
+['Falso','False'],
+['Terminar examen','Finish exam'],
+['Va a empezar el examen','The exam will start'],
+['Tiene','You have'],
+['minutos para terminar','minutes to finish'],
+['Si sale de la pantalla completa se tomara como realizado','If you go out of the full screen the exam will end'],
+['Asi que tenga Cuidado!','So be careful!'],
+['Cancelar','Cancel'],
+['Atención!','Warning!'],
+['Aun tiene preguntas sin contestar, está seguro de que desea continuar?','You still have unanswered questions, are you sure you want to continue?'],
+['Cancelar','Cancel'],
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
    <?php
-   $title = "Examen";
+   $title = $lang->translation('Examen');
    Route::includeFile('/foro/estudiante/includes/layouts/header.php');
    ?>
 </head>
@@ -37,8 +55,8 @@ $topicNumber = 1;
          <p id="timer" class="text-primary font-weight-bold"><?= $exam->tiempo ?></p>
       </div>     
       <div id="menuButtons">
-         <button id="askForExam" class="btn btn-primary mx-auto d-block my-2">Empezar examen</button>
-         <a href="<?= Route::url('/foro/estudiante/exams.php') ?>" class="btn btn-secondary mx-auto d-block my-2">No estoy listo</a>
+         <button id="askForExam" class="btn btn-primary mx-auto d-block my-2"><?= $lang->translation("Empezar examen") ?></button>
+         <a href="<?= Route::url('/foro/estudiante/exams.php') ?>" class="btn btn-secondary mx-auto d-block my-2"><?= $lang->translation("No estoy listo") ?></a>
       </div>
       <div class="jumbotron py-4 blur">
          <div class="container bg-white px-3 py-5 p-md-5 shadow">
@@ -55,9 +73,9 @@ $topicNumber = 1;
                      <div class="form-group">
                         <label class="font-weight-bold" for="fv<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta"); ?></label>
                         <select id="fv<?= $count ?>" class="form-control" name="fv[<?= $topic->id ?>]" required>
-                           <option value="" selected>Selecciona la respuesta</option>
-                           <option value="v">Verdadero</option>
-                           <option value="f">Falso</option>
+                           <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
+                           <option value="v"><?= $lang->translation("Verdadero") ?></option>
+                           <option value="f"><?= $lang->translation("Falso") ?></option>
                         </select>
                      </div>
                      <?php $count++; ?>
@@ -98,7 +116,7 @@ $topicNumber = 1;
                      <div class="form-group row">
                         <label class="col-8" for="pair<?= $count ?>"><?= utf8_decode("$count) $topic->pregunta"); ?></label>
                         <select id="pair<?= $count ?>" class="form-control col-4" name="pair[<?= $topic->id ?>]" required>
-                           <option value="" selected>Selecciona la respuesta</option>
+                           <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                            <?php foreach ($exam->pairCodes->topics as $answer) : ?>
                               <option value="<?= $answer->id ?>"><?= utf8_decode($answer->respuesta) ?></option>
                            <?php endforeach ?>
@@ -149,7 +167,7 @@ $topicNumber = 1;
                   <!-- END QA -->
                <?php endif ?>
 
-               <button type="submit" class="btn btn-primary btn-block">Terminar examen</button>
+               <button type="submit" class="btn btn-primary btn-block"><?= $lang->translation("Terminar examen") ?></button>
             </form>
 
          </div>
@@ -159,15 +177,15 @@ $topicNumber = 1;
    <div class="modal fade" id="modalExam" data-backdrop="static" data-keyboard="false" tabindex="9998" aria-labelledby="modalExamLabel" aria-hidden="true">
       <div class="modal-dialog  modal-dialog-centered">
          <div class="modal-content">
-            <h5 class="modal-header bg-warning">Va a empezar el examen.</h5>
+            <h5 class="modal-header bg-warning"><?= $lang->translation("Va a empezar el examen") ?>.</h5>
             <div class="modal-body">
-               <p>Tiene <b class="text-primary"><?= $exam->tiempo ?></b> minutos para terminar.</p>
-               <p>Si sale de la pantalla completa se tomara como realizado.</p>
-               <p><b>Asi que tenga Cuidado!</b></p>
+               <p><?= $lang->translation("Tiene") ?> <b class="text-primary"><?= $exam->tiempo ?></b> <?= $lang->translation("minutos para terminar") ?>.</p>
+               <p><?= $lang->translation("Si sale de la pantalla completa se tomara como realizado") ?>.</p>
+               <p><b><?= $lang->translation("Asi que tenga Cuidado!") ?></b></p>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-               <button id="startExam" type="button" class="btn btn-warning">Empezar Examen</button>
+               <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cancelar") ?></button>
+               <button id="startExam" type="button" class="btn btn-warning"><?= $lang->translation("Empezar Examen") ?></button>
             </div>
          </div>
       </div>
@@ -176,20 +194,20 @@ $topicNumber = 1;
    <div class="modal fade" id="modalAlert" data-backdrop="static" data-keyboard="false" tabindex="9998" aria-labelledby="modalAlertLabel" aria-hidden="true">
       <div class="modal-dialog  modal-dialog-centered">
          <div class="modal-content">
-            <h5 class="modal-header bg-danger">Atención!</h5>
+            <h5 class="modal-header bg-danger"><?= $lang->translation("Atención!") ?></h5>
             <div class="modal-body">
-               Aun tiene preguntas sin contestar, esta seguro de que desea continuar?
+               <?= $lang->translation("Aun tiene preguntas sin contestar, está seguro de que desea continuar?") ?>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-               <button id="finishExam" type="button" class="btn btn-danger">Terminar examen</button>
+               <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cancelar") ?></button>
+               <button id="finishExam" type="button" class="btn btn-danger"><?= $lang->translation("Terminar examen") ?></button>
             </div>
          </div>
       </div>
    </div>
 
    <?php
-   Route::includeFile('/foro/estudiante/includes/layouts/scripts.php');
+    Route::includeFile('/includes/layouts/scripts.php', true);
    ?>
 </body>
 

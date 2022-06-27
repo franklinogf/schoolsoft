@@ -51,7 +51,7 @@ $lang = new Lang([
                     <?php foreach ($_info as $index => $info) : ?>
                         <div class="col-6 col-md-4 col-xl-3">
                             <label for="<?= "page$index" ?>"><?= $lang->translation($info) ?></label>
-                            <input type="checkbox" name="pages[]" id="<?= "page$index" ?>" class="custom-input align-middle" value="<?= $index ?>">
+                            <input type="checkbox" name="pages[]" id="<?= "page$index" ?>" class="custom-input align-middle page" value="<?= $index ?>">
                         </div>
                     <?php endforeach ?>
                 </div>
@@ -60,13 +60,13 @@ $lang = new Lang([
                     <?php for ($i = 1; $i <= 4; $i++) : ?>
                         <div class="col-6 col-md-3">
                             <label for="<?= "tri$i" ?>"><?= $lang->translation("Trimestre") ?> <?= $i ?></label>
-                            <input type="checkbox" name="trimesters[]" id="<?= "tri$i" ?>" class="custom-input align-middle" value="<?= "Trimestre-$i" ?>">
+                            <input type="checkbox" name="trimesters[]" id="<?= "tri$i" ?>" class="custom-input align-middle trimester" value="<?= "Trimestre-$i" ?>">
                         </div>
                     <?php endfor ?>
                 </div>
                 <div class="text-center">
                     <hr>
-                    <input type="submit" value="Continuar" class="btn btn-primary mt-3">
+                    <button type="submit" class="btn btn-primary mt-3"><?= $lang->translation("Continuar") ?> </button>
                 </div>
             </form>
         </div>

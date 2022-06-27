@@ -9,7 +9,7 @@ use Classes\Session;
 use Classes\Util;
 
 Session::is_logged();
-$mail = new Mail(true, "Teacher");
+$mail = new Mail(false, "Teacher");
 $teacher = new Teacher(Session::id());
 
 $students = DB::table('year')->where([
@@ -45,28 +45,52 @@ foreach ($students as $student) {
    $studentName = "{$student->id} {$student->nombre} {$student->apellidos}";
    $studentUser = $student->usuario;
    $studentPassword = $student->clave;
-   $messageTitle = "Usuario y Clave";
+   $messageTitle = __LANG === 'es' ? 'Usuario y contraseña' : 'User and password';
 
    $mail->isHTML(true);
-   $mail->Subject = "Acceso al foro";
-   $mail->Body    = "
+   $mail->Subject = __LANG === 'es' ? 'Acceso al foro' : 'Access to the forum';
+   $mail->Body = __LANG === 'es' ? "
+   <!DOCTYPE html>
+   <html lang='es'>
+   <head>
+     <meta charset='UTF-8'>
+     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+     <title>{$messageTitle}</title>
+   </head>
+   <body>
+   <center><h1>{$schoolName}</h1></center>
+   <center><h2>{$messageTitle}</h2></center>
+   <br>
+   <br>
+   <p>Esta es la información de acceso para el estudiante: <b>{$studentName}</b></p>
+   <ul style='list-style: none;'>
+      <li>Usuario: <b>{$studentUser}</b></li>
+      <li style='margin-top: 10px;'>Contraseña: <b>{$studentPassword}</b></li><br>   
+      <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Foro</a></li>
+      <br><br>
+   </ul>
+   <hr>
+   </body>
+   </html>
+   " :
+      "
 <!DOCTYPE html>
-<html lang='es'>
+<html lang='en'>
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>Document</title>
+  <title>{$messageTitle}</title>
 </head>
 <body>
 <center><h1>{$schoolName}</h1></center>
 <center><h2>{$messageTitle}</h2></center>
 <br>
 <br>
-<p>Esta es la información de acceso para el estudiante: <b>{$studentName}</b></p>
+<p>This is the student information to acces the forum: <b>{$studentName}</b></p>
 <ul style='list-style: none;'>
-	<li>Usuario: <b>{$studentUser}</b></li>
-   <li style='margin-top: 10px;'>Clave: <b>{$studentPassword}</b></li><br>   
-   <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Acceso al Foro</a></li>
+	<li>Username: <b>{$studentUser}</b></li>
+   <li style='margin-top: 10px;'>Password: <b>{$studentPassword}</b></li><br>   
+   <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Forum</a></li>
    <br><br>
 </ul>
 <hr>
@@ -76,7 +100,7 @@ foreach ($students as $student) {
 
    if ($count > 0) {
       if (!$mail->send()) {
-         echo "Error " .$mail->ErrorInfo;
+         echo "Error " . $mail->ErrorInfo;
       }
    }
    $mail->ClearAddresses();

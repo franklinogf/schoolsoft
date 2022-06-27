@@ -37,14 +37,14 @@ if (isset($_POST['getMessages'])) {
          $teacher = new Teacher($message->id_p);
          $from = $message->enviado_por === 'e' ? 'student' : 'teacher';
          $to = $message->enviado_por === 'e' ? 'teacher' : 'student';
-
+         $esOrEn1 = __LANG === 'es' ?'profesor':'teacher';
          $name = ${$from}->fullName();
          $profilePicture = ${$from}->profilePicture();
-         $info = $message->enviado_por === 'e' ? 'yo' : 'profesor';
+         $info = $message->enviado_por === 'e' ? 'yo' : $esOrEn1;
          $path = $message->enviado_por === 'e' ? __STUDENT_MESSAGES_FILES_DIRECTORY_URL : __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
          $toName = ${$to}->fullName();
          $toProfilePicture = ${$to}->profilePicture();
-         $toInfo = $message->enviado_por === 'e' ? 'profesor' : $student->grado;
+         $toInfo = $message->enviado_por === 'e' ? $esOrEn1 : $student->grado;
 
          $linksArray = [];
          foreach ($links as $link) {
