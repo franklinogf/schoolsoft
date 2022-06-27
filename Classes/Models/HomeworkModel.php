@@ -111,7 +111,8 @@ class HomeworkModel extends School
             ])->whereRaw("AND ({$this->table}.fec_out >= ? OR {$this->table}.fec_out = ?)", [$date, "0000-00-00"])
             ->orderBy("{$this->table}.fec_out", 'ASC')->get();
       } else {
-         $obj = parent::table($this->table, !__COSEY)->select("{$this->table}.*,cursos.desc1 as `desc`")
+         $desc = __LANG === 'es' ? 'desc1' : 'desc2';
+         $obj = parent::table($this->table, !__COSEY)->select("{$this->table}.*,cursos.$desc as `desc`")
             ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
             ->where([
                ["{$this->table}.curso", $class],

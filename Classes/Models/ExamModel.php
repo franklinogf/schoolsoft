@@ -111,7 +111,8 @@ class ExamModel extends School
             ])
             ->orderBy("{$this->table}.fecha", 'DESC')->get();    
          }      else{
-            $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
+            $desc = __LANG === 'es' ? 'desc1' : 'desc2';
+            $obj = parent::table($this->table)->select("{$this->table}.*,cursos.$desc as `desc`")
             ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
             ->where([
                ["{$this->table}.curso", $class],
@@ -137,7 +138,8 @@ class ExamModel extends School
                ])
                ->orderBy("{$this->table}.fecha", 'DESC')->get();
             }else{
-               $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
+               $desc = __LANG === 'es' ? 'desc1' : 'desc2';
+               $obj = parent::table($this->table)->select("{$this->table}.*,cursos.$desc as `desc`")
                ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
                ->where([
                   ["{$this->table}.curso", $class],
