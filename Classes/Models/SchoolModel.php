@@ -8,7 +8,7 @@ use Classes\DataBase\DB;
 class SchoolModel extends DB
 {
   private $table = 'colegio';
-  protected $primary_key = 'id';
+  protected $primary_key = 'usuario';
   const TABLE = 'colegio';
 
   protected function getSchoolByPK($pk)
@@ -27,6 +27,20 @@ class SchoolModel extends DB
   protected function getSchool()
   {
     return $this->getSchoolByUser();
+  }
+  protected function adminLogin($username, $password)
+  {
+    $obj =  parent::table($this->table, !__COSEY)
+      ->where([
+        ['usuario', $username],
+        ['clave', $password]
+      ])->first();
+
+    return $obj;
+  }
+  protected function updateAdmin($propsArray)
+  {
+    $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
   }
 
   
