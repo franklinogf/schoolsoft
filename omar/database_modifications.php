@@ -7,24 +7,34 @@ use Classes\DataBase\DB;
 /*                           DATABASE MODIFICATIONS                           */
 /* -------------------------------------------------------------------------- */
 
+/* ---------------------------- Cafeteria orders ---------------------------- */
+
+DB::table("cafeteria_orders")->create("
+id INT PRIMARY KEY AUTO_INCREMENT,
+ss varchar(50) NOT NULL,
+id_compra INT,
+year varchar(50) NOT NULL,
+despachado boolean NOT NULL default false
+");
+
 /* ----------------------------- homeworks table ---------------------------- */
 DB::table("tbl_documentos")->alter("
 ADD `year` CHAR(5) NULL AFTER `hora`
 ");
 DB::table('tbl_documentos')->where([
-    ["fec_in",'>=','2020-08-01'],
-    ["fec_in",'<=','2021-06-30'],
+    ["fec_in", '>=', '2020-08-01'],
+    ["fec_in", '<=', '2021-06-30'],
 ])
-->update([
-    "year"=>'20-21'
-]);
+    ->update([
+        "year" => '20-21'
+    ]);
 DB::table('tbl_documentos')->where([
-    ["fec_in",'>=','2021-08-01'],
-    ["fec_in",'<=','2022-06-30'],
+    ["fec_in", '>=', '2021-08-01'],
+    ["fec_in", '<=', '2022-06-30'],
 ])
-->update([
-    "year"=>'21-22'
-]);
+    ->update([
+        "year" => '21-22'
+    ]);
 
 DB::table("t_mensajes_archivos")->create(
     "
@@ -89,4 +99,3 @@ PRIMARY KEY (`id`)");
 DB::table('tarjeta_cambios')->alter("
  ADD `id2` INT NOT NULL AUTO_INCREMENT COMMENT 'autoincrement' FIRST, 
  ADD PRIMARY KEY (`id2`);");
-
