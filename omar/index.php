@@ -7,14 +7,14 @@ use Classes\Controllers\School;
 
 $school = new School();
 $lang = new Lang([
-    ['Administración', 'administración'],
+    ['Administración', 'Administration'],
     ["Regiweb", 'Regiweb'],
     ["Padres", 'Parents'],
     ["Foro", 'Foro'],
     ["Calendario", 'Calendar'],
     ["Solicitudes", 'Requests'],
     ["Documentos", "Documents"],
-    ["Cafeteria", "Cafeteria"]
+    ["Cafetería", "Cafeteria"]
 ]);
 ?>
 <!DOCTYPE html>
@@ -41,7 +41,7 @@ $lang = new Lang([
         <div class="container d-flex align-items-center justify-content-center" style='height:15rem'>
             <div class="row row-cols-2 row-cols-md-4 w-100">
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/ss_admin.htm') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Administración") ?></a>
+                    <a href="<?= Route::url('/admin/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Administración") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
                     <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Regiweb") ?></a>
@@ -62,7 +62,7 @@ $lang = new Lang([
                     <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Documentos") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafeteria") ?></a>
+                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafetería") ?></a>
                 </div>
             </div>
         </div>
