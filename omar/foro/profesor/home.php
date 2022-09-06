@@ -29,7 +29,7 @@ $lang = new Lang([
 
 <head>
   <?php
-  $title = $lang->translation("Salón Hogar");
+  $title = utf8_encode($lang->translation("Salón Hogar"));
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -40,7 +40,7 @@ $lang = new Lang([
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center"><?= $lang->translation("Salón Hogar") ?></h1>
+    <h1 class="text-center"><?= utf8_encode($lang->translation("Salón Hogar")) ?></h1>
 
     <?php
     $students = $teacher->homeStudents();

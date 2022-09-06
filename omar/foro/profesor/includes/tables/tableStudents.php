@@ -53,7 +53,7 @@ $lang = new Lang([
          </tr>
          <?php if (!$students) : ?>
             <tr class="bg-gradient-light bg-light">
-               <td colspan="<?= $tableStudentsCheckbox ? '3' : '2' ?>"><button id="back" type="button" class="btn btn-block btn-primary"><?= $lang->translation("Atrás") ?></button></td>
+               <td colspan="<?= $tableStudentsCheckbox ? '3' : '2' ?>"><button id="back" type="button" class="btn btn-block btn-primary"><?= utf8_encode($lang->translation("Atrás")) ?></button></td>
             </tr>
          <?php endif ?>
          <?php if ($tableStudentsCheckbox) : ?>

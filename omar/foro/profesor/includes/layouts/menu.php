@@ -46,10 +46,10 @@ $pathFile = str_replace('.php', '', $file);
         <a class="nav-link" href="<?= Route::url('/foro/profesor/classes.php') ?>"><?= $lang->translation("Mis Cursos") ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'virtual' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/foro/profesor/virtual.php') ?>"><?= $lang->translation("Salón Virtual") ?></a>
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/virtual.php') ?>"><?= utf8_encode($lang->translation("Salón Virtual")) ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'home' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/foro/profesor/home.php') ?>"><?= $lang->translation("Salón Hogar") ?></a>
+        <a class="nav-link" href="<?= Route::url('/foro/profesor/home.php') ?>"><?= utf8_encode($lang->translation("Salón Hogar")) ?></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropDownInformes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,7 +62,7 @@ $pathFile = str_replace('.php', '', $file);
           <a class="dropdown-item" href="<?= Route::url('/foro/profesor/reports/virtualList.php') ?>"><i class="far fa-list-alt text-primary"></i> <?= $lang->translation("Lista de clases virtuales") ?></a>
           <div class="dropdown-divider"></div>
           <?php if (!__COSEY) : ?>
-            <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-primary"></i> <?= $lang->translation("Salón Hogar") ?></a>
+            <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfHomeStudents.php') ?>"><i class="far fa-file-pdf text-primary"></i> <?= utf8_encode($lang->translation("Salón Hogar")) ?></a>
           <?php endif ?>
           <a class="dropdown-item" target="_blank" href="<?= Route::url('/foro/profesor/pdf/pdfUsersList.php') ?>"><i class="far fa-file-pdf text-primary"></i></i> <?= $lang->translation("Lista de Usuarios") ?></a>
         </div>
@@ -84,7 +84,7 @@ $pathFile = str_replace('.php', '', $file);
         <a class="nav-link" href="<?= Route::url('/foro/profesor/profile.php') ?>"><i class="far fa-id-card text-primary"></i> <?= $lang->translation("Mi Perfil") ?></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> <?= $lang->translation("Cerrar Sesión") ?></a>
+        <a class="nav-link" href="<?= Route::url('/foro/includes/logout.php') ?>"><i class="fas fa-sign-out-alt text-primary"></i> <?= utf8_encode($lang->translation("Cerrar Sesión")) ?></a>
       </li>
     </ul>
 

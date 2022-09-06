@@ -69,7 +69,7 @@ $lang = new Lang([
         </div>
       <?php else : ?>
         <div class="alert alert-info mt-5 mb-0" role="alert">
-          <?= $lang->translation("No tiene comentarios nuevos en los temas de conversación") ?>
+          <?= utf8_encode($lang->translation("No tiene comentarios nuevos en los temas de conversación")) ?>
         </div>
 
       <?php endif ?>

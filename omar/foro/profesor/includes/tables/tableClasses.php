@@ -25,7 +25,7 @@ $lang = new Lang([
                </th>
             <?php endif ?>
             <th><?= $lang->translation("Curso") ?></th>
-            <th><?= $lang->translation("Descripción") ?></th>
+            <th><?= utf8_encode($lang->translation("Descripción")) ?></th>
          </tr>
       </thead>
       <tbody>
@@ -71,7 +71,7 @@ $lang = new Lang([
                </th>
             <?php endif ?>
             <th><?= $lang->translation("Curso") ?></th>
-            <th><?= $lang->translation("Descripción") ?></th>
+            <th><?= utf8_encode($lang->translation("Descripción")) ?></th>
          </tr>
          <?php if ($tableClassesCheckbox) : ?>
             <tr class="bg-gradient-light bg-light">
