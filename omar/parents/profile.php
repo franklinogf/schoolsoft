@@ -248,7 +248,7 @@ $lang = new Lang([
             <h6 class="card-subtitle col-12 my-2"><?= $lang->translation("Opciones de E-mail y SMS") ?></h6>
             <div class="form-row col-12">
               <div class="form-group col-6">
-                <label for="receiveEmailP"><?= $lang->translation("Recibir E-mail") ?></label>
+                <label for="receiveEmailP"><?= $lang->translation("Recibir correo electrónico") ?></label>
                 <select class="form-control" name="receiveEmailP" id="receiveEmailP">
                   <option <?= $parents->re_e_p === 'NO' ? 'selected=""' : '' ?> value="NO">NO</option>
                   <option <?= $parents->re_e_p === 'SI' ? 'selected=""' : '' ?> value="SI"><?= $lang->translation("SI") ?></option>
