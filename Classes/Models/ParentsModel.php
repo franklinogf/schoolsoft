@@ -22,6 +22,15 @@ class ParentsModel extends School
     ])->first();
     return $obj;
   }
+  protected function getAllParents()
+  {
+    $year = $this->info('year');
+    $obj = parent::table($this->table)->orderBy($this->primary_key)->get();
+    // $obj = parent::table($this->table)->where([
+    //   ['year', $year],      
+    // ])->orderBy($this->primary_key)->get();
+    return $obj;
+  }
   protected function getParentsByPK($pk)
   {
     $obj = parent::table($this->table, !__COSEY)
@@ -33,5 +42,9 @@ class ParentsModel extends School
   protected function updateParents($propsArray)
   {
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
+  }
+  protected function addParents($propsArray)
+  {
+    $this->insertTable($this->table, $propsArray);
   }
 }

@@ -290,4 +290,8 @@ class StudentModel extends School
   {
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
   }
+  protected function addStudent($propsArray)
+  {
+    $this->insertTable($this->table, $propsArray);
+  }
 }

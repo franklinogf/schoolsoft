@@ -173,13 +173,15 @@ class Student extends StudentModel
     return $this->getStudentsByGrade($grade, $table);
   }
 
-  public function save()
+  public function save($type = 'edit')
   {
     // get self public class, no parents classes
     $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
     if (count($propsArray) > 0) {
-      if (isset($this->{$this->primary_key})) {
+      if (isset($this->{$this->primary_key}) && $type === 'edit') {
         $this->updateStudent($propsArray);
+      } else {
+        $this->addStudent($propsArray);
       }
     } else {
       $this->exception('Debe de asignar valor a las propiedades en primer lugar');
