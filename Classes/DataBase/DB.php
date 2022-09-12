@@ -32,7 +32,20 @@ class DB extends DataBase
   private static $innerJoinOperator = [];
   private static $cosey = true;
 
-
+  /* -------------------- Get the next autoincrement number ------------------- */
+  // table that has autoincrement
+  public static function getNextAutoIncrementIdFromTable($table)
+  {
+    $nextId = self::table('information_schema.TABLES')->select('AUTO_INCREMENT')->whereRaw("TABLE_SCHEMA = '" . __USERNAME . "'
+    AND TABLE_NAME = '$table'")->first();
+    return $nextId->AUTO_INCREMENT;
+  }
+  //table that doesn't have autoincrement but has an id
+  public static function getNextIdFromTable($table, $col = 'id')
+  {
+    $nextId = self::table($table)->select("MAX($col) as $col")->first();
+    return (int)$nextId->{$col} + 1;
+  }
   /* ---------------------- Method to create a new table ---------------------- */
 
   public function create($columns, $others = '')
