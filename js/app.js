@@ -248,7 +248,18 @@ function scrollWindow(tagName) {
 $.getScript(getRootUrl() + '/js/jquery.mask.min.js', function () {
   $(function () {
     //Masked Inputs
-    $('.onlyNumbers').mask('(000)000-0000')
+    $(".onlyNumbers").mask('0#')
+    $('.phone').mask('(000)000-0000', {
+      onComplete: function (cep, e) {
+        $(e.target).val($(e.target).cleanVal())
+      }
+    })
+    $.each($('.phone'), function (indexInArray, valueOfElement) {
+      if ($(this).val().length === 13) {
+        $(this).val($(this).cleanVal())
+      }
+    });
+    $('.socialSecurity').mask('000-00-0000')
     // Ajax session check
     $(document).ajaxStart(function () {
       const sessionPath = getBaseUrl().split('/').slice(0, 3).join("/");
@@ -398,14 +409,14 @@ if ($.fn.dataTable) {
       }
     }
   });
-  function tableDataToSubmit(formElement,dataTable,dataTableName) {
+  function tableDataToSubmit(formElement, dataTable, dataTableName) {
     $(".tableDataHiddenInput").remove()
     $.each(dataTable.rows().nodes(), function (indexInArray, valueOfElement) {
-        if ($(this).find("[type='checkbox'].check").prop('checked')) {
-            $(formElement).prepend(`<input type='hidden' class='tableDataHiddenInput' name='${dataTableName}' value='${$(this).find("[type='checkbox'].check").val()}'>`);
-        }
-    })        
-}
+      if ($(this).find("[type='checkbox'].check").prop('checked')) {
+        $(formElement).prepend(`<input type='hidden' class='tableDataHiddenInput' name='${dataTableName}' value='${$(this).find("[type='checkbox'].check").val()}'>`);
+      }
+    })
+  }
 }
 // delete everything when the modal hides
 if ($('.modal').length > 0) {

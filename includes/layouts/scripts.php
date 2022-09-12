@@ -1,6 +1,7 @@
 <?php
 global $jqUI;
 global $DataTable;
+global $jqMask;
 
 use Classes\Route;
 ?>
@@ -8,11 +9,14 @@ use Classes\Route;
 
 <?php if ($jqUI) Route::jqUI(); ?>
 <?php if ($DataTable) Route::includeFile('/includes/datatable-js.php', true); ?>
+<?php if ($jqMask) : ?>
+  <script src="/js/jquery.mask.min.js"></script>
+<?php endif ?>
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript"> 
-    const __LANG = '<?= __LANG ?>';  
+<script type="text/javascript">
+  const __LANG = '<?= __LANG ?>';
 </script>
 <?php
 Route::js('/js/app.js', true);
