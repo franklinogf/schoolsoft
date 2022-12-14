@@ -29,9 +29,10 @@ $lang->AddTranslation([
     ["NOTA","GRADE"]
 ]);
 
+$gradeLang = __LANG === 'es' ? 'NTA': 'GRD';
 $titles = [
-    ["NTA-1", "40%", "C-1", "NTA-2", "40%", "C-2", "EXF", "20%", $lang->translation("NOTA")],
-    ["NTA-1", "45%", "C-1", "NTA-2", "45%", "C-2", "EXF", "10%", $lang->translation("NOTA")]
+    ["$gradeLang-1", "40%", "C-1", "$gradeLang-2", "40%", "C-2", "EXF", "20%", $lang->translation("NOTA")],
+    ["$gradeLang-1", "45%", "C-1", "$gradeLang-2", "45%", "C-2", "EXF", "10%", $lang->translation("NOTA")]
 ];
 $percentNotes = [
     [0.40, 0.20],
@@ -61,7 +62,7 @@ $pdf->SetFont('Arial', '', 8);
 $pdf->Cell(50, 5, utf8_decode($teacher->fullName()), 1, 0, 'C');
 $pdf->Cell(18, 5, $data->curso, 1, 0, 'C');
 $pdf->Cell(40, 5, utf8_decode($data->descripcion), 1, 0, 'C');
-$pdf->Cell(20, 5, $teacher->credits($_class), 1, 0, 'C');
+$pdf->Cell(20, 5, number_format($teacher->classCredit($_class),2), 1, 0, 'C');
 $pdf->Cell(20, 5, count($students), 1, 0, 'C');
 $pdf->Cell(25, 5, Util::formatDate(Util::date()), 1, 1, 'C');
 

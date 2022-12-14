@@ -41,7 +41,10 @@ $columns = [
 $titles = [
     "Semestre-1" => ["T-1", "C-1", "T-2", "C-2", 'Exa', $lang->translation('Nota')],
     "Semestre-2" => ["T-3", "C-3", "T-4", "C-4", 'Exa', $lang->translation('Nota')],
-    "V-Nota" => ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'Bn', 'TPA', '%', 'Nta', 'Con', 'Au', 'Ta', 'Com']
+    "V-Nota" => [
+        'es' => ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'Bn', 'TPA', '%', 'Nta', 'Con', 'Au', 'Ta', 'Com'],
+        'en' => ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'Bn', 'TPA', '%', 'GRD', 'Con', 'Au', 'Ta', 'Com'],
+    ]
 ];
 
 $lang->AddTranslation([
@@ -71,7 +74,7 @@ $pdf->SetFont('Arial', '', 7);
 $pdf->Cell(50, 5, utf8_decode($teacher->fullName()), 1, 0, 'C');
 $pdf->Cell(18, 5, $data->curso, 1, 0, 'C');
 $pdf->Cell(40, 5, utf8_decode($data->descripcion), 1, 0, 'C');
-$pdf->Cell(20, 5, $teacher->credits($_class), 1, 0, 'C');
+$pdf->Cell(20, 5, number_format($teacher->classCredit($_class), 2), 1, 0, 'C');
 $pdf->Cell(20, 5, count($students), 1, 0, 'C');
 $pdf->Cell(25, 5, $lang->trimesterTranslation($_trimester), 1, 0, 'C');
 $pdf->Cell(25, 5, Util::formatDate(Util::date()), 1, 1, 'C');
@@ -81,8 +84,9 @@ $pdf->Ln(3);
 $pdf->SetFont('Arial', 'B', 9);
 $pdf->Cell(50, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
 $pdf->Cell(40, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
-foreach ($titles[$_report] as $index => $title) {
-    if (count($titles[$_report]) === ($index + 1)) {
+$_titles = $_report === 'V-Nota' ? $titles[$_report][__LANG] : $titles[$_report];
+foreach ($_titles as $index => $title) {
+    if (count($_titles) === ($index + 1)) {
         $pdf->Cell(10, 5, $title, 1, 1, 'C', true);
     } else {
         $pdf->Cell(7, 5, $title, 1, 0, 'C', true);

@@ -57,7 +57,7 @@ $pdf->SetFont('Arial', '', 7);
 $pdf->Cell(50, 5, utf8_decode($teacher->fullName()), 1, 0, 'C');
 $pdf->Cell(18, 5, $data->curso, 1, 0, 'C');
 $pdf->Cell(40, 5, utf8_decode($data->descripcion), 1, 0, 'C');
-$pdf->Cell(20, 5, $teacher->credits($_class), 1, 0, 'C');
+$pdf->Cell(20, 5, number_format($teacher->classCredit($_class),2), 1, 0, 'C');
 $pdf->Cell(20, 5, count($students), 1, 0, 'C');
 $pdf->Cell(25, 5, Util::formatDate(Util::date()), 1, 1, 'C');
 
