@@ -17,19 +17,19 @@ $options = [
                 'link' => 'accounts/'
             ],
             [
-                'name' => ["es" => 'Entrega de documentos', "en" => "Entrega de documentos"],
-                'desc' => ['es' => 'Es la documentación que se pide y entregan a la oficina.', 'en' => 'Es la documentación que se pide y entregan a la oficina.'],
-                'link' => '#'
+                'name' => ["es" => 'Entrega de documentos', "en" => "Documents delivery"],
+                'desc' => ['es' => 'Documentación que se pide y entregan a la oficina.', 'en' => 'Documents to be handle to the office.'],
+                'link' => 'documents/'
             ],
             [
-                'name' => ["es" => 'Re-Matrícula', "en" => "Re-Matrícula"],
+                'name' => ["es" => 'Re-matrícula', "en" => "Re-enrollment"],
                 'desc' => ['es' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A', 'en' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A'],
-                'link' => '#'
+                'link' => 'reenrollment/'
             ],
             [
-                'name' => ["es" => 'Maestros', "en" => "Maestros"],
-                'desc' => ['es' => 'Añadir, borrar, bajas o modificar información de los maestros.', 'en' => 'Añadir, borrar, bajas o modificar información de los maestros.'],
-                'link' => '#'
+                'name' => ["es" => 'Maestros', "en" => "Teachers"],
+                'desc' => ['es' => 'Añadir, borrar o modificar información de los maestros.', 'en' => 'Add, update or delete teachers information.'],
+                'link' => 'teachers/'
             ],
             [
                 'name' => ["es" => 'Administración', "en" => "Administración"],
@@ -102,7 +102,7 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Re-Matrícula',   "en" => "Re-Matrícula"],
+                'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment block"],
                 'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Acceso o bloqueo de las re-matricula a los padres.'],
                 'link' => '#'
             ],
