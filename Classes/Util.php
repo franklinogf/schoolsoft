@@ -19,6 +19,32 @@ class Util
       "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
    ];
 
+   public static function getNextGrade($oldGrade)
+   {
+      list($g1, $g2) = explode('-', $oldGrade);
+
+      if (preg_match('/[A-Za-z]/', $g1)) {
+         if ($g1 === 'IN') {
+            $grade =  "MA-$g2";
+         } else if ($g1 === 'MA' || $g1 === 'PP') {
+            $grade =  "PK-$g2";
+         } else if ($g1 === 'PK') {
+            $grade =  "KG-$g2";
+         } else if ($g1 === 'KG') {
+            $grade = "01-$g2";
+         }
+      } else {
+         $grade = (int) $g1;
+         $grade++;
+         if ($grade < 10) {
+            $grade = '0' . $grade . '-' . $g2;
+         } else {
+            $grade = $grade . '-' . $g2;
+         }
+      }
+      return $grade;
+   }
+
    public static function numberToLetter($value)
    {
       if ($value == '') {
@@ -186,34 +212,34 @@ class Util
       return ["AT&T", "T-Movil", "Sprint", "Open M.", "Claro", "Verizon", "Suncom", "Boost"];
    }
    public static function phoneAddress($phone, $company)
-{
-    $phoneAddress = preg_replace('/[^\d]/', '', $phone);
-    if ($company == "AT&T") {
-        $phoneAddress .= "@txt.att.net";
-    }
-    if ($company == "T-Movil") {
-        $phoneAddress .= "@tmomail.net";
-    }
-    if ($company == "Sprint") {
-        $phoneAddress .= "@messaging.sprintpcs.com";
-    }
-    if ($company == "Open M.") {
-        $phoneAddress .= "@email.openmobilepr.com";
-    }
-    if ($company == "Claro") {
-        $phoneAddress .= "@mms.claropr.com";
-    }
-    if ($company == "Verizon") {
-        $phoneAddress .= "@vtext.com";
-    }
-    if ($company == "Suncom") {
-        $phoneAddress .= "@tms.suncom.com";
-    }
-    if ($company == "Boost") {
-        $phoneAddress .= "@myboostmobile.com";
-    }
-    return $phoneAddress;
-}
+   {
+      $phoneAddress = preg_replace('/[^\d]/', '', $phone);
+      if ($company == "AT&T") {
+         $phoneAddress .= "@txt.att.net";
+      }
+      if ($company == "T-Movil") {
+         $phoneAddress .= "@tmomail.net";
+      }
+      if ($company == "Sprint") {
+         $phoneAddress .= "@messaging.sprintpcs.com";
+      }
+      if ($company == "Open M.") {
+         $phoneAddress .= "@email.openmobilepr.com";
+      }
+      if ($company == "Claro") {
+         $phoneAddress .= "@mms.claropr.com";
+      }
+      if ($company == "Verizon") {
+         $phoneAddress .= "@vtext.com";
+      }
+      if ($company == "Suncom") {
+         $phoneAddress .= "@tms.suncom.com";
+      }
+      if ($company == "Boost") {
+         $phoneAddress .= "@myboostmobile.com";
+      }
+      return $phoneAddress;
+   }
 
    public static function getIp()
    {
