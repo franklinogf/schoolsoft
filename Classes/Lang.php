@@ -8,7 +8,7 @@ class Lang
     private $translations = [];
 
     public function __construct(array $translation = [])
-    {       
+    {
         $defaultTranslations = [
             ['Seleccionar', 'Select'],
             ['Continuar', 'Continue'],
@@ -17,13 +17,13 @@ class Lang
             ['Trimestre', 'Trimester'],
             ['Pagina', 'Page'],
             ['Derechos reservados', 'Copy Right'],
-            ["Notas","Grades"],
-            ["Notas de verano","Summer grades"],
-            ["Pruebas cortas","Short tests"],
-            ["Trabajos diarios","Daily homework"],
-            ["Trabajos de libreta","Book homework"],
-            ["Conducta y asistencia","Behavior and attendance"],
-            ["Examen final","Final exam"],
+            ["Notas", __SCHOOL_ACRONYM !== 'cbtm' ? "Grades" : "Grades/Test"],
+            ["Notas de verano", "Summer grades"],
+            ["Pruebas cortas", "Quiz"],
+            ["Trabajos diarios", __SCHOOL_ACRONYM !== 'cbtm' ? "Daily homework" : "Participation"],
+            ["Trabajos de libreta", "Homework"],
+            ["Conducta y asistencia", "Behavior and attendance"],
+            ["Examen final", "Final exam"],
         ];
         $this->addTranslation($defaultTranslations);
         if (count($translation) > 0) {
@@ -34,7 +34,7 @@ class Lang
     public function addTranslation(array $translationArray)
     {
         foreach ($translationArray as $translation) {
-            $this->translations[strtolower(utf8_decode($translation[0]))]['es'] = utf8_decode($translation[0]);
+            $this->translations[strtolower(utf8_decode($translation[0]))]['es'] = $translation[0];
             $this->translations[strtolower(utf8_decode($translation[0]))]['en'] = $translation[1];
         }
     }
@@ -44,8 +44,9 @@ class Lang
         return $this->translations[strtolower(utf8_decode($text))][__LANG];
     }
 
-    public function trimesterTranslation($text){
-       return str_replace('Trimestre', $this->translation("Trimestre"), str_replace('-', ' ', $text));
+    public function trimesterTranslation($text)
+    {
+        return str_replace('Trimestre', $this->translation("Trimestre"), str_replace('-', ' ', $text));
     }
 
     // public static function translation($text)
