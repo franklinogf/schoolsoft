@@ -31,24 +31,32 @@ $lang = new Lang([
     ?>
     <div class="container mt-3">
         <h1 class="text-center my-2"><?= $lang->translation("Notas diarias") ?></h1>
-        <div class="jumbotron mt-3">
-            <p><?= $lang->translation("Yo, padre, madre o encargado, certifico que veré las notas diarias de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las notas diarias en curso.") ?></p>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="accept">
-                <label class="custom-control-label" for="accept"><?= $lang->translation("He leido y estoy de acuerdo.") ?></label>
+        <?php if ($parents->activo == 'Activo') : ?>
+            <div class="jumbotron mt-3">
+                <p><?= $lang->translation("Yo, padre, madre o encargado, certifico que veré las notas diarias de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las notas diarias en curso.") ?></p>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="accept">
+                    <label class="custom-control-label" for="accept"><?= $lang->translation("He leido y estoy de acuerdo.") ?></label>
+                </div>
             </div>
-        </div>
-        <form action="<?= Route::url('/parents/grades/gradesOptions.php') ?>" method="POST">
-            <div class="form-row">
-                <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiantes inscritos") ?></label>
-                <select name="studentSS" id="studentSS" class="form-control col-12 col-lg-6">
-                    <?php foreach ($parents->kids() as $kid) : ?>
-                        <option value="<?= $kid->ss ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado" ?></option>
-                    <?php endforeach ?>
-                </select>
+            <form action="<?= Route::url('/parents/grades/gradesOptions.php') ?>" method="POST">
+                <div class="form-row">
+                    <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiantes inscritos") ?></label>
+                    <select name="studentSS" id="studentSS" class="form-control col-12 col-lg-6">
+                        <?php foreach ($parents->kids() as $kid) : ?>
+                            <option value="<?= $kid->ss ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado" ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled><?= $lang->translation("Notas diarias") ?></button>
+            </form>
+        <?php else : ?>
+            <div class="jumbotron mt-3 border-danger">
+                <div class="alert alert-danger" role="alert">
+                    <?= $parents->info('men_inac') ?>
+                </div>
             </div>
-            <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled><?= $lang->translation("Notas diarias") ?></button>
-        </form>
+        <?php endif ?>
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
