@@ -161,7 +161,7 @@ class DB extends DataBase
 
     $where = $this->buildWhere();
     $query = 'DELETE FROM ' . self::$table . ' ' . $where;
-    $this->deleteQuery($query, self::$whereValues);
+    $this->updateQuery($query, self::$whereValues);
     $this->closeDB();
   }
 

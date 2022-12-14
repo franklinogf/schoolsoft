@@ -20,9 +20,9 @@ class Student extends StudentModel
     }
   }
 
-  public function All()
+  public function All($year = null)
   {
-    return $this->getAllStudents();
+    return $this->getAllStudents($year);
   }
 
   public function findPK($pk)
@@ -168,9 +168,9 @@ class Student extends StudentModel
     return $this->getStudentsByCurs($ss, $table, $summer);
   }
 
-  public function findByGrade($grade, $table = 'year')
+  public function findByGrade($grade, $year = null, $table = 'year')
   {
-    return $this->getStudentsByGrade($grade, $table);
+    return $this->getStudentsByGrade($grade, $table, $year);
   }
 
   public function save($type = 'edit')
@@ -182,6 +182,18 @@ class Student extends StudentModel
         $this->updateStudent($propsArray);
       } else {
         $this->addStudent($propsArray);
+      }
+    } else {
+      $this->exception('Debe de asignar valor a las propiedades en primer lugar');
+    }
+  }
+
+  public function delete()
+  {
+    $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
+    if (count($propsArray) > 0) {
+      if (isset($this->{$this->primary_key})) {
+        $this->deleteStudent();
       }
     } else {
       $this->exception('Debe de asignar valor a las propiedades en primer lugar');

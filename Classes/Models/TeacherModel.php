@@ -36,6 +36,12 @@ class TeacherModel extends School
     $obj = parent::table('profesor')->where('grado', $grade)->first();
     return $obj;
   }
+  protected function getTeacherByUser($username)
+  {
+    $obj = parent::table($this->table)->where('usuario', $username)->first();
+
+    return $obj;
+  }
   protected function getTeacherClasses($id)
   {
     $year = $this->info('year');
@@ -56,23 +62,29 @@ class TeacherModel extends School
     }
     return $obj;
   }
-  protected function getTeacherCredits($id, $class)
+  protected function getTeacherClassCredit($id, $class)
   {
     $year = $this->info('year');
-    $obj =  parent::table('padres')->select('SUM(credito) as creditos')
+    $obj =  parent::table('cursos')->select('credito')
       ->where([
         ['curso', $class],
         ['year', $year],
         ['id', $id]
       ])->first();
-    return $obj->creditos;
+    return $obj->credito;
   }
 
   protected function getAllTeacherStudents($id, $table = 'padres')
   {
     $year = $this->info('year');
-    $students = new Student();
-    return $students->findById($id, $table);
+    $obj = parent::table($table)->where([
+      ['year', $year],
+      ['id', $id]
+    ])->groupBy('ss')->orderBy('apellidos')->get();
+    
+    return $obj;
+    // $students = new Student();
+    // return $students->findById($id, $table);
   }
 
   protected function getHomeStudents($grade)
@@ -196,5 +208,9 @@ class TeacherModel extends School
   {
 
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
+  }
+  protected function addTeacher($propsArray)
+  {
+    $this->insertTable($this->table, $propsArray);
   }
 }

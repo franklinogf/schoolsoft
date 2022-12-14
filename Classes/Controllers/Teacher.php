@@ -51,12 +51,12 @@ class Teacher extends TeacherModel
     return $this->getTeacherClasses($this->id);
   }
 
-  public function credits($class)
+  public function classCredit($class)
   {
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeacherCredits($this->id, $class);
+    return $this->getTeacherClassCredit($this->id, $class);
   }
 
   public function homeStudents()
@@ -156,16 +156,16 @@ class Teacher extends TeacherModel
     return $this->getTeacherByUser($username);
   }
 
-  public function save()
+  public function save($type = 'edit')
   {
     // get self public class, no parents classes
     $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
 
     if (count($propsArray) > 0) {
-      if (isset($this->{$this->primary_key})) {
+      if (isset($this->{$this->primary_key}) && $type === 'edit') {
         $this->updateTeacher($propsArray);
       } else {
-        echo 'insert <hr>';
+        $this->addTeacher($propsArray);
       }
     } else {
       throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');

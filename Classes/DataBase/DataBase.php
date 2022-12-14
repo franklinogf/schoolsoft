@@ -35,10 +35,27 @@ class DataBase
     $db = $this->connect();
     return $db->query($query);
   }
-  protected function deleteQuery($query, $valuesArray)
+  protected function deleteTable($table, $pk, $wherePk)
   {
 
-    $this->updateQuery($query, $valuesArray);
+    $query = "DELETE FROM {$table}";
+    $query .= " WHERE {$pk} = '{$wherePk}'";
+    return $this->deleteQuery($query);
+  }
+
+  protected function deleteQuery($query)
+  {
+    $db = $this->connect();
+    if (!$stmt = $db->prepare($query)) {
+      $this->exception($db->error . ' QUERY: ' . $query);
+    }
+    if (Session::is_logged(false)) {
+
+      if ($stmt->execute()) {
+        return true;
+      }
+      return false;
+    }
   }
 
   // update tables 
@@ -55,14 +72,14 @@ class DataBase
       $query .= "$coma $key = ?";
       $count++;
     }
-    $query .= " WHERE {$pk} = '" . $wherePk . "'";
-    $this->updateQuery($query, $valuesArray);
+    $query .= " WHERE {$pk} = '{$wherePk}'";
+    return $this->updateQuery($query, $valuesArray);
   }
   protected function updateQuery($query, $valuesArray)
   {
     $db = $this->connect();
     if (!$stmt = $db->prepare($query)) {
-      $this->exception($db->error);
+      $this->exception($db->error . ' QUERY: ' . $query);
     }
     $bind =  str_repeat('s', count($valuesArray));
     // php 5 version

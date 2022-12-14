@@ -46,9 +46,9 @@ class StudentModel extends School
     return $obj;
   }
 
-  protected function getAllStudents()
+  protected function getAllStudents($year)
   {
-    $year = $this->info('year');
+    $year = $year !== null ? $year :  $this->info('year');
     $obj = parent::table($this->table)->where([
       ['year', $year],
       ['fecha_baja', '0000-00-00']
@@ -148,7 +148,7 @@ class StudentModel extends School
     }
 
     $obj = parent::table("$table")->join('year', "$table.ss", '=', 'year.ss')
-      ->where($where)->orderBy('year.apellidos')->get();
+      ->where($where)->orderBy('year.apellidos asc,year.nombre asc')->get();
 
     return $obj;
   }
@@ -178,9 +178,9 @@ class StudentModel extends School
 
     return $obj;
   }
-  protected function getStudentsByGrade($grade, $table = 'year')
+  protected function getStudentsByGrade($grade, $table = 'year', $year)
   {
-    $year = $this->info('year');
+    $year = $year !== null ? $year :  $this->info('year');
     $where = [
       ["$table.grado", $grade],
       ["$table.year", $year],
@@ -293,5 +293,9 @@ class StudentModel extends School
   protected function addStudent($propsArray)
   {
     $this->insertTable($this->table, $propsArray);
+  }
+  protected function deleteStudent()
+  {
+    $this->deleteTable($this->table, $this->primary_key, $this->{$this->primary_key});
   }
 }
