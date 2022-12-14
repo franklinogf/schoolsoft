@@ -17,6 +17,7 @@ use Classes\Route;
 <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
   const __LANG = '<?= __LANG ?>';
+  const __SCHOOL_ACRONYM = '<?= __SCHOOL_ACRONYM ?>';
 </script>
 <?php
 Route::js('/js/app.js', true);
