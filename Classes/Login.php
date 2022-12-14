@@ -11,10 +11,17 @@ class Login
 {
    private static $errorLoginMessage = "No coincide con los datos, intentelo otra vez";
 
+   private static function startSession()
+   {
+      $_SESSION["start"] = time(); 
+   }
+
    public static function login($request, $location)
    {
+      self::startSession();
       self::{$location}($request);
    }
+
 
    private static function parents($request)
    {
