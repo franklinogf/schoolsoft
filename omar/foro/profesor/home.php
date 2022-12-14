@@ -21,6 +21,8 @@ $lang = new Lang([
   ['Las contraseñas no coinciden', 'The passwords do not match'],
   ['Cerrar', 'Close'],
   ['Guardar', 'Save'],
+  ['Debes de tener un correo para poder enviar los usuarios','You must have an email to be able to send users'],
+  ['ir a mi perfil','go to my profile']
 ]);
 
 ?>
@@ -29,7 +31,7 @@ $lang = new Lang([
 
 <head>
   <?php
-  $title = utf8_encode($lang->translation("Salón Hogar"));
+  $title = $lang->translation("Salón Hogar");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -40,7 +42,7 @@ $lang = new Lang([
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 class="text-center"><?= utf8_encode($lang->translation("Salón Hogar")) ?></h1>
+    <h1 class="text-center"><?= $lang->translation("Salón Hogar") ?></h1>
 
     <?php
     $students = $teacher->homeStudents();
@@ -48,8 +50,11 @@ $lang = new Lang([
     ?>
 
     <a id="createUsers" href="<?= Route::url('/foro/profesor/includes/createUsers.php') ?>" class="btn btn-primary mt-2"><?= $lang->translation("Crear usuarios automaticamente") ?></a>
-    <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-secondary mt-2"><?= $lang->translation("Enviar usuarios a los padres") ?></a>
-
+    <?php if ($teacher->email1) : ?>
+      <a id="sendEmails" href="<?= Route::url('/foro/profesor/includes/email/mailUsers.php') ?>" class="btn btn-secondary mt-2"><?= $lang->translation("Enviar usuarios a los padres") ?></a>
+    <?php else : ?>
+      <p class="text-danger mt-2"><?= $lang->translation("Debes de tener un correo para poder enviar los usuarios") ?>, <a href="<?= Route::url('/foro/profesor/profile.php') ?>"><?= $lang->translation("ir a mi perfil") ?></a></p>
+    <?php endif ?>
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <form action="<?= Route::url('/foro/profesor/includes/home.php') ?>" method="POST">
