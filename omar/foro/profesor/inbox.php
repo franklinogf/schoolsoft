@@ -168,7 +168,7 @@ $lang = new Lang([
 
                </div>
                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary form hidden back"><?= utf8_encode($lang->translation("Atrás")) ?></button>
+                  <button type="button" class="btn btn-primary form hidden back"><?= $lang->translation("Atrás") ?></button>
                   <button type="button" class="btn btn-secondary closeModal"><?= $lang->translation("Cerrar") ?></button>
                   <button type="submit" class="btn btn-primary form hidden"><?= $lang->translation("Enviar") ?></button>
                </div>

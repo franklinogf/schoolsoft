@@ -29,7 +29,7 @@ $lang = new Lang([
 
 <head>
   <?php
-  $title = utf8_encode($lang->translation("Salón Virtual"));
+  $title = $lang->translation("Salón Virtual");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
   ?>
 </head>
@@ -40,7 +40,7 @@ $lang = new Lang([
   Route::includeFile('/foro/profesor/includes/layouts/menu.php');
   ?>
   <div class="container mt-5 pb-5">
-    <h1 id="header" class="text-center"><?= utf8_encode($lang->translation("Salón Virtual")) ?></h1>
+    <h1 id="header" class="text-center"><?= $lang->translation("Salón Virtual") ?></h1>
 
     <?php
     $virtual = true;
