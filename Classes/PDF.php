@@ -17,17 +17,20 @@ class PDF extends FPDF
     function Header()
     {
         if ($this->header) {
+            $this->SetXY(10, 10);
+            $this->SetMargins(10, 10);
+            $this->SetFont('Arial', 'B', 15);
             $this->SetTextColor(0);
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
                 $school = new School();
                 // dafault values
                 $this->SetAuthor(utf8_decode($school->info('colegio')), true);
                 $this->setCreator('School Soft');
-                $this->SetAutoPageBreak(true, -15);
+                // $this->SetAutoPageBreak(true, -15);
                 if (file_exists(__ROOT . School::logo()) && $this->logo) {
                     $this->Image(__ROOT . School::logo(), 10, 10, __PDF_LOGO_SIZE);
                 }
-                $this->SetFont('Arial', 'B', 15);
+
                 $this->Cell(0, 5, utf8_decode($school->info('colegio')), 0, 1, 'C');
                 $this->SetFontSize(9);
                 if ($school->info('dir1') !== '') {
