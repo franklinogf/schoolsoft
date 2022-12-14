@@ -7,6 +7,50 @@ use Classes\DataBase\DB;
 /*                           DATABASE MODIFICATIONS                           */
 /* -------------------------------------------------------------------------- */
 
+/* ------------------------------ table Padres ------------------------------ */
+DB::table("padres")->alter("
+ADD `average1` INT NULL,
+ADD `average2` INT NULL,
+ADD `average3` INT NULL,
+ADD `average4` INT NULL;");
+/* ------------------------------ Teachers table ----------------------------- */
+DB::table('profesor')->alter("
+CHANGE `nivel` `nivel` CHAR(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `grado` `grado` CHAR(5) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lic1` `lic1` VARCHAR(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lic2` `lic2` VARCHAR(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lic3` `lic3` VARCHAR(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lic4` `lic4` VARCHAR(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lp1` `lp1` VARCHAR(2) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lp2` `lp2` VARCHAR(2) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lp3` `lp3` VARCHAR(2) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `lp4` `lp4` VARCHAR(2) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `fex1` `fex1` DATE NULL,
+CHANGE `fex2` `fex2` DATE NULL,
+CHANGE `fex3` `fex3` DATE NULL,
+CHANGE `fex4` `fex4` DATE NULL,
+CHANGE `club1` `club1` CHAR(35) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `club2` `club2` CHAR(35) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `club3` `club3` CHAR(35) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `club4` `club4` CHAR(35) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `club5` `club5` CHAR(35) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `pre1` `pre1` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `pre2` `pre2` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `pre3` `pre3` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `pre4` `pre4` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `pre5` `pre5` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `vi1` `vi1` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `vi2` `vi2` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `vi3` `vi3` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `vi4` `vi4` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `vi5` `vi5` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `se1` `se1` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `se2` `se2` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `se3` `se3` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `se4` `se4` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
+CHANGE `se5` `se5` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL;");
+
+
 /* ---------------------------- Cafeteria orders ---------------------------- */
 
 DB::table("cafeteria_orders")->create("
