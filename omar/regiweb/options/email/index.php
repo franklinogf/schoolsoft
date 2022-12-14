@@ -59,8 +59,12 @@ $lang = new Lang([
                 <div id="students" class="mb-3 option hidden">
                     <?php
                     $__tableData = $teacher->getAllStudents();
+                    // echo '<pre>';
+                    // var_dump($__tableData);
+                    // echo '</pre>';
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'students';
+                    $__dataPk = 'ss';
                     Route::includeFile('/includes/layouts/table.php', true)
                     ?>
                 </div>

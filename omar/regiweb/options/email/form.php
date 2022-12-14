@@ -19,8 +19,8 @@ if (isset($_POST['students'])) {
     if ($studentsAmount > 1) {
         $_titleValue = __LANG === 'es' ? "$studentsAmount estudiantes" : "$studentsAmount students";
     } else {
-        $_mt = $_POST['students'][0];
-        $student = new Student($_mt);
+        $_ss = $_POST['students'][0];
+        $student = new Student($_ss);
         $_titleValue = $student->fullName();
     }
     Session::set('students', $_POST['students']);

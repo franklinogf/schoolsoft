@@ -65,6 +65,7 @@ $lang = new Lang([
                     $__tableData = $teacher->getAllStudents();
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'students';
+                    $__dataPk = 'ss';
                     Route::includeFile('/includes/layouts/table.php', true)
                     ?>
                 </div>
