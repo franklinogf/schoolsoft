@@ -6,6 +6,9 @@ use Classes\Route;
 
 class Session
 {
+    // 4 hours in seconds (4*60*60)
+    private static $sessionDuration = 14400;
+
     public static function set($name, $value)
     {
         $_SESSION[$name] = $value;
@@ -33,10 +36,18 @@ class Session
         $location = str_replace('/', "", __SUB_ROOT_URL);
         $logged = false;
         if (isset($_SESSION['logged'])) {
-            if ($_SESSION['logged']['location'] !== $location) {
+            if (time() - $_SESSION['start'] > self::$sessionDuration) {
+                session_unset();
+                session_destroy();
                 $logged = false;
             } else {
-                $logged = true;
+                if ($_SESSION['logged']['location'] !== $location) {
+                    $logged = false;
+                    session_unset();
+                    session_destroy();
+                } else {
+                    $logged = true;
+                }
             }
         } else {
             $logged = false;
