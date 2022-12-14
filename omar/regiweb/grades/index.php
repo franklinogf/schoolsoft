@@ -11,15 +11,15 @@ $teacher = new Teacher(Session::id());
 $classes = $teacher->classes();
 
 
-$lang= new Lang([
+$lang = new Lang([
     ['Cursos', 'Grades'],
     ['Entrada de asistencias', 'Assists entry'],
     ['Informe de asistencias diarias', 'Daily attendance report'],
     ['Informe de asistencias', 'Attendance report'],
     ['Preescolar', 'Preschool'],
-    ["Grado","Grade"],
-    ["Pagina","Page"],
-    ["Verano","Summer"],
+    ["Grado", "Grade"],
+    ["Pagina", "Page"],
+    ["Verano", "Summer"],
 ]);
 
 ?>
@@ -42,7 +42,7 @@ $lang= new Lang([
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-2">
                 <div class="col mb-3">
-                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg"><?= $lang->translation('Entrada de asistencias') ?></a>
+                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= __SCHOOL_ACRONYM === 'cbtm' && $teacher->grado !== '' ? '' : 'disabled' ?>" ><?= $lang->translation('Entrada de asistencias') ?></a>
                 </div>
                 <div class="col mb-3">
                     <a href="dailyAttendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= $lang->translation('Informe de asistencias diarias') ?></a>
