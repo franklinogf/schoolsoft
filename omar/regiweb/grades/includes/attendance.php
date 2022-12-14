@@ -52,7 +52,7 @@ if (isset($_POST['getStudents'])) {
         $students = DB::table('asisdia')
             ->where([
                 ['baja', ''],
-                ['grado', $attendanceOption === '1' ? $teacher->grado : $_POST['grade']],
+                ['grado', $attendanceOption === '1' && __SCHOOL_ACRONYM !== 'cbtm' ? $teacher->grado : $_POST['grade']],
                 ['year', $year],
                 ['mes', $month],
             ])

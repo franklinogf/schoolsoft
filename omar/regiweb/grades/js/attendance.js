@@ -6,25 +6,31 @@ $(function () {
     let date = $("#date").val()
     let __translation;
     if (__LANG === 'es') {
-        __translation = [           
+        __translation = [
             "Ausencias",
             "Tardanzas",
             "No hay estudiantes",
             "Seleccionar"
         ];
     } else {
-        __translation = [            
+        __translation = [
             "Absence",
             "Tardy",
             "No students",
             "Select"
         ];
     }
-
-    if (_attendanceOption === "1") {
+console.log($("#gradesButtons").length)
+    if (_attendanceOption === "1" && __SCHOOL_ACRONYM !== 'cbtm') {
         fillTable({
             getStudents: _attendanceOption,
             date
+        })
+    } else if (__SCHOOL_ACRONYM === 'cbtm' && $("#gradesButtons button").length === 1) {
+        fillTable({
+            getStudents: 1,
+            date,
+            grade: $("#gradesButtons button.active").data('grade')
         })
     }
     $("#date").change(function (e) {
@@ -33,6 +39,7 @@ $(function () {
                 $("#classButtons button.active").click()
             }
         } else if ($("#gradesButtons").length > 0) {
+
             if ($("#gradesButtons button.active").length > 0) {
                 $("#gradesButtons button.active").click()
             }
@@ -80,7 +87,7 @@ $(function () {
             changeAttendance: _attendanceOption,
             value,
             ss,
-            date,
+            date: $("#date").val(),
             grade: _grade
         }
         if (_attendanceOption === '3') data.class = _class
@@ -97,6 +104,7 @@ $(function () {
 
     // functions
     function fillTable(dataJson) {
+        console.log('dataJson', dataJson)
         $("#studentsList").removeClass('invisible')
         $("#studentsList .table tbody").html(`
     <tr>
@@ -109,8 +117,9 @@ $(function () {
             data: dataJson,
             dataType: "json",
             complete: function (res) {
+                console.log(res)
                 const response = res.responseJSON
-                const newDate = new Date(date);
+                const newDate = new Date($("#date").val());
                 newDate.setDate(newDate.getDate() + 1)
                 const day = newDate.getDate()
                 let attendanceValue = '';
@@ -130,6 +139,7 @@ $(function () {
                         <td class="text-right">
                             <select data-ss='${student.ss}' class="form-control w-50 ml-auto">
                                 <option value= '' selected>${__translation[3]}</option>
+                                ${__SCHOOL_ACRONYM !== 'cbtm' ? `
                                 <optgroup label="${__translation[0]}">
                                     <option ${attendanceValue == "1" ? 'selected' : ''} value="1">${attendanceCodes[1]['description'][__LANG]}</option>
                                     <option ${attendanceValue == "2" ? 'selected' : ''} value="2">${attendanceCodes[2]['description'][__LANG]}</option>
@@ -145,7 +155,15 @@ $(function () {
                                     <option ${attendanceValue == "10" ? 'selected' : ''} value="10">${attendanceCodes[10]['description'][__LANG]}</option>
                                     <option ${attendanceValue == "11" ? 'selected' : ''} value="11">${attendanceCodes[11]['description'][__LANG]}</option>
                                     <option ${attendanceValue == "12" ? 'selected' : ''} value="12">${attendanceCodes[12]['description'][__LANG]}</option>
+                                </optgroup>`: `
+                                <optgroup label="${__translation[0]}">
+                                    <option ${attendanceValue == "13" ? 'selected' : ''} value="13">Only AM</option>
+                                    <option ${attendanceValue == "14" ? 'selected' : ''} value="14">Only PM</option>
+                                    <option ${attendanceValue == "15" ? 'selected' : ''} value="15">All day</option>
                                 </optgroup>
+                                <optgroup label="${__translation[1]}">
+                                    <option ${attendanceValue == "16" ? 'selected' : ''} value="16">Tardy</option>
+                                </optgroup>`}
                             </select>
                         </td>
                     </tr>

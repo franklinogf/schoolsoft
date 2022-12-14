@@ -21,20 +21,35 @@ $year = $teacher->info('year');
 $optionCppd = $teacher->info('cppd') === 'Si';
 $sumTrimester = $teacher->info('sutri') === 'NO'; //NO === SI
 $_trimesterNumber = (int) substr($_trimester, -1);
-$_value = DB::table('valores')
+// Diferent option for these schools
+$enterGrades2 = ['cbtm'];
+
+if (!$_value = DB::table('valores')
     ->where([
         ['curso', $_class],
         ['trimestre', $_trimester],
         ['nivel', $_report],
         ['year', $year]
-    ])->first();
-
+    ])->first()) {
+    $_valueId = DB::table('valores')->insertGetId([
+        'curso' => $_class,
+        'trimestre' => $_trimester,
+        'nivel' => $_report,
+        'year' => $year
+    ]);
+    $_value = DB::table('valores')->where('id', $_valueId)->first();
+}
 
 $gradeInfo = DB::table('padres')->where([
     ['curso', $_class],
     ['year', $year],
 ])->first();
 $optionLetter = $gradeInfo->letra === "ON";
+
+// only this school
+if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
+    $gradeInfo->nota_por = '1';
+}
 
 $_schoolInfo = [
     'Trimestre-1' => [
@@ -115,14 +130,28 @@ if ($optionCppd) {
         ]
     ];
 } else {
+    if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
+        $columns =  [
+            'es' => ['Bono', 'Promedio', 'T-Diario', 'T-Libreta', 'P-Cor'],
+            'en' => ['Bonus', 'Average', 'DW', 'HW', 'Quiz'],
+            'text' => [false, '60%', '10%', '10%', '20%']
+        ];
+    } else {
+        $columns =  [
+            'es' => ['Bono', 'T-Diario', 'T-Libreta', 'P-Cor'],
+            'en' => ['Bonus', 'DW', 'HW', 'Quiz'],
+            'text' => [false, false, false, false]
+        ];
+    }
 
     $_info = [
         "Notas" => [
             'table' => 'padres',
             'title' => 'Notas',
-            'columns' => ['Bono', 'T-Diario', 'T-Libreta', 'P-Cor'],
+            'columns' => $columns,
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
+                'totalAverage' => 'average1',
                 'grades' => [1, 10],
                 'values' => [
                     'tdia' => 'td1',
@@ -134,6 +163,7 @@ if ($optionCppd) {
             ],
             'Trimestre-2' => [
                 'totalGrade' => 'nota2',
+                'totalAverage' => 'average2',
                 'grades' => [11, 20],
                 'values' => [
                     'tdia' => 'td2',
@@ -145,6 +175,7 @@ if ($optionCppd) {
             ],
             'Trimestre-3' => [
                 'totalGrade' => 'nota3',
+                'totalAverage' => 'average3',
                 'grades' => [21, 30],
                 'values' => [
                     'tdia' => 'td3',
@@ -156,11 +187,12 @@ if ($optionCppd) {
             ],
             'Trimestre-4' => [
                 'totalGrade' => 'nota4',
+                'totalAverage' => 'average4',
                 'grades' => [31, 40],
                 'values' => [
                     'tdia' => 'td4',
-                    'pcor' => 'pc4',
                     'tlib' => 'tl4',
+                    'pcor' => 'pc4',
                     'tpa' => 'tpa4',
                     'tdp' => 'por4'
                 ]
@@ -169,7 +201,10 @@ if ($optionCppd) {
         "Pruebas-Cortas" => [
             'table' => 'padres4',
             'title' => 'Pruebas Cortas',
-            'columns' => ['Nota 10'],
+            'columns' => [
+                'es' => ['Nota 10'],
+                'en' => ['Grade 10']
+            ],
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 10],
@@ -208,7 +243,10 @@ if ($optionCppd) {
         "Trab-Diarios" => [
             'table' => 'padres2',
             'title' => 'Trabajos Diarios',
-            'columns' => ['Nota 10'],
+            'columns' => [
+                'es' => ['Nota 10'],
+                'en' => ['Grade 10']
+            ],
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 10],
@@ -247,7 +285,10 @@ if ($optionCppd) {
         "Trab-Diarios2" => [
             'table' => 'padres5',
             'title' => 'Trabajos Diarios 2',
-            'columns' => ['Nota 10'],
+            'columns' => [
+                'es' => ['Nota 10'],
+                'en' => ['Grade 10']
+            ],
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 10],
@@ -286,7 +327,10 @@ if ($optionCppd) {
         "Trab-Libreta" => [
             'table' => 'padres3',
             'title' => 'Trabajos de libreta',
-            'columns' => ['Nota 10'],
+            'columns' => [
+                'es' => ['Nota 10'],
+                'en' => ['Grade 10']
+            ],
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 10],
@@ -325,7 +369,10 @@ if ($optionCppd) {
         "Trab-Libreta2" => [
             'table' => 'padres6',
             'title' => 'Trabajos de libreta 2',
-            'columns' => ['Nota 10'],
+            'columns' => [
+                'es' => ['Nota 10'],
+                'en' => ['Grade 10']
+            ],
             'Trimestre-1' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 10],
@@ -378,7 +425,10 @@ if ($optionCppd) {
         "V-Nota" => [
             'table' => 'padres',
             'title' => 'Notas de verano',
-            'columns' => ['Bono', 'T-Diario', 'T-Libreta', 'P-Cor'],
+            'columns' => [
+                'es' => ['Bono', 'T-Diario', 'T-Libreta', 'P-Cor'],
+                'en' => ['Bonus', 'DW', 'HW', 'Quiz']
+            ],
             'Verano' => [
                 'totalGrade' => 'nota1',
                 'grades' => [1, 7],
@@ -399,7 +449,11 @@ $_dates = $_schoolInfo[$_trimester]['dates'];
 $_end = isset($_schoolInfo[$_trimester]['end']) ? $_schoolInfo[$_trimester]['end'] : null;
 $_options = isset($_info[$_report][$_trimester]) ? $_info[$_report][$_trimester] : null;
 $_values = isset($_options['values']) ? $_options['values'] : null;
-$_columns = isset($_info[$_report]['columns']) ? $_info[$_report]['columns'] : null;
+$_columns = null;
+if (isset($_info[$_report]['columns'])) {
+
+    $_columns =  isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
+}
 $_trimesterNumber = $_schoolInfo[$_trimester]['number'];
 $_thisReport = $_info[$_report];
 $students = new Student();
@@ -413,6 +467,16 @@ function findValue($table, $student)
     global $year;
     global $_values;
     return DB::table($table)->select($_values['tdp'])->where([
+        ['curso', $_class],
+        ['ss', $student->ss],
+        ['year', $year]
+    ])->first();
+}
+function findValueFor($table, $student)
+{
+    global $_class;
+    global $year;
+    return DB::table($table)->where([
         ['curso', $_class],
         ['ss', $student->ss],
         ['year', $year]
@@ -454,8 +518,8 @@ $lang = new Lang([
     ["¿Quieres que estas notas sean?", "Do you want these grades to be?"],
     ["Calculando notas", "Calculating grades"],
     ["Nombre del estudiante", 'Student name'],
-    ["TPA", "TPA"],
-    ["TDP", "TDP"],
+    ["TPA", "TAP"],
+    ["TDP", "TP"],
     ["Conducta", "Behavior"],
     ["Ausencias", "Absence"],
     ["Tardanzas", "Tardy"],
@@ -469,9 +533,11 @@ $lang = new Lang([
     ["Valores", "Values"],
     ["Tema", "Topic"],
     ["Valor", "Value"],
-    ["Fecha", "Date"]
+    ["Fecha", "Date"],
+    ["Promedio", "Average"],
 
 ]);
+
 
 ?>
 <!DOCTYPE html>
@@ -555,23 +621,26 @@ $lang = new Lang([
                 </div>
             </div>
         <?php else : ?>
-            <div class="card border-secondary mt-2">
-                <div class="card-body">
-                    <div class="row row-cols-1">
-                        <div class="col">
-                            <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1" <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="noteType1"><?= $lang->translation("Porciento") ?></label>
-                            </div>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" id="noteType2" class="custom-control-input" name="noteType" value="2" <?= $gradeInfo->nota_por === "2" ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="noteType2"><?= $lang->translation("Suma") ?></label>
+            <!-- only school cbtm -->
+            <?php if (!in_array(__SCHOOL_ACRONYM, $enterGrades2)) : ?>
+                <div class="card border-secondary mt-2">
+                    <div class="card-body">
+                        <div class="row row-cols-1">
+                            <div class="col">
+                                <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1" <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
+                                    <label class="custom-control-label" for="noteType1"><?= $lang->translation("Porciento") ?></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="noteType2" class="custom-control-input" name="noteType" value="2" <?= $gradeInfo->nota_por === "2" ? 'checked=""' : '' ?> disabled>
+                                    <label class="custom-control-label" for="noteType2"><?= $lang->translation("Suma") ?></label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endif ?>
         <?php endif ?>
     </div>
     <!-- loading spinner -->
@@ -602,7 +671,9 @@ $lang = new Lang([
                     <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
                     <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
                     <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
-
+                    <?php if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) : ?>
+                        <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
+                    <?php endif ?>
 
                     <?php if ($_report === 'Notas' || $_report === 'V-Nota' && !$optionCppd) : ?>
                         <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
@@ -617,13 +688,17 @@ $lang = new Lang([
                                 <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
                                 <?php
                                 $amountOfGrades = $_report === 'V-Nota' ? 7 : ($_options['grades'][1]) - ($_options['grades'][0]);
-                                for ($i = 1; $i <= $amountOfGrades; $i++) :
-                                ?>
+                                for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
                                     <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
                                 <?php endfor ?>
                                 <?php if ($_columns !== null) : ?>
-                                    <?php foreach ($_columns as $column) : ?>
-                                        <th scope="col"><?= $column ?></th>
+                                    <?php foreach ($_columns as $index => $column) : ?>
+                                        <th scope="col">
+                                            <?= $column ?>
+                                            <?php if ($_info[$_report]['columns']['text'][$index]) : ?>
+                                                <span style="font-size: 15px;" class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
+                                            <?php endif ?>
+                                        </th>
                                     <?php endforeach ?>
                                 <?php endif ?>
                                 <th scope="col"><?= $lang->translation("TPA") ?></th>
@@ -653,14 +728,23 @@ $lang = new Lang([
                                                 $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
                                                 $pcor = $_student->{$_values['tdp']};
                                             } else {
-                                                $tdia = $student->{$_values['tdia']} ? '100' : '';
-                                                $tlib = $student->{$_values['tlib']} ? '100' : '';
-                                                $pcor = $student->{$_values['pcor']} ? '100' : '';
+                                                if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
+                                                    $tdia = $student->{$_values['tdia']} ? '10' : '';
+                                                    $tlib = $student->{$_values['tlib']} ? '10' : '';
+                                                    $pcor = $student->{$_values['pcor']} ? '20' : '';
+                                                } else {
+                                                    $tdia = $student->{$_values['tdia']} ? '100' : '';
+                                                    $tlib = $student->{$_values['tlib']} ? '100' : '';
+                                                    $pcor = $student->{$_values['pcor']} ? '100' : '';
+                                                }
                                             }
                                         ?>
                                             <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
                                                 <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
                                                 <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
+                                            <?php endif ?>
+                                            <?php if ($_report === 'Notas' && __SCHOOL_ACRONYM === 'cbtm') : ?>
+                                                <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso' value="<?= $student->peso ?>">
                                             <?php endif ?>
                                             <input type="hidden" class="_tdia" value="<?= $tdia ?>">
                                             <input type="hidden" class="_tlib" value="<?= $tlib ?>">
@@ -674,12 +758,32 @@ $lang = new Lang([
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
                                     <?php endfor ?>
+                                    <?php if (in_array(__SCHOOL_ACRONYM, $enterGrades2) && $_report === 'Notas') : ?>
+                                        <td><input class="form-control-plaintext text-center totalAverage" readonly type="text" name="totalAverage-<?= $student->ss ?>" value=<?= $student->{$_options['totalAverage']} ?>></td>
+                                    <?php endif ?>
                                     <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->not10 ?>" disabled></td>
                                     <?php endif ?>
                                     <?php if ($_values !== null) : ?>
-                                        <?php foreach ($_values as $name => $value) : ?>
-                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $student->{$value} ?>></td>
+                                        <?php foreach ($_values as $name => $value) :
+                                            if (in_array(__SCHOOL_ACRONYM, $enterGrades2) && $_report === 'Notas') {
+                                                if ($name === 'tdia' || $name === 'tlib' || $name === 'pcor') {
+                                                    $r = [
+                                                        'tdia' => 'Trab-Diarios',
+                                                        'tlib' => 'Trab-Libreta',
+                                                        'pcor' => 'Pruebas-Cortas',
+                                                    ];
+                                                    $_student =  findValueFor($_info[$r[$name]]['table'], $student);
+                                                    $val = $_student->{$_info[$r[$name]][$_trimester]['totalGrade']};
+                                                    // echo "$name= $val";
+                                                } else {
+                                                    $val = $student->{$value};
+                                                }
+                                            } else {
+                                                $val = $student->{$value};
+                                            }
+                                        ?>
+                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $val ?>></td>
                                         <?php endforeach ?>
                                     <?php endif ?>
                                     <td><input class="form-control-plaintext text-center totalGrade" readonly type="text" name="totalGrade-<?= $student->ss ?>" value=<?= $student->{$_options['totalGrade']} ?>></td>

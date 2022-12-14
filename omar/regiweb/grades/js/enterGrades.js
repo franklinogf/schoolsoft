@@ -8,9 +8,9 @@ $(function () {
     let _letter = $("#letra").prop('checked')
     const _report = $("#report").val()
     const _subjectCode = $("#subject").val()
-    const _noteType = $("#noteType1").prop('checked') ? 1 : 2
     const _allGrades = $(".table tbody tr")
     if ($("#save")[0]) $("input:disabled").prop('disabled', false)
+    enterGrades2 = ['cbtm'];
 
     init()
 
@@ -134,16 +134,30 @@ $(function () {
         }
         return value
     }
+    function NumberToLetterCBTM($value) {
+        if ($value >= 80 && $value <= 100) {
+            return 'E';
+        } else if ($value >= 60 && $value <= 79) {
+            return 'S';
+        } else {
+            return 'N';
+        }
+    }
     function isString(value) {
         return (/[a-zA-Z]/).test(value)
     }
     function calculate(parentTr, cppd = false) {
+        const _noteType = $("#noteType1").prop('checked') ? 1 : 2
         const parentAllGrades = parentTr.find('.grade')
         const tpa = parentTr.find('.tpa')
         const tdp = parentTr.find('.tdp')
+
+
         const totalGrade = parentTr.find('.totalGrade')
+        const totalAverage = parentTr.find('.totalAverage')
         let tpaTotal = _sumTrimester && (_trimester === 'Trimestre-2' || _trimester === 'Trimestre-4') ? +parentTr.find('._tpaTotal').val() : null
         let tdpTotal = _sumTrimester && (_trimester === 'Trimestre-2' || _trimester === 'Trimestre-4') ? +parentTr.find('._tdpTotal').val() : 0
+        let averageTdp = 0;
 
         if (cppd) {
             const _A = +$("#valueA").val()
@@ -185,6 +199,8 @@ $(function () {
             totalGrade.val(gradeTotal ? gradeTotal.toFixed(2) : '')
         } else {
 
+            const _peso = parentTr.find('._peso').val()
+
             const tdia = parentTr.find('.tdia')
             const tlib = parentTr.find('.tlib')
             const pcor = parentTr.find('.pcor')
@@ -194,12 +210,22 @@ $(function () {
             const _pcor = parentTr.find('._pcor')
 
             $.each(parentAllGrades, function (index, grade) {
-                if ($(grade).val() !== '') {
+                if ($(grade).val() !== '' && +$(grade).val() > -1) {
+
                     if (index !== parentAllGrades.length - 1) {
                         const tdpInput = $("#values").find(`#val${index + 1}`)
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
-                            tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                            if (enterGrades2.includes(__SCHOOL_ACRONYM)) {
+                                averageTdp += tdpInput.val() ? +tdpInput.val() : 0
+                                if (_report === 'Notas') {
+                                    tdpTotal = 60
+                                } else {
+                                    tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                                }
+                            } else {
+                                tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                            }
                         }
                     } else {
                         tpaTotal += +$(grade).val()
@@ -207,7 +233,17 @@ $(function () {
                 }
 
             });
+
             // tpa
+            let averageTotal = 0
+            if (enterGrades2.includes(__SCHOOL_ACRONYM) && _report === 'Notas') {
+                averageTotal = tpaTotal ? ((tpaTotal / averageTdp) * 100) * .6 : 0
+                totalAverage.val(typeof averageTotal === 'number' && !isNaN(averageTotal) && averageTotal !== null && averageTotal !== 0 ? Math.round(averageTotal) : '')
+                tpaTotal = averageTotal
+            }
+
+
+            // if (__SCHOOL_ACRONYM !== 'omar') {
             if (tdia.val()) {
                 tpaTotal += +tdia.val()
             }
@@ -217,27 +253,50 @@ $(function () {
             if (pcor.val()) {
                 tpaTotal += +pcor.val()
             }
-            // tpaTotal += tdia.val() ? +tdia.val() : 0
-            // tpaTotal += tlib.val() ? +tlib.val() : 0
-            // tpaTotal += pcor.val() ? +pcor.val() : 0
+            // }
+            // if (__SCHOOL_ACRONYM !== 'omar' || _report !== 'Notas') {
+
+            //     tpa.val(tpaTotal !== '' ? tpaTotal : '')
+            // }
+            tpa.val(tpaTotal !== '' && tpaTotal !== 0 && tpaTotal !== null ? Math.round(tpaTotal) : '')
+
 
             // tdp
             tdpTotal += _tdia.val() && tdia.val() ? +_tdia.val() : 0
             tdpTotal += _tlib.val() && tlib.val() ? +_tlib.val() : 0
             tdpTotal += _pcor.val() && pcor.val() ? +_pcor.val() : 0
-            tpa.val(tpaTotal !== '' ? tpaTotal : '')
             tdp.val(tdpTotal || '')
 
             // Grade total 
-            let gradeTotal
-            if (_report === 'Notas') {
-                gradeTotal = (tpaTotal / tdpTotal) * 100
+
+            let gradeTotal = averageTotal
+            if (enterGrades2.includes(__SCHOOL_ACRONYM)) {
+                // Only school cbtm
+                if (_report === 'Notas') {
+                    gradeTotal = (tpaTotal / tdpTotal) * 100
+                    // gradeTotal += +tdia.val() + +tlib.val() + +pcor.val()
+                } else if (_report === 'Pruebas-Cortas') {
+                    gradeTotal = ((tpaTotal / tdpTotal) * 100) * .2
+                } else {
+                    gradeTotal = ((tpaTotal / tdpTotal) * 100) * .1
+                }
             } else {
-                gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100
+                // All schools
+                if (_report === 'Notas') {
+                    gradeTotal = (tpaTotal / tdpTotal) * 100
+                } else {
+                    gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100
+                }
             }
-            console.log(isNaN(gradeTotal))
+            console.log('gradeTotal', gradeTotal)
+            if (__SCHOOL_ACRONYM === 'cbtm' && _report === 'Notas' && _peso == 1) {
+                totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null && gradeTotal !== 0 ? NumberToLetterCBTM(Math.round(gradeTotal)) : '')
+            } else {
+                totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null && gradeTotal !== 0 ? Math.round(gradeTotal) : '')
+            }
+
+            // console.log(isNaN(gradeTotal))
             // totalGrade.val(!isNaN(gradeTotal) ? Math.round(gradeTotal) : '')
-            totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null ? Math.round(gradeTotal) : '')
             if (_letter) {
                 const numberLetter = +$("#letra").val() - 1;
                 const grade = parentTr.find('.grade').eq(numberLetter)
@@ -261,4 +320,6 @@ $(function () {
             })
         }
     }
+
+
 });

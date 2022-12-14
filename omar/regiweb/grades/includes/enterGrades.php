@@ -10,6 +10,7 @@ use Classes\DataBase\DB;
 Server::is_post();
 $teacher = new Teacher(Session::id());
 $year = $teacher->info('year');
+$enterGrades2 = ['cbtm'];
 $_info = [
     "Notas" => [
         'Trimestre-1' => [
@@ -113,7 +114,6 @@ if (isset($_POST['changeValue'])) {
                 $noteIndex = $index + 1;
                 $lastNote = $studentData->{"not$_gradeStart"};
                 if ($newNote !== $lastNote && $lastNote !== '') {
-                    echo "$ss New Note = $newNote lastNote = $lastNote \n";
 
                     DB::table('tarjeta_cambios')->insert([
                         'id' => $teacher->id,
@@ -149,6 +149,13 @@ if (isset($_POST['changeValue'])) {
                 );
             }
 
+            if (in_array(__SCHOOL_ACRONYM, $enterGrades2) && $_report === 'Notas') {
+                $allInputs = array_merge(
+                    $allInputs,
+                    [$data->totalAverage[0] => $data->{"totalAverage-$ss"}[0]]
+                );
+            }
+
             if (
                 DB::table($_table)
                 ->where([
@@ -170,6 +177,7 @@ if (isset($_POST['changeValue'])) {
                         $_values[$_reports[$_report]] => $data->{"tpa-$ss"}[0]
                     ]);
             } else {
+
                 $studentData = DB::table($_table)
                     ->where([
                         ['ss', $ss],
@@ -192,27 +200,6 @@ if (isset($_POST['changeValue'])) {
                     $div += $studentData->{$note1} !== '' ? 1 : 0;
                     $div += $studentData->{$note2} !== '' ? 1 : 0;
                     $semNote = $div !== 0 ? round((+$studentData->{$note1} + +$studentData->{$note2}) / $div) : '';
-
-
-                    // // Final Note
-                    // $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
-                    // $sem2 = $sem === 'sem2' ? $semNote : $studentData->sem2;
-                    // $div = 0;
-                    // $div += $sem1 !== '' ? 1 : 0;
-                    // $div += $sem2 !== '' ? 1 : 0;
-                    // $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
-
-                    // $updateSem = [
-                    //     $sem => $semNote,
-                    //     'final' => $semFinalNote
-                    // ];
-                    // DB::table($_table)
-                    //     ->where([
-                    //         ['ss', $ss],
-                    //         ['curso', $_subjectCode],
-                    //         ['year', $teacher->info('year')]
-                    //     ])->update($updateSem);
-                    // var_dump($updateSem);
                 } else {
                     if ($data->trimester[0] === 'Trimestre-2') {
                         $note = 'nota2';
@@ -222,17 +209,6 @@ if (isset($_POST['changeValue'])) {
                         $sem = 'sem2';
                     }
                     $semNote = round(+$studentData->{$note});
-                    // // Final Note
-                    // $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
-                    // $sem2 = $sem === 'sem2' ? $semNote : $studentData->sem2;
-                    // $div = 0;
-                    // $div += $sem1 !== '' ? 1 : 0;
-                    // $div += $sem2 !== '' ? 1 : 0;
-                    // $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
-                    // $updateSem = [
-                    //     $sem => $semNote,
-                    //     'final' => $semFinalNote
-                    // ];
                 }
                 // Final Note
                 $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
@@ -241,6 +217,12 @@ if (isset($_POST['changeValue'])) {
                 $div += $sem1 !== '' ? 1 : 0;
                 $div += $sem2 !== '' ? 1 : 0;
                 $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
+                /* -------------------------------------------------------------------------- */
+                /*       // PARA QUE EL CBTM NO APAREZCA EL PROMEDIO CUANDO SEA PESO = 1      */
+                /* -------------------------------------------------------------------------- */
+                if (__SCHOOL_ACRONYM === 'cbtm' && $data->{"peso-$ss"}[0] == 1) {
+                    $semNote = '';
+                }
                 $updateSem = [
                     $sem => $semNote,
                     'final' => $semFinalNote
@@ -251,7 +233,6 @@ if (isset($_POST['changeValue'])) {
                         ['curso', $_subjectCode],
                         ['year', $teacher->info('year')]
                     ])->update($updateSem);
-                var_dump($updateSem);
             }
         }
     } else {
