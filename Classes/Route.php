@@ -4,6 +4,12 @@ namespace Classes;
 
 class Route
 {
+   public static function pathFolder(){
+      $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
+      $root = str_replace('\\', '/', substr($root, strpos($root, DIRECTORY_SEPARATOR,1)+1));
+      return str_replace('\\', '/', substr($root,0, strpos($root, DIRECTORY_SEPARATOR)));
+   }
+
    public static function includeFile($path, $serverRoot = false)
    {
       $root = __ROOT;

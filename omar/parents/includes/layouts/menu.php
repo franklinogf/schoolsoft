@@ -5,13 +5,14 @@ use Classes\Route;
 use Classes\Controllers\School;
 
 
-$file = basename($_SERVER['SCRIPT_FILENAME']);
-$pathFile = str_replace('.php', '', $file);
+
+$pathFile = Route::pathFolder();
 
 $lang = new Lang([
   ['Notas', 'Grades'],
   ['Asistencia', 'Attendance'],
   ['Opciones', 'Options'],
+  ['Disciplina', 'Discipline'],
   ['Mi Perfil', 'My profile'],
   ['Cerrar Sesión', 'Sign off'],
 ]);
@@ -30,6 +31,9 @@ $lang = new Lang([
     <ul class="navbar-nav mr-auto">
       <li class="nav-item <?= ($pathFile === 'grades' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/parents/grades') ?>"><?= $lang->translation('Notas') ?></a>
+      </li>
+      <li class="nav-item <?= ($pathFile === 'discipline' ? 'active' : '') ?>">
+        <a class="nav-link" href="<?= Route::url('/parents/discipline') ?>"><?= $lang->translation('Disciplina') ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'attendance' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/parents/attendance/') ?>"><?= $lang->translation('Asistencia') ?></a>

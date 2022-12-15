@@ -6,8 +6,7 @@ use Classes\Session;
 use Classes\Controllers\School;
 
 
-$file = basename($_SERVER['SCRIPT_FILENAME']);
-$pathFile = str_replace('.php', '', $file);
+$pathFile = Route::pathFolder();
 
 /* ------------------------------- Transaltion ------------------------------ */
 $lang = new Lang([

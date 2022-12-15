@@ -18,8 +18,7 @@ $lang = new Lang([
 
 ]);
 
-$file = basename($_SERVER['SCRIPT_FILENAME']);
-$pathFile = str_replace('.php', '', $file);
+$pathFile = Route::pathFolder();
 ?>
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">

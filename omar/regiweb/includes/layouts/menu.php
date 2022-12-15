@@ -4,8 +4,7 @@ use Classes\Lang;
 use Classes\Route;
 
 
-$file = basename($_SERVER['SCRIPT_FILENAME']);
-$pathFile = str_replace('.php', '', $file);
+$pathFile = Route::pathFolder();
 
 /* ------------------------------- Transaltion ------------------------------ */
 $TRANS = [
