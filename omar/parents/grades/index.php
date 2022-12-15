@@ -39,7 +39,7 @@ $lang = new Lang([
                     <label class="custom-control-label" for="accept"><?= $lang->translation("He leido y estoy de acuerdo.") ?></label>
                 </div>
             </div>
-            <form action="<?= Route::url('/parents/grades/gradesOptions.php') ?>" method="POST">
+            <form action="<?= Route::url('/parents/grades/gradesOptions.php') ?>" method="GET">
                 <div class="form-row">
                     <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiantes inscritos") ?></label>
                     <select name="studentSS" id="studentSS" class="form-control col-12 col-lg-6">

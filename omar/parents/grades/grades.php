@@ -1,21 +1,38 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
-use Classes\Lang;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
 $year = $parents->info('year');
 $studentSS = $_POST['studentSS'];
 $trimester = $_POST['trimester'];
+$trimesterNumber = substr($trimester,-1);
 $report = $_POST['area'];
 $student = new Student($studentSS);
 $sumTrimester = $student->info('sutri') === 'NO'; //NO === SI
+DB::table('acuse')->insert([
+    'id'=> $parents->id,
+    'ss' => $studentSS,
+    'grado' => $student->grado,
+    'year' => $year,
+    'ip' => Util::getIp(),
+    'fecha' => Util::date(),
+    'hora' => Util::time(),
+    'tri' => $trimesterNumber,
+    'cn' => '',
+    'tra' => $report,
+    'tri2' => $trimester,
+    'fra' => '',
+    'hoja' => '4'
+]);
 $_info = [
     "Notas" => [
         'table' => 'padres',
@@ -103,7 +120,8 @@ $lang = new Lang([
     ["Tardanza", "Tardy"],
     ["Totales por curso", "Total per class"],
     ["Primer Semestre","First semester"],
-    ["Segundo Semestre","Second semester"]
+    ["Segundo Semestre","Second semester"],
+    ["Atrás","Go back"]
 ]);
 
 ?>
@@ -113,20 +131,23 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation("Selección de notas");
-    Route::includeFile('/parents/includes/layouts/header.php');
-    ?>
+Route::includeFile('/parents/includes/layouts/header.php');
+?>
 </head>
 
 <body>
     <?php
-    Route::includeFile('/parents/includes/layouts/menu.php');
-    ?>
+Route::includeFile('/parents/includes/layouts/menu.php');
+?>
     <div class="container mt-3 mb-5">
         <?php if ($report === 'Notas') : ?>
             <h1 class="text-center my-2"><?= $lang->translation("Tarjeta de notas por curso") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
             <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
             <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
+            <div class="text-right">
+            <a class="btn btn-primary" href="<?= Route::url("/parents/grades/gradesOptions.php?studentSS=$studentSS") ?>"><?= $lang->translation("Atrás") ?></a>
+            </div>
             <div class="accordion my-4" id="classesAccordion">
                 <?php foreach ($student->classes() as $class) : ?>
                     <div class="card">
@@ -141,18 +162,18 @@ $lang = new Lang([
                         <div id="collapse<?= $class->curso ?>" class="collapse" aria-labelledby="heading<?= $class->curso ?>" data-parent="#classesAccordion">
                             <div class="card-body">
                                 <?php
-                                $fatherTable = DB::table($_info[$report]['table'])->Where([
-                                    ['ss', $studentSS],
-                                    ['year', $year],
-                                    ['curso', $class->curso]
-                                ])->first();
-                                $value = DB::table('valores')->where([
-                                    ['curso', $class->curso],
-                                    ['trimestre', $trimester],
-                                    ['nivel', $report],
-                                    ['year', $year]
-                                ])->first();
-                                ?>
+                            $fatherTable = DB::table($_info[$report]['table'])->Where([
+                                ['ss', $studentSS],
+                                ['year', $year],
+                                ['curso', $class->curso]
+                            ])->first();
+                    $value = DB::table('valores')->where([
+                        ['curso', $class->curso],
+                        ['trimestre', $trimester],
+                        ['nivel', $report],
+                        ['year', $year]
+                    ])->first();
+                    ?>
                                 <h5><?= $lang->translation($report) ?></h5>
                                 <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
                                     <table class="table table-bordered table-sm">
@@ -167,11 +188,11 @@ $lang = new Lang([
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $valIndex = 1;
-                                            $grades = $thisReport['grades'];
-                                            for ($i = $grades[0]; $i <= $grades[1]; $i++) :
-                                                // var_dump($fatherTable);
-                                                if (is_numeric($fatherTable->{"not$i"})) :
+                                $valIndex = 1;
+                                    $grades = $thisReport['grades'];
+                                    for ($i = $grades[0]; $i <= $grades[1]; $i++) :
+                                        // var_dump($fatherTable);
+                                        if (is_numeric($fatherTable->{"not$i"})) :
                                             ?>
                                                     <tr>
                                                         <td><?= $valIndex ?></td>
@@ -201,7 +222,7 @@ $lang = new Lang([
                                         ['nivel', $other['report']],
                                         ['year', $year]
                                     ])->first();
-                                ?>
+                                    ?>
                                     <h5><?= $lang->translation($other['title']) ?></h5>
                                     <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
                                         <table class="table table-bordered table-sm">
@@ -214,11 +235,11 @@ $lang = new Lang([
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $valIndex = 1;
-                                                $grades = $thisReport['grades'];
-                                                for ($i = $grades[0]; $i <= $grades[1]; $i++) :
-                                                    // var_dump($fatherTable);
-                                                    if (is_numeric($fatherTable->{"not$i"})) :
+                                                    $valIndex = 1;
+                                        $grades = $thisReport['grades'];
+                                        for ($i = $grades[0]; $i <= $grades[1]; $i++) :
+                                            // var_dump($fatherTable);
+                                            if (is_numeric($fatherTable->{"not$i"})) :
                                                 ?>
                                                         <tr>
                                                             <td><?= $valIndex ?></td>
@@ -261,7 +282,7 @@ $lang = new Lang([
                             ['year', $year],
                             ['curso', $class->curso]
                         ])->first();
-                    ?>
+                        ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
                             <td class="text-center"><?= $fatherTable->{$_info[$report]['totalGrade'] . $trimesterNumber} ?></td>
@@ -308,7 +329,7 @@ $lang = new Lang([
                             ['year', $year],
                             ['curso', $class->curso]
                         ])->first();
-                    ?>
+                        ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
                             <?php for ($i = 1; $i <= 4; $i++) : ?>
@@ -355,7 +376,7 @@ $lang = new Lang([
                             ['year', $year],
                             ['curso', $class->curso]
                         ])->first();
-                    ?>
+                        ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
                             <?php for ($i = 1; $i <= 2; $i++) : ?>
@@ -377,7 +398,7 @@ $lang = new Lang([
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
+?>
 </body>
 
 </html>

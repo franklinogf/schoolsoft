@@ -8,7 +8,7 @@ use Classes\Session;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
-$studentSS = $_POST['studentSS'];
+$studentSS = $_GET['studentSS'];
 $lang = new Lang([
     ['Selección de notas', 'Selection of grades'],
     ['Area','Area'],
