@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once 'database.php';
 require_once 'config.php';
@@ -8,7 +9,7 @@ require_once 'config.php';
 
 /* ------------------------------ don't change ------------------------------ */
 
-define('__ROOT_SCHOOL', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html/demo 
+define('__ROOT_SCHOOL', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html/demo
 define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__))); # /home/admin/public_html
 define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL)))); # /demo
 $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
@@ -40,8 +41,11 @@ define('__NO_PROFILE_PICTURE_STUDENT_FEMALE', str_replace('/', DIRECTORY_SEPARAT
 define('__DEFAULT_LOGO_REGIWEB', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-regiweb.gif'));
 define('__DEFAULT_LOGO_SCHOOLSOFT', str_replace('/', DIRECTORY_SEPARATOR, '/images/logo-schoolsoft.gif'));
 
-// Cosey 
+/* ---------------------------------- Cosey --------------------------------- */
 define('__COSEY', false);
+
+/* ---------------------------- Different schools --------------------------- */
+define('__REGIWERB_EnterGrades', 'cbtm,omar');
 
 
 
