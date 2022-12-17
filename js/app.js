@@ -154,8 +154,12 @@ function getFileName(path = '') {
   return fileName;
 }
 /* ---------------------------- Different schools --------------------------- */
-function differentSchool(schoolAcronym) {
-  arrayOfSchools = ['cbtm', 'omar']
+function differentSchool(schoolAcronym,file) {
+  if(file === 'REGIWEB_enterGrades'){
+    arrayOfSchools = ['cbtm', 'omar']
+  }else{
+    return false
+  }
   return arrayOfSchools.includes(schoolAcronym)
 }
 
