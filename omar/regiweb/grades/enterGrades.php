@@ -22,7 +22,7 @@ $optionCppd = $teacher->info('cppd') === 'Si';
 $sumTrimester = $teacher->info('sutri') === 'NO'; //NO === SI
 $_trimesterNumber = (int) substr($_trimester, -1);
 // Diferent option for these schools
-$enterGrades2 = ['cbtm'];
+
 
 if (!$_value = DB::table('valores')
     ->where([
@@ -47,7 +47,7 @@ $gradeInfo = DB::table('padres')->where([
 $optionLetter = $gradeInfo->letra === "ON";
 
 // only this school
-if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
+if (Util::differentSchool(__REGIWERB_EnterGrades)) {
     $gradeInfo->nota_por = '1';
 }
 
@@ -130,7 +130,7 @@ if ($optionCppd) {
         ]
     ];
 } else {
-    if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
+    if (Util::differentSchool(__REGIWERB_EnterGrades)) {
         $columns =  [
             'es' => ['Bono', 'Promedio', 'T-Diario', 'T-Libreta', 'P-Cor'],
             'en' => ['Bonus', 'Average', 'DW', 'HW', 'Quiz'],
@@ -196,6 +196,30 @@ if ($optionCppd) {
                     'tpa' => 'tpa4',
                     'tdp' => 'por4'
                 ]
+            ]
+        ],
+        "Notas2" => [
+            'table' => 'padres7',
+            'title' => 'Notas 2',
+            'Trimestre-1' => [
+                'totalGrade' => 'nota1',
+                'totalAverage' => 'average1',
+                'grades' => [1, 10],
+            ],
+            'Trimestre-2' => [
+                'totalGrade' => 'nota2',
+                'totalAverage' => 'average2',
+                'grades' => [11, 20],
+            ],
+            'Trimestre-3' => [
+                'totalGrade' => 'nota3',
+                'totalAverage' => 'average3',
+                'grades' => [21, 30],
+            ],
+            'Trimestre-4' => [
+                'totalGrade' => 'nota4',
+                'totalAverage' => 'average4',
+                'grades' => [31, 40],
             ]
         ],
         "Pruebas-Cortas" => [
@@ -451,7 +475,6 @@ $_options = isset($_info[$_report][$_trimester]) ? $_info[$_report][$_trimester]
 $_values = isset($_options['values']) ? $_options['values'] : null;
 $_columns = null;
 if (isset($_info[$_report]['columns'])) {
-
     $_columns =  isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
 }
 $_trimesterNumber = $_schoolInfo[$_trimester]['number'];
@@ -535,6 +558,7 @@ $lang = new Lang([
     ["Valor", "Value"],
     ["Fecha", "Date"],
     ["Promedio", "Average"],
+    ["Notas 2", "Grades 2"],
 
 ]);
 
@@ -546,14 +570,14 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation('Entrada de notas');
-    Route::includeFile('/regiweb/includes/layouts/header.php');
-    ?>
+Route::includeFile('/regiweb/includes/layouts/header.php');
+?>
 </head>
 
 <body>
     <?php
-    Route::includeFile('/regiweb/includes/layouts/menu.php');
-    ?>
+Route::includeFile('/regiweb/includes/layouts/menu.php');
+?>
 
 
     <div class="container-lg mt-lg-3 px-0">
@@ -586,8 +610,8 @@ $lang = new Lang([
         </div>
 
         <?php
-        if ($_report === 'Notas' || $_report === 'V-Nota') :
-            $letterNumber = $_report === 'Notas' ? '9' : '7';
+    if ($_report === 'Notas' || $_report === 'V-Nota') :
+        $letterNumber = $_report === 'Notas' ? '9' : '7';
         ?>
             <div class="card border-secondary mt-2">
                 <div class="card-body">
@@ -622,7 +646,7 @@ $lang = new Lang([
             </div>
         <?php else : ?>
             <!-- only school cbtm -->
-            <?php if (!in_array(__SCHOOL_ACRONYM, $enterGrades2)) : ?>
+            <?php if (!Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
                 <div class="card border-secondary mt-2">
                     <div class="card-body">
                         <div class="row row-cols-1">
@@ -671,11 +695,11 @@ $lang = new Lang([
                     <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
                     <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
                     <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
-                    <?php if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) : ?>
+                    <?php if (Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
                         <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
                     <?php endif ?>
 
-                    <?php if ($_report === 'Notas' || $_report === 'V-Nota' && !$optionCppd) : ?>
+                    <?php if ($_report === 'Notas'  || $_report === 'V-Nota' && !$optionCppd) : ?>
                         <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
                         <input type="hidden" name="tlib" id="tlib" value="<?= $_values['tlib'] ?>">
                         <input type="hidden" name="pcor" id="pcor" value="<?= $_values['pcor'] ?>">
@@ -688,7 +712,7 @@ $lang = new Lang([
                                 <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
                                 <?php
                                 $amountOfGrades = $_report === 'V-Nota' ? 7 : ($_options['grades'][1]) - ($_options['grades'][0]);
-                                for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
+                    for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
                                     <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
                                 <?php endfor ?>
                                 <?php if ($_columns !== null) : ?>
@@ -717,34 +741,59 @@ $lang = new Lang([
                                     <th scope="row">
                                         <?= $index + 1 ?>
                                         <?php
-                                        // important information for the values
-                                        // Only on Notas and when "Cambiar Porciento a Punto Decimal" is not activated
-                                        if ($_report === 'Notas' && !$optionCppd) :
-                                            if ($gradeInfo->nota_por === "2") {
-                                                $_student =  findValue($_info['Trab-Diarios']['table'], $student);
-                                                $tdia = $_student->{$_values['tdp']};
-                                                $_student =  findValue($_info['Trab-Libreta']['table'], $student);
-                                                $tlib = $_student->{$_values['tdp']};
-                                                $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
-                                                $pcor = $_student->{$_values['tdp']};
-                                            } else {
-                                                if (in_array(__SCHOOL_ACRONYM, $enterGrades2)) {
-                                                    $tdia = $student->{$_values['tdia']} ? '10' : '';
-                                                    $tlib = $student->{$_values['tlib']} ? '10' : '';
-                                                    $pcor = $student->{$_values['pcor']} ? '20' : '';
-                                                } else {
-                                                    $tdia = $student->{$_values['tdia']} ? '100' : '';
-                                                    $tlib = $student->{$_values['tlib']} ? '100' : '';
-                                                    $pcor = $student->{$_values['pcor']} ? '100' : '';
-                                                }
-                                            }
-                                        ?>
+                            // important information for the values
+                            // Only on Notas and when "Cambiar Porciento a Punto Decimal" is not activated
+                            if ($_report === 'Notas' && !$optionCppd) :
+                                if ($gradeInfo->nota_por === "2") {
+                                    $_student =  findValue($_info['Trab-Diarios']['table'], $student);
+                                    $tdia = $_student->{$_values['tdp']};
+                                    $_student =  findValue($_info['Trab-Libreta']['table'], $student);
+                                    $tlib = $_student->{$_values['tdp']};
+                                    $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
+                                    $pcor = $_student->{$_values['tdp']};
+                                } else {
+                                    if (Util::differentSchool(__REGIWERB_EnterGrades)) {
+                                        $tdia = $student->{$_values['tdia']} ? '10' : '';
+                                        $tlib = $student->{$_values['tlib']} ? '10' : '';
+                                        $pcor = $student->{$_values['pcor']} ? '20' : '';
+                                    } else {
+                                        $tdia = $student->{$_values['tdia']} ? '100' : '';
+                                        $tlib = $student->{$_values['tlib']} ? '100' : '';
+                                        $pcor = $student->{$_values['pcor']} ? '100' : '';
+                                    }
+                                }
+                                ?>
                                             <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
                                                 <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
                                                 <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
                                             <?php endif ?>
-                                            <?php if ($_report === 'Notas' && __SCHOOL_ACRONYM === 'cbtm') : ?>
+                                            <?php if ($_report === 'Notas' && Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
                                                 <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso' value="<?= $student->peso ?>">
+                                                 <!-- /* ----------------------- Get the grades from Notas2 ----------------------- */ -->
+                                                <?php 
+                                                $nota2Grades = DB::table("padres7")->where([
+                                                        ['ss',$student->ss],
+                                                        ['curso',$_class],
+                                                        ['year',$year]
+                                                    ])->first();
+                                                $nota2Values = DB::table('valores')
+                                                    ->where([
+                                                        ['curso', $_class],
+                                                        ['trimestre', $_trimester],
+                                                        ['nivel', "Notas2"],
+                                                        ['year', $year]
+                                                    ])->first();
+                                                    $_nota2Grade = $_nota2value = 0;
+                                                for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) {
+                                                    if($nota2Grades->{"not$i"} != '' && $nota2Values->{"val$i"} != '') {
+                                                        $_nota2Grade += $nota2Grades->{"not$i"};
+                                                        $_nota2Value += $nota2Values->{"val$i"};
+                                                    }
+                                                }
+                                                ?>
+
+                                            <input type="hidden" class="_nota2Grade" value="<?= $_nota2Grade ?>">
+                                            <input type="hidden" class="_nota2Value" value="<?= $_nota2Value ?>">
                                             <?php endif ?>
                                             <input type="hidden" class="_tdia" value="<?= $tdia ?>">
                                             <input type="hidden" class="_tlib" value="<?= $tlib ?>">
@@ -758,7 +807,7 @@ $lang = new Lang([
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
                                     <?php endfor ?>
-                                    <?php if (in_array(__SCHOOL_ACRONYM, $enterGrades2) && $_report === 'Notas') : ?>
+                                    <?php if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') : ?>
                                         <td><input class="form-control-plaintext text-center totalAverage" readonly type="text" name="totalAverage-<?= $student->ss ?>" value=<?= $student->{$_options['totalAverage']} ?>></td>
                                     <?php endif ?>
                                     <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
@@ -766,7 +815,7 @@ $lang = new Lang([
                                     <?php endif ?>
                                     <?php if ($_values !== null) : ?>
                                         <?php foreach ($_values as $name => $value) :
-                                            if (in_array(__SCHOOL_ACRONYM, $enterGrades2) && $_report === 'Notas') {
+                                            if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') {
                                                 if ($name === 'tdia' || $name === 'tlib' || $name === 'pcor') {
                                                     $r = [
                                                         'tdia' => 'Trab-Diarios',
@@ -775,14 +824,14 @@ $lang = new Lang([
                                                     ];
                                                     $_student =  findValueFor($_info[$r[$name]]['table'], $student);
                                                     $val = $_student->{$_info[$r[$name]][$_trimester]['totalGrade']};
-                                                    // echo "$name= $val";
+                                                // echo "$name= $val";
                                                 } else {
                                                     $val = $student->{$value};
                                                 }
                                             } else {
                                                 $val = $student->{$value};
                                             }
-                                        ?>
+                                            ?>
                                             <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $val ?>></td>
                                         <?php endforeach ?>
                                     <?php endif ?>
@@ -796,8 +845,34 @@ $lang = new Lang([
                             <?php endforeach ?>
                         </tbody>
                     </table>
+                <?php elseif ($_report === 'Notas2') :
+                    $amountOfGrades = 10;?>
+                    <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
+                        <table class="table table-sm table-hover bg-white">
+                            <thead class="thead-dark text-center">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
+                                    <?php for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
+                                        <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
+                                    <?php endfor ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($students as $index => $student) : ?>
+                                    <tr>
+                                        <th scope="row">
+                                            <?= $index + 1 ?>
+                                            <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                                        </th>
+                                        <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                        <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
+                                            <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
+                                        <?php endfor ?>
+                                    <?php endforeach ?>
+                            </tbody>
+                        </table>
                 <?php elseif ($_report === 'Cond-Asis') : ?>
-                    <div class="container">
                         <table class="table table-sm table-hover bg-white">
                             <thead class="thead-dark text-center">
                                 <tr>
@@ -824,11 +899,7 @@ $lang = new Lang([
                                     <?php endforeach ?>
                             </tbody>
                         </table>
-
-
-                    </div>
                 <?php elseif ($_report === 'Ex-Final') : ?>
-                    <div class="container">
                         <?php if ($_options !== null) : ?>
                             <table class="table table-sm table-hover bg-white">
                                 <thead class="thead-dark text-center">
@@ -854,7 +925,6 @@ $lang = new Lang([
                             <h1 class="display-3 text-center"><?= $lang->translation("Los examenes finales solo estan en el trimestre 2 y trimestre 4") ?></h1>
                             <button class="btn btn-primary d-block mx-auto mb-3" onclick="javascript:history.back()"><?= $lang->translation("Volver") ?></button>
                         <?php endif ?>
-                    </div>
                 <?php endif ?>
 
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
@@ -912,7 +982,7 @@ $lang = new Lang([
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
+?>
 
 </body>
 

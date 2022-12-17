@@ -1,10 +1,11 @@
 <?php
 require_once '../../app.php';
 
+use Classes\Lang;
+use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
-use Classes\Lang;
 
 Session::is_logged();
 $teacher = new Teacher(Session::id());
@@ -21,7 +22,6 @@ $lang = new Lang([
     ["Pagina", "Page"],
     ["Verano", "Summer"],
 ]);
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -29,20 +29,20 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation('Cursos');
-    Route::includeFile('/regiweb/includes/layouts/header.php');
-    ?>
+Route::includeFile('/regiweb/includes/layouts/header.php');
+?>
 </head>
 
 <body>
     <?php
-    Route::includeFile('/regiweb/includes/layouts/menu.php');
-    ?>
+Route::includeFile('/regiweb/includes/layouts/menu.php');
+?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Cursos') ?></h1>
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-2">
                 <div class="col mb-3">
-                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= __SCHOOL_ACRONYM === 'cbtm' && $teacher->grado !== '' ? '' : 'disabled' ?>" ><?= $lang->translation('Entrada de asistencias') ?></a>
+                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= Util::differentSchool(__REGIWERB_EnterGrades) && $teacher->grado !== '' ? '' : 'disabled' ?>" ><?= $lang->translation('Entrada de asistencias') ?></a>
                 </div>
                 <div class="col mb-3">
                     <a href="dailyAttendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= $lang->translation('Informe de asistencias diarias') ?></a>
@@ -103,6 +103,9 @@ $lang = new Lang([
                                 <option value="V-Nota" disabled><?= $lang->translation("Notas de verano") ?></option>
                             <?php else : ?>
                                 <option value="Notas"><?= $lang->translation("Notas") ?></option>
+                                <?php if(Util::differentSchool(__REGIWERB_EnterGrades)): ?>
+                                <option value="Notas2"><?= $lang->translation("Notas") ?> 2</option>
+                                <?php endif ?>
                                 <option value="Pruebas-Cortas"><?= $lang->translation("Pruebas cortas") ?></option>
                                 <option value="Trab-Diarios"><?= $lang->translation("Trabajos diarios") ?></option>
                                 <?php if ($teacher->info('etd') === 'SI') : ?>
@@ -130,8 +133,8 @@ $lang = new Lang([
 
     </div>
     <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
+Route::includeFile('/includes/layouts/scripts.php', true);
+?>
 
 </body>
 
