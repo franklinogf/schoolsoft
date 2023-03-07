@@ -32,10 +32,7 @@ $lang = new Lang([
     ?>
 </head>
 
-<body>
-    <?php
-    Route::includeFile('/admin/includes/layouts/menu.php');
-    ?>
+<body>   
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Seleccionar profesor') ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded">
