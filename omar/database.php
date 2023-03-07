@@ -19,10 +19,10 @@
 
 /* ----------------------------- REMOTE DATABASE ---------------------------- */
 
-define('__HOST', "schoolsoftpr.com");
-define('__USERNAME', "admin_democol");
-define('__PASSWORD', "Amc123456");
-define('__DB_NAME', "admin_democol");
+define('__HOST', "schoolsoftpr.org");
+define('__USERNAME', "adminsspr_demo");
+define('__PASSWORD', "Amc@513107");
+define('__DB_NAME', "adminsspr_demo");
 
 /* ----------------------------- COSEY DATABASE ---------------------------- */
 
