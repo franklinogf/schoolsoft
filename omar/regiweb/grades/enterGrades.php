@@ -585,25 +585,36 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
             <div class="card-body">
                 <div class="row row-cols-1 row-cols-md-3">
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Curso:") ?> <span class="badge badge-info"><?= $_class ?> </span></p>
+                        <p class="text-monospace"><?= $lang->translation("Curso:") ?> <span
+                                class="badge badge-info"><?= $_class ?> </span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Trimestre:") ?> <span class="badge badge-info"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $_trimester)) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Trimestre:") ?> <span
+                                class="badge badge-info"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $_trimester)) ?></span>
+                        </p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes:") ?> <span class="badge badge-info"><?= sizeof($students) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes:") ?> <span
+                                class="badge badge-info"><?= sizeof($students) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Entrando notas a:") ?> <span class="badge badge-info"><?= $lang->translation($_thisReport['title']) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Entrando notas a:") ?> <span
+                                class="badge badge-info"><?= $lang->translation($_thisReport['title']) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Fecha de inicio:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[0]), true) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de inicio:") ?> <span
+                                class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[0]), true) ?></span>
+                        </p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span
+                                class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span>
+                        </p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span
+                                class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -613,58 +624,70 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
     if ($_report === 'Notas' || $_report === 'V-Nota') :
         $letterNumber = $_report === 'Notas' ? '9' : '7';
         ?>
-            <div class="card border-secondary mt-2">
-                <div class="card-body">
-                    <div id="options" class="row row-cols-1">
-                        <div class="col">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="letra"><?= $lang->translation("Pasar a letras") ?></label>
-                            </div>
-                            <small><?= $lang->translation("Está opción se aplica en la columna") ?> <b><?= $_report === 'Notas' ? $lang->translation("Nota") . '-9' : $lang->translation("Nota") . '-7' ?></b> <?= $lang->translation("exclusivamente.") ?></small>
+        <div class="card border-secondary mt-2">
+            <div class="card-body">
+                <div id="options" class="row row-cols-1">
+                    <div class="col">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>"
+                                <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
+                            <label class="custom-control-label"
+                                for="letra"><?= $lang->translation("Pasar a letras") ?></label>
                         </div>
-                        <div class="col mt-2">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
-                                <label class="custom-control-label" for="pal"><?= $lang->translation("Conversión") ?></label>
-                            </div>
-                            <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
+                        <small><?= $lang->translation("Está opción se aplica en la columna") ?>
+                            <b><?= $_report === 'Notas' ? $lang->translation("Nota") . '-9' : $lang->translation("Nota") . '-7' ?></b>
+                            <?= $lang->translation("exclusivamente.") ?></small>
+                    </div>
+                    <div class="col mt-2">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="pal" value="ON"
+                                <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
+                            <label class="custom-control-label"
+                                for="pal"><?= $lang->translation("Conversión") ?></label>
                         </div>
-                        <?php if ($_end) : ?>
-                            <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
-                                <div class="col mt-2">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
-                                        <label class="custom-control-label" for="<?= $_end ?>"><?= $lang->translation("Aviso terminar") ?></label>
-                                    </div>
-                                    <small><?= $lang->translation("Cuando termine el trimestre marque está Opción.") ?></small>
-                                </div>
-                            <?php endif ?>
-                        <?php endif ?>
+                        <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
+                    </div>
+                    <?php if ($_end) : ?>
+                    <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
+                    <div class="col mt-2">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X'
+                                <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
+                            <label class="custom-control-label"
+                                for="<?= $_end ?>"><?= $lang->translation("Aviso terminar") ?></label>
+                        </div>
+                        <small><?= $lang->translation("Cuando termine el trimestre marque está Opción.") ?></small>
+                    </div>
+                    <?php endif ?>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+        <?php else : ?>
+        <!-- only school cbtm -->
+        <?php if (!Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
+        <div class="card border-secondary mt-2">
+            <div class="card-body">
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1"
+                                <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
+                            <label class="custom-control-label"
+                                for="noteType1"><?= $lang->translation("Porciento") ?></label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="noteType2" class="custom-control-input" name="noteType" value="2"
+                                <?= $gradeInfo->nota_por === "2" ? 'checked=""' : '' ?> disabled>
+                            <label class="custom-control-label"
+                                for="noteType2"><?= $lang->translation("Suma") ?></label>
+                        </div>
                     </div>
                 </div>
             </div>
-        <?php else : ?>
-            <!-- only school cbtm -->
-            <?php if (!Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
-                <div class="card border-secondary mt-2">
-                    <div class="card-body">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1" <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
-                                    <label class="custom-control-label" for="noteType1"><?= $lang->translation("Porciento") ?></label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="noteType2" class="custom-control-input" name="noteType" value="2" <?= $gradeInfo->nota_por === "2" ? 'checked=""' : '' ?> disabled>
-                                    <label class="custom-control-label" for="noteType2"><?= $lang->translation("Suma") ?></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif ?>
+        </div>
+        <?php endif ?>
         <?php endif ?>
     </div>
     <!-- loading spinner -->
@@ -689,58 +712,61 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
             <input type="hidden" name="sumTrimester" id="sumTrimester" value="<?= $sumTrimester ?>">
             <div class="table-responsive my-3 shadow">
                 <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2') : ?>
-                    <!-- Required hidden inputs -->
-                    <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
-                    <input type="hidden" name="tpa" id="tpa" value="<?= $_values['tpa'] ?>">
-                    <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
-                    <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
-                    <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
-                    <?php if (Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
-                        <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
-                    <?php endif ?>
+                <!-- Required hidden inputs -->
+                <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
+                <input type="hidden" name="tpa" id="tpa" value="<?= $_values['tpa'] ?>">
+                <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
+                <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
+                <input type="hidden" name="optionLetter" id="optionLetter"
+                    value="<?= $optionLetter ? $letterNumber : 0 ?>">
+                <?php if (Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
+                <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
+                <?php endif ?>
 
-                    <?php if ($_report === 'Notas'  || $_report === 'V-Nota' && !$optionCppd) : ?>
-                        <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
-                        <input type="hidden" name="tlib" id="tlib" value="<?= $_values['tlib'] ?>">
-                        <input type="hidden" name="pcor" id="pcor" value="<?= $_values['pcor'] ?>">
-                    <?php endif ?>
+                <?php if ($_report === 'Notas'  || $_report === 'V-Nota' && !$optionCppd) : ?>
+                <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
+                <input type="hidden" name="tlib" id="tlib" value="<?= $_values['tlib'] ?>">
+                <input type="hidden" name="pcor" id="pcor" value="<?= $_values['pcor'] ?>">
+                <?php endif ?>
 
-                    <table class="table table-sm table-hover bg-white">
-                        <thead class="thead-dark text-center">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
-                                <?php
+                <table class="table table-sm table-hover bg-white">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?>
+                            </th>
+                            <?php
                                 $amountOfGrades = $_report === 'V-Nota' ? 7 : ($_options['grades'][1]) - ($_options['grades'][0]);
                     for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
-                                    <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
-                                <?php endfor ?>
-                                <?php if ($_columns !== null) : ?>
-                                    <?php foreach ($_columns as $index => $column) : ?>
-                                        <th scope="col">
-                                            <?= $column ?>
-                                            <?php if ($_info[$_report]['columns']['text'][$index]) : ?>
-                                                <span style="font-size: 15px;" class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
-                                            <?php endif ?>
-                                        </th>
-                                    <?php endforeach ?>
+                            <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
+                            <?php endfor ?>
+                            <?php if ($_columns !== null) : ?>
+                            <?php foreach ($_columns as $index => $column) : ?>
+                            <th scope="col">
+                                <?= $column ?>
+                                <?php if ($_info[$_report]['columns']['text'][$index]) : ?>
+                                <span style="font-size: 15px;"
+                                    class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
                                 <?php endif ?>
-                                <th scope="col"><?= $lang->translation("TPA") ?></th>
-                                <th scope="col"><?= $lang->translation("TDP") ?></th>
-                                <th scope="col"><?= $lang->translation("Nota") ?></th>
-                                <?php if ($_report === 'V-Nota') : ?>
-                                    <th scope="col"><?= $lang->translation("Conducta") ?></th>
-                                    <th scope="col"><?= $lang->translation("Ausencias") ?></th>
-                                    <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
-                                <?php endif ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($students as $index => $student) : ?>
-                                <tr>
-                                    <th scope="row">
-                                        <?= $index + 1 ?>
-                                        <?php
+                            </th>
+                            <?php endforeach ?>
+                            <?php endif ?>
+                            <th scope="col"><?= $lang->translation("TPA") ?></th>
+                            <th scope="col"><?= $lang->translation("TDP") ?></th>
+                            <th scope="col"><?= $lang->translation("Nota") ?></th>
+                            <?php if ($_report === 'V-Nota') : ?>
+                            <th scope="col"><?= $lang->translation("Conducta") ?></th>
+                            <th scope="col"><?= $lang->translation("Ausencias") ?></th>
+                            <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
+                            <?php endif ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $index => $student) : ?>
+                        <tr>
+                            <th scope="row">
+                                <?= $index + 1 ?>
+                                <?php
                             // important information for the values
                             // Only on Notas and when "Cambiar Porciento a Punto Decimal" is not activated
                             if ($_report === 'Notas' && !$optionCppd) :
@@ -763,14 +789,17 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
                                     }
                                 }
                                 ?>
-                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
-                                                <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
-                                                <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
-                                            <?php endif ?>
-                                            <?php if ($_report === 'Notas' && Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
-                                                <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso' value="<?= $student->peso ?>">
-                                                 <!-- /* ----------------------- Get the grades from Notas2 ----------------------- */ -->
-                                                <?php 
+                                <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
+                                <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal"
+                                    value="<?= findTotal('tpa', $student) ?>">
+                                <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal"
+                                    value="<?= findTotal('tdp', $student) ?>">
+                                <?php endif ?>
+                                <?php if ($_report === 'Notas' && Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
+                                <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso'
+                                    value="<?= $student->peso ?>">
+                                    <!-- Get the grades from Notas2 -->
+                                <?php 
                                                 $nota2Grades = DB::table("padres7")->where([
                                                         ['ss',$student->ss],
                                                         ['curso',$_class],
@@ -792,29 +821,34 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
                                                 }
                                                 ?>
 
-                                            <input type="hidden" class="_nota2Grade" value="<?= $_nota2Grade ?>">
-                                            <input type="hidden" class="_nota2Value" value="<?= $_nota2Value ?>">
-                                            <?php endif ?>
-                                            <input type="hidden" class="_tdia" value="<?= $tdia ?>">
-                                            <input type="hidden" class="_tlib" value="<?= $tlib ?>">
-                                            <input type="hidden" class="_pcor" value="<?= $pcor ?>">
-                                        <?php endif; ?>
-                                        <input type="hidden" name="ss" value="<?= $student->ss ?>">
-                                    </th>
-                                    <td>
-                                        <?= utf8_decode("$student->apellidos $student->nombre"); ?>
-                                    </td>
-                                    <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
-                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
-                                    <?php endfor ?>
-                                    <?php if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') : ?>
-                                        <td><input class="form-control-plaintext text-center totalAverage" readonly type="text" name="totalAverage-<?= $student->ss ?>" value=<?= $student->{$_options['totalAverage']} ?>></td>
-                                    <?php endif ?>
-                                    <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
-                                        <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->not10 ?>" disabled></td>
-                                    <?php endif ?>
-                                    <?php if ($_values !== null) : ?>
-                                        <?php foreach ($_values as $name => $value) :
+                                <input type="hidden" class="_nota2Grade" value="<?= $_nota2Grade ?>">
+                                <input type="hidden" class="_nota2Value" value="<?= $_nota2Value ?>">
+                                <?php endif ?>
+                                <input type="hidden" class="_tdia" value="<?= $tdia ?>">
+                                <input type="hidden" class="_tlib" value="<?= $tlib ?>">
+                                <input type="hidden" class="_pcor" value="<?= $pcor ?>">
+                                <?php endif; ?>
+                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                            </th>
+                            <td>
+                                <?= utf8_decode("$student->apellidos $student->nombre"); ?>
+                            </td>
+                            <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
+                            <td><input class="form-control form-control-sm text-center grade" type="text"
+                                    name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
+                            </td>
+                            <?php endfor ?>
+                            <?php if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') : ?>
+                            <td><input class="form-control-plaintext text-center totalAverage" readonly type="text"
+                                    name="totalAverage-<?= $student->ss ?>"
+                                    value=<?= $student->{$_options['totalAverage']} ?>></td>
+                            <?php endif ?>
+                            <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
+                            <td><input class="form-control form-control-sm text-center grade" type="text"
+                                    name="<?= "grade-$student->ss" ?>" value="<?= $student->not10 ?>" disabled></td>
+                            <?php endif ?>
+                            <?php if ($_values !== null) : ?>
+                            <?php foreach ($_values as $name => $value) :
                                             if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') {
                                                 if ($name === 'tdia' || $name === 'tlib' || $name === 'pcor') {
                                                     $r = [
@@ -832,114 +866,138 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
                                                 $val = $student->{$value};
                                             }
                                             ?>
-                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $val ?>></td>
-                                        <?php endforeach ?>
-                                    <?php endif ?>
-                                    <td><input class="form-control-plaintext text-center totalGrade" readonly type="text" name="totalGrade-<?= $student->ss ?>" value=<?= $student->{$_options['totalGrade']} ?>></td>
-                                    <?php if ($_report === 'V-Nota') : ?>
-                                        <td><input class="form-control text-center" type="text" name="con-<?= $student->ss ?>" value=<?= $student->{$_options['others'][0]} ?>></td>
-                                        <td><input class="form-control text-center" type="text" name="asis-<?= $student->ss ?>" value=<?= $student->{$_options['others'][1]} ?>></td>
-                                        <td><input class="form-control text-center" type="text" name="tar-<?= $student->ss ?>" value=<?= $student->{$_options['others'][2]} ?>></td>
-                                    <?php endif ?>
-                                </tr>
+                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text"
+                                    name="<?= $name . "-$student->ss" ?>" value=<?= $val ?>></td>
                             <?php endforeach ?>
-                        </tbody>
-                    </table>
+                            <?php endif ?>
+                            <td><input class="form-control-plaintext text-center totalGrade" readonly type="text"
+                                    name="totalGrade-<?= $student->ss ?>"
+                                    value=<?= $student->{$_options['totalGrade']} ?>></td>
+                            <?php if ($_report === 'V-Nota') : ?>
+                            <td><input class="form-control text-center" type="text" name="con-<?= $student->ss ?>"
+                                    value=<?= $student->{$_options['others'][0]} ?>></td>
+                            <td><input class="form-control text-center" type="text" name="asis-<?= $student->ss ?>"
+                                    value=<?= $student->{$_options['others'][1]} ?>></td>
+                            <td><input class="form-control text-center" type="text" name="tar-<?= $student->ss ?>"
+                                    value=<?= $student->{$_options['others'][2]} ?>></td>
+                            <?php endif ?>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
                 <?php elseif ($_report === 'Notas2') :
                     $amountOfGrades = 10;?>
-                    <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
-                        <table class="table table-sm table-hover bg-white">
-                            <thead class="thead-dark text-center">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
-                                    <?php for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
-                                        <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
-                                    <?php endfor ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($students as $index => $student) : ?>
-                                    <tr>
-                                        <th scope="row">
-                                            <?= $index + 1 ?>
-                                            <input type="hidden" name="ss" value="<?= $student->ss ?>">
-                                        </th>
-                                        <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
-                                        <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
-                                            <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
-                                        <?php endfor ?>
-                                    <?php endforeach ?>
-                            </tbody>
-                        </table>
+                <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
+                <table class="table table-sm table-hover bg-white">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?>
+                            </th>
+                            <?php for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
+                            <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
+                            <?php endfor ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $index => $student) : ?>
+                        <tr>
+                            <th scope="row">
+                                <?= $index + 1 ?>
+                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                            </th>
+                            <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                            <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
+                            <td><input class="form-control form-control-sm text-center grade" type="text"
+                                    name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
+                            </td>
+                            <?php endfor ?>
+                            <?php endforeach ?>
+                    </tbody>
+                </table>
                 <?php elseif ($_report === 'Cond-Asis') : ?>
-                        <table class="table table-sm table-hover bg-white">
-                            <thead class="thead-dark text-center">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
-                                    <th scope="col"><?= $lang->translation("Conducta") ?></th>
-                                    <th scope="col"><?= $lang->translation("Ausencias") ?></th>
-                                    <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
-                                    <th scope="col"><?= $lang->translation("Deméritos") ?></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($students as $index => $student) : ?>
-                                    <tr>
-                                        <th scope="row">
-                                            <?= $index + 1 ?>
-                                            <input type="hidden" name="ss" value="<?= $student->ss ?>">
-                                        </th>
-                                        <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "con-{$student->ss}" ?>" value="<?= $student->{$_options[0]} ?>"></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "aus-{$student->ss}" ?>" value="<?= $student->{$_options[1]} ?>"></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "tar-{$student->ss}" ?>" value="<?= $student->{$_options[2]} ?>"></td>
-                                        <td><input class="form-control form-control-sm text-center" type="text" name="<?= "de-{$student->ss}" ?>" value="<?= $student->{$_options[3]} ?>"></td>
-                                    <?php endforeach ?>
-                            </tbody>
-                        </table>
+                <table class="table table-sm table-hover bg-white">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?>
+                            </th>
+                            <th scope="col"><?= $lang->translation("Conducta") ?></th>
+                            <th scope="col"><?= $lang->translation("Ausencias") ?></th>
+                            <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
+                            <th scope="col"><?= $lang->translation("Deméritos") ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $index => $student) : ?>
+                        <tr>
+                            <th scope="row">
+                                <?= $index + 1 ?>
+                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                            </th>
+                            <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                            <td><input class="form-control form-control-sm text-center" type="text"
+                                    name="<?= "con-{$student->ss}" ?>" value="<?= $student->{$_options[0]} ?>"></td>
+                            <td><input class="form-control form-control-sm text-center" type="text"
+                                    name="<?= "aus-{$student->ss}" ?>" value="<?= $student->{$_options[1]} ?>"></td>
+                            <td><input class="form-control form-control-sm text-center" type="text"
+                                    name="<?= "tar-{$student->ss}" ?>" value="<?= $student->{$_options[2]} ?>"></td>
+                            <td><input class="form-control form-control-sm text-center" type="text"
+                                    name="<?= "de-{$student->ss}" ?>" value="<?= $student->{$_options[3]} ?>"></td>
+                            <?php endforeach ?>
+                    </tbody>
+                </table>
                 <?php elseif ($_report === 'Ex-Final') : ?>
-                        <?php if ($_options !== null) : ?>
-                            <table class="table table-sm table-hover bg-white">
-                                <thead class="thead-dark text-center">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
-                                        <th scope="col"><?= $lang->translation("Nota del Examen Final") ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($students as $index => $student) : ?>
-                                        <tr>
-                                            <th scope="row">
-                                                <?= $index + 1 ?>
-                                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
-                                            </th>
-                                            <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
-                                            <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text" name="<?= "ex-{$student->ss}" ?>" value="<?= $student->{$_options} ?>"></td>
-                                        <?php endforeach ?>
-                                </tbody>
-                            </table>
-                        <?php else : ?>
-                            <h1 class="display-3 text-center"><?= $lang->translation("Los examenes finales solo estan en el trimestre 2 y trimestre 4") ?></h1>
-                            <button class="btn btn-primary d-block mx-auto mb-3" onclick="javascript:history.back()"><?= $lang->translation("Volver") ?></button>
-                        <?php endif ?>
+                <?php if ($_options !== null) : ?>
+                <?php if (Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
+                <input type="hidden" name="exGrade" value="<?= substr($students[0]->grado,0,2) ?>" />
+                <?php endif ?>
+                <table class="table table-sm table-hover bg-white">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?>
+                            </th>
+                            <th scope="col"><?= $lang->translation("Nota del Examen Final") ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $index => $student) : ?>
+                        <tr>
+                            <th scope="row">
+                                <?= $index + 1 ?>
+                                <input type="hidden" name="ss" value="<?= $student->ss ?>">
+                            </th>
+                            <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                            <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text"
+                                    name="<?= "ex-{$student->ss}" ?>" value="<?= $student->{$_options} ?>"></td>
+                            <?php endforeach ?>
+                    </tbody>
+                </table>
+                <?php else : ?>
+                <h1 class="display-3 text-center">
+                    <?= $lang->translation("Los examenes finales solo estan en el trimestre 2 y trimestre 4") ?></h1>
+                <?php endif ?>
                 <?php endif ?>
 
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
                 <?php if ($_options !== null) : ?>
-                    <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5) : ?>
-                        <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
-                    <?php else : ?>
-                        <h4 class="text-center text-danger"><?= $lang->translation("Lo Sentimos, La fecha Ha Vencido o la selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.") ?></h4>
-                    <?php endif ?>
+                <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5) : ?>
+                <button id="save" type="submit"
+                    class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
+                <?php else : ?>
+                <h4 class="text-center text-danger">
+                    <?= $lang->translation("Lo Sentimos, La fecha Ha Vencido o la selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.") ?>
+                </h4>
+                <?php endif ?>
                 <?php endif ?>
             </div>
         </form>
         <!-- end Students list -->
         <?php if ($_report !== 'Notas' && $_report !== 'V-Notas' && $_report !== 'Ex-Final' && $_report !== 'Cond-Asis') : ?>
-            <h2 class="text-center text-info mb-0">*<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*</h2>
+        <h2 class="text-center text-info mb-0">
+            *<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*
+        </h2>
         <?php endif ?>
         <!-- Values -->
         <div class="container my-5">
@@ -947,7 +1005,9 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
                 <div class="card">
                     <div class="card-header bg-secondary" id="valuesHead">
                         <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
+                            <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button"
+                                data-toggle="collapse" data-target="#values" aria-expanded="true"
+                                aria-controls="values">
                                 <?= $lang->translation("Valores") ?>
                             </button>
                         </h2>
@@ -958,20 +1018,24 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
                             <div class="form-row">
                                 <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
                                 <?php for ($i = 1; $i <= $cant; $i++) : ?>
-                                    <div class="form-row col-12 col-md-8 mb-2">
-                                        <div class="form-group col-12">
-                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?> <?= $i ?></label>
-                                            <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
-                                        </div>
-                                        <div class="form-group col-4 col-md-2 text-center">
-                                            <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
-                                            <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
-                                        </div>
-                                        <div class="form-group col-8 col-md-3">
-                                            <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
-                                            <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
-                                        </div>
+                                <div class="form-row col-12 col-md-8 mb-2">
+                                    <div class="form-group col-12">
+                                        <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?> <?= $i ?></label>
+                                        <input class="form-control" type="text" id="<?= "tema$i" ?>"
+                                            value="<?= $_value->{"tema{$i}"} ?>" />
                                     </div>
+                                    <div class="form-group col-4 col-md-2 text-center">
+                                        <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
+                                        <input class="form-control text-center" type="text" id="<?= "val$i" ?>"
+                                            data-value="<?= $_value->{"val{$i}"} ?>"
+                                            value="<?= $_value->{"val{$i}"} ?>" />
+                                    </div>
+                                    <div class="form-group col-8 col-md-3">
+                                        <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
+                                        <input class="form-control" type="date" id="<?= "fec$i" ?>"
+                                            value="<?= $_value->{"fec{$i}"} ?>" />
+                                    </div>
+                                </div>
                                 <?php endfor ?>
                             </div>
                         </div>
@@ -981,8 +1045,9 @@ Route::includeFile('/regiweb/includes/layouts/menu.php');
         </div>
     </div>
     <?php
+    echo "HOLA";
     Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+   ?>
 
 </body>
 
