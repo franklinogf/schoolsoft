@@ -1,6 +1,6 @@
 <?php
 require_once '../app.php';
-require_once '../database_modifications.php';
+// require_once '../database_modifications.php';
 
 use Classes\Lang;
 use Classes\Route;
