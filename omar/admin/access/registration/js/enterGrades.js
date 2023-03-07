@@ -10,7 +10,6 @@ $(function () {
     const _subjectCode = $("#subject").val()
     const _allGrades = $(".table tbody tr")
     if ($("#save")[0]) $("input:disabled").prop('disabled', false)
-    enterGrades2 = ['cbtm'];
 
     init()
 
@@ -40,11 +39,9 @@ $(function () {
         })
 
     })
-    
     $(document).ajaxStart(function () {
         $(this).html("<img src='demo_wait.gif'>");
     });
-
     $("#form").submit(function (event) {
         event.preventDefault();
         loadingBtn($("#form .btn"), '', 'Guardando...')
@@ -218,7 +215,7 @@ $(function () {
                         const tdpInput = $("#values").find(`#val${index + 1}`)
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
-                            if (enterGrades2.includes(__SCHOOL_ACRONYM)) {
+                            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades')) {
                                 averageTdp += tdpInput.val() ? +tdpInput.val() : 0
                                 if (_report === 'Notas') {
                                     tdpTotal = 60
@@ -238,7 +235,9 @@ $(function () {
 
             // tpa
             let averageTotal = 0
-            if (enterGrades2.includes(__SCHOOL_ACRONYM) && _report === 'Notas') {
+            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades') && (_report === 'Notas')) {
+                tpaTotal += tpaTotal ? +parentTr.find("._nota2Grade").val() : 0;
+                averageTdp += tpaTotal ? +parentTr.find("._nota2Value").val() : 0;
                 averageTotal = tpaTotal ? ((tpaTotal / averageTdp) * 100) * .6 : 0
                 totalAverage.val(typeof averageTotal === 'number' && !isNaN(averageTotal) && averageTotal !== null && averageTotal !== 0 ? Math.round(averageTotal) : '')
                 tpaTotal = averageTotal
@@ -272,7 +271,7 @@ $(function () {
             // Grade total 
 
             let gradeTotal = averageTotal
-            if (enterGrades2.includes(__SCHOOL_ACRONYM)) {
+            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades')) {
                 // Only school cbtm
                 if (_report === 'Notas') {
                     gradeTotal = (tpaTotal / tdpTotal) * 100
@@ -291,7 +290,7 @@ $(function () {
                 }
             }
             console.log('gradeTotal', gradeTotal)
-            if (__SCHOOL_ACRONYM === 'cbtm' && _report === 'Notas' && _peso == 1) {
+            if (__SCHOOL_ACRONYM === 'cbtm' && _peso == 1 && (_report === 'Notas')) {
                 totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null && gradeTotal !== 0 ? NumberToLetterCBTM(Math.round(gradeTotal)) : '')
             } else {
                 totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null && gradeTotal !== 0 ? Math.round(gradeTotal) : '')

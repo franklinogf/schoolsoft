@@ -94,28 +94,24 @@ class Login
    private static function foro($request)
    {
       $teacher = new Teacher();
+      $student = new Student();
       if ($teacher->login(trim($request['username']), trim($request['password']))->logged === true) {
-
          $_SESSION['logged'] = [
             'location' => "foro",
             "user" => ['id' => $teacher->id],
             'type' => 'profesor'
-         ];
+         ];         
          Route::redirect('/profesor');
-      } else {
-         $student = new Student();
-         if ($student->login(trim($request['username']), trim($request['password']))->logged === true) {
+      } else if ($student->login(trim($request['username']), trim($request['password']))->logged === true){
             $_SESSION['logged'] = [
                'location' => "foro",
                "user" => ['id' => $student->mt],
                'type' => 'estudiante'
             ];
             Route::redirect('/estudiante');
-         } else {
-            $_SESSION['errorLogin'] = self::$errorLoginMessage;
-
-            Route::redirect();
-         }
-      }
+      }else {
+         $_SESSION['errorLogin'] = self::$errorLoginMessage;
+         Route::redirect();
+       }
    }
 }

@@ -88,7 +88,9 @@ class Route
          $newPath = __SUB_ROOT_URL;
       }
       $newPath .= $path;
-      header("Location: " . __SCHOOL_URL . $newPath);
+      $newPath = __SCHOOL_URL . $newPath;
+      header("Location: $newPath");
+      die();
    }
 
    public static function back()

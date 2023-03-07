@@ -108,10 +108,11 @@ if (isset($_POST['changeValue'])) {
     $_table = $data->table[0];
     $_report = $data->report[0];
     $_sumTrimester = $data->sumTrimester[0];
-    if ($_report !== 'Cond-Asis' && $_report !== 'Cond-Asis') {
+    if ($_report !== 'Cond-Asis' && $_report !== 'Ex-Final') {
         $_values = $_info[$_report][$data->trimester[0]]['values'];
         // foreach student ss
         foreach ($data->ss as $ss) {
+            echo $ss,' - ';
             $_gradeStart = (int) $data->gradeStart[0];
             $inputsGrades = [];
             $studentData = DB::table($_table)
@@ -146,7 +147,7 @@ if (isset($_POST['changeValue'])) {
                 $_gradeStart++;
             }
             $allInputs = $inputsGrades;
-            
+
             if ($_report !== 'Notas2') {
                 $allInputs = array_merge(
                     $inputsGrades,
@@ -170,7 +171,6 @@ if (isset($_POST['changeValue'])) {
                     [$data->totalAverage[0] => $data->{"totalAverage-$ss"}[0]]
                 );
             }
-
             if (
                 DB::table($_table)
                 ->where([
@@ -182,15 +182,18 @@ if (isset($_POST['changeValue'])) {
                 &&
                 $_report !== 'Notas' && $_report !== 'Notas2'
             ) {
+                // if($_report === 'Pruebas-Cortas'){
+                //     $reportUpdate =[$_info['Notas'][$data->trimester[0]]['values'][$_reports[$_report]] => $data->{"tpa-$ss"}[0]] ;
+                // }else{
+                //     $reportUpdate = [$_values[$_reports[$_report]] => $data->{"tpa-$ss"}[0]];
+                // }
                 DB::table('padres')
                     ->where([
                         ['ss', $ss],
                         ['curso', $_subjectCode],
                         ['year', $teacher->info('year')]
                     ])
-                    ->update([
-                        $_values[$_reports[$_report]] => $data->{"tpa-$ss"}[0]
-                    ]);
+                    ->update([$_info['Notas'][$data->trimester[0]]['values'][$_reports[$_report]] => $data->{"tpa-$ss"}[0]]);
             } else {
                 if ($_report !== 'Notas2') {
                     $studentData = DB::table($_table)
@@ -265,6 +268,77 @@ if (isset($_POST['changeValue'])) {
                 $updateArray = [
                     $_values => $data->{"ex-$ss"}[0]
                 ];
+                /* ---------- Sacarle el porciento a las notas para el examen final --------- */
+                if (__SCHOOL_ACRONYM === 'cbtm') {
+                    if ($data->{"ex-$ss"}[0] !== '') {
+                        $exGrade = $data->exGrade[0];
+                        if ($exGrade === '06') {
+                            $quater = 42.5 / 100;
+                            $ex = 15 / 100;
+                        } elseif ($exGrade === '07') {
+                            $quater = 40 / 100;
+                            $ex = 20 / 100;
+                        } elseif ($exGrade === '08') {
+                            $quater = 37.5 / 100;
+                            $ex = 25 / 100;
+                        } else {
+                            $quater = 35 / 100;
+                            $ex = 30 / 100;
+                        }
+                        $exStu=  DB::table('padres')
+                        ->where([
+                            ['ss', $ss],
+                            ['curso', $_subjectCode],
+                            ['year', $year]
+                        ])->first();
+
+                        if ($data->trimester[0] === 'Trimestre-2') {
+                            $q1 =  round($exStu->nota1 * $quater);
+                            $q2 =  round($exStu->nota2 * $quater);
+                            $qex = round($data->{"ex-$ss"}[0] * $ex);
+                            $exTotal = $q1 + $q2 + $qex;
+                            $updateArray["q1"] = $q1 != 0 ? $q1 : null;
+                            $updateArray["q2"] = $q2 != 0 ? $q2 : null;
+                            $updateArray["qex1"] = $qex;
+                            $updateArray["sem1"] = $exTotal;
+                        } else {
+                            $q1 =  round($exStu->nota3 * $quater);
+                            $q2 =  round($exStu->nota4 * $quater);
+                            $qex = round($data->{"ex-$ss"}[0] * $ex);
+                            $exTotal = $q1 + $q2 + $qex;
+                            $updateArray["q3"] = $q1 != 0 ? $q1 : null;
+                            $updateArray["q4"] = $q2 != 0 ? $q2 : null;
+                            $updateArray["qex2"] = $qex;
+                            $updateArray["sem2"] = $exTotal;
+                        }
+                    }else{
+                        $updateArray["qex1"] = '';
+                        $updateArray["qex2"] = '';
+                        $studentData = DB::table($_table)
+                        ->where([
+                            ['ss', $ss],
+                            ['curso', $_subjectCode],
+                            ['year', $teacher->info('year')]
+                        ])->first();
+                        if ($data->trimester[0] === 'Trimestre-1' || $data->trimester[0] === 'Trimestre-2') {
+                            $note1 = 'nota1';
+                            $note2 = 'nota2';
+                            $sem = 'sem1';
+                        } else {
+                            $note1 = 'nota3';
+                            $note2 = 'nota4';
+                            $sem = 'sem2';
+                        }
+                        // Semester 1 or Semester 2 Notes
+                        $div = 0;
+                        $div += $studentData->{$note1} !== '' ? 1 : 0;
+                        $div += $studentData->{$note2} !== '' ? 1 : 0;
+                        $semNote = $div !== 0 ? round((+$studentData->{$note1} + +$studentData->{$note2}) / $div) : '';
+                        $updateArray[$sem] = round($semNote);
+                        // var_dump($updateArray);
+                    
+                    }
+                }
             }
             DB::table('padres')
                 ->where([
