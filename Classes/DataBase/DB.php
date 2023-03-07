@@ -73,7 +73,7 @@ class DB extends DataBase
   public static function table($table, $cosey = true)
   {
     self::$instance = new self;
-    self::$table = trim($table);
+    self::$table = '`'.trim($table).'`';
     self::$cosey = $cosey;
 
     return self::$instance;
