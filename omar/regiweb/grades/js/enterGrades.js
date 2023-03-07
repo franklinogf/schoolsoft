@@ -134,14 +134,14 @@ $(function () {
         return value
     }
     function NumberToLetterCBTM($value) {
-        if ($value >= 80 && $value <= 100) {
+        if ($value >= 90 && $value <= 100) {
             return 'E';
-        } else if ($value >= 60 && $value <= 79) {
+        } else if ($value >= 80 && $value <= 89) {
             return 'S';
         } else {
             return 'N';
         }
-    }
+    }    
     function isString(value) {
         return (/[a-zA-Z]/).test(value)
     }
