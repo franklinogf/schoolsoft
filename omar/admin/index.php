@@ -1,12 +1,13 @@
 <?php
 require_once '../app.php';
 
-use Classes\Controllers\School;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
+use Classes\DataBase\DB;
+use Classes\Controllers\School;
 
 Session::is_logged();
 $school = new School(Session::id());
@@ -19,6 +20,18 @@ $lang = new Lang([
     ["IP:", "IP:"],
     ["Hora:", "Time:"],
 ]);
+
+$user = $school->info("usuario");
+$date =  Util::date();
+$ip = Util::getIp();
+
+DB::table("entradas")->insert([
+    'id' => $school->info('id'),
+    'usuario'=>$user,
+    'fecha' =>$date,
+    'hora' =>  Util::time(),
+    'ip' => $ip,
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -26,8 +39,8 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation("Información");
-    Route::includeFile('/admin/includes/layouts/header.php');
-    ?>
+Route::includeFile('/admin/includes/layouts/header.php');
+?>
 </head>
 
 <body>
@@ -42,7 +55,7 @@ $lang = new Lang([
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Nombre:") ?></span>
                 </div>
-                <div class="col-6"><?= $school->info("usuario") ?></div>                
+                <div class="col-6"><?= $user ?></div>                
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Grupo:") ?></span>
                 </div>
@@ -54,7 +67,7 @@ $lang = new Lang([
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("IP:") ?></span>
                 </div>
-                <div class="col-6"><?= Server::get('REMOTE_ADDR') ?></div>
+                <div class="col-6"><?= $ip ?></div>
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Hora:") ?></span>
                 </div>
@@ -65,10 +78,10 @@ $lang = new Lang([
         </div>
     </div>
     <?php
-    $school->ufecha = Util::date();
-    $school->save();
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
+$school->ufecha = $date;
+$school->save();
+Route::includeFile('/includes/layouts/scripts.php', true);
+?>
 
 </body>
 

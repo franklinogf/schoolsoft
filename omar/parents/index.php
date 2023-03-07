@@ -6,6 +6,7 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
+use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 
 Session::is_logged();
@@ -20,7 +21,18 @@ $lang = new Lang([
     ["IP:", "IP:"],
     ["Hora:", "Time:"],
 ]);
+$date =  Util::date();
+$ip = Util::getIp();
 
+DB::table("entradas")->insert([
+    'id' => $parents->id,
+    'usuario'=> $parents->usuario,
+    'fecha' => $date,
+    'hora' =>  Util::time(),
+    'ip' => $ip,
+    'nombre' => $parents->madre,
+    'apellidos' => $parents->padre
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -28,8 +40,8 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation("Información");
-    Route::includeFile('/parents/includes/layouts/header.php');
-    ?>
+Route::includeFile('/parents/includes/layouts/header.php');
+?>
 </head>
 
 <body>
@@ -60,7 +72,7 @@ $lang = new Lang([
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Ip:") ?></span>
                 </div>
-                <div class="col-6"><?= Server::get('REMOTE_ADDR') ?></div>
+                <div class="col-6"><?= $ip ?></div>
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Hora:") ?></span>
                 </div>
@@ -71,10 +83,10 @@ $lang = new Lang([
         </div>
     </div>
     <?php
-    $parents->ufecha = Util::date();
-    $parents->save();
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
+$parents->ufecha = $date;
+$parents->save();
+Route::includeFile('/includes/layouts/scripts.php', true);
+?>
 
 </body>
 
