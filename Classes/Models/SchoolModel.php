@@ -13,15 +13,15 @@ class SchoolModel extends DB
 
   protected function getSchoolByPK($pk)
   {
-    $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";    
+    $query = "SELECT * FROM {$this->table} WHERE {$this->primary_key} = ?";
 
-    return $this->selectOne($query,[$pk]);
+    return $this->selectOne($query, [$pk]);
   }
 
   protected function getSchoolByUser($user = 'administrador')
   {
     $query = "SELECT * FROM {$this->table} WHERE usuario = ?";
-    return $this->selectOne($query,[$user]);
+    return $this->selectOne($query, [$user]);
   }
 
   protected function getSchool()
@@ -43,5 +43,13 @@ class SchoolModel extends DB
     $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
   }
 
-  
+  protected function getAllGrades($year,$with12)
+  {
+    if($with12){
+      $obj = DB::table("year")->select('DISTINCT grado')->where([['year', $year], ['activo', '']])->orderBy('grado')->get();
+    }else{
+      $obj = DB::table("year")->select('DISTINCT grado')->where([['year', $year], ['activo', '']])->whereRaw("AND grado not like '12%'")->orderBy('grado')->get();
+    }
+   return $obj;
+  }
 }

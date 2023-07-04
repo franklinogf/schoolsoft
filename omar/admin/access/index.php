@@ -16,6 +16,11 @@ $options = [
                 'desc' => ['es' => 'Registro de notas', 'en' => 'Registro de notas'],
                 'link' => 'registration/'
             ],
+            [
+                'name' => ["es" => 'Informes',   "en" => "Reports"],
+                'desc' => ['es' => 'Pantalla con todos los informes', 'en' => 'Screen with all the reports'],
+                'link' => 'reports/'
+            ],
         ]
     ],
    
@@ -57,7 +62,7 @@ $lang = new Lang([
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button) : ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= $button['target'] ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

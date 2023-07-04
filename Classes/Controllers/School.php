@@ -54,7 +54,7 @@ class School extends SchoolModel
    {
       // get self public class, no parents classes
       $propsArray[] = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
-      
+
       if (count($propsArray[0]['props']) > 0) {
          if (isset($this->props[$this->primary_key])) {
             $this->updateAdmin($propsArray[0]['props']);
@@ -64,5 +64,15 @@ class School extends SchoolModel
       } else {
          throw new \Exception('Debe de asignar valor a las propiedades en primer lugar');
       }
+   }
+
+   public function allGrades($with12 = true)
+   {
+      $grades = $this->getAllGrades($this->info('year'),$with12);
+      $returnData = [];
+      foreach ($grades as $grade) {
+         $returnData[] = $grade->grado;
+      }
+      return $returnData;
    }
 }

@@ -10,7 +10,6 @@ $(function () {
     const _subjectCode = $("#subject").val()
     const _allGrades = $(".table tbody tr")
     if ($("#save")[0]) $("input:disabled").prop('disabled', false)
-
     init()
 
     $(".grade").change(function (event) {
@@ -141,7 +140,7 @@ $(function () {
         } else {
             return 'N';
         }
-    }    
+    }
     function isString(value) {
         return (/[a-zA-Z]/).test(value)
     }
@@ -215,10 +214,15 @@ $(function () {
                         const tdpInput = $("#values").find(`#val${index + 1}`)
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
-                            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades')) {
+                            if (differentSchool(__SCHOOL_ACRONYM, 'REGIWEB_enterGrades')) {
                                 averageTdp += tdpInput.val() ? +tdpInput.val() : 0
                                 if (_report === 'Notas') {
-                                    tdpTotal = 60
+                                    if (_subjectCode.includes('HW')){
+                                        tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                                    }else{
+
+                                        tdpTotal = 60
+                                    }
                                 } else {
                                     tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
                                 }
@@ -235,12 +239,18 @@ $(function () {
 
             // tpa
             let averageTotal = 0
-            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades') && (_report === 'Notas')) {
+            if (differentSchool(__SCHOOL_ACRONYM, 'REGIWEB_enterGrades') && (_report === 'Notas')) {
                 tpaTotal += tpaTotal ? +parentTr.find("._nota2Grade").val() : 0;
                 averageTdp += tpaTotal ? +parentTr.find("._nota2Value").val() : 0;
                 averageTotal = tpaTotal ? ((tpaTotal / averageTdp) * 100) * .6 : 0
-                totalAverage.val(typeof averageTotal === 'number' && !isNaN(averageTotal) && averageTotal !== null && averageTotal !== 0 ? Math.round(averageTotal) : '')
-                tpaTotal = averageTotal
+                if (_subjectCode.includes('HW')) {
+                    const hwTotal = (tpaTotal / tdpTotal) * 100
+                    totalAverage.val(typeof hwTotal === 'number' && !isNaN(hwTotal) && hwTotal !== null && hwTotal !== 0 ? Math.round(hwTotal) : '')
+                } else {
+                    tpaTotal = averageTotal
+                    totalAverage.val(typeof averageTotal === 'number' && !isNaN(averageTotal) && averageTotal !== null && averageTotal !== 0 ? Math.round(averageTotal) : '')
+
+                }
             }
 
 
@@ -259,7 +269,8 @@ $(function () {
 
             //     tpa.val(tpaTotal !== '' ? tpaTotal : '')
             // }
-            tpa.val(tpaTotal !== '' && tpaTotal !== 0 && tpaTotal !== null ? Math.round(tpaTotal) : '')
+            tpaTotal = tpaTotal !== '' && tpaTotal !== 0 && tpaTotal !== null ?  Math.round(tpaTotal) : '' 
+            tpa.val(tpaTotal)
 
 
             // tdp
@@ -271,7 +282,7 @@ $(function () {
             // Grade total 
 
             let gradeTotal = averageTotal
-            if (differentSchool(__SCHOOL_ACRONYM,'REGIWEB_enterGrades')) {
+            if (differentSchool(__SCHOOL_ACRONYM, 'REGIWEB_enterGrades')) {
                 // Only school cbtm
                 if (_report === 'Notas') {
                     gradeTotal = (tpaTotal / tdpTotal) * 100
@@ -289,7 +300,7 @@ $(function () {
                     gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100
                 }
             }
-            console.log('gradeTotal', gradeTotal)
+            console.log('gradeTotal:', `${tpaTotal} / ${tdpTotal} = ${gradeTotal}`)
             if (__SCHOOL_ACRONYM === 'cbtm' && _peso == 1 && (_report === 'Notas')) {
                 totalGrade.val(typeof gradeTotal === 'number' && !isNaN(gradeTotal) && gradeTotal !== null && gradeTotal !== 0 ? NumberToLetterCBTM(Math.round(gradeTotal)) : '')
             } else {

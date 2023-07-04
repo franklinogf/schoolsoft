@@ -31,6 +31,9 @@ DB::table("entradas")->insert([
     'fecha' =>$date,
     'hora' =>  Util::time(),
     'ip' => $ip,
+    'nombre'=>'',
+    'apellidos'=>'',
+    'control'=>'',
 ]);
 ?>
 <!DOCTYPE html>

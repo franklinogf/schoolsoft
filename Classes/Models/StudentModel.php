@@ -42,17 +42,21 @@ class StudentModel extends School
     $obj = parent::table($table)->where([
       ['year', $year],
       ['id', $id]
-    ])->get();
+    ])->orderBy('grado DESC')->get();
     return $obj;
   }
 
-  protected function getAllStudents($year)
+  protected function getAllStudents($year, $includeUnenrolled)
   {
     $year = $year !== null ? $year :  $this->info('year');
-    $obj = parent::table($this->table)->where([
-      ['year', $year],
-      ['fecha_baja', '0000-00-00']
-    ])->orderBy('apellidos')->get();
+
+    if (!$includeUnenrolled) {
+      $data = [['year', $year], ['fecha_baja', '0000-00-00']];
+    } else {
+      $data = ['year', $year];
+    }
+
+    $obj = parent::table($this->table)->where($data)->orderBy('apellidos')->get();
     return $obj;
   }
 

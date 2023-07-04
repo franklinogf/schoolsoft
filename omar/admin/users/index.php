@@ -19,11 +19,11 @@ $options = [
             [
                 'name' => ["es" => 'Entrega de documentos', "en" => "Documents delivery"],
                 'desc' => ['es' => 'Documentación que se pide y entregan a la oficina.', 'en' => 'Documents to be handle to the office.'],
-                'link' => 'documents/'
+                'link' => 'documentsDelivery/'
             ],
             [
                 'name' => ["es" => 'Re-matrícula', "en" => "Re-enrollment"],
-                'desc' => ['es' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A', 'en' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A'],
+                'desc' => ['es' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A', 'en' => 'Screen to pass the students of a grade to the next grade. e.i. 01-A to 02-A'],
                 'link' => 'reenrollment/'
             ],
             [
@@ -47,14 +47,14 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Memos y deméritos', "en" => "Memos y deméritos"],
-                'desc' => ['es' => 'Pantalla para entrar los memos y deméritos a los estudiantes.', 'en' => 'Pantalla para entrar los memos y deméritos a los estudiantes.'],
-                'link' => '#'
+                'name' => ["es" => 'Memos y deméritos', "en" => "Memos and demerits"],
+                'desc' => ['es' => 'Pantalla para entrar los memos y deméritos a los estudiantes.', 'en' => 'Screen to enter the memos and demerit to the students.'],
+                'link' => 'memos/'
             ],
             [
-                'name' => ["es" => 'Pantalla de bajas', "en" => "Pantalla de bajas"],
-                'desc' => ['es' => 'Pantalla para dar de bajas a los estudiantes.', 'en' => 'Pantalla para dar de bajas a los estudiantes.'],
-                'link' => '#'
+                'name' => ["es" => 'Pantalla de bajas', "en" => "Unenrollment"],
+                'desc' => ['es' => 'Pantalla para dar de bajas a los estudiantes.', 'en' => 'Screen to unenroll students.'],
+                'link' => 'unenrollment/'
             ],
             [
                 'name' => ["es" => 'Enfermeria', "en" => "Enfermeria"],
@@ -67,9 +67,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Documentos', "en" => "Documentos"],
-                'desc' => ['es' => 'Pantalla para guardar los archivos de los estudiantes.', 'en' => 'Pantalla para guardar los archivos de los estudiantes.'],
-                'link' => '#'
+                'name' => ["es" => 'Documentos', "en" => "Documents"],
+                'desc' => ['es' => 'Pantalla para guardar los archivos de los estudiantes.', 'en' => 'Screen to save the files for the students.'],
+                'link' => 'documents/'
             ],
             [
                 'name' => ["es" => 'Impresiones', "en" => "Impresiones"],
@@ -78,8 +78,8 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Cambiar grado', "en" => "Cambiar grado"],
-                'desc' => ['es' => 'Pantalla para cambiar el grado', 'en' => 'Pantalla para cambiar el grado'],
-                'link' => '#'
+                'desc' => ['es' => 'Pantalla para cambiar el grado', 'en' => 'Screen to change grade'],
+                'link' => 'changeGrade/'
             ],
             [
                 'name' => ["es" => 'Cambiar cuenta', "en" => "Cambiar cuenta"],
@@ -92,9 +92,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Enviar usuarios', "en" => "Enviar usuarios"],
-                'desc' => ['es' => 'Pantalla para enviar los usuarios a los padres.', 'en' => 'Pantalla para enviar los usuarios a los padres.'],
-                'link' => '#'
+                'name' => ["es" => 'Enviar usuarios', "en" => "Send users"],
+                'desc' => ['es' => 'Pantalla para enviar los usuarios a los padres.', 'en' => 'Screen to send users to parents.'],
+                'link' => 'email/sendUsers.php'
             ],
             [
                 'name' => ["es" => 'Buscar correo electrónico', "en" => "Buscar correo electrónico"],
@@ -102,8 +102,8 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment block"],
-                'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Acceso o bloqueo de las re-matricula a los padres.'],
+                'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment lock"],
+                'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Access or blockage of re-enrollment to parents.'],
                 'link' => '#'
             ],
         ]
@@ -112,9 +112,9 @@ $options = [
         'title' => ["es" => 'Entrada de codigos', "en" => 'Entrada de codigos'],
         'buttons' => [
             [
-                'name' => ["es" => 'Código de bajas',   "en" => "Código de bajas"],
-                'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Pantalla para entrar los código de bajas.'],
-                'link' => '#'
+                'name' => ["es" => 'Códigos de bajas',   "en" => "Unenrollment codes"],
+                'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
+                'link' => 'unenrollment/codes.php'
             ],
             [
                 'name' => ["es" => 'Socio económico',   "en" => "Socio económico"],
@@ -127,9 +127,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Códigos documentos',   "en" => "Códigos documentos"],
-                'desc' => ['es' => 'Definir la entrada de los documentos para entregar.', 'en' => 'Definir la entrada de los documentos para entregar.'],
-                'link' => '#'
+                'name' => ["es" => 'Códigos documentos',   "en" => "Documents codes"],
+                'desc' => ['es' => 'Definir la entrada de los documentos para entregar.', 'en' => 'Define the entry of documents to deliver.'],
+                'link' => 'documentsDelivery/codes.php'
             ],
             [
                 'name' => ["es" => 'Departamento',   "en" => "Departamento"],
@@ -146,6 +146,11 @@ $options = [
                 'desc' => ['es' => 'Configuración del email para envio de mensajes.', 'en' => 'Configuración del email para envio de mensajes.'],
                 'link' => '#'
             ],
+            [
+                'name' => ["es" => 'Códigos de memos',   "en" => "Memos codes"],
+                'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
+                'link' => 'memos/codes.php'
+            ]
         ]
     ],
 

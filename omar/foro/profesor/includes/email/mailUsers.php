@@ -74,28 +74,28 @@ foreach ($students as $student) {
    </html>
    " :
       "
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>{$messageTitle}</title>
-</head>
-<body>
-<center><h1>{$schoolName}</h1></center>
-<center><h2>{$messageTitle}</h2></center>
-<br>
-<br>
-<p>This is the student information to acces the forum: <b>{$studentName}</b></p>
-<ul style='list-style: none;'>
-	<li>Username: <b>{$studentUser}</b></li>
-   <li style='margin-top: 10px;'>Password: <b>{$studentPassword}</b></li><br>   
-   <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Forum</a></li>
-   <br><br>
-</ul>
-<hr>
-</body>
-</html>
+   <!DOCTYPE html>
+   <html lang='en'>
+   <head>
+   <meta charset='UTF-8'>
+   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+   <title>{$messageTitle}</title>
+   </head>
+   <body>
+   <center><h1>{$schoolName}</h1></center>
+   <center><h2>{$messageTitle}</h2></center>
+   <br>
+   <br>
+   <p>This is the student information to acces the forum: <b>{$studentName}</b></p>
+   <ul style='list-style: none;'>
+      <li>Username: <b>{$studentUser}</b></li>
+      <li style='margin-top: 10px;'>Password: <b>{$studentPassword}</b></li><br>   
+      <li style='margin-top: 10px;'><b>Link: </b><a href='{$link}' style='color: #FFFFFF; background-color: #FF3A00'>Forum</a></li>
+      <br><br>
+   </ul>
+   <hr>
+   </body>
+   </html>
 ";
 
    if ($count > 0) {

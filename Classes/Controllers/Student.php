@@ -20,9 +20,9 @@ class Student extends StudentModel
     }
   }
 
-  public function All($year = null)
+  public function All($year = null, $includeUnenrolled = false)
   {
-    return $this->getAllStudents($year);
+    return $this->getAllStudents($year, $includeUnenrolled);
   }
 
   public function findPK($pk)

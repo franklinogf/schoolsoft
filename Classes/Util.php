@@ -5,27 +5,60 @@ namespace Classes;
 class Util
 {
     public static $attendanceCodes = [
-       "1" => ['type' => 'A', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
-       "2" => ['type' => 'A', 'description' => ['es' => 'Determinación del hogar (viaje)', 'en' => 'Determination of the home (travel)']],
-       "3" => ['type' => 'A', 'description' => ['es' => 'Actividad con padres (open house)', 'en' => 'Activity with parents (open house)']],
-       "4" => ['type' => 'A', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
-       "5" => ['type' => 'A', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
-       "6" => ['type' => 'A', 'description' => ['es' => 'Actividad educativa del colegio', 'en' => 'School activity']],
-       "7" => ['type' => 'A', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
-       "8" => ['type' => 'T', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
-       "9" => ['type' => 'T', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
-       "10" => ['type' => 'T', 'description' => ['es' => 'Problema en la transportación', 'en' => 'Problem with transportation']],
-       "11" => ['type' => 'T', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
-       "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
+        "1" => ['type' => 'A', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
+        "2" => ['type' => 'A', 'description' => ['es' => 'Determinación del hogar (viaje)', 'en' => 'Determination of the home (travel)']],
+        "3" => ['type' => 'A', 'description' => ['es' => 'Actividad con padres (open house)', 'en' => 'Activity with parents (open house)']],
+        "4" => ['type' => 'A', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
+        "5" => ['type' => 'A', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
+        "6" => ['type' => 'A', 'description' => ['es' => 'Actividad educativa del colegio', 'en' => 'School activity']],
+        "7" => ['type' => 'A', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
+        "8" => ['type' => 'T', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
+        "9" => ['type' => 'T', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
+        "10" => ['type' => 'T', 'description' => ['es' => 'Problema en la transportación', 'en' => 'Problem with transportation']],
+        "11" => ['type' => 'T', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
+        "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
     ];
 
+    public static function getAge($date)
+    {
+        list($year, $month, $day) = explode("-", $date);
+        $yearDifference  = date("Y") - $year;
+        $monthDifference = date("m") - $month;
+        $dayDifference   = date("d") - $day;
+        if ($dayDifference < 0 && $monthDifference <= 0 || date("m") < $month) {
+            $yearDifference--;
+        }
+        return $yearDifference;
+    }
+    public static function ssLast4Digits($ss)
+    {
+        return substr($ss, -4);
+    }
+    public static function gender($gender, $fullGender = false)
+    {
+        $thisGender = '';
+        if ($gender === '2' || $gender === 'M') {
+            $thisGender = $fullGender ? (__LANG === 'es' ? 'Masculino' : 'Male')  : 'M';
+        } else if ($gender === '1' || $gender === 'F') {
+            $thisGender = $fullGender ? (__LANG === 'es' ? 'Femenino' : 'Female')  : 'F';
+        }
+        return $thisGender;
+    }
     public static function differentSchool($arrayOfSchools)
     {
         $array = explode(',', $arrayOfSchools);
         return in_array(__SCHOOL_ACRONYM, $array);
     }
 
-    public static function getNextGrade($oldGrade)
+    public static function getNextYear($year)
+    {
+        list($year1, $year2) = explode('-', $year);
+        $year1++;
+        $year2++;
+        return "$year1-$year2";
+    }
+
+    public static function getNextGrade($oldGrade, $alone = false)
     {
         list($g1, $g2) = explode('-', $oldGrade);
 
@@ -48,6 +81,7 @@ class Util
                 $grade = $grade . '-' . $g2;
             }
         }
+        if ($alone) $grade = substr($grade, 0, 2);
         return $grade;
     }
 

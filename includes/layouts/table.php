@@ -1,7 +1,4 @@
 <?php
-
-use Classes\Lang;
-
 global $__tableDataCheckbox; # This variable is used for habiltate the checkboxes in the table @boolean variable
 global $__tableData;
 global $__tableDataInfo;
@@ -21,10 +18,11 @@ $defaultTableDataInfo = [
 ];
 $__dataPk = $__dataPk ?: 'mt';
 $__tableDataInfo = $__tableDataInfo ?: $defaultTableDataInfo;
-$__tableDataCheckBoxName = $__tableDataCheckboxName ?: '';
+$__tableDataCheckboxName = $__tableDataCheckboxName ?: '';
 $__tableDataName = $__tableDataName ?: '';
 $__tableDataCheckbox = $__tableDataCheckbox ?: false;
 $__tableDataButton = $__tableDataButton !== null ? $__tableDataButton : true;
+
 ?>
 <!-- default table -->
 
@@ -52,7 +50,7 @@ $__tableDataButton = $__tableDataButton !== null ? $__tableDataButton : true;
                         <?php if ($__tableDataCheckbox) : ?>
                             <td>
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input check" type="checkbox" id="<?= $data->{$__dataPk} ?>" <?= $__tableDataCheckBoxName !== '' ? "name='$__tableDataCheckBoxName'" : '' ?> value="<?= $data->{$__dataPk} ?>">
+                                    <input class="custom-control-input check" type="checkbox" id="<?= $data->{$__dataPk} ?>" <?= $__tableDataCheckboxName !== '' ? "name='{$__tableDataCheckboxName}[]'" : '' ?> value="<?= $data->{$__dataPk} ?>">
                                     <label class="custom-control-label" for="<?= $data->{$__dataPk} ?>"></label>
                                 </div>
                             </td>

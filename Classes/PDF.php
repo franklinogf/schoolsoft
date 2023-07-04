@@ -12,11 +12,14 @@ class PDF extends FPDF
     public $header = true;
     public $headerFirstPage = false;
     public $logo = true;
+    private $leftMargin = 10;
 
 
-    function Header()
+    public function Header()
     {
+
         if ($this->header) {
+            $this->leftMargin = $this->lMargin;
             $this->SetXY(10, 10);
             $this->SetMargins(10, 10);
             $this->SetFont('Arial', 'B', 15);
@@ -45,9 +48,11 @@ class PDF extends FPDF
                 $this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
                 $this->Ln(10);
                 $this->SetFontSize(10);
+                $this->SetLeftMargin($this->leftMargin);
             }
         }
     }
+
 
     public function useHeader($bool = true)
     {
@@ -228,4 +233,15 @@ class PDF extends FPDF
         $this->SetTextColor(0);
     }
     /* -------------------------------- End HTML -------------------------------- */
+
+    /* --------------------------------- Dashes --------------------------------- */
+    function SetDash($black = null, $white = null)
+    {
+        if ($black !== null)
+            $s = sprintf('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
+        else
+            $s = '[] 0 d';
+        $this->_out($s);
+    }
+    /* ------------------------------- End Dashes ------------------------------- */
 }

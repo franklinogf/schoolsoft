@@ -36,9 +36,8 @@ class DB extends DataBase
   // table that has autoincrement
   public static function getNextAutoIncrementIdFromTable($table)
   {
-    $nextId = self::table('information_schema.TABLES')->select('AUTO_INCREMENT')->whereRaw("TABLE_SCHEMA = '" . __USERNAME . "'
-    AND TABLE_NAME = '$table'")->first();
-    return $nextId->AUTO_INCREMENT;
+    $nextId = self::table('')->selectOne("SHOW TABLE STATUS LIKE '$table'");
+    return $nextId->Auto_increment;
   }
   //table that doesn't have autoincrement but has an id
   public static function getNextIdFromTable($table, $col = 'id')
@@ -51,15 +50,15 @@ class DB extends DataBase
   public function create($columns, $others = '')
   {
     $tableName = self::$table;
-    $query = "CREATE TABLE IF NOT EXISTS `{$tableName}` ({$columns}) {$others};";
-    $this->query($query);
+    $query = "CREATE TABLE IF NOT EXISTS {$tableName} ({$columns}) {$others};";
+    return $this->query($query);
   }
 
   public function alter($query)
   {
     $tableName = self::$table;
-    $q = "ALTER TABLE `{$tableName}` {$query}";
-    $this->query($q);
+    $q = "ALTER TABLE {$tableName} {$query}";
+    return $this->query($q);
   }
 
   /* -------------------------------- Raw Query ------------------------------- */
@@ -73,7 +72,7 @@ class DB extends DataBase
   public static function table($table, $cosey = true)
   {
     self::$instance = new self;
-    self::$table = '`'.trim($table).'`';
+    self::$table = '`' . trim($table) . '`';
     self::$cosey = $cosey;
 
     return self::$instance;

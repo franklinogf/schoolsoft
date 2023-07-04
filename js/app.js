@@ -108,8 +108,12 @@ function formatDate(value) {
 
 }
 function getDate() {
-  const todayDate = new Date().toISOString().slice(0, 10)
-  return todayDate
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  return yyyy + '-' + mm + '-' + dd;
 }
 
 function formatTime(value) {
@@ -154,10 +158,10 @@ function getFileName(path = '') {
   return fileName;
 }
 /* ---------------------------- Different schools --------------------------- */
-function differentSchool(schoolAcronym,file) {
-  if(file === 'REGIWEB_enterGrades'){
+function differentSchool(schoolAcronym, file) {
+  if (file === 'REGIWEB_enterGrades') {
     arrayOfSchools = ['cbtm', 'omar']
-  }else{
+  } else {
     return false
   }
   return arrayOfSchools.includes(schoolAcronym)

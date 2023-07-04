@@ -2,50 +2,54 @@
 
 require_once '../../../../app.php';
 
+use Classes\File;
+use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Student;
-use Classes\Util;
 
 Session::is_logged();
 Server::is_post();
 
+$filePath = "admin/users/documents/files/";
 
-if (isset($_POST['saveDocument'])) {
-    $documents = DB::table('docu_entregados')->get();
-    echo "STUDENT SS";
-    echo $studentSS = $_POST['studentSS'];
-    $student = new Student($studentSS);
-    $year = $student->info('year');
-    foreach ($documents as $index => $document) {
-        if (DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->first()) {
-            DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->update([
-                'year' => $year,
-                'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : null,
-                'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : null,
-                'fecha' => $_POST["date$index"],
-                'fesp' => $_POST["expirationDate$index"],
-            ]);
-                Util::toJson([
-                    'year' => $year,
-                    'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : null,
-                    'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : null,
-                    'fecha' => $_POST["date$index"],
-                    'fesp' => $_POST["expirationDate$index"],
-                ]);
-        } else {
-            DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->insert([
-                'id' => $student->id,
-                'ss' => $studentSS,
-                'codigo' => $document->codigo,
-                'desc1' => $document->desc1,
-                'year' => $year,
-                'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : null,
-                'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : null,
-                'fecha' => $_POST["date$index"],
-                'fesp' => $_POST["expirationDate$index"],
-            ]);
-        }
-    }
+if ($_POST['option'] === 'save') {
+   $title = $_POST['title'];
+   $date = $_POST['date'];
+   $file = new File();
+   if ($file->amount > 0) {
+      $nextId = DB::getNextAutoIncrementIdFromTable('estudiantes_docs');
+      $newName = "$ss($nextId).jpg";
+      $file::upload($file->files, $filePath, $newName);
+      DB::table("estudiantes_docs")->insert([
+         'ss_estudiante' => $ss,
+         'titulo' => $title,
+         'fecha' => $date,
+         'nombre_archivo' => $newName,
+      ]);
+   }
+   $ss = $_POST['addDocumentStudentSs'];
+
+   Route::redirect("/users/documents/index.php?student=$ss");
+} else if ($_POST['option'] === 'edit') {
+   $title = $_POST['title'];
+   $date = $_POST['date'];
+   $file = new File();
+   $id = $_POST['addDocumentId'];
+   if ($file->amount > 0) {
+      $document = DB::table("estudiantes_docs")->select('nombre_archivo')->where(['id', $id])->first();
+      $file::upload($file->files, $filePath, $document->nombre_archivo);
+   }
+   DB::table("estudiantes_docs")->where(['id', $id])->update([
+      'titulo' => $title,
+      'fecha' => $date,
+   ]);
+   $ss = $_POST['addDocumentStudentSs'];
+
+   Route::redirect("/users/documents/index.php?student=$ss");
+} else if ($_POST['option'] === 'delete') {
+   $id = $_POST['addDocumentId'];
+   $document = DB::table("estudiantes_docs")->select('nombre_archivo')->where(['id', $id])->first();
+   File::delete($filePath, $document->nombre_archivo);
+   DB::table("estudiantes_docs")->where(['id', $id])->delete();
 }
