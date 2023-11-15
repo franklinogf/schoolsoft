@@ -304,8 +304,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Lista de edad y seguro social',   "en" => "Lista de edad y seguro social"],
-                'link' => '#'
+                'name' => ["es" => 'Lista de edad y seguro social',   "en" => "Age and social security list"],
+                'link' => 'pdf/ageSsClassroom.php',
+                'target' => 'ageSsClassroom'
             ],
             [
                 'name' => ["es" => 'Distribución de notas',   "en" => "Distribución de notas"],
