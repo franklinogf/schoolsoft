@@ -9,7 +9,7 @@ Session::is_logged();
 
 $options = [
     [
-        'title' => ["es" => 'Informess', "en" => 'Reports'],
+        'title' => ["es" => 'Informes', "en" => 'Reports'],
         'buttons' => [ 
             [
                 'name' => ["es" => 'Lista de estudiantes',   "en" => "Students list"],
