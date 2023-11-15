@@ -236,22 +236,6 @@ $options = [
                 'target' => 'listOFauthorizedPersons'
             ],
             [
-                'name' => ["es" => 'Label mensualidad NO va',   "en" => "Label mensualidad NO va"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Hoja larga de matrícula NO va',   "en" => "Hoja larga de matrícula NO va"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Carta de correo NO va',   "en" => "Carta de correo NO va"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Lista de correos de firmas NO va',   "en" => "Lista de correos de firmas NO va"],
-                'link' => '#'
-            ],
-            [
                 'name' => ["es" => 'Direcciones y telefonos por grado',   "en" => "Addresses and telephones by grade"],
                 'link' => 'pdf/listAddressphone.php',
                 'target' => 'listAddressphone'
@@ -276,24 +260,28 @@ $options = [
                 'target' => 'listInformation'
             ],
             [
-                'name' => ["es" => 'Plan semanal 3',   "en" => "Plan semanal 3"],
+                'name' => ["es" => 'Plan semanal 3 pasar a notas',   "en" => "Plan semanal 3"],
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Informe de raza',   "en" => "Informe de raza"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de raza',   "en" => "Race List"],
+                'link' => 'pdf/listInformeRaza.php',
+                'target' => 'listInformeRaza'
             ],
             [
-                'name' => ["es" => 'Informe de religión',   "en" => "Informe de religión"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de religión',   "en" => "Religion Report"],
+                'link' => 'pdf/listInformeReligion.php',
+                'target' => 'listInformeReligion'
             ],
             [
-                'name' => ["es" => 'Informe de raza y religión',   "en" => "Informe de raza y religión"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de raza y religión',   "en" => "Race and Religion Report"],
+                'link' => 'pdf/listRaceeReligion.php',
+                'target' => 'listRaceReligion'
             ],
             [
-                'name' => ["es" => 'Resumen de raza y religión',   "en" => "Resumen de raza y religión"],
-                'link' => '#'
+                'name' => ["es" => 'Resumen de raza y religión',   "en" => "Summary of race and religion"],
+                'link' => 'pdf/ResumRaceeReligion.php',
+                'target' => 'ResumRaceeReligion'
             ],
             [
                 'name' => ["es" => 'Documentos no entregados',   "en" => "Documentos no entregados"],
@@ -309,27 +297,28 @@ $options = [
                 'target' => 'ageSsClassroom'
             ],
             [
-                'name' => ["es" => 'Distribución de notas',   "en" => "Distribución de notas"],
+                'name' => ["es" => 'Distribución de notas pasar a notas',   "en" => "Distribución de notas"],
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Informe de procedencia',   "en" => "Informe de procedencia"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de procedencia',   "en" => "Provenance report"],
+                'link' => 'pdf/infProcedencia.php',
+                'target' => 'infProcedencia'
             ],
             [
                 'name' => ["es" => 'Movimiento de matrícula',   "en" => "Movimiento de matrícula"],
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Informe acumulativo de notas',   "en" => "Informe acumulativo de notas"],
+                'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Informe acumulativo de notas"],
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Progreso de educación fisica',   "en" => "Progreso de educación fisica"],
+                'name' => ["es" => 'Progreso de educación fisica pasar a notas',   "en" => "Progreso de educación fisica"],
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Evaluación de educación fisica',   "en" => "Evaluación de educación fisica"],
+                'name' => ["es" => 'Evaluación de educación fisica pasar a notas',   "en" => "Evaluación de educación fisica"],
                 'link' => '#'
             ],
             [
