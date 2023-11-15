@@ -10,7 +10,7 @@ Session::is_logged();
 $options = [
     [
         'title' => ["es" => 'Opciones', "en" => 'Options'],
-        'buttons' => [ 
+        'buttons' => [
             [
                 'name' => ["es" => 'Registro',   "en" => "Registro"],
                 'desc' => ['es' => 'Registro de notas', 'en' => 'Registro de notas'],
@@ -21,9 +21,193 @@ $options = [
                 'desc' => ['es' => 'Pantalla con todos los informes', 'en' => 'Screen with all the reports'],
                 'link' => 'reports/'
             ],
+
+            [
+                'name' => ["es" => 'Fechas',   "en" => "Fechas"],
+                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los trimestres.', 'en' => 'Entrada de fechas para los inicios y cierres de los trimestres.'],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Activaciones',   "en" => "Activaciones"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Re-matrícula',   "en" => "Re-matrícula"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+
+
         ]
     ],
-   
+    [
+        'title' => ["es" => 'Notas', "en" => 'Grades'],
+        'buttons' => [
+            [
+                'name' => ["es" => 'Opciones de notas',   "en" => "Grade options"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Informes de notas',   "en" => "Grade reports"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Acumulativa',   "en" => "Acumulativa"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Catálogo',   "en" => "Catálogo"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Crear los grados',   "en" => "Crear los grados"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Cursos por grados',   "en" => "Cursos por grados"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Programas especiales',   "en" => "Programas especiales"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Cambiar curso',   "en" => "Cambiar curso"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Ordenar cursos',   "en" => "Ordenar cursos"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Eliminar',   "en" => "Eliminar"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Asistencia',   "en" => "Asistencia"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Entrar asistencia',   "en" => "Entrar asistencia"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Clases diaras',   "en" => "Clases diaras"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Plan de trabajo',   "en" => "Plan de trabajo"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Mensajes de notas',   "en" => "Mensajes de notas"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Deporte',   "en" => "Deporte"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Clases de verano',   "en" => "Clases de verano"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+
+        ]
+    ],
+    [
+        'title' => ["es" => 'Información', "en" => 'Information'],
+        'buttons' => [
+            [
+                'name' => ["es" => 'Año escolar',   "en" => "Año escolar"],
+                'desc' => ['es' => 'Aqui puede seleccionar el año donde van a trabajar.', 'en' => 'Aqui puede seleccionar el año donde van a trabajar.'],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Mensaje inicial',   "en" => "Mensaje inicial"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Mensaje grupal',   "en" => "Mensaje grupal"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Mensaje inactivar',   "en" => "Mensaje inactivar"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Encuestas',   "en" => "Encuestas"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Requisitos',   "en" => "Requisitos"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+        ]
+    ],
+    [
+        'title' => ["es" => 'Datos', "en" => 'Data'],
+        'buttons' => [
+            [
+                'name' => ["es" => 'Exportar',   "en" => "Exportar"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Importar',   "en" => "Importar"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Documentos',   "en" => "Documentos"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Clave padres',   "en" => "Clave padres"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Backup',   "en" => "Backup"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Pasar data',   "en" => "Pasar data"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Exportar data',   "en" => "Exportar data"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+        ]
+    ],
+
 
 
 ];

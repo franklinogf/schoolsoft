@@ -73,7 +73,8 @@ class HomeworkModel extends School
    {
       $whereArray = [
          ["{$this->table}.id2", $id],
-         ["{$this->table}.year", $this->info('year')]
+         ["{$this->table}.year", $this->info('year')],
+         ["cursos.id",'!=','']
       ];
       if ($class) {
          array_push($whereArray, ["{$this->table}.curso", $class]);
@@ -94,7 +95,6 @@ class HomeworkModel extends School
       }
 
       $this->getFiles($obj);
-
       return $obj;
    }
    protected function getHomeworksByClassForStudents($class, $date = null)

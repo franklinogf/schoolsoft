@@ -1,5 +1,6 @@
 $(document).ready(function () {
 	const $modal = $("#myModal");
+	const $progressModal = $("#progressModal");
 	let homeworkId = null;
 	let doneHomeworkId = null;
 
@@ -29,7 +30,7 @@ $(document).ready(function () {
 						// For uploads
 						if (e.lengthComputable) {
 							$("#progressModal").modal("show");
-							let progress =Math.round((e.loaded / e.total) * 100)
+							let progress = Math.round((e.loaded / e.total) * 100)
 							$("#progressModal .progress-bar")
 								.prop("aria-valuenow", progress)
 								.css("width", progress + "%")
@@ -37,7 +38,7 @@ $(document).ready(function () {
 						}
 					};
 					return xhr;
-				},				
+				},
 				success: function (res) {
 					console.log("response:", res);
 					$status = $(`.homework.${homeworkId}`).find(".fa-circle");
@@ -59,25 +60,34 @@ $(document).ready(function () {
 				cache: false,
 				processData: false,
 				xhr: function () {
-					var xhr = $.ajaxSettings.xhr();
-					xhr.upload.onprogress = function (e) {
+					var xhr = $.ajaxSettings.xhr();		
+					xhr.upload.onprogress = (function (e) {
 						// For uploads
 						if (e.lengthComputable) {
-							$("#progressModal").modal("show");
-							let progress =Math.round((e.loaded / e.total) * 100)
+							$("#progressModal").modal('show');
+							let progress = Math.round((e.loaded / e.total) * 100)
 							$("#progressModal .progress-bar")
-								.prop("aria-valuenow", progress)
-								.css("width", progress + "%")
-								.text(progress + "%");
+							.prop("aria-valuenow", progress)
+							.css("width", progress + "%")
+							.text(progress + "%");
 						}
-					};
+					});
+					
 					return xhr;
+
+
 				},
-				success: function (res) {
-					$("#progressModal").modal("hide");
-					$modal.modal("hide");
+				complete: function (res) {
+					var MyInterval = setInterval(function(){
+						console.log("progress now:", $("#progressModal .progress-bar").prop('aria-valuenow'))
+						if($("#progressModal .progress-bar").prop('aria-valuenow') == 100){							
+							clearInterval(MyInterval);
+							location.reload()
+						}
+					 },500)
+					
 				}
-				
+
 			});
 		}
 	});

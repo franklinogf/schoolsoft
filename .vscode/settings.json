@@ -12,5 +12,7 @@
       "blade": {
          "parser": "xml"
       }
-   }
+   },
+   "php.version": "5.5",
+   "intelephense.environment.phpVersion": "5.5"
 }

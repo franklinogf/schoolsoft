@@ -37,6 +37,7 @@ $lang = new Lang([
 
 $teacher = new Teacher(Session::id());
 $homeworks = $teacher->homeworks();
+// Util::dump($homeworks);
 $classes = $teacher->classes();
 ?>
 <!DOCTYPE html>
@@ -140,7 +141,6 @@ $classes = $teacher->classes();
    <div class="container">
 
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-
          <?php foreach ($homeworks as $homework) : ?>
             <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
