@@ -251,8 +251,9 @@ $options = [
                 'target' => 'listWithoutScholarships'
             ],
             [
-                'name' => ["es" => 'Lista estudiantes KG-12',   "en" => "Lista estudiantes KG-12"],
-                'link' => '#'
+                'name' => ["es" => 'Lista estudiantes KG-12',   "en" => "KG-12 Student list"],
+                'link' => 'pdf/studentListK12.php',
+                'target' => 'studentListK12'
             ],
             [
                 'name' => ["es" => 'Lista de E/P/G/E/T',   "en" => "S/F/G/P/C list"],
