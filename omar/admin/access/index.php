@@ -136,9 +136,9 @@ $options = [
         'title' => ["es" => 'Información', "en" => 'Information'],
         'buttons' => [
             [
-                'name' => ["es" => 'Año escolar',   "en" => "Año escolar"],
-                'desc' => ['es' => 'Aqui puede seleccionar el año donde van a trabajar.', 'en' => 'Aqui puede seleccionar el año donde van a trabajar.'],
-                'link' => '#'
+                'name' => ["es" => 'Año escolar',   "en" => "School year"],
+                'desc' => ['es' => 'Aqui puede seleccionar el año donde van a trabajar.', 'en' => 'Here you can select the year where they are going to work.'],
+                'link' => 'schoolYear.php'
             ],
             [
                 'name' => ["es" => 'Mensaje inicial',   "en" => "Mensaje inicial"],
