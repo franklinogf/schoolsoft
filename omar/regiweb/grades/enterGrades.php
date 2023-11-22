@@ -47,7 +47,7 @@ $gradeInfo = DB::table('padres')->where([
 $optionLetter = $gradeInfo->letra === "ON";
 
 // only this school
-if (__REGIWEB_CBTM) {
+if (__ONLY_CBTM__) {
     $gradeInfo->nota_por = '1';
 }
 
@@ -130,7 +130,7 @@ if ($optionCppd) {
         ]
     ];
 } else {
-    if (__REGIWEB_CBTM) {
+    if (__ONLY_CBTM__) {
         $columns =  [
             'es' => ['Bono', 'Promedio', 'T-Diario', 'T-Libreta', 'P-Cor'],
             'en' => ['Bonus', 'Average', 'DW', 'HW', 'Quiz'],
@@ -652,7 +652,7 @@ $lang = new Lang([
             </div>
         <?php else : ?>
             <!-- only school cbtm -->
-            <?php if (!__REGIWEB_CBTM) : ?>
+            <?php if (!__ONLY_CBTM__) : ?>
                 <div class="card border-secondary mt-2">
                     <div class="card-body">
                         <div class="row row-cols-1">
@@ -701,7 +701,7 @@ $lang = new Lang([
                     <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
                     <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
                     <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
-                    <?php if (__REGIWEB_CBTM) : ?>
+                    <?php if (__ONLY_CBTM__) : ?>
                         <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
                     <?php endif ?>
 
@@ -759,7 +759,7 @@ $lang = new Lang([
                                                 $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
                                                 $pcor = $_student->{$_values['tdp']};
                                             } else {
-                                                if (__REGIWEB_CBTM) {
+                                                if (__ONLY_CBTM__) {
                                                     $tdia = $student->{$_values['tdia']} ? '10' : '';
                                                     $tlib = $student->{$_values['tlib']} ? '10' : '';
                                                     $pcor = $student->{$_values['pcor']} ? '20' : '';
@@ -774,7 +774,7 @@ $lang = new Lang([
                                                 <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
                                                 <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
                                             <?php endif ?>
-                                            <?php if ($_report === 'Notas' && __REGIWEB_CBTM) : ?>
+                                            <?php if ($_report === 'Notas' && __ONLY_CBTM__) : ?>
                                                 <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso' value="<?= $student->peso ?>">
                                                 <!-- Get the grades from Notas2 -->
                                                 <?php
@@ -815,7 +815,7 @@ $lang = new Lang([
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
                                         </td>
                                     <?php endfor ?>
-                                    <?php if (__REGIWEB_CBTM && $_report === 'Notas') : ?>
+                                    <?php if (__ONLY_CBTM__ && $_report === 'Notas') : ?>
                                         <td><input class="form-control-plaintext text-center totalAverage" readonly type="text" name="totalAverage-<?= $student->ss ?>" value=<?= $student->{$_options['totalAverage']} ?>></td>
                                     <?php endif ?>
                                     <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
@@ -823,7 +823,7 @@ $lang = new Lang([
                                     <?php endif ?>
                                     <?php if ($_values !== null) : ?>
                                         <?php foreach ($_values as $name => $value) :
-                                            if (__REGIWEB_CBTM && $_report === 'Notas') {
+                                            if (__ONLY_CBTM__ && $_report === 'Notas') {
                                                 if ($name === 'tdia' || $name === 'tlib' || $name === 'pcor') {
                                                     $r = [
                                                         'tdia' => 'Trab-Diarios',
@@ -912,7 +912,7 @@ $lang = new Lang([
                     </table>
                 <?php elseif ($_report === 'Ex-Final') : ?>
                     <?php if ($_options !== null) : ?>
-                        <?php if (__REGIWEB_CBTM) : ?>
+                        <?php if (__ONLY_CBTM__) : ?>
                             <input type="hidden" name="exGrade" value="<?= substr($students[0]->grado, 0, 2) ?>" />
                         <?php endif ?>
                         <table class="table table-sm table-hover bg-white">

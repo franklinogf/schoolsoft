@@ -1,1 +1,1 @@
-const __REGIWEB_CBTM = false
+const __ONLY_CBTM__ = false

@@ -214,7 +214,7 @@ $(function () {
                         const tdpInput = $("#values").find(`#val${index + 1}`)
                         if (tdpInput.val() && !isString($(grade).val())) {
                             tpaTotal += +$(grade).val()
-                            if (__REGIWEB_CBTM) {
+                            if (__ONLY_CBTM__) {
                                 averageTdp += tdpInput.val() ? +tdpInput.val() : 0
                                 if (_report === 'Notas') {
                                     if (_subjectCode.includes('HW')){
@@ -239,7 +239,7 @@ $(function () {
 
             // tpa
             let averageTotal = 0
-            if (__REGIWEB_CBTM && (_report === 'Notas')) {
+            if (__ONLY_CBTM__ && (_report === 'Notas')) {
                 tpaTotal += tpaTotal ? +parentTr.find("._nota2Grade").val() : 0;
                 averageTdp += tpaTotal ? +parentTr.find("._nota2Value").val() : 0;
                 averageTotal = tpaTotal ? ((tpaTotal / averageTdp) * 100) * .6 : 0
@@ -282,7 +282,7 @@ $(function () {
             // Grade total 
 
             let gradeTotal = averageTotal
-            if (__REGIWEB_CBTM) {
+            if (__ONLY_CBTM__) {
                 // Only school cbtm
                 if (_report === 'Notas') {
                     gradeTotal = (tpaTotal / tdpTotal) * 100
