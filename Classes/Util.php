@@ -44,11 +44,7 @@ class Util
         }
         return $thisGender;
     }
-    public static function differentSchool($arrayOfSchools)
-    {
-        $array = explode(',', $arrayOfSchools);
-        return in_array(__SCHOOL_ACRONYM, $array);
-    }
+    
 
     public static function getNextYear($year)
     {

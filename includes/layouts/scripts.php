@@ -20,6 +20,7 @@ use Classes\Route;
   const __SCHOOL_ACRONYM = '<?= __SCHOOL_ACRONYM ?>';
 </script>
 <?php
+Route::js('/js/variables.js');
 Route::js('/js/app.js', true);
 
 $__file = basename($_SERVER['SCRIPT_FILENAME']);

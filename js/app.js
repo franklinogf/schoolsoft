@@ -157,15 +157,6 @@ function getFileName(path = '') {
   let fileName = path.replace(/^.*[\\\/]/, '')
   return fileName;
 }
-/* ---------------------------- Different schools --------------------------- */
-function differentSchool(schoolAcronym, file) {
-  if (file === 'REGIWEB_enterGrades') {
-    arrayOfSchools = ['cbtm', 'omar']
-  } else {
-    return false
-  }
-  return arrayOfSchools.includes(schoolAcronym)
-}
 
 function includeThisFile() {
   const fileName = baseName(window.location.href) === '' ? 'index' : baseName(window.location.href)

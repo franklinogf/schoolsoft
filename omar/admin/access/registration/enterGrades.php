@@ -827,9 +827,9 @@ $lang = new Lang([
                 <?php elseif ($_report === 'Ex-Final') : ?>
                     <div class="container">
                         <?php if ($_options !== null) : ?>
-                        <?php if (Util::differentSchool(__REGIWERB_EnterGrades)) : ?>
-                        <input type="hidden" name="exGrade"  value="<?= substr($students[0]->grado,0,2) ?>"/>
-                        <?php endif ?>
+                            <?php if (__REGIWEB_CBTM) : ?>
+                                <input type="hidden" name="exGrade" value="<?= substr($students[0]->grado, 0, 2) ?>" />
+                            <?php endif ?>
                             <table class="table table-sm table-hover bg-white">
                                 <thead class="thead-dark text-center">
                                     <tr>
