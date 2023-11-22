@@ -23,9 +23,9 @@ $options = [
             ],
 
             [
-                'name' => ["es" => 'Fechas',   "en" => "Fechas"],
-                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los trimestres.', 'en' => 'Entrada de fechas para los inicios y cierres de los trimestres.'],
-                'link' => '#'
+                'name' => ["es" => 'Fechas',   "en" => "Dates"],
+                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los cuatrimestres.', 'en' => 'Dates entry for the beginnings and closures of the quarter.'],
+                'link' => 'changeDates.php'
             ],
             [
                 'name' => ["es" => 'Activaciones',   "en" => "Activaciones"],
@@ -137,7 +137,7 @@ $options = [
         'buttons' => [
             [
                 'name' => ["es" => 'Año escolar',   "en" => "School year"],
-                'desc' => ['es' => 'Aqui puede seleccionar el año donde van a trabajar.', 'en' => 'Here you can select the year where they are going to work.'],
+                'desc' => ['es' => 'Seleccionar el año para trabajar.', 'en' => 'Select the year to work with.'],
                 'link' => 'schoolYear.php'
             ],
             [

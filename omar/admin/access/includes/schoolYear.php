@@ -2,13 +2,10 @@
 require_once '../../../app.php';
 
 use Classes\Lang;
-use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
 
 Server::is_post();
 
