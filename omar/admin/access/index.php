@@ -12,8 +12,8 @@ $options = [
         'title' => ["es" => 'Opciones', "en" => 'Options'],
         'buttons' => [
             [
-                'name' => ["es" => 'Registro',   "en" => "Registro"],
-                'desc' => ['es' => 'Registro de notas', 'en' => 'Registro de notas'],
+                'name' => ["es" => 'Registro',   "en" => "Record"],
+                'desc' => ['es' => 'Registro de notas', 'en' => 'Record of notes'],
                 'link' => 'registration/'
             ],
             [
@@ -28,9 +28,9 @@ $options = [
                 'link' => 'changeDates.php'
             ],
             [
-                'name' => ["es" => 'Activaciones',   "en" => "Activaciones"],
+                'name' => ["es" => 'Activaciones',   "en" => "Activations"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'activations.php'
             ],
             [
                 'name' => ["es" => 'Re-matrícula',   "en" => "Re-matrícula"],

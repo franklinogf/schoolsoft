@@ -14,5 +14,12 @@
       }
    },
    "php.version": "5.5",
-   "intelephense.environment.phpVersion": "5.5"
+   "intelephense.environment.phpVersion": "5.5",
+   "php.problems.exclude": {
+      "/": [
+          "0416",
+      ]
+   },
+   "intelephense.diagnostics.typeErrors": true,
+   "intelephense.diagnostics.undefinedProperties": false
 }
