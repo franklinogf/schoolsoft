@@ -53,7 +53,7 @@ $lang = new Lang([
         <?php else : ?>
             <div class="jumbotron mt-3 border-danger">
                 <div class="alert alert-danger" role="alert">
-                    <?= $parents->info('men_inac') ?>
+                    <?= nl2br($parents->info('men_inac')) ?>
                 </div>
             </div>
         <?php endif ?>
