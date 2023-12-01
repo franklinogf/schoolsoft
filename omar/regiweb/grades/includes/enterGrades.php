@@ -165,7 +165,7 @@ if (isset($_POST['changeValue'])) {
                 );
             }
 
-            if (Util::differentSchool(__REGIWERB_EnterGrades) && $_report === 'Notas') {
+            if (__ONLY_CBTM__ && $_report === 'Notas') {
                 $allInputs = array_merge(
                     $allInputs,
                     [$data->totalAverage[0] => $data->{"totalAverage-$ss"}[0]]
@@ -238,7 +238,7 @@ if (isset($_POST['changeValue'])) {
                     /* -------------------------------------------------------------------------- */
                     /*       // PARA QUE EL CBTM NO APAREZCA EL PROMEDIO CUANDO SEA PESO = 1      */
                     /* -------------------------------------------------------------------------- */
-                    if (Util::differentSchool(__REGIWERB_EnterGrades) && $data->{"peso-$ss"}[0] == 1) {
+                    if (__ONLY_CBTM__ && $data->{"peso-$ss"}[0] == 1) {
                         $semNote = '';
                     }
                     $updateSem = [

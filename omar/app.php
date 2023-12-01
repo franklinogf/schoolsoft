@@ -45,7 +45,7 @@ define('__DEFAULT_LOGO_SCHOOLSOFT', str_replace('/', DIRECTORY_SEPARATOR, '/imag
 define('__COSEY', false);
 
 /* ---------------------------- Different schools --------------------------- */
-define('__REGIWERB_EnterGrades', 'cbtm,omar');
+define('__ONLY_CBTM__', false);
 
 
 

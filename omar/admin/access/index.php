@@ -12,8 +12,8 @@ $options = [
         'title' => ["es" => 'Opciones', "en" => 'Options'],
         'buttons' => [
             [
-                'name' => ["es" => 'Registro',   "en" => "Registro"],
-                'desc' => ['es' => 'Registro de notas', 'en' => 'Registro de notas'],
+                'name' => ["es" => 'Registro',   "en" => "Record"],
+                'desc' => ['es' => 'Registro de notas', 'en' => 'Record of notes'],
                 'link' => 'registration/'
             ],
             [
@@ -23,14 +23,14 @@ $options = [
             ],
 
             [
-                'name' => ["es" => 'Fechas',   "en" => "Fechas"],
-                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los trimestres.', 'en' => 'Entrada de fechas para los inicios y cierres de los trimestres.'],
-                'link' => '#'
+                'name' => ["es" => 'Fechas',   "en" => "Dates"],
+                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los cuatrimestres.', 'en' => 'Dates entry for the beginnings and closures of the quarter.'],
+                'link' => 'changeDates.php'
             ],
             [
-                'name' => ["es" => 'Activaciones',   "en" => "Activaciones"],
+                'name' => ["es" => 'Activaciones',   "en" => "Activations"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'activations.php'
             ],
             [
                 'name' => ["es" => 'Re-matrícula',   "en" => "Re-matrícula"],
@@ -136,9 +136,9 @@ $options = [
         'title' => ["es" => 'Información', "en" => 'Information'],
         'buttons' => [
             [
-                'name' => ["es" => 'Año escolar',   "en" => "Año escolar"],
-                'desc' => ['es' => 'Aqui puede seleccionar el año donde van a trabajar.', 'en' => 'Aqui puede seleccionar el año donde van a trabajar.'],
-                'link' => '#'
+                'name' => ["es" => 'Año escolar',   "en" => "School year"],
+                'desc' => ['es' => 'Seleccionar el año para trabajar.', 'en' => 'Select the year to work with.'],
+                'link' => 'schoolYear.php'
             ],
             [
                 'name' => ["es" => 'Mensaje inicial',   "en" => "Mensaje inicial"],

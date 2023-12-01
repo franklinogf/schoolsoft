@@ -4,7 +4,6 @@ require_once '../app.php';
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
-use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
@@ -12,7 +11,7 @@ use Classes\Controllers\Parents;
 Session::is_logged();
 $parents = new Parents(Session::id());
 $lang = new Lang([
-    ["Información","Information"],
+    ["Información", "Information"],
     ["Bienvenido", "Welcome"],
     ["Nombre:", "Name:"],
     ["ID:", "ID:"],
@@ -26,7 +25,7 @@ $ip = Util::getIp();
 
 DB::table("entradas")->insert([
     'id' => $parents->id,
-    'usuario'=> $parents->usuario,
+    'usuario' => $parents->usuario,
     'fecha' => $date,
     'hora' =>  Util::time(),
     'ip' => $ip,
@@ -40,8 +39,8 @@ DB::table("entradas")->insert([
 <head>
     <?php
     $title = $lang->translation("Información");
-Route::includeFile('/parents/includes/layouts/header.php');
-?>
+    Route::includeFile('/parents/includes/layouts/header.php');
+    ?>
 </head>
 
 <body>
@@ -79,14 +78,20 @@ Route::includeFile('/parents/includes/layouts/header.php');
                 <div class="col-6"><?= Util::time(true) ?></div>
             </div>
             <hr class="my-4" />
-            <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/parents/home.php') ?>"><?= $lang->translation("Continuar") ?></a>
+            <?php if ($parents->activo != 'Activo' && $parents->info('inactivo') == '1') : ?>
+                <div class="alert alert-danger" role="alert">
+                    <?= nl2br($parents->info('men_inac')) ?>
+                </div>
+            <?php else : ?>
+                <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/parents/home.php') ?>"><?= $lang->translation("Continuar") ?></a>
+            <?php endif ?>
         </div>
     </div>
     <?php
-$parents->ufecha = $date;
-$parents->save();
-Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+    $parents->ufecha = $date;
+    $parents->save();
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    ?>
 
 </body>
 
