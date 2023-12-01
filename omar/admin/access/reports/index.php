@@ -364,8 +364,8 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'ID del estudiante',   "en" => "ID del estudiante"],
-                'link' => '#'
+                'name' => ["es" => 'ID del estudiante',   "en" => "Student ID"],
+                'link' => 'studentID.php'
             ],
             [
                 'name' => ["es" => 'ID del maestro',   "en" => "ID del maestro"],
