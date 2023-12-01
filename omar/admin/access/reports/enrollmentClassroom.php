@@ -12,7 +12,7 @@ use Classes\Util;
 Session::is_logged();
 $teacher = new Teacher();
 $lang = new Lang([
-    ['Liata martícula por sal1ón', 'Enrollment classroom list'],
+    ['Lista martícula por sal1ón', 'Enrollment classroom list'],
     ['Enero', 'January'],
     ['Febrero', 'February'],
     ['Marzo', 'March'],
@@ -48,7 +48,7 @@ $grades = $school->allGrades();
 
 <head>
     <?php
-    $title = $lang->translation('Liata martícula por sal1ón');
+    $title = $lang->translation('Lista martícula por sal1ón');
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::selectPicker();
     ?>
@@ -59,7 +59,7 @@ $grades = $school->allGrades();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation('Liata martícula por sal1ón') ?></h1>
+        <h1 class="text-center my-3"><?= $lang->translation('Lista martícula por sal1ón') ?></h1>
         <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atrás") ?></a>
         <div class="container bg-white shadow-lg py-3 rounded">
             <form action="<?= Route::url('/admin/access/reports/pdf/enrollmentClassroom.php') ?>" target="birthbayList" method="POST">
