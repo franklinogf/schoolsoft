@@ -95,7 +95,4 @@ foreach ($allGrades as $grade) {
     }
 }
 
-
-
-
 $pdf->Output();
