@@ -327,8 +327,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Pruebas de selección',   "en" => "Pruebas de selección"],
-                'link' => '#'
+                'name' => ["es" => 'Pruebas de selección',   "en" => "Selection tests"],
+                'link' => 'pdf/selectiontests.php',
+                'target' => 'selectiontests'
             ],
             [
                 'name' => ["es" => 'Carta de recomendación',   "en" => "Carta de recomendación"],

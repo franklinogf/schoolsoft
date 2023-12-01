@@ -57,14 +57,14 @@ foreach ($allGrades as $grade) {
 	$pdf->Cell(50, 15, 'Lugar de Procedencia', 1, 0, 'C', true);
 	$pdf->Cell(40, 7.5, 'Cantidad de', 'LTR', 0, 'C', true);
 	$pdf->Cell(30, 15, 'Por ciento %', 1, 0, 'C', true);
-	$pdf->Cell(60, 5, utf8_decode('Género'), 1, 0, 'C', true);
+    $pdf->Cell(60, 5, 'GÃ©nero', 1, 0, 'C', true);
 	$pdf->Ln(7.5);
 	$pdf->Cell(50);
 	$pdf->Cell(40, 7.5, 'Estudiantes', 'LBR', 0, 'C', true);
 	$pdf->Cell(30);
 	$pdf->SetXY(130, $pdf->GetY() - 2.5);
-	$pdf->Cell(30, 5, utf8_decode('Cuántos'), 'LTR', 0, 'C', true);
-	$pdf->Cell(30, 5, utf8_decode('Cuántos'), 'LTR', 1, 'C', true);
+    $pdf->Cell(30, 5, 'CuÃ¡ntos', 'LTR', 0, 'C', true);
+    $pdf->Cell(30, 5, 'CuÃ¡ntos', 'LTR', 1, 'C', true);
 	$pdf->Cell(120);
 	$pdf->Cell(30, 5, 'Femenino', 'LBR', 0, 'C', true);
 	$pdf->Cell(30, 5, 'Masculino', 'LBR', 1, 'C', true);
