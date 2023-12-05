@@ -289,8 +289,8 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Formulario socioeconómico',   "en" => "Formulario socioeconómico"],
-                'link' => '#'
+                'name' => ["es" => 'Formulario socioeconómico',   "en" => "Socioeconomic form"],
+                'link' => 'formSocio.php'
             ],
             [
                 'name' => ["es" => 'Lista de edad y seguro social',   "en" => "Age and social security list"],
