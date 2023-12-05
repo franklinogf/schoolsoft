@@ -13,21 +13,20 @@ use Classes\Controllers\Student;
 Server::is_post();
 Session::is_logged();
 
-$lang = new Lang([
-    ["Estudio Socioecon髆ico", "Socio-economic study"],
+$lang = new Lang([["Estudio Socioecon贸mico", "Socio-economic study"],
     ['Nombre del estudiante:', 'Student name: '],
     ['Nombre de padre o encargado: ', 'Name of parent or guardian: '],
     ['Grado: ', 'Grade: '],
     ['Fecha', 'Date'],
-    ['Ocupaci髇: ', 'Occupation: '],
-    ['G閚ero: ', 'Gender: '],
+    ['Ocupaci贸n: ', 'Occupation: '],
+    ['G茅nero: ', 'Gender: '],
     ['Nombre de la Madre: ', "Mother's name: "],
     ['Total Ingreso Familiar: ', 'Total Family Income: '],
-    ['Composici髇 Familiar: ', 'Family composition: '],
+    ['Composici贸n Familiar: ', 'Family composition: '],
     ['Edad: ', 'Age: '],
     ['Masculino', 'Male'],
     ['Femenina', 'Female'],
-    ['Cantidad en estudiantes en la instituci髇: ', 'Number of students at the institution:'],
+    ['Cantidad en estudiantes en la instituci贸n: ', 'Number of students at the institution:'],
     ['Firma: ', 'Signature: '],
     ['Padre, Madre o encargado', 'Father, Mother or guardian'],
 
@@ -40,14 +39,14 @@ $studentClass = new Student();
 
 $year = $school->info('year');
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Estudio Socioecon髆ico") . " $year", true);
+$pdf->SetTitle($lang->translation("Estudio Socioecon贸mico") . " $year", true);
 $pdf->Fill();
 $students = $_POST['students'];
 foreach ($students as $ss) {
     $pdf->AddPage();
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Estudio Socioecon髆ico") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, $lang->translation("Estudio Socioecon贸mico") . " $year", 0, 1, 'C');
     $pdf->SetFont('Arial', '', 12);
 
     $pdf->Ln(5);
@@ -81,19 +80,19 @@ foreach ($students as $ss) {
     $pdf->Cell(15, 5, $lang->translation("Edad: "), 0, 0, 'L');
     $pdf->Cell(20, 5, $edad,'B', 0, 'C');
     $pdf->Cell(25, 5, '',0, 0, 'L');
-    $pdf->Cell(20, 5, $lang->translation("G閚ero: "), 0, 0, 'L');
+    $pdf->Cell(20, 5, $lang->translation("G茅nero: "), 0, 0, 'L');
     $pdf->Cell(20, 5, $genero,'B', 1, 'C');
     $pdf->Ln(5);
     $pdf->Cell(50, 5, $lang->translation("Nombre de padre o encargado: "), 0, 0, 'L');
     $pdf->Cell(100, 5, $parent->padre,'B', 1, 'L');
     $pdf->Ln(5);
-    $pdf->Cell(40, 5, $lang->translation("Ocupaci髇: "), 0, 0, 'L');
+    $pdf->Cell(40, 5, $lang->translation("Ocupaci贸n: "), 0, 0, 'L');
     $pdf->Cell(100, 5, $parent->posicion_p,'B', 1, 'L');
     $pdf->Ln(5);
     $pdf->Cell(50, 5, $lang->translation("Nombre de la Madre: "), 0, 0, 'L');
     $pdf->Cell(100, 5, $parent->madre,'B', 1, 'L');
     $pdf->Ln(5);
-    $pdf->Cell(40, 5, $lang->translation("Ocupaci髇: "), 0, 0, 'L');
+    $pdf->Cell(40, 5, $lang->translation("Ocupaci贸n: "), 0, 0, 'L');
     $pdf->Cell(100, 5, $parent->posicion_m,'B', 1, 'L');
     $pdf->Ln(5);
     $pdf->Cell(40, 5, $lang->translation("Total Ingreso Familiar: "), 0, 0, 'L');
@@ -130,10 +129,10 @@ foreach ($students as $ss) {
     $pdf->Cell(20, 5, '51,351 - +',0, 0, 'L');
 
     $pdf->Ln(15);
-    $pdf->Cell(40, 5, $lang->translation("Composici髇 Familiar: "), 0, 0, 'L');
+    $pdf->Cell(40, 5, $lang->translation("Composici贸n Familiar: "), 0, 0, 'L');
     $pdf->Cell(70, 5, '','B', 1, 'L');
     $pdf->Ln(5);
-    $pdf->Cell(70, 5, $lang->translation("Cantidad en estudiantes en la instituci髇: "), 0, 0, 'L');
+    $pdf->Cell(70, 5, $lang->translation("Cantidad en estudiantes en la instituci贸n: "), 0, 0, 'L');
     $pdf->Cell(40, 5, '','B', 1, 'L');
     $pdf->Ln(15);
     $pdf->Cell(35, 5, $lang->translation("Firma: "), 0, 0, 'L');
