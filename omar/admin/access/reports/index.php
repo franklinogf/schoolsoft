@@ -332,8 +332,8 @@ $options = [
                 'target' => 'selectiontests'
             ],
             [
-                'name' => ["es" => 'Carta de recomendación',   "en" => "Carta de recomendación"],
-                'link' => '#'
+                'name' => ["es" => 'Carta de recomendación',   "en" => "Letter of recommendation"],
+                'link' => 'LetterRecommendation.php'
             ],
             [
                 'name' => ["es" => 'Formulario de matrícula',   "en" => "Formulario de matrícula"],
