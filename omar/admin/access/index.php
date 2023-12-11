@@ -60,9 +60,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Catálogo',   "en" => "Catálogo"],
+                'name' => ["es" => 'Catálogo',   "en" => "Catalog"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'catalog.php'
             ],
             [
                 'name' => ["es" => 'Crear los grados',   "en" => "Crear los grados"],
