@@ -33,7 +33,7 @@ $students = new Student();
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center my-3"><?= $lang->translation('Lista de estudiantes') ?></h1>
-        <form id="form" action="<?= Route::url('/admin/access/reports/pdf/formSocio.php') ?>" method="POST" target="_blank">
+        <form id="form" action="<?= Route::url('/admin/access/reports/pdf/LetterRecommendation.php') ?>" method="POST" target="_blank">
             <?php
             $__tableData = $students->all();
             $__tableDataCheckbox = true;
