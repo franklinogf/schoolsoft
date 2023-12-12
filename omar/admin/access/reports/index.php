@@ -356,8 +356,12 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Informe de acceso de maestros',   "en" => "Informe de acceso de maestros"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de acceso de maestros',   "en" => "Teacher Access Report"],
+                'link' => 'TeacherAccessReport.php'
+            ],
+            [
+                'name' => ["es" => 'Informe de acceso de los padres',   "en" => "Parents Access Report"],
+                'link' => 'ParentsAccessReport.php'
             ],
             [
                 'name' => ["es" => 'Informe de documentos',   "en" => "Informe de documentos"],
