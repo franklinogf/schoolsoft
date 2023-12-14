@@ -32,7 +32,6 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Limpiar', 'Clear'],
     ['Eliminar', 'Delete'],
-    ['Lista', 'List'],
 ]);
 $years = DB::table('year')->select("DISTINCT year")->get();
 $school = new School(Session::id());
@@ -101,8 +100,8 @@ $courses = DB::table('cursos')->where([
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Catálogo') ?></h1>
         <div class="d-flex justify-content-center mb-3">
-            <a href="<?= Route::url('/admin/access/pdf/listA.php') ?>" class="btn btn-outline-primary mr-2"><?= $lang->translation('Lista') ?> A</a>
-            <a href="<?= Route::url('/admin/access/pdf/listB.php') ?>" class="btn btn-outline-primary"><?= $lang->translation('Lista') ?> B</a>
+            <a href="<?= Route::url('/admin/access/pdf/listA.php') ?>" target="listaA" class="btn btn-outline-primary mr-2"><?= $lang->translation('Lista') ?> A</a>
+            <a href="<?= Route::url('/admin/access/pdf/listB.php') ?>" target="listaB" class="btn btn-outline-primary"><?= $lang->translation('Lista') ?> B</a>
         </div>
         <div class="container">
             <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
