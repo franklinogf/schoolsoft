@@ -53,7 +53,10 @@ class PDF extends FPDF
         }
     }
 
-
+    public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
+    {
+        parent::Cell($w, $h, utf8_decode($txt), $border, $ln, $align, $fill, $link);
+    }
     public function useHeader($bool = true)
     {
         $this->header = $bool;
