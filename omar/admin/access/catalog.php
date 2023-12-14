@@ -136,13 +136,13 @@ $courses = DB::table('cursos')->where([
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="credito"><?= $lang->translation("Credito") ?></label>
-                                <input type="text" value='<?= $thisCourse->credito ?>' class="form-control" name='credito' id="credito" required>
+                                <input type="text" value='<?= $thisCourse->credito ?>' class="form-control --float" name='credito' id="credito" required>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="peso"><?= $lang->translation("Peso") ?></label>
-                                <input type="text" value='<?= $thisCourse->peso ?>' class="form-control" name='peso' id="peso" required>
+                                <input type="text" value='<?= $thisCourse->peso ?>' class="form-control --float" name='peso' id="peso" required>
                             </div>
                         </div>
                         <div class="col-12">
@@ -186,8 +186,8 @@ $courses = DB::table('cursos')->where([
                         <div class="col-7">
                             <label for="valor"><?= $lang->translation("Valor") ?></label>
                             <div class="input-group">
-                                <input type="text" value='<?= $thisCourse->valor ?>' class="form-control" name='valor' id="valor" required>
-                                <select class="form-control" name="verano" id="verano">
+                                <input type="text" value='<?= $thisCourse->valor ?>' class="form-control --float" name='valor' id="valor" disabled>
+                                <select class="form-control" name="verano" id="verano" disabled>
                                     <option <?= $thisCourse->verano == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Regular") ?></option>
                                     <option <?= $thisCourse->verano == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Verano") ?></option>
                                 </select>
@@ -208,9 +208,17 @@ $courses = DB::table('cursos')->where([
 
     </div>
     <?php
+    $jqMask = true;
     Route::includeFile('/includes/layouts/scripts.php', true);
     Route::selectPicker('js');
     ?>
+    <script>
+        $(document).ready(function() {
+            $('.--float').mask("#.##0,00", {
+                reverse: true
+            });
+        });
+    </script>
 
 </body>
 
