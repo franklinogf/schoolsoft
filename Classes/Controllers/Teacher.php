@@ -25,6 +25,9 @@ class Teacher extends TeacherModel
   public function findPK($pk)
   {
     $array = $this->getTeacherByPK($pk);
+    if (!is_object($array)) {
+      return false;
+    }
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
