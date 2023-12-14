@@ -214,9 +214,24 @@ $courses = DB::table('cursos')->where([
     ?>
     <script>
         $(document).ready(function() {
-            $('.--float').mask("#.##0,00", {
-                reverse: true
+
+            $('.--float').mask("0.00").change(function() {
+                if ($(this).val()) {
+                    $(this).val(parseFloat($(this).val()).toFixed(2))
+                } else {
+                    $(this).val('0.00')
+                }
             });
+            $('#ava').change(function(e) {
+                e.preventDefault();
+                if ($(this).val() == 'No') {
+                    $('#valor,#verano').attr('disabled', true)
+                } else {
+                    $('#valor,#verano').attr('disabled', false)
+
+                }
+            });
+            $('.--float,#ava').change();
         });
     </script>
 
