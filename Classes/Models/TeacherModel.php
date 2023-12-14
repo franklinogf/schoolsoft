@@ -28,7 +28,7 @@ class TeacherModel extends School
   protected function getAllTeachers()
   {
 
-    $obj =  parent::table($this->table)->orderBy('apellidos')->get();
+    $obj =  parent::table($this->table)->where(['baja', ''])->orderBy('apellidos')->get();
     return $obj;
   }
   protected function getTeacherByGrade($grade)
