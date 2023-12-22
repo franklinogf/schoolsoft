@@ -55,7 +55,7 @@ $admins = DB::table('colegio')->orderBy('usuario')->get();
         <h1 class="text-center my-3"><?= $lang->translation('Informe de acceso de los administradores') ?></h1>
         <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atr&#65533;s") ?></a>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= Route::url('/admin/access/reports/pdf/ParentsAccessReport.php') ?>" target="ParentsAccessReport" method="POST">
+            <form action="<?= Route::url('/admin/access/reports/pdf/AdminAccessReport.php') ?>" target="ParentsAccessReport" method="POST">
                 <div class="mx-auto" style="width: 25rem;">
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
