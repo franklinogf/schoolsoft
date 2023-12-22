@@ -364,6 +364,10 @@ $options = [
                 'link' => 'ParentsAccessReport.php'
             ],
             [
+                'name' => ["es" => 'Informe de acceso de los administradores',   "en" => "Administrator Access Report"],
+                'link' => 'AdminAccessReport.php'
+            ],
+            [
                 'name' => ["es" => 'Informe de documentos',   "en" => "Informe de documentos"],
                 'link' => '#'
             ],
