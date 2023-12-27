@@ -307,8 +307,9 @@ $options = [
                 'target' => 'infProcedencia'
             ],
             [
-                'name' => ["es" => 'Movimiento de matrícula',   "en" => "Movimiento de matrícula"],
-                'link' => '#'
+                'name' => ["es" => 'Movimiento de matrícula',   "en" => "School enrollment movement"],
+                'link' => 'pdf/SchoolMovement.php',
+                'target' => 'SchoolMovement'
             ],
             [
                 'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Informe acumulativo de notas"],
