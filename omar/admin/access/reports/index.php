@@ -380,6 +380,11 @@ $options = [
                 'name' => ["es" => 'ID del maestro',   "en" => "ID del maestro"],
                 'link' => '#'
             ],
+            [
+                'name' => ["es" => 'Acomodo Razonable',   "en" => "Reasonable accommodation"],
+                'link' => 'pdf/ReasonableAccommodation.php',
+                'target' => 'ReasonableAccommodation'
+            ],
         ]
     ],
    
