@@ -377,8 +377,8 @@ $options = [
                 'link' => 'studentID.php'
             ],
             [
-                'name' => ["es" => 'ID del maestro',   "en" => "ID del maestro"],
-                'link' => '#'
+                'name' => ["es" => 'ID del maestro',   "en" => "Teacher ID"],
+                'link' => 'teacherID.php'
             ],
             [
                 'name' => ["es" => 'Acomodo Razonable',   "en" => "Reasonable accommodation"],
