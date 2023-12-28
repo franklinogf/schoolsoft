@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../app.php';
-
+// le faltan las fotos a los estudiantes
 use Classes\pdf_codabar;
 use Classes\Session;
 use Classes\Server;
