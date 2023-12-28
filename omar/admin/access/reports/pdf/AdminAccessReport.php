@@ -38,7 +38,7 @@ $ida = $_POST['student'];
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Informe de acceso de los administradores") . " $year", true);
 $pdf->Fill();
-if ($option != 'all') {
+if ($ida != 'all') {
 
     $admin1 = DB::table('colegio')->where([
         ['id', $ida]
@@ -56,7 +56,7 @@ if ($option != 'all') {
     $pdf->Cell(70, 5, $lang->translation("Nombre") . ' ' . $admin1->usuario, 0, 1, 'L');
     $pdf->SetFont('Arial', 'B', 10);
 
-    //    $pdf->Cell(10);
+//    $pdf->Cell(10);
     $pdf->Cell(20, 5, '', 1, 0, 'C', true);
     $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
     $pdf->Cell(50, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
@@ -78,28 +78,17 @@ if ($option != 'all') {
         $pdf->Cell(50, 5, $attendance->ip, 1, 1, 'C');
     }
 } else {
-    //    $school = new School();
-    //    $year = $school->info('year');
     $grade = $_POST['grade'];
-    //    $separatedGrade = $_POST['separatedGrade'] === 'si' ? true : false;
-
-
     $admins1 = DB::table('colegio')->orderBy('usuario')->get();
 
-
     $type = $_POST['type'];
-    //    $grades = $grade !== '' ? [$grade] : $school->allGrades();
-    //        foreach ($admins as $admin) {
-    //        $students = DB::table('colegio')->where([
-    //            ['grado', $grade],
-    //        ])->orderBy("usuario")->get();
 
     $count = 1;
     $type = 'list';
     foreach ($admins1 as $admin2) {
         $pdf->addPage();
         $pdf->SetFont('Arial', 'B', 15);
-        $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los padres") . " $year", 0, 1, 'C');
+        $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los administradores") . " $year", 0, 1, 'C');
         $pdf->SetFont('Arial', '', 12);
         $pdf->Ln(10);
         $pdf->SetFont('Arial', 'B', 12);
@@ -107,10 +96,9 @@ if ($option != 'all') {
         $pdf->Ln(5);
 
         $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'L', true);
-        $pdf->Cell(135, 5, $admin2->usuario, 0, 0, 'L');
-        $pdf->Cell(20, 5, $lang->translation("Grado"), 1, 0, 'C', true);
-        $pdf->Cell(20, 5, '', 0, 1, 'L');
-        $pdf->Ln(5);
+        $pdf->Cell(140, 5, $admin2->usuario, 0, 0, 'L');
+        $pdf->Cell(15, 5, $lang->translation("Fecha"), 1, 0, 'C');
+        $pdf->Cell(20, 5, date('m-d-Y'), 0, 1, 'L');
 
         $pdf->Cell(20, 5, '', 1, 0, 'C', true);
         $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
@@ -132,7 +120,6 @@ if ($option != 'all') {
             $count++;
         }
     }
-    //      }
 }
 
 $pdf->Output();

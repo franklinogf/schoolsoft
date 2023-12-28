@@ -307,8 +307,9 @@ $options = [
                 'target' => 'infProcedencia'
             ],
             [
-                'name' => ["es" => 'Movimiento de matrícula',   "en" => "Movimiento de matrícula"],
-                'link' => '#'
+                'name' => ["es" => 'Movimiento de matrícula',   "en" => "School enrollment movement"],
+                'link' => 'pdf/SchoolMovement.php',
+                'target' => 'SchoolMovement'
             ],
             [
                 'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Informe acumulativo de notas"],
@@ -378,6 +379,11 @@ $options = [
             [
                 'name' => ["es" => 'ID del maestro',   "en" => "ID del maestro"],
                 'link' => '#'
+            ],
+            [
+                'name' => ["es" => 'Acomodo Razonable',   "en" => "Reasonable accommodation"],
+                'link' => 'pdf/ReasonableAccommodation.php',
+                'target' => 'ReasonableAccommodation'
             ],
         ]
     ],
