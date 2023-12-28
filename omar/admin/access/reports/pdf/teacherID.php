@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../app.php';
-
+// le falta las fotos
 use Classes\pdf_codabar;
 use Classes\Session;
 use Classes\Server;
