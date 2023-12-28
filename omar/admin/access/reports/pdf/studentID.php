@@ -18,6 +18,8 @@ $cole = DB::table('colegio')->where([
 //$cole= new School();
 //$year = $cole->info('year');
 //echo $cole->colegio;
+
+
 //$q = "SELECT * from colegio where usuario = 'administrador'";
 //$res = mysql_query($q);
 //$cole = mysql_fetch_object($res);
