@@ -42,7 +42,7 @@ $students = new Student();
             $__tableDataInfo = [
                 [
                     'title' => ["es" => "Nombre compleo", 'en' => "Full Name"],
-                    'values' => ['nombre', 'apellidos']
+                    'values' => ['apellidos', 'nombre', 'grado']
                 ],
             ];
             Route::includeFile('/includes/layouts/table.php', true);
