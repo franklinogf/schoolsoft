@@ -14,7 +14,7 @@ $students = DB::table('year')->where([
     ['id', $parents->id]
 ])->get();
 if (isset($_POST['student'])) {
-    list($ss, $year) = split(',', $_POST['student']);
+    list($ss, $year) = explode(',', $_POST['student']);
     $attendances = DB::table('asispp')->where([
         ['ss', $ss],
         ['year', $year]
@@ -25,11 +25,11 @@ $lang = new Lang([
     ["Estudiantes", "Students"],
     ["Asistencias", "Attendance"],
     ["Fecha", "Date"],
-    ["Descripción","Description"],
-    ["No tiene información","Has no information"],
+    ["Descripción", "Description"],
+    ["No tiene información", "Has no information"],
     ["Ausencias", "Absence"],
-    ["Tardanzas","Tardy"]
-    
+    ["Tardanzas", "Tardy"]
+
 ]);
 ?>
 <!DOCTYPE html>

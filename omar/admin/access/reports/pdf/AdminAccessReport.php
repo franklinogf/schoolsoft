@@ -42,7 +42,7 @@ if ($option != 'all') {
 
     $admin1 = DB::table('colegio')->where([
         ['id', $ida]
-    ])->orderBy('usuario')->get();
+    ])->orderBy('usuario')->first();
 
 
     $pdf->AddPage();
