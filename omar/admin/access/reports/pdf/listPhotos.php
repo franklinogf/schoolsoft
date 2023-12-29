@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../app.php';
-
+// le falta las fotos y el codigo de barra.
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
