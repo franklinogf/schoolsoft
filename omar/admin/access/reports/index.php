@@ -209,8 +209,9 @@ $options = [
                 'target' => 'totalGrade'
             ],
             [
-                'name' => ["es" => 'Lista con fotos',   "en" => "Lista con fotos"],
-                'link' => '#'
+                'name' => ["es" => 'Lista con fotos',   "en" => "List with photos"],
+                'link' => 'pdf/ListPhotos.php',
+                'target' => 'ListPhotos'
             ],
             [
                 'name' => ["es" => 'Acuse de recibo',   "en" => "Acknowledgment of receipt"],
