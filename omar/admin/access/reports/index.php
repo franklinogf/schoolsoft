@@ -325,9 +325,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Pruebas diagnósticas"],
-                'link' => 'pdf/selectiontests.php',
-                'target' => 'selectiontests'
+                'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Diagnostic tests"],
+                'link' => 'pdf/diagnosticTests.php',
+                'target' => 'diagnosticTests'
             ],
             [
                 'name' => ["es" => 'Pruebas de selección',   "en" => "Selection tests"],
