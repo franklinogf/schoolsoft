@@ -326,7 +326,8 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Pruebas diagnósticas"],
-                'link' => '#'
+                'link' => 'pdf/selectiontests.php',
+                'target' => 'selectiontests'
             ],
             [
                 'name' => ["es" => 'Pruebas de selección',   "en" => "Selection tests"],
@@ -336,10 +337,6 @@ $options = [
             [
                 'name' => ["es" => 'Carta de recomendación',   "en" => "Letter of recommendation"],
                 'link' => 'LetterRecommendation.php'
-            ],
-            [
-                'name' => ["es" => 'Formulario de matrícula',   "en" => "Formulario de matrícula"],
-                'link' => '#'
             ],
             [
                 'name' => ["es" => 'Información personal',   "en" => "Información personal"],
