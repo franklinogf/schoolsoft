@@ -19,10 +19,10 @@ $teacherYear = $_POST['teacherYear'];
 
 if (isset($_POST['save'])) {
     $updates = [
-        'year2' => $teacherYear
+        'year' => $teacherYear
     ];
     if (isset($adminYear)) {
-        $updates['year'] = $adminYear;
+        $updates['year2'] = $adminYear;
     }
     DB::table('colegio')->where('usuario', Session::id())->update($updates);
     Session::set('schoolYear', $lang->translation("Año cambiado"));
