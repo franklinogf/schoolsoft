@@ -367,8 +367,8 @@ $options = [
                 'link' => 'AdminAccessReport.php'
             ],
             [
-                'name' => ["es" => 'Informe de documentos',   "en" => "Informe de documentos"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de documentos',   "en" => "Document report"],
+                'link' => 'DocumentReport.php'
             ],
             [
                 'name' => ["es" => 'ID del estudiante',   "en" => "Student ID"],
