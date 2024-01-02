@@ -16,7 +16,7 @@ $lang = new Lang([
     ['Guardar', 'Save'],
 ]);
 $years = DB::table('year')->select("DISTINCT year")->get();
-$school = new School(Session::id());
+$school = new School();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,9 +39,6 @@ $school = new School(Session::id());
             <form method="POST" action="<?= Route::url('/admin/access/includes/schoolYear.php') ?>">
                 <div class="mx-auto" style="width: 20rem;">
                     <h2 class="text-center"><?= $lang->translation("Selección de año") ?></h2>
-                    <?php
-                    //                    if (Session::id() === 'administrador') : 
-                    ?>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="class"><?= $lang->translation('Para administración') ?></label>
@@ -52,9 +49,6 @@ $school = new School(Session::id());
                             <?php endforeach ?>
                         </select>
                     </div>
-                    <?php
-                    //                    endif 
-                    ?>
                     <?php if (Session::id() === 'administrador') : ?>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">

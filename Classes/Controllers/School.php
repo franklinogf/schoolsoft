@@ -1,9 +1,7 @@
 <?php
 
 namespace Classes\Controllers;
-
-
-
+use Classes\Session;
 use Classes\Models\SchoolModel;
 
 class School extends SchoolModel
@@ -26,8 +24,16 @@ class School extends SchoolModel
       return $this;
    }
 
-   public function __construct($user = 'administrador')
+   public function __construct($userForLogin = null)
    {
+      if(Session::location() === 'admin'){
+      $user = Session::id();
+      }else{
+      $user = 'administrador';
+      }
+      if($userForLogin){
+      $user = $userForLogin;
+      }
       $array = $this->getSchoolByUser($user);
       foreach ($array as $key => $value) {
          $this->set($key, $value);
@@ -41,6 +47,11 @@ class School extends SchoolModel
    public function info($key)
    {
       return $this->props[$key];
+   }
+
+   public function year(){
+   $yearToUse = Session::location() === 'admin' ? 'year2' : 'year';
+   return $this->props[$yearToUse];
    }
 
 
