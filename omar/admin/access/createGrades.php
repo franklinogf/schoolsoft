@@ -39,9 +39,9 @@ $grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('
             <form method="POST" action="<?= Route::url('/admin/access/includes/createGrades.php') ?>">
                 <div class="mx-auto" style="max-width: 500px;">
                     <?php if (Session::get('createGrades')) : ?>
-                        <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
-                            <i class="fa-solid fa-square-check"></i> <?= Session::get('createGrades', true) ?>
-                        </div>
+                    <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
+                        <i class="fa-solid fa-square-check"></i> <?= Session::get('createGrades', true) ?>
+                    </div>
                     <?php endif ?>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -49,7 +49,7 @@ $grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
                             <?php foreach ($grades as $grade) : ?>
-                                <option value='<?= $grade->grado ?>'><?= $grade->grado ?></option>
+                            <option value='<?= $grade->grado ?>'><?= $grade->grado ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>

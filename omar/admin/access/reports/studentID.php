@@ -33,7 +33,7 @@ $students = new Student();
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center my-3"><?= $lang->translation('ID del estudiante') ?></h1>
-        <form id="form" action="<?= Route::url('/admin/access/reports/pdf/studentID.php') ?>" method="POST">
+        <form id="form" action="<?= Route::url('/admin/access/reports/pdf/studentID.php') ?>" target="studentID" method="POST">
             <?php
             $__tableData = $students->all(); #Informacion que se va a utilizar
             $__tableDataCheckbox = true; #decirle que quiere usar los check box
@@ -42,7 +42,7 @@ $students = new Student();
             $__tableDataInfo = [
                 [
                     'title' => ["es" => "Nombre compleo", 'en' => "Full Name"],
-                    'values' => ['nombre', 'apellidos']
+                    'values' => ['apellidos', 'nombre', 'grado']
                 ],
             ];
             Route::includeFile('/includes/layouts/table.php', true);

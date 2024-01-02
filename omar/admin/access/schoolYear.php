@@ -39,28 +39,34 @@ $school = new School(Session::id());
             <form method="POST" action="<?= Route::url('/admin/access/includes/schoolYear.php') ?>">
                 <div class="mx-auto" style="width: 20rem;">
                     <h2 class="text-center"><?= $lang->translation("Selección de año") ?></h2>
+                    <?php
+                    //                    if (Session::id() === 'administrador') : 
+                    ?>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="class"><?= $lang->translation('Para administración') ?></label>
+                        </div>
+                        <select name="adminYear" class="custom-select" required>
+                            <?php foreach ($years as $year) : ?>
+                                <option <?= $school->info('year2') == $year->year ? 'selected' : '' ?> value="<?= $year->year ?>"><?= $year->year ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <?php
+                    //                    endif 
+                    ?>
                     <?php if (Session::id() === 'administrador') : ?>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="class"><?= $lang->translation('Para administración') ?></label>
+                                <label class="input-group-text" for="class"><?= $lang->translation('Para maestro(a)s') ?></label>
                             </div>
-                            <select name="adminYear" class="custom-select" required>
+                            <select name="teacherYear" class="custom-select" required>
                                 <?php foreach ($years as $year) : ?>
                                     <option <?= $school->info('year') == $year->year ? 'selected' : '' ?> value="<?= $year->year ?>"><?= $year->year ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
                     <?php endif ?>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="class"><?= $lang->translation('Para maestro(a)s') ?></label>
-                        </div>
-                        <select name="teacherYear" class="custom-select" required>
-                            <?php foreach ($years as $year) : ?>
-                                <option <?= $school->info('year2') == $year->year ? 'selected' : '' ?> value="<?= $year->year ?>"><?= $year->year ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
                     <input name="save" class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
 
                 </div>

@@ -209,8 +209,9 @@ $options = [
                 'target' => 'totalGrade'
             ],
             [
-                'name' => ["es" => 'Lista con fotos',   "en" => "Lista con fotos"],
-                'link' => '#'
+                'name' => ["es" => 'Lista con fotos',   "en" => "List with photos"],
+                'link' => 'pdf/ListPhotos.php',
+                'target' => 'ListPhotos'
             ],
             [
                 'name' => ["es" => 'Acuse de recibo',   "en" => "Acknowledgment of receipt"],
@@ -324,8 +325,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Pruebas diagnósticas"],
-                'link' => '#'
+                'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Diagnostic tests"],
+                'link' => 'pdf/diagnosticTests.php',
+                'target' => 'diagnosticTests'
             ],
             [
                 'name' => ["es" => 'Pruebas de selección',   "en" => "Selection tests"],
@@ -335,10 +337,6 @@ $options = [
             [
                 'name' => ["es" => 'Carta de recomendación',   "en" => "Letter of recommendation"],
                 'link' => 'LetterRecommendation.php'
-            ],
-            [
-                'name' => ["es" => 'Formulario de matrícula',   "en" => "Formulario de matrícula"],
-                'link' => '#'
             ],
             [
                 'name' => ["es" => 'Información personal',   "en" => "Información personal"],
@@ -369,16 +367,16 @@ $options = [
                 'link' => 'AdminAccessReport.php'
             ],
             [
-                'name' => ["es" => 'Informe de documentos',   "en" => "Informe de documentos"],
-                'link' => '#'
+                'name' => ["es" => 'Informe de documentos',   "en" => "Document report"],
+                'link' => 'DocumentReport.php'
             ],
             [
                 'name' => ["es" => 'ID del estudiante',   "en" => "Student ID"],
                 'link' => 'studentID.php'
             ],
             [
-                'name' => ["es" => 'ID del maestro',   "en" => "ID del maestro"],
-                'link' => '#'
+                'name' => ["es" => 'ID del maestro',   "en" => "Teacher ID"],
+                'link' => 'teacherID.php'
             ],
             [
                 'name' => ["es" => 'Acomodo Razonable',   "en" => "Reasonable accommodation"],

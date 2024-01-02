@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../app.php';
-// le faltan las fotos a los estudiantes
+// le falta las fotos
 use Classes\pdf_codabar;
 use Classes\Session;
 use Classes\Server;
@@ -18,8 +18,6 @@ $cole = DB::table('colegio')->where([
 //$cole= new School();
 //$year = $cole->info('year');
 //echo $cole->colegio;
-
-
 //$q = "SELECT * from colegio where usuario = 'administrador'";
 //$res = mysql_query($q);
 //$cole = mysql_fetch_object($res);
@@ -88,47 +86,50 @@ class PDF extends PDF_Codabar
         ));
     }
 }
+
 $pdf = new PDF();
 $pdf->SetAutoPageBreak(false);
 $pdf->AddPage();
-$estudiantesSS = $_REQUEST['students'];
+$profesorIds = $_REQUEST['students'];
 function StudentId()
 {
-    global $ss;
-    global $year;
+    global $id;
     global $pdf;
     global $cole;
 
-    $estu = DB::table('year')->where([
-        ['ss', $ss],
-        ['year', $year],
+    //	$result = mysql_query("SELECT * FROM profesor WHERE id = '$id'");
+    //	$profe = mysql_fetch_object($result);
+    $profe = DB::table('profesor')->where([
+        ['id', $id],
     ])->orderBy('grado, apellidos')->first();
+    //    echo $id;
     $pdf->SetLineWidth(1);
     $pdf->RoundedRect($pdf->GetX(), $pdf->GetY(), 80, 40, 2, '1234');
+    //	$pdf->Image('../logo/fondo.png', $pdf->GetX() + 35, $pdf->GetY() + 11, 30, 28);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(55, 5, $cole->colegio);
     $pdf->Cell(25, 5, $cole->telefono, 0, 1, 'R');
     $pdf->SetFont('Times', '', 8);
     $pdf->Cell(.5);
     $pdf->Cell(79, 5, "$cole->dir1 $cole->dir3, $cole->pueblo1, $cole->esta1 $cole->zip1", 0, 1, 'L', true);
-    //$pdf->Image('../logo/logo.gif', $pdf->GetX() + 53, $pdf->GetY() - 7.5, 25);
+    // $pdf->Image('../logo/logo.gif', $pdf->GetX() + 53, $pdf->GetY() - 7.5, 25);
 
-    if (file_exists("../picture/{$estu->tipo}.jpg")) {
+    if (file_exists("../picture/{$profe->foto_name}.jpg")) {
         $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
-        $pdf->Image("../picture/{$estu->tipo}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
+        $pdf->Image("../picture/{$profe->foto_name}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
     }
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, $estu->nombre, 0, 1, 'R');
+    $pdf->Cell(79, 5, !mb_detect_encoding($profe->nombre, 'UTF-8', true) ? $profe->nombre : utf8_decode($profe->nombre), 0, 1, 'R');
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, $estu->apellidos, 0, 1, 'R');
+    $pdf->Cell(79, 5, !mb_detect_encoding($profe->apellidos, 'UTF-8', true) ? $profe->apellidos : utf8_decode($profe->apellidos), 0, 1, 'R');
     $pdf->Cell(35);
-    $pdf->Cell(40, 5, "Grado $estu->grado ID #$estu->id", 0, 1, 'C', true);
-    if ($estu->cbarra !== '') $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $estu->cbarra, '*', '*', 0.29, 5);
+    $pdf->Cell(40, 5, "S. Hogar: $profe->grado ID: #$profe->id", 0, 1, 'C', true);
+    if (sizeof($profe->id) > 0) $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $profe->id, '*', '*', 0.29, 5);
     $pdf->Ln(30);
 }
 $count = 1;
-foreach ($estudiantesSS as $ss) {
+foreach ($profesorIds as $id) {
     $pdf->SetFillColor(144, 184, 255);
     if ($count === 6) {
         $pdf->SetMargins(120, 10);

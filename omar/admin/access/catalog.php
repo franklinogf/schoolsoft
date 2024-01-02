@@ -43,6 +43,7 @@ if (isset($_REQUEST['search'])) {
     $thisCourse = DB::table('cursos')->where('mt', $_REQUEST['course'])->first();
 }
 if (isset($_REQUEST['save'])) {
+    $teacher = new Teacher($_POST['teacherId']);
     $thisCourse = DB::table('cursos')->where('mt', $_REQUEST['courseId'])->update([
         'curso' => $_POST['curso'],
         'desc1' => $_POST['desc1'],
@@ -57,6 +58,32 @@ if (isset($_REQUEST['save'])) {
         'valor' => $_POST['valor'],
         'verano' => $_POST['verano'],
     ]);
+
+    $thisCourse2 = DB::table('padres')->where([
+        ['curso', $_POST['curso']],
+        ['year', $school->info('year2')]
+    ])->update([
+        'descripcion' => $_POST['desc1'],
+        'profesor' => "$teacher->nombre $teacher->apellidos",
+        'desc2' => $_POST['desc2'],
+        'credito' => $_POST['credito'],
+        'peso' => $_POST['peso'],
+        'id' => $_POST['teacherId'],
+        'dias' => $_POST['dias'],
+        'ava' => $_POST['ava'],
+        'valor' => $_POST['valor'],
+        'verano' => $_POST['verano'],
+    ]);
+    for ($a = 2; $a <= 6; $a++) {
+        $thisCourse2 = DB::table("padres$a")->where([
+            ['curso', $_POST['curso']],
+            ['year', $school->info('year2')]
+        ])->update([
+            'descripcion' => $_POST['desc1'],
+            'profesor' => "$teacher->nombre $teacher->apellidos",
+        ]);
+    }
+
 }
 if (isset($_REQUEST['create'])) {
     DB::table('cursos')->insert([
