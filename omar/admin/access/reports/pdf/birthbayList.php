@@ -11,7 +11,7 @@ use Classes\Controllers\School;
 Session::is_logged();
 
 $lang = new Lang([
-    ["Lista de cumpleaños", "Birthbay list"],
+    ["Lista de cumpleaï¿½os", "Birthbay list"],
     ['Apellidos', 'Surnames'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
@@ -24,14 +24,14 @@ $grade = $_POST['grade'];
 $sg = $_POST['separatedGrade'];
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de cumpleaños") . " $year", true);
+$pdf->SetTitle($lang->translation("Lista de cumpleaï¿½os") . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Lista de cumpleaños") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Lista de cumpleaï¿½os") . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);

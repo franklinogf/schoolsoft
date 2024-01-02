@@ -36,7 +36,7 @@ $lang = new Lang([
 $school = new School();
 $students = new Student();
 $students = $students->all();
-$budgets = DB::table('presupuesto')->where('year', $school->info('year'))->get();
+$budgets = DB::table('presupuesto')->where('year', $school->year())->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -54,7 +54,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->info('year'))->get()
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o inactivar las cuentas de los padres del año') . ' ' . $school->info('year') ?> </h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o inactivar las cuentas de los padres del año') . ' ' . $school->year() ?> </h1>
         <div class="container mt-5">
             <button class="btn btn-primary mb-1" data-toggle="modal" data-target="#optionsModal"><?= $lang->translation("Opciones") ?></button>
             <div class="table_wrap">

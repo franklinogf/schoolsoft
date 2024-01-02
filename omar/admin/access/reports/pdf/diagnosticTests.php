@@ -34,7 +34,7 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Pruebas diagnósticas") . " $year", true);

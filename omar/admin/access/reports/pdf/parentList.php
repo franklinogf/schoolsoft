@@ -19,11 +19,8 @@ $lang = new Lang([
     ['Madres', 'Mothers'],
 ]);
 $grade = $_POST['grade'];
-
 $school = new School();
-$year = $school->info('year');
-$school = new School();
-$year = $school->info('year');
+$year = $school->year();
 class nPDF extends PDF
 {
     function header()

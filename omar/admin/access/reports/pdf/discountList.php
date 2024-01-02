@@ -16,12 +16,12 @@ $lang = new Lang([
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
     ['Fecha', 'Date drop out'],
-    ['Código', 'Code'],
+    ['Cï¿½digo', 'Code'],
     ['Descuentos', 'Discount'],
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de descuentos") . " $year", true);
 $pdf->Fill();
@@ -54,15 +54,15 @@ foreach ($students as $student) {
         $pdf->Cell(55, 5, utf8_decode($student->apellidos));
         $pdf->Cell(45, 5, utf8_decode($student->nombre));
         $pdf->Cell(12, 5, $student->grado, 0, 0, 'C');
-        if (utf8_decode($student->desc1) !='Selección')
+        if (utf8_decode($student->desc1) !='Selecciï¿½n')
            {
            $pdf->Cell(50, 5, utf8_decode($student->desc1).' '.$student->desc_men, 0, 0, 'L');
            }
-        if (utf8_decode($student->desc2) !='Selección')
+        if (utf8_decode($student->desc2) !='Selecciï¿½n')
            {
            $pdf->Cell(50, 5, utf8_decode($student->desc2).' '.$student->desc_mat, 0, 0, 'L');
            }
-        if (utf8_decode($student->desc3) !='Selección')
+        if (utf8_decode($student->desc3) !='Selecciï¿½n')
            {
            $pdf->Cell(50, 5, utf8_decode($student->desc3).' '.$student->desc_otro1, 0, 0, 'L');
            }

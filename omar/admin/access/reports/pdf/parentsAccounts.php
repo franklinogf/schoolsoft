@@ -18,7 +18,7 @@ $lang = new Lang([
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 class nPDF extends PDF
 {
     function header()

@@ -14,11 +14,11 @@ $lang = new Lang([
     ['Profesor', 'Teacher'],
     ['Nombre', 'Name'],
     ['Correo', 'E-Mail'],
-    ['Contraseña', 'Password'],
+    ['Contraseï¿½a', 'Password'],
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista Correos Profesor") . " $year", true);
 $pdf->Fill();

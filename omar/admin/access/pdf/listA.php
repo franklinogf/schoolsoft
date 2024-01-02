@@ -14,7 +14,7 @@ $pdf->addPage();
 
 
 $school = new School();
-$courses = DB::table('cursos')->where('year', $school->info('year'))->orderBy('curso')->get();
+$courses = DB::table('cursos')->where('year', $school->year())->orderBy('curso')->get();
 
 
 $pdf->Cell(0, 10, 'LISTA DE CURSOS', 0, 1, 'C');

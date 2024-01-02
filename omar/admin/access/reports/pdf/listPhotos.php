@@ -30,7 +30,7 @@ $school = new School();
 $studentClass = new Student();
 $teacherClass = new Teacher();
 
-$year = $school->info('year');
+$year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de estudiantes por salón hogar y fotos") . " $year", true);

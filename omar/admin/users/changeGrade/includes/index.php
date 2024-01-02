@@ -12,7 +12,7 @@ use Classes\Controllers\Student;
 Session::is_logged();
 Server::is_post();
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 if (isset($_POST['grade'])) {
     $grade = $_POST['grade'];
     $students = $_POST['students'];

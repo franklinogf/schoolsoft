@@ -12,12 +12,12 @@ use Classes\Util;
 Session::is_logged();
 
 $lang = new Lang([
-    ['Lista de religión', 'Religion List'],
+    ['Lista de religiï¿½n', 'Religion List'],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
     ['Cuenta', 'Account'],
-    ['Religión', 'Religion'],
+    ['Religiï¿½n', 'Religion'],
     ['Parroquia o Iglesia', 'Parish or Church'],
     ['Nombre', 'Name'],
     ['Total de estudiantes', 'Total students'],
@@ -32,7 +32,7 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 
 $unegrade = $_POST['grade'];
 
@@ -47,7 +47,7 @@ else
 
 
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de religión"). " $year", true);
+$pdf->SetTitle($lang->translation("Lista de religiï¿½n"). " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -56,7 +56,7 @@ foreach ($allGrades as $grade) {
     $students = $studentClass->findByGrade($grade);
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Lista de religión") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, $lang->translation("Lista de religiï¿½n") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
@@ -65,7 +65,7 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
     $pdf->Cell(15, 5, 'ID', 1, 0, 'C', true);
     $pdf->Cell(80, 5, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
-    $pdf->Cell(45, 5, $lang->translation("Religión"), 1, 0, 'C', true);
+    $pdf->Cell(45, 5, $lang->translation("Religiï¿½n"), 1, 0, 'C', true);
     $pdf->Cell(45, 5, $lang->translation("Parroquia o Iglesia"), 1, 1, 'C', true);
     $col=1;$wo2=65;
     foreach ($students as $count => $student) {

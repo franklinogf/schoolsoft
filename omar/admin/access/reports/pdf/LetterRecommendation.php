@@ -16,7 +16,7 @@ Session::is_logged();
 $school = new School();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $colegio = $school->info('colegio');
 
 

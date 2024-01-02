@@ -14,17 +14,14 @@ $lang = new Lang([
     ['Lista trabajo de padres', 'Parents work List'],
     ['Nombres padres', 'Parents Name'],
     ['Celular', 'Cel-Phone'],
-    ['Teléfono', 'Phone'],
+    ['Telï¿½fono', 'Phone'],
     ['Trabajos', 'Works'],
     ['Padres', 'Fathers'],
     ['Madres', 'Mothers'],
 ]);
 $grade = $_POST['grade'];
-
 $school = new School();
-$year = $school->info('year');
-$school = new School();
-$year = $school->info('year');
+$year = $school->year();
 class nPDF extends PDF
 {
     function header()
@@ -42,7 +39,7 @@ class nPDF extends PDF
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombres padres"), 1, 0, 'C', true);
         $this->Cell(35, 5, $lang->translation("Celular"), 1, 0, 'C', true);
-        $this->Cell(35, 5, $lang->translation("Teléfono"), 1, 0, 'C', true);
+        $this->Cell(35, 5, $lang->translation("Telï¿½fono"), 1, 0, 'C', true);
         $this->Cell(80, 5, $lang->translation("Trabajos"), 1, 1, 'C', true);
 //        $this->Cell(65, 5, $lang->translation("Padres"), 1, 0, 'C', true);
 //        $this->Cell(65, 5, $lang->translation("Madres"), 1, 1, 'C', true);

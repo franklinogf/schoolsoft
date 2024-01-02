@@ -21,7 +21,7 @@ if (isset($_POST['create'])) {
     $grade = $_POST['grade'];
     $option = $_POST['option'];
 
-    $year = $school->info('year');
+    $year = $school->year();
     $students = DB::table('year')->where([
         ['grado', $grade],
         ['year', $year],

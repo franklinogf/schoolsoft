@@ -21,7 +21,7 @@ $lang = new Lang([
 $school = new School();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Informe de familia por grado") . " $year", true);

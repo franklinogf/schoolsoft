@@ -30,7 +30,7 @@ $lang = new Lang([
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 
 $students = DB::table('year')->where([
     ['activo', ''],

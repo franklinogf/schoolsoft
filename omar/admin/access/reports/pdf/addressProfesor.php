@@ -14,11 +14,11 @@ $lang = new Lang([
     ['Profesor', 'Teacher'],
     ['Nombre', 'Name'],
     ['Correo', 'E-Mail'],
-    ['Dirección', 'Address'],
+    ['Direcciï¿½n', 'Address'],
 ]);
 $prof = $_POST['prof'];
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de direcciones maestros") . " $year", true);
 $pdf->Fill();
@@ -32,7 +32,7 @@ $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
 $pdf->Cell(70, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
-$pdf->Cell(70, 5, $lang->translation("Dirección"), 1, 1, 'C', true);
+$pdf->Cell(70, 5, $lang->translation("Direcciï¿½n"), 1, 1, 'C', true);
 $pdf->ln(2);
 $pdf->SetFont('Arial', '', 10);
 

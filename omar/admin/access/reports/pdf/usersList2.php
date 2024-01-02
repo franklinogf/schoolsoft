@@ -14,7 +14,7 @@ use Classes\Util;
 Session::is_logged();
 
 $lang = new Lang([
-    ['Información Usuario', 'User Information'],
+    ['Informaciï¿½n Usuario', 'User Information'],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
@@ -35,7 +35,7 @@ $school = new School();
 $studentClass = new Student();
 $parentsClass = new Parents();
 
-$year = $school->info('year');
+$year = $school->year();
 
 $unegrade = $_POST['grade'];
 
@@ -102,7 +102,7 @@ foreach ($allGrades as $grade) {
       if ($col==1){$pdf->SetX(15);}
       if ($col==2){$pdf->SetX(80);}
       if ($col==3){$pdf->SetX(145);}
-      $pdf->Cell(60, 5, $lang->translation("Información Usuario"), 'LRT',1,'C');
+      $pdf->Cell(60, 5, $lang->translation("Informaciï¿½n Usuario"), 'LRT',1,'C');
       if ($col==1){$pdf->SetX(15);}
       if ($col==2){$pdf->SetX(80);}
       if ($col==3){$pdf->SetX(145);}

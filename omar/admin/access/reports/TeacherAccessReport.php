@@ -76,7 +76,7 @@ if ($option === 'student') {
     }
 } else {
     $school = new School();
-    $year = $school->info('year');
+    $year = $school->year();
     $student = new Teacher();
 
 //    $grade = $_POST['grade'];

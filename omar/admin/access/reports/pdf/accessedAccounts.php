@@ -19,7 +19,7 @@ $lang = new Lang([
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de cuentas que acceden") . " $year", true);
 $pdf->Fill();

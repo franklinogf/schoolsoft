@@ -13,7 +13,7 @@ use Classes\Util;
 Session::is_logged();
 
 $lang = new Lang([
-    ["Lista de teléfonos", "Phone list"],
+    ["Lista de telï¿½fonos", "Phone list"],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
@@ -33,7 +33,7 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $allGrades = $school->allGrades();
 
 
@@ -47,7 +47,7 @@ class nPDF extends PDF
         global $teacher2;
         parent::header();       
     $this->SetFont('Arial', 'B', 15);
-    $this->Cell(0, 5, $lang->translation("Lista de teléfonos") . " $year", 0, 1, 'C');
+    $this->Cell(0, 5, $lang->translation("Lista de telï¿½fonos") . " $year", 0, 1, 'C');
     $this->Ln(5);
     $this->SetFont('Arial', 'B', 12);
     $this->splitCells($lang->translation("Maestro(a):") . ' '.utf8_decode($teacher2), $lang->translation("Grado:") . " $grade");
@@ -66,7 +66,7 @@ class nPDF extends PDF
 
 
 $pdf = new nPDF();
-$pdf->SetTitle($lang->translation("Lista de teléfonos"). " $year", true);
+$pdf->SetTitle($lang->translation("Lista de telï¿½fonos"). " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {

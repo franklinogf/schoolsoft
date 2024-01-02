@@ -18,7 +18,7 @@ $lang = new Lang([
     ['Indeciso', 'Undecided'],
 ]);
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $code = $_POST['code'];
 $survey = DB::table("estadisticas")->where(['codigo', $code])->first();
 $surveyAnswers = DB::table("respuestas")->where(['codigo', $code])->orderBy('apellidos')->get();

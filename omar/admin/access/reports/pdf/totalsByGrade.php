@@ -26,7 +26,7 @@ $lang = new Lang([
 $school = new School();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de totales por grado") . " $year", true);

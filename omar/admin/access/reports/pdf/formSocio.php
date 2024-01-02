@@ -37,7 +37,7 @@ $lang = new Lang([["Estudio Socioeconómico", "Socio-economic study"],
 $school = new School();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Estudio Socioeconómico") . " $year", true);
 $pdf->Fill();

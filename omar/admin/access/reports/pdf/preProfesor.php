@@ -10,29 +10,29 @@ use Classes\Controllers\School;
 Session::is_logged();
 
 $lang = new Lang([
-    ["Preparación de Maestros", "Teachers preparation"],
+    ["Preparaciï¿½n de Maestros", "Teachers preparation"],
     ['Profesor', 'Teacher'],
     ['ID', 'ID'],
     ['Celular', 'Cel Phone'],
-    ['Preparación', 'Preparation'],
+    ['Preparaciï¿½n', 'Preparation'],
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Preparación de Maestros") . " $year", true);
+$pdf->SetTitle($lang->translation("Preparaciï¿½n de Maestros") . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Preparación de Maestros") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Preparaciï¿½n de Maestros") . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(10, 5, $lang->translation("ID"), 1, 0, 'C', true);
 $pdf->Cell(60, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
-$pdf->Cell(110, 5, $lang->translation("Preparación"), 1, 1, 'C', true);
+$pdf->Cell(110, 5, $lang->translation("Preparaciï¿½n"), 1, 1, 'C', true);
 $pdf->ln(2);
 $pdf->SetFont('Arial', '', 10);
 

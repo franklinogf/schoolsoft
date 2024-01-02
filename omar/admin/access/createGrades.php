@@ -17,7 +17,7 @@ $lang = new Lang([
     ['Orden', 'Order'],
 ]);
 $school = new School(Session::id());
-$grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('grado')->get();
+$grades = DB::table('materias')->where('year', $school->year())->orderBy('grado')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

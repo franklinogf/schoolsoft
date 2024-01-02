@@ -29,7 +29,7 @@ $lang = new Lang([
     ['Resumen', 'Summary'],
 ]);
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 
 $depar = DB::table('departamentos')->orderBy('descripcion')->get();
 

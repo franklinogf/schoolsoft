@@ -11,9 +11,9 @@ use Classes\Controllers\School;
 Session::is_logged();
 
 $lang = new Lang([
-    ['Lista de dirección postal', 'Postal address List'],
+    ['Lista de direcciï¿½n postal', 'Postal address List'],
     ['Nombre Estudiante', 'Student name'],
-    ['Dirección', 'Address'],
+    ['Direcciï¿½n', 'Address'],
     ['Trabajos', 'Works'],
     ['Padres', 'Fathers'],
     ['Madres', 'Mothers'],
@@ -21,9 +21,8 @@ $lang = new Lang([
 $grade = $_POST['grade'];
 
 $school = new School();
-$year = $school->info('year');
-$school = new School();
-$year = $school->info('year');
+$year = $school->year();
+
 $grupo = '';
 class nPDF extends PDF
 {
@@ -34,18 +33,18 @@ class nPDF extends PDF
         global $grupo;
         parent::header();
         $this->SetFont('Arial', 'B', 15);
-        $this->Cell(0, 5, $lang->translation("Lista de dirección postal") . " $year / ".$grupo, 0, 1, 'C');
+        $this->Cell(0, 5, $lang->translation("Lista de direcciï¿½n postal") . " $year / ".$grupo, 0, 1, 'C');
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombre Estudiante"), 1, 0, 'C', true);
-        $this->Cell(90, 5, $lang->translation("Dirección"), 1, 1, 'C', true);
+        $this->Cell(90, 5, $lang->translation("Direcciï¿½n"), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }
 }
 $pdf = new nPDF();
-$pdf->SetTitle($lang->translation("Lista de dirección postal") . " $year / ".$grupo, true);
+$pdf->SetTitle($lang->translation("Lista de direcciï¿½n postal") . " $year / ".$grupo, true);
 $pdf->Fill();
 
 $grade = $_POST['grade'];
