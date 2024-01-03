@@ -27,7 +27,7 @@ $lang = new Lang([
 $school = new School();
 $studentClass = new Student();
 $students = $studentClass->all();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de estudiantes") . " $year", true);
 $pdf->Fill();

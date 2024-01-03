@@ -44,7 +44,7 @@ class TeacherModel extends School
   }
   protected function getTeacherClasses($id)
   {
-    $year = $this->info('year2');
+    $year = $this->year();
     if (__COSEY) {
       $desc = (__LANG === "es") ? "descripcion" : "desc2";
       $obj =  parent::table('padres')->select("DISTINCT curso, {$desc} as desc1")
@@ -64,7 +64,7 @@ class TeacherModel extends School
   }
   protected function getTeacherClassCredit($id, $class)
   {
-    $year = $this->info('year2');
+    $year = $this->year();
     $obj =  parent::table('cursos')->select('credito')
       ->where([
         ['curso', $class],
@@ -76,7 +76,7 @@ class TeacherModel extends School
 
   protected function getAllTeacherStudents($id, $table = 'padres')
   {
-    $year = $this->info('year2');
+    $year = $this->year();
     $obj = parent::table($table)->where([
       ['year', $year],
       ['id', $id]
@@ -89,7 +89,7 @@ class TeacherModel extends School
 
   protected function getHomeStudents($grade)
   {
-    $year = $this->info('year2');
+    $year = $this->year();
     if (__COSEY) {
       $obj =  parent::table(StudentModel::TABLE)
         ->where([
@@ -112,7 +112,7 @@ class TeacherModel extends School
   }
   protected function getUnreadMessages($id)
   {
-    $year = $this->info('year2');
+    $year = $this->year();
     $obj = parent::table('foro_mensajes', !__COSEY)->where([
       ['enviado_por', '<>', 'p'],
       ['id_p', $id],
@@ -126,7 +126,7 @@ class TeacherModel extends School
   protected function getLastTeacherTopic($id)
   {
 
-    $year = $this->info('year2');
+    $year = $this->year();
     if (__COSEY) {
       $obj =  parent::table('detalle_foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
@@ -161,7 +161,7 @@ class TeacherModel extends School
   protected function getTeachersTopicsByClass($id, $class)
   {
 
-    $year = $this->info('year2');
+    $year = $this->year();
     $obj =  parent::table('foro_entradas', !__COSEY)
       ->where([
         ['creador_id', $id],
@@ -175,7 +175,7 @@ class TeacherModel extends School
   protected function getTeachersTopics($id)
   {
 
-    $year = $this->info('year2');
+    $year = $this->year();
     $obj =  parent::table('foro_entradas', !__COSEY)
       ->where([
         ['creador_id', $id],

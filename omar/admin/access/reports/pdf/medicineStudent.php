@@ -31,7 +31,7 @@ $school = new School();
 //$teacherClass = new Teacher();
 //$studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Medicamentos / Recetas"). " $year", true);
 $pdf->Fill();

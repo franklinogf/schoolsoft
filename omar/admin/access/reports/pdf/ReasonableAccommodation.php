@@ -35,7 +35,7 @@ $lang = new Lang([
 $school = new School();
 $teacherClass = new Teacher();
 
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Informe Acomodo Razonable") . " $year", true);
 $pdf->Fill();

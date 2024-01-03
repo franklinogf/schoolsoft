@@ -23,7 +23,7 @@ $lang = new Lang([
 $_grades = ['MA', 'PK', 'KG', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Resumen socioeconómico") . " $year", true);
 $pdf->Fill();

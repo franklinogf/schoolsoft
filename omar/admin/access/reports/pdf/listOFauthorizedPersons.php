@@ -23,7 +23,7 @@ $lang = new Lang([
 $grade = $_POST['grade'];
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $studentClass = new Student();
 
 class nPDF extends PDF

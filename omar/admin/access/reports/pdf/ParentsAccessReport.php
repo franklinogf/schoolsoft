@@ -70,7 +70,7 @@ if ($option === 'student') {
     }
 } else {
     $school = new School();
-    $year = $school->info('year');
+    $year = $school->year();
     $grade = $_POST['grade'];
 //    $separatedGrade = $_POST['separatedGrade'] === 'si' ? true : false;
     $type = $_POST['type'];

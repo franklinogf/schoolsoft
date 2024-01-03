@@ -17,7 +17,7 @@ $lang = new Lang([
     ['Grado', 'Grade'],
     ['Fecha', 'Date'],
     ['Si', 'Yes'],
-    ['Es la Dirección unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
+    ['Es la Direcciï¿½n unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
     ['Apellidos', 'Surnames'],
     ['Las vio', 'He saw them'],
     ['Tarjeta de notas', 'Note card'],
@@ -30,7 +30,7 @@ $grade = $_POST['grade'];
 $trimestre = $_POST['trimestre'];
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Acuse de recibo") . " $year", true);
 $pdf->Fill();

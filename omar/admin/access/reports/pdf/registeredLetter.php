@@ -21,7 +21,7 @@ $lang = new Lang([
     [', certifica que el/la/los/las', ', certifies that he/she/they'],
     ['estudiante(s) ha sido estudiante(s) regular(es) de', 'student(s) has been a regular student(s) of'],
     ['nuestro Colegio durante el curso escolar 20', 'our School during the school year 20'],
-    ['Cualquier información favor de comunicarse a nuestras', 'Any information please contact our'],
+    ['Cualquier informaciï¿½n favor de comunicarse a nuestras', 'Any information please contact our'],
     ['Oficinas de Finanzas.', 'Finance Offices.'],
 ]);
 $grade = $_POST['grade'];
@@ -31,7 +31,7 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 $colegio = $school->info('colegio');
 list($y1,$y2) = explode("-",$year);
 
@@ -83,7 +83,7 @@ if ($opcion == 'grade')
            }
        $pdf->Ln(10);
        $pdf->Cell(25, 7, '', 0, 0, 'C');
-       $pdf->Cell(100, 7, $lang->translation("Cualquier información favor de comunicarse a nuestras"), 0, 1, 'L');
+       $pdf->Cell(100, 7, $lang->translation("Cualquier informaciï¿½n favor de comunicarse a nuestras"), 0, 1, 'L');
        $pdf->Cell(25, 7, '', 0, 0, 'C');
        $pdf->Cell(100, 7, $lang->translation("Oficinas de Finanzas."), 0, 1, 'L');
        }
@@ -128,7 +128,7 @@ else
            }
        $pdf->Ln(10);
        $pdf->Cell(25, 7, '', 0, 0, 'C');
-       $pdf->Cell(100, 7, $lang->translation("Cualquier información favor de comunicarse a nuestras"), 0, 1, 'L');
+       $pdf->Cell(100, 7, $lang->translation("Cualquier informaciï¿½n favor de comunicarse a nuestras"), 0, 1, 'L');
        $pdf->Cell(25, 7, '', 0, 0, 'C');
        $pdf->Cell(100, 7, $lang->translation("Oficinas de Finanzas."), 0, 1, 'L');
    }

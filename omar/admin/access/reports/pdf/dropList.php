@@ -16,11 +16,11 @@ $lang = new Lang([
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
     ['Fecha', 'Date drop out'],
-    ['Código', 'Code'],
+    ['Cï¿½digo', 'Code'],
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de bajas") . " $year", true);
 $pdf->Fill();
@@ -33,7 +33,7 @@ $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(10, 5, 'ID', 1, 0, 'C', true);
-$pdf->Cell(17, 5, $lang->translation("Código"), 1, 0, 'C', true);
+$pdf->Cell(17, 5, $lang->translation("Cï¿½digo"), 1, 0, 'C', true);
 $pdf->Cell(55, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
 $pdf->Cell(45, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
 $pdf->Cell(20, 5, $lang->translation("Grado"), 1, 0, 'C', true);

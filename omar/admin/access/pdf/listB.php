@@ -34,7 +34,7 @@ $count = 1;
 foreach ($teachers as $teacher) {
 
 	$courses = DB::table('cursos')->where([
-		['year', $school->info('year')],
+		['year', $school->year()],
 		['id', $teacher->id]
 	])->orderBy('curso')->get();
 

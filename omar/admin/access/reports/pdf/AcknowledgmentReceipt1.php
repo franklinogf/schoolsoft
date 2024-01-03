@@ -15,7 +15,7 @@ $lang = new Lang([
     ['Trimestres', 'Quarters'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
-    ['Es la Dirección unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
+    ['Es la Direcciï¿½n unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
     ['Fecha', 'Date'],
     ['Hora', 'Hour'],
     ['Tarjeta de notas', 'Note card'],
@@ -28,7 +28,7 @@ $grade = $_POST['grade'];
 $ss = $_POST['student'];
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Acuse de recibo") . " $year", true);
 $pdf->Fill();
@@ -69,7 +69,7 @@ foreach ($students as $student) {
         $pdf->Cell(70, 5, $student->grado,0,1,'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Ln(5);
-        $pdf->Cell(0, 5, '*IP = '.$lang->translation("Es la Dirección unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet."), 0, 1, 'L');
+        $pdf->Cell(0, 5, '*IP = '.$lang->translation("Es la Direcciï¿½n unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet."), 0, 1, 'L');
         $pdf->Cell(15, 5, '', 1, 0, 'C', true);
         $pdf->Cell(43, 5, $lang->translation("Trimestres"), 1, 0, 'C', true);
         $pdf->Cell(43, 5, $lang->translation("Fecha"), 1, 0, 'C', true);

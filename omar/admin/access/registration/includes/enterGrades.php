@@ -10,7 +10,7 @@ use Classes\DataBase\DB;
 
 Server::is_post();
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $enterGrades2 = ['cbtm'];
 $_info = [
     "Notas" => [

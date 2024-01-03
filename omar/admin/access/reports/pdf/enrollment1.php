@@ -17,7 +17,7 @@ $lang = new Lang([
 
 ]);
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $todayDate = $_POST['todayDate'] === 'si' ? true : false;
 $enrollmentYear = $_POST['enrollmentYear'];
 $option = $_POST['option'];

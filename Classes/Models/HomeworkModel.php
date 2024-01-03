@@ -40,7 +40,7 @@ class HomeworkModel extends School
       $doneHw = parent::table('tareas_enviadas', !__COSEY)->where([
          ['id_tarea', $id],
          ['id_profesor', $hw->id2],
-         ['year', $this->info('year')]
+         ['year', $this->year()]
       ])->get();
       $this->getFiles($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
 
@@ -73,7 +73,7 @@ class HomeworkModel extends School
    {
       $whereArray = [
          ["{$this->table}.id2", $id],
-         ["{$this->table}.year", $this->info('year')],
+         ["{$this->table}.year", $this->year()],
          ["cursos.id",'!=','']
       ];
       if ($class) {
@@ -83,12 +83,12 @@ class HomeworkModel extends School
          array_push($whereArray, ["{$this->table}.enviartarea", 'si']);
       }
       if (__COSEY) {
-         array_push($whereArray, ["padres.year", $this->info('year')]);
+         array_push($whereArray, ["padres.year", $this->year()]);
          $obj = parent::table($this->table, !__COSEY)->select("DISTINCT {$this->table}.*,padres.descripcion as `desc`")
             ->join('padres', "padres.curso", "=", "{$this->table}.curso")
             ->where($whereArray)->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
       } else {
-         array_push($whereArray, ["cursos.year", $this->info('year')]);
+         array_push($whereArray, ["cursos.year", $this->year()]);
          $obj = parent::table($this->table)->select("{$this->table}.*,cursos.desc1 as `desc`")
             ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
             ->where($whereArray)->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
@@ -107,7 +107,7 @@ class HomeworkModel extends School
             ->where([
                ["{$this->table}.curso", $class],
                // ["{$this->table}.enviartarea", 'si'],
-               ["padres.year", $this->info('year')]
+               ["padres.year", $this->year()]
             ])->whereRaw("AND ({$this->table}.fec_out >= ? OR {$this->table}.fec_out = ?)", [$date, "0000-00-00"])
             ->orderBy("{$this->table}.fec_out", 'ASC')->get();
       } else {
@@ -116,8 +116,8 @@ class HomeworkModel extends School
             ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
             ->where([
                ["{$this->table}.curso", $class],
-               ["cursos.year", $this->info('year')],
-               ["{$this->table}.year", $this->info('year')],
+               ["cursos.year", $this->year()],
+               ["{$this->table}.year", $this->year()],
             ])
             ->whereRaw("AND ({$this->table}.fec_out >=  ? OR {$this->table}.fec_out = ?)", [Util::date(), "0000-00-00"])
             ->orderBy("{$this->table}.fec_out ASC")->get();

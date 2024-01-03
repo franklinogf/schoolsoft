@@ -13,11 +13,11 @@ $lang = new Lang([
     ['Crear grado', 'Create grade'],
     ['Cursos', 'Courses'],
     ['Grado', 'Grade'],
-    ['Opción', 'Option'],
+    ['OpciÃ³n', 'Option'],
     ['Orden', 'Order'],
 ]);
 $school = new School(Session::id());
-$grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('grado')->get();
+$grades = DB::table('materias')->where('year', $school->year())->orderBy('grado')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,9 +39,9 @@ $grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('
             <form method="POST" action="<?= Route::url('/admin/access/includes/createGrades.php') ?>">
                 <div class="mx-auto" style="max-width: 500px;">
                     <?php if (Session::get('createGrades')) : ?>
-                        <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
-                            <i class="fa-solid fa-square-check"></i> <?= Session::get('createGrades', true) ?>
-                        </div>
+                    <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
+                        <i class="fa-solid fa-square-check"></i> <?= Session::get('createGrades', true) ?>
+                    </div>
                     <?php endif ?>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -49,13 +49,13 @@ $grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
                             <?php foreach ($grades as $grade) : ?>
-                                <option value='<?= $grade->grado ?>'><?= $grade->grado ?></option>
+                            <option value='<?= $grade->grado ?>'><?= $grade->grado ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="option"><?= $lang->translation('Opción') ?></label>
+                            <label class="input-group-text" for="option"><?= $lang->translation('OpciÃ³n') ?></label>
                         </div>
                         <select id="option" name="option" class="form-control" required>
                             <option value="1">Todo</option>

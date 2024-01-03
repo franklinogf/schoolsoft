@@ -18,7 +18,7 @@ $lang = new Lang([
 ]);
 $prof = $_POST['prof'];
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista No docentes") . " $year", true);
 $pdf->Fill();

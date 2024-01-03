@@ -19,8 +19,8 @@ $lang = new Lang([
     ['Nuevo grado creado', 'New grade created'],
 ]);
 $school = new School(Session::id());
-$grades = DB::table('materias')->where('year', $school->info('year'))->orderBy('grado')->get();
-$allCourses = DB::table('cursos')->where('year', $school->info('year'))->orderBy('curso')->get();
+$grades = DB::table('materias')->where('year', $school->year())->orderBy('grado')->get();
+$allCourses = DB::table('cursos')->where('year', $school->year())->orderBy('curso')->get();
 
 $courses = [];
 foreach ($allCourses as $course) {

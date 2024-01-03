@@ -13,17 +13,15 @@ Session::is_logged();
 $lang = new Lang([
     ['Direcciones y telefonos por grado', 'Addresses and telephones by grade'],
     ['Nombre Estudiante', 'Student name'],
-    ['Dirección', 'Address'],
-    ['Teléfono', 'Phone'],
+    ['Direcciï¿½n', 'Address'],
+    ['Telï¿½fono', 'Phone'],
     ['Celular', 'Cell Phone'],
     ['Madres', 'Mothers'],
 ]);
 //$grade = $_POST['grade'];
 
 $school = new School();
-$year = $school->info('year');
-//$school = new School();
-//$year = $school->info('year');
+$year = $school->year();
 $grupo = '';
 class nPDF extends PDF
 {
@@ -40,8 +38,8 @@ class nPDF extends PDF
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(80, 5, $lang->translation("Nombre Estudiante"), 1, 0, 'C', true);
-        $this->Cell(80, 5, $lang->translation("Dirección"), 1, 0, 'C', true);
-        $this->Cell(40, 5, $lang->translation("Teléfono"), 1, 0, 'C', true);
+        $this->Cell(80, 5, $lang->translation("Direcciï¿½n"), 1, 0, 'C', true);
+        $this->Cell(40, 5, $lang->translation("Telï¿½fono"), 1, 0, 'C', true);
         $this->Cell(40, 5, $lang->translation("Celular"), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }

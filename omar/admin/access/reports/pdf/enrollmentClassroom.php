@@ -32,7 +32,7 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->info('year');
+$year = $school->year();
 
 $unegrade = $_POST['grade'];
 

@@ -65,9 +65,9 @@ $options = [
                 'link' => 'catalog.php'
             ],
             [
-                'name' => ["es" => 'Crear los grados',   "en" => "Crear los grados"],
+                'name' => ["es" => 'Crear grados',   "en" => "Create grades"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'createGrades.php'
             ],
             [
                 'name' => ["es" => 'Cursos por grados',   "en" => "Courses by grade"],

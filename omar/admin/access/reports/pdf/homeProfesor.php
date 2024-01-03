@@ -10,7 +10,7 @@ use Classes\Controllers\School;
 Session::is_logged();
 
 $lang = new Lang([
-    ["Lista de Salón Hogar", "Teachers Home room list"],
+    ["Lista de Salï¿½n Hogar", "Teachers Home room list"],
     ['Profesor', 'Teacher'],
     ['ID', 'ID'],
     ['Celular', 'Cel Phone'],
@@ -18,14 +18,14 @@ $lang = new Lang([
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de Salón Hogar") . " $year", true);
+$pdf->SetTitle($lang->translation("Lista de Salï¿½n Hogar") . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Lista de Salón Hogar") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Lista de Salï¿½n Hogar") . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);

@@ -41,9 +41,9 @@ class ExamModel extends School
       $doneHw = parent::table('tareas_enviadas',!__COSEY)->where([
          ['id_tarea', $id],
          ['id_profesor', $hw->id2],
-         ['year', $this->info('year')]
+         ['year', $this->year()]
       ])->get();
-      $this->getExamTopics($doneHw, 'id', 't_tareas_archivos', 'id_tarea');
+      $this->getExamTopics($doneHw);
 
       return $doneHw;
    }
@@ -77,14 +77,14 @@ class ExamModel extends School
          ->join('padres', "padres.curso", "=", "{$this->table}.curso")
          ->where([
             ["{$this->table}.curso", $class],
-            ["padres.year", $this->info('year')]
+               ["padres.year", $this->year()]
          ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
       }else{
          $obj = parent::table($this->table,!__COSEY)->select("{$this->table}.*,cursos.desc1 as `desc`")
          ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
          ->where([
             ["{$this->table}.curso", $class],
-            ["cursos.year", $this->info('year')]
+               ["cursos.year", $this->year()]
          ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
       }
 
@@ -102,7 +102,7 @@ class ExamModel extends School
             ->where([
                ["{$this->table}.curso", $class],
                ["{$this->table}.activo", 'si'],
-               ["padres.year", $this->info('year')],
+                  ["padres.year", $this->year()],
                ["{$this->table}.fecha", $date]
             ])
             ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final",[
@@ -117,7 +117,7 @@ class ExamModel extends School
             ->where([
                ["{$this->table}.curso", $class],
                ["{$this->table}.activo", 'si'],
-               ["cursos.year", $this->info('year')],
+                  ["cursos.year", $this->year()],
                ["{$this->table}.fecha", $date]
             ])
             ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final",[
@@ -133,7 +133,7 @@ class ExamModel extends School
                ->where([
                   ["{$this->table}.curso", $class],
                   ["{$this->table}.activo", 'si'],
-                  ["padres.year", $this->info('year')],
+                  ["padres.year", $this->year()],
                   ["{$this->table}.fecha", '>=', $date]
                ])
                ->orderBy("{$this->table}.fecha", 'DESC')->get();
@@ -144,7 +144,7 @@ class ExamModel extends School
                ->where([
                   ["{$this->table}.curso", $class],
                   ["{$this->table}.activo", 'si'],
-                  ["cursos.year", $this->info('year')],
+                  ["cursos.year", $this->year()],
                   ["{$this->table}.fecha", '>=', $date]
                ])
                ->orderBy("{$this->table}.fecha", 'DESC')->get();

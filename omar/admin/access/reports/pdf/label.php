@@ -16,7 +16,7 @@ $lang = new Lang([
 ]);
 $school = new School();
 $studentClass = new Student();
-$year = $school->info('year');
+$year = $school->year();
 
 $label = $_POST['label'];
 $grade = $_POST['grade'];

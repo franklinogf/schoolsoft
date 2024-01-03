@@ -18,7 +18,7 @@ $lang = new Lang([
 
 ]);
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $withFees = $_POST['fees'] === 'si' ? true : false;
 $option = $_POST['option'];
 $fees = DB::table('hojacostos')->orderBy('id')->get();

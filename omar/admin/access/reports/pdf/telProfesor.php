@@ -10,22 +10,22 @@ use Classes\Controllers\School;
 Session::is_logged();
 
 $lang = new Lang([
-    ["Lista Teléfono Profesor", "Teacher phone list"],
+    ["Lista Telï¿½fono Profesor", "Teacher phone list"],
     ['Profesor', 'Teacher'],
     ['Casa', 'Home'],
     ['Celular', 'Cel Phone'],
-    ['Contraseña', 'Password'],
+    ['Contraseï¿½a', 'Password'],
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista Teléfono Profesor") . " $year", true);
+$pdf->SetTitle($lang->translation("Lista Telï¿½fono Profesor") . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Lista Teléfono Profesor") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Lista Telï¿½fono Profesor") . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);

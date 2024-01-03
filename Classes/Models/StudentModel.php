@@ -28,7 +28,7 @@ class StudentModel extends School
   protected function getStudentBySS($ss, $table)
   {
 
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($table)->where([
       ['year', $year],
       ['ss', $ss]
@@ -38,7 +38,7 @@ class StudentModel extends School
 
   protected function getStudentsById($id, $table)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($table)->where([
       ['year', $year],
       ['id', $id]
@@ -48,7 +48,7 @@ class StudentModel extends School
 
   protected function getAllStudents($year, $includeUnenrolled)
   {
-    $year = $year !== null ? $year :  $this->info('year');
+    $year = $year !== null ? $year : $this->year();
 
     if (!$includeUnenrolled) {
       $data = [['year', $year], ['fecha_baja', '0000-00-00']];
@@ -62,7 +62,7 @@ class StudentModel extends School
 
   protected function getStudentClasses($ss)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $desc = __LANG === 'es' ? 'descripcion' : 'desc2';
     $obj = parent::table('padres')
       ->select("DISTINCT id, curso, $desc as descripcion")
@@ -133,7 +133,7 @@ class StudentModel extends School
 
   protected function getStudentsByClass($class, $table = 'padres', $summer = false)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     if (!$summer) {
       $where = [
         ["$table.curso", $class],
@@ -159,7 +159,7 @@ class StudentModel extends School
 
   protected function getStudentsByCurs($ss, $table = 'padres', $summer = false)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     if (!$summer) {
       $where = [
         ["$table.ss", $ss],
@@ -184,7 +184,7 @@ class StudentModel extends School
   }
   protected function getStudentsByGrade($grade, $table = 'year', $year)
   {
-    $year = $year !== null ? $year :  $this->info('year');
+    $year = $year !== null ? $year : $this->year();
     $where = [
       ["$table.grado", $grade],
       ["$table.year", $year],
@@ -199,7 +199,7 @@ class StudentModel extends School
 
   protected function studentLogin($username, $password)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($this->table, !__COSEY)->where([
       ['usuario', $username],
       ['clave', $password],
@@ -209,7 +209,7 @@ class StudentModel extends School
   }
   protected function getUnreadMessages($id)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table('foro_mensajes', !__COSEY)->where([
       ['enviado_por', '<>', 'e'],
       ['id_e', $id],
@@ -223,7 +223,7 @@ class StudentModel extends School
   protected function getLastStudentTopic($id)
   {
 
-    $year = $this->info('year');
+    $year = $this->year();
     if (__COSEY) {
       $obj =  parent::table('foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
@@ -257,7 +257,7 @@ class StudentModel extends School
   protected function getLastCommentedStudentTopic($id)
   {
 
-    $year = $this->info('year');
+    $year = $this->year();
     if (__COSEY) {
       $obj =  parent::table('detalle_foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')

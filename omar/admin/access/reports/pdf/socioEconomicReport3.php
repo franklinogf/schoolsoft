@@ -26,7 +26,7 @@ $lang = new Lang([
 ]);
 
 $school = new School();
-$year = $school->info('year');
+$year = $school->year();
 $_grades = $school->allGrades();
 
 $pdf = new PDF();

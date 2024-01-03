@@ -9,12 +9,12 @@ use Classes\Controllers\School;
 
 Server::is_post();
 
-$school = new School(Session::id());
-
+$school = new School();
+$year = $school->year();
 if (isset($_POST['searchGrade'])) {
     $grades = DB::table('materias')->where([
         ['grado', $_POST['searchGrade']],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->orderBy('grado')->first();
 
     echo json_encode($grades);
@@ -27,18 +27,18 @@ if (isset($_POST['searchGrade'])) {
     $new = false;
     if (!DB::table('materias')->where([
         ['grado', $grade],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->first()) {
         $new = true;
         DB::table('materias')->insert([
             'grado' => $grade,
-            'year' => $school->info('year2')
+            'year' => $year
         ]);
     }
 
     DB::table('materias')->where([
         ['grado', $grade],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->update([
         "curso$index" => $value,
         "des$index" => $desc
@@ -50,18 +50,18 @@ if (isset($_POST['searchGrade'])) {
 
     if (!DB::table('materias')->where([
         ['grado', $newGrade],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->first()) {
         $exist = false;
         DB::table('materias')->insert([
             'grado' => $newGrade,
-            'year' => $school->info('year2')
+            'year' => $year
         ]);
     }
     echo json_encode(['exist' => $exist]);
 } else if (isset($_POST['deleteGrade'])) {
     DB::table('materias')->where([
         ['grado', $_POST['deleteGrade']],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->delete();
 }

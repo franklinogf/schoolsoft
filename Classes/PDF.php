@@ -25,7 +25,7 @@ class PDF extends FPDF
             $this->SetFont('Arial', 'B', 15);
             $this->SetTextColor(0);
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
-                $school = new School();
+                $school = new School('administrador');
                 // dafault values
                 $this->SetAuthor(utf8_decode($school->info('colegio')), true);
                 $this->setCreator('School Soft');
