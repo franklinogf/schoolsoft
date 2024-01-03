@@ -7,6 +7,7 @@ use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
+use Classes\Controllers\School;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
 
@@ -17,7 +18,8 @@ $_trimester = $_POST['tri'];
 $_report = $_POST['tra'];
 $teacherId = $_POST['teacherId'];
 $teacher = new Teacher($teacherId);
-$year = $teacher->info('year');
+$school = new School();
+$year = $school->year();
 $optionCppd = $teacher->info('cppd') === 'Si';
 $sumTrimester = $teacher->info('sutri') === 'NO'; //NO === SI
 $_trimesterNumber = (int) substr($_trimester, -1);

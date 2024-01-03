@@ -79,7 +79,7 @@ class School extends SchoolModel
 
    public function allGrades($with12 = true)
    {
-      $grades = $this->getAllGrades($this->info('year'),$with12);
+      $grades = $this->getAllGrades($this->year(), $with12);
       $returnData = [];
       foreach ($grades as $grade) {
          $returnData[] = $grade->grado;

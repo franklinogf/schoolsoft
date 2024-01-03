@@ -24,7 +24,7 @@ class ParentsModel extends School
   }
   protected function getAllParents()
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($this->table)->orderBy($this->primary_key)->get();
     // $obj = parent::table($this->table)->where([
     //   ['year', $year],      

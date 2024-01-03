@@ -1,12 +1,13 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Controllers\Parents;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
+use Classes\Controllers\School;
+use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
 
 Session::is_logged();
@@ -74,7 +75,9 @@ $lang = new Lang([
     ["Agregar", 'Add'],
 
 ]);
-$year = $students->info('year');
+
+$school = new School();
+$year = $school->year();
 $female = DB::table('year')->whereRaw("year = '$year' AND activo = '' AND (genero = 'F' OR genero = 1)")->get();
 $male = DB::table('year')->whereRaw("year = '$year' AND activo = '' AND (genero = 'M' OR genero = 2)")->get();
 $families = DB::table('year')->select("DISTINCT id")->where([

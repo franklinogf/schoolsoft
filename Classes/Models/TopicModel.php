@@ -26,7 +26,7 @@ class TopicModel extends School
 
   protected function getTopicsByClass($class)
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($this->table,!__COSEY)->where([
       ['curso', $class],
       ['year', $year]
@@ -37,7 +37,7 @@ class TopicModel extends School
 
   protected function getAllTopics()
   {
-    $year = $this->info('year');
+    $year = $this->year();
     $obj = parent::table($this->table,!__COSEY)->where('year', $year)->orderBy('fecha')->get();
     return $obj;
   }
@@ -50,7 +50,7 @@ class TopicModel extends School
 
   protected function insertTopicComment($id, $type, $id_topic, $desc)
   {
-    $year = $this->info('year');
+    $year = $this->year();
 
     parent::table('detalle_foro_entradas')->insert([
       "creador_id" => $id,
