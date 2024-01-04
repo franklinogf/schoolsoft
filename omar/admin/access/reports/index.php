@@ -286,8 +286,8 @@ $options = [
                 'target' => 'ResumRaceeReligion'
             ],
             [
-                'name' => ["es" => 'Documentos no entregados',   "en" => "Documentos no entregados"],
-                'link' => '#'
+                'name' => ["es" => 'Documentos no entregados',   "en" => "Documents not delivered"],
+                'link' => 'pdf/DocumentsNotDelivered.php'
             ],
             [
                 'name' => ["es" => 'Formulario socioeconómico',   "en" => "Socioeconomic form"],
