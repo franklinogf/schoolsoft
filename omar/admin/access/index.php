@@ -52,7 +52,7 @@ $options = [
             [
                 'name' => ["es" => 'Informes de notas',   "en" => "Grade reports"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'gradesReports/'
             ],
             [
                 'name' => ["es" => 'Acumulativa',   "en" => "Acumulativa"],
