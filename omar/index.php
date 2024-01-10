@@ -27,6 +27,7 @@ $lang = new Lang([
     <title><?= $school->info('colegio') ?></title>
     <link rel="icon" href="<?= School::logo() ?>" />
     <?php Route::css("/css/main-bootstrap.css") ?>
+    <?php Route::css("/css/main.css", true) ?>
     <?php Route::fontawasome(); ?>
 </head>
 

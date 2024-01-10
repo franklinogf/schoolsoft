@@ -173,3 +173,7 @@ tr.disabled {
 html {
 	scroll-behavior: smooth;
 }
+
+.btn{
+	font-weight: bold !important;
+}

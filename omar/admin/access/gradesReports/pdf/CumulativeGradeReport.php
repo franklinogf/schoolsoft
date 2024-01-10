@@ -93,7 +93,11 @@ foreach ($allGrades as $grade) {
 foreach ($cursos as $curso) {
       if ($curso->descripcion == 'Espanol')
          {
+<<<<<<< HEAD
          $materias[] = 'ESPAÑOL';
+=======
+         $materias[] = 'ESPA&#65533;OL';
+>>>>>>> 29b516d46905de9fd967b1089b3c090363caadca
          }
       else
          {
@@ -281,7 +285,11 @@ foreach ($estus as $estu) {
     $pdf->SetXY(10, -5);
     $pdf->SetMargins(10, -10);
     $pdf->SetFont('Arial', 'B', 9);
+<<<<<<< HEAD
     $pdf->Cell(0, 4, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la línea correspondiente.'), 0, 0, 'C');
+=======
+    $pdf->Cell(0, 4, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la l&#65533;nea correspondiente.'), 0, 0, 'C');
+>>>>>>> 29b516d46905de9fd967b1089b3c090363caadca
 
 }
 
