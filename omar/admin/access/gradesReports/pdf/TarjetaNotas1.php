@@ -46,7 +46,6 @@ function NLetra($valor)
     }
 }
 
-
 $pdf = new PDF();
 $pdf->useFooter(false);
 $school = new School();
@@ -54,7 +53,7 @@ $teacherClass = new Teacher();
 $studentClass = new Student();
 
 $year = $school->year();
-// $allGrades = $school->allGrades();
+
 $pdf = new PDF();
 $pdf->useFooter(false);
 
