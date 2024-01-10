@@ -33,9 +33,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Lista de fracasados', "en" => "Lista de fracasados"],
+                'name' => ["es" => 'Lista de fracasados', "en" => "List of failures"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'ListaFracasados.php'
             ],
             [
                 'name' => ["es" => 'Lista de promedios', "en" => "Lista de promedios"],
