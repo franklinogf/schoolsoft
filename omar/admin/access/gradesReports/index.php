@@ -23,9 +23,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Registro de notas', "en" => "Registro de notas"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Registro de notas', "en" => "Record of notes"],
+                'desc' => ['es' => 'Informes del registro de los maestros', 'en' => 'Teacher Record Reports'],
+                'link' => 'RegistroNotas.php'
             ],
             [
                 'name' => ["es" => 'Distribucción de notas', "en" => "Distribucción de notas"],
