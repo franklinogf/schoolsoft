@@ -13,9 +13,9 @@ $options = [
         'buttons' => [
 
             [
-                'name' => ["es" => 'Tarjeta de notas', "en" => "Tarjeta de notas"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Tarjeta de notas', "en" => "Grade report"],
+                'desc' => ['es' => 'Pantalla para imprimir reporte de notas', 'en' => 'Screen to print grade report'],
+                'link' => 'TarjetaOpciones.php'
             ],
             [
                 'name' => ["es" => 'Planes', "en" => "Planes"],
@@ -23,9 +23,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Registro de notas', "en" => "Registro de notas"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Registro de notas', "en" => "Record of notes"],
+                'desc' => ['es' => 'Informes del registro de los maestros', 'en' => 'Teacher Record Reports'],
+                'link' => 'RegistroNotas.php'
             ],
             [
                 'name' => ["es" => 'Distribucción de notas', "en" => "Distribucción de notas"],
@@ -33,9 +33,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Lista de fracasados', "en" => "Lista de fracasados"],
+                'name' => ["es" => 'Lista de fracasados', "en" => "List of failures"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'ListaFracasados.php'
             ],
             [
                 'name' => ["es" => 'Lista de promedios', "en" => "Lista de promedios"],
@@ -127,6 +127,11 @@ $options = [
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => '#'
             ],
+            [
+                'name' => ["es" => 'Informe acumulativo de notas', "en" => "Cumulative grade report"],
+                'link' => 'pdf/CumulativeGradeReport.php',
+                'target' => 'CumulativeGradeReport'
+            ],
 
         ]
     ],
@@ -192,6 +197,7 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -211,7 +217,7 @@ $lang = new Lang([
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
-            <?php foreach ($options as $option): ?>
+            <?php foreach ($options as $option) : ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto">
@@ -219,7 +225,7 @@ $lang = new Lang([
                         </legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button): ?>
+                                <?php foreach ($option['buttons'] as $button) : ?>
                                     <div class="col mt-1">
                                         <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
                                             <?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?>
