@@ -42,15 +42,15 @@ $options = [
         ]
     ],
     [
-        'title' => ["es" => 'Notas', "en" => 'Grades'],
+        'title' => ["es" => 'Notas', "en" => 'Notes'],
         'buttons' => [
             [
-                'name' => ["es" => 'Opciones de notas',   "en" => "Grade options"],
+                'name' => ["es" => 'Opciones de notas', "en" => "Note options"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'noteOptions.php'
             ],
             [
-                'name' => ["es" => 'Informes de notas',   "en" => "Grade reports"],
+                'name' => ["es" => 'Informes de notas', "en" => "Note reports"],
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => 'gradesReports/'
             ],
