@@ -75,9 +75,9 @@ $options = [
                 'link' => 'gradesCourses.php'
             ],
             [
-                'name' => ["es" => 'Programas especiales',   "en" => "Programas especiales"],
+                'name' => ["es" => 'Programas especiales', "en" => "Specials Programs"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'specialsPrograms.php'
             ],
             [
                 'name' => ["es" => 'Cambiar curso',   "en" => "Cambiar curso"],
