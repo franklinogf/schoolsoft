@@ -28,9 +28,9 @@ $options = [
                 'link' => 'RegistroNotas.php'
             ],
             [
-                'name' => ["es" => 'Distribucción de notas', "en" => "Distribucción de notas"],
+                'name' => ["es" => 'Distribucción de notas', "en" => "Note distribution"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'DistribuccionNotas.php '
             ],
             [
                 'name' => ["es" => 'Lista de fracasados', "en" => "List of failures"],
