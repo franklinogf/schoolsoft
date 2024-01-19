@@ -20,12 +20,12 @@ $lang = new Lang([
     ['Registro de notas', 'Record of notes'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
-    ["A駉 escolar:", "School year:"],
-    ["Descripci髇", "Description"],
+  ["A帽o escolar:", "School year:"],
+  ["Descripci贸n", "Description"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Curso', 'Course'],
-    ['Cr閐ito', 'Credit'],
+  ['Cr茅dito', 'Credit'],
     ['Trimestre', 'Quarter'],
     ['NF', 'FN'],
     ['T-D', 'DW'],
@@ -109,8 +109,8 @@ $stu = DB::table('padres')->where([
     $estudiantes = [];
     $pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
     $pdf->Cell(19, 5, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Descripci髇"), 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Cr閐ito"), 1, 0, 'C', true);
+    $pdf->Cell(50, 5, $lang->translation("Descripci贸n"), 1, 0, 'C', true);
+    $pdf->Cell(15, 5, $lang->translation("Cr茅dito"), 1, 0, 'C', true);
     $pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
     $pdf->Cell(18, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
     $pdf->Cell(21, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
@@ -173,7 +173,7 @@ $stu = DB::table('padres')->where([
         {
         $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
         }
-    $pdf->Cell(6, 5, $curso->not10, 1, 0, 'R');
+      $pdf->Cell(6, 5, $curso->$not[10], 1, 0, 'R');
 
     $pdf->Cell(7, 5, $curso->$t4, 1, 0, 'R');
     $pdf->Cell(7, 5, $curso->$t5, 1, 0, 'R');
@@ -250,8 +250,8 @@ $stu = DB::table('padres')->where([
     $estudiantes = [];
     $pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
     $pdf->Cell(19, 5, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Descripci髇"), 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Cr閐ito"), 1, 0, 'C', true);
+    $pdf->Cell(50, 5, $lang->translation("Descripci贸n"), 1, 0, 'C', true);
+    $pdf->Cell(15, 5, $lang->translation("Cr茅dito"), 1, 0, 'C', true);
     $pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
     $pdf->Cell(18, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
     $pdf->Cell(21, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
@@ -386,8 +386,8 @@ $stu = DB::table('padres')->where([
     $estudiantes = [];
     $pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
     $pdf->Cell(19, 5, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Descripci髇"), 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Cr閐ito"), 1, 0, 'C', true);
+    $pdf->Cell(50, 5, $lang->translation("Descripci贸n"), 1, 0, 'C', true);
+    $pdf->Cell(15, 5, $lang->translation("Cr茅dito"), 1, 0, 'C', true);
     $pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
     $pdf->Cell(18, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
     $pdf->Cell(21, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
@@ -520,8 +520,8 @@ $stu = DB::table('padres')->where([
     $estudiantes = [];
     $pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
     $pdf->Cell(19, 5, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Descripci髇"), 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Cr閐ito"), 1, 0, 'C', true);
+    $pdf->Cell(50, 5, $lang->translation("Descripci贸n"), 1, 0, 'C', true);
+    $pdf->Cell(15, 5, $lang->translation("Cr茅dito"), 1, 0, 'C', true);
     $pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
     $pdf->Cell(18, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
     $pdf->Cell(21, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
@@ -655,8 +655,8 @@ $stu = DB::table('padres')->where([
     $estudiantes = [];
     $pdf->Cell(50, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
     $pdf->Cell(19, 5, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Descripci髇"), 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Cr閐ito"), 1, 0, 'C', true);
+    $pdf->Cell(50, 5, $lang->translation("Descripci贸n"), 1, 0, 'C', true);
+    $pdf->Cell(15, 5, $lang->translation("Cr茅dito"), 1, 0, 'C', true);
     $pdf->Cell(20, 5, $lang->translation("Total Est."), 1, 0, 'C', true);
     $pdf->Cell(18, 5, $lang->translation("Trimestre"), 1, 0, 'C', true);
     $pdf->Cell(21, 5, $lang->translation("Fecha"), 1, 1, 'C', true);
