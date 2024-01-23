@@ -18,9 +18,9 @@ $options = [
                 'link' => 'TarjetaOpciones.php'
             ],
             [
-                'name' => ["es" => 'Planes', "en" => "Planes"],
+                'name' => ["es" => 'Hoja de progreso', "en" => "Progress sheet"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'HojaPrograso.php'
             ],
             [
                 'name' => ["es" => 'Registro de notas', "en" => "Record of notes"],
