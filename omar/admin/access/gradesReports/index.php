@@ -48,6 +48,11 @@ $options = [
                 'link' => '#'
             ],
             [
+                'name' => ["es" => 'Lista de rango', "en" => "Rank List"],
+                'desc' => ['es' => 'Listado de rango por materiaws', 'en' => 'Rank list by materials'],
+                'link' => 'ListaRango.php'
+            ],
+            [
                 'name' => ["es" => 'Rango por grado', "en" => "Rango por grado"],
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => '#'
