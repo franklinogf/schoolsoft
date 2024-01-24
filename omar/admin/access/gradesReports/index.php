@@ -49,13 +49,13 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Lista de rango', "en" => "Rank List"],
-                'desc' => ['es' => 'Listado de rango por materiaws', 'en' => 'Rank list by materials'],
+                'desc' => ['es' => 'Listado de rango por materias', 'en' => 'Rank list by materials'],
                 'link' => 'ListaRango.php'
             ],
             [
-                'name' => ["es" => 'Rango por grado', "en" => "Rango por grado"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Rango por grado', "en" => "Rank by grade"],
+                'desc' => ['es' => 'Listado de rango por grado', 'en' => 'List of rank by grade'],
+                'link' => 'RangoGrado.php'
             ],
             [
                 'name' => ["es" => 'Conducta', "en" => "Conducta"],
