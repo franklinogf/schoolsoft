@@ -63,9 +63,9 @@ $options = [
                 'link' => 'Conduct.php'
             ],
             [
-                'name' => ["es" => 'Cambios en registro', "en" => "Cambios en registro"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Cambios en registro', "en" => "Registry changes"],
+                'desc' => ['es' => 'Cambio que los maestros hacen en el registro de notas', 'en' => 'Change that teachers make in the grade record'],
+                'link' => 'gradesChanges.php'
             ],
             [
                 'name' => ["es" => 'Boleta de verano', "en" => "Boleta de verano"],
