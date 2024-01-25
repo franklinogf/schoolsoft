@@ -58,9 +58,9 @@ $options = [
                 'link' => 'RangoGrado.php'
             ],
             [
-                'name' => ["es" => 'Conducta', "en" => "Conducta"],
+                'name' => ["es" => 'Conducta', "en" => "Conduct"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'Conduct.php'
             ],
             [
                 'name' => ["es" => 'Cambios en registro', "en" => "Cambios en registro"],
