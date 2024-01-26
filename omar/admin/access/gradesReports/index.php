@@ -78,9 +78,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Cuadro de honor', "en" => "Cuadro de honor"],
+                'name' => ["es" => 'Cuadro de honor', "en" => "Honor roll"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'HonorRoll.php'
             ],
             [
                 'name' => ["es" => 'Notas finales', "en" => "Notas finales"],
