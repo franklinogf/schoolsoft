@@ -68,9 +68,9 @@ $options = [
                 'link' => 'gradesChanges.php'
             ],
             [
-                'name' => ["es" => 'Boleta de verano', "en" => "Boleta de verano"],
+                'name' => ["es" => 'Boleta de verano', "en" => "Summer card"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'SummerCard.php'
             ],
             [
                 'name' => ["es" => 'Promedios decimales', "en" => "Promedios decimales"],
