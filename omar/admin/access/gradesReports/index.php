@@ -83,6 +83,11 @@ $options = [
                 'link' => 'HonorRoll.php'
             ],
             [
+                'name' => ["es" => 'Inf. de Deficiencia', "en" => "Deficiency Report"],
+                'desc' => ['es' => 'Beleta de deficiencia por estudiante para los padres.', 'en' => 'Deficiency letter per student for parents.'],
+                'link' => 'Deficiencia.php'
+            ],
+            [
                 'name' => ["es" => 'Notas finales', "en" => "Notas finales"],
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => '#'
