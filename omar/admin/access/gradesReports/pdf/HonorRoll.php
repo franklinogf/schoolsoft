@@ -17,7 +17,7 @@ $lang = new Lang([
     ['Cuadro de honor por Curso', 'Honor roll by Course'],
     ["Nombre", "Name"],
     ["Apellidos", "Surnames"],
-    ["Año escolar:", "School year:"],
+  ["AÃ±o escolar:", "School year:"],
     ["T-1", "Q-1"],
     ["T-2", "Q-2"],
     ["T-3", "Q-3"],
@@ -82,24 +82,45 @@ $cl = $_POST['conlinia'];
 //    grado ASC, curso, final DESC
 if (empty($cur))
    {
-   $cursos = DB::table('padres')->where([
+  if ($grade == 'all') {
+    $cursos = DB::table('padres')->where([
           ['baja', ''],
           ['year', $year],
           [$nota, '<', '150'],
           ['curso', '!=', ''],
           ['curso', 'NOT LIKE', '%AA-%']
         ])->orderBy($data)->get();
-   }
-else
-   {
-   $cursos = DB::table('padres')->where([
+  } else {
+    $cursos = DB::table('padres')->where([
           ['baja', ''],
           ['year', $year],
+      ['grado', $grade],
+      [$nota, '<', '150'],
+      ['curso', '!=', ''],
+      ['curso', 'NOT LIKE', '%AA-%']
+    ])->orderBy($data)->get();
+  }
+} else {
+  if ($grade == 'all') {
+    $cursos = DB::table('padres')->where([
+      ['baja', ''],
+      ['year', $year],
           [$nota, '<', '150'],
           ['curso', '!=', ''],
           ['curso', 'LIKE', '%'.$cur.'%'],
           ['curso', 'NOT LIKE', '%AA-%']
         ])->orderBy($data)->get();
+  } else {
+    $cursos = DB::table('padres')->where([
+      ['baja', ''],
+      ['year', $year],
+      ['grado', $grade],
+      [$nota, '<', '150'],
+      ['curso', '!=', ''],
+      ['curso', 'LIKE', '%' . $cur . '%'],
+      ['curso', 'NOT LIKE', '%AA-%']
+    ])->orderBy($data)->get();
+  }
    }
     $c = 0;
     $g = '';
