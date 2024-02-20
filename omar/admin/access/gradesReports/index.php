@@ -79,7 +79,7 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Cuadro de honor', "en" => "Honor roll"],
-                'desc' => ['es' => '', 'en' => ''],
+                'desc' => ['es' => 'Listado por curso o materias para el cuadro de honor.', 'en' => 'List by course or subjects for the honor roll.'],
                 'link' => 'HonorRoll.php'
             ],
             [
