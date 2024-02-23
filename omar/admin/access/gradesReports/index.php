@@ -93,9 +93,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Programa de clases', "en" => "Programa de clases"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Programa de clases', "en" => "Class Program"],
+                'desc' => ['es' => 'Hoja de itinerario de las clases', 'en' => 'Class itinerary sheet'],
+                'link' => 'ProgramaClases.php'
             ],
             [
                 'name' => ["es" => 'Lista de promedios', "en" => "Lista de promedios"],
