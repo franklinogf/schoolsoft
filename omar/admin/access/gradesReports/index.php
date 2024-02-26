@@ -103,9 +103,9 @@ $options = [
                 'link' => 'ListadePromedios.php'
             ],
             [
-                'name' => ["es" => 'Asistencia perfecta', "en" => "Asistencia perfecta"],
+                'name' => ["es" => 'Asistencia perfecta', "en" => "Perfect assistance"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'AsistenciaPerfecta.php'
             ],
             [
                 'name' => ["es" => 'Horas comunitarias', "en" => "Horas comunitarias"],
