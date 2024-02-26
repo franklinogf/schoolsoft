@@ -98,9 +98,9 @@ $options = [
                 'link' => 'ProgramaClases.php'
             ],
             [
-                'name' => ["es" => 'Lista de promedios', "en" => "Lista de promedios"],
+                'name' => ["es" => 'Lista de promedios', "en" => "List of averages"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'ListaPromedios.php'
             ],
             [
                 'name' => ["es" => 'Asistencia perfecta', "en" => "Asistencia perfecta"],
