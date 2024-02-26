@@ -152,8 +152,10 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             <?= $lang->translation('Continuar') ?>
                         </button>
                     </div>
-            </form>
+                </div>
         </div>
+        </form>
+    </div>
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
