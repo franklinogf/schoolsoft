@@ -100,7 +100,7 @@ $options = [
             [
                 'name' => ["es" => 'Lista de promedios', "en" => "List of averages"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => 'ListaPromedios.php'
+                'link' => 'ListadePromedios.php'
             ],
             [
                 'name' => ["es" => 'Asistencia perfecta', "en" => "Asistencia perfecta"],
