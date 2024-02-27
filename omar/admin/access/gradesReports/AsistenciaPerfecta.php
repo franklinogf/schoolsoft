@@ -32,22 +32,46 @@ $lang = new Lang([
     ['3 por pagina', '3 per page'],
     ['Maestro', 'Maestro'],
     ['Promedio final', 'Final average'],
-    ['CURSOS A MEJORAR', 'COURSES TO IMPROVE'],
+    ['todos', 'alls'],
     ['INFORME DE DEFICIENCIA', 'DEFICIENCY REPORT'],
-    
 
-    
+
+
 ]);
 $school = new School(Session::id());
 //$grades = DB::table('materias')->where('year', $school->info('year2'))->orderBy('grado')->get();
 $grades = $school->allGrades();
 
 $re = $school->info('tar');
-$in1='';$in2='';$in3='';$in4='';$in5='';$in6=''; $in7='';$in8='';
-$in9='';$in10='';$in11='';$in12='';$in13='';$in14='';$in15='';$in16='';$in17='';$in18='';$in19='';$in20='';
-if ($re=='1'){$in1='selected';}
-if ($re=='2'){$in2='selected';}
-if ($re=='3'){$in3='selected';}
+$in1 = '';
+$in2 = '';
+$in3 = '';
+$in4 = '';
+$in5 = '';
+$in6 = '';
+$in7 = '';
+$in8 = '';
+$in9 = '';
+$in10 = '';
+$in11 = '';
+$in12 = '';
+$in13 = '';
+$in14 = '';
+$in15 = '';
+$in16 = '';
+$in17 = '';
+$in18 = '';
+$in19 = '';
+$in20 = '';
+if ($re == '1') {
+    $in1 = 'selected';
+}
+if ($re == '2') {
+    $in2 = 'selected';
+}
+if ($re == '3') {
+    $in3 = 'selected';
+}
 
 $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 
@@ -56,16 +80,17 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
 <head>
     <?php
     $title = $lang->translation('Asistencia perfecta');
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
-	<style type="text/css">
-	.style1 {
-		text-align: center;
-	}
-	</style>
+    <style type="text/css">
+        .style1 {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -80,7 +105,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
         <div class="container bg-white shadow-lg py-3 rounded">
             <form id="TarjetaNotas" name="Deficiencia" method="POST" target="_blank" action="<?= Route::url('/admin/access/gradesReports/pdf/AsistenciaPerfecta.php') ?>">
                 <div class="mx-auto" style="max-width: 500px;">
-                    <?php if (Session::get('Deficiencia')): ?>
+                    <?php if (Session::get('Deficiencia')) : ?>
                         <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
                             <i class="fa-solid fa-square-check"></i>
                             <?= Session::get('ListadePromedios', true) ?>
@@ -93,17 +118,20 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
-                                <option value=''>
-                                    <?= $lang->translation('Selección') ?>
-                                </option>
+                            <option value=''>
+                                <?= $lang->translation('Selección') ?>
+                            </option>
+                            <option value='todos'>
+                                <?= $lang->translation('todos') ?>
+                            </option>
 
-                            <?php foreach ($grades as $grade): ?>
+                            <?php foreach ($grades as $grade) : ?>
                                 <option value='<?= $grade ?>'>
                                     <?= $grade ?>
                                 </option>
                             <?php endforeach ?>
                         </select>
-                    </div>                    <div class="input-group mb-3">
+                    </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="grade">
@@ -125,7 +153,6 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>
-                </div>
                 </div>
             </form>
         </div>
