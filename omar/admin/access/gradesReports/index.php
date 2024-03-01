@@ -108,9 +108,10 @@ $options = [
                 'link' => 'AsistenciaPerfecta.php'
             ],
             [
-                'name' => ["es" => 'Horas comunitarias', "en" => "Horas comunitarias"],
+                'name' => ["es" => 'Horas comunitarias', "en" => "Communitary hours"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'pdf/HorasComunitarias.php',
+                'target' => 'HorasComunitarias'
             ],
             [
                 'name' => ["es" => 'Comparación de notas', "en" => "Comparación de notas"],
