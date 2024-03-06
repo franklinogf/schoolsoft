@@ -114,9 +114,9 @@ $options = [
                 'target' => 'HorasComunitarias'
             ],
             [
-                'name' => ["es" => 'Comparación de notas', "en" => "Comparación de notas"],
+                'name' => ["es" => 'Comparación de notas', "en" => "Comparison of notes"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'ComparacionNotas.php'
             ],
             [
                 'name' => ["es" => 'Clasificación de notas', "en" => "Clasificación de notas"],
