@@ -119,6 +119,11 @@ $options = [
                 'link' => 'ComparacionNotas.php'
             ],
             [
+                'name' => ["es" => 'Inf. Aprove. Académico', "en" => "Inf. about academic achiev."],
+                'desc' => ['es' => 'información sobre el rendimiento académico.', 'en' => 'information on academic performance.'],
+                'link' => 'InfAproveAcademico.php'
+            ],
+            [
                 'name' => ["es" => 'Clasificación de notas', "en" => "Clasificación de notas"],
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => '#'
