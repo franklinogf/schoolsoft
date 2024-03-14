@@ -120,7 +120,7 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Inf. Aprove. Académico', "en" => "Inf. about academic achiev."],
-                'desc' => ['es' => 'información sobre el rendimiento académico.', 'en' => 'information on academic performance.'],
+                'desc' => ['es' => 'Información sobre el rendimiento académico.', 'en' => 'Information on academic performance.'],
                 'link' => 'InfAproveAcademico.php'
             ],
             [
@@ -134,9 +134,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Distri/Notas maestros', "en" => "Distri/Notas maestros"],
+                'name' => ["es" => 'Distri/Notas maestros', "en" => "Teacher Notes Distribution"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'DistriNotasMaestros.php'
             ],
             [
                 'name' => ["es" => 'Listado de 100', "en" => "Listado de 100"],
@@ -155,6 +155,11 @@ $options = [
         'title' => ["es" => 'Informes', "en" => 'Reports'],
         'buttons' => [
             [
+                'name' => ["es" => 'Planes', "en" => "Planes"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => '#'
+            ],
+            [
                 'name' => ["es" => 'Deficiencia', "en" => "Deficiencia"],
                 'desc' => ['es' => '', 'en' => ''],
                 'link' => '#'
@@ -170,9 +175,10 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Asistencia semanal', "en" => "Asistencia semanal"],
+                'name' => ["es" => 'Asistencia semanal', "en" => "Weekly attendance"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'pdf/AsistenciaSemanal.php',
+                'target' => 'AsistenciaSemanal'
             ],
             [
                 'name' => ["es" => 'Notas por examen', "en" => "Notas por examen"],
