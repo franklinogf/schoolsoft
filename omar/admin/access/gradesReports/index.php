@@ -165,9 +165,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Asistencia', "en" => "Asistencia"],
+                'name' => ["es" => 'Asistencia', "en" => "Attendance"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'Attendance.php'
             ],
             [
                 'name' => ["es" => 'Notas', "en" => "Notas"],
