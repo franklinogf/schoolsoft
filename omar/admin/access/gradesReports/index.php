@@ -124,9 +124,9 @@ $options = [
                 'link' => 'InfAproveAcademico.php'
             ],
             [
-                'name' => ["es" => 'Clasificación de notas', "en" => "Clasificación de notas"],
+                'name' => ["es" => 'Clasificación de notas', "en" => "Note classification"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'NoteClassification.php'
             ],
             [
                 'name' => ["es" => 'Sabana de notas', "en" => "Sabana de notas"],
