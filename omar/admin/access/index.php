@@ -95,9 +95,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Asistencia',   "en" => "Asistencia"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Asistencia',   "en" => "Attendance"],
+                'desc' => ['es' => 'Entrada de fecha para asistencia trimestral.', 'en' => 'Date entry for quarterly attendance.'],
+                'link' => 'Attendance.php'
             ],
             [
                 'name' => ["es" => 'Entrar asistencia',   "en" => "Entrar asistencia"],
