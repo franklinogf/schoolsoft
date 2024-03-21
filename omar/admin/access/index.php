@@ -100,9 +100,9 @@ $options = [
                 'link' => 'Attendance.php'
             ],
             [
-                'name' => ["es" => 'Entrar asistencia',   "en" => "Entrar asistencia"],
+                'name' => ["es" => 'Entrada de asistencia',   "en" => "Attendance entry"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'attendance/'
             ],
             [
                 'name' => ["es" => 'Clases diaras',   "en" => "Clases diaras"],
