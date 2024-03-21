@@ -36,8 +36,8 @@ $lang = new Lang([
       <li class="nav-item <?= ($pathFile === 'access' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/admin/access') ?>"><?= $lang->translation('Acceso') ?></a>
       </li>
-      <li class="nav-item <?= ($pathFile === 'accounts' ? 'active' : '') ?>">
-        <a class="nav-link" href="<?= Route::url('/admin/accounts/') ?>"><?= $lang->translation('Cuentas por cobrar') ?></a>
+      <li class="nav-item <?= ($pathFile === 'billing' ? 'active' : '') ?>">
+        <a class="nav-link" href="<?= Route::url('/admin/billing/') ?>"><?= $lang->translation('Cuentas por cobrar') ?></a>
       </li>
       <li class="nav-item <?= ($pathFile === 'messages' ? 'active' : '') ?>">
         <a class="nav-link" href="<?= Route::url('/admin/messages/') ?>"><?= $lang->translation('Mensajes') ?></a>
