@@ -80,9 +80,9 @@ $options = [
                 'link' => 'specialsPrograms.php'
             ],
             [
-                'name' => ["es" => 'Cambiar curso',   "en" => "Cambiar curso"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Cambiar curso',   "en" => "Course change"],
+                'desc' => ['es' => 'Para cambiar de un curso a otro curso.', 'en' => 'To change from one course to another course.'],
+                'link' => 'CourseChange.php'
             ],
             [
                 'name' => ["es" => 'Ordenar cursos',   "en" => "Ordenar cursos"],
