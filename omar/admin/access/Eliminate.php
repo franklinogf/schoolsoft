@@ -64,6 +64,7 @@ $courses = DB::table('cursos')->where([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que desea borrar el curso a todos los Estudiante?') ?>')"><?= $lang->translation('Eliminar') ?></button>
 
 <head>
     <?php
