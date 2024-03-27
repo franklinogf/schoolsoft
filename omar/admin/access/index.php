@@ -115,9 +115,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Mensajes de notas',   "en" => "Mensajes de notas"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Mensajes de notas',   "en" => "Note messages"],
+                'desc' => ['es' => 'Mensajes por clase para la tarjeta de notas', 'en' => 'Class Note Card Messages'],
+                'link' => 'MensajesNotas.php'
             ],
             [
                 'name' => ["es" => 'Deporte',   "en" => "Deporte"],
