@@ -90,9 +90,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Eliminar',   "en" => "Eliminar"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Eliminar',   "en" => "Eliminate"],
+                'desc' => ['es' => 'Para eliminar el curso a todos los estudiantes.', 'en' => 'To remove the course from all students.'],
+                'link' => 'Eliminate.php'
             ],
             [
                 'name' => ["es" => 'Asistencia',   "en" => "Attendance"],
@@ -221,6 +221,7 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
