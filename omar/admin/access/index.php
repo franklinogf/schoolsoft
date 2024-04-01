@@ -85,9 +85,9 @@ $options = [
                 'link' => 'CourseChange.php'
             ],
             [
-                'name' => ["es" => 'Ordenar cursos',   "en" => "Ordenar cursos"],
+                'name' => ["es" => 'Ordenar cursos',   "en" => "Order courses"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'OrderCourses.php'
             ],
             [
                 'name' => ["es" => 'Eliminar',   "en" => "Eliminate"],
