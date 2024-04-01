@@ -146,9 +146,9 @@ $options = [
                 'link' => 'InitialMessage.php'
             ],
             [
-                'name' => ["es" => 'Mensaje grupal',   "en" => "Mensaje grupal"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Mensaje grupal',   "en" => "Group message"],
+                'desc' => ['es' => 'Envío de mensajes a padres y profesores en su zona de la plataforma.', 'en' => 'Sending messages to parents and teachers in their area of the platform.'],
+                'link' => 'GroupMessage.php'
             ],
             [
                 'name' => ["es" => 'Mensaje inactivar',   "en" => "Mensaje inactivar"],
