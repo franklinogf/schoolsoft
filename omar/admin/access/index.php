@@ -141,9 +141,9 @@ $options = [
                 'link' => 'schoolYear.php'
             ],
             [
-                'name' => ["es" => 'Mensaje inicial',   "en" => "Mensaje inicial"],
+                'name' => ["es" => 'Mensaje inicial',  "en" => "Initial message"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'InitialMessage.php'
             ],
             [
                 'name' => ["es" => 'Mensaje grupal',   "en" => "Mensaje grupal"],
