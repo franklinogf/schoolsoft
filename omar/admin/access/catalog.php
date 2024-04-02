@@ -32,6 +32,7 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Limpiar', 'Clear'],
     ['Eliminar', 'Delete'],
+    ['Estás seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
 ]);
 $years = DB::table('year')->select("DISTINCT year")->get();
 $school = new School(Session::id());
@@ -83,7 +84,6 @@ if (isset($_REQUEST['save'])) {
             'profesor' => "$teacher->nombre $teacher->apellidos",
         ]);
     }
-
 }
 if (isset($_REQUEST['create'])) {
     DB::table('cursos')->insert([
@@ -228,13 +228,12 @@ $courses = DB::table('cursos')->where([
                             <button type="submit" class="btn btn-primary" name="<?= isset($_POST['search']) ? 'save' : 'create' ?>" type="submit"><?= $lang->translation(isset($_POST['search']) ? 'Guardar' : 'Crear') ?></button>
                             <?php if (isset($_POST['search'])) : ?>
                                 <a href="catalog.php" class="btn btn-secondary"><?= $lang->translation('Limpiar') ?></a>
-                                <button type="submit" class="btn btn-danger" name="delete" type="submit"><?= $lang->translation('Eliminar') ?></button>
+                                <button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que quieres borrar el curso?') ?>')"><?= $lang->translation('Eliminar') ?></button>
                             <?php endif ?>
                         </div>
                     </div>
                 </form>
             </div>
-            </form>
         </div>
 
     </div>
@@ -244,6 +243,9 @@ $courses = DB::table('cursos')->where([
     Route::selectPicker('js');
     ?>
     <script>
+        function confirmar(mensaje) {
+            return confirm(mensaje);
+        }
         $(document).ready(function() {
 
             $('.--float').mask("0.00").change(function() {
