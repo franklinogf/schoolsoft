@@ -151,9 +151,9 @@ $options = [
                 'link' => 'GroupMessage.php'
             ],
             [
-                'name' => ["es" => 'Mensaje inactivar',   "en" => "Mensaje inactivar"],
+                'name' => ["es" => 'Mensaje inactivar',   "en" => "Inactivate message"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'MensajeInactivar.php'
             ],
             [
                 'name' => ["es" => 'Encuestas',   "en" => "Surveys"],
