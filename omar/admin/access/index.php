@@ -161,9 +161,9 @@ $options = [
                 'link' => 'Encuestas.php'
             ],
             [
-                'name' => ["es" => 'Requisitos',   "en" => "Requisitos"],
+                'name' => ["es" => 'Requisitos',   "en" => "Requirements"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'Requisitos.php'
             ],
         ]
     ],
