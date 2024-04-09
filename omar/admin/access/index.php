@@ -186,9 +186,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Clave padres',   "en" => "Clave padres"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Clave padres',   "en" => "Parent password"],
+                'desc' => ['es' => 'Para esforzar cambiar la contraseña de los padres.', 'en' => 'To force change the parent password.'],
+                'link' => 'ClavePadres.php'
             ],
             [
                 'name' => ["es" => 'Backup',   "en" => "Backup"],
