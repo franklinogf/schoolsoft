@@ -201,9 +201,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Exportar data',   "en" => "Exportar data"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Pasar data',   "en" => "Transfer data"],
+                'desc' => ['es' => 'Transferir información de un año al siguiente.', 'en' => 'Transfer information from one year to the next.'],
+                'link' => 'PasarData.php'
             ],
         ]
     ],
