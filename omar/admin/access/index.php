@@ -196,14 +196,14 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Pasar data',   "en" => "Pasar data"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
-            ],
-            [
                 'name' => ["es" => 'Pasar data',   "en" => "Transfer data"],
                 'desc' => ['es' => 'Transferir información de un año al siguiente.', 'en' => 'Transfer information from one year to the next.'],
                 'link' => 'PasarData.php'
+            ],
+            [
+                'name' => ["es" => 'Exportar data',   "en" => "Export data"],
+                'desc' => ['es' => 'Exportación de data a Excel.', 'en' => 'Data export to Excel.'],
+                'link' => 'ExportarData.php'
             ],
         ]
     ],
