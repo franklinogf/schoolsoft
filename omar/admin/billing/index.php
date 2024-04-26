@@ -30,7 +30,7 @@ $options = [
             [
                 'name' => ["es" => 'Entrar pagos',   "en" => "Entrar pagos"],
                 'desc' => ['es' => 'Pantalla para realizar los pagos a las cuentas.', 'en' => 'Pantalla para realizar los pagos a las cuentas.'],
-                'link' => '#'
+                'link' => 'payments/'
             ],
             [
                 'name' => ["es" => 'Ver Pagos',   "en" => "Ver Pagos"],
