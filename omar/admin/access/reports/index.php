@@ -383,6 +383,16 @@ $options = [
                 'link' => 'pdf/ReasonableAccommodation.php',
                 'target' => 'ReasonableAccommodation'
             ],
+            [
+                'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Cumulative grade report"],
+                'link' => 'pdf/CumulativeGradeReport.php',
+                'target' => 'CumulativeGradeReport'
+            ],
+            [
+                'name' => ["es" => 'Listado PP - 06',   "en" => "List PP - 06"],
+                'link' => 'pdf/inf_pp_06.php',
+                'target' => 'inf_pp_06'
+            ],
         ]
     ],
    
