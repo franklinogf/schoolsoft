@@ -66,13 +66,13 @@ if ($grados=='B')
    }
 
 $mat[0] = "";
-$mat[1] = "Español";
+$mat[1] = "EspaÃ±ol";
 $mat[2] = "Ciencia";
 $mat[3] = "Matematica";
-$mat[4] = "Religión";
-$mat[5] = "Inglés";
+$mat[4] = "ReligiÃ³n";
+$mat[5] = "InglÃ©s";
 $mat[6] = "Estudios Sociales";
-$mat[7] = "Educación Fisica";
+$mat[7] = "EducaciÃ³n Fisica";
 $mat[8] = "Computadora";
 $mat[9] = "Baile";
 
