@@ -55,9 +55,9 @@ $options = [
                 'link' => 'gradesReports/'
             ],
             [
-                'name' => ["es" => 'Acumulativa',   "en" => "Acumulativa"],
+                'name' => ["es" => 'Acumulativa',   "en" => "Credit transcription"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'acumulativa.php'
             ],
             [
                 'name' => ["es" => 'Catálogo',   "en" => "Catalog"],
