@@ -4,10 +4,11 @@ namespace Classes;
 
 class Route
 {
-   public static function pathFolder(){
+   public static function pathFolder()
+   {
       $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
-      $root = str_replace('\\', '/', substr($root, strpos($root, DIRECTORY_SEPARATOR,1)+1));
-      return str_replace('\\', '/', substr($root,0, strpos($root, DIRECTORY_SEPARATOR)));
+      $root = str_replace('\\', '/', substr($root, strpos($root, DIRECTORY_SEPARATOR, 1) + 1));
+      return str_replace('\\', '/', substr($root, 0, strpos($root, DIRECTORY_SEPARATOR)));
    }
 
    public static function includeFile($path, $serverRoot = false)
@@ -71,13 +72,19 @@ class Route
       die();
    }
 
+   public static function sweetAlert()
+   {
+      echo ' <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+      echo '<script src="/js/alerts.js"></script>';
+   }
+
    public static function url($path, $fullPath = false, $serverRoot = false)
    {
       $root = '';
       if (!$serverRoot) {
          $root = __SCHOOL_URL;
       }
-      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL .  $path : $root . $path;
+      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL . $path : $root . $path;
       return $newPath;
    }
 
