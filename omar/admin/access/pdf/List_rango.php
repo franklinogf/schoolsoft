@@ -35,13 +35,6 @@ if ($grados=='A')
    }
 
 
-if ($grados=='C')
-   {
-   $gra4='05';
-   $gra3='06';
-   $gra2='07';
-   $gra1='08';
-   }
 if ($grados=='A')
    {
    $gra8='01-';
@@ -52,6 +45,7 @@ if ($grados=='A')
    $gra3='06';
    $gra2='07';
    $gra1='08';
+   $gra0 = '08';
    }
 if ($grados=='B')
    {
@@ -63,8 +57,34 @@ if ($grados=='B')
    $gra3='10';
    $gra2='11';
    $gra1='12';
-   }
+   $gra0 = '12';
+}
 
+
+if ($grados == 'B1') {
+   $gra4 = '09';
+   $gra3 = '10';
+   $gra2 = '11';
+   $gra1 = '12';
+   $gra0 = '12';
+}
+
+if ($grados == 'C') {
+   $gra4 = '09';
+   $gra3 = '10';
+   $gra2 = '11';
+   $gra1 = '**';
+   $gra0 = '11';
+}
+
+if ($grados == 'D') {
+   $gra4 = '09';
+   $gra3 = '10';
+   $gra2 = '**';
+   $gra1 = '**';
+   $gra0 = '10';
+   }
+   
 $mat[0] = "";
 $mat[1] = "Español";
 $mat[2] = "Ciencia";
@@ -131,7 +151,7 @@ $pdf->Fill();
         $cur2 = $cur[10+$i];
 
         $students = DB::table('year')
-        ->whereRaw("grado like '%".$gra1."%' and year = '$year' and activo = ''")->orderBy('apellidos')->get();
+   ->whereRaw("grado like '%" . $gra0 . "%' and year = '$year' and activo = ''")->orderBy('apellidos')->get();
 
       foreach ($students as $student)
               {
@@ -269,6 +289,7 @@ $pdf->Fill();
 for ($e = 1; $e <= 9; $e++)       
     {
     $ce=0;
+   $ce1 = 0;
     if ($grados=='A')
        {
        $pdf->AddPage('L');
@@ -298,24 +319,27 @@ for ($e = 1; $e <= 9; $e++)
 
   foreach ($allGrades as $grade)
           {
+      if ($grados == 'A' and $ce1 > 26) {
+         $ce1 = 0;
+         $pdf->AddPage('L');
+      }
           
           $ce=$ce+1;
+      $ce1 = $ce1 + 1;
           $pdf->Cell(10,5,$ce,1,0,'R');
           $pdf->Cell(85,5,$grade->apellidos.' '.$grade->nombre,1,0,'L');
           if ($grados=='A')
              {
-             $pdf->Cell(15,5,$grade->not8,1,0,'R');
-             $pdf->Cell(15,5,$grade->not7,1,0,'R');
-             $pdf->Cell(15,5,$grade->not6,1,0,'R');
-             $pdf->Cell(15,5,$grade->not5,1,0,'R');
+         $pdf->Cell(15, 5, number_format($grade->not8, 2), 1, 0, 'R');
+         $pdf->Cell(15, 5, number_format($grade->not7, 2), 1, 0, 'R');
+         $pdf->Cell(15, 5, number_format($grade->not6, 2), 1, 0, 'R');
+         $pdf->Cell(15, 5, number_format($grade->not5, 2), 1, 0, 'R');
              }
-          $pdf->Cell(15,5,$grade->not4,1,0,'R');
-          $pdf->Cell(15,5,$grade->not3,1,0,'R');
-          $pdf->Cell(15,5,$grade->not2,1,0,'R');
-          $pdf->Cell(15,5,$grade->not1,1,0,'R');
+      $pdf->Cell(15, 5, number_format($grade->not4, 2), 1, 0, 'R');
+      $pdf->Cell(15, 5, number_format($grade->not3, 2), 1, 0, 'R');
+      $pdf->Cell(15, 5, number_format($grade->not2, 2), 1, 0, 'R');
+      $pdf->Cell(15, 5, number_format($grade->not1, 2), 1, 0, 'R');
           $pdf->Cell(27,5,number_format($grade->final,2),1,1,'R');
-
-
 
           }
 
