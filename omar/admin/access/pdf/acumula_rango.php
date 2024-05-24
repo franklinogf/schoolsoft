@@ -52,14 +52,7 @@ $pdf->SetFont('Times','B',11);
 $pdf->Cell(15,5,'',1,0,'L',true);
 $pdf->Cell(25,5,'RANGO',1,0,'C',true);
 $pdf->Cell(90,5,'NOMBRE DEL ESTUDIANTE',1,0,'C',true);
-if ($grados =='B')
-   {
-   $pdf->Cell(12,5,'09',1,0,'C',true);
-   $pdf->Cell(12,5,'10',1,0,'C',true);
-   $pdf->Cell(12,5,'11',1,0,'C',true);
-   $pdf->Cell(12,5,'12',1,0,'C',true);
-   }
-else
+if ($grados == 'A')
    {
    $pdf->Cell(12,5,'01',1,0,'C',true);
    $pdf->Cell(12,5,'02',1,0,'C',true);
@@ -69,7 +62,12 @@ else
    $pdf->Cell(12,5,'06',1,0,'C',true);
    $pdf->Cell(12,5,'07',1,0,'C',true);
    $pdf->Cell(12,5,'08',1,0,'C',true);
-   }
+   } else {
+   $pdf->Cell(12, 5, '09', 1, 0, 'C', true);
+   $pdf->Cell(12, 5, '10', 1, 0, 'C', true);
+   $pdf->Cell(12, 5, '11', 1, 0, 'C', true);
+   $pdf->Cell(12, 5, '12', 1, 0, 'C', true);
+}
 
 $pdf->Cell(12,5,'PRO',1,1,'C',true);
 $pdf->SetFont('Times','',12);
@@ -87,6 +85,7 @@ IF ($grados=='A')
    $gra6='03-';
    $gra7='02-';
    $gra8='01-';
+   $gra0 = '08';
    }
 IF ($grados=='B')
    {
@@ -94,7 +93,25 @@ IF ($grados=='B')
    $gra3='10';
    $gra2='11';
    $gra1='12';
+   $gra0 = '12';
    }
+
+if ($grados == 'C') {
+   $gra4 = '09';
+   $gra3 = '10';
+   $gra2 = '11';
+   $gra1 = '22';
+   $gra0 = '11';
+}
+
+if ($grados == 'D') {
+   $gra4 = '09';
+   $gra3 = '10';
+   $gra2 = '22';
+   $gra1 = '22';
+   $gra0 = '10';
+}
+
 
 
 $a=0;
@@ -118,7 +135,7 @@ $notF=0;
 $notF1=0;
 
 $students = DB::table('year')
-  ->whereRaw("grado like '%".$gra1."%' and year = '$year' and activo = ''")->orderBy('apellidos')->get();
+->whereRaw("grado like '%" . $gra0 . "%' and year = '$year' and activo = ''")->orderBy('apellidos')->get();
 
 //$q7 = "select * from year where activo='' and grado like '%".$gra1."%' AND year = '$_POST[year2]' ORDER BY apellidos ASC";
 //$result7=mysql_query($q7);
