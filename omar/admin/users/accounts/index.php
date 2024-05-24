@@ -77,13 +77,20 @@ $lang = new Lang([
 ]);
 
 $school = new School();
+$students = $students->All();
 $year = $school->year();
-$female = DB::table('year')->whereRaw("year = '$year' AND activo = '' AND (genero = 'F' OR genero = 1)")->get();
-$male = DB::table('year')->whereRaw("year = '$year' AND activo = '' AND (genero = 'M' OR genero = 2)")->get();
+$female = $male = 0;
+foreach ($students as $student) {
+    if( strtoupper($student->genero) === 'F' OR $student->genero === '1'){
+        $female++;
+    }else{
+        $male++;
+    }
+}
 $families = DB::table('year')->select("DISTINCT id")->where([
     ['year', $year],
 ])->get();
-$parentsWithNoStudents = DB::table('madre')->whereRaw("not EXISTS(select * from year where year.id = madre.id)")->orderBy('id DESC')->get();
+// $parentsWithNoStudents = DB::table('madre')->whereRaw("not EXISTS(select * from year where year.id = madre.id)")->orderBy('id DESC')->get();
 if (Session::get('accountNumber')) {
     $_REQUEST['student'] = Session::get('accountNumber', true);
 }
@@ -110,9 +117,9 @@ if (Session::get('accountNumber')) {
                 <hr class="d-lg-none d-sm-block" />
                 <div class="card border-info">
                     <div class="card-body">
-                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge badge-info"><?= sizeof($students->All()) ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Femeninas") ?>: <span class="badge badge-info"><?= sizeof($female) ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Masculinos") ?>: <span class="badge badge-info"><?= sizeof($male) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge badge-info"><?= sizeof($students) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Femeninas") ?>: <span class="badge badge-info"><?= $female ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Masculinos") ?>: <span class="badge badge-info"><?= $male ?></span></p>
                         <p class="text-monospace"><?= $lang->translation("Total de familias") ?>: <span class="badge badge-info"><?= sizeof($families) ?></span></p>
                         <p class="text-monospace"><?= $lang->translation("Año escolar") ?>: <span class="badge badge-info"><?= $year ?></span></p>
                     </div>
@@ -123,34 +130,12 @@ if (Session::get('accountNumber')) {
                 <form method="POST">
                     <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
                         <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
-                        <?php foreach ($students->All() as $student) : ?>
+                        <?php foreach ($students as $student) : ?>
                             <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                         <?php endforeach ?>
                     </select>
                     <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar información") ?></button>
-                </form>
-                <form class="mt-4" method="POST">
-                    <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
-                        <option value=""><?= $lang->translation("Seleccionar padres sin estudiantes") ?></option>
-                        <?php foreach ($parentsWithNoStudents as $parent) :
-                            $parentInfo = '';
-                            if ($parent->madre !== '' && $parent->padre !== '') {
-                                $parentInfo = "$parent->madre, $parent->padre";
-                            } else {
-                                if ($parent->madre !== '') {
-                                    $parentInfo = "$parent->madre";
-                                } else if ($parent->padre !== '') {
-                                    $parentInfo = "$parent->padre";
-                                }
-                            }
-                            $parentInfo .= " ($parent->id)";
-
-                        ?>
-                            <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $parent->id ? 'selected=""' : '' ?> value="<?= $parent->id ?>"><?= $parentInfo ?></option>
-                        <?php endforeach ?>
-                    </select>
-                    <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar información") ?></button>
-                </form>
+                </form>                
                 <form method="POST">
                     <button class="btn btn-outline-primary btn-sm btn-block mt-2" name="new" type="submit"><?= $lang->translation("Agregar una familia nueva") ?></button>
                 </form>
