@@ -109,7 +109,7 @@ $options = [
         ]
     ],
     [
-        'title' => ["es" => 'Entrada de codigos', "en" => 'Entrada de codigos'],
+        'title' => ["es" => 'Entrada de codigos', "en" => 'Code entry'],
         'buttons' => [
             [
                 'name' => ["es" => 'Códigos de bajas',   "en" => "Unenrollment codes"],
@@ -122,9 +122,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Códigos especiales',   "en" => "Códigos especiales"],
-                'desc' => ['es' => 'Entrada de valores Especiales.', 'en' => 'Entrada de valores Especiales.'],
-                'link' => '#'
+                'name' => ["es" => 'Códigos especiales',   "en" => "Special codes"],
+                'desc' => ['es' => 'Entrada de valores Especiales.', 'en' => 'Entry of Special values.'],
+                'link' => 'Special_codes.php'
             ],
             [
                 'name' => ["es" => 'Códigos documentos',   "en" => "Documents codes"],
