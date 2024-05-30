@@ -45,6 +45,9 @@ if ($opcion=='2' and $fg=='true')
 
 
 $tar= 'Tarjeta'.$tarjeta.'.php';
+if ($grado == 'C' and $tarjeta == '33') {
+    $tar = 'Tarjeta' . $tarjeta . 'b.php';
+}
 
 require_once $tar;
 
