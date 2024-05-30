@@ -132,9 +132,9 @@ $options = [
                 'link' => 'documentsDelivery/codes.php'
             ],
             [
-                'name' => ["es" => 'Departamento',   "en" => "Departamento"],
-                'desc' => ['es' => 'Entra los códigos de los departamentos del Colegio.', 'en' => 'Entra los códigos de los departamentos del Colegio.'],
-                'link' => '#'
+                'name' => ["es" => 'Códigos Departamentos',   "en" => "Department codes"],
+                'desc' => ['es' => 'Entra los códigos de los departamentos del Colegio.', 'en' => 'Enter the codes of the College departments.'],
+                'link' => 'deparment/codes.php'
             ],
             [
                 'name' => ["es" => 'Paypal',   "en" => "Paypal"],
