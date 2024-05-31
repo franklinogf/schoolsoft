@@ -97,9 +97,9 @@ $options = [
                 'link' => 'email/sendUsers.php'
             ],
             [
-                'name' => ["es" => 'Buscar correo electrónico', "en" => "Buscar correo electrónico"],
-                'desc' => ['es' => 'Pantalla para buscar de quien es el email.', 'en' => 'Pantalla para buscar de quien es el email.'],
-                'link' => '#'
+                'name' => ["es" => 'Buscar correo electrónico', "en" => "Search email"],
+                'desc' => ['es' => 'Pantalla para buscar de quien es el email.', 'en' => 'Screen to search for who the email is from.'],
+                'link' => 'search_email/'
             ],
             [
                 'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment lock"],
