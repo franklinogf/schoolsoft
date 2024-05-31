@@ -82,9 +82,9 @@ $options = [
                 'link' => 'changeGrade/'
             ],
             [
-                'name' => ["es" => 'Cambiar cuenta', "en" => "Cambiar cuenta"],
-                'desc' => ['es' => 'Pantalla para cambiar una cuenta a otra.', 'en' => 'Pantalla para cambiar una cuenta a otra.'],
-                'link' => '#'
+                'name' => ["es" => 'Cambiar cuenta', "en" => "Change account"],
+                'desc' => ['es' => 'Pantalla para cambiar una cuenta a otra.', 'en' => 'Screen to change one account to another.'],
+                'link' => 'change_account/'
             ],
             [
                 'name' => ["es" => 'Admisión', "en" => "Admisión"],
