@@ -117,9 +117,9 @@ $options = [
                 'link' => 'unenrollment/codes.php'
             ],
             [
-                'name' => ["es" => 'Socio económico',   "en" => "Socio económico"],
-                'desc' => ['es' => 'Entrada de valores para el Socio Económico.', 'en' => 'Entrada de valores para el Socio Económico.'],
-                'link' => '#'
+                'name' => ["es" => 'Socio económico',   "en" => "Socioeconomic"],
+                'desc' => ['es' => 'Entrada de valores para el Socio Económico.', 'en' => 'Input of values for the Socioeconomic.'],
+                'link' => 'socioeconomic/codes.php'
             ],
             [
                 'name' => ["es" => 'Códigos especiales',   "en" => "Special codes"],
