@@ -65,9 +65,9 @@ $options = [
         'title' => ["es" => 'Informes', "en" => 'Reports'],
         'buttons' => [
             [
-                'name' => ["es" => 'Pagos diarios', "en" => "Pagos diarios"],
-                'desc' => ['es' => 'Pagos Realizados, Cuadre del día, puede seleccionar las fechas.', 'en' => 'Pagos Realizados, Cuadre del día, puede seleccionar las fechas.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos diarios', "en" => "Daily payments"],
+                'desc' => ['es' => 'Pagos Realizados, Cuadre del día, puede seleccionar las fechas.', 'en' => 'Payments Made, Square of the day, you can select the dates.'],
+                'link' => 'Daily_payments.php'
             ],
             [
                 'name' => ["es" => 'Estado de cuenta', "en" => "Estado de cuenta"],
