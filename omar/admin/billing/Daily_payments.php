@@ -35,7 +35,7 @@ $lang = new Lang([
     ['Estás seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
     ['Resumen fecha', 'Summary date'],
     ['Resumen código', 'Code summary'],
-    ['', ''],
+    ['Caja', 'Cash register'],
     ['', ''],
     ['', ''],
     ['', ''],
@@ -46,36 +46,57 @@ $year = $school->info('year2');
 $grades = $school->allGrades();
 
 $re = $school->info('tar');
-$in1='';$in2='';$in3='';$in4='';$in5='';$in6=''; $in7='';$in8='';
-$in9='';$in10='';$in11='';$in12='';$in13='';$in14='';$in15='';$in16='';$in17='';$in18='';$in19='';$in20='';
-if ($re=='1'){$in1='selected';}
-if ($re=='2'){$in2='selected';}
-if ($re=='3'){$in3='selected';}
+$in1 = '';
+$in2 = '';
+$in3 = '';
+$in4 = '';
+$in5 = '';
+$in6 = '';
+$in7 = '';
+$in8 = '';
+$in9 = '';
+$in10 = '';
+$in11 = '';
+$in12 = '';
+$in13 = '';
+$in14 = '';
+$in15 = '';
+$in16 = '';
+$in17 = '';
+$in18 = '';
+$in19 = '';
+$in20 = '';
+if ($re == '1') {
+    $in1 = 'selected';
+}
+if ($re == '2') {
+    $in2 = 'selected';
+}
+if ($re == '3') {
+    $in3 = 'selected';
+}
 
 $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 
 $presupuesto = DB::table('presupuesto')->where([
-            ['year', $year]
-        ])->orderBy('codigo')->get();
+    ['year', $year]
+])->orderBy('codigo')->get();
 
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <script language="JavaScript">
-function activarTrimestre() {
-var dis = document.TarjetaNotas.tarjeta.value;
-if (dis == '2')
-   {
-   document.TarjetaNotas.tri.disabled=false;
-   }
- else
-   {
-   document.TarjetaNotas.tri.disabled=true;
-   }
+    function activarTrimestre() {
+        var dis = document.TarjetaNotas.tarjeta.value;
+        if (dis == '2') {
+            document.TarjetaNotas.tri.disabled = false;
+        } else {
+            document.TarjetaNotas.tri.disabled = true;
+        }
 
-}
-</script> 
+    }
+</script>
 
 <head>
     <?php
@@ -94,9 +115,9 @@ if (dis == '2')
         </h1>
         <a href="<?= Route::url('/admin/billing/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atrás") ?></a>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form id="TarjetaNotas" name="TarjetaNotas" method="POST" target="_blank" action="<?= Route::url('/admin/access/gradesReports/pdf/TarjetaOpciones.php') ?>">
+            <form id="TarjetaNotas" name="TarjetaNotas" method="POST" target="_blank" action="<?= Route::url('/admin/billing/pdf/pagos_diario_inf.php') ?>">
                 <div class="mx-auto" style="max-width: 550px;">
-                    <?php if (Session::get('createGrades')): ?>
+                    <?php if (Session::get('createGrades')) : ?>
                         <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
                             <i class="fa-solid fa-square-check"></i>
                             <?= Session::get('gradesReports', true) ?>
@@ -124,10 +145,10 @@ if (dis == '2')
                             </label>
                         </div>
                         <select id="codigo" name="codigo" class="form-control">
-                            <option><?= $lang->translation('Todos') ?></option>
+                            <option value='Todos'><?= $lang->translation('Todos') ?></option>
                             <?php foreach ($presupuesto as $pres) { ?>
                                 <option value='<?= $pres->codigo ?>'>
-                                    <?= $pres->descripcion?>
+                                    <?= $pres->descripcion ?>
                                 </option>
                             <?php } ?>
                         </select>
@@ -220,7 +241,20 @@ if (dis == '2')
                                 <?= $lang->translation('Bash') ?>
                             </label>
                         </div>
-                        <select id="bash" name="bash" class="form-control">
+                        <select id="bash" name="bash" class="form-control" style="width: 30px">
+                            <option value='0'>0</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="mensaje">
+                                <?= $lang->translation('Caja') ?>
+                            </label>
+                        </div>
+                        <select id="caja" name="caja" class="form-control" style="width: 30px">
                             <option value='0'>0</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -233,7 +267,7 @@ if (dis == '2')
                                 <?= $lang->translation('Selección') ?>
                             </label>
                         </div>
-                        <select id="pagos" name="pagos" class="form-control">
+                        <select id="pagos" name="pagos" class="form-control" style="width: 301px">
                             <option value='A'><?= $lang->translation('Detallado') ?></option>
                             <option value='B'><?= $lang->translation('Resumen fecha') ?></option>
                             <option value='C'><?= $lang->translation('Resumen código') ?></option>
@@ -258,16 +292,12 @@ if (dis == '2')
     ?>
 </body>
 <script language="JavaScript">
-var dis = document.TarjetaNotas.tarjeta.value;
-if (dis == '2')
-   {
-   document.TarjetaNotas.tri.disabled=false;
-   }
- else
-   {
-   document.TarjetaNotas.tri.disabled=true;
-   }
-
-</script> 
+    var dis = document.TarjetaNotas.tarjeta.value;
+    if (dis == '2') {
+        document.TarjetaNotas.tri.disabled = false;
+    } else {
+        document.TarjetaNotas.tri.disabled = true;
+    }
+</script>
 
 </html>
