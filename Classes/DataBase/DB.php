@@ -43,7 +43,7 @@ class DB extends DataBase
   public static function getNextIdFromTable($table, $col = 'id')
   {
     $nextId = self::table($table)->select("MAX($col) as $col")->first();
-    return (int)$nextId->{$col} + 1;
+    return (int) $nextId->{$col} + 1;
   }
   /* ---------------------- Method to create a new table ---------------------- */
 
@@ -147,12 +147,11 @@ class DB extends DataBase
 
     $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
     $values = array_merge($valuesArray, self::$whereValues);
-
-    if ($this->updateQuery($query, $values)) {
-      $this->closeDB();
+    $result = $this->updateQuery($query, $values);
+    $this->closeDB();
+    if ($result['error']) {
       return true;
     }
-    $this->closeDB();
     return false;
   }
   public function delete()
@@ -278,7 +277,8 @@ class DB extends DataBase
     echo self::$query . "<br/> ";
     var_dump(self::$where);
     echo "<hr/>";
-    if ($exit) exit;
+    if ($exit)
+      exit;
   }
 
   /* ---------------------------- get multiple rows --------------------------- */
@@ -308,14 +308,14 @@ class DB extends DataBase
   {
     $where = '';
     if (count(self::$whereCols) > 0) {
-      foreach (self::$whereCols  as $i => $col) {
+      foreach (self::$whereCols as $i => $col) {
         $where .= ($i > 0 ? ' AND' : ' WHERE');
         $where .= ' ' . $col . ' ' . self::$whereOperators[$i] . ' ?';
       }
     }
 
     if (count(self::$orWhereCols) > 0) {
-      foreach (self::$orWhereCols  as $i => $col) {
+      foreach (self::$orWhereCols as $i => $col) {
         $where .= ' OR ' . $col . ' ' . self::$orWhereOperators[$i] . ' ?';
       }
     }
@@ -329,7 +329,7 @@ class DB extends DataBase
     if (__COSEY) {
       $obj = $this->selectOne("SELECT escuela,centro FROM profesor WHERE id = ?", [Session::id()]);
       if (!$obj) {
-        $obj  = $this->selectOne("SELECT escuela,centro FROM year WHERE mt = ?", [Session::id()]);
+        $obj = $this->selectOne("SELECT escuela,centro FROM year WHERE mt = ?", [Session::id()]);
       }
       if (self::$cosey) {
         return $where . " AND " . self::$table . ".escuela = '$obj->escuela' AND " . self::$table . ". centro = '$obj->centro'";
@@ -349,7 +349,7 @@ class DB extends DataBase
 
     $join = '';
     if (count(self::$innerJoinTable) > 0) {
-      foreach (self::$innerJoinTable  as $i => $table) {
+      foreach (self::$innerJoinTable as $i => $table) {
         $join .= ' INNER JOIN ' . $table . ' ON ' . self::$innerJoinCol1[$i] . ' ' . self::$innerJoinOperator[$i] . ' ' . self::$innerJoinCol2[$i];
       }
     }
