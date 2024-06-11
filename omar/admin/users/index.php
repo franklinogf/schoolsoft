@@ -104,7 +104,7 @@ $options = [
             [
                 'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment lock"],
                 'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Access or blockage of re-enrollment to parents.'],
-                'link' => '#'
+                'link' => 'regis_deactivation.php'
             ],
         ]
     ],
