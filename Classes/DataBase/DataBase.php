@@ -6,6 +6,7 @@ use Classes\Session;
 use mysqli;
 use Exception;
 use Classes\Util;
+
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase connection                     */
 /* -------------------------------------------------------------------------- */
@@ -78,10 +79,11 @@ class DataBase
   protected function updateQuery($query, $valuesArray)
   {
     $db = $this->connect();
-    if (!$stmt = $db->prepare($query)) {
-      $this->exception($db->error . ' QUERY: ' . $query);
+    $stmt = $db->prepare($query);
+    if (!$stmt) {
+      return $this->exception($db->error, $query, $valuesArray);
     }
-    $bind =  str_repeat('s', count($valuesArray));
+    $bind = str_repeat('s', count($valuesArray));
     // php 5 version
     $refs = array();
     foreach ($valuesArray as $key => $value) {
@@ -89,14 +91,11 @@ class DataBase
     }
     call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
     // php 7 version
-    // $stmt->bind_param($bind, ...$valuesArray);
-    if (Session::is_logged(false)) {
-
-      if ($stmt->execute()) {
-        return true;
-      }
-      return false;
+    // $stmt->bind_param($bind, ...$valuesArray);   
+    if (!$stmt->execute()) {
+      return $this->exception("Error executing query", $query, $valuesArray);
     }
+    return true;
   }
 
   // Insert row into tables 
@@ -132,7 +131,7 @@ class DataBase
         if (!$stmt = $db->prepare($query[$key])) {
           echo "error " . $db->error . "<br/>";
         }
-        $bind =  str_repeat('s', count($array));
+        $bind = str_repeat('s', count($array));
         // php 5 version
         $refs = [];
         foreach ($array as $key => $value) {
@@ -141,11 +140,12 @@ class DataBase
         call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
         // // php 7 version
         // $stmt->bind_param($bind, ...$array);
-        if (Session::is_logged(false)) $stmt->execute();
+        if (Session::is_logged(false))
+          $stmt->execute();
       }
     } else {
       $stmt = $db->prepare($query[0]);
-      $bind =  str_repeat('s', count($valuesArray));
+      $bind = str_repeat('s', count($valuesArray));
       // php 5 version
       $refs = [];
       foreach ($valuesArray as $key => $value) {
@@ -223,12 +223,13 @@ class DataBase
   protected function isMultiArray($array)
   {
     $rv = array_filter($array, 'is_array');
-    if (count($rv) > 0) return true;
+    if (count($rv) > 0)
+      return true;
     return false;
   }
 
-  private function exception($message)
+  private function exception($message, $query, $values)
   {
-    throw new \Exception($message);
+    return ["error" => true, "message" => $message, "query" => $query, "values" => $values];
   }
 }
