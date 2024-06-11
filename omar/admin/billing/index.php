@@ -12,9 +12,9 @@ $options = [
         'title' => ["es" => 'Opciones', "en" => 'Options'],
         'buttons' => [
             [
-                'name' => ["es" => 'Presupuesto',   "en" => "Presupuesto"],
-                'desc' => ['es' => 'Para definir los códigos y las descripciones.', 'en' => 'Para definir los códigos y las descripciones.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto',   "en" => "Budget"],
+                'desc' => ['es' => 'Para definir los códigos y las descripciones.', 'en' => 'To define codes and descriptions.'],
+                'link' => 'budget.php'
             ],
             [
                 'name' => ["es" => 'Costos',   "en" => "Costos"],
