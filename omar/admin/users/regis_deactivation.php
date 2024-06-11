@@ -11,8 +11,8 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $lang = new Lang([
-    ['inactivacion de matrícula', 'registration deactivation'],
-    ['Activar o desactivar la reinscripción de padres para el año', 'Turn parent re-enrollment on or off for the year'],
+    ['inactivacion de matrï¿½cula', 'registration deactivation'],
+    ['Activar o desactivar la reinscripciï¿½n de padres para el aï¿½o', 'Turn parent re-enrollment on or off for the year'],
     ['Apellidos', 'Last name'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
@@ -25,8 +25,8 @@ $lang = new Lang([
     ['Control del bloqueo', 'Block control'],
     ['Todo el sistema', 'The whole system'],
     ['Area de notas', 'Grades area'],
-    ['Día de vencimiento', 'Expiration day'],
-    ['Bloqueo automático si debe la cuenta', 'Automatic blocking if the account owe'],
+    ['Dï¿½a de vencimiento', 'Expiration day'],
+    ['Bloqueo automï¿½tico si debe la cuenta', 'Automatic blocking if the account owe'],
     ['Codigos para controlar el bloqueo', 'Codes to control the block'],
     ['Si', 'Yes'],
     ['Guardado!', 'Saved!'],
@@ -43,7 +43,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
 
 <head>
     <?php
-    $title = $lang->translation('inactivacion de matrícula');
+    $title = $lang->translation('inactivacion de matrï¿½cula');
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::fontawasome();
     ?>
@@ -54,7 +54,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o desactivar la reinscripción de padres para el año') . ' ' . $school->year() ?> </h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o desactivar la reinscripciï¿½n de padres para el aï¿½o') . ' ' . $school->year() ?> </h1>
         <div class="container mt-5">
             <button class="btn btn-primary mb-1" data-toggle="modal" data-target="#optionsModal"><?= $lang->translation("Opciones") ?></button>
             <div class="table_wrap">
@@ -143,7 +143,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
             $('#optionsModal').on('show.bs.modal', function(e) {
                 $('#alert').hide()
 
-                $.post(includeThisFile(), {
+                $.post('./includes/regis_deactivation.php', {
                     search: true,
                 }, function(data, textStatus, xhr) {
                     console.log(data);
@@ -172,7 +172,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
             $(".custom-control-input.check").on('change', function(e) {
                 const id = $(this).data('id');
                 const value = !$(this).prop('checked') ? '' : 'SI';
-//                alert("Hello! I am an alert box!!");
+                //                alert("Hello! I am an alert box!!");
                 $.post('./includes/regis_deactivation.php', {
                     check: id,
                     value,
