@@ -44,6 +44,18 @@ $codes = DB::table('presupuesto')->where([
     ["year", $year]
 ])->orderBy('codigo')->get();
 
+$adminUsers = DB::table('colegio')->select('usuario')->get();
+$depositTypes = [
+    1 => "Cash",
+    2 => "Donación",
+    3 => "Intercambio LT",
+    4 => "Recompensa",
+    5 => "Correción",
+    6 => "Devolución Balance",
+    // 7 => "Borrar",
+    8 => "Balance",
+    9 => "Otros",
+];
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -88,6 +100,7 @@ $codes = DB::table('presupuesto')->where([
                 $debtData[$month][] = $row;
             }
             ?>
+            <!-- students -->
             <div class="my-4">
                 <h2>Estudiantes en esta cuenta</h2>
                 <div class="card-deck">
@@ -96,7 +109,7 @@ $codes = DB::table('presupuesto')->where([
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title"><?= "$student->apellidos $student->nombre ($student->grado)" ?></h5>
-                                <button class="btn btn-sm btn-primary">Deposito <?= number_format($student->cantidad, 2) ?></button>
+                                <button data-id="<?= $student->mt ?>" class="btn btn-sm btn-primary depositBtn">Deposito <span><?= number_format($student->cantidad, 2) ?></span></button>
                             </div>
                         </div>
                     <?php endforeach ?>
@@ -164,7 +177,7 @@ $codes = DB::table('presupuesto')->where([
                                         <td><?= $payment->rec !== 0 ? $payment->rec : '' ?></td>
                                         <td class="text-right">
                                             <i data-id="<?= $payment->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
-                                            <i data-id="<?= $payment->mt ?>" role="button" class="<?= $payment->deuda ? 'editCharge' : 'editPayment' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+                                            <i data-id="<?= $payment->mt ?>" role="button" class="<?= $payment->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
                                         </td>
                                     </tr>
                                 <?php endforeach ?>
@@ -184,9 +197,8 @@ $codes = DB::table('presupuesto')->where([
         <?php endif ?>
 
     </div>
-
     <!-- Payment Modal -->
-    <div class="modal fade" id="paymentModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div data-account-id="<?= $accountId ?>" class="modal fade" id="paymentModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -311,7 +323,7 @@ $codes = DB::table('presupuesto')->where([
                             </div>
                             <div class="form-group col-6">
                                 <label for="amount">Cantidad a pagar</label>
-                                <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" />
+                                <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" required />
                             </div>
                         </div>
 
@@ -334,32 +346,232 @@ $codes = DB::table('presupuesto')->where([
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="PUT" action="<?= Route::url('/admin/billing/payments/includes/editCharge.php') ?>">
+                <form method="post" action="<?= Route::url('/admin/billing/payments/includes/editCharge.php') ?>">
+                    <input type="hidden" id="editChargeId" name="id">
+
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="chargeTo">Aplicar a</label>
-                            <select class="form-control" id="chargeTo" name="chargeTo">
+                            <label for="editChargeDate">Fecha posteo</label>
+                            <input type="date" class="form-control" id="editChargeDate" name="date" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editChargeTo">Aplicar a</label>
+                            <select class="form-control" id="editChargeTo" name="chargeTo">
                                 <?php foreach ($accountStudents as $student): ?>
                                     <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="editChargeDescription">Descripción</label>
+                            <input type="text" class="form-control" id="editChargeDescription" name="description" />
+                        </div>
                         <div class="form-row">
                             <div class="form-group col-6">
-                                <label for="amount">Cantidad a pagar</label>
-                                <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" />
+                                <label for="editChargeAmount">Cantidad a pagar</label>
+                                <input type="text" class="form-control" id="editChargeAmount" name="amount" />
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Pagar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- Edit Payment Modal -->
+    <div class="modal fade" id="editPaymentModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPaymentModalLabel">Editar pago</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="<?= Route::url('/admin/billing/payments/includes/editPayment.php') ?>">
+                    <input type="hidden" id="editPaymentId" name="id">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label for="editPaymentBash">Bash</label>
+                                        <select class="form-control" <?= $school->info('caja') != 0 ? 'disabled' : '' ?> id="editPaymentBash" name="bash">
+                                            <?php for ($i = 0; $i <= 10; $i++): ?>
+                                                <option <?= $school->info('rec') === $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
+                                            <?php endfor ?>
+                                        </select>
+                                        <?php if ($school->info('caja') != 0): ?>
+                                            <input type="hidden" class="form-control" name="bash" value="<?= $school->info('caja') ?>" />
+                                        <?php endif ?>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="editPaymentChargeDate">Fecha posteo</label>
+                                        <input type="date" class="form-control" id="editPaymentChargeDate" name="charge_date" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editPaymentTo">Aplicar a</label>
+                                    <select class="form-control" id="editPaymentTo" name="chargeTo">
+                                        <?php foreach ($accountStudents as $student): ?>
+                                            <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label for="editPaymentPaymentDate">Fecha del pago</label>
+                                        <input type="date" class="form-control" id="editPaymentPaymentDate" name="payment_date" />
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="editPaymentDescription">Descripción</label>
+                                        <input type="text" class="form-control" id="editPaymentDescription" name="description" />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentAmount">Cantidad a pagar</label>
+                                        <input type="text" class="form-control" id="editPaymentAmount" name="amount" />
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentPaymentType">Tipo de pago</label>
+                                        <select class="form-control" id="editPaymentPaymentType" name="paymentType">
+                                            <?php foreach ($paymentTypes as $id => $label): ?>
+                                                <option value="<?= $id ?>"><?= $label ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentChkNum">No. de CHK</label>
+                                        <input type="text" class="form-control" data-mask="0#" id="editPaymentChkNum" name="chkNum" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="editPaymentComment">Razón del cambio</label>
+                                    <textarea class="form-control" name="comment" id="editPaymentComment" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editPaymentChangeDate">Fecha del cambio</label>
+                                    <input type="text" class="form-control-plaintext" id="editPaymentChangeDate" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="editPaymentReturnedCheck" name="returnedCheck" value="true">
+                                        <label class="custom-control-label w-100" for="editPaymentReturnedCheck">Cheque devuelto</label>
+                                    </div>
+                                </div>
+                                <div class="form-group hidden">
+                                    <label for="editPaymentCode">Codigo</label>
+                                    <select class="form-control" id="editPaymentCode" name="code">
+                                        <?php foreach ($codes as $code): ?>
+                                            <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentUser">Cobrador</label>
+                                        <input type="text" class="form-control-plaintext" id="editPaymentUser" readonly>
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentDate">Fecha</label>
+                                        <input type="text" class="form-control-plaintext" id="editPaymentDate" readonly>
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="editPaymentTime">Hora</label>
+                                        <input type="text" class="form-control-plaintext" id="editPaymentTime" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal fade" id="depositModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="depositModalLabel">Deposito</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="minDepositForm" novalidate>
+                        <label for="minDeposit">Cantidad minima</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="minDeposit" required name="deposit" class="form-control" placeholder="10.00" aria-label="Cantidad minima" aria-describedby="minDepositBtn">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="submit" id="minDepositBtn">Actualizar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="d-flex">
+                        <p class="mb-0">Poner balance en "0"</p>
+                        <button id="deleteDeposit" type="button" class="btn btn-warning btn-sm ml-2"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <form id="depositForm" method="POST" novalidate action="<?= Route::url('/admin/billing/payments/includes/deposit.php') ?>">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="depositType">Tipo de deposito</label>
+                                <select class="form-control" name="type" id="depositType">
+                                    <?php foreach ($depositTypes as $id => $label): ?>
+                                        <option value="<?= $id ?>"><?= $label ?></option>
+                                    <?php endforeach ?>
+                                </select>
+
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label for="depositAmount">Cantidad a Depositar</label>
+                                <input type="text" class="form-control" name="amount" id="depositAmount" placeholder="10.00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="depositOther">Otra descripción</label>
+                            <input type="text" class="form-control" name="other" id="depositOther" disabled>
+                        </div>
+                        <table class="table table-sm text-center">
+                            <thead>
+                                <tr>
+                                    <th>Disponible</th>
+                                    <th>Nueva</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="availableDeposit"></td>
+                                    <td id="newDeposit"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Depositar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
