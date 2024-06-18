@@ -7,15 +7,12 @@ global $title;
 ?>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>Admin <?= $title ? "- {$title}" : '' ?></title>
+<title>Admin <?= $title ? "- {$title}":'' ?></title>
 <link rel="icon" href="<?= School::logo() ?>" />
 <?php
 
-if ($DataTable)
-    Route::includeFile('/includes/datatable-css.php', true);
-?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<?php
+if ($DataTable) Route::includeFile('/includes/datatable-css.php', true);
+
 Route::css("/css/main-bootstrap.css");
 Route::css("/css/main.css", true);
 
@@ -30,4 +27,3 @@ if (Route::file_exists($__path)) {
 
     Route::css($__path);
 }
-?>

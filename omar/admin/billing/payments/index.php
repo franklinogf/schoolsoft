@@ -76,7 +76,7 @@ $depositTypes = [
     <div class="container-md mt-md-3 mb-md-5 px-0">
         <h1 class="text-center my-3"><?= $lang->translation("Pagos") ?></h1>
         <form method="GET">
-            <select class="form-control selectpicker" name="accountId" data-live-search="true" required>
+            <select class="form-control selectpicker w-100" name="accountId" data-live-search="true" required>
                 <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
                 <?php foreach ($students->All() as $student): ?>
                     <option <?= isset($_REQUEST['accountId']) && $_REQUEST['accountId'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
