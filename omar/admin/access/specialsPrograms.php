@@ -109,7 +109,7 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                                         <span>
                                             <?= "$course->curso - $desc ($course->id)" ?>
                                             <?php if ($course->nota1 !== '' || $course->nota2 !== '' || $course->nota3 !== '' || $course->nota4 !== ''): ?>
-                                                <span class="badge text-bg-warning ml-1">
+                                                <span class="badge badge-warning ml-1">
                                                     <?= $lang->translation("Tiene notas"); ?>
                                                 </span>
                                             <?php endif ?>

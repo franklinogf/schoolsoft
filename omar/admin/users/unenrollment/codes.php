@@ -64,13 +64,13 @@ $codes = DB::table('codigo_bajas')->get();
 
         <h2 class="text-center my-5 <?php sizeof($codes) > 0 ? '' : 'invisible' ?>"><?= $lang->translation("Lista de codigos") ?></h2>
         <div id="codesList" class="row row-cols-1 row-cols-md-4">
-            <?php if (sizeof($codes) > 0): ?>
-                <?php foreach ($codes as $code): ?>
+            <?php if (sizeof($codes) > 0) : ?>
+                <?php foreach ($codes as $code) : ?>
                     <div id="<?= $code->codigo ?>" class="col mb-4">
                         <div class="card h-100">
                             <div class="card-body">
                                 <p class="card-text float-left id"><?= $code->id ?></p>
-                                <p class="card-text float-right"><span class="badge text-bg-info code"><?= $code->codigo ?></span></p>
+                                <p class="card-text float-right"><span class="badge badge-info code"><?= $code->codigo ?></span></p>
                             </div>
                             <div class="card-body">
                                 <p class="card-text description"><?= $code->descripcion ?></p>
