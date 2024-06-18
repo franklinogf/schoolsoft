@@ -266,7 +266,7 @@ $depositTypes = [
                         </div>
                         <div>
                             <span>Cantidad a pagar</span>
-                            <span class="badge badge-primary" id="paymentTotal">0.00</span>
+                            <span class="badge text-bg-primary" id="paymentTotal">0.00</span>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -81,9 +81,9 @@ $students = $students->All();
 $year = $school->year();
 $female = $male = 0;
 foreach ($students as $student) {
-    if( strtoupper($student->genero) === 'F' OR $student->genero === '1'){
+    if (strtoupper($student->genero) === 'F' or $student->genero === '1') {
         $female++;
-    }else{
+    } else {
         $male++;
     }
 }
@@ -117,11 +117,11 @@ if (Session::get('accountNumber')) {
                 <hr class="d-lg-none d-sm-block" />
                 <div class="card border-info">
                     <div class="card-body">
-                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge badge-info"><?= sizeof($students) ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Femeninas") ?>: <span class="badge badge-info"><?= $female ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Masculinos") ?>: <span class="badge badge-info"><?= $male ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Total de familias") ?>: <span class="badge badge-info"><?= sizeof($families) ?></span></p>
-                        <p class="text-monospace"><?= $lang->translation("Año escolar") ?>: <span class="badge badge-info"><?= $year ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge text-bg-info"><?= sizeof($students) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Femeninas") ?>: <span class="badge text-bg-info"><?= $female ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Masculinos") ?>: <span class="badge text-bg-info"><?= $male ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Total de familias") ?>: <span class="badge text-bg-info"><?= sizeof($families) ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Año escolar") ?>: <span class="badge text-bg-info"><?= $year ?></span></p>
                     </div>
                 </div>
 
@@ -130,18 +130,18 @@ if (Session::get('accountNumber')) {
                 <form method="POST">
                     <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
                         <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
-                        <?php foreach ($students as $student) : ?>
+                        <?php foreach ($students as $student): ?>
                             <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                         <?php endforeach ?>
                     </select>
                     <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar información") ?></button>
-                </form>                
+                </form>
                 <form method="POST">
                     <button class="btn btn-outline-primary btn-sm btn-block mt-2" name="new" type="submit"><?= $lang->translation("Agregar una familia nueva") ?></button>
                 </form>
-                <?php if (Session::get("edited")) :
+                <?php if (Session::get("edited")):
                     Session::delete('edited');
-                ?>
+                    ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se ha actualizado con éxito") ?>
@@ -151,9 +151,9 @@ if (Session::get('accountNumber')) {
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (Session::get("added")) :
+                <?php if (Session::get("added")):
                     Session::delete('added');
-                ?>
+                    ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se ha agregado con éxito") ?>
@@ -163,7 +163,7 @@ if (Session::get('accountNumber')) {
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (Session::get("editedStudent")) : ?>
+                <?php if (Session::get("editedStudent")): ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se ha actualizado la información del estudiante con éxito") ?>
@@ -175,7 +175,7 @@ if (Session::get('accountNumber')) {
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (Session::get("addedStudent")) : ?>
+                <?php if (Session::get("addedStudent")): ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se agregado el estudiante con éxito") ?>
@@ -189,13 +189,13 @@ if (Session::get('accountNumber')) {
                 <?php endif; ?>
             </div>
         </div>
-        <?php if (isset($_REQUEST['student']) || isset($_POST['new'])) :
+        <?php if (isset($_REQUEST['student']) || isset($_POST['new'])):
             if (isset($_REQUEST['student'])) {
                 $parents = new Parents($_REQUEST['student']);
             } else {
                 $nextId = DB::getNextIdFromTable('madre');
             }
-        ?>
+            ?>
             <form method="POST" action="<?= Route::url('/admin/users/accounts/includes/index.php') ?>">
                 <div class="row mt-5">
                     <div class="col-12">
@@ -262,7 +262,7 @@ if (Session::get('accountNumber')) {
                                 <label for="cellCompanyM"><?= $lang->translation("Compañia telefonica") ?></label>
                                 <select id="cellCompanyM" class="form-control" name="cellCompanyM">
                                     <option <?= $parents->cel_com_m === '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Seleccionar") ?></option>
-                                    <?php foreach (Util::phoneCompanies() as $company) : ?>
+                                    <?php foreach (Util::phoneCompanies() as $company): ?>
                                         <option <?= $parents->cel_com_m === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -363,7 +363,7 @@ if (Session::get('accountNumber')) {
                                 <label for="cellCompanyP"><?= $lang->translation("Compañia telefonica") ?></label>
                                 <select id="cellCompanyP" class="form-control" name="cellCompanyP">
                                     <option <?= $parents->cel_com_p === '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Seleccionar") ?></option>
-                                    <?php foreach (Util::phoneCompanies() as $company) : ?>
+                                    <?php foreach (Util::phoneCompanies() as $company): ?>
                                         <option <?= $parents->cel_com_p === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -437,7 +437,7 @@ if (Session::get('accountNumber')) {
                     <div class="col-12">
                         <h5 class="card-title text-center my-3"><?= $lang->translation("Personas autorizadas a recoger") ?></h5>
                     </div>
-                    <?php for ($i = 1; $i <= 2; $i++) : ?>
+                    <?php for ($i = 1; $i <= 2; $i++): ?>
                         <div class="card col-12 col-lg-6 p-3 rounded-0">
                             <div class="form-group row">
                                 <label for="<?= "person$i" ?>" class="col-4"><?= $lang->translation("Nombre") ?>:</label>
@@ -471,7 +471,7 @@ if (Session::get('accountNumber')) {
                             </div>
                         </div>
                     <?php endfor ?>
-                    <?php for ($i = 5; $i <= 6; $i++) : ?>
+                    <?php for ($i = 5; $i <= 6; $i++): ?>
                         <div class="card col-12 col-lg-6 p-3 rounded-0">
                             <div class="form-group row">
                                 <label for="<?= "person$i" ?>" class="col-4"><?= $lang->translation("Nombre") ?>:</label>
@@ -508,7 +508,7 @@ if (Session::get('accountNumber')) {
                     <div class="col-12">
                         <h5 class="card-title text-center my-3"><?= $lang->translation("Información de emergencia") ?></h5>
                     </div>
-                    <?php for ($i = 3; $i <= 4; $i++) : ?>
+                    <?php for ($i = 3; $i <= 4; $i++): ?>
                         <div class="card col-12 col-lg-6 p-3 rounded-0">
                             <div class="form-group row">
                                 <label for="<?= "person$i" ?>" class="col-4"><?= $lang->translation("Nombre") ?>:</label>
@@ -596,7 +596,7 @@ if (Session::get('accountNumber')) {
                                         <label for="inChargeCellCompany"><?= $lang->translation("Compañia telefonica") ?></label>
                                         <select id="inChargeCellCompany" class="form-control" name="inChargeCellCompany">
                                             <option <?= $parents->cel_com_m === '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <?php foreach (Util::phoneCompanies() as $company) : ?>
+                                            <?php foreach (Util::phoneCompanies() as $company): ?>
                                                 <option <?= $parents->cel_com_m === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
                                             <?php endforeach ?>
                                         </select>
@@ -632,18 +632,18 @@ if (Session::get('accountNumber')) {
                 <hr>
             </div>
 
-            <?php if ($_REQUEST['student']) : ?>
+            <?php if ($_REQUEST['student']): ?>
                 <div class="col-12 my-1">
                     <h2 class="text-center mb-3"><?= $lang->translation("Información de los hijos") ?></h2>
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                        <?php foreach ($parents->kids() as $kid) : ?>
+                        <?php foreach ($parents->kids() as $kid): ?>
                             <div class="col mt-1">
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <img src="<?= Util::studentProfilePicture($kid) ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
                                         <h6 class="card-title"><?= "$kid->nombre $kid->apellidos" ?></h6>
-                                        <p class="card-text"><?= $lang->translation("Grado:") ?> <?= $kid->grado ?></p>
-                                        <p class="card-text"><?= $lang->translation("Fecha de nacimiento:") ?> <?= Util::formatDate($kid->fecha, true, true) ?></p>
+                                        <p class="card-text"><?= $lang->translation("Grado:") ?>             <?= $kid->grado ?></p>
+                                        <p class="card-text"><?= $lang->translation("Fecha de nacimiento:") ?>             <?= Util::formatDate($kid->fecha, true, true) ?></p>
                                     </div>
                                     <div class="card-footer">
                                         <a href="<?= Route::url("/admin/users/accounts/students.php?pk=$kid->mt&id=$parents->id") ?>" class="btn btn-primary btn-block stretched-link">Edit student</a>
@@ -662,17 +662,17 @@ if (Session::get('accountNumber')) {
                 </div>
             <?php endif ?>
 
+        </div>
+    <?php endif ?>
+
     </div>
-<?php endif ?>
-
-</div>
 
 
-<?php
-Route::includeFile('/includes/layouts/scripts.php', true);
-Route::selectPicker('js');
+    <?php
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::selectPicker('js');
 
-?>
+    ?>
 
 </body>
 
