@@ -17,11 +17,10 @@ $options = [
                 'link' => 'budget.php'
             ],
             [
-                'name' => ["es" => 'Costos',   "en" => "Costos"],
-                'desc' => ['es' => 'Para definir los cargos a los grados.', 'en' => 'Para definir los cargos a los grados.'],
-                'link' => '#'
+                'name' => ["es" => 'Costos',   "en" => "Costs"],
+                'desc' => ['es' => 'Para definir los cargos a los grados.', 'en' => 'To define costs to grades.'],
+                'link' => 'Costs.php'
             ],
-
             [
                 'name' => ["es" => 'Crear cargos',   "en" => "Crear cargos"],
                 'desc' => ['es' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.', 'en' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.'],
