@@ -22,9 +22,9 @@ $options = [
                 'link' => 'Costs.php'
             ],
             [
-                'name' => ["es" => 'Crear cargos',   "en" => "Crear cargos"],
-                'desc' => ['es' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.', 'en' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.'],
-                'link' => '#'
+                'name' => ["es" => 'Crear cargos',   "en" => "Create costs"],
+                'desc' => ['es' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.', 'en' => 'Screen to create the different costs to the student accounts.'],
+                'link' => 'Create_costs.php'
             ],
             [
                 'name' => ["es" => 'Entrar pagos',   "en" => "Entrar pagos"],
