@@ -32,9 +32,9 @@ $options = [
                 'link' => 'payments/'
             ],
             [
-                'name' => ["es" => 'Ver Pagos',   "en" => "Ver Pagos"],
-                'desc' => ['es' => 'Cambiar o Borrar Pagos.', 'en' => 'Cambiar o Borrar Pagos.'],
-                'link' => '#'
+                'name' => ["es" => 'Ver Pagos',   "en" => "View transactions"],
+                'desc' => ['es' => 'Ver y borrar transacciones.', 'en' => 'View and delete transactions.'],
+                'link' => 'Ver_pagos.php'
             ],
             [
                 'name' => ["es" => 'Recargos',   "en" => "Recargos"],
