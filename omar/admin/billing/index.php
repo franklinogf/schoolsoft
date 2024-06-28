@@ -37,9 +37,9 @@ $options = [
                 'link' => 'Ver_pagos.php'
             ],
             [
-                'name' => ["es" => 'Recargos',   "en" => "Recargos"],
-                'desc' => ['es' => 'Pantalla para aplicarle recargos a las cuentas atrazadas.', 'en' => 'Pantalla para aplicarle recargos a las cuentas atrazadas.'],
-                'link' => '#'
+                'name' => ["es" => 'Recargos',   "en" => "Surcharges"],
+                'desc' => ['es' => 'Pantalla para aplicarle recargos a las cuentas atrazadas.', 'en' => 'Screen to apply surcharges to overdue accounts.'],
+                'link' => 'recargos.php'
             ],
             [
                 'name' => ["es" => 'Posteos',   "en" => "Posteos"],
