@@ -4,7 +4,7 @@ use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 use Classes\Controllers\School;
 
-require_once '../.././../../app.php';
+require_once '../../../../app.php';
 $depositTypes = [
     1 => "Cash",
     2 => "Donación",
@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $id = $_POST['id'];
     $school = new School();
     $year = $school->year();
+    $date = date('Y-m-d');
 
     if (isset($_POST['minDeposit'])) {
         $result = DB::table('year')->where('mt', $id)->update([
@@ -40,11 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $other = $_POST['other'];
         $oldAmount = floatval($student->cantidad);
         $newAmount = $oldAmount + $amount;
-        $date = date('Y-m-d');
+
         $time = date('H:m:i');
         $selectedType = $depositTypes[$type];
         $data = [
-            'id' => $id,
+            'id' => $student->id,
             'ss' => $student->ss,
             'fecha' => $date,
             'year' => $year,

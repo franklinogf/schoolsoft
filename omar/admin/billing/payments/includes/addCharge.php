@@ -4,7 +4,7 @@ use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 use Classes\Controllers\School;
 
-require_once '../.././../../app.php';
+require_once '../../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     // echo '<pre>';

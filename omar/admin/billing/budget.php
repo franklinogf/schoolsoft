@@ -14,6 +14,7 @@ $lang = new Lang([
     ['Grabar', 'Save'],
     ['Código', 'Code'],
     ['Editar', 'Edit'],
+    ['Añadir', 'Add'],
     ['Borrar', 'Delete'],
     ['Debe de llenar todos los campos', 'You must fill all fields'],
     ['Lista de codigos', 'Codes list'],
@@ -25,13 +26,14 @@ $lang = new Lang([
 
 $school = new School(Session::id());
 $year = $school->info('year2');
-
+$add2=0;
 
 if (isset($_POST['borra']))
    {
    DB::table('presupuesto')->where('mt', $_POST['mt'])->delete();
    }
-$add2=$_POST['add2'];
+if ($add2==0)
+   {$add2=$_GET['add2'];}
 if (isset($_POST['add']) and $add2==0)
    {
     DB::table('presupuesto')->insert([
@@ -60,7 +62,8 @@ if (isset($_POST['cambiar'])){
 }
 
 $codes = DB::table('presupuesto')->where('year', $year)->orderBy('codigo')->get();
-
+//var_dump($codes);
+//exit;
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -106,34 +109,29 @@ document.oncontextmenu = function(){return false}
 
 
 
-<form method="post" action="">
+<form method="post">
 	<table align="center" cellspacing="0" style="width: 71%">
 		<tr>
 			<td style="width: 50px"><strong><?= $lang->translation('Código') ?></strong></td>
-			<td style="width: 100px"><strong><?= $lang->translation('Descripción') ?></strong></td>
+			<td style="width: 500px"><strong><?= $lang->translation('Descripción') ?></strong></td>
 			<td style="width: 50px"><strong><?= $lang->translation('Cantidad') ?></strong></td>
 			<td style="width: 50px"><strong><?= $lang->translation('Precio') ?></strong></td>
 			<td style="width: 100px" colspan="2"><strong><center><?= $lang->translation('Opciones') ?></center></strong></td>
 		</tr>
-<? 
-      foreach ($codes as $code)
-              {
-
-    echo '<form method="post">';
-
-?>
+<?php foreach ($codes as $code): ?>
+      <form method="post">
 		<tr>
 			<td style="width: 50px">
-			<? echo $code->codigo ?>
+			<?= $code->codigo ?>
 			</td>
 			<td style="width: 100px">
-			<? echo $code->descripcion ?>
+			<?= $code->descripcion ?>
 			&nbsp;</td>
 			<td style="width: 50px">
-			<? echo number_format($code->cantidad,2) ?>
+			<?= number_format($code->cantidad,2) ?>
 			</td>
 			<td style="width: 50px">
-			<? echo number_format($code->costo,2) ?>
+			<?= number_format($code->costo,2) ?>
 			</td>
 			<td style="width: 100px">
 			<input class="btn btn-danger" name="borra" style="width: 90px;" type="submit" formnovalidate value="<?= $lang->translation('Borrar') ?>" onclick="return confirmar('&iquest;Est&aacute; seguro que desea eliminar los dependientes?')" />
@@ -142,14 +140,11 @@ document.oncontextmenu = function(){return false}
             <input class="btn btn-primary" name="cambiar" style="width: 90px" type="submit" formnovalidate value="<?= $lang->translation('Editar') ?>" />
 			</td>
 		</tr>
-<?
-	echo "<input type=hidden name=nn  value='$code->codigo'>";
-//	echo "<input type=hidden name=nn1 value='$row2[1]'>";
-	echo "<input type=hidden name=mt value='$code->mt '>";
-	echo "<input type=hidden name=add2 value='$add2'>";
-echo '</form>';
-       }
-?>
+<input type=hidden name=nn  value='<?= $code->codigo ?>'>
+<input type=hidden name=mt value='<?= $code->mt ?> '>
+<input type=hidden name=add2 value='<?= $add2 ?>'>
+</form>
+      <?php endforeach ?>
 		<tr>
 			<td style="width: 50px"><strong><?= $lang->translation('Código') ?></strong></td>
 			<td style="width: 100px"><strong><?= $lang->translation('Descripción') ?></strong></td>
@@ -157,33 +152,48 @@ echo '</form>';
 			<td style="width: 50px"><strong><?= $lang->translation('Precio') ?></strong></td>
 			<td style="width: 100px" colspan="2"><strong><center><?= $lang->translation('Opciones') ?></center></strong></td>
 		</tr>
-<?
-    echo '<form method="post">';
-?>		<tr>
+<?php if ($add2==0): ?>
+    <form method="post" action="budget.php?add2=<?= $add2 ?>">
+		<tr>
 			<td style="width: 50px">
-			<input maxlength="2" name="codigo" size="2" type="text" required value="<? echo $reg4->codigo ?>" /></td>
+			<input maxlength="2" name="codigo" size="2" type="text" required value="<?= $reg4->codigo ?? '' ?>" /></td>
 			<td style="width: 100px">
-			<input maxlength="50" name="descripcion" size="30" type="text" required value="<? echo $reg4->descripcion ?>" /></td>
+			<input maxlength="50" name="descripcion" size="30" type="text" required value="<?= $reg4->descripcion ?? '' ?>" /></td>
 			<td style="width: 50px">
-			<input maxlength="10" name="bajo_nivel" size="10" style="width: 80px" type="text" placeholder="999.99" value="<? echo $reg4->cantidad ?>"></td>
+			<input maxlength="10" name="bajo_nivel" size="10" style="width: 80px" type="text" placeholder="999.99" value="<?= $reg4->cantidad ?? '' ?>"></td>
 			<td style="width: 50px">
-			<input id="ex-91" name="sobre_nivel" class="text" size="10" type="text" style="width: 80px" maxlength="10" placeholder="999.99" value="<? echo $reg4->costo ?>" /></td>
+			<input id="ex-91" name="sobre_nivel" class="text" size="10" type="text" style="width: 80px" maxlength="10" placeholder="999.99" value="<?= $reg4->costo ?? '' ?>" /></td>
 			<td style="width: 100px" colspan="2">
 			<strong><center>
-<? 
-	echo "<input type=hidden name=nn0  value='$reg4->codigo'>";
-//	echo "<input type=hidden name=nn11 value='$reg4[1]'>";
-	echo "<input type=hidden name=mt value='$reg4->mt '>";
-	echo "<input type=hidden name=add2 value='$add2'>";
-?>
-
+ 
+	<input type=hidden name=nn0  value='<?= $reg4->codigo ?> '>
+	<input type=hidden name=mt value='<?= $reg4->mt ?> '>
+	<input type=hidden name=add2 value='<?= $add2 ?> '>
 			<input class="btn btn-primary" name="add" style="width: 90px" type="submit" value="<?= $lang->translation('Grabar') ?>" /></center></strong></td>
 		</tr>
-<? 
-echo '</form>';
-?>
-
-
+</form>
+<?php endif ?>
+<?php if ($add2==1): ?>
+    <form method="post" action="budget.php?add2=<?= $add2 ?>">
+		<tr>
+			<td style="width: 50px">
+			<input maxlength="2" name="codigo" size="2" type="text" required value="" /></td>
+			<td style="width: 100px">
+			<input maxlength="50" name="descripcion" size="30" type="text" required value="" /></td>
+			<td style="width: 50px">
+			<input maxlength="10" name="bajo_nivel" size="10" style="width: 80px" type="text" placeholder="999.99" value=""></td>
+			<td style="width: 50px">
+			<input id="ex-91" name="sobre_nivel" class="text" size="10" type="text" style="width: 80px" maxlength="10" placeholder="999.99" value="" /></td>
+			<td style="width: 100px" colspan="2">
+			<strong><center>
+ 
+	<input type=hidden name=nn0  value='<?= $reg4->codigo ?> '>
+	<input type=hidden name=mt value='<?= $reg4->mt ?> '>
+	<input type=hidden name=add2 value='<?= $add2 ?> '>
+			<input class="btn btn-primary" name="add" style="width: 90px" type="submit" value="<?= $lang->translation('Grabar') ?>" /></center></strong></td>
+		</tr>
+</form>
+<?php endif ?>
 		<tr>
 			<td class="style7" style="width: 80px">&nbsp;</td>
 			<td class="style7" style="width: 80px">&nbsp;</td>

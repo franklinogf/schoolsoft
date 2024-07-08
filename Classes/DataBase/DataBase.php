@@ -48,7 +48,7 @@ class DataBase
   {
     $db = $this->connect();
     if (!$stmt = $db->prepare($query)) {
-      $this->exception($db->error . ' QUERY: ' . $query);
+      $this->exception($db->error, $query);
     }
     if (Session::is_logged(false)) {
 
@@ -228,7 +228,7 @@ class DataBase
     return false;
   }
 
-  private function exception($message, $query, $values)
+  private function exception($message, $query, $values = null)
   {
     return ["error" => true, "message" => $message, "query" => $query, "values" => $values];
   }

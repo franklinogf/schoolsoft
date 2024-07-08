@@ -57,7 +57,7 @@ class DB extends DataBase
   public function alter($query)
   {
     $tableName = self::$table;
-    $q = "ALTER TABLE {$tableName} {$query}";
+    $q = "ALTER TABLE IF EXISTS {$tableName} {$query}";
     return $this->query($q);
   }
 
@@ -149,7 +149,7 @@ class DB extends DataBase
     $values = array_merge($valuesArray, self::$whereValues);
     $result = $this->updateQuery($query, $values);
     $this->closeDB();
-    if ($result['error']) {
+    if (isset($result['error'])) {
       return true;
     }
     return false;

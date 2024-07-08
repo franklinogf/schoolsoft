@@ -2,8 +2,187 @@ $(document).ready(function () {
   let _month = document.querySelector("#monthsButtons button.active").dataset
     .month;
   let _parcialPaymentTotal = 0;
-
+  function formatMoney(amount) {
+    return new Intl.NumberFormat("en", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount);
+  }
   init();
+  $("#paymentReceiptForm").submit(function (e) {
+    e.preventDefault();
+    const form = $(this)[0];
+    const fd = new FormData(form);
+    const type = fd.get("type");
+    const transaction = fd.get("transaction");
+    const email = fd.get("email");
+    const newEmail = fd.get("newEmail");
+    window.open(
+      `./pdf/receipt.php?type=${type}&transaction=${transaction}`,
+      "receipt"
+    );
+  });
+  $("#statementForm").submit(function (e) {
+    e.preventDefault();
+    const accountId = $("#accountId").val();
+    const form = $(this)[0];
+    const fd = new FormData(form);
+    const type = fd.get("type");
+    const email = fd.get("email");
+    const newEmail = fd.get("newEmail");
+    window.open(
+      `./pdf/statement.php?type=${type}&accountId=${accountId}${
+        type === "3" ? `&month=${_month}` : ""
+      }`,
+      "statement"
+    );
+  });
+  $("#expiredModal").on("show.bs.modal", async function (event) {
+    console.log("promise modal");
+    const accountId = $("#accountId").val();
+    $.ajax({
+      type: "GET",
+      url: "./includes/expired.php",
+      data: { accountId },
+      // dataType: "json",
+      success: function (charges) {
+        let total = 0;
+        charges.forEach(({ code, description, debt }) => {
+          if (debt > 0) {
+            total += debt;
+            $("#expiredTable tbody").append(`
+              <tr>
+                <td>${code} ${description}</td>
+                <th class="text-right">${formatMoney(debt)}</th>
+              </tr>`);
+          }
+        });
+        $("#expiredTotal").text(formatMoney(total));
+      },
+    });
+  });
+  $("#paymentPromiseDelete").click(function (e) {
+    ConfirmationAlert.fire({
+      title:
+        __LANG === "es"
+          ? "Esta seguro que desea borrar esta promesa de pago?"
+          : "Are you sure you want to delete this payment promise?",
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        const accountId = $("#accountId").val();
+        $.ajax({
+          type: "POST",
+          url: "./includes/paymentPromise.php",
+          data: { accountId, deletePromise: true },
+          dataType: "json",
+          complete: function (response) {
+            $("#paymentPromiseButton span").text("No");
+            $("#paymentPromiseModal").modal("hide");
+            Toast.fire("Promesa de pago eliminada!", "", "success");
+          },
+        });
+      }
+    });
+  });
+  $("#paymentPromiseModal").on("show.bs.modal", async function (event) {
+    const accountId = $("#accountId").val();
+    $.ajax({
+      type: "GET",
+      url: "./includes/paymentPromise.php",
+      data: { accountId },
+      dataType: "json",
+      success: function (response) {
+        $("#paymentPromiseDate").val(response.date);
+        $("#paymentPromiseExpirationDate").val(response.expirationDate);
+        $("#paymentPromiseDescription").val(response.description);
+        $("#paymentPromiseAmount").val(response.amount);
+        $("#paymentPromiseTime").val(response.time);
+        $("#paymentPromiseNewAmount").val(response.newAmount);
+        $("#paymentPromiseTotal").val(response.total);
+      },
+    });
+  });
+  $("#paymentPromiseForm").submit(function (e) {
+    e.preventDefault();
+    const form = $(this)[0];
+    const accountId = $("#accountId").val();
+    const fd = new FormData(form);
+    const date = fd.get("date");
+    const expirationDate = fd.get("expirationDate");
+    const description = fd.get("description");
+    const amount = fd.get("amount");
+    const time = fd.get("time");
+    const newAmount = fd.get("newAmount");
+    const total = fd.get("total");
+
+    $.ajax({
+      type: "POST",
+      url: "./includes/paymentPromise.php",
+      data: {
+        accountId,
+        date,
+        expirationDate,
+        description,
+        amount,
+        time,
+        newAmount,
+        total,
+      },
+      dataType: "json",
+      complete: function (response) {
+        Toast.fire("Promesa de pago guardada", "", "success");
+        $("#paymentPromiseButton span").text("Si");
+        $("#paymentPromiseModal").modal("hide");
+      },
+    });
+  });
+
+  $("#latePaymentForm").submit(function (e) {
+    e.preventDefault();
+    const form = $(this)[0];
+    const accountId = $("#accountId").val();
+    const fd = new FormData(form);
+    const observationType = fd.get("observationType");
+    const alert = fd.get("alert");
+    const info = fd.get("info");
+
+    $.ajax({
+      type: "POST",
+      url: "./includes/latePayment.php",
+      data: { accountId, observationType, alert, info },
+      dataType: "json",
+      complete: function (response) {
+        Toast.fire("Pago moroso guardado", "", "success");
+        $("#latePaymentModal").modal("hide");
+      },
+    });
+    if (observationType || alert) {
+      $("#latePaymentButton")
+        .addClass("btn-danger")
+        .removeClass("btn-secondary");
+    } else {
+      $("#latePaymentButton")
+        .removeClass("btn-danger")
+        .addClass("btn-secondary");
+    }
+  });
+  $("#latePaymentModal").on("show.bs.modal", async function (event) {
+    const { observationType, alert, info } = await getLatePaymentInfo();
+    $("#latePaymentObservationType").val(observationType);
+    $("#latePaymentAlert").prop("checked", alert);
+    $("#latePaymentAditionalInfo").val(info);
+  });
+
+  async function getLatePaymentInfo() {
+    const accountId = $("#accountId").val();
+    const ajax = await $.ajax({
+      type: "GET",
+      url: "./includes/latePayment.php",
+      data: { accountId },
+      dataType: "json",
+    });
+    return ajax;
+  }
 
   $(".depositBtn").click(function () {
     const id = $(this).data("id");
@@ -144,11 +323,15 @@ $(document).ready(function () {
           data: { id, deleteDeposit: true },
           dataType: "json",
           success: function (response) {
+            console.log({ response });
             if (!response.error) {
               $(`button[data-id=${id}] span`).text("0.00");
               $("#depositModal").modal("hide");
               Toast.fire("Deposito eliminado!", "", "success");
             }
+          },
+          error: function (error) {
+            console.log({ error });
           },
         });
       }
@@ -186,7 +369,6 @@ $(document).ready(function () {
       data: { id },
       dataType: "json",
       success: function (response) {
-        console.log({ response });
         if (response.error) {
           Toast.fire("Hubo un error");
         } else {
@@ -285,7 +467,7 @@ $(document).ready(function () {
     $("#paymentDate").val(date);
     _parcialPaymentTotal = 0;
     $("#monthToPay").val(_month);
-    $("#accountId").val($("#paymentModal").data("accountId"));
+    $("#paymentAccountId").val($("#paymentModal").data("accountId"));
 
     $("#paymentMode").change();
     $("#paymentButton").prop("disabled", total <= 0);
@@ -365,15 +547,32 @@ $(document).ready(function () {
 
     $input.change(function (e) {
       changePaymentTotal(parseFloat($(this).val()));
-      console.log("changed");
     });
   });
 
-  function init() {
+  async function init() {
+    const { observationType, alert, info } = await getLatePaymentInfo();
+    if (observationType || alert) {
+      let text =
+        observationType === "Si"
+          ? "Cheque rebotado"
+          : observationType === "2"
+          ? "Documento"
+          : observationType === "3"
+          ? info
+          : "";
+      text += text.length > 0 ? "<br/>" : "";
+      text += alert ? "No puede pagar con cheque" : "";
+      Alert.fire("Advertencia", text, "warning");
+      $("#latePaymentButton")
+        .addClass("btn-danger")
+        .removeClass("btn-secondary");
+    }
     setSearchParams("month", _month);
     displayAmounts();
     toggleMonthButtons();
   }
+
   function isIncorrectAmount(amount, type) {
     if (type === 6) return false;
     return (

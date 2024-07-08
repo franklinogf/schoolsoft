@@ -5,6 +5,7 @@ use Classes\Route;
 use Classes\Session;
 use Classes\Lang;
 use Classes\Controllers\Student;
+use Classes\Controllers\Parents;
 use Classes\Controllers\School;
 use Classes\DataBase\DB;
 
@@ -21,7 +22,7 @@ $students = new Student();
 $months = __LANG === 'es' ?
     ['Julio' => '07', 'Agosto' => '08', 'Septiembre' => '09', 'Octubre' => '10', 'Noviembre' => '11', 'Diciembre' => '12', 'Enero' => '01', 'Febrero' => '02', 'Marzo' => '03', 'Abril' => '04', 'Mayo' => '05', 'Junio' => '06']
     : ['July' => '07', 'August' => '08', 'September' => '09', 'October' => '10', 'November' => '11', 'December' => '12', 'January' => '01', 'February' => '02', 'March' => '03', 'April' => '04', 'May' => '05', 'June' => '06'];
-$currentMonth = $_GET['month'] ?: date('m');
+$currentMonth = $_GET['month'] ?? date('m');
 $school = new School();
 $year = $school->year();
 $paymentTypes = [
@@ -73,7 +74,7 @@ $depositTypes = [
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
-    <div class="container-md mt-md-3 mb-md-5 px-0">
+    <div class="container-md mt-md-3 mb-md-5 px-2">
         <h1 class="text-center my-3"><?= $lang->translation("Pagos") ?></h1>
         <form method="GET">
             <select class="form-control selectpicker w-100" name="accountId" data-live-search="true" required>
@@ -87,6 +88,7 @@ $depositTypes = [
 
         <?php if (isset($_REQUEST['accountId'])):
             $accountId = $_REQUEST['accountId'];
+            $parent = new Parents($accountId);
             $accountStudents = $students->findById($accountId);
             $paymentsQuery = DB::table('pagos')->where([
                 ['id', $accountId],
@@ -94,15 +96,27 @@ $depositTypes = [
                 ['baja', '']
             ])->get();
 
-            $debtData = [];
+            $debtData = $paymentsData = [];
             foreach ($paymentsQuery as $row) {
                 $month = date('m', strtotime($row->fecha_d));
                 $debtData[$month][] = $row;
+                if ($row->pago > 0) {
+                    $paymentsData[] = $row;
+                }
             }
+
+
             ?>
+            <input type="hidden" id="accountId" value="<?= $accountId ?>">
             <!-- students -->
+
             <div class="my-4">
-                <h2>Estudiantes en esta cuenta</h2>
+                <div class="d-inline-flex align-items-center mb-2">
+                    <h2>Estudiantes en esta cuenta</h2>
+                    <button id="paymentPromiseButton" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#paymentPromiseModal">
+                        Promesa de pago <span class="badge badge-light"><?= $parent->total_pagar !== '' && floatval($parent->total_pagar) > 0 ? 'Si' : 'No' ?></span>
+                    </button>
+                </div>
                 <div class="card-deck">
                     <?php foreach ($accountStudents as $student): ?>
 
@@ -123,7 +137,9 @@ $depositTypes = [
                     </div>
                 <?php endforeach ?>
             </div>
+
             <div id="paymentButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
+
                 <div class="col mb-1">
                     <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentModal">Hacer un pago</button>
                 </div>
@@ -134,13 +150,13 @@ $depositTypes = [
                     <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#statementModal">Estado de cuenta</button>
                 </div>
                 <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100">Recibo de pago</button>
+                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentReceiptModal">Recibo de pago</button>
                 </div>
                 <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100">Vencido</button>
+                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#expiredModal">Vencido</button>
                 </div>
                 <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100">Pago moroso</button>
+                    <button id="latePaymentButton" class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#latePaymentModal">Pago moroso</button>
                 </div>
 
             </div>
@@ -163,21 +179,21 @@ $depositTypes = [
                     </thead>
                     <?php foreach ($months as $name => $number): ?>
                         <tbody id="table<?= $number ?>" class="<?= $currentMonth !== $number ? 'hidden' : '' ?> monthTable">
-                            <?php if ($debtData[$number]): ?>
-                                <?php foreach ($debtData[$number] as $payment): ?>
-                                    <tr data-id="<?= $payment->codigo ?>">
-                                        <th scope="row"><?= $payment->codigo ?></th>
-                                        <td><?= $payment->grado ?></td>
-                                        <td><?= $payment->desc1 ?></td>
-                                        <td><?= $payment->fecha_d ?></td>
-                                        <td class="text-right debt"><?= number_format($payment->deuda, 2) ?></td>
-                                        <td class="text-right payment"><?= number_format($payment->pago, 2) ?></td>
-                                        <td><?= $payment->fecha_p === '0000-00-00' ? '' : $payment->fecha_p ?></td>
-                                        <td><?= $paymentTypes[$payment->tdp] ?></td>
-                                        <td><?= $payment->rec !== 0 ? $payment->rec : '' ?></td>
+                            <?php if (isset($debtData[$number])): ?>
+                                <?php foreach ($debtData[$number] as $charge): ?>
+                                    <tr data-id="<?= $charge->codigo ?>">
+                                        <th scope="row"><?= $charge->codigo ?></th>
+                                        <td><?= $charge->grado ?></td>
+                                        <td><?= $charge->desc1 ?></td>
+                                        <td><?= $charge->fecha_d ?></td>
+                                        <td class="text-right debt"><?= number_format($charge->deuda, 2) ?></td>
+                                        <td class="text-right payment"><?= number_format($charge->pago, 2) ?></td>
+                                        <td><?= $charge->fecha_p === '0000-00-00' ? '' : $charge->fecha_p ?></td>
+                                        <td><?= $charge->tdp !== '' ? $paymentTypes[$charge->tdp] : '' ?></td>
+                                        <td><?= $charge->rec !== 0 ? $charge->rec : '' ?></td>
                                         <td class="text-right">
-                                            <i data-id="<?= $payment->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
-                                            <i data-id="<?= $payment->mt ?>" role="button" class="<?= $payment->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+                                            <i data-id="<?= $charge->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
+                                            <i data-id="<?= $charge->mt ?>" role="button" class="<?= $charge->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
                                         </td>
                                     </tr>
                                 <?php endforeach ?>
@@ -209,7 +225,7 @@ $depositTypes = [
                 </div>
                 <form method="POST" action="<?= Route::url('/admin/billing/payments/includes/makePayment.php') ?>">
                     <input type="hidden" id="monthToPay" name="monthToPay" value="<?= $currentMonth ?>">
-                    <input type="hidden" id="accountId" name="accountId" value="<?= $accountId ?>">
+                    <input type="hidden" id="paymentAccountId" name="accountId" value="<?= $accountId ?>">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="paymentMode">Modo de pago</label>
@@ -566,6 +582,241 @@ $depositTypes = [
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Depositar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Late payment Modal -->
+    <div class="modal fade" id="latePaymentModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="latePaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="latePaymentModalLabel">Pago moroso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="latePaymentForm" method="POST">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="latePaymentObservationType">Tipo de observación</label>
+                                <select class="form-control" name="observationType" id="latePaymentObservationType">
+                                    <option value=""></option>
+                                    <option value="Si">Cheque devuelto</option>
+                                    <option value="2">Documentos</option>
+                                    <option value="3">Otros</option>
+                                </select>
+
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="latePaymentAlert" name="alert">
+                                    <label class="custom-control-label w-100" for="latePaymentAlert">Alerta no aceptar cheques</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="latePaymentAditionalInfo">Información adicional</label>
+                            <textarea class="form-control" name="info" id="latePaymentAditionalInfo"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Payment Promise Modal -->
+    <div class="modal fade" id="paymentPromiseModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="paymentPromiseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentPromiseModalLabel">Promesa de pago</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="paymentPromiseForm" method="POST">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="paymentPromiseDate">Fecha</label>
+                                <input type="date" class="form-control" name="date" id="paymentPromiseDate" required />
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label for="paymentPromiseExpirationDate">Fecha de expiración</label>
+                                <input type="date" class="form-control" name="expirationDate" id="paymentPromiseExpirationDate" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentPromiseDescription">Descripción de la promesa de pago</label>
+                            <textarea class="form-control" name="description" id="paymentPromiseDescription" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentPromiseAmount">Cantidad acordada</label>
+                            <input type="text" class="form-control" name="amount" id="paymentPromiseAmount" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentPromiseTime">Tiempo acordado</label>
+                            <input type="text" class="form-control" name="time" id="paymentPromiseTime" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentPromiseNewAmount">Nuevos cargos</label>
+                            <input type="text" class="form-control" name="newAmount" id="paymentPromiseNewAmount" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentPromiseTotal">Total a pagar</label>
+                            <input type="text" class="form-control" name="total" id="paymentPromiseTotal" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button id="paymentPromiseDelete" type="button" class="btn btn-danger">Borrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Expired Modal -->
+    <div class="modal fade" id="expiredModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="expiredModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="expiredModalLabel">Cargos vencidos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="expiredTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th class="text-right">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="text-right">Total a pagar <span class="font-weight-bold" id="expiredTotal"></span></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Statement Modal -->
+    <div class="modal fade" id="statementModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="statementModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statementModalLabel">Estado de cuenta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="statementForm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="statementType">Tipo de transacción</label>
+                            <select class="form-control" name="type" id="statementType" required>
+                                <option value="1">Todas las transacciones</option>
+                                <option value="2">Solamente pagos</option>
+                                <option value="3">Balance del mes</option>
+                                <option value="4">Transacciones por código</option>
+                                <option value="5">Depositos entrados</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="statementEmail">Email</label>
+                            <select class="form-control" name="email" id="statementEmail">
+                                <option value="">Selección</option>
+                                <?php if ($parent->email_m && $parent->email_p): ?>
+                                    <option value="ambos">Ambos</option>
+                                <?php endif ?>
+                                <?php if ($parent->email_m): ?>
+                                    <option><?= $parent->email_m ?></option>
+                                <?php endif ?>
+                                <?php if ($parent->email_p): ?>
+                                    <option><?= $parent->email_p ?></option>
+                                <?php endif ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="statementNewEmail">Nuevo email</label>
+                            <input type="text" class="form-control" name="newEmail" id="statementNewEmail">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Payment Receipt Modal -->
+    <div class="modal fade" id="paymentReceiptModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="paymentReceiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentReceiptModalLabel">Recibo de pago</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="paymentReceiptForm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="paymentReceiptType">Tipo de recibo</label>
+                            <select class="form-control" name="type" id="paymentReceiptType" required>
+                                <option value="1">Recibo 1</option>
+                                <option value="2">Recibo 2</option>
+                                <option value="3">Recibo 3</option>
+                                <option value="4">Recibo 4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentReceiptTransaction">Transacción</label>
+                            <select class="form-control" name="transaction" id="paymentReceiptTransaction" required>
+                                <?php foreach ($paymentsData as $payment): ?>
+                                    <option value="<?= $payment->mt ?>"><?= "$payment->fecha_p, $payment->rec" ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentReceiptEmail">Email</label>
+                            <select class="form-control" name="email" id="paymentReceiptEmail">
+                                <option value="">Selección</option>
+                                <?php if ($parent->email_m && $parent->email_p): ?>
+                                    <option value="ambos">Ambos</option>
+                                <?php endif ?>
+                                <?php if ($parent->email_m): ?>
+                                    <option><?= $parent->email_m ?></option>
+                                <?php endif ?>
+                                <?php if ($parent->email_p): ?>
+                                    <option><?= $parent->email_p ?></option>
+                                <?php endif ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentReceiptNewEmail">Nuevo email</label>
+                            <input type="text" class="form-control" name="newEmail" id="paymentReceiptNewEmail">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Continuar</button>
                     </div>
                 </form>
             </div>
