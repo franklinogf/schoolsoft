@@ -24,7 +24,7 @@ $lang = new Lang([
 
 
 ])
-?>
+    ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -50,7 +50,7 @@ $lang = new Lang([
     Route::includeFile('/includes/layouts/scripts.php', true);
 
     if (isset($_POST['Grabar'])) {
-        for ($a = 1; $a <= $_POST[num_rec]; $a++) {
+        for ($a = 1; $a <= $_POST['num_rec']; $a++) {
             $codi = 'est(' . $a . ',1)';
             $dijo = 'est(' . $a . ',2)';
             $nom = 'est(' . $a . ',5)';
@@ -83,7 +83,7 @@ $lang = new Lang([
 
     $can = count($mensages);
     if ($can > 0) {
-    ?>
+        ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
@@ -93,14 +93,14 @@ $lang = new Lang([
                 <table border="0" width="64%" cellspacing="0" cellpadding="3">
                     <?
                     foreach ($mensages as $mensage) {
-                    ?>
+                        ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
                                         <font size="4"><?= $lang->translation("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                    <?
+                        <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
@@ -129,7 +129,7 @@ $lang = new Lang([
     $can = count($mensages);
 
     if ($can > 0) {
-    ?>
+        ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
@@ -146,14 +146,14 @@ $lang = new Lang([
                     $a = 0;
                     $b = 0;
                     foreach ($mensages as $mensage) {
-                    ?>
+                        ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
                                         <font size="4"><?= $lang->translation("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                    <?
+                        <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
@@ -166,7 +166,7 @@ $lang = new Lang([
                         $respuesta = DB::table('respuestas')->where([
                             ['id2', $teacher->id],
                             ['codigo', $mensage->codigo],
-                            ['year',  $year],
+                            ['year', $year],
                         ])->first();
 
                         echo "<input type=hidden name='est($a,1)' value='$mensage->codigo'>";
@@ -195,21 +195,21 @@ $lang = new Lang([
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'SI'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can1 = count($respuesta1);
 
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'NO'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can2 = count($respuesta1);
 
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'INDECISO'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can3 = count($respuesta1);
 
@@ -255,7 +255,7 @@ $lang = new Lang([
         </form>
 
 
-    <?   } ?>
+    <?php } ?>
     <br>
     <br>
     <br>

@@ -69,7 +69,7 @@ if (isset($_POST['borra']))
    {
    DB::table('costos')->where('mt', $_POST['mt1'])->delete();
    }
-$add2=$_POST['add2'];
+$add2=$_GET['add2'];
 if (isset($_POST['add']) and $add2==0)
    {
     list($r1,$r2) = explode(", ",$_POST['desc']);
@@ -124,7 +124,7 @@ if (isset($_POST['add']) and $add2==1)
 
   }
 
-$add2=0;
+//$add2=0;
 if (isset($_POST['cambiar'])){
   $reg4 = DB::table('costos')->where('mt', $_POST['mt1'])->first();
   $add2=1;
@@ -191,63 +191,64 @@ document.oncontextmenu = function(){return false}
 	<div class="style11">
 	<table align="center" cellpadding="2" cellspacing="0" style="width: 750px">
 		<tr>
-			<td class="style1" style="width: 75"><center><strong><?= $lang->translation('Grados') ?></strong></center></td>
-			<td class="style1" style="width: 75"><center><strong><?= $lang->translation('Código') ?></strong></center></td>
-			<td class="style1" style="width: 190"><center><strong><?= $lang->translation('Descripción') ?></strong></center></td>
-			<td class="style1" style="width: 75"><center><strong><?= $lang->translation('Activo') ?></strong></center></td>
-			<td class="style1" style="width: 75"><center><strong><?= $lang->translation('Costos') ?></strong></center></td>
-			<td class="style1" style="width: 320"><center><strong><?= $lang->translation('Opciones') ?></strong></center></td>
+			<td  style="width: 75"><center><strong><?= $lang->translation('Grados') ?></strong></center></td>
+			<td  style="width: 75"><center><strong><?= $lang->translation('Código') ?></strong></center></td>
+			<td  style="width: 150"><center><strong><?= $lang->translation('Descripción') ?></strong></center></td>
+			<td  style="width: 75"><center><strong><?= $lang->translation('Activo') ?></strong></center></td>
+			<td  style="width: 75"><center><strong><?= $lang->translation('Costos') ?></strong></center></td>
+			<td  style="width: 400"><center><strong><?= $lang->translation('Opciones') ?></strong></center></td>
 		</tr>
-<? 
-  foreach ($resultado2 as $row2)
-          {
+<?php foreach ($resultado2 as $row2): ?>
 
-    echo '<form method="post">';
+    <form method="post">
 
-?>
 		<tr>
-			<td class="style9" style="width: 75">&nbsp;&nbsp;&nbsp;&nbsp;
-			<? echo $row2->grado ?>
+			<td class="style9" style="width: 75">
+			<?= $row2->grado ?>
 			</td>
 			<td class="style4"><center>
-			<? echo $row2->codigo ?></center>
+			<?= $row2->codigo ?></center>
 			</td>
 			<td class="style2">
-			<? echo $row2->descripcion ?>
+			<?= $row2->descripcion ?>
 			</td>
 			<td class="style4 activo"><center>
 			<?= $lang->translation($row2->activo) ?></center>
 			</td>
 			<td class=""><center>
-			<? echo $row2->costo ?></center>
+			<?= $row2->costo ?></center>
 			</td>
-			<td class="style4"  style="width: 320"><center>
+			<td class="style4"  style="width: 400"><center>
 			<strong>
 			<input class="btn btn-danger" name="borra" style="width: 90px;" type="submit" formnovalidate value="<?= $lang->translation('Borrar') ?>" onclick="return confirmar('<?= $lang->translation('Estás seguro que desea eliminar el costo?') ?>')" />
 			&nbsp;
             <input class="btn btn-primary" name="cambiar" style="width: 90px" type="submit" formnovalidate value="<?= $lang->translation('Editar') ?>" /></strong></center></td>
-		</tr><?
-	echo "<input type=hidden name=nn  value='$row2->codigo'>";
-	echo "<input type=hidden name=nn1 value='$row2->grado'>";
-	echo "<input type=hidden name=mt1 value='$row2->mt'>";
-	echo "<input type=hidden name=add2 value='$add2'>";
-echo '</form>';
-
-}
-?>
-		<tr>
-			<td class="style1"><strong><?= $lang->translation('Grado') ?></strong></td>
-			<td class="style1"><strong><?= $lang->translation('Código') ?></strong></td>
-			<td class="style1"><strong><?= $lang->translation('Descripción') ?></strong></td>
-			<td class="style1"><strong><?= $lang->translation('Activo') ?></strong></td>
-			<td class="style1"><strong><?= $lang->translation('Costos') ?></strong></td>
-			<td class="style1"><strong><?= $lang->translation('Opciones') ?></strong></td>
 		</tr>
+	<input type=hidden name=nn  value='<?= $row2->codigo ?>'>
+	<input type=hidden name=nn1 value='<?= $row2->grado ?>'>
+	<input type=hidden name=mt1 value='<?= $row2->mt ?>'>
+	<input type=hidden name=add2 value='<?= $add2 ?> '>
+</form>
+
+
+
+      <?php endforeach ?>
+
+		<tr>
+			<td ><strong><?= $lang->translation('Grado') ?></strong></td>
+			<td ><strong><?= $lang->translation('Código') ?></strong></td>
+			<td ><strong><?= $lang->translation('Descripción') ?></strong></td>
+			<td ><strong><?= $lang->translation('Activo') ?></strong></td>
+			<td ><strong><?= $lang->translation('Costos') ?></strong></td>
+			<td ><strong><?= $lang->translation('Opciones') ?></strong></td>
+		</tr>
+			<input <? ($reg4->m8 ?? '') ? 'checked="checked"' : 'checked="checked"' ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px">
+<?php if ($add2==1): ?>
 		<tr>
 			<td class="style4">
 			<input id="ex-2" maxlength="5" name="grado" size="5" type="text" placeholder="  -  " required value="<? echo $reg4->grado ?>" /></td>
 			<td class="style4">
-			<? echo $reg4->codigo ?>
+			<?= $reg4->codigo ?>
 			</td>
 			<td class="style9">
 			<select name="desc" required style="width: 190px">
@@ -257,9 +258,7 @@ echo '</form>';
      {
      echo '<option selected="">'.$reg4->codigo.', '.$reg4->descripcion.'</option>';
      }
-
-foreach ($resultado3 as $row3)
-        {
+foreach ($resultado3 as $row3)        {
         echo '<option>'.$row3->codigo.', '.$row3->descripcion.'</option>';
 	    }
 ?>
@@ -274,19 +273,19 @@ foreach ($resultado3 as $row3)
 			?>
 
 			<select name="activo" style="width: 46px">
-			<option <? echo $ac1 ?> value="Si"><?= $lang->translation('Si') ?></option>
-			<option <? echo $ac2 ?> value="No">No</option>
+			<option <?= $reg4->activo === 'Si' ? 'selected=""' : '' ?> value="Si"><?= $lang->translation('Si') ?></option>
+			<option <?= $reg4->activo === 'No' ? 'selected=""' : '' ?> value="No">No</option>
 			</select></td>
 			<td class="style4">
 			<input id="ex-99" name="costo" class="text" size="7" type="text" maxlength="7" placeholder="$999.99" required value="<? echo $reg4->costo ?>" /></td>
 			<td class="style4">
 			<strong>
-<? 
-	echo "<input type=hidden name=nn0  value=''>";
-	echo "<input type=hidden name=nn11 value=''>";
-	echo "<input type=hidden name=mt value='$reg4->mt'>";
-	echo "<input type=hidden name=add2 value='$add2'>";
-?>
+
+	<input type=hidden name=nn0  value=''>
+	<input type=hidden name=nn11 value=''>
+	<input type=hidden name=mt value='<?= $reg4->mt ?>'>
+	<input type=hidden name=add2 value='<?= $add2 ?>'>
+
 
 			</strong></td>
 		</tr>
@@ -296,22 +295,22 @@ foreach ($resultado3 as $row3)
 			<td class="style7">&nbsp;</td>
 			<td class="style7">&nbsp;</td>
 			<td class="style7">&nbsp;</td>
-			<td class="style1">&nbsp;</td>
+			<td >&nbsp;</td>
 		</tr>
 	</table>
 	<table align="center" cellpadding="2" cellspacing="0" style="width: 600px">
 		<tr>
-			<td class="style1"><center><strong><?= $lang->translation('Agosto') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Septiembre') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Octubre') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Noviembre') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Diciembre') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Agosto') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Septiembre') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Octubre') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Noviembre') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Diciembre') ?></strong></center></td>
 		</tr>
 		<tr>
-			<td class="style4"><center>
-			
-			<? $m8=''; if($reg4->m8=='Si'){$m8='checked="checked"';} ?>
-			<input <? echo $m8 ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px"></center></td>
+			<td class="style4"><center>				
+			<input <?= ($reg4->m8 === 'Si') ? 'checked="checked"' : '' ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px">
+			</center>
+			</td>
 			<td class="style4"><center>
 			<? $m9=''; if($reg4->m9=='Si'){$m9='checked="checked"';} ?>
 			<input <? echo $m9 ?> name="m9" type="checkbox" value="Si" style="height: 25px; width: 25px"></center></td>
@@ -326,11 +325,11 @@ foreach ($resultado3 as $row3)
 			<input <? echo $m12 ?> name="m12" type="checkbox" value="Si" style="height: 25px; width: 25px"></center></td>
 		</tr>
 		<tr>
-			<td class="style1"><center><strong><?= $lang->translation('Enero') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Febrero') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Marzo') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Abril') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Mayo') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Enero') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Febrero') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Marzo') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Abril') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Mayo') ?></strong></center></td>
 		</tr>
 		<tr>
 			<td class="style4"><center>
@@ -350,11 +349,11 @@ foreach ($resultado3 as $row3)
 			<input <? echo $m17 ?> name="m5" type="checkbox" value="Si" style="height: 25px; width: 25px"></center></td>
 		</tr>
 		<tr>
-			<td class="style1"><center><strong><?= $lang->translation('Matri/Junio') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Julio') ?></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Por Familia') ?></strong></center></td>
-			<td class="style1"><center><strong></strong></center></td>
-			<td class="style1"><center><strong><?= $lang->translation('Estu. Nuevo') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Matri/Junio') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Julio') ?></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Por Familia') ?></strong></center></td>
+			<td ><center><strong></strong></center></td>
+			<td ><center><strong><?= $lang->translation('Estu. Nuevo') ?></strong></center></td>
 		</tr>
 		<tr>
 			<td class="style4"><center>
@@ -371,11 +370,11 @@ foreach ($resultado3 as $row3)
 			<? $esn=''; if($reg4->esn=='Si'){$esn='checked="checked"';} ?>
 			<input <? echo $esn ?> name="esn" type="checkbox" value="Si" style="height: 25px; width: 25px"></center></td>
 		</tr>
+<?php endif ?>
 		<tr>
 			<td class="style7">&nbsp;</td>
-			<td class="style1">&nbsp;</td>
-			<td class="style1">
-			&nbsp;</td>
+			<td >&nbsp;</td>
+			<td >&nbsp;</td>
 			<td class="style7">&nbsp;</td>
 			<td class="style7" style="width: 116px">&nbsp;</td>
 		</tr>

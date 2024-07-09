@@ -9,10 +9,10 @@ use Classes\DataBase\DB;
 
 /* ------------------------------ table Padres ------------------------------ */
 DB::table("padres")->alter("
-ADD `average1` INT NULL,
-ADD `average2` INT NULL,
-ADD `average3` INT NULL,
-ADD `average4` INT NULL;");
+ADD COLUMN IF NOT EXISTS `average1` INT NULL,
+ADD COLUMN IF NOT EXISTS `average2` INT NULL,
+ADD COLUMN IF NOT EXISTS `average3` INT NULL,
+ADD COLUMN IF NOT EXISTS `average4` INT NULL;");
 /* ------------------------------ Teachers table ----------------------------- */
 DB::table('profesor')->alter("
 CHANGE `nivel` `nivel` CHAR(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
@@ -63,7 +63,7 @@ despachado boolean NOT NULL default false
 
 /* ----------------------------- homeworks table ---------------------------- */
 DB::table("tbl_documentos")->alter("
-ADD `year` CHAR(5) NULL AFTER `hora`
+ADD COLUMN IF NOT EXISTS `year` CHAR(5) NULL AFTER `hora`
 ");
 DB::table('tbl_documentos')->where([
     ["fec_in", '>=', '2020-08-01'],
@@ -88,9 +88,9 @@ DB::table("t_mensajes_archivos")->create(
 PRIMARY KEY (`id`)"
 );
 
-DB::table("tareas_enviadas")->alter("
-DROP INDEX `id_tarea`, ADD INDEX `id_tarea` (`id_tarea`) USING BTREE
-");
+// DB::table("tareas_enviadas")->alter("
+// DROP INDEX `id_tarea`, ADD COLUMN IF NOT EXISTS INDEX `id_tarea` (`id_tarea`)
+// ");
 
 DB::table("t_mensajes_links")->create("
 `id` INT NOT NULL AUTO_INCREMENT ,
@@ -102,17 +102,17 @@ DB::table('T_archivos')->alter("RENAME TO t_archivos");
 DB::table('T_tareas_archivos')->alter("RENAME TO t_tareas_archivos");
 
 DB::table('T_examenes')->alter("
-ADD `hora_final` TIME NOT NULL AFTER `hora`,
-ADD `desc1` CHAR(2) NOT NULL DEFAULT 'no' AFTER `activo`,
-ADD `desc1_1` TEXT NULL DEFAULT NULL AFTER `desc1`,
-ADD `desc2` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc1_1`,
-ADD `desc2_1` TEXT NULL DEFAULT NULL AFTER `desc2`,
-ADD `desc3` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc2_1`,
-ADD `desc3_1` TEXT NULL DEFAULT NULL AFTER `desc3`,
-ADD `desc4` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc3_1`,
-ADD `desc4_1` TEXT NULL DEFAULT NULL AFTER `desc4`,
-ADD `desc5` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc4_1`,
-ADD `desc5_1` TEXT NULL DEFAULT NULL AFTER `desc5`
+ADD COLUMN IF NOT EXISTS `hora_final` TIME NOT NULL AFTER `hora`,
+ADD COLUMN IF NOT EXISTS `desc1` CHAR(2) NOT NULL DEFAULT 'no' AFTER `activo`,
+ADD COLUMN IF NOT EXISTS `desc1_1` TEXT NULL DEFAULT NULL AFTER `desc1`,
+ADD COLUMN IF NOT EXISTS `desc2` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc1_1`,
+ADD COLUMN IF NOT EXISTS `desc2_1` TEXT NULL DEFAULT NULL AFTER `desc2`,
+ADD COLUMN IF NOT EXISTS `desc3` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc2_1`,
+ADD COLUMN IF NOT EXISTS `desc3_1` TEXT NULL DEFAULT NULL AFTER `desc3`,
+ADD COLUMN IF NOT EXISTS `desc4` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc3_1`,
+ADD COLUMN IF NOT EXISTS `desc4_1` TEXT NULL DEFAULT NULL AFTER `desc4`,
+ADD COLUMN IF NOT EXISTS `desc5` CHAR(2) NOT NULL DEFAULT 'no' AFTER `desc4_1`,
+ADD COLUMN IF NOT EXISTS `desc5_1` TEXT NULL DEFAULT NULL AFTER `desc5`
 ");
 
 /* ---------------------- table for the virtual classes --------------------- */
@@ -140,6 +140,6 @@ DB::table("asistencia_virtual")->create("
 PRIMARY KEY (`id`)");
 
 /* --------------------------- notes changes table -------------------------- */
-DB::table('tarjeta_cambios')->alter("
- ADD `id2` INT NOT NULL AUTO_INCREMENT COMMENT 'autoincrement' FIRST, 
- ADD PRIMARY KEY (`id2`);");
+// DB::table('tarjeta_cambios')->alter("
+//  ADD COLUMN IF NOT EXISTS `id2` INT NOT NULL AUTO_INCREMENT COMMENT 'autoincrement' FIRST, 
+//  ADD PRIMARY KEY (`id2`);");

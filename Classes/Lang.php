@@ -41,7 +41,11 @@ class Lang
 
     public function translation($text)
     {
-        return $this->translations[strtolower(utf8_decode($text))][__LANG];
+        $key = strtolower(utf8_decode($text));
+        if (!isset($this->translations[$key])) {
+            return $text;
+        }
+        return $this->translations[$key][__LANG];
     }
 
     public function trimesterTranslation($text)
