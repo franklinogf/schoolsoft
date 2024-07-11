@@ -1,6 +1,7 @@
 <?php
 
 namespace Classes\Controllers;
+
 use Classes\Session;
 use Classes\Models\SchoolModel;
 
@@ -26,13 +27,13 @@ class School extends SchoolModel
 
    public function __construct($userForLogin = null)
    {
-      if(Session::location() === 'admin'){
-      $user = Session::id();
-      }else{
-      $user = 'administrador';
+      if (Session::location() === 'admin') {
+         $user = Session::id();
+      } else {
+         $user = 'administrador';
       }
-      if($userForLogin){
-      $user = $userForLogin;
+      if ($userForLogin) {
+         $user = $userForLogin;
       }
       $array = $this->getSchoolByUser($user);
       foreach ($array as $key => $value) {
@@ -49,9 +50,10 @@ class School extends SchoolModel
       return $this->props[$key];
    }
 
-   public function year(){
-   $yearToUse = Session::location() === 'admin' ? 'year2' : 'year';
-   return $this->props[$yearToUse];
+   public function year()
+   {
+      $yearToUse = Session::location() === 'admin' ? 'year2' : 'year';
+      return $this->props[$yearToUse];
    }
 
 
@@ -61,13 +63,13 @@ class School extends SchoolModel
       $newPath .= __LOGO_PATH . $path;
       return $newPath;
    }
-   public function save()
+   public function save($type = 'edit')
    {
       // get self public class, no parents classes
       $propsArray[] = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
 
       if (count($propsArray[0]['props']) > 0) {
-         if (isset($this->props[$this->primary_key])) {
+         if (isset($this->props[$this->primary_key]) && $type === 'edit') {
             $this->updateAdmin($propsArray[0]['props']);
          } else {
             echo 'insert <hr>';

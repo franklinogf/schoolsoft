@@ -90,15 +90,15 @@ $lang = new Lang([
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
-            <?php foreach ($options as $option) : ?>
+            <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button) : ?>
+                                <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" <?= $button['target'] ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
