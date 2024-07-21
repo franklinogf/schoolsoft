@@ -9,13 +9,13 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 $lang = new Lang([
-    ['Exportación de data a Excel', 'Data export to Excel'],
-    ['Selección de Base de datos', 'Database Selection'],
-    ['Seleccióna el año', 'Select the year'],
-    ['Selección', 'Selection'],
+    ['Exportaciï¿½n de data a Excel', 'Data export to Excel'],
+    ['Selecciï¿½n de Base de datos', 'Database Selection'],
+    ['Selecciï¿½na el aï¿½o', 'Select the year'],
+    ['Selecciï¿½n', 'Selection'],
     ['Padres', 'Parents'],
     ['Estudiantes', 'Students'],
-    ['Año para transferir datos', 'Year to transfer data'],
+    ['Aï¿½o para transferir datos', 'Year to transfer data'],
     ['Notas', 'Grades'],
     ['Pagos', 'Payments'],
     ['Transferir', 'Transfer'],
@@ -30,25 +30,25 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Limpiar', 'Clear'],
     ['Eliminar', 'Delete'],
-    ['Estás seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
+    ['Estï¿½s seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
 ]);
 $school = new School(Session::id());
 
-$tabla =  $_COOKIE["variable9"];
-$year  =  $_COOKIE["variable10"];
+$tabla = $_COOKIE["variable9"];
+$year = $_COOKIE["variable10"];
 session_start();
 
 $students = DB::table('year')->where([
-     ['year', $year],
-     ['codigobaja', 0]
-   ])->orderBy('apellidos')->get();
+    ['year', $year],
+    ['codigobaja', 0]
+])->orderBy('apellidos')->get();
 
 function haveDate($date)
 {
     return $date === '0000-00-00' ? '' : $date;
 }
-header("Content-type: application/vnd.ms-excel") ; 
-header("Content-Disposition: attachment; filename=Comedor escolar $cole->year.xls"); 
+header("Content-type: application/vnd.ms-excel");
+header("Content-Disposition: attachment; filename=Comedor escolar $cole->year.xls");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -97,15 +97,14 @@ header("Content-Disposition: attachment; filename=Comedor escolar $cole->year.xl
             </tr>
         </thead>
         <tbody>
-            <?php 
-        foreach ($students as $student)
-                {
-                list($name, $initial) = explode(' ', $student->nombre);
+            <?php
+            foreach ($students as $student) {
+                list($fileName, $initial) = explode(' ', $student->nombre);
                 list($lastName1, $lastName2) = explode(' ', $student->apellidos);
-                
-            $madre = DB::table('madre')->where([
-              ['id', $student->id]
-            ])->first();
+
+                $madre = DB::table('madre')->where([
+                    ['id', $student->id]
+                ])->first();
 
                 if ($madre->madre !== '') {
                     $father = $madre->madre;
@@ -127,11 +126,11 @@ header("Content-Disposition: attachment; filename=Comedor escolar $cole->year.xl
                 } else if ($madre->email_p !== '') {
                     $email = $madre->email_p;
                 }
-            ?>
+                ?>
                 <tr>
                     <td><?= $student->id ?></td>
                     <td><?= $student->ss ?></td>
-                    <td><?= utf8_encode($name) ?></td>
+                    <td><?= utf8_encode($fileName) ?></td>
                     <td><?= $initial[0] ?></td>
                     <td><?= utf8_encode($lastName1) ?></td>
                     <td><?= utf8_encode($lastName2) ?></td>
@@ -145,7 +144,7 @@ header("Content-Disposition: attachment; filename=Comedor escolar $cole->year.xl
                     <td><?= $cole->colegio ?></td>
                     <td><?= $cole->pueblo1 ?></td>
                     <td></td>
-                    <td><?=$tel?></td>
+                    <td><?= $tel ?></td>
                     <td><?= $student->email ?></td>
                     <td><?= $madre->dir1 ?></td>
                     <td><?= $madre->dir3 ?></td>

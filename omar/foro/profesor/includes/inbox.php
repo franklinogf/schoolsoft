@@ -43,7 +43,7 @@ if (isset($_POST['getMessages'])) {
          $teacher = new Teacher($message->id_p);
          $from = $message->enviado_por === 'p' ? 'teacher' : 'student';
 
-         $name = ${$from}->fullName();
+         $fileName = ${$from}->fullName();
          $profilePicture = ${$from}->profilePicture();
          $info = $message->enviado_por === 'p' ? 'yo' : $student->grado;
          $path = $message->enviado_por === 'p' ? __STUDENT_MESSAGES_FILES_DIRECTORY_URL : __TEACHER_MESSAGES_FILES_DIRECTORY_URL;
@@ -93,7 +93,7 @@ if (isset($_POST['getMessages'])) {
             'asunto' => $message->asunto,
             'mensaje' => $message->mensaje,
             'archivos' => $filesArray,
-            'nombre' => $name,
+            'nombre' => $fileName,
             'foto' => $profilePicture,
             'info' => $info,
             'leido' => $message->leido_p,

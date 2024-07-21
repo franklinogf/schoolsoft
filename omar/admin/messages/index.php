@@ -16,15 +16,15 @@ $options = [
                 'links' => [
                     [
                         'name' => ["es" => 'Profesores', "en" => "Teachers"],
-                        'href' => "#"
+                        'href' => "email/teachers.php"
                     ],
                     [
                         'name' => ["es" => 'Estudiantes', "en" => "Students"],
-                        'href' => "#"
+                        'href' => "email/students.php"
                     ],
                     [
                         'name' => ["es" => 'Administración', "en" => "Admin"],
-                        'href' => "#"
+                        'href' => "email/admins.php"
                     ]
                 ]
 
@@ -35,15 +35,15 @@ $options = [
                 'links' => [
                     [
                         'name' => ["es" => 'Profesores', "en" => "Teachers"],
-                        'href' => "#"
+                        'href' => "sms/teachers.php"
                     ],
                     [
                         'name' => ["es" => 'Estudiantes', "en" => "Students"],
-                        'href' => "#"
+                        'href' => "sms/students.php"
                     ],
                     [
                         'name' => ["es" => 'Administración', "en" => "Admin"],
-                        'href' => "#"
+                        'href' => "sms/admins.php"
                     ]
                 ]
             ],
