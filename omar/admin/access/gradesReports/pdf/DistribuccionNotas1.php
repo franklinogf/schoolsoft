@@ -10,16 +10,15 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Distribucción de notas', 'Note distribution'],
+$lang = new Lang([['DistribucciÃ³n de notas', 'Note distribution'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
-    ["Año escolar:", "School year:"],
-    ["Descripción", "Description"],
+    ["AÃ±o escolar:", "School year:"],
+    ["DescripciÃ³n", "Description"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Curso', 'Course'],
-    ['Crédito', 'Credit'],
+    ['CrÃ©dito', 'Credit'],
     ['Trimestre', 'Quarter'],
     ['Nota A', 'Note A'],
     ['Nota B', 'Note B'],
@@ -62,7 +61,7 @@ class nPDF extends PDF
         if ($ct=='nota4'){$tt=$lang->translation("T-4");}
         $this->SetFont('Arial', 'B', 12);
 
-        $this->Cell(0, 5, $lang->translation("Distribucción de notas").' / '.$tt." / $year", 0, 1, 'C');
+        $this->Cell(0, 5, $lang->translation("Distribucciï¿½n de notas").' / '.$tt." / $year", 0, 1, 'C');
         $this->Ln(5);
         $this->SetFont('Arial', '', 12);
     $this->Fill();
