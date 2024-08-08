@@ -131,9 +131,9 @@ $depositTypes = [
             </div>
 
             <div id="monthsButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
-                <?php foreach ($months as $name => $number): ?>
+                <?php foreach ($months as $fileName => $number): ?>
                     <div class="col mb-1">
-                        <button data-month="<?= $number ?>" class="btn w-100 <?= $currentMonth === $number ? 'active' : '' ?>"><?= $name ?></button>
+                        <button data-month="<?= $number ?>" class="btn w-100 <?= $currentMonth === $number ? 'active' : '' ?>"><?= $fileName ?></button>
                     </div>
                 <?php endforeach ?>
             </div>
@@ -177,7 +177,7 @@ $depositTypes = [
                             <td></td>
                         </tr>
                     </thead>
-                    <?php foreach ($months as $name => $number): ?>
+                    <?php foreach ($months as $fileName => $number): ?>
                         <tbody id="table<?= $number ?>" class="<?= $currentMonth !== $number ? 'hidden' : '' ?> monthTable">
                             <?php if (isset($debtData[$number])): ?>
                                 <?php foreach ($debtData[$number] as $charge): ?>
@@ -328,8 +328,8 @@ $depositTypes = [
                             <div class="form-group col-6">
                                 <label for="month">Mes para aplicar</label>
                                 <select class="form-control" id="month" name="month">
-                                    <?php foreach ($months as $name => $monthNumber): ?>
-                                        <option value="<?= $monthNumber ?>"><?= $name ?></option>
+                                    <?php foreach ($months as $fileName => $monthNumber): ?>
+                                        <option value="<?= $monthNumber ?>"><?= $fileName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <div class="custom-control custom-checkbox">

@@ -66,10 +66,10 @@ if ($_option === 'home') {
     if ($_type === 'list') {
         $pdf->Cell(0, 10, $lang->translation("Informe de asistencias diarias en lista") . " $year", 0, 1, 'C');
     } else {
-        $pdf->Cell(0, 10,  $lang->translation("Informe de asistencias diarias en resumen") . " $year", 0, 1, 'C');
+        $pdf->Cell(0, 10, $lang->translation("Informe de asistencias diarias en resumen") . " $year", 0, 1, 'C');
     }
 } else {
-    $pdf->Cell(0, 10,  $lang->translation("Informe de asistencias diarias") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 10, $lang->translation("Informe de asistencias diarias") . " $year", 0, 1, 'C');
 }
 $pdf->Cell(0, 10, $lang->translation("Desde:") . " " . Util::formatDate($_date1) . ' / ' . $lang->translation("Hasta:") . ' ' . Util::formatDate($_date2), 0, 1, 'C');
 
@@ -85,7 +85,8 @@ if ($_option === 'home') {
             ['fecha', '<=', $_date2],
             ['codigo', '>', 0]
         ])->orderBy('apellidos, nombre, fecha')->get();
-    if ($_type === 'resum') $pdf->Cell(15);
+    if ($_type === 'resum')
+        $pdf->Cell(15);
     $pdf->Cell(10, 5, '', 'LTB', 0, 'C', true);
     $pdf->Cell(50, 5, $lang->translation("Apellidos"), 'RTB', 0, 'C', true);
     $pdf->Cell(50, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
@@ -124,13 +125,13 @@ if ($_option === 'home') {
             foreach ($students as $student) {
                 $aus += $student->codigo <= 7 ? 1 : 0;
                 $tar += $student->codigo >= 8 ? 1 : 0;
-                $name = $student->nombre;
+                $fileName = $student->nombre;
                 $lastName = $student->apellidos;
             }
             $pdf->Cell(15);
             $pdf->Cell(10, 5, $count, 1, 0, 'C');
             $pdf->Cell(50, 5, $lastName, 1);
-            $pdf->Cell(50, 5, $name, 1);
+            $pdf->Cell(50, 5, $fileName, 1);
             $pdf->Cell(30, 5, $aus, 1, 0, 'C');
             $pdf->Cell(30, 5, $tar, 1, 1, 'C');
             $count++;
@@ -159,7 +160,7 @@ if ($_option === 'home') {
         $pdf->Cell(40);
         $pdf->Cell(10, 5, $count, 1, 0, 'C');
         $pdf->Cell(35, 5, $asi->fecha, 1, 0, 'C');
-        $pdf->Cell(70, 5,Util::$attendanceCodes[$asi->codigo]['description'][__LANG], 1, 1);
+        $pdf->Cell(70, 5, Util::$attendanceCodes[$asi->codigo]['description'][__LANG], 1, 1);
         $count++;
     }
 }

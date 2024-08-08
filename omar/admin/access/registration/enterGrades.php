@@ -26,13 +26,15 @@ $_trimesterNumber = (int) substr($_trimester, -1);
 // Diferent option for these schools
 $enterGrades2 = ['cbtm'];
 
-if (!$_value = DB::table('valores')
-    ->where([
-        ['curso', $_class],
-        ['trimestre', $_trimester],
-        ['nivel', $_report],
-        ['year', $year]
-    ])->first()) {
+if (
+    !$_value = DB::table('valores')
+        ->where([
+            ['curso', $_class],
+            ['trimestre', $_trimester],
+            ['nivel', $_report],
+            ['year', $year]
+        ])->first()
+) {
     $_valueId = DB::table('valores')->insertGetId([
         'curso' => $_class,
         'trimestre' => $_trimester,
@@ -133,13 +135,13 @@ if ($optionCppd) {
     ];
 } else {
     if (__ONLY_CBTM__) {
-        $columns =  [
+        $columns = [
             'es' => ['Bono', 'Promedio', 'T-Diario', 'T-Libreta', 'P-Cor'],
             'en' => ['Bonus', 'Average', 'DW', 'HW', 'Quiz'],
             'text' => [false, '60%', '10%', '10%', '20%']
         ];
     } else {
-        $columns =  [
+        $columns = [
             'es' => ['Bono', 'T-Diario', 'T-Libreta', 'P-Cor'],
             'en' => ['Bonus', 'DW', 'HW', 'Quiz'],
             'text' => [false, false, false, false]
@@ -454,7 +456,7 @@ $_values = isset($_options['values']) ? $_options['values'] : null;
 $_columns = null;
 if (isset($_info[$_report]['columns'])) {
 
-    $_columns =  isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
+    $_columns = isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
 }
 $_trimesterNumber = $_schoolInfo[$_trimester]['number'];
 $_thisReport = $_info[$_report];
@@ -493,7 +495,7 @@ function findTotal($type, $student)
     if ($_trimesterNumber === 2 || $_trimesterNumber === 4) {
         $lastTrimester = $_trimesterNumber - 1;
         $t = $_info[$_report]["Trimestre-$lastTrimester"]['values'][$type];
-        $tpaTotal += (int)$student->{$t};
+        $tpaTotal += (int) $student->{$t};
     }
     return $tpaTotal;
 }
@@ -583,9 +585,9 @@ $lang = new Lang([
         </div>
 
         <?php
-        if ($_report === 'Notas' || $_report === 'V-Nota') :
+        if ($_report === 'Notas' || $_report === 'V-Nota'):
             $letterNumber = $_report === 'Notas' ? '9' : '7';
-        ?>
+            ?>
             <div class="card border-secondary mt-2">
                 <div class="card-body">
                     <div id="options" class="row row-cols-1">
@@ -603,8 +605,8 @@ $lang = new Lang([
                             </div>
                             <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
                         </div>
-                        <?php if ($_end) : ?>
-                            <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
+                        <?php if ($_end): ?>
+                            <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4'): ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
@@ -617,9 +619,9 @@ $lang = new Lang([
                     </div>
                 </div>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <!-- only school cbtm -->
-            <?php if (!__ONLY_CBTM__) : ?>
+            <?php if (!__ONLY_CBTM__): ?>
                 <div class="card border-secondary mt-2">
                     <div class="card-body">
                         <div class="row row-cols-1">
@@ -663,18 +665,18 @@ $lang = new Lang([
             <input type="hidden" name="valueF" id="valueF" value="<?= $teacher->info('valf') ?>">
             <input type="hidden" name="sumTrimester" id="sumTrimester" value="<?= $sumTrimester ?>">
             <div class="table-responsive my-3 shadow">
-                <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2') : ?>
+                <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2'): ?>
                     <!-- Required hidden inputs -->
                     <input type="hidden" name="gradeStart" id="gradeStart" value="<?= $_options['grades'][0] ?>">
                     <input type="hidden" name="tpa" id="tpa" value="<?= $_values['tpa'] ?>">
                     <input type="hidden" name="tdp" id="tdp" value="<?= $_values['tdp'] ?>">
                     <input type="hidden" name="totalGrade" id="totalGrade" value="<?= $_options['totalGrade'] ?>">
                     <input type="hidden" name="optionLetter" id="optionLetter" value="<?= $optionLetter ? $letterNumber : 0 ?>">
-                    <?php if (__ONLY_CBTM__) : ?>
+                    <?php if (__ONLY_CBTM__): ?>
                         <input type="hidden" name="totalAverage" id="totalAverage" value="<?= $_options['totalAverage'] ?>">
                     <?php endif ?>
 
-                    <?php if ($_report === 'Notas' || $_report === 'V-Nota' && !$optionCppd) : ?>
+                    <?php if ($_report === 'Notas' || $_report === 'V-Nota' && !$optionCppd): ?>
                         <input type="hidden" name="tdia" id="tdia" value="<?= $_values['tdia'] ?>">
                         <input type="hidden" name="tlib" id="tlib" value="<?= $_values['tlib'] ?>">
                         <input type="hidden" name="pcor" id="pcor" value="<?= $_values['pcor'] ?>">
@@ -687,14 +689,14 @@ $lang = new Lang([
                                 <th scope="col" style="width: 19rem;"><?= $lang->translation("Nombre del estudiante") ?></th>
                                 <?php
                                 $amountOfGrades = $_report === 'V-Nota' ? 7 : ($_options['grades'][1]) - ($_options['grades'][0]);
-                                for ($i = 1; $i <= $amountOfGrades; $i++) : ?>
+                                for ($i = 1; $i <= $amountOfGrades; $i++): ?>
                                     <th scope="col"><?= $lang->translation("Nota") . " {$i}" ?></th>
                                 <?php endfor ?>
-                                <?php if ($_columns !== null) : ?>
-                                    <?php foreach ($_columns as $index => $column) : ?>
+                                <?php if ($_columns !== null): ?>
+                                    <?php foreach ($_columns as $index => $column): ?>
                                         <th scope="col">
                                             <?= $column ?>
-                                            <?php if ($_info[$_report]['columns']['text'][$index]) : ?>
+                                            <?php if ($_info[$_report]['columns']['text'][$index]): ?>
                                                 <span style="font-size: 15px;" class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
                                             <?php endif ?>
                                         </th>
@@ -703,7 +705,7 @@ $lang = new Lang([
                                 <th scope="col"><?= $lang->translation("TPA") ?></th>
                                 <th scope="col"><?= $lang->translation("TDP") ?></th>
                                 <th scope="col"><?= $lang->translation("Nota") ?></th>
-                                <?php if ($_report === 'V-Nota') : ?>
+                                <?php if ($_report === 'V-Nota'): ?>
                                     <th scope="col"><?= $lang->translation("Conducta") ?></th>
                                     <th scope="col"><?= $lang->translation("Ausencias") ?></th>
                                     <th scope="col"><?= $lang->translation("Tardanzas") ?></th>
@@ -711,20 +713,20 @@ $lang = new Lang([
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($students as $index => $student) : ?>
+                            <?php foreach ($students as $index => $student): ?>
                                 <tr>
                                     <th scope="row">
                                         <?= $index + 1 ?>
                                         <?php
                                         // important information for the values
                                         // Only on Notas and when "Cambiar Porciento a Punto Decimal" is not activated
-                                        if ($_report === 'Notas' && !$optionCppd) :
+                                        if ($_report === 'Notas' && !$optionCppd):
                                             if ($gradeInfo->nota_por === "2") {
-                                                $_student =  findValue($_info['Trab-Diarios']['table'], $student);
+                                                $_student = findValue($_info['Trab-Diarios']['table'], $student);
                                                 $tdia = $_student->{$_values['tdp']};
-                                                $_student =  findValue($_info['Trab-Libreta']['table'], $student);
+                                                $_student = findValue($_info['Trab-Libreta']['table'], $student);
                                                 $tlib = $_student->{$_values['tdp']};
-                                                $_student =  findValue($_info['Pruebas-Cortas']['table'], $student);
+                                                $_student = findValue($_info['Pruebas-Cortas']['table'], $student);
                                                 $pcor = $_student->{$_values['tdp']};
                                             } else {
                                                 if (__ONLY_CBTM__) {
@@ -737,12 +739,12 @@ $lang = new Lang([
                                                     $pcor = $student->{$_values['pcor']} ? '100' : '';
                                                 }
                                             }
-                                        ?>
-                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)) : ?>
+                                            ?>
+                                            <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)): ?>
                                                 <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
                                                 <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
                                             <?php endif ?>
-                                            <?php if ($_report === 'Notas' && __SCHOOL_ACRONYM === 'cbtm') : ?>
+                                            <?php if ($_report === 'Notas' && __SCHOOL_ACRONYM === 'cbtm'): ?>
                                                 <input type="hidden" name="peso-<?= $student->ss ?>" class='_peso' value="<?= $student->peso ?>">
                                             <?php endif ?>
                                             <input type="hidden" class="_tdia" value="<?= $tdia ?>">
@@ -754,26 +756,26 @@ $lang = new Lang([
                                     <td>
                                         <?= utf8_decode("$student->apellidos $student->nombre"); ?>
                                     </td>
-                                    <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++) : ?>
+                                    <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++): ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled></td>
                                     <?php endfor ?>
-                                    <?php if (__ONLY_CBTM__ && $_report === 'Notas') : ?>
+                                    <?php if (__ONLY_CBTM__ && $_report === 'Notas'): ?>
                                         <td><input class="form-control-plaintext text-center totalAverage" readonly type="text" name="totalAverage-<?= $student->ss ?>" value=<?= $student->{$_options['totalAverage']} ?>></td>
                                     <?php endif ?>
-                                    <?php if ($_report === 'V-Nota' && !$optionCppd) : ?>
+                                    <?php if ($_report === 'V-Nota' && !$optionCppd): ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->not10 ?>" disabled></td>
                                     <?php endif ?>
-                                    <?php if ($_values !== null) : ?>
-                                        <?php foreach ($_values as $name => $value) :
+                                    <?php if ($_values !== null): ?>
+                                        <?php foreach ($_values as $fileName => $value):
                                             if (__ONLY_CBTM__ && $_report === 'Notas') {
-                                                if ($name === 'tdia' || $name === 'tlib' || $name === 'pcor') {
+                                                if ($fileName === 'tdia' || $fileName === 'tlib' || $fileName === 'pcor') {
                                                     $r = [
                                                         'tdia' => 'Trab-Diarios',
                                                         'tlib' => 'Trab-Libreta',
                                                         'pcor' => 'Pruebas-Cortas',
                                                     ];
-                                                    $_student =  findValueFor($_info[$r[$name]]['table'], $student);
-                                                    $val = $_student->{$_info[$r[$name]][$_trimester]['totalGrade']};
+                                                    $_student = findValueFor($_info[$r[$fileName]]['table'], $student);
+                                                    $val = $_student->{$_info[$r[$fileName]][$_trimester]['totalGrade']};
                                                     // echo "$name= $val";
                                                 } else {
                                                     $val = $student->{$value};
@@ -781,12 +783,12 @@ $lang = new Lang([
                                             } else {
                                                 $val = $student->{$value};
                                             }
-                                        ?>
-                                            <td><input class="form-control-plaintext text-center <?= $name ?>" readonly type="text" name="<?= $name . "-$student->ss" ?>" value=<?= $val ?>></td>
+                                            ?>
+                                            <td><input class="form-control-plaintext text-center <?= $fileName ?>" readonly type="text" name="<?= $fileName . "-$student->ss" ?>" value=<?= $val ?>></td>
                                         <?php endforeach ?>
                                     <?php endif ?>
                                     <td><input class="form-control-plaintext text-center totalGrade" readonly type="text" name="totalGrade-<?= $student->ss ?>" value=<?= $student->{$_options['totalGrade']} ?>></td>
-                                    <?php if ($_report === 'V-Nota') : ?>
+                                    <?php if ($_report === 'V-Nota'): ?>
                                         <td><input class="form-control text-center" type="text" name="con-<?= $student->ss ?>" value=<?= $student->{$_options['others'][0]} ?>></td>
                                         <td><input class="form-control text-center" type="text" name="asis-<?= $student->ss ?>" value=<?= $student->{$_options['others'][1]} ?>></td>
                                         <td><input class="form-control text-center" type="text" name="tar-<?= $student->ss ?>" value=<?= $student->{$_options['others'][2]} ?>></td>
@@ -795,7 +797,7 @@ $lang = new Lang([
                             <?php endforeach ?>
                         </tbody>
                     </table>
-                <?php elseif ($_report === 'Cond-Asis') : ?>
+                <?php elseif ($_report === 'Cond-Asis'): ?>
                     <div class="container">
                         <table class="table table-sm table-hover bg-white">
                             <thead class="thead-dark text-center">
@@ -809,7 +811,7 @@ $lang = new Lang([
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($students as $index => $student) : ?>
+                                <?php foreach ($students as $index => $student): ?>
                                     <tr>
                                         <th scope="row">
                                             <?= $index + 1 ?>
@@ -826,10 +828,10 @@ $lang = new Lang([
 
 
                     </div>
-                <?php elseif ($_report === 'Ex-Final') : ?>
+                <?php elseif ($_report === 'Ex-Final'): ?>
                     <div class="container">
-                        <?php if ($_options !== null) : ?>
-                            <?php if (__ONLY_CBTM__) : ?>
+                        <?php if ($_options !== null): ?>
+                            <?php if (__ONLY_CBTM__): ?>
                                 <input type="hidden" name="exGrade" value="<?= substr($students[0]->grado, 0, 2) ?>" />
                             <?php endif ?>
                             <table class="table table-sm table-hover bg-white">
@@ -841,7 +843,7 @@ $lang = new Lang([
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($students as $index => $student) : ?>
+                                    <?php foreach ($students as $index => $student): ?>
                                         <tr>
                                             <th scope="row">
                                                 <?= $index + 1 ?>
@@ -852,7 +854,7 @@ $lang = new Lang([
                                         <?php endforeach ?>
                                 </tbody>
                             </table>
-                        <?php else : ?>
+                        <?php else: ?>
                             <h1 class="display-3 text-center"><?= $lang->translation("Los examenes finales solo estan en el trimestre 2 y trimestre 4") ?></h1>
                             <button class="btn btn-primary d-block mx-auto mb-3" onclick="javascript:history.back()"><?= $lang->translation("Volver") ?></button>
                         <?php endif ?>
@@ -860,17 +862,17 @@ $lang = new Lang([
                 <?php endif ?>
 
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
-                <?php if ($_options !== null) : ?>
-                    <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5) : ?>
+                <?php if ($_options !== null): ?>
+                    <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) || $teacher->tri === $_trimesterNumber || $teacher->tri === 5): ?>
                         <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
-                    <?php else : ?>
+                    <?php else: ?>
                         <h4 class="text-center text-danger"><?= $lang->translation("Lo Sentimos, La fecha Ha Vencido o la selección del trimestre es equivocada. Intentelo de Nuevo o Comuniquese con la Administración.") ?></h4>
                     <?php endif ?>
                 <?php endif ?>
             </div>
         </form>
         <!-- end Students list -->
-        <?php if ($_report !== 'Notas' && $_report !== 'V-Notas' && $_report !== 'Ex-Final' && $_report !== 'Cond-Asis') : ?>
+        <?php if ($_report !== 'Notas' && $_report !== 'V-Notas' && $_report !== 'Ex-Final' && $_report !== 'Cond-Asis'): ?>
             <h2 class="text-center text-info mb-0">*<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*</h2>
         <?php endif ?>
         <!-- Values -->
@@ -889,10 +891,10 @@ $lang = new Lang([
                         <div class="card-body">
                             <div class="form-row">
                                 <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
-                                <?php for ($i = 1; $i <= $cant; $i++) : ?>
+                                <?php for ($i = 1; $i <= $cant; $i++): ?>
                                     <div class="form-row col-12 col-md-8 mb-2">
                                         <div class="form-group col-12">
-                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?> <?= $i ?></label>
+                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?>     <?= $i ?></label>
                                             <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
                                         </div>
                                         <div class="form-group col-4 col-md-2 text-center">
