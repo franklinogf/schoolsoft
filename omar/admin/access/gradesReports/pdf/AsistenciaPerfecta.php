@@ -94,8 +94,20 @@ foreach ($allGrades as $grade) {
              ['grado', $grade],
              ['ss', $student->ss],
              ])->orderBy('apellidos')->get();
-           $aus = [];
+         $aus = 0;
            $tar = [];
+         $aus = array(5);
+         $tar = array(5);
+         $aus[1] = 0;
+         $aus[2] = 0;
+         $aus[3] = 0;
+         $aus[4] = 0;
+         $aus[5] = 0;
+         $tar[1] = 0;
+         $tar[2] = 0;
+         $tar[3] = 0;
+         $tar[4] = 0;
+         $tar[5] = 0;
            foreach ($asistencia as $asis) 
                    {
                    if ($asis->fecha >= $fa[1] and $asis->fecha <= $fa[2] and $asis->codigo < 8)
@@ -179,8 +191,6 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(40, 5, $lang->translation("Femeninas"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['F'], 1, 1, 'C');
 }
-
-
 
 
 $pdf->Output();
