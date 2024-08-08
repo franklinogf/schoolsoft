@@ -1,10 +1,8 @@
 <?php
 require_once '../../../../app.php';
 
-
 // I, as the parent, guardian, or responsible party, hereby acknowledge and affirm that I will actively monitor and oversee my child's online activities. The system will maintain a record to verify that I have reviewed and acknowledged the disciplinary actions.
 // Yo, como padre, tutor o responsable, por la presente reconozco y afirmo que supervisar&#65533; activamente las actividades en l&#65533;nea de mi hijo/a. El sistema mantendr&#65533; un registro para verificar que he revisado y aceptado las acciones disciplinarias.
-
 
 use Classes\PDF;
 use Classes\Lang;
@@ -82,7 +80,7 @@ $id = $_POST['teacher'];
 $teacher = DB::table('profesor')->where([
        ['id', $id],
        ])->orderBy('id')->first();
-if ($_POST['tri1b'] ==  'Si')
+if ($_POST['tri1b'] ?? '' ==  'Si')
    {
 
 $students = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
@@ -158,7 +156,7 @@ $stu = DB::table('padres')->where([
     $t4 = 'tl'.$ct;
     $t5 = 'td'.$ct;
     $t6 = 'pc'.$ct;
-    $not = array(10);
+    $not = array(11);
     for ( $num = 1; $num < 11; $num += 1)
         {
         $b = $num+$a;
@@ -171,16 +169,17 @@ $stu = DB::table('padres')->where([
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
     for ( $n = 1; $n < 10; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
+        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
+//        $pdf->Cell(7, 5, $curso[$n], 1, 0, 'R');
         }
-      $pdf->Cell(6, 5, $curso->$not[10], 1, 0, 'R');
+      $pdf->Cell(6, 5, $curso->not10, 1, 0, 'R');
 
-    $pdf->Cell(7, 5, $curso->$t4, 1, 0, 'R');
-    $pdf->Cell(7, 5, $curso->$t5, 1, 0, 'R');
-    $pdf->Cell(7, 5, $curso->$t6, 1, 0, 'R');
-    $pdf->Cell(7, 5, $curso->$t1, 1, 0, 'R');
-    $pdf->Cell(7, 5, $curso->$t2, 1, 0, 'R');
-    $pdf->Cell(7, 5, $curso->$t3, 1, 1, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t4"}, 1, 0, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t5"}, 1, 0, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t6"}, 1, 0, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t1"}, 1, 0, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t2"}, 1, 0, 'R');
+      $pdf->Cell(7, 5, $curso->{"$t3"}, 1, 1, 'R');
         }
     $pdf->Ln(1);
     $pdf->Cell(17, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
@@ -210,18 +209,19 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 8);
     for ($n = 1; $n < 6; $n += 1)
         {
-        $pdf->Cell(17, 5, $tema->$fec[$n], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n], 1, 0, 'R');
-        $pdf->Cell(17, 5, $tema->$fec[$n+5], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->tem[$n+5], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n+5], 1, 1, 'R');
+      $n2 = $n + 5;
+      $pdf->Cell(17, 5, $tema->{"fec$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n"} ?? '', 1, 0, 'R');
+      $pdf->Cell(17, 5, $tema->{"fec$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n2"} ?? '', 1, 1, 'R');
         }
      }
   }
-
+$tri2b = $_POST['tri2b'] ?? '';
 // Pruebas Cortas
-if ($_POST['tri2b'] ==  'Si')
+if ($tri2b ==  'Si')
    {
 
 $students = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
@@ -309,12 +309,12 @@ $stu = DB::table('padres')->where([
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
     for ( $n = 1; $n < 10; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
+        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
         }
-    $pdf->Cell(9, 5, $curso->$not[10], 1, 0, 'R');
-    $pdf->Cell(9, 5, $curso->$t1, 1, 0, 'R');
-    $pdf->Cell(9, 5, $curso->$t2, 1, 0, 'R');
-    $pdf->Cell(9, 5, $curso->$t3, 1, 1, 'R');
+      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
+      $pdf->Cell(9, 5, $curso->{"$t1"}, 1, 0, 'R');
+      $pdf->Cell(9, 5, $curso->{"$t2"}, 1, 0, 'R');
+      $pdf->Cell(9, 5, $curso->{"$t3"}, 1, 1, 'R');
         }
     $pdf->Ln(1);
     $pdf->Cell(17, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
@@ -344,12 +344,13 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 8);
     for ($n = 1; $n < 6; $n += 1)
         {
-        $pdf->Cell(17, 5, $tema->$fec[$n], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n], 1, 0, 'R');
-        $pdf->Cell(17, 5, $tema->$fec[$n+5], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n+5], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n+5], 1, 1, 'R');
+      $n2 = $n + 5;
+      $pdf->Cell(17, 5, $tema->{"fec$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n"} ?? '', 1, 0, 'R');
+      $pdf->Cell(17, 5, $tema->{"fec$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n2"} ?? '', 1, 1, 'R');
         }
      }
   }
@@ -357,7 +358,8 @@ $stu = DB::table('padres')->where([
 
 
 // Trabajos Diarios
-if ($_POST['tri3b'] ==  'Si')
+if ($_POST['tri3b'] ?? '' ==  'Si'
+)
    {
 
 $students = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
@@ -445,9 +447,9 @@ $stu = DB::table('padres')->where([
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
     for ( $n = 1; $n < 10; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
+        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
         }
-    $pdf->Cell(9, 5, $curso->$not[10], 1, 0, 'R');
+      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t1, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t2, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t3, 1, 1, 'R');
@@ -480,18 +482,20 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 8);
     for ($n = 1; $n < 6; $n += 1)
         {
-        $pdf->Cell(17, 5, $tema->$fec[$n], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n], 1, 0, 'R');
-        $pdf->Cell(17, 5, $tema->$fec[$n+5], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n+5], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n+5], 1, 1, 'R');
+      $n2 = $n + 5;
+      $pdf->Cell(17, 5, $tema->{"fec$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n"} ?? '', 1, 0, 'R');
+      $pdf->Cell(17, 5, $tema->{"fec$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n2"} ?? '', 1, 1, 'R');
         }
      }
   }
 
 // Trabajos Libretas
-if ($_POST['tri4b'] ==  'Si')
+if ($_POST['tri4b'] ?? '' ==  'Si'
+)
    {
 
 $students = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
@@ -579,9 +583,10 @@ $stu = DB::table('padres')->where([
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
     for ( $n = 1; $n < 10; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
+        //        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
+        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
         }
-    $pdf->Cell(9, 5, $curso->$not[10], 1, 0, 'R');
+      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t1, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t2, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t3, 1, 1, 'R');
@@ -614,19 +619,21 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 8);
     for ($n = 1; $n < 6; $n += 1)
         {
-        $pdf->Cell(17, 5, $tema->$fec[$n], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n], 1, 0, 'R');
-        $pdf->Cell(17, 5, $tema->$fec[$n+5], 1, 0, 'C');
-        $pdf->Cell(70, 5, $tema->$tem[$n+5], 1, 0, 'C');
-        $pdf->Cell(11, 5, $tema->$val[$n+5], 1, 1, 'R');
+      $n2 = $n + 5;
+      $pdf->Cell(17, 5, $tema->{"fec$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n"} ?? '', 1, 0, 'R');
+      $pdf->Cell(17, 5, $tema->{"fec$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(70, 5, $tema->{"tema$n2"} ?? '', 1, 0, 'C');
+      $pdf->Cell(11, 5, $tema->{"val$n2"} ?? '', 1, 1, 'R');
         }
      }
   }
 
 
 // Nota Final
-if ($_POST['tri5b'] ==  'Si')
+if ($_POST['tri5b'] ?? '' ==  'Si'
+)
    {
 
 $students = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
