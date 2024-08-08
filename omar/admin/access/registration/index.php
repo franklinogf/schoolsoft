@@ -32,7 +32,10 @@ $lang = new Lang([
     ?>
 </head>
 
-<body>   
+<body>
+    <?php
+    Route::includeFile('/admin/includes/layouts/menu.php');
+    ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Seleccionar profesor') ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded">
@@ -62,7 +65,7 @@ $lang = new Lang([
             <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Cursos') ?></h1>
             <div class="container bg-white shadow-lg py-3 rounded">
                 <form action="<?= Route::url('/admin/access/registration/enterGrades.php') ?>" method="post">
-                    <input type="hidden" name="teacherId" value="<?= $_POST['teacherId'] ?>">
+                    <input type="hidden" name="teacherId" value="<?= $_POST['teacherId'] ?? '' ?>">
                     <div class="mx-auto" style="width: 20rem;">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -71,7 +74,7 @@ $lang = new Lang([
                             <select name="class" class="custom-select" id="class" required>
                                 <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                                 <?php foreach ($classes as $class) : ?>
-                                    <option data-verano=<?= $class->verano === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                                    <option data-verano=<?= $class->verano ?? '' === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -111,11 +114,11 @@ $lang = new Lang([
                                     <option value="Notas"><?= $lang->translation("Notas") ?></option>
                                     <option value="Pruebas-Cortas"><?= $lang->translation("Pruebas cortas") ?></option>
                                     <option value="Trab-Diarios"><?= $lang->translation("Trabajos diarios") ?></option>
-                                    <?php if ($teacher->info('etd') === 'SI') : ?>
+                                    <?php if ($teacher->info('etd') ?? '' === 'SI') : ?>
                                         <option value="Trab-Diarios2"><?= $lang->translation("Trabajos diarios") ?> 2</option>
                                     <?php endif ?>
                                     <option value="Trab-Libreta"><?= $lang->translation("Trabajos de libreta") ?></option>
-                                    <?php if ($teacher->info('etd') === 'SI') : ?>
+                                    <?php if ($teacher->info('etd') ?? '' === 'SI') : ?>
                                         <option value="Trab-Libreta2"><?= $lang->translation("Trabajos de libreta") ?> 2</option>
                                     <?php endif ?>
                                     <option value="Cond-Asis"><?= $lang->translation("Conducta y asistencia") ?></option>
