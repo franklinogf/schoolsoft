@@ -83,11 +83,11 @@ $parent = DB::table('madre')->where([
            {
            $pdf->Cell(8, 5, $count, 0, 0, 'C');
            $pdf->Cell(15, 5, $student->id, 0, 0, 'C');
-           $pdf->Cell(55, 5, utf8_decode($student->apellidos));
-           $pdf->Cell(50, 5, utf8_decode($student->nombre));
+        $pdf->Cell(55, 5, $student->apellidos);
+        $pdf->Cell(50, 5, $student->nombre);
            $pdf->Cell(20, 5, $student->grado, 0, 0, 'C');
-           $pdf->Cell(65, 5, utf8_decode($parent->padre), 0, 0, 'L');
-           $pdf->Cell(65, 5, utf8_decode($parent->madre), 0, 1, 'L');
+        $pdf->Cell(65, 5, $parent->padre, 0, 0, 'L');
+        $pdf->Cell(65, 5, $parent->madre, 0, 1, 'L');
            $count++;
            }
 }
