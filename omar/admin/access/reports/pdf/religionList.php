@@ -11,13 +11,12 @@ use Classes\Util;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Lista de religi�n', 'Religion List'],
+$lang = new Lang([['Lista de religión', 'Religion List'],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
     ['Cuenta', 'Account'],
-    ['Religi�n', 'Religion'],
+   ['Religión', 'Religion'],
     ['Parroquia o Iglesia', 'Parish or Church'],
     ['Nombre', 'Name'],
     ['Total de estudiantes', 'Total students'],
@@ -47,7 +46,7 @@ else
 
 
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de religi�n"). " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Lista de religión")) . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -56,24 +55,26 @@ foreach ($allGrades as $grade) {
     $students = $studentClass->findByGrade($grade);
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Lista de religi�n") . " $year", 0, 1, 'C');
+   $pdf->Cell(0, 5, utf8_encode($lang->translation("Lista de religión")) . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+   $nom = $teacher->nombre ?? '';
+   $nom2 = $teacher->apellidos ?? '';
+   $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $nom2", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
     $pdf->Cell(15, 5, 'ID', 1, 0, 'C', true);
     $pdf->Cell(80, 5, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
-    $pdf->Cell(45, 5, $lang->translation("Religi�n"), 1, 0, 'C', true);
+   $pdf->Cell(45, 5, utf8_encode($lang->translation("Religión")), 1, 0, 'C', true);
     $pdf->Cell(45, 5, $lang->translation("Parroquia o Iglesia"), 1, 1, 'C', true);
     $col=1;$wo2=65;
     foreach ($students as $count => $student) {
       $pdf->Cell(10, 5, $count, 1, 0,'R');
       $pdf->Cell(15, 5, $student->id, 1, 0);
-      $pdf->Cell(80, 5, utf8_decode($student->apellidos.' '.$student->nombre), 1,0);
-      $pdf->Cell(45, 5, utf8_decode($student->religion), 1, 0);
-      $pdf->Cell(45, 5, utf8_decode($student->iglesia), 1, 1);
+      $pdf->Cell(80, 5, $student->apellidos . ' ' . $student->nombre, 1, 0);
+      $pdf->Cell(45, 5, $student->religion, 1, 0);
+      $pdf->Cell(45, 5, $student->iglesia, 1, 1);
          $count++;
     }
 }
