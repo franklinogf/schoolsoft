@@ -38,7 +38,7 @@ if (isset($_REQUEST['Grabar'])) {
     $thisCourse = DB::table('colegio')->where([
         ['usuario', 'administrador'],
     ])->update([
-        'forzar' => $_POST['forzar'],
+        'forzar' => $_POST['forzar'] ?? '',
         'clavepadre' => $_POST['clavepadre'],
     ]);
 }
@@ -74,8 +74,11 @@ $clavepadre = $school->info('clavepadre');
                         <div class="col-12 text-center">
                             <div class="form-group px-0">
                                 <label for="curso"><?= $lang->translation("Activar") ?></label>
-                                <? $chk1=""; if ($forzar=="NO") {$chk1="checked=checked";}?>
-                                <input name="forzar" type="checkbox" value="NO" class="style7" style="width: 26px; height: 24px" <? echo $chk1 ?> />	
+                                <? $chk1 = "";
+                                if ($forzar == "NO") {
+                                    $chk1 = "checked=checked";
+                                } ?>
+                                <input <?= ($forzar ?? '' === 'NO') ? 'checked="checked"' : '' ?> name="forzar" type="checkbox" value="NO" style="height: 25px; width: 25px">
                             </div>
                         </div>
 
@@ -91,7 +94,7 @@ $clavepadre = $school->info('clavepadre');
                             </div>
                         </div>
                         <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-danger" name="Grabar" type="submit" ><?= $lang->translation('Grabar') ?></button>
+                            <button type="submit" class="btn btn-danger" name="Grabar" type="submit"><?= $lang->translation('Grabar') ?></button>
                         </div>
 
                         <div class="col-12 text-center">
