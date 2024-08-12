@@ -11,16 +11,16 @@ use Classes\Controllers\Teacher;
 Session::is_logged();
 $lang = new Lang([
     ['Encuestas', 'Surveys'],
-    ['Selecci髇', 'Selection'],
-    ['T韙ulo', 'Title'],
+    ['Selecci贸n', 'Selection'],
+    ['T铆tulo', 'Title'],
     ['Todos', 'All'],
     ['Padres', 'Parents'],
-    ['Est醩 seguro que quieres borrar el mensage?', 'Are you sure you want to delete the message?'],
+    ['Est谩s seguro que quieres borrar el mensage?', 'Are you sure you want to delete the message?'],
     ['Peso', 'Peso'],
     ['Maestros', 'Teachers'],
     ['Fecha de comienzo', 'Start date'],
     ['Fecha final', 'Final date'],
-    ['D韆s', 'Days'],
+    ['D铆as', 'Days'],
     ['Avanzada', 'Advance'],
     ['Que vean los detalles:', 'Let them see the details:'],
     ['Que puedan comentar:', 'Who can comment:'],
@@ -32,6 +32,7 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Limpiar', 'Clear'],
     ['Eliminar', 'Delete'],
+    ['Descripci贸n1', 'Description'],
 ]);
 $school = new School(Session::id());
 $grades = $school->allGrades();
@@ -77,6 +78,7 @@ $courses = DB::table('estadisticas')->orderBy('titulo')->get();
     Route::selectPicker();
     ?>
 </head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
@@ -102,28 +104,28 @@ $courses = DB::table('estadisticas')->orderBy('titulo')->get();
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="desc1"><?= $lang->translation("T韙ulo") ?></label>
-                                <input type="text" value='<?= $thisCourse->titulo ?>' class="form-control" maxlength="40" name='titulo' id="titulo" required>
+                                <label for="desc1"><?= $lang->translation("T铆tulo") ?></label>
+                                <input type="text" value='<?= $thisCourse->titulo ?? '' ?>' class="form-control" maxlength="40" name='titulo' id="titulo" required>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="desc2"><?= $lang->translation("Descripci髇") ?></label>
-                                <textarea cols="60" name="text" rows="10"><?= $thisCourse->text ?></textarea>
+                                <label for="desc2"><?= $lang->translation("Descripci贸n") ?></label>
+                                <textarea cols="60" name="text" rows="10"><?= $thisCourse->text ?? '' ?></textarea>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="ava"><?= $lang->translation("Selecci髇") ?></label>
+                                <label for="ava"><?= $lang->translation("Selecci贸n") ?></label>
                                 <select class="form-control" name="grupo" id="grupo" required>
-                                    <option <?= $thisCourse->grupo == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Selecci髇") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Todos' ? 'selected=""' : '' ?> value="Todos"><?= $lang->translation("Todos") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Maestros' ? 'selected=""' : '' ?> value="Maestros"><?= $lang->translation("Maestros") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Padres' ? 'selected=""' : '' ?> value="Padres"><?= $lang->translation("Padres") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Selecci贸n") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Todos' ? 'selected=""' : '' ?> value="Todos"><?= $lang->translation("Todos") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Maestros' ? 'selected=""' : '' ?> value="Maestros"><?= $lang->translation("Maestros") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Padres' ? 'selected=""' : '' ?> value="Padres"><?= $lang->translation("Padres") ?></option>
                                     <?php foreach ($grades as $grade): ?>
-                                       <option <?= $thisCourse->grupo == $grade ? 'selected=""' : '' ?> value='<?= $grade ?>'>
-                                           <?= $grade ?>
-                                       </option>
+                                        <option <?= $thisCourse->grupo ?? '' == $grade ? 'selected=""' : '' ?> value='<?= $grade ?>'>
+                                            <?= $grade ?>
+                                        </option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -131,23 +133,23 @@ $courses = DB::table('estadisticas')->orderBy('titulo')->get();
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="entrada"><?= $lang->translation("Fecha de comienzo") ?></label>
-                                <input type="date" value='<?= $thisCourse->fecha_in ?>' class="form-control" maxlength="7" name='fecha_in' id="fecha_in">
+                                <input type="date" value='<?= $thisCourse->fecha_in ?? '' ?>' class="form-control" maxlength="7" name='fecha_in' id="fecha_in">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="salida"><?= $lang->translation("Fecha final") ?></label>
-                                <input type="date" value='<?= $thisCourse->fecha_out ?>' class="form-control" maxlength="7" name='fecha_out' id="fecha_out">
+                                <input type="date" value='<?= $thisCourse->fecha_out ?? '' ?>' class="form-control" maxlength="7" name='fecha_out' id="fecha_out">
                             </div>
                         </div>
-                        
+
 
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="entrada"><?= $lang->translation("Que vean los detalles:") ?></label>
                                 <select class="form-control" name="vicible" id="vicible" required>
-                                    <option <?= $thisCourse->vicible == 'NO' ? 'selected=""' : '' ?> value="NO">No</option>
-                                    <option <?= $thisCourse->vicible == 'SI' ? 'selected=""' : '' ?> value="SI"><?= $lang->translation("Si") ?></option>
+                                    <option <?= $thisCourse->vicible ?? '' == 'NO' ? 'selected=""' : '' ?> value="NO">No</option>
+                                    <option <?= $thisCourse->vicible ?? '' == 'SI' ? 'selected=""' : '' ?> value="SI"><?= $lang->translation("Si") ?></option>
                                 </select>
                             </div>
                         </div>
@@ -155,19 +157,19 @@ $courses = DB::table('estadisticas')->orderBy('titulo')->get();
                             <div class="form-group">
                                 <label for="salida"><?= $lang->translation("Que puedan comentar:") ?></label>
                                 <select class="form-control" name="comentario" id="comentario" required>
-                                    <option <?= $thisCourse->comentario == 'NO' ? 'selected=""' : '' ?> value="NO">No</option>
-                                    <option <?= $thisCourse->comentario == 'SI' ? 'selected=""' : '' ?> value="SI"><?= $lang->translation("Si") ?></option>
+                                    <option <?= $thisCourse->comentario ?? '' == 'NO' ? 'selected=""' : '' ?> value="NO">No</option>
+                                    <option <?= $thisCourse->comentario ?? '' == 'SI' ? 'selected=""' : '' ?> value="SI"><?= $lang->translation("Si") ?></option>
                                 </select>
                             </div>
                         </div>
-                        
-                        
-                        
+
+
+
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary" name="<?= isset($_POST['search']) ? 'save' : 'create' ?>" type="submit"><?= $lang->translation(isset($_POST['search']) ? 'Guardar' : 'Crear') ?></button>
                             <?php if (isset($_POST['search'])) : ?>
                                 <a href="Encuestas.php" class="btn btn-secondary"><?= $lang->translation('Limpiar') ?></a>
-                                <button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Est醩 seguro que quieres borrar el mensage?') ?>')"><?= $lang->translation('Eliminar') ?></button>
+                                <button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Est谩s seguro que quieres borrar el mensage?') ?>')"><?= $lang->translation('Eliminar') ?></button>
                             <?php endif ?>
                         </div>
                     </div>
