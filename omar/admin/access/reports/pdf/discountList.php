@@ -16,7 +16,7 @@ $lang = new Lang([
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
     ['Fecha', 'Date drop out'],
-    ['C�digo', 'Code'],
+   ['Código', 'Code'],
     ['Descuentos', 'Discount'],
 ]);
 
@@ -51,24 +51,26 @@ $tcount = 0;
 foreach ($students as $student) {
         $pdf->Cell(7, 5, $count, 0, 0, 'C');
         $pdf->Cell(10, 5, $student->id, 0, 0, 'C');
-        $pdf->Cell(55, 5, utf8_decode($student->apellidos));
-        $pdf->Cell(45, 5, utf8_decode($student->nombre));
+   $pdf->Cell(55, 5, $student->apellidos);
+   $pdf->Cell(45, 5, $student->nombre);
         $pdf->Cell(12, 5, $student->grado, 0, 0, 'C');
-        if (utf8_decode($student->desc1) !='Selecci�n')
+   if ($student->desc_men != '')
            {
-           $pdf->Cell(50, 5, utf8_decode($student->desc1).' '.$student->desc_men, 0, 0, 'L');
+      $tcount = $tcount + number_format($student->desc_men, 2);
+      $pdf->Cell(50, 5, $student->desc1 . ' ' . $student->desc_men, 0, 0, 'L');
            }
-        if (utf8_decode($student->desc2) !='Selecci�n')
+   if ($student->desc_mat != '')
            {
-           $pdf->Cell(50, 5, utf8_decode($student->desc2).' '.$student->desc_mat, 0, 0, 'L');
+      $pdf->Cell(50, 5, $student->desc2 . ' ' . $student->desc_mat, 0, 0, 'L');
+      $tcount = $tcount + number_format($student->desc_mat, 2);
            }
-        if (utf8_decode($student->desc3) !='Selecci�n')
+   if ($student->desc_otro1 != '')
            {
-           $pdf->Cell(50, 5, utf8_decode($student->desc3).' '.$student->desc_otro1, 0, 0, 'L');
+      $pdf->Cell(50, 5, $student->desc3 . ' ' . $student->desc_otro1, 0, 0, 'L');
+      $tcount = $tcount + number_format($student->desc_otro1, 2);
            }
         $pdf->Cell(1, 5, '', 0, 1, 'L');
-        $count++;
-        $tcount=$tcount+$student->desc_men+$student->desc_mat+$student->desc_otro1;
+   $count++;
 }
         $pdf->Cell(50, 5, '', 0, 1, 'L');
         $pdf->Cell(10, 5, '', 0, 0, 'L');
