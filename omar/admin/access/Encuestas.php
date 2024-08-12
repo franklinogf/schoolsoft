@@ -32,7 +32,7 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Limpiar', 'Clear'],
     ['Eliminar', 'Delete'],
-    ['Descripción1', 'Description'],
+    ['Descripción', 'Description'],
 ]);
 $school = new School(Session::id());
 $grades = $school->allGrades();
