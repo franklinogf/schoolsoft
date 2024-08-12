@@ -10,17 +10,17 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $lang = new Lang([
-    ['Envío de mensajes a padres y/o profesores en su zona de la plataforma.', 'Sending messages to parents and teachers in their area of the platform.'],
-    ['Selección', 'Selection'],
-    ['Título', 'Title'],
+    ['EnvÃ­o de mensajes a padres y/o profesores en su zona de la plataforma.', 'Sending messages to parents and teachers in their area of the platform.'],
+    ['SelecciÃ³n', 'Selection'],
+    ['TÃ­tulo', 'Title'],
     ['Todos', 'All'],
     ['Padres', 'Parents'],
-    ['Estás seguro que quieres borrar el mensage?', 'Are you sure you want to delete the message?'],
+    ['EstÃ¡s seguro que quieres borrar el mensage?', 'Are you sure you want to delete the message?'],
     ['Peso', 'Peso'],
     ['Maestros', 'Teachers'],
     ['Fecha de comienzo', 'Start date'],
     ['Fecha final', 'Final date'],
-    ['Días', 'Days'],
+    ['DÃ­as', 'Days'],
     ['Avanzada', 'Advance'],
     ['Valor', 'Value'],
     ['Regular', 'Regular'],
@@ -67,18 +67,19 @@ $courses = DB::table('mensa_tarjeta')->orderBy('titulo')->get();
 
 <head>
     <?php
-    $title = $lang->translation('Envío de mensajes a padres y/o profesores en su zona de la plataforma.');
+    $title = $lang->translation('EnvÃ­o de mensajes a padres y/o profesores en su zona de la plataforma.');
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::selectPicker();
     ?>
 </head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Envío de mensajes a padres y/o profesores en su zona de la plataforma.') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('EnvÃ­o de mensajes a padres y/o profesores en su zona de la plataforma.') ?></h1>
         <div class="container">
             <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
                 <form method="POST">
@@ -97,44 +98,44 @@ $courses = DB::table('mensa_tarjeta')->orderBy('titulo')->get();
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="desc1"><?= $lang->translation("Título") ?></label>
-                                <input type="text" value='<?= $thisCourse->titulo ?>' class="form-control" maxlength="40" name='titulo' id="titulo" required>
+                                <label for="desc1"><?= $lang->translation("TÃ­tulo") ?></label>
+                                <input type="text" value='<?= $thisCourse->titulo ?? '' ?>' class="form-control" maxlength="40" name='titulo' id="titulo" required>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="desc2"><?= $lang->translation("Descripción") ?></label>
-                                <textarea cols="60" name="text" rows="10"><?= $thisCourse->text ?></textarea>
+                                <label for="desc2"><?= $lang->translation("DescripciÃ³n") ?></label>
+                                <textarea cols="60" name="text" rows="10"><?= $thisCourse->text ?? '' ?></textarea>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="ava"><?= $lang->translation("Selección") ?></label>
+                                <label for="ava"><?= $lang->translation("SelecciÃ³n") ?></label>
                                 <select class="form-control" name="grupo" id="grupo" required>
-                                    <option <?= $thisCourse->grupo == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Selección") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Todos' ? 'selected=""' : '' ?> value="Todos"><?= $lang->translation("Todos") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Maestros' ? 'selected=""' : '' ?> value="Maestros"><?= $lang->translation("Maestros") ?></option>
-                                    <option <?= $thisCourse->grupo == 'Padres' ? 'selected=""' : '' ?> value="Padres"><?= $lang->translation("Padres") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("SelecciÃ³n") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Todos' ? 'selected=""' : '' ?> value="Todos"><?= $lang->translation("Todos") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Maestros' ? 'selected=""' : '' ?> value="Maestros"><?= $lang->translation("Maestros") ?></option>
+                                    <option <?= $thisCourse->grupo ?? '' == 'Padres' ? 'selected=""' : '' ?> value="Padres"><?= $lang->translation("Padres") ?></option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="entrada"><?= $lang->translation("Fecha de comienzo") ?></label>
-                                <input type="date" value='<?= $thisCourse->fecha_in ?>' class="form-control" maxlength="7" name='fecha_in' id="fecha_in">
+                                <input type="date" value='<?= $thisCourse->fecha_in ?? '' ?>' class="form-control" maxlength="7" name='fecha_in' id="fecha_in">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="salida"><?= $lang->translation("Fecha final") ?></label>
-                                <input type="date" value='<?= $thisCourse->fecha_out ?>' class="form-control" maxlength="7" name='fecha_out' id="fecha_out">
+                                <input type="date" value='<?= $thisCourse->fecha_out ?? '' ?>' class="form-control" maxlength="7" name='fecha_out' id="fecha_out">
                             </div>
                         </div>
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary" name="<?= isset($_POST['search']) ? 'save' : 'create' ?>" type="submit"><?= $lang->translation(isset($_POST['search']) ? 'Guardar' : 'Crear') ?></button>
                             <?php if (isset($_POST['search'])) : ?>
                                 <a href="GroupMessage.php" class="btn btn-secondary"><?= $lang->translation('Limpiar') ?></a>
-                                <button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que quieres borrar el mensage?') ?>')"><?= $lang->translation('Eliminar') ?></button>
+                                <button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('EstÃ¡s seguro que quieres borrar el mensage?') ?>')"><?= $lang->translation('Eliminar') ?></button>
                             <?php endif ?>
                         </div>
                     </div>
