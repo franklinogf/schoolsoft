@@ -30,6 +30,7 @@ $lang = new Lang([
 $school = new School();
 //$teacherClass = new Teacher();
 //$studentClass = new Student();
+$count = 0;
 
 $year = $school->year();
 $pdf = new PDF();
@@ -58,7 +59,8 @@ $students = DB::table('year')->where([
     $pdf->SetFont('Arial', '', 10);
 
     foreach ($students as $student) {
-        $pdf->Cell(10, 5, $count + 1, 1, 0, 'C');
+    $count = $count + 1;
+    $pdf->Cell(10, 5, $count, 1, 0, 'C');
         $pdf->Cell(17, 5, $student->id, 1, 0, 'C');
         $pdf->Cell(60, 5, $student->apellidos, 1);
         $pdf->Cell(50, 5, $student->nombre, 1, 0);
