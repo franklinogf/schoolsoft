@@ -48,7 +48,9 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(0, 5, $lang->translation("Lista esrudiuantes grados") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
@@ -71,9 +73,9 @@ foreach ($allGrades as $grade) {
     $pdf->SetFont('Arial', '', 10);
 
     foreach ($students as $count => $student) {
-        $dia=date(j);
-        $mes=date(n);
-        $ano=date(Y);
+        $dia = date('j');
+        $mes = date('n');
+        $ano = date('Y');
         list($ss1,$ss2,$ss3) = explode("-",$student->ss);
 
         $fec=$student->fecha; 
