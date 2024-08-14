@@ -11,8 +11,7 @@ use Classes\Util;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Liata mart�cula por sal1�n', 'Enrollment classroom list'],
+$lang = new Lang([['Liata matrícula por salón', 'Enrollment classroom list'],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
@@ -47,7 +46,7 @@ else
 
 
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Liata mart�cula por sal1�n"). " $year", true);
+$pdf->SetTitle($lang->translation("Liata matrícula por salón") . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -55,10 +54,12 @@ foreach ($allGrades as $grade) {
     $students = $studentClass->findByGrade($grade);
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Liata mart�cula por sal1�n") . " $year", 0, 1, 'C');
+  $pdf->Cell(0, 5, $lang->translation("Liata matrícula por salón") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+  $nom = $teacher->nombre ?? '';
+  $ape = $teacher->apellidos ?? '';
+  $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(190, 5, '', 1, 1, 'C', true);
