@@ -13,8 +13,7 @@ use Classes\Util;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Informaci�n Usuario', 'User Information'],
+$lang = new Lang([['Información Usuario', 'User Information'],
     ["Maestro(a):", "Teacher:"],
     ["Grado:", "Grade:"],
     ["Nombre del estudiante", "Student name"],
@@ -67,7 +66,7 @@ function Footer1()
 }
 
 
-$link = $_SERVER[HTTP_HOST] . $_SERVER[REQUEST_URI];
+$link = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $escaped_link = htmlspecialchars($link, ENT_QUOTES, 'UTF-8');
 list($l1, $l2, $l3, $l4) = explode("/",$escaped_link);
 $link = "https://www.schoolsoftpr.org/".$l2;
@@ -102,12 +101,12 @@ foreach ($allGrades as $grade) {
       if ($col==1){$pdf->SetX(15);}
       if ($col==2){$pdf->SetX(80);}
       if ($col==3){$pdf->SetX(145);}
-      $pdf->Cell(60, 5, $lang->translation("Informaci�n Usuario"), 'LRT',1,'C');
+        $pdf->Cell(60, 5, $lang->translation("Información Usuario"), 'LRT', 1, 'C');
       if ($col==1){$pdf->SetX(15);}
       if ($col==2){$pdf->SetX(80);}
       if ($col==3){$pdf->SetX(145);}
       $pdf->SetFont('Arial', '', 8);
-      $pdf->Cell(60, 5, utf8_decode($student->nombre.' '.$student->apellidos), 'RL', 1);
+        $pdf->Cell(60, 5, $student->nombre . ' ' . $student->apellidos, 'RL', 1);
       $pdf->SetFont('Arial', '', 10);
       if ($col==1){$pdf->SetX(15);}
       if ($col==2){$pdf->SetX(80);}
