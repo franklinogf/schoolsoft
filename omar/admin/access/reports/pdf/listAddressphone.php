@@ -38,8 +38,8 @@ class nPDF extends PDF
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(80, 5, $lang->translation("Nombre Estudiante"), 1, 0, 'C', true);
-        $this->Cell(80, 5, $lang->translation("Dirección"), 1, 0, 'C', true);
-        $this->Cell(40, 5, $lang->translation("Teléfono"), 1, 0, 'C', true);
+        $this->Cell(80, 5, utf8_encode($lang->translation("Dirección")), 1, 0, 'C', true);
+        $this->Cell(40, 5, utf8_encode($lang->translation("Teléfono")), 1, 0, 'C', true);
         $this->Cell(40, 5, $lang->translation("Celular"), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }
