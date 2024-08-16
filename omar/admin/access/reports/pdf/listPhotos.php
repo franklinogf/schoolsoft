@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../app.php';
-// le falta las fotos y el codigo de barra.
+// le falta el codigo de barra.
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -41,12 +41,14 @@ foreach ($allGrades as $grade) {
     $teacher = $teacherClass->findByGrade($grade);
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Lista de estudiantes por salón hogar y fotos") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, utf8_encode($lang->translation("Lista de estudiantes por salón hogar y fotos")) . " $year", 0, 1, 'C');
 
     $pdf->Ln(5);
 
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
@@ -59,25 +61,27 @@ foreach ($allGrades as $grade) {
 
     foreach ($students as $count => $student) {
 
-        $pdf->Cell(10, 15, $count + 1, 0, 0, 'C');
+        $pdf->Cell(10, 10, $count + 1, 0, 0, 'C');
         if (empty($student->tipo)) {
-            $foto = "../../images/none.gif";
+            $foto = "../../../../../images/none.gif";
         } else {
-            $foto = "../picture/" . $student->tipo . ".jpg";
+            $foto = "../../../../picture/" . $student->tipo . ".jpg";
         }
 
-        //        $pdf->Image($foto, $pdf->GetX() + 5, $pdf->GetY() + 1, 10,13);
-        $pdf->Cell(25, 15, '', 1, 0, 'C');
-        $pdf->Cell(55, 15, $student->apellidos, 0);
-        $pdf->Cell(45, 15, $student->nombre, 0);
+        $pdf->Image($foto, $pdf->GetX() + 10, $pdf->GetY() + 1, 5, 10);
+        $pdf->Cell(25, 10, '', 0, 0, 'C');
+        $pdf->Cell(55, 10, $student->apellidos, 0);
+        $pdf->Cell(45, 10, $student->nombre, 0);
         //        $pdf->Cell(55, 10, '___________________________', 0, 1,'C');
 
         if ($student->cbarra !== '') {
             $pdf->Line($pdf->GetX(), $pdf->GetY() + 15, $pdf->GetX() + 55, $pdf->GetY() + 15);
-            //            $pdf->Codabar($pdf->GetX() + 5, $pdf->GetY() + 3, $student->cbarra, '*', '*', 0.29, 5);
+            $pdf->Codabar($pdf->GetX() + 5, $pdf->GetY() + 3, $student->cbarra, '*', '*', 0.29, 5);
             $pdf->Ln(15);
         } else {
-            $pdf->Cell(45, 8, 'N/A', 'B', 1);
+            //            $pdf->Ln(10);
+            $pdf->Cell(45, 5, 'N/A', 'B', 1);
+            $pdf->Ln(5);
         }
     }
 }
