@@ -24,6 +24,10 @@ $lang = new Lang([
     ['Nombre', 'Name'],
 ]);
 
+$school = new School(Session::id());
+$year = $school->year('year2');
+
+
 $from = $_POST['from'];
 $to = $_POST['to'];
 $option = $_POST['option'];
@@ -34,7 +38,7 @@ $pdf->Fill();
 if ($option === 'student') {
     $studentMt = $_POST['student'];
     $student = new Student($studentMt);
-    $year = $student->info('year');
+//    $year = $student->info('year');
 
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
