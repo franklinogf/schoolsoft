@@ -58,8 +58,10 @@ foreach ($allGrades as $grade) {
     $pdf->SetFont('Arial', 'B', 15);
     $pdf->Cell(0, 5, $lang->translation("Movimiento de matrícula") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
@@ -85,9 +87,9 @@ foreach ($allGrades as $grade) {
             ['codigo', $student->codigobaja],
         ])->orderBy('codigo')->first();
 
-        $dia = date(j);
-        $mes = date(n);
-        $ano = date(Y);
+        $dia = date('j');
+        $mes = date('n');
+        $ano = date('Y');
         $fec = $student->fecha;
         list($anonaz, $mesnaz, $dianaz) = explode('-', $fec);
         if (($mesnaz == $mes) && ($dianaz > $dia)) {
@@ -147,8 +149,5 @@ foreach ($allGrades as $grade) {
         $pdf->Cell(40, 6, '', 1, 1, 'C');
     }
 }
-
-
-
 
 $pdf->Output();
