@@ -28,7 +28,8 @@ $lang = new Lang([
 ]);
 $students = new Student();
 $allStudents = $students->all();
-$school = new School();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $grades = $school->allGrades();
 
 $from = $_POST['from'];
@@ -81,7 +82,7 @@ if ($ida != 'all') {
     $grade = $_POST['grade'];
     $admins1 = DB::table('colegio')->orderBy('usuario')->get();
 
-    $type = $_POST['type'];
+    $type = $_POST['type'] ?? '';
 
     $count = 1;
     $type = 'list';
@@ -96,8 +97,8 @@ if ($ida != 'all') {
         $pdf->Ln(5);
 
         $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'L', true);
-        $pdf->Cell(140, 5, $admin2->usuario, 0, 0, 'L');
-        $pdf->Cell(15, 5, $lang->translation("Fecha"), 1, 0, 'C');
+        $pdf->Cell(132, 5, $admin2->usuario, 0, 0, 'L');
+        $pdf->Cell(15, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
         $pdf->Cell(20, 5, date('m-d-Y'), 0, 1, 'L');
 
         $pdf->Cell(20, 5, '', 1, 0, 'C', true);
