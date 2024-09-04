@@ -49,13 +49,13 @@ $lang = new Lang([
 $pdf = new PDF();
 
 $school = new School(Session::id());
-$grado = $_POST['grade'];
-$nota = $_POST['nota'];
-$divicion= $_POST['divicion'];
-list($nota,$tt) = explode("-",$_POST['nota']);
+$grado = $_POST['grade'] ?? '';
+$nota1 = $_POST['nota'] ?? '-';
+$divicion = $_POST['divicion'] ?? '';
+list($nota, $tt) = explode("-", $nota1);
 
-$cl = $_POST['cl'];
-$notar = $_POST['notar'];
+$cl = $_POST['cl'] ?? '';
+$notar = $_POST['notar'] ?? '';
 
 $year = $school->info('year2');
 //$pdf = new nPDF();
