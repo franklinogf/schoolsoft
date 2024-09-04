@@ -28,16 +28,16 @@ $lang = new Lang([
     ['Femeninas', 'Females'],
     ['Tarde', 'Late'],
     ['Ausencia', 'Absence'],
-    ['Ausencia-situaci髇 en el hogar', 'Absence-situation at home'],
-    ['Ausencia-determinaci髇 del hogar(viaje)', 'Absence-determination of home (travel)'],
+   ['Ausencia-situaci贸n en el hogar', 'Absence-situation at home'],
+   ['Ausencia-determinaci贸n del hogar(viaje)', 'Absence-determination of home (travel)'],
     ['Ausencia-actividad con padres(open house)', 'Absence-activity with parents (open house)'],
     ['Ausencia-enfermedad', 'Absence-illness'],
     ['Ausencia-cita', 'Absence-appointment'],
     ['Ausencia-actividad educativa del colegio', 'Absence-school educational activity'],
     ['Ausencia-sin excusa del hogar', 'Unexcused absence from home'],
     ['Tardanza-sin excusa del hogar', 'Unexcused tardiness home'],
-    ['Tardanza-situaci髇 en el hogar', 'Late situation at home'],
-    ['Tardanza-problema en la transportaci髇', 'Transportation delay problem.'],
+   ['Tardanza-situaci贸n en el hogar', 'Late situation at home'],
+   ['Tardanza-problema en la transportaci贸n', 'Transportation delay problem.'],
     ['Tardanza-enfermedad', 'Delay due to illness'],
     ['Tardanza-cita', 'Late - appointment'],
 
@@ -49,19 +49,19 @@ $studentClass = new Student();
 $seasis = $_POST['seasis'];
 $grado = $_POST['grado'];
 $lista = $_POST['lista'];
-$ss = $_POST['teacher'];
+$ss = $_POST['teacher'] ?? '';
 $year = $school->info('year2');
 $aus = [];
-$aus[1] = $lang->translation('Ausencia-situaci髇 en el hogar');
-$aus[2] = $lang->translation('Ausencia-determinaci髇 del hogar(viaje)');
+$aus[1] = $lang->translation('Ausencia-situaci&#65533;n en el hogar');
+$aus[2] = $lang->translation('Ausencia-determinaci&#65533;n del hogar(viaje)');
 $aus[3] = $lang->translation('Ausencia-actividad con padres(open house)');
 $aus[4] = $lang->translation('Ausencia-enfermedad');
 $aus[5] = $lang->translation('Ausencia-cita');
 $aus[6] = $lang->translation('Ausencia-actividad educativa del colegio');
 $aus[7] = $lang->translation('Ausencia-sin excusa del hogar');
 $aus[8] = $lang->translation('Tardanza-sin excusa del hogar');
-$aus[9] = $lang->translation('Tardanza-situaci髇 en el hogar');
-$aus[10] = $lang->translation('Tardanza-problema en la transportaci髇');
+$aus[9] = $lang->translation('Tardanza-situaci&#65533;n en el hogar');
+$aus[10] = $lang->translation('Tardanza-problema en la transportaci&#65533;n');
 $aus[11] = $lang->translation('Tardanza-enfermedad');
 $aus[12] = $lang->translation('Tardanza-cita');
 
@@ -90,7 +90,9 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(0, 5, $lang->translation("Ausencia diaria") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . utf8_encode(" $teacher->nombre $teacher->apellidos"), $lang->translation("Grado:") . " $grade");
+      $nom = $teacher->nombre ?? '';
+      $ape = $teacher->apellidos ?? '';
+      $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
     $pdf->SetFont('Arial', 'B', 10);
     if ($lista == 1)
        {
