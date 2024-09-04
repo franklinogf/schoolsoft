@@ -66,9 +66,9 @@ $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de fracasados por ".$_POST['cursos']) . " $year", true);
 $pdf->Fill();
 
-$grade = $_POST['grade'];
-$men = $_POST['mensaje'];
-$cl = $_POST['conlinia'];
+$grade = $_POST['grade'] ?? '';
+$men = $_POST['mensaje'] ?? '';
+$cl = $_POST['conlinia'] ?? '';
     $materias = [];
     $cursos = [];
     $estudiantes = [];
