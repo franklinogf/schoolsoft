@@ -38,8 +38,8 @@ $lang = new Lang([
 $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
-$tda = $_POST['asis'];
-$grado = $_POST['grade'];
+$tda = $_POST['asis'] ?? '';
+$grado = $_POST['grade'] ?? '';
 $year = $school->info('year2');
 $fa = [];
 
@@ -76,7 +76,9 @@ for ($i = 1; $i <= 4; $i++)
     $pdf->Cell(0, 5, $lang->translation("Horas comunitarias") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 11);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
