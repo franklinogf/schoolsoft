@@ -139,9 +139,9 @@ $options = [
                 'link' => 'DistriNotasMaestros.php'
             ],
             [
-                'name' => ["es" => 'Listado de 100', "en" => "Listado de 100"],
+                'name' => ["es" => 'Listado de 100', "en" => "Average Listing 100"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'Listade100.php'
             ],
             [
                 'name' => ["es" => 'Informe acumulativo de notas', "en" => "Cumulative grade report"],
