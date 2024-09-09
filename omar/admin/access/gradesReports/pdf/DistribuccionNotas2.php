@@ -10,16 +10,15 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Informe de distribuci�n de promedio por grado', 'GPA Distribution Report by Grade'],
+$lang = new Lang([['Informe de distribución de promedio por grado', 'GPA Distribution Report by Grade'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
-    ["A&#65533;o escolar:", "School year:"],
-    ["Descripci&#65533;n", "Description"],
+   ["Año escolar:", "School year:"],
+   ["Descripción", "Description"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
-    ['Cr&#65533;dito', 'Credit'],
+   ['Crédito', 'Credit'],
     ['Trimestre', 'Quarter'],
     ['Nota A', 'Note A'],
     ['Nota B', 'Note B'],
@@ -62,7 +61,7 @@ class nPDF extends PDF
         if ($ct=='nota4'){$tt=$lang->translation("T-4");}
         $this->SetFont('Arial', 'B', 12);
 
-        $this->Cell(0, 5, $lang->translation("Informe de distribuci�n de promedio por grado").' / '.$tt." / $year", 0, 1, 'C');
+      $this->Cell(0, 5, $lang->translation("Informe de distribución de promedio por grado") . ' / ' . $tt . " / $year", 0, 1, 'C');
         $this->Ln(5);
         $this->SetFont('Arial', '', 12);
     $this->Fill();
@@ -148,7 +147,7 @@ foreach ($allGrades as $grade) {
 
 $pdf = new nPDF();
 $pdf->AddPage('');
-$cur = $_POST['curso'];
+$cur = $_POST['curso'] ?? '';
 $n = 0;
 $x = 0;
     $am1 = 0;
