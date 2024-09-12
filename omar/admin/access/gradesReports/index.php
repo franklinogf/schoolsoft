@@ -129,9 +129,10 @@ $options = [
                 'link' => 'NoteClassification.php'
             ],
             [
-                'name' => ["es" => 'Sabana de notas', "en" => "Sabana de notas"],
+                'name' => ["es" => 'Sabana de notas', "en" => "Sheet of Notes"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'pdf/sabana_notas.php',
+                'target' => 'HorasComunitarias'
             ],
             [
                 'name' => ["es" => 'Distri/Notas maestros', "en" => "Teacher Notes Distribution"],
