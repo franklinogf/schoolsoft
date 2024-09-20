@@ -74,9 +74,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Lista de deudores', "en" => "Lista de deudores"],
-                'desc' => ['es' => 'Informe de deudores por grado puede seleccionar código.', 'en' => 'Informe de deudores por grado puede seleccionar código.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista de deudores', "en" => "List of debtors"],
+                'desc' => ['es' => 'Informe de deudores por grado puede seleccionar código.', 'en' => 'Debtors report by grade you can select code.'],
+                'link' => 'deudores.php'
             ],
             [
                 'name' => ["es" => '30, 60, 90', "en" => "30, 60, 90"],
