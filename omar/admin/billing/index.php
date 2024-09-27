@@ -69,9 +69,9 @@ $options = [
                 'link' => 'Daily_payments.php'
             ],
             [
-                'name' => ["es" => 'Estado de cuenta', "en" => "Estado de cuenta"],
-                'desc' => ['es' => 'Imprimir o enviar el informe de estado de cuentas a los padres.', 'en' => 'Imprimir o enviar el informe de estado de cuentas a los padres.'],
-                'link' => '#'
+                'name' => ["es" => 'Estado de cuenta', "en" => "Statement"],
+                'desc' => ['es' => 'Imprimir o enviar el informe de estado de cuentas a los padres.', 'en' => 'Print or send the account status report to parents.'],
+                'link' => 'Statement.php'
             ],
             [
                 'name' => ["es" => 'Lista de deudores', "en" => "List of debtors"],
