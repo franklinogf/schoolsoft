@@ -29,7 +29,7 @@ Route::includeFile('/admin/includes/layouts/header.php');
 Route::includeFile('/admin/includes/layouts/menu.php');
 ?>
     <div class="container-lg mt-lg-3  px-0">
-        <h1 class="display-4 mt-5 text-center"><?=$lang->translation("Conectate desde cualquier parte del Mundo.")?></h1>
+        <h1 class="display-4 mt-5 text-center"><?=$lang->translation("Opciones de notas")?></h1>
 
         <div class="container">
             <?php if (Session::get('saved')): ?>
