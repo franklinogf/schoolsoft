@@ -9,6 +9,52 @@ $(document).ready(function () {
     }).format(amount);
   }
   init();
+  $("#addChargeForm").submit(function (e) {
+    e.preventDefault();
+    const form = $(this)[0];
+    const fd = new FormData(form);
+    const data = {
+      code: fd.get("code"),
+      codeDescription: fd.get("codeDescription"),
+      chargeTo: fd.get("chargeTo"),
+      amount: fd.get("amount"),
+      month: fd.get("month"),
+    };
+    if ($("#allMonths").prop("checked")) {
+      data.allMonths = true;
+    }
+    $.ajax({
+      type: "POST",
+      url: form.action,
+      data,
+      dataType: "json",
+      success: function (response) {
+        console.log({ response });
+        if (response.error) {
+          $("#addChargeModal").modal("hide");
+          Alert.fire({
+            icon: "error",
+            title: "Error!",
+            text: response.message,
+          });
+        } else {
+          const { rows } = response;
+          rows.forEach((row) => {
+            addChargeToTable(row.month, {
+              id: row.codigo,
+              description: row.desc1,
+              date: row.fecha_d,
+              debt: row.deuda,
+              grade: row.grado,
+              mt: row.mt,
+            });
+          });
+          $("#addChargeModal").modal("hide");
+          Toast.fire("Cargo añadido!", "", "success");
+        }
+      },
+    });
+  });
   $("#paymentReceiptForm").submit(function (e) {
     e.preventDefault();
     const form = $(this)[0];
@@ -173,17 +219,6 @@ $(document).ready(function () {
     $("#latePaymentAditionalInfo").val(info);
   });
 
-  async function getLatePaymentInfo() {
-    const accountId = $("#accountId").val();
-    const ajax = await $.ajax({
-      type: "GET",
-      url: "./includes/latePayment.php",
-      data: { accountId },
-      dataType: "json",
-    });
-    return ajax;
-  }
-
   $(".depositBtn").click(function () {
     const id = $(this).data("id");
     $.ajax({
@@ -338,7 +373,7 @@ $(document).ready(function () {
     });
   });
 
-  $(".editCharge").click(function (e) {
+  $(document).on("click", ".editCharge", function (e) {
     const id = $(this).data("id");
     $.ajax({
       type: "GET",
@@ -360,7 +395,7 @@ $(document).ready(function () {
       },
     });
   });
-  $(".editPayment").click(function (e) {
+  $(document).on("click", ".editPayment", function (e) {
     const id = $(this).data("id");
     console.log("payment clicked");
     $.ajax({
@@ -403,7 +438,7 @@ $(document).ready(function () {
     }
   });
 
-  $(".delete").click(function (e) {
+  $(document).on("click", ".delete", function (e) {
     const id = $(this).data("id");
     const parentTr = $(this).parents("tr");
 
@@ -550,6 +585,42 @@ $(document).ready(function () {
     });
   });
 
+  /* -------------------------------- Functions ------------------------------- */
+
+  function addChargeToTable(
+    monthToAdd,
+    { id, grade, description, date, debt, mt }
+  ) {
+    const tr = `
+    <tr data-id="<?= $charge->codigo ?>">
+        <th scope="row">${id}</th>
+        <td>${grade}</td>
+        <td>${description}</td>
+        <td>${date}</td>
+        <td class="text-right debt">${parseFloat(debt).toFixed(2)}</td>
+        <td class="text-right payment">0.00</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right">
+            <i data-id="${mt}" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
+            <i data-id="${mt}" role="button" class="editCharge fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+        </td>
+    </tr>`;
+    $(`#table${monthToAdd}`).append(tr);
+    displayAmounts();
+    toggleMonthButtons();
+  }
+  async function getLatePaymentInfo() {
+    const accountId = $("#accountId").val();
+    const ajax = await $.ajax({
+      type: "GET",
+      url: "./includes/latePayment.php",
+      data: { accountId },
+      dataType: "json",
+    });
+    return ajax;
+  }
   async function init() {
     const { observationType, alert, info } = await getLatePaymentInfo();
     if (observationType || alert) {

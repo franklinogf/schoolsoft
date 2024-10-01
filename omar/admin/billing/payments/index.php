@@ -303,7 +303,7 @@ $depositTypes = [
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
+                <form id="addChargeForm" method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="code">Codigo</label>
@@ -346,7 +346,7 @@ $depositTypes = [
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Pagar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </div>
                 </form>
             </div>
