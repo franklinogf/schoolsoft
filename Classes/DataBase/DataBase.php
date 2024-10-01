@@ -34,7 +34,12 @@ class DataBase
   protected function normalQuery($query)
   {
     $db = $this->connect();
-    return $db->query($query);
+    try {
+      return $db->query($query);
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+
   }
   protected function deleteTable($table, $pk, $wherePk)
   {
