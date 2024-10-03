@@ -133,7 +133,10 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
                         <br />
                         <br />
                         <strong>
-                            <input class="myButton" name="buscar" type="submit" value="<?= $lang->translation('Procesar') ?>" style="width: 129px; height: 28px" /></strong><br />
+                            <center>
+                                <input class="btn btn-primary form-control" name="buscar" type="submit" value="<?= $lang->translation('Procesar') ?>" style="width: 129px;" />
+                            </center>
+                        </strong><br />
                         <br />
                     </div>
                 </form>
