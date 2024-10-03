@@ -80,8 +80,8 @@ $options = [
             ],
             [
                 'name' => ["es" => '30, 60, 90', "en" => "30, 60, 90"],
-                'desc' => ['es' => 'Lista de deudores por meses por cuentas.', 'en' => 'Lista de deudores por meses por cuentas.'],
-                'link' => '#'
+                'desc' => ['es' => 'Lista de deudores por meses por cuentas.', 'en' => 'List of debtors by month by accounts.'],
+                'link' => 'deudores369.php'
             ],
             [
                 'name' => ["es" => 'Carta de cobro', "en" => "Carta de cobro"],
