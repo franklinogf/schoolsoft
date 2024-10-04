@@ -84,9 +84,9 @@ $options = [
                 'link' => 'deudores369.php'
             ],
             [
-                'name' => ["es" => 'Carta de cobro', "en" => "Carta de cobro"],
-                'desc' => ['es' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.', 'en' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.'],
-                'link' => '#'
+                'name' => ["es" => 'Carta de cobro', "en" => "Collection letter"],
+                'desc' => ['es' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.', 'en' => 'You can select letters to print or send by E-Mail.'],
+                'link' => 'letter/index.php'
             ],
             [
                 'name' => ["es" => 'Libreta de pago', "en" => "Libreta de pago"],
