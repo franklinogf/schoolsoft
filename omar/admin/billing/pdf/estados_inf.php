@@ -67,6 +67,7 @@ class nPDF extends PDF
     function Header()
     {
         global $lang;
+        parent::header();
         //Logo
         $this->Ln(15);
         $this->Cell(80);
