@@ -240,7 +240,7 @@ $lang = new Lang([
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
-            <?php foreach ($options as $option) : ?>
+            <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto">
@@ -248,9 +248,9 @@ $lang = new Lang([
                         </legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button) : ?>
+                                <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
+                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'][__LANG] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
                                             <?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?>
                                         </a>
                                     </div>
