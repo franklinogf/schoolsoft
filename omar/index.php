@@ -1,6 +1,7 @@
 <?php
 require_once 'app.php';
 
+use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Controllers\School;
@@ -102,7 +103,7 @@ $lang = new Lang([
                         </div>
                     </div>
                 </div>
-                <?php if ($school->info('dir2') !== '') : ?>
+                <?php if ($school->info('dir2') !== ''): ?>
                     <div class="col-sm-6">
                         <div class="card bg-transparent border-0 text-white">
                             <div class="card-body">
