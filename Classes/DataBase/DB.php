@@ -101,7 +101,7 @@ class DB extends DataBase
         $columns = '';
         foreach ($array as $key => $value) {
           $coma = ($count > 0 ? ',' : '');
-          $columns .= "{$coma}{$key}";
+          $columns .= "{$coma} `{$key}`";
           $values .= "{$coma}?";
           $count++;
         }
@@ -115,7 +115,7 @@ class DB extends DataBase
       foreach ($insertArray as $key => $value) {
         $valuesArray[] = $value;
         $coma = ($count > 0 ? ',' : '');
-        $columns .= "{$coma}{$key}";
+        $columns .= "{$coma} `{$key}`";
         $values .= "{$coma}?";
         $count++;
       }
@@ -140,7 +140,7 @@ class DB extends DataBase
     foreach ($updateArray as $key => $value) {
       $valuesArray[] = $value;
       $coma = ($count > 0 ? ',' : '');
-      $set .= "$coma $key = ?";
+      $set .= "$coma `{$key}` = ?";
       $count++;
     }
     $where = $this->buildWhere();
