@@ -41,11 +41,15 @@ $lang = new Lang([
     ['BALANCE DEL ESTADO DE CUENTA:', 'TOTAL BALANCE SHEET:'],
     ['PAGO REQUERIDO:', 'PAYMENT REQUIRED:'],
     ['Mensaje', 'Message'],
-    ['No has seleccionado el mes del estado. Por favor vuelve e inténtalo de nuevo.', 'You have not selected the state month. Please come back and try again.'],
+    ['No has seleccionado el mes del estado. Por favor vuelve e int&#65533;ntalo de nuevo.', 'You have not selected the state month. Please come back and try again.'],
 ]);
 
 $school = new School(Session::id());
 $year = $school->info('year2');
+$reply_to = $school->info('correo');
+$user = $school->info('usuario');
+$colegio = $school->info('colegio');
+
 $id = '';
 $usua = '';
 $est1 = [];
@@ -57,7 +61,7 @@ if ($_POST['envia'] == 'Si') {
 
 date_default_timezone_set('America/Puerto_Rico');
 if ($_POST['mes'] == 0) {
-    echo "<br><br><center>" . $lang->translation('No has seleccionado el mes del estado. Por favor vuelve e inténtalo de nuevo.') . "</center>";
+    echo "<br><br><center>" . $lang->translation('No has seleccionado el mes del estado. Por favor vuelve e int&#65533;ntalo de nuevo.') . "</center>";
     exit;
 }
 
@@ -69,7 +73,7 @@ class nPDF extends PDF
         global $lang;
         parent::header();
         //Logo
-        $this->Ln(15);
+        $this->Ln(2);
         $this->Cell(80);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(30, 4, $lang->translation('ESTADO DE CUENTAS'), 0, 0, 'C');
@@ -190,11 +194,11 @@ class nPDF extends PDF
     function PutLink($URL, $txt)
     {
         //Escribir un hiper-enlace
-        //        $this->SetTextColor(0, 0, 255);
+//        $this->SetTextColor(0, 0, 255);
         $this->SetStyle('U', true);
         $this->Write(5, $txt, $URL);
         $this->SetStyle('U', false);
-        //        $this->SetTextColor(0);
+//        $this->SetTextColor(0);
     }
 
     //Pie de pgina
@@ -208,6 +212,7 @@ class nPDF extends PDF
             $this->SetY(-50);
             $this->Cell(50, 22, '', 0, 0, 'C');
             $this->Cell(140, 22, '', 0, 0, 'C');
+
         }
     }
     function generateTable($no, $at, $id, $usua)
@@ -381,14 +386,15 @@ class nPDF extends PDF
                         ['cta', $no],
                         ['year', $year],
                         ['mes', $_POST['mes']],
-                    ])->update([
-                        $n1 => $est1[$x],
+                    ])->update([$n1 => $est1[$x],
                         $n2 => $est2[$x],
                         $n3 => $est3[$x],
                     ]);
                 }
+
             }
         }
+
     }
 }
 
@@ -470,9 +476,24 @@ foreach ($resulta as $rowa1) {
     $row4 = DB::table('madre')->whereRaw("id='$rowa1->id'")->orderBy('id')->first();
 
     if ($deu > 0 and $_POST['enviae'] == 'Si' or $atra > 0 and $_POST['enviae'] == 'Si') {
-        $file_name = "Statement.pdf";
+        $file_name = "Statement_" . $rowa1->id . ".pdf";
+        $from = "{$colegio} <cdp@schoolsoftusa.com>";
+
+//        $file_name = "Statement.pdf";
         $dir = '../../';
         $file = $pdf->Output("", "S");
+        //********************************************
+        $uploadHost = dirname($_SERVER['SCRIPT_URI']);
+        $target_dir = "attachments/";
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir);
+        }
+        $files = [];
+        $target_file = $file_name;
+        $files[] = $uploadHost . '/' . $target_dir . $target_file;
+        if ($features->resend == '1') {
+            $file2 = $pdf->Output("attachments/" . $file_name, 'F');
+        }
 
         //*********************************************
         $mail = new Mail();
@@ -491,12 +512,15 @@ foreach ($resulta as $rowa1) {
             ['correo' => $parents->email_p, 'nombre' => $parents->padre],
             ['correo' => $parents->email_m, 'nombre' => $parents->madre]
         ];
+        $to = [];
         foreach ($emails as $email) {
             if ($email['correo'] !== '') {
                 $mail->addAddress($email['correo'], $email['nombre']);
+                $to[] = $email['correo'];
             }
         }
         //        $mail->addAddress("alf_med@hotmail.com", 'Alfredo Medina');
+        $message = "<center><h1>$title</h1></center><br/><br/><p>" . nl2br($title) . "</p>";
 
         $mail->isHTML(true);
         $mail->Body = "
@@ -514,10 +538,31 @@ foreach ($resulta as $rowa1) {
             </body>
             </html>
             ";
+        $admin = DB::admin()->first();
+        $enviroments = json_decode($admin->enviroments);
+        $features = json_decode($admin->features);
+        //            echo $enviroments->resend_key->value.' / ';
+        //            echo $features->resend.' / ';
 
+        if ($features->phpmail == '1') {
         $mail->send();
         $mail->ClearAddresses();
-        //        exit;
+        }
+        $mail->ClearAttachments();
+        if ($features->resend == '1') {
+            DB::table('email_queue')->insert([
+                'from' => $from,
+                'reply_to' => $reply_to,
+                'to' => json_encode($to),
+                'message' => $message,
+                'text' => '',
+                'subject' => $subject,
+                'attachments' => json_encode($files),
+                'user' => $user,
+                'year' => $year,
+            ]);
+        }
+
     }
 }
 
