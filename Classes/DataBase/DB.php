@@ -392,6 +392,7 @@ class DB extends DataBase
     self::$innerJoinCol1 = [];
     self::$innerJoinCol2 = [];
     self::$innerJoinOperator = [];
+    parent::$admin = false;
   }
 
   /* -------------------------------- var_dump -------------------------------- */
