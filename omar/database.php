@@ -3,6 +3,12 @@
 /*                         @Class DataBase Information                        */
 /* -------------------------------------------------------------------------- */
 
+/* ----------------------------- ADMIN DATABASE ---------------------------- */
+define('__ADMIN_HOST', "localhost");
+define('__ADMIN_USERNAME', "u291111878_main");
+define('__ADMIN_PASSWORD', "Amc@3151068");
+define('__ADMIN_DB_NAME', "u291111878_main");
+
 /* ----------------------------- LOCAL DATABASE ----------------------------- */
 
 // define('__HOST', "localhost");
@@ -23,6 +29,8 @@ define('__HOST', "localhost");
 define('__USERNAME', "u291111878_demo2");
 define('__PASSWORD', "Amc@3151");
 define('__DB_NAME', "u291111878_demo2");
+
+
 
 /* ----------------------------- COSEY DATABASE ---------------------------- */
 

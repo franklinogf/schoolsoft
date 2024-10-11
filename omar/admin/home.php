@@ -9,7 +9,7 @@ Session::is_logged();
 $lang = new Lang([
     ['Inicio', 'Home'],
     ['Conectate desde cualquier parte del Mundo.', "Connect from anywhere in the world."]
-])
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
