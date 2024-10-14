@@ -2,6 +2,8 @@
 session_start();
 require_once 'database.php';
 require_once 'config.php';
+
+
 /* -------------------------------------------------------------------------- */
 /*                              Root directories                              */
 /* -------------------------------------------------------------------------- */
@@ -10,7 +12,7 @@ require_once 'config.php';
 
 define('__ROOT_SCHOOL', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html/demo
 define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__))); # /home/admin/public_html
-define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL)))); # /demo
+define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, -(strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL)))); # /demo
 $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
 define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, DIRECTORY_SEPARATOR, 1)))); #  /foro
 define('__SCHOOL_ACRONYM', str_replace('/', '', __SCHOOL_URL)); # demo
@@ -49,3 +51,6 @@ define('__ONLY_CBTM__', false);
 
 
 include __ROOT . '/autoload.php';
+require '../../vendor/autoload.php';
+// require_once __ROOT . '/vendor/autoload.php';
+require_once 'constants.php';
