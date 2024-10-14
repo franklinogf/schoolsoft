@@ -1,6 +1,6 @@
 {
   "php.version": "8.3",
   "php.problems.exclude": {
-    "/": [406, 416]
+    "/": [406, 416, 415]
   }
 }
