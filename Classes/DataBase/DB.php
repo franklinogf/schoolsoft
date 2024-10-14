@@ -4,6 +4,7 @@ namespace Classes\DataBase;
 
 use Classes\Session;
 use Classes\Util;
+use Classes\DataBase\DataBase;
 
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase queries                        */
@@ -191,18 +192,18 @@ class DB extends DataBase
   public function where($w1, $w2 = false, $w3 = false)
   {
     if ($w2) {
-      self::$whereCols[] = trim($w1);
+      self::$whereCols[] = trim("`$w1`");
       self::$whereValues[] = $w3 ? trim($w3) : trim($w2);
       self::$whereOperators[] = $w3 ? trim($w2) : '=';
     } else if (!$w2) {
       if (parent::isMultiArray($w1)) {
         foreach ($w1 as $w) {
-          self::$whereCols[] = trim($w[0]);
+          self::$whereCols[] = trim("`$w[0]`");
           self::$whereValues[] = isset($w[2]) ? trim($w[2]) : trim($w[1]);
           self::$whereOperators[] = isset($w[2]) ? trim($w[1]) : '=';
         }
       } else {
-        self::$whereCols[] = trim($w1[0]);
+        self::$whereCols[] = trim("`$w1[0]`");
         self::$whereValues[] = isset($w1[2]) ? trim($w1[2]) : trim($w1[1]);
         self::$whereOperators[] = isset($w1[2]) ? trim($w1[1]) : '=';
       }
