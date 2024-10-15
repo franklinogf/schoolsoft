@@ -96,7 +96,7 @@ class nPDF extends PDF
         $this->Cell(0, 5, $lang->translation('OFICINA DE FINANZAS'));
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 11);
-        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.')));
+        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificación.')));
     }
 }
 
