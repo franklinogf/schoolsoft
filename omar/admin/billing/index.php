@@ -94,9 +94,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Presupuesto', "en" => "Presupuesto"],
-                'desc' => ['es' => 'Informe para contabilizar las partidas de cada código.', 'en' => 'Informe para contabilizar las partidas de cada código.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto', "en" => "Budget"],
+                'desc' => ['es' => 'Informe para contabilizar las partidas de cada código.', 'en' => 'Report to account for the items of each code.'],
+                'link' => 'inf_presupuesto_op.php'
             ],
             [
                 'name' => ["es" => 'Pagos', "en" => "Pagos"],
