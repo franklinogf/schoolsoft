@@ -45,13 +45,19 @@ $lang = new Lang([
     ['3. FAVOR DE HACER LOS ARREGLOS PERTINENTES PARA QUE LOS SERVICIOS EDUCATIVOS DE SU HIJO(A) NO SE VEAN AFECTADOS.', '3. PLEASE MAKE ARRANGEMENTS SO THAT THE EDUCATIONAL SERVICES OF YOUR CHILD WILL NOT BE AFFECTED.'],
     ['CORDIALMENTE', 'CORDIALLY'],
     ['OFICINA DE FINANZAS', 'FINANCE OFFICE'],
-    ['Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificación.', 'If you have made the aforementioned payment, please ignore this notification.'],
+    ['Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.', 'If you have made the aforementioned payment, please ignore this notification.'],
     ['', ''],
 ]);
+
+$db = new DB();
+$col = db::table('colegio')->whereRaw("usuario = 'administrador'")->first();
+$colegio = $col->colegio;
 
 $school = new School(Session::id());
 $year = $school->info('year2');
 $chk = $school->info('chk');
+$reply_to = $school->info('correo');
+$user = $school->info('usuario');
 
 $mes = $_REQUEST['mes'];
 list($y3, $y2) = explode("-", $year);
@@ -63,11 +69,13 @@ if ($mes < 6) {
 list($ya, $yb, $yc) = explode("-", date('Y-m-d'));
 
 $fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, $ya));
+$fechaFinal = "";
+
 
 if ($mes > 6) {
     $year1 = "{$year[0]}{$year[1]}";
     $fechaFinal = "";
-    // $fechaFinal = "AND fecha_d>='$year1-07-01'";
+	// $fechaFinal = "AND fecha_d>='$year1-07-01'";
 }
 class nPDF extends PDF
 {
@@ -85,7 +93,7 @@ class nPDF extends PDF
         $this->Cell(0, 5, $lang->translation('OFICINA DE FINANZAS'));
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 11);
-        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificación.')));
+        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.')));
     }
 }
 
@@ -105,7 +113,7 @@ $MES = array(
 );
 $pdf = new nPDF();
 $result = DB::table('pagos')->select("DISTINCT id")
-    ->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
+->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
 
 foreach ($result as $r) {
     $pdf->SetFont('Arial', '', 12);
@@ -135,14 +143,13 @@ foreach ($result as $r) {
             }
             $pdf->Cell(0, 5, $fechaHoy, 0, 1);
             $pdf->Ln(5);
-            //			$pdf->Cell(0, 5, 'ESTUDIANTE (S)', 0, 1);
             $pdf->Cell(0, 5, $lang->translation('Padre, Madre o Encargado'), 0, 1);
             $pdf->Ln(3);
             $pdf->SetFont('Arial', 'B', 12);
             $estu = DB::table('madre')
                 ->whereRaw("id='$r->id'")->first();
-            $pdf->Cell(0, 5, "$estu->madre", 0, 1);
-            $pdf->Cell(0, 5, "$estu->padre", 0, 1);
+            $pdf->Cell(0, 5, $estu->madre ?? '', 0, 1);
+            $pdf->Cell(0, 5, $estu->padre ?? '', 0, 1);
             $pdf->Ln(3);
             $pdf->SetFont('Arial', '', 12);
             $pdf->Cell(0, 5, $lang->translation('CUENTA') . ' # ' . $r->id, 0, 1);
@@ -155,7 +162,7 @@ foreach ($result as $r) {
                 $deudas = 0;
                 $pagos = 0;
                 $p = DB::table('pagos')
-                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                 foreach ($p as $row) {
                     $deudas += $row->deuda;
                     $pagos += $row->pago;
@@ -202,8 +209,10 @@ $pdf->Output();
 if ($_POST['tipo'] == 'email') {
     $result = DB::table('pagos')->select("DISTINCT id")
         ->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
+    //**********************************************
 
     foreach ($result as $r) {
+
         $pdf = new PDF();
         $pdf->SetFont('Arial', '', 12);
         $rs = DB::table('pagos')->select("DISTINCT fecha_d")
@@ -232,14 +241,13 @@ if ($_POST['tipo'] == 'email') {
                 }
                 $pdf->Cell(0, 5, $fechaHoy, 0, 1);
                 $pdf->Ln(5);
-                //                $pdf->Cell(0, 5, 'ESTUDIANTE (S)', 0, 1);
                 $pdf->Cell(0, 5, $lang->translation('Padre, Madre o Encargado'), 0, 1);
                 $pdf->Ln(3);
                 $pdf->SetFont('Arial', 'B', 12);
                 $estu = DB::table('madre')
-                    ->whereRaw("id='$r->id'")->first();
-                $pdf->Cell(0, 5, "$estu->madre", 0, 1);
-                $pdf->Cell(0, 5, "$estu->padre", 0, 1);
+                ->whereRaw("id='$r->id'")->first();
+                $pdf->Cell(0, 5, $estu->madre ?? '', 0, 1);
+                $pdf->Cell(0, 5, $estu->padre ?? '', 0, 1);
                 $pdf->Ln(3);
                 $pdf->SetFont('Arial', '', 12);
                 $pdf->Cell(0, 5, $lang->translation('CUENTA') . ' # ' . $r->id, 0, 1);
@@ -252,7 +260,7 @@ if ($_POST['tipo'] == 'email') {
                     $deudas = 0;
                     $pagos = 0;
                     $p = DB::table('pagos')
-                        ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                     foreach ($p as $row) {
                         $deudas += $row->deuda;
                         $pagos += $row->pago;
@@ -291,35 +299,52 @@ if ($_POST['tipo'] == 'email') {
                 $pdf->MultiCell(0, 7, $lang->translation('3. FAVOR DE HACER LOS ARREGLOS PERTINENTES PARA QUE LOS SERVICIOS EDUCATIVOS DE SU HIJO(A) NO SE VEAN AFECTADOS.'));
                 $pdf->Ln(3);
 
-                $file_name = "letter.pdf";
-
-                $file = $pdf->Output('', 'S');
-
+                $file_name = "letter_" . $r->id . ".pdf";
+                $co_re = __RESEND_KEY_OTHER__;
+                $from = "{$colegio} <" . $co_re . ">";
 
                 //***************************************************
-
                 $mail = new Mail();
                 $title = $lang->translation('Primer aviso de cobro');
                 $subject = $lang->translation('Primer aviso de cobro');
-                $message = '';
+                $message = 'Cta. ' . $r->id;
                 $mail->Subject = $subject;
                 $emailsSent = 0;
                 $emailsError = 0;
                 $error = null;
 
-                $mail->addStringAttachment($file, $file_name);
+                $uploadHost = dirname($_SERVER['SCRIPT_URI']);
+                $target_dir = "attachments/";
+
+                if (!is_dir($target_dir)) {
+                    mkdir($target_dir);
+                }
+                $files = [];
+                $target_file = $file_name;
+                $files[] = $uploadHost . '/' . $target_dir . $target_file;
+                if (__RESEND__ == '1') {
+                    $file = $pdf->Output("attachments/" . $file_name, 'F');
+                }
+
+                if (__PHPMAIL__ == '1') {
+                    $file2 = $pdf->Output('', 'S');
+                    $mail->addStringAttachment($file2, $file_name);
+                }
 
                 $parents = DB::table('madre')->where('id', $r->id)->first();
                 $emails = [
                     ['correo' => $parents->email_p, 'nombre' => $parents->padre],
                     ['correo' => $parents->email_m, 'nombre' => $parents->madre]
                 ];
+                $to = [];
                 foreach ($emails as $email) {
                     if ($email['correo'] !== '') {
                         $mail->addAddress($email['correo'], $email['nombre']);
+                        $to[] = $email['correo'];
                     }
                 }
                 //        $mail->addAddress("alf_med@hotmail.com", 'Alfredo Medina');
+                $message = "<center><h1>$title</h1></center><br/><br/><p>" . nl2br($title) . "</p>";
 
                 $mail->isHTML(true);
                 $mail->Body = "
@@ -331,16 +356,35 @@ if ($_POST['tipo'] == 'email') {
                 <title>{$title}</title>
             </head>
             <body>
-            <center><h2>{$title}</h2></center>
             <br>
             <p>{$message}</p>  
             </body>
             </html>
             ";
+                //            <center><h2>{$title}</h2></center>
 
-                $mail->send();
+                if (__PHPMAIL__ == '1') {
+                    $mail->send();
+                    $mail->ClearAddresses();
+                }
                 $mail->ClearAddresses();
-                //        exit;
+                $mail->ClearAttachments();
+                if (__RESEND__ == '1') {
+                    DB::table('email_queue')->insert([
+                        'from' => $from,
+                        'reply_to' => $reply_to,
+                        'to' => json_encode($to),
+                        'message' => $message,
+                        'text' => '',
+                        'subject' => $subject,
+                        'attachments' => json_encode($files),
+                        'user' => $user,
+                        'year' => $year,
+                    ]);
+                }
+
+
+//***************************************************
 
             }
         }
