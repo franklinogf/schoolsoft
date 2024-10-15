@@ -44,11 +44,14 @@ $lang = new Lang([
     ['No has seleccionado el mes del estado. Por favor vuelve e int&#65533;ntalo de nuevo.', 'You have not selected the state month. Please come back and try again.'],
 ]);
 
+$db = new DB();
+$col = db::table('colegio')->whereRaw("usuario = 'administrador'")->first();
+$colegio = $col->colegio;
+
 $school = new School(Session::id());
 $year = $school->info('year2');
 $reply_to = $school->info('correo');
 $user = $school->info('usuario');
-$colegio = $school->info('colegio');
 
 $id = '';
 $usua = '';
@@ -64,13 +67,14 @@ if ($_POST['mes'] == 0) {
     echo "<br><br><center>" . $lang->translation('No has seleccionado el mes del estado. Por favor vuelve e int&#65533;ntalo de nuevo.') . "</center>";
     exit;
 }
-
+$mes = '';
 class nPDF extends PDF
 {
     //Cabecera de pgina
     function Header()
     {
         global $lang;
+        global $mes;
         parent::header();
         //Logo
         $this->Ln(2);
@@ -386,7 +390,8 @@ class nPDF extends PDF
                         ['cta', $no],
                         ['year', $year],
                         ['mes', $_POST['mes']],
-                    ])->update([$n1 => $est1[$x],
+                    ])->update([
+                        $n1 => $est1[$x],
                         $n2 => $est2[$x],
                         $n3 => $est3[$x],
                     ]);
@@ -477,11 +482,10 @@ foreach ($resulta as $rowa1) {
 
     if ($deu > 0 and $_POST['enviae'] == 'Si' or $atra > 0 and $_POST['enviae'] == 'Si') {
         $file_name = "Statement_" . $rowa1->id . ".pdf";
-        $from = "{$colegio} <cdp@schoolsoftusa.com>";
+        $co_re = __RESEND_KEY_OTHER__;
+        $from = "{$colegio} <" . $co_re . ">";
 
-//        $file_name = "Statement.pdf";
         $dir = '../../';
-        $file = $pdf->Output("", "S");
         //********************************************
         $uploadHost = dirname($_SERVER['SCRIPT_URI']);
         $target_dir = "attachments/";
@@ -491,21 +495,24 @@ foreach ($resulta as $rowa1) {
         $files = [];
         $target_file = $file_name;
         $files[] = $uploadHost . '/' . $target_dir . $target_file;
-        if ($features->resend == '1') {
+        if (__RESEND__ == '1') {
             $file2 = $pdf->Output("attachments/" . $file_name, 'F');
         }
 
         //*********************************************
         $mail = new Mail();
-        $title = $lang->translation('Estado de cuenta');
-        $subject = $lang->translation('Estado de cuenta');
+        $title = $lang->translation('Estado de cuenta') . ' ' . $mes;
+        $subject = $lang->translation('Estado de cuenta') . ' ' . $mes;
         $message = '';
         $mail->Subject = $subject;
         $emailsSent = 0;
         $emailsError = 0;
         $error = null;
 
+        if (__PHPMAIL__ == '1') {
+            $file = $pdf->Output("", "S");
         $mail->addStringAttachment($file, $file_name);
+        }
 
         $parents = DB::table('madre')->where('id', $rowa1->id)->first();
         $emails = [
@@ -538,18 +545,13 @@ foreach ($resulta as $rowa1) {
             </body>
             </html>
             ";
-        $admin = DB::admin()->first();
-        $enviroments = json_decode($admin->enviroments);
-        $features = json_decode($admin->features);
-        //            echo $enviroments->resend_key->value.' / ';
-        //            echo $features->resend.' / ';
 
-        if ($features->phpmail == '1') {
+        if (__PHPMAIL__ == '1') {
         $mail->send();
-        $mail->ClearAddresses();
         }
+        $mail->ClearAddresses();
         $mail->ClearAttachments();
-        if ($features->resend == '1') {
+        if (__RESEND__ == '1') {
             DB::table('email_queue')->insert([
                 'from' => $from,
                 'reply_to' => $reply_to,
