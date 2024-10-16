@@ -14,10 +14,6 @@ class ComposerStaticInit3af214c65adf1c067a5df718a1d7e928
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
-            'Schoolsoft\\Schoolsoft\\' => 22,
-        ),
         'R' => 
         array (
             'Resend\\' => 7,
@@ -33,13 +29,13 @@ class ComposerStaticInit3af214c65adf1c067a5df718a1d7e928
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
+        'C' => 
+        array (
+            'Classes\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Schoolsoft\\Schoolsoft\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/Classes',
-        ),
         'Resend\\' => 
         array (
             0 => __DIR__ . '/..' . '/resend/resend-php/src',
@@ -64,6 +60,10 @@ class ComposerStaticInit3af214c65adf1c067a5df718a1d7e928
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Classes\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Classes',
         ),
     );
 

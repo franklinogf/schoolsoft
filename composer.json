@@ -1,19 +1,19 @@
 {
-    "name": "schoolsoft/schoolsoft",
-    "description": "Web app for schools",
-    "type": "project",
-    "require": {
-        "resend/resend-php": "^0.13.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Schoolsoft\\Schoolsoft\\": "Classes/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Franklin Gonzalez",
-            "email": "franklinomarflores@gmail.com"
-        }
-    ]
+  "name": "schoolsoft/schoolsoft",
+  "description": "Web app for schools",
+  "type": "project",
+  "require": {
+    "resend/resend-php": "^0.13.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Schoolsoft\\Schoolsoft\\": "Classes/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Franklin Gonzalez",
+      "email": "franklinomarflores@gmail.com"
+    }
+  ]
 }

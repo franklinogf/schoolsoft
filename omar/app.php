@@ -51,6 +51,6 @@ define('__ONLY_CBTM__', false);
 
 
 include __ROOT . '/autoload.php';
-require '../../vendor/autoload.php';
-// require_once __ROOT . '/vendor/autoload.php';
+// require '../../vendor/autoload.php';
+require_once __ROOT . '/vendor/autoload.php';
 require_once 'constants.php';
