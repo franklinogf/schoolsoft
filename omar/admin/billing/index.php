@@ -99,9 +99,9 @@ $options = [
                 'link' => 'inf_presupuesto_op.php'
             ],
             [
-                'name' => ["es" => 'Pagos', "en" => "Pagos"],
-                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'Listado por grupo para saber quienes pagaron.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos', "en" => "Payments"],
+                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'List by group to know who paid.'],
+                'link' => 'inf_pagos_op.php'
             ],
             [
                 'name' => ["es" => 'Lista por fechas', "en" => "Lista por fechas"],
