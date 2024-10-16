@@ -11,7 +11,7 @@ use Classes\Session;
 Session::is_logged();
 $lang = new Lang([
     ['ESTADO DE CUENTAS', 'STATEMENT'],
-    ['Primer aviso de cobro', 'First collection notice'],
+    ['AVISO DE COBRO', 'COLLECTION NOTICE'],
     ['CUENTA', 'ACCOUNT'],
     ['PAGOS', 'PAYS'],
     ['es', 'in'],
@@ -46,9 +46,8 @@ $lang = new Lang([
     ['CORDIALMENTE', 'CORDIALLY'],
     ['OFICINA DE FINANZAS', 'FINANCE OFFICE'],
     ['Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.', 'If you have made the aforementioned payment, please ignore this notification.'],
-    ['', ''],
+    ['ESTUDIANTE ', 'STUDENT '],
 ]);
-
 $db = new DB();
 $col = db::table('colegio')->whereRaw("usuario = 'administrador'")->first();
 $colegio = $col->colegio;
@@ -59,6 +58,9 @@ $chk = $school->info('chk');
 $reply_to = $school->info('correo');
 $user = $school->info('usuario');
 
+//$not1 = $reg->not1;
+//$not2 = $reg->not2;
+
 $mes = $_REQUEST['mes'];
 list($y3, $y2) = explode("-", $year);
 if ($mes < 6) {
@@ -66,19 +68,20 @@ if ($mes < 6) {
 } else {
     $y1 = '20' . $y3;
 }
+//	$y1 = '2024';
 list($ya, $yb, $yc) = explode("-", date('Y-m-d'));
 
 $fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, $ya));
+
+//$fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, $y1));
 $fechaFinal = "";
 
-
 if ($mes > 6) {
-    $year1 = "{$year[0]}{$year[1]}";
     $fechaFinal = "";
-	// $fechaFinal = "AND fecha_d>='$year1-07-01'";
 }
 class nPDF extends PDF
 {
+
     function Header()
     {
         parent::header();
@@ -93,7 +96,7 @@ class nPDF extends PDF
         $this->Cell(0, 5, $lang->translation('OFICINA DE FINANZAS'));
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 11);
-        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.')));
+        $this->Cell(0, 5, utf8_encode($lang->translation('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificación.')));
     }
 }
 
@@ -111,9 +114,12 @@ $MES = array(
     'noviembre',
     'diciembre'
 );
+//$pdf = new PDF();
+//$result = mysql_query("SELECT DISTINCT id FROM pagos WHERE fecha_d <= '$fecha' AND year = '$year' and baja=''", $con);
+
 $pdf = new nPDF();
 $result = DB::table('pagos')->select("DISTINCT id")
-->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
+    ->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
 
 foreach ($result as $r) {
     $pdf->SetFont('Arial', '', 12);
@@ -130,11 +136,11 @@ foreach ($result as $r) {
                 $deudas += $row->deuda;
                 $pagos += $row->pago;
             }
-            $total = $total + $deudas - $pagos;
+            $total = $total + ($deudas - $pagos);
         }
         if ($total != 0) {
             $pdf->AddPage();
-            $pdf->Cell(0, 5, $lang->translation('Primer aviso de cobro'), 0, 1);
+            $pdf->Cell(0, 5, $lang->translation('AVISO DE COBRO'), 0, 1);
             $pdf->Ln(5);
             if ($lang->translation('es') == 'es') {
                 $fechaHoy = date('j') . ' de ' . $MES[date('n') - 1] . ' de ' . date('Y');
@@ -143,13 +149,15 @@ foreach ($result as $r) {
             }
             $pdf->Cell(0, 5, $fechaHoy, 0, 1);
             $pdf->Ln(5);
-            $pdf->Cell(0, 5, $lang->translation('Padre, Madre o Encargado'), 0, 1);
+            $pdf->Cell(0, 5, $lang->translation('ESTUDIANTE ') . '(S)', 0, 1);
             $pdf->Ln(3);
             $pdf->SetFont('Arial', 'B', 12);
-            $estu = DB::table('madre')
-                ->whereRaw("id='$r->id'")->first();
-            $pdf->Cell(0, 5, $estu->madre ?? '', 0, 1);
-            $pdf->Cell(0, 5, $estu->padre ?? '', 0, 1);
+            $e = DB::table('year')
+                ->whereRaw("id='$r->id' AND year='$year'")->get();
+            foreach ($e as $estu) {
+                $pdf->Cell(80, 5, "$estu->nombre $estu->apellidos", 0, 0);
+                $pdf->Cell(20, 5, "$estu->grado", 0, 1);
+            }
             $pdf->Ln(3);
             $pdf->SetFont('Arial', '', 12);
             $pdf->Cell(0, 5, $lang->translation('CUENTA') . ' # ' . $r->id, 0, 1);
@@ -162,7 +170,7 @@ foreach ($result as $r) {
                 $deudas = 0;
                 $pagos = 0;
                 $p = DB::table('pagos')
-                ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                 foreach ($p as $row) {
                     $deudas += $row->deuda;
                     $pagos += $row->pago;
@@ -176,21 +184,20 @@ foreach ($result as $r) {
                         $y4 = ' 20' . $y2;
                     } else {
                         $y4 = ' 20' . $y3;
+                        //                       $y4 = ' 2024';
                     }
-
                     if ($MES1 == $lang->translation('Junio') . ' ' . $y4) {
                         $MES1 = $lang->translation('MATRICULA');
                     }
-
                     $pdf->Cell(37, 5, $lang->translation($MES1) . ' ' . $y4);
-                    $pdf->Cell(90, 5, '.......................................................................');
+                    $pdf->Cell(87, 5, '.......................................................................');
                     $pdf->Cell(20, 5, number_format($total, 2), 0, 1, 'R');
                 }
             }
             $pdf->Cell(37, 5, $lang->translation('BALANCE'));
             $pdf->Cell(90, 5, '.......................................................................');
             $pdf->Cell(20, 5, number_format($TOTAL, 2), 0, 1, 'R');
-            $pdf->SetFont('Arial', '', 11);
+            $pdf->SetFont('Arial', '', 10);
             $pdf->Ln(5);
             $pdf->Cell(0, 5, $lang->translation('NOTA IMPORTANTE:'), 0, 1);
             $pdf->Ln(5);
@@ -206,13 +213,13 @@ foreach ($result as $r) {
 
 $pdf->Output();
 
+
 if ($_POST['tipo'] == 'email') {
     $result = DB::table('pagos')->select("DISTINCT id")
         ->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
-    //**********************************************
+    //$from = "{$colegio} <cdp@schoolsoftusa.com>";
 
     foreach ($result as $r) {
-
         $pdf = new PDF();
         $pdf->SetFont('Arial', '', 12);
         $rs = DB::table('pagos')->select("DISTINCT fecha_d")
@@ -228,11 +235,11 @@ if ($_POST['tipo'] == 'email') {
                     $deudas += $row->deuda;
                     $pagos += $row->pago;
                 }
-                $total = $total + $deudas - $pagos;
+                $total = $total + ($deudas - $pagos);
             }
             if ($total != 0) {
                 $pdf->AddPage();
-                $pdf->Cell(0, 5, $lang->translation('Primer aviso de cobro'), 0, 1);
+                $pdf->Cell(0, 5, $lang->translation('AVISO DE COBRO'), 0, 1);
                 $pdf->Ln(5);
                 if ($lang->translation('es') == 'es') {
                     $fechaHoy = date('j') . ' de ' . $MES[date('n') - 1] . ' de ' . date('Y');
@@ -241,13 +248,15 @@ if ($_POST['tipo'] == 'email') {
                 }
                 $pdf->Cell(0, 5, $fechaHoy, 0, 1);
                 $pdf->Ln(5);
-                $pdf->Cell(0, 5, $lang->translation('Padre, Madre o Encargado'), 0, 1);
+                $pdf->Cell(0, 5, $lang->translation('ESTUDIANTE ') . '(S)', 0, 1);
                 $pdf->Ln(3);
                 $pdf->SetFont('Arial', 'B', 12);
-                $estu = DB::table('madre')
-                ->whereRaw("id='$r->id'")->first();
-                $pdf->Cell(0, 5, $estu->madre ?? '', 0, 1);
-                $pdf->Cell(0, 5, $estu->padre ?? '', 0, 1);
+                $e = DB::table('year')
+                    ->whereRaw("id='$r->id' AND year='$year'")->get();
+                foreach ($e as $estu) {
+                    $pdf->Cell(80, 5, "$estu->nombre $estu->apellidos", 0, 0);
+                    $pdf->Cell(20, 5, "$estu->grado", 0, 1);
+                }
                 $pdf->Ln(3);
                 $pdf->SetFont('Arial', '', 12);
                 $pdf->Cell(0, 5, $lang->translation('CUENTA') . ' # ' . $r->id, 0, 1);
@@ -260,7 +269,7 @@ if ($_POST['tipo'] == 'email') {
                     $deudas = 0;
                     $pagos = 0;
                     $p = DB::table('pagos')
-                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                        ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                     foreach ($p as $row) {
                         $deudas += $row->deuda;
                         $pagos += $row->pago;
@@ -275,11 +284,9 @@ if ($_POST['tipo'] == 'email') {
                         } else {
                             $y4 = ' 20' . $y3;
                         }
-
                         if ($MES1 == $lang->translation('Junio') . ' ' . $y4) {
                             $MES1 = $lang->translation('MATRICULA');
                         }
-
                         $pdf->Cell(37, 5, $lang->translation($MES1) . ' ' . $y4);
                         $pdf->Cell(90, 5, '.......................................................................');
                         $pdf->Cell(20, 5, number_format($total, 2), 0, 1, 'R');
@@ -288,7 +295,7 @@ if ($_POST['tipo'] == 'email') {
                 $pdf->Cell(37, 5, $lang->translation('BALANCE'));
                 $pdf->Cell(90, 5, '.......................................................................');
                 $pdf->Cell(20, 5, number_format($TOTAL, 2), 0, 1, 'R');
-                $pdf->SetFont('Arial', '', 11);
+                $pdf->SetFont('Arial', '', 10);
                 $pdf->Ln(5);
                 $pdf->Cell(0, 5, $lang->translation('NOTA IMPORTANTE:'), 0, 1);
                 $pdf->Ln(5);
@@ -303,10 +310,9 @@ if ($_POST['tipo'] == 'email') {
                 $co_re = __RESEND_KEY_OTHER__;
                 $from = "{$colegio} <" . $co_re . ">";
 
-                //***************************************************
                 $mail = new Mail();
-                $title = $lang->translation('Primer aviso de cobro');
-                $subject = $lang->translation('Primer aviso de cobro');
+                $title = $lang->translation('AVISO DE COBRO');
+                $subject = $lang->translation('AVISO DE COBRO');
                 $message = 'Cta. ' . $r->id;
                 $mail->Subject = $subject;
                 $emailsSent = 0;
@@ -382,10 +388,6 @@ if ($_POST['tipo'] == 'email') {
                         'year' => $year,
                     ]);
                 }
-
-
-//***************************************************
-
             }
         }
     }
