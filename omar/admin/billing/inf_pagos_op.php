@@ -44,7 +44,7 @@ $lang = new Lang([
     ['Grado', 'Grade'],
     ['Selección', 'Selection'],
     ['Si', 'Yes'],
-    ['No', 'No'],
+    ['Desc. Mensualidad', 'Monthly Discount'],
     ['Selección de código', 'Code selection'],
     ['Selección de Meses', 'Month Selection'],
     ['Selección de meses para el informe.', 'Selection of months for the report.'],
@@ -152,7 +152,7 @@ $resultado2 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codig
                                             <option value="<?= $row3->codigo ?>"><?= $row3->codigo . ', ' . $row3->descripcion ?></option>
                                         <?php endforeach ?>
 
-                                        <option value="D">Desc. Mensualidad</option>
+                                        <option value="D"><?= $lang->translation('Desc. Mensualidad') ?></option>
                                     </select>
                                 </td>
                             </tr>
@@ -263,7 +263,5 @@ $resultado2 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codig
     </script>
 
 </body>
-
-
 
 </html>
