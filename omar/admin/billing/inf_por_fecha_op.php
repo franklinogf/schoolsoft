@@ -70,7 +70,7 @@ $resultado3 = DB::table('presupuesto')->where('year', $year)->orderBy('codigo')-
                             <tr>
                                 <td class="style1">
                                     <select name="desc" required style="width: 250px">
-                                        <option value="Selección"><?= $lang->translation('Selección') ?></option>
+                                        <option value="Selección, Selección"><?= $lang->translation('Selección') ?></option>
                                         <?php foreach ($resultado3 as $row3): ?>
                                             <option value="<?= $row3->codigo ?>"><?= $row3->codigo . ', ' . $row3->descripcion ?></option>
                                         <?php endforeach ?>
