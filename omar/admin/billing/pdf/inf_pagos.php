@@ -40,7 +40,7 @@ $lang = new Lang([
     ['Grados', 'Grades'],
     ['Matri/Junio', 'Regis/June'],
     ['Totales: ', 'Totals: '],
-    ['', ''],
+    ['GRADO: ', 'GRADE: '],
     ['', ''],
     ['', ''],
     ['', ''],
@@ -69,14 +69,15 @@ class nPDF extends PDF
         if ($_POST['pag'] == 'L') {
             $pag = 120;
         }
-        //	$this->Cell($pag);
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(0, 3, $lang->translation('INFORME DE PAGOS POR GRADO') . ' ' . $year, 0, 0, 'C');
-        $this->Ln(5);
+        $this->Ln(10);
     }
 
     function foo($bb)
     {
+        global $lang;
+
         $this->Cell(90, 5, $lang->translation('NOMBRE ESTUDIANTES'), 1, 0, 'C', true);
         if ($_POST['ago'] ?? '' == 1) {
             $this->Cell(15, 5, $lang->translation('AGO'), 1, 0, 'C', true);
@@ -119,9 +120,10 @@ class nPDF extends PDF
 
     function gra($gra)
     {
+        global $lang;
         $this->AddPage($_POST['pag'], $_POST['pag1']);
         $this->SetFont('Times', '', 11);
-        $this->Cell(30, 5, 'GRADO: ' . $gra, 0, 0, 'L');
+        $this->Cell(30, 5, $lang->translation('GRADO: ') . $gra, 0, 0, 'L');
         if ($_POST['pag'] == 'P') {
             $pag = 50;
         }
@@ -144,13 +146,13 @@ class nPDF extends PDF
         //N&uacute;mero de p&aacute;gina
         $this->Cell(0, 10, $lang->translation('Pagina ') . $this->PageNo() . '/{nb}' . ' / ' . date('m-d-Y'), 0, 0, 'C');
     }
+
 }
 
 //Creacin del objeto de la clase heredada
 $pdf = new nPDF();
 $pdf->AliasNbPages();
 $pdf->Fill();
-$pdf->AddPage();
 $pdf->SetTitle($lang->translation('INFORME DE PAGOS POR GRADO') . ' ' . $year);
 
 $aa = 0;
@@ -448,3 +450,4 @@ foreach ($grades as $grade) {
 }
 
 $pdf->Output();
+?>
