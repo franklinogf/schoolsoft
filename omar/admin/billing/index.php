@@ -104,9 +104,9 @@ $options = [
                 'link' => 'inf_pagos_op.php'
             ],
             [
-                'name' => ["es" => 'Lista por fechas', "en" => "Lista por fechas"],
-                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Informe de totales por meses por código.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista por fechas', "en" => "List by dates"],
+                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Monthly totals report by code.'],
+                'link' => 'inf_por_fecha_op.php'
             ],
             [
                 'name' => ["es" => 'Lista de pagos', "en" => "Lista de pagos"],
