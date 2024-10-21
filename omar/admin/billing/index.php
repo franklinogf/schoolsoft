@@ -99,24 +99,24 @@ $options = [
                 'link' => 'inf_presupuesto_op.php'
             ],
             [
-                'name' => ["es" => 'Pagos', "en" => "Pagos"],
-                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'Listado por grupo para saber quienes pagaron.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos', "en" => "Payments"],
+                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'List by group to know who paid.'],
+                'link' => 'inf_pagos_op.php'
             ],
             [
-                'name' => ["es" => 'Lista por fechas', "en" => "Lista por fechas"],
-                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Informe de totales por meses por código.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista por fechas', "en" => "List by dates"],
+                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Monthly totals report by code.'],
+                'link' => 'inf_por_fecha_op.php'
             ],
             [
-                'name' => ["es" => 'Lista de pagos', "en" => "Lista de pagos"],
-                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'Lista de estudiantes que pagaron o no.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista de pagos', "en" => "Payment list"],
+                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'List of students who paid or not.'],
+                'link' => 'lista_pagos.php'
             ],
             [
                 'name' => ["es" => 'Descripción', "en" => "Descripción"],
-                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'Lista de deudores detallada por mes por cuentas.'],
-                'link' => '#'
+                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'List of debtors detailed by month by accounts.'],
+                'link' => 'sabana.php'
             ],
             [
                 'name' => ["es" => 'Cobros', "en" => "Cobros"],
