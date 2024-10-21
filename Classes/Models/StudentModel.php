@@ -225,7 +225,7 @@ class StudentModel extends School
 
     $year = $this->year();
     if (__COSEY) {
-      $obj =  parent::table('foro_entradas', !__COSEY)
+      $obj = parent::table('foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde')
         ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
         ->join('year', 'year.ss', '=', 'padres.ss')
@@ -237,7 +237,7 @@ class StudentModel extends School
         ->orderBy('foro_entradas.fecha DESC, foro_entradas.hora DESC')->first();
     } else {
       $desc = __LANG === 'es' ? 'desc1' : 'desc2';
-      $obj =  parent::table('foro_entradas')
+      $obj = parent::table('foro_entradas')
         ->select("foro_entradas.titulo,foro_entradas.curso,cursos.$desc as desc1,foro_entradas.id,foro_entradas.fecha,foro_entradas.hora,foro_entradas.desde")
         ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
         ->join('cursos', 'padres.curso', '=', 'cursos.curso')
@@ -259,7 +259,7 @@ class StudentModel extends School
 
     $year = $this->year();
     if (__COSEY) {
-      $obj =  parent::table('detalle_foro_entradas', !__COSEY)
+      $obj = parent::table('detalle_foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
         ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
         ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')
@@ -272,7 +272,7 @@ class StudentModel extends School
         ->orderBy('detalle_foro_entradas.fecha DESC, detalle_foro_entradas.hora DESC')->first();
     } else {
       $desc = __LANG === 'es' ? 'desc1' : 'desc2';
-      $obj =  parent::table('detalle_foro_entradas')
+      $obj = parent::table('detalle_foro_entradas')
         ->select("foro_entradas.titulo,foro_entradas.curso,cursos.$desc as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora")
         ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
         ->join('padres', 'padres.curso', '=', 'foro_entradas.curso')

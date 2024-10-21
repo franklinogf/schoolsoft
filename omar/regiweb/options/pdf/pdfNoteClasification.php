@@ -23,7 +23,7 @@ $lang = new Lang([
     ["GRADO", "GRADE"],
     ["AÑO", "YEAR"],
     ["Nombre del estudiante", "Student name"],
-   
+
 ]);
 
 
@@ -124,31 +124,31 @@ foreach ($students as $student) {
         ['ss', $student->ss],
         ['year', $teacher->info('year')],
     ])->update([
-        'fin' => $finalGrade
-    ]);
+                'fin' => $finalGrade
+            ]);
     // echo "<hr>";
 
     $pdf->Cell(110, 7, "$student->nombre $student->apellidos", 1);
-    $pdf->Cell(8, 7, $grades[1]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[1]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[1]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[1]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[1]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[2]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[2]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[2]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[2]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[2]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[3]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[3]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[3]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[3]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[3]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[4]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[4]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[4]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[4]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, $grades[4]['F'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['A'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['B'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['C'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['D'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['F'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['A'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['B'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['C'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['D'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['F'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['A'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['B'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['C'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['D'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['F'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['A'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['B'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['C'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['D'], 1, 0, 'C');
+    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['F'], 1, 0, 'C');
     $pdf->Cell(15, 7, $finalGrade, 1, 1, 'C');
 }
 

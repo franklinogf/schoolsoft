@@ -89,10 +89,12 @@ $(document).ready(function () {
     $.ajax({
       type: "GET",
       url: "./includes/expired.php",
-      data: { accountId },
+      data: { accountId, month: _month },
       // dataType: "json",
       success: function (charges) {
+        console.log({ charges, month: _month });
         let total = 0;
+        $("#expiredTable tbody").html("");
         charges.forEach(({ code, description, debt }) => {
           if (debt > 0) {
             total += debt;
