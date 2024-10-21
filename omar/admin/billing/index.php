@@ -115,8 +115,8 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Descripción', "en" => "Descripción"],
-                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'Lista de deudores detallada por mes por cuentas.'],
-                'link' => '#'
+                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'List of debtors detailed by month by accounts.'],
+                'link' => 'sabana.php'
             ],
             [
                 'name' => ["es" => 'Cobros', "en" => "Cobros"],
