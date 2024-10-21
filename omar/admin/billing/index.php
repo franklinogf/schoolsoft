@@ -109,9 +109,9 @@ $options = [
                 'link' => 'inf_por_fecha_op.php'
             ],
             [
-                'name' => ["es" => 'Lista de pagos', "en" => "Lista de pagos"],
-                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'Lista de estudiantes que pagaron o no.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista de pagos', "en" => "Payment list"],
+                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'List of students who paid or not.'],
+                'link' => 'lista_pagos.php'
             ],
             [
                 'name' => ["es" => 'Descripción', "en" => "Descripción"],
