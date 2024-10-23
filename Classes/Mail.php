@@ -2,6 +2,7 @@
 
 namespace Classes;
 
+use Classes\DataBase\DB;
 use Classes\Mail\SMTP;
 use Classes\Mail\PHPMailer;
 use Classes\Controllers\School;
@@ -34,16 +35,35 @@ class Mail extends PHPMailer
             parent::__construct(true);
             $this->isSMTP();
             $this->SMTPDebug = ($debug) ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
-            $this->Host       = $host;
-            $this->SMTPAuth   = true;
-            $this->Username   = $fromEmail;
-            $this->Password   = $password;
+            $this->Host = $host;
+            $this->SMTPAuth = true;
+            $this->Username = $fromEmail;
+            $this->Password = $password;
             $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $this->Port       =  $port;
+            $this->Port = $port;
          }
 
          $this->setFrom($fromEmail, utf8_decode($name));
-         if ($this->replyTo)  $this->addReplyTo($replayToEmail, utf8_decode($replayToName));
+         if ($this->replyTo)
+            $this->addReplyTo($replayToEmail, utf8_decode($replayToName));
       }
+   }
+
+   public static function queue(string $from, string $reply_to, array $to, string $subject, string $message, string|null $text = null, array $attachments = [])
+   {
+      if (count($to) === 0) {
+         return;
+      }
+
+      DB::table('email_queue')->insert([
+         'from' => $from,
+         'to' => json_encode($to),
+         'reply_to' => $reply_to,
+         'message' => $message,
+         'text' => $text,
+         'subject' => $subject,
+         'attachments' => json_encode($attachments, JSON_UNESCAPED_UNICODE),
+         'user' => Session::id() ?? null,
+      ]);
    }
 }

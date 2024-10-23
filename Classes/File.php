@@ -12,16 +12,15 @@ class File
 
    public function __construct($file = 'file')
    {
-
       if (isset($_FILES[$file]) && !empty($file)) {
          if ($this->isMultiArray($_FILES[$file])) {
             foreach ($_FILES[$file]['name'] as $i => $name) {
                if ($_FILES[$file]['name'][$i] !== '') {
-                  $this->files[$i]['name'] =  $_FILES[$file]['name'][$i];
-                  $this->files[$i]['tmp_name'] =  $_FILES[$file]['tmp_name'][$i];
-                  $this->files[$i]['size'] =  $_FILES[$file]['size'][$i];
-                  $this->files[$i]['type'] =  $_FILES[$file]['type'][$i];
-                  $this->files[$i]['error'] =  $_FILES[$file]['error'][$i];
+                  $this->files[$i]['name'] = $_FILES[$file]['name'][$i];
+                  $this->files[$i]['tmp_name'] = $_FILES[$file]['tmp_name'][$i];
+                  $this->files[$i]['size'] = $_FILES[$file]['size'][$i];
+                  $this->files[$i]['type'] = $_FILES[$file]['type'][$i];
+                  $this->files[$i]['error'] = $_FILES[$file]['error'][$i];
                }
             }
             $this->files = Util::toObject($this->files);
@@ -33,30 +32,29 @@ class File
                $this->amount = 1;
             }
          }
-         return true;
-      } else {
-         return false;
+
       }
    }
 
-   public static function upload($file, $path, $name = false)
+   public static function upload($file, $path, $name = null)
    {
-      $newName = (!$name) ? $file->name : $name;
-      $fullPath = __ROOT_SCHOOL . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
+      $uploadHost = $_SERVER['HTTP_ORIGIN'] . '/' . __SCHOOL_ACRONYM;
 
-      if (!is_dir($fullPath)) {
-         mkdir($fullPath, 0777, true);
+      $newName = $name ?: $file->name;
+      $target_dir = __ROOT_SCHOOL . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
+      if (!is_dir($target_dir)) {
+         mkdir($target_dir, 0777, true);
       }
 
-      $filePath = $fullPath . $newName;
+      $filePath = "{$target_dir}/{$newName}";
       if (move_uploaded_file($file->tmp_name, $filePath)) {
-         return true;
+         return "{$uploadHost}/{$path}/{$name}";
       } else {
          return false;
       }
    }
 
-   public static function delete($path, $fileName)
+   public static function delete($path, $fileName = null)
    {
       $fullPath = __ROOT_SCHOOL . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
 
@@ -119,7 +117,8 @@ class File
    private function isMultiArray($array)
    {
       $rv = array_filter($array, 'is_array');
-      if (count($rv) > 0) return true;
+      if (count($rv) > 0)
+         return true;
       return false;
    }
 }
