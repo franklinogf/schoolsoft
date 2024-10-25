@@ -89,9 +89,9 @@ $options = [
                 'link' => 'letter/index.php'
             ],
             [
-                'name' => ["es" => 'Libreta de pago', "en" => "Libreta de pago"],
-                'desc' => ['es' => 'Imprime las libretas de pagos a los padres.', 'en' => 'Imprime las libretas de pagos a los padres.'],
-                'link' => '#'
+                'name' => ["es" => 'Carta de Suspensión', "en" => "Suspension Letter"],
+                'desc' => ['es' => 'Listado de deudores para suspensión.', 'en' => 'List of debtors for suspension.'],
+                'link' => 'letter.php'
             ],
             [
                 'name' => ["es" => 'Presupuesto', "en" => "Budget"],
