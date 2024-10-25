@@ -54,35 +54,35 @@ $lang = new Lang([
     ["Cantidad de líneas en blanco para la respuesta", "Number of blank lines for the answer"],
     ["Titulo", "Title"],
     ["Curso", "Class"],
-    ["Crear", "Created"],
-    ["Buscar","Search"],
-    ["¿Está seguro que desea eliminarlo?","Are you sure you want to delete it?"],
+    ["Crear", "Create"],
+    ["Buscar", "Search"],
+    ["¿Está seguro que desea eliminarlo?", "Are you sure you want to delete it?"],
     ["Eliminar", "Delete"],
     ["Hora de inicio", "Start time"],
     ["Hora de término", "End time"],
     ["Fecha", "Date"],
-    ["Tiempo para coger el examen en minutos","Time to take the exam in minutes"],
-    ["Si","Yes"],
-    ["Permitir ver la nota del examen","Allow to see the grade of the exam"],
-    ["¿Examen disponible?","Exam available?"],
-    ["Duplicar examen","Duplicate exam"],
-    ["Eliminar examen","Delete exam"],
-    ["Guardar","Save"],
-    ["Duplicar","Duplicate"],
-    ["Tipo de nota","Grade type"],
-    ["Notas","Grades"],
-    ["Descripción","Description"],
-    ["Estudiantes que han tomado el examen","Students who have taken the exam"],
-    ["Estudiante","Student"],
-    ["Puntos","Points"],
-    ["Porcentaje","Percent"],
+    ["Tiempo para coger el examen en minutos", "Time to take the exam in minutes"],
+    ["Si", "Yes"],
+    ["Permitir ver la nota del examen", "Allow to see the grade of the exam"],
+    ["¿Examen disponible?", "Exam available?"],
+    ["Duplicar examen", "Duplicate exam"],
+    ["Eliminar examen", "Delete exam"],
+    ["Guardar", "Save"],
+    ["Duplicar", "Duplicate"],
+    ["Tipo de nota", "Grade type"],
+    ["Notas", "Grades"],
+    ["Descripción", "Description"],
+    ["Estudiantes que han tomado el examen", "Students who have taken the exam"],
+    ["Estudiante", "Student"],
+    ["Puntos", "Points"],
+    ["Porcentaje", "Percent"],
     ["Corregir examenes", "Correct exams"],
-    ["Pasar puntos","Pass points"],
-    ["Pasar porcentajes","Pass percentages"],
-    ["Dar oportunidad","Give opportunity"],
-    ["¿Desea eliminar este examen?","Do you want to delete this exam?"],
-    ["Cancelar","Cancel"]
-    ]);
+    ["Pasar puntos", "Pass points"],
+    ["Pasar porcentajes", "Pass percentages"],
+    ["Dar oportunidad", "Give opportunity"],
+    ["¿Desea eliminar este examen?", "Do you want to delete this exam?"],
+    ["Cancelar", "Cancel"]
+]);
 
 ?>
 <!DOCTYPE html>
@@ -127,11 +127,16 @@ $lang = new Lang([
             <div class="col-12 col-md-8 mx-md-auto">
                 <h3><?= $lang->translation("Temas del examen") ?></h3>
                 <div id="menuButtons" class="list-group">
-                    <button type="button" class="list-group-item list-group-item-action option1" data-toggle="modal" data-target="#option1Modal" disabled><?= $lang->translation("Falso y verdadero") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
-                    <button type="button" class="list-group-item list-group-item-action option2" data-toggle="modal" data-target="#option2Modal" disabled><?= $lang->translation("Selecciona la respuesta correcta") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
-                    <button type="button" class="list-group-item list-group-item-action option3" data-toggle="modal" data-target="#option3Modal" disabled><?= $lang->translation("Parea") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
-                    <button type="button" class="list-group-item list-group-item-action option4" data-toggle="modal" data-target="#option4Modal" disabled><?= $lang->translation("Línea en blanco") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
-                    <button type="button" class="list-group-item list-group-item-action option5" data-toggle="modal" data-target="#option5Modal" disabled><?= $lang->translation("Preguntas") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
+                    <button type="button" class="list-group-item list-group-item-action option1" data-toggle="modal" data-target="#option1Modal" disabled><?= $lang->translation("Falso y verdadero") ?> <span class="float-right"><span
+                                class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
+                    <button type="button" class="list-group-item list-group-item-action option2" data-toggle="modal" data-target="#option2Modal" disabled><?= $lang->translation("Selecciona la respuesta correcta") ?> <span class="float-right"><span
+                                class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
+                    <button type="button" class="list-group-item list-group-item-action option3" data-toggle="modal" data-target="#option3Modal" disabled><?= $lang->translation("Parea") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?>
+                                0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
+                    <button type="button" class="list-group-item list-group-item-action option4" data-toggle="modal" data-target="#option4Modal" disabled><?= $lang->translation("Línea en blanco") ?> <span class="float-right"><span
+                                class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?> 0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
+                    <button type="button" class="list-group-item list-group-item-action option5" data-toggle="modal" data-target="#option5Modal" disabled><?= $lang->translation("Preguntas") ?> <span class="float-right"><span class="badge badge-secondary amount"><?= $lang->translation("cantidad:") ?>
+                                0</span> <span class="badge badge-secondary value"><?= $lang->translation("valor:") ?> 0</span></span></button>
                 </div>
                 <div class="float-right text-muted mr-3">
                     Total: <span id="examTotalAmount" class="badge badge-pill badge-info amount"><?= $lang->translation("cantidad:") ?> 0</span> <span id="examTotalValue" class="badge badge-pill badge-info value"><?= $lang->translation("valor:") ?> 0</span>
@@ -442,7 +447,8 @@ $lang = new Lang([
                                 <label class="label-form" for="option5Question"><?= $lang->translation("Pregunta") ?></label>
                                 <textarea name="option5Question" id="option5Question" rows="3" class="form-control" required></textarea>
                                 <div class="input-group flex-nowrap">
-                                    <input id="option5AmountOfLines" name="option5AmountOfLines" type="number" class="form-control" placeholder="<?= $lang->translation("Cantidad de líneas en blanco para la respuesta") ?>" aria-label="<?= $lang->translation("Cantidad de líneas en blanco para la respuesta") ?>" aria-describedby="addon-wrapping" min="1" max="10" value="1" required>
+                                    <input id="option5AmountOfLines" name="option5AmountOfLines" type="number" class="form-control" placeholder="<?= $lang->translation("Cantidad de líneas en blanco para la respuesta") ?>"
+                                        aria-label="<?= $lang->translation("Cantidad de líneas en blanco para la respuesta") ?>" aria-describedby="addon-wrapping" min="1" max="10" value="1" required>
                                     <input id="option5Value" name="option5Value" type="number" class="form-control" placeholder="<?= $lang->translation("Valor") ?>" aria-label="<?= $lang->translation("Valor") ?>" aria-describedby="addon-wrapping" min="1" max="100" required>
                                 </div>
                                 <div class="d-flex justify-content-around">
@@ -500,7 +506,7 @@ $lang = new Lang([
                             <div class="form-group">
                                 <label class="label-form" for="newExamGrade"><?= $lang->translation("Curso") ?></label>
                                 <select name="newExamGrade" id="newExamGrade" class="form-control" required>
-                                    <?php foreach ($teacher->classes() as $class) : ?>
+                                    <?php foreach ($teacher->classes() as $class): ?>
                                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -528,7 +534,7 @@ $lang = new Lang([
                             <div class="form-group">
                                 <label class="label-form" for="searchExamId"><?= $lang->translation("Titulo") ?></label>
                                 <select name="searchExamId" id="searchExamId" class="form-control" required>
-                                    <?php foreach ($exams as $exam) : ?>
+                                    <?php foreach ($exams as $exam): ?>
                                         <option value="<?= $exam->id ?>"><?= $exam->titulo ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -574,7 +580,7 @@ $lang = new Lang([
                                 <div class="form-group">
                                     <label class="label-form" for="infoExamGrade"><?= $lang->translation("Curso") ?></label>
                                     <select name="infoExamGrade" id="infoExamGrade" class="form-control" required>
-                                        <?php foreach ($teacher->classes() as $class) : ?>
+                                        <?php foreach ($teacher->classes() as $class): ?>
                                             <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                                         <?php endforeach ?>
                                     </select>
@@ -665,7 +671,7 @@ $lang = new Lang([
                             <div class="form-group">
                                 <label class="label-form" for="duplicateExamGrade"><?= $lang->translation("Curso") ?></label>
                                 <select name="duplicateExamGrade" id="duplicateExamGrade" class="form-control" required>
-                                    <?php foreach ($teacher->classes() as $class) : ?>
+                                    <?php foreach ($teacher->classes() as $class): ?>
                                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -693,7 +699,7 @@ $lang = new Lang([
                             <div class="form-group">
                                 <label class="label-form" for="gradeOptionsModalGrade"><?= $lang->translation("Curso") ?></label>
                                 <select name="gradeOptionsModalGrade" id="gradeOptionsModalGrade" class="form-control" required>
-                                    <?php foreach ($teacher->classes() as $class) : ?>
+                                    <?php foreach ($teacher->classes() as $class): ?>
                                         <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
                                     <?php endforeach ?>
                                 </select>
@@ -703,8 +709,8 @@ $lang = new Lang([
                             <div class="form-group">
                                 <label class="label-form" for="gradeOptionsTrimester"><?= $lang->translation("Trimestre") ?></label>
                                 <select name="gradeOptionsTrimester" id="gradeOptionsTrimester" class="form-control" required>
-                                    <?php for ($i = 1; $i <= 4; $i++) : ?>
-                                        <option value="Trimestre-<?= $i ?>"><?= $lang->translation("Trimestre") ?> <?= $i ?></option>
+                                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                                        <option value="Trimestre-<?= $i ?>"><?= $lang->translation("Trimestre") ?>     <?= $i ?></option>
                                     <?php endfor ?>
                                 </select>
                             </div>
@@ -734,7 +740,7 @@ $lang = new Lang([
                         </div>
                     </div>
                     <div id="gradeOptionsList">
-                        <?php for ($i = 1; $i <= 10; $i++) : ?>
+                        <?php for ($i = 1; $i <= 10; $i++): ?>
                             <div class="row mt-2">
                                 <div class="col-1 text-center">
                                     <input type="radio" style="width:25px; height:25px;" class="align-middle" id="gradeOptionsSelected<?= $i ?>" name="gradeOptionsSelected" value="<?= $i ?>" disabled>
