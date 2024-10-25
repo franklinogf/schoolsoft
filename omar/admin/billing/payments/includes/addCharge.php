@@ -7,12 +7,11 @@ use Classes\Controllers\School;
 require_once '../../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    // echo '<pre>';
-    // var_dump($_POST);
-    // echo '</pre>';
-    // exit;
+
     $school = new School();
     $year = $school->year();
+    $year1 = "{$year[0]}{$year[1]}";
+    $year2 = "{$year[3]}{$year[4]}";
     $code = $_POST['code'];
     $codeDescription = $_POST['codeDescription'];
     $chargeTo = $_POST['chargeTo'];
@@ -46,19 +45,22 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $months = [];
         $monthNumber = (int) $month;
         $nextYearMonths = $monthNumber >= 8;
-        $lastMonth = $monthNumber <= 6 ? 6 : 12;
+        $lastMonth = $monthNumber <= 6 ? 5 : 12;
         for ($i = $monthNumber; $i <= $lastMonth; $i++) {
             array_push($months, $i < 10 ? "0$i" : strval($i));
         }
         if ($nextYearMonths) {
-            for ($i = 1; $i <= 6; $i++) {
+            for ($i = 1; $i < 6; $i++) {
                 array_push($months, "0$i");
             }
         }
+
         $rows = [];
         try {
             foreach ($months as $month) {
-                $date = date("Y-$month-01");
+                $date = '20';
+                $date .= intval($month) >= 1 && intval($month) <= 5 ? $year2 : $year1;
+                $date .= "-$month-01";
                 $dataToInsert = [
                     'id' => $student->id,
                     'nombre' => "$student->nombre $student->apellidos",
