@@ -20,8 +20,8 @@ $lang = new Lang([
     ['Deudas', 'Debtors'],
     ['Apellidos', 'Last Name'],
     ['Procesar', 'Process'],
-    ['', ''],
-    ['', ''],
+    ['Enviar por E-mail', 'Send E-mail'],
+    ['Se enviaron por correo electrónico todas las deudas que están marcadas en la lista.', 'All debts that are marked on the list were sent by email.'],
 ]);
 $school = new School(Session::id());
 $year = $school->info('year2');
@@ -67,7 +67,7 @@ $students = DB::table('year')
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de deudores') . ' ' . $year ?> </h1>
         <div class="container mt-1">
-            <form action="pdf/letter.php" method="post" target="_blank">
+            <form action="pdf/letter_inf.php" method="post" target="_blank">
                 <div class="table_wrap">
                     <table class="dataTable table table-sm table-pointer table-striped table-hover cell-border shadow">
                         <thead class="bg-gradient-primary bg-primary border-0">
@@ -106,6 +106,13 @@ $students = DB::table('year')
                         </tbody>
                     </table>
                 </div>
+                <div><b>
+                        <center>
+                            <span lang="en-us"><?= $lang->translation("Enviar por E-mail") ?></span>
+                            <input name="m6" type="checkbox" value="Si" style="height: 25px; width: 25px"><br />
+                            <span lang="en-us"><?= $lang->translation("Se enviaron por correo electrónico todas las deudas que están marcadas en la lista.") ?></span>
+                        </center>
+                    </b></div>
                 <input name="buscar" style="width: 140px;" class="btn btn-primary mx-auto d-block mt-2" type="submit" value="<?= $lang->translation("Procesar") ?>" />
             </form>
         </div>
