@@ -14,7 +14,7 @@ $students = DB::table('year')->where([
     ['id', $parents->id]
 ])->get();
 if (isset($_POST['student'])) {
-    list($ss, $year) = explode(',', $_POST['student']);
+    [$ss, $year] = explode(',', $_POST['student']);
     $attendances = DB::table('asispp')->where([
         ['ss', $ss],
         ['year', $year]
@@ -23,7 +23,7 @@ if (isset($_POST['student'])) {
 $lang = new Lang([
     ["Informe de asistencia", "Attendance report"],
     ["Estudiantes", "Students"],
-    ["Asistencias", "Attendance"],
+    ["Asistencias", "Attendances"],
     ["Fecha", "Date"],
     ["Descripción", "Description"],
     ["No tiene información", "Has no information"],
@@ -52,7 +52,7 @@ $lang = new Lang([
             <div class="form-row">
                 <label class="font-weight-bold col-12" for="student"><?= $lang->translation("Estudiantes") ?></label>
                 <select name="student" id="student" class="form-control col-12 col-lg-6">
-                    <?php foreach ($students as $kid) : ?>
+                    <?php foreach ($students as $kid): ?>
                         <option <?= isset($_POST['student']) && $_POST['student'] === "$kid->ss,$kid->year" ? 'selected=""' : '' ?> value="<?= "$kid->ss,$kid->year" ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado [$kid->year]" ?></option>
                     <?php endforeach ?>
                 </select>
@@ -70,21 +70,21 @@ $lang = new Lang([
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (sizeof($attendances) > 0) :
+                    <?php if (isset($attendances) && sizeof($attendances) > 0):
                         $count = 1;
                         $codes = [0, 0];
-                    ?>
-                        <?php foreach ($attendances as $attendance) : ?>
+                        ?>
+                        <?php foreach ($attendances as $attendance): ?>
                             <tr>
                                 <td class="text-center"><?= $count ?></td>
                                 <td class="text-center"><?= $attendance->fecha ?></td>
                                 <td><?= Util::$attendanceCodes[$attendance->codigo]['description'][__LANG] ?></td>
                             </tr>
-                        <?php $count++;
+                            <?php $count++;
                             $codes[0] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'A' ? 1 : 0;
                             $codes[1] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'T' ? 1 : 0;
                         endforeach ?>
-                    <?php else : ?>
+                    <?php else: ?>
                         <tr>
                             <td class="text-center" colspan="3"><?= $lang->translation("No tiene información") ?></td>
                         </tr>
@@ -92,7 +92,7 @@ $lang = new Lang([
                 </tbody>
 
             </table>
-            <?php if (sizeof($attendances) > 0) : ?>
+            <?php if (isset($attendances) && sizeof($attendances) > 0): ?>
                 <table class="table table-bordered table-sm">
                     <thead class="thead-light text-center">
                         <tr>

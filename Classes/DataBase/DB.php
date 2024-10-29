@@ -306,8 +306,10 @@ class DB extends DataBase
     echo self::$query . "<br/> ";
     var_dump(self::$where);
     echo "<hr/>";
-    if ($exit)
+    $this->closeDB();
+    if ($exit) {
       exit;
+    }
   }
 
   /* ---------------------------- get multiple rows --------------------------- */

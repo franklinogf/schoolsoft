@@ -93,7 +93,7 @@ class StudentModel extends School
     $obj = parent::table('tareas_enviadas', !__COSEY)->where([
       ['id_tarea', $id_hw],
       ['id_estudiante', $mt],
-      ['year', $this->info('year')]
+      ['year', $this->year()]
     ])->first();
     return $obj;
   }

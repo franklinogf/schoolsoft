@@ -22,7 +22,7 @@ $lang = new Lang([
     ['Encuesta para los padres', "Parent's survey"],
     ['Titulo de la encuesta: ', 'Survey title: '],
     ['Comentario:', 'Comment:'],
-])
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -39,16 +39,16 @@ $lang = new Lang([
     <?php
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
-    <div class="container-lg mt-lg-3  px-0">
-        <center>
-            <h1 class="display-4 mt-2"><?= $lang->translation("Conectate desde cualquier parte del Mundo.") ?></h1>
-            <img class="img-fluid mx-auto d-block mt-5 mt-lg-4 w-20" src="/images/globe.gif" height="150" width="150" />
-        </center>
+    <div class="container-lg mt-lg-3 mx-auto  px-0">
+
+        <h1 class="display-4 mt-2 text-center"><?= $lang->translation("Conectate desde cualquier parte del Mundo.") ?></h1>
+        <img class="img-fluid mx-auto d-block mt-5 mt-lg-4 w-20" src="/images/globe.gif" height="150" width="150" />
+
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
     // Route::js('/react-components/Clock.js', true);
-
+    
     if (isset($_POST['Grabar'])) {
         for ($a = 1; $a <= $_POST[num_rec]; $a++) {
             $codi = 'est(' . $a . ',1)';
@@ -58,10 +58,9 @@ $lang = new Lang([
             $ape = 'est(' . $a . ',4)';
             $com = 'est(' . $a . ',6)';
             $date = date("Y-m-d");
-            if ($_POST[$dijo] == '') {
-            } else {
-                echo $q = "INSERT INTO respuestas set comentario='" . $_POST[$com] . "',id2='$parents->id', codigo='$_POST[$codi]', dijo='$_POST[$dijo]', fecha='$date', grado='$_POST[$gra]', year='$year', nombre='$_POST[$nom]', apellidos='$_POST[$ape]'";
-
+            if ($_POST[$dijo] !== '') {
+                // echo $q = "INSERT INTO respuestas set comentario='" . $_POST[$com] . "',id2='$parents->id', codigo='$_POST[$codi]', dijo='$_POST[$dijo]', fecha='$date', grado='$_POST[$gra]', year='$year', nombre='$_POST[$nom]', apellidos='$_POST[$ape]'";
+    
                 DB::table('respuestas')->insert([
                     'year' => $year,
                     'id2' => $parents->id,
@@ -86,43 +85,44 @@ $lang = new Lang([
 
     $can = count($mensages);
 
-    if ($can > 0) {
-    ?>
+    if ($can > 0):
+        ?>
         <div class="container-lg mt-lg-3  px-0">
-            <center>
-                <h1 class="display-12 mt-2">
-                    <font size="6"><b><?= $lang->translation("Mensaje(s) para los padres") ?></b></font>
-                </h1>
 
-                <table border="0" width="64%" cellspacing="0" cellpadding="3">
-                    <?
-                    foreach ($mensages as $mensage) {
+            <h1 class="display-12 mt-2">
+                <font size="6"><b><?= $lang->translation("Mensaje(s) para los padres") ?></b></font>
+            </h1>
+
+            <table border="0" width="64%" cellspacing="0" cellpadding="3">
+                <?
+                foreach ($mensages as $mensage) {
                     ?>
-                        <tr>
-                            <td bgcolor="#C0C0C0">
-                                <p align="center"><b>
-                                        <font size="4"><?= $lang->translation("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td bgcolor="#C0C0C0">
+                            <p align="center"><b>
+                                    <font size="4"><?= $lang->translation("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
+                        </td>
+                    </tr>
                     <?
-                        echo '<tr>';
-                        echo '<td>';
-                        echo $mensage->text;
-                        echo '</td>';
-                        echo '</tr>';
-                        echo '<tr>';
-                        echo '<td bgcolor="#C0C0C0">';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                    ?>
-                </table>
-            </center>
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $mensage->text;
+                    echo '</td>';
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<td bgcolor="#C0C0C0">';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+                ?>
+            </table>
+
         </div>
-    <?
-    }
-    //********************************************
+    <?php endif ?>
+    <?php
 
+    //********************************************
+    
 
     $date = date("Y-m-d");
 
@@ -134,8 +134,8 @@ $lang = new Lang([
 
     $can = count($mensages);
 
-    if ($can > 0) {
-    ?>
+    if ($can > 0):
+        ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
@@ -151,14 +151,14 @@ $lang = new Lang([
                     <?
                     $a = 0;
                     foreach ($mensages as $mensage) {
-                    ?>
+                        ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
                                         <font size="4"><?= $lang->translation("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                    <?
+                        <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
@@ -171,7 +171,7 @@ $lang = new Lang([
                         $respuesta = DB::table('respuestas')->where([
                             ['id2', $parents->id],
                             ['codigo', $mensage->codigo],
-                            ['year',  $year],
+                            ['year', $year],
                         ])->first();
                         $estu = DB::table('year')->where([
                             ['id', $parents->id],
@@ -201,21 +201,21 @@ $lang = new Lang([
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'SI'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can1 = count($respuesta1);
 
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'NO'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can2 = count($respuesta1);
 
                             $respuesta1 = DB::table('respuestas')->where([
                                 ['dijo', 'INDECISO'],
                                 ['codigo', $mensage->codigo],
-                                ['year',  $year],
+                                ['year', $year],
                             ])->get();
                             $can3 = count($respuesta1);
 
@@ -262,7 +262,7 @@ $lang = new Lang([
         </form>
 
 
-    <?   } ?>
+    <?php endif ?>
     <br>
     <br>
     <br>

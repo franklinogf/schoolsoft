@@ -16,14 +16,14 @@ $buttons = [
     ['name' => 'Tarjeta de notas', 'link' => 'grades/'],
     ['name' => 'Documentos', 'link' => 'documents/'],
 ];
-$lang =new Lang([
-    ["Mensajes y Opciones"," Messages and Options"],
-    ["Ver mensajes","View messages"],
-    ["Hacer cita","Make an appointment"],
-    ["Re-Matrícula","Re-Enrollment"],
-    ["Tareas","Homeworks"],
-    ["Tarjeta de notas","Grades card"],
-    ["Documentos","Documents"],
+$lang = new Lang([
+    ["Mensajes y Opciones", " Messages and Options"],
+    ["Ver mensajes", "View messages"],
+    ["Hacer cita", "Make an appointment"],
+    ["Re-Matrícula", "Re-Enrollment"],
+    ["Tareas", "Homeworks"],
+    ["Tarjeta de notas", "Grades card"],
+    ["Documentos", "Documents"],
 ]);
 ?>
 <!DOCTYPE html>
@@ -43,9 +43,9 @@ $lang =new Lang([
     <div class="container-md mt-md-3 mb-md-5 px-0">
         <h1 class="text-center my-4"><?= $lang->translation("Mensajes y Opciones") ?></h1>
         <div class="row row-cols-1 row-cols-md-2">
-            <?php foreach ($buttons as $button) : ?>
+            <?php foreach ($buttons as $button): ?>
                 <div class="col mb-1">
-                    <a style="font-size: .8em;" <?= $button['target'] ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($lang->translation($button['name']), 'UTF-8') ?></a>
+                    <a style="font-size: .8em;" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($lang->translation($button['name']), 'UTF-8') ?></a>
                 </div>
             <?php endforeach ?>
         </div>
@@ -55,4 +55,5 @@ $lang =new Lang([
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
 </body>
+
 </html>

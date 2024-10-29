@@ -19,7 +19,7 @@ class ExamModel extends School
 
    protected function getExamByPK($pk)
    {
-      $obj =  parent::table($this->table,!__COSEY)
+      $obj = parent::table($this->table, !__COSEY)
          ->where($this->primary_key, $pk)->first();
       $this->getExamTopics($obj);
       return $obj;
@@ -29,7 +29,7 @@ class ExamModel extends School
    protected function getAllExams()
    {
 
-      $obj = parent::table($this->table,!__COSEY)
+      $obj = parent::table($this->table, !__COSEY)
          ->orderBy($this->primary_key, 'DESC')->get();
       $this->getExamTopics($obj);
       return $obj;
@@ -38,7 +38,7 @@ class ExamModel extends School
    protected function getDoneExamsByExamId($id)
    {
       $hw = $this->getExamByPK($id);
-      $doneHw = parent::table('tareas_enviadas',!__COSEY)->where([
+      $doneHw = parent::table('tareas_enviadas', !__COSEY)->where([
          ['id_tarea', $id],
          ['id_profesor', $hw->id2],
          ['year', $this->year()]
@@ -50,7 +50,7 @@ class ExamModel extends School
 
    protected function getExamsByTeacherId($id)
    {
-      $obj = parent::table($this->table,!__COSEY)
+      $obj = parent::table($this->table, !__COSEY)
          ->where([
             ['id_maestro', $id]
          ])
@@ -60,7 +60,7 @@ class ExamModel extends School
    }
    protected function getExamsByTeacherIdAndClass($id, $class)
    {
-      $obj = parent::table($this->table,!__COSEY)
+      $obj = parent::table($this->table, !__COSEY)
          ->where([
             ['curso', $class],
             ['id_maestro', $id]
@@ -72,20 +72,20 @@ class ExamModel extends School
 
    protected function getExamsByClassForTeachers($class)
    {
-      if(__COSEY){
-         $obj = parent::table($this->table,!__COSEY)->select("{$this->table}.*,padres.desc1 as `desc`")
-         ->join('padres', "padres.curso", "=", "{$this->table}.curso")
-         ->where([
-            ["{$this->table}.curso", $class],
+      if (__COSEY) {
+         $obj = parent::table($this->table, !__COSEY)->select("{$this->table}.*,padres.desc1 as `desc`")
+            ->join('padres', "padres.curso", "=", "{$this->table}.curso")
+            ->where([
+               ["{$this->table}.curso", $class],
                ["padres.year", $this->year()]
-         ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
-      }else{
-         $obj = parent::table($this->table,!__COSEY)->select("{$this->table}.*,cursos.desc1 as `desc`")
-         ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
-         ->where([
-            ["{$this->table}.curso", $class],
+            ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
+      } else {
+         $obj = parent::table($this->table, !__COSEY)->select("{$this->table}.*,cursos.desc1 as `desc`")
+            ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
+            ->where([
+               ["{$this->table}.curso", $class],
                ["cursos.year", $this->year()]
-         ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
+            ])->orderBy("{$this->table}.{$this->primary_key}", 'DESC')->get();
       }
 
       $this->getExamTopics($obj);
@@ -95,40 +95,41 @@ class ExamModel extends School
    protected function getExamsByClassForStudents($class, $date = null, $time = false)
    {
       $date = $date ? $date : Util::date();
-      if($time){
-         if(__COSEY){
-            $obj = parent::table($this->table,!__COSEY)->select("{$this->table}.*,padres.descripcion as `desc`")
-            ->join('padres', "padres.curso", "=", "{$this->table}.curso")
-            ->where([
-               ["{$this->table}.curso", $class],
-               ["{$this->table}.activo", 'si'],
+      if ($time) {
+         if (__COSEY) {
+            $obj = parent::table($this->table, !__COSEY)->select("{$this->table}.*,padres.descripcion as `desc`")
+               ->join('padres', "padres.curso", "=", "{$this->table}.curso")
+               ->where([
+                  ["{$this->table}.curso", $class],
+                  ["{$this->table}.activo", 'si'],
                   ["padres.year", $this->year()],
-               ["{$this->table}.fecha", $date]
-            ])
-            ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final",[
-               Util::time(),
-               Util::time()
-            ])
-            ->orderBy("{$this->table}.fecha", 'DESC')->get();    
-         }      else{
+                  ["{$this->table}.fecha", $date]
+               ])
+               ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final", [
+                  Util::time(),
+                  Util::time()
+               ])
+               ->orderBy("{$this->table}.fecha", 'DESC')->get();
+         } else {
             $desc = __LANG === 'es' ? 'desc1' : 'desc2';
             $obj = parent::table($this->table)->select("{$this->table}.*,cursos.$desc as `desc`")
-            ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
-            ->where([
-               ["{$this->table}.curso", $class],
-               ["{$this->table}.activo", 'si'],
+               ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
+               ->where([
+                  ["{$this->table}.curso", $class],
+                  ["{$this->table}.activo", 'si'],
                   ["cursos.year", $this->year()],
-               ["{$this->table}.fecha", $date]
-            ])
-            ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final",[
-               Util::time(),
-               Util::time()
-            ])
-            ->orderBy("{$this->table}.fecha", 'DESC')->get();    
+                  ["{$this->table}.fecha", $date]
+               ])
+               ->WhereRaw("AND ? >= {$this->table}.hora AND ? <= {$this->table}.hora_final", [
+                  Util::time(),
+                  Util::time()
+               ])
+               ->orderBy("{$this->table}.fecha", 'DESC')->get();
          }
-         }else{
-            if(__COSEY){
-               $obj = parent::table($this->table,!__COSEY)->select("DISTINCT {$this->table}.*,padres.descripcion as `desc`")
+
+      } else {
+         if (__COSEY) {
+            $obj = parent::table($this->table, !__COSEY)->select("DISTINCT {$this->table}.*,padres.descripcion as `desc`")
                ->join('padres', "padres.curso", "=", "{$this->table}.curso")
                ->where([
                   ["{$this->table}.curso", $class],
@@ -137,9 +138,9 @@ class ExamModel extends School
                   ["{$this->table}.fecha", '>=', $date]
                ])
                ->orderBy("{$this->table}.fecha", 'DESC')->get();
-            }else{
-               $desc = __LANG === 'es' ? 'desc1' : 'desc2';
-               $obj = parent::table($this->table)->select("{$this->table}.*,cursos.$desc as `desc`")
+         } else {
+            $desc = __LANG === 'es' ? 'desc1' : 'desc2';
+            $obj = parent::table($this->table)->select("{$this->table}.*,cursos.$desc as `desc`")
                ->join('cursos', "cursos.curso", "=", "{$this->table}.curso")
                ->where([
                   ["{$this->table}.curso", $class],
@@ -148,9 +149,11 @@ class ExamModel extends School
                   ["{$this->table}.fecha", '>=', $date]
                ])
                ->orderBy("{$this->table}.fecha", 'DESC')->get();
-            }
-      }     
 
+         }
+      }
+
+      // exit;
       return $obj;
    }
 
@@ -165,7 +168,7 @@ class ExamModel extends School
          'T_examen_pregunta' => 'qas'
       ];
 
-      if(__LANG === "es"){
+      if (__LANG === "es") {
          $titles = [
             'fvs' => 'Falso y verdadero',
             'selects' => 'Selecciona la respuesta correcta',
@@ -173,7 +176,7 @@ class ExamModel extends School
             'lines' => 'Llena la linea en blanco',
             'qas' => 'Responde las preguntas correctamente'
          ];
-      }else{
+      } else {
          $titles = [
             'fvs' => 'False and true',
             'selects' => 'Select the correct answer',
@@ -188,13 +191,17 @@ class ExamModel extends School
       }
       foreach ($obj as $exam) {
          foreach ($tables as $table => $name) {
-            $objs = parent::table($table,!__COSEY)
+            $objs = parent::table($table, !__COSEY)
                ->where('id_examen', $exam->id)->get();
             $exam->{$name} = new stdClass();
             $exam->{$name}->value = 0;
             foreach ($objs as $obj) {
-               if (array_key_exists($name, $titles)) $exam->{$name}->title = $titles[$name];
-               if (array_key_exists('valor', $obj)) $exam->{$name}->value = $exam->{$name}->value + $obj->valor;
+               if (array_key_exists($name, $titles)) {
+                  $exam->{$name}->title = $titles[$name];
+               }
+               if (isset($obj->valor)) {
+                  $exam->{$name}->value = $exam->{$name}->value + $obj->valor;
+               }
                $exam->{$name}->topics[] = $obj;
             }
          }
