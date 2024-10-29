@@ -17,17 +17,17 @@ $year = $student->info('year');
 
 $lang = new Lang([
     ['Lista de disciplinas aplicadas', 'Applied Discipline List'],
-    ['Nombre','Name'],
-    ['Fecha','Date'],
-    ['Titulo','Title'],
-    ['Cantidad','Amount'],
-    ['Tallies','Tallies'],
-    ['Méritos','Mertis'],
-    ['Deméritos','Demerits'],
+    ['Nombre', 'Name'],
+    ['Fecha', 'Date'],
+    ['Titulo', 'Title'],
+    ['Cantidad', 'Amount'],
+    ['Tallies', 'Tallies'],
+    ['Méritos', 'Mertis'],
+    ['Deméritos', 'Demerits'],
 ]);
 
 DB::table('acuse')->insert([
-    'id'=> $student->id,
+    'id' => $student->id,
     'ss' => $studentSS,
     'grado' => $student->grado,
     'year' => $year,
@@ -51,7 +51,7 @@ $pdf->Cell(0, 5, $lang->translation("Lista de disciplinas aplicadas"), 0, 1, 'C'
 $pdf->Ln(5);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(40, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
-$pdf->Cell(70, 5, $student->nombre.' '.$student->apellidos, 1, 0);
+$pdf->Cell(70, 5, $student->nombre . ' ' . $student->apellidos, 1, 0);
 $pdf->Cell(30, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
 $pdf->Cell(40, 5, date('m-d-Y'), 1, 1);
 
@@ -79,11 +79,11 @@ foreach ($memos as $memo) {
 $pdf->Ln(5);
 
 $pdf->Cell(40, 5, 'Tallies', 1, 0, 'L', true);
-$pdf->Cell(20, 5, $amounts['tallies'], 1, 1, 'R');
+$pdf->Cell(20, 5, $amounts['tallies'] ?? null, 1, 1, 'R');
 $pdf->Cell(40, 5, 'Merits', 1, 0, 'L', true);
-$pdf->Cell(20, 5, $amounts['merits'], 1, 1, 'R');
+$pdf->Cell(20, 5, $amounts['merits'] ?? null, 1, 1, 'R');
 $pdf->Cell(40, 5, 'Demerits', 1, 0, 'L', true);
-$pdf->Cell(20, 5, $amounts['demertis'], 1, 1, 'R');
+$pdf->Cell(20, 5, $amounts['demertis'] ?? null, 1, 1, 'R');
 
 
 $pdf->Output();

@@ -105,7 +105,7 @@ $lang = new Lang([
         <button class="btn btn-info text-dark" type="button" data-toggle="modal" data-target="#searchExamModal" disabled><?= $lang->translation("Buscar Examen") ?></button>
         <form action="<?= Route::url('/regiweb/options/exam/pdf/printExam.php') ?>" method="POST" class="float-right" target="printExam">
             <input type="hidden" name="printExamId" class="printExamId">
-            <select class="printExam" name="paperSize" required disabled>
+            <select class="printExam form-control" name="paperSize" required disabled>
                 <option value="A4" selected><?= $lang->translation("Carta") ?></option>
                 <option value="Legal"><?= $lang->translation("Hoja legal") ?></option>
             </select>
