@@ -119,8 +119,8 @@ $options = [
                 'link' => 'sabana.php'
             ],
             [
-                'name' => ["es" => 'Cobros', "en" => "Collections"],
-                'desc' => ['es' => 'Pantalla para enviar mensajes de cobros a los deudores.', 'en' => 'Screen to send collection messages to debtors.'],
+                'name' => ["es" => 'Cobros', "en" => "Late Payment"],
+                'desc' => ['es' => 'Pantalla para enviar mensajes de cobros a los deudores.', 'en' => 'Screen to send a late payment message to debtors.'],
                 'link' => 'cobros_testos.php'
             ],
             [
