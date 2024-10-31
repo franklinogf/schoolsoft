@@ -40,7 +40,7 @@ class School extends SchoolModel
          $this->set($key, $value);
       }
    }
-   private function set($key, $value)
+   public function set($key, $value)
    {
       $this->props[$key] = $value;
    }
@@ -66,11 +66,10 @@ class School extends SchoolModel
    public function save($type = 'edit')
    {
       // get self public class, no parents classes
-      $propsArray[] = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
-
-      if (count($propsArray[0]['props']) > 0) {
+      $array = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
+      if (count($array['props']) > 0) {
          if (isset($this->props[$this->primary_key]) && $type === 'edit') {
-            $this->updateAdmin($propsArray[0]['props']);
+            $this->updateAdmin($array['props']);
          } else {
             echo 'insert <hr>';
          }

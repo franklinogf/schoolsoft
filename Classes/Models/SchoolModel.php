@@ -41,8 +41,8 @@ class SchoolModel extends DB
   protected function updateAdmin($propsArray)
   {
 
-    if ($this->{$this->primary_key} !== null) {
-      $this->updateTable($this->table, $this->primary_key, $this->{$this->primary_key}, $propsArray);
+    if ($this->info($this->primary_key) !== null) {
+      $this->updateTable($this->table, $this->primary_key, $this->info($this->primary_key), $propsArray);
     }
   }
 
