@@ -45,7 +45,9 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(0, 5, $lang->translation("Lista de estudiantes por salón hogar") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = utf8_encode($teacher->nombre ?? '');
+    $ape = utf8_encode($teacher->apellidos ?? '');
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 10);
