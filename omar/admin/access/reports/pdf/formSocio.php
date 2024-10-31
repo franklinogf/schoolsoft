@@ -60,9 +60,9 @@ foreach ($students as $ss) {
     if ($students->genero == 'F')
        {$genero=$lang->translation("Femenina");}
 
-        $dia=date(j);
-        $mes=date(n);
-        $ano=date(Y);
+    $dia = date('j');
+    $mes = date('n');
+    $ano = date('Y');
         $fec=$students->fecha; 
         list($anonaz, $mesnaz, $dianaz) = explode('-', $fec);
         if (($mesnaz == $mes) && ($dianaz > $dia)) {$ano=($ano-1);}
