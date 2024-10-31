@@ -42,21 +42,21 @@ $allStudents = $students->All(null, true);
             <form method="POST">
                 <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
                     <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
-                    <?php foreach ($allStudents as $student) : ?>
+                    <?php foreach ($allStudents as $student): ?>
                         <option <?= isset($_POST['student']) && $_POST['student'] == $student->ss ? 'selected=""' : '' ?> value="<?= $student->ss ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                     <?php endforeach ?>
                 </select>
                 <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar") ?></button>
             </form>
-            <?php if ($_POST['student']) :
+            <?php if (isset($_POST['student'])):
                 $student = new Student($_POST['student']);
-            ?>
+                ?>
 
                 <div class="form-group">
                     <label for="unerollmentCode">Código de baja</label>
                     <select id="unerollmentCode" class="form-control">
                         <option value=""><?= $lang->translation("Sin baja") ?></option>
-                        <?php foreach ($codes as $code) : ?>
+                        <?php foreach ($codes as $code): ?>
                             <option <?= $student->codigobaja === $code->codigo ? 'selected' : '' ?> value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
                         <?php endforeach ?>
                     </select>
