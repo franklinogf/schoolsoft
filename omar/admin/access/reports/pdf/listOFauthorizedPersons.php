@@ -20,7 +20,7 @@ $lang = new Lang([
     ['Personas Autorizadas', 'Authorized persons'],
     ['Parentesco', 'Relationship'],
 ]);
-$grade = $_POST['grade'];
+$grade = $_POST['grade'] ?? '';
 
 $school = new School();
 $year = $school->year();
@@ -40,9 +40,9 @@ class nPDF extends PDF
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
-        $this->Cell(50, 5, $lang->translation("Personas Autorizadas"), 1, 0, 'C', true);
+        $this->Cell(60, 5, $lang->translation("Personas Autorizadas"), 1, 0, 'C', true);
         $this->Cell(30, 5, $lang->translation("Parentesco"), 1, 0, 'C', true);
-        $this->Cell(30, 5, $lang->translation("Celular"), 1, 1, 'C', true);
+        $this->Cell(25, 5, $lang->translation("Celular"), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }
 }
@@ -65,24 +65,24 @@ $parent = DB::table('madre')->where([
            {
            $grupo = $student->grado;
            $pdf->AddPage('');
-           $pdf->SetFont('Arial', '', 10);
+            $pdf->SetFont('Arial', '', 9);
            }
          if (!empty($parent->per1) or !empty($parent->per2) or !empty($parent->per3) or !empty($parent->per4))
             {
             $pdf->Cell(10, 5, $count, 0, 0, 'C');
-            $pdf->Cell(70, 5, utf8_decode($student->apellidos.' '.$student->nombre));
-            $pdf->Cell(50, 5, $parent->per1);
+            $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre);
+            $pdf->Cell(60, 5, $parent->per1);
             $pdf->Cell(30, 5, $parent->rel1);
-            $pdf->Cell(30, 5, $parent->cel1, 0, 1, 'L');
+            $pdf->Cell(25, 5, $parent->cel1, 0, 1, 'L');
             $v=0;
             for ($i = 2; $i <= 4; $i++) {
                 if (!empty($parent->{"per$i"}))
                    {
                    $pdf->Cell(10, 5, '', 0, 0, 'C');
                    $pdf->Cell(70, 5, '');
-                   $pdf->Cell(50, 5, $parent->{"per$i"});
+                    $pdf->Cell(60, 5, $parent->{"per$i"});
                    $pdf->Cell(30, 5, $parent->{"rel$i"});
-                   $pdf->Cell(30, 5, $parent->{"cel$i"}, 0, 1, 'L');
+                    $pdf->Cell(25, 5, $parent->{"cel$i"}, 0, 1, 'L');
                    }
                 }
             $count++;
@@ -93,5 +93,3 @@ $parent = DB::table('madre')->where([
 
 
 $pdf->Output();
-
-
