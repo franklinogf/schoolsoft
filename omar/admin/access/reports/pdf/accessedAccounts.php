@@ -49,8 +49,8 @@ foreach ($students as $student) {
     foreach ($parents as $parent) {
        if($parent->ufecha !== '0000-00-00'){
         $pdf->Cell(10, 5, $count, 0, 0, 'C');
-        $pdf->Cell(60, 5, utf8_decode($student->apellidos));
-        $pdf->Cell(60, 5, utf8_decode($student->nombre));
+            $pdf->Cell(60, 5, $student->apellidos);
+            $pdf->Cell(60, 5, $student->nombre);
         $pdf->Cell(30, 5, $student->grado, 0, 0, 'C');
         $pdf->Cell(30, 5, $parent->ufecha, 0, 1, 'C');
         $count++;
