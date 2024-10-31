@@ -67,9 +67,9 @@ foreach ($students as $ss) {
         $genero = $lang->translation("Femenina");
     }
 
-    $dia = date(j);
-    $mes = date(n);
-    $ano = date(Y);
+    $dia = date('j');
+    $mes = date('n');
+    $ano = date('Y');
     $fec = $students->fecha;
     list($anonaz, $mesnaz, $dianaz) = explode('-', $fec);
     if (($mesnaz == $mes) && ($dianaz > $dia)) {
@@ -93,7 +93,7 @@ foreach ($students as $ss) {
     $pdf->Cell(70, 5, $lang->translation("Por este medio se certifica que el/la estudiante "), 0, 0, 'L');
     $pdf->Cell(70, 5, $students->apellidos . ' ' . $students->nombre, 'B', 1, 'L');
 
-    $pdf->Cell(100, 5, $lang->translation("cursó estudios en nuestro " . $colegio . " durante el Año Escolar en el ") . $students->grado . $lang->translation(" grado."), 0, 1, 'L');
+    $pdf->Cell(100, 5, utf8_encode($lang->translation("cursó estudios en nuestro " . $colegio . " durante el Año Escolar en el ")) . $students->grado . $lang->translation(" grado."), 0, 1, 'L');
     $pdf->Ln(5);
     $pdf->Cell(100, 5, $lang->translation("Ha observado una conducta satisfactoria y por tal motivo le recomendamos para continuar estudios "), 0, 1, 'L');
     $pdf->Cell(100, 5, $lang->translation("en otro colegio o escuela."), 0, 1, 'L');
