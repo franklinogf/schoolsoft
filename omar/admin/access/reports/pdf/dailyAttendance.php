@@ -44,7 +44,8 @@ if ($option === 'student') {
     $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
 
     $pdf->Ln(5);
-    $pdf->splitCells($lang->translation("Nombre") . ": " . $student->fullName(), $lang->translation("Grado") . ": $student->grado");
+    //    $pdf->splitCells($lang->translation("Nombre") . ": " . $student->fullName(), $lang->translation("Grado") . ": $student->grado");
+    $pdf->splitCells($lang->translation("Nombre") . ": " . utf8_encode($student->apellidos . ' ' . $student->nombre), $lang->translation("Grado") . ": $student->grado");
     $pdf->SetFont('Arial', 'B', 10);
 
     $pdf->Cell(30);
