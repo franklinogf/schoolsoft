@@ -15,14 +15,6 @@ $cole = DB::table('colegio')->where([
     ['usuario', 'administrador'],
 ])->orderBy('usuario')->first();
 
-//$cole= new School();
-//$year = $cole->info('year');
-//echo $cole->colegio;
-
-
-//$q = "SELECT * from colegio where usuario = 'administrador'";
-//$res = mysql_query($q);
-//$cole = mysql_fetch_object($res);
 $year = $cole->year;
 class PDF extends PDF_Codabar
 {
