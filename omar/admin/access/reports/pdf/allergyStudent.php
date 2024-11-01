@@ -27,23 +27,15 @@ $lang = new Lang([
 
 ]);
 
-$school = new School();
-//$teacherClass = new Teacher();
-//$studentClass = new Student();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $count = 0;
 
-$year = $school->year();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Condiciones / Alergias"). " $year", true);
 $pdf->Fill();
 $pdf->AddPage('L');
-$students = DB::table('year')->where([
-    ['activo', ''],
-    ['year', $year],
-    ['imp1', '!=' , '']
-])->orWhere([
-    ['enf1','!=','']
-])->orderBy('apellidos')->get();
+$students = DB::table('year')->whereRaw("year='$year' and activo='' and (enf1 != '' or enf1 != '')")->orderBy('apellidos')->get();
 
     $pdf->SetFont('Arial', 'B', 15);
     $pdf->Cell(0, 5, $lang->translation("Condiciones / Alergias") . " $year", 0, 1, 'C');
@@ -56,7 +48,7 @@ $students = DB::table('year')->where([
     $pdf->Cell(13, 5, $lang->translation("Grado"), 1, 0, 'C', true);
     $pdf->Cell(65, 5, $lang->translation("Condiciones"), 1, 0, 'C', true);
     $pdf->Cell(65, 5, $lang->translation("Alergias"), 1, 1, 'C', true);
-    $pdf->SetFont('Arial', '', 10);
+$pdf->SetFont('Arial', '', 9);
 
     foreach ($students as $student) {
     $count = $count + 1;
