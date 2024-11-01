@@ -40,8 +40,8 @@ class nPDF extends PDF
         }
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 5, '', 1, 0, 'C', true);
-        $this->Cell(50, 5, utf8_decode($lang->translation("Apellidos")), 1, 0, 'C', true);
-        $this->Cell(50, 5, utf8_decode($lang->translation("Nombre")), 1, 0, 'C', true);
+        $this->Cell(50, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
+        $this->Cell(50, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
         $this->Cell(15, 5, $lang->translation("Grado"), 1, 0, 'C', true);
         $this->Cell(20, 5, utf8_decode($lang->translation("Usuario")), 1, 0, 'C', true);
         $this->Cell(20, 5, utf8_decode($lang->translation("Contraseña")), 1, 0, 'C', true);
@@ -72,11 +72,11 @@ foreach ($students as $student) {
     ])->orderBy('id')->first();
 
     $pdf->Cell(10, 5, $count, 0, 0, 'C');
-    $pdf->Cell(50, 5, utf8_decode($student->apellidos));
-    $pdf->Cell(50, 5, utf8_decode($student->nombre));
+    $pdf->Cell(50, 5, $student->apellidos);
+    $pdf->Cell(50, 5, $student->nombre);
     $pdf->Cell(15, 5, $student->grado, 0, 0, 'C');
-    $pdf->Cell(20, 5, empty($parent->usuario) ? 'X' : '', 0, 0, 'C');
-    $pdf->Cell(20, 5, empty($parent->clave) ? 'X' : '', 0, 0, 'C');
+    $pdf->Cell(20, 5, $parent->usuario, 0, 0, 'C');
+    $pdf->Cell(20, 5, $parent->clave, 0, 0, 'C');
     $pdf->Cell(15, 5, empty($parent->email_m) ? 'X' : '', 0, 0, 'C');
     $pdf->Cell(15, 5, empty($parent->email_p) ? 'X' : '', 0, 0, 'C');
     $pdf->Cell(15, 5, empty($parent->cel_m) ? 'X' : '', 0, 0, 'C');
@@ -86,8 +86,5 @@ foreach ($students as $student) {
     $pdf->Cell(15, 5, empty($parent->ufecha) ? 'X' : '', 0, 1, 'C');
     $count++;
 }
-
-
-
 
 $pdf->Output();
