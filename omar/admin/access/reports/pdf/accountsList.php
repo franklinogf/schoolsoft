@@ -66,8 +66,8 @@ foreach ($students as $student) {
     }
     $pdf->Cell(10, 5, $newCount, $newCount !== '' ? 'T' : 0, 0, 'C');
     $pdf->Cell(20, 5, $student->id, $newCount !== '' ? 'T' : 0, 0, 'R');
-    $pdf->Cell(50, 5, utf8_decode($student->apellidos),$newCount !== '' ? 'T' : 0);
-    $pdf->Cell(50, 5, utf8_decode($student->nombre),$newCount !== '' ? 'T' : 0);
+    $pdf->Cell(50, 5, $student->apellidos, $newCount !== '' ? 'T' : 0);
+    $pdf->Cell(50, 5, $student->nombre, $newCount !== '' ? 'T' : 0);
     $pdf->Cell(15, 5, $student->grado, $newCount !== '' ? 'T' : 0, 0, 'C');
     $pdf->Cell(15, 5, Util::gender($student->genero), $newCount !== '' ? 'T' : 0, 0, 'C');
     $pdf->Cell(25, 5, Util::formatDate($student->fecha,"%Y-%m-%d"),$newCount !== '' ? 'T' : 0, 1, 'C');
