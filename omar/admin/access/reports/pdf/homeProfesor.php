@@ -9,8 +9,7 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ["Lista de Sal�n Hogar", "Teachers Home room list"],
+$lang = new Lang([["Lista de Salón Hogar", "Teachers Home room list"],
     ['Profesor', 'Teacher'],
     ['ID', 'ID'],
     ['Celular', 'Cel Phone'],
@@ -20,12 +19,12 @@ $lang = new Lang([
 $school = new School();
 $year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de Sal�n Hogar") . " $year", true);
+$pdf->SetTitle($lang->translation("Lista de Salón Hogar") . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Lista de Sal�n Hogar") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, $lang->translation("Lista de Salón Hogar") . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);
@@ -44,7 +43,7 @@ $teachers = DB::table('profesor')->where([
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(10, 7, $count + 1, 0, 0, 'C');
     $pdf->Cell(20, 7, $teacher->id, 0, 0, 'C');
-    $pdf->Cell(70, 7, utf8_decode($teacher->apellidos).' '.utf8_decode($teacher->nombre));
+    $pdf->Cell(70, 7, $teacher->apellidos . ' ' . $teacher->nombre);
     $pdf->Cell(50, 7, $teacher->grado, 0, 1, 'C');
 }
 
