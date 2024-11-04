@@ -11,17 +11,13 @@ use Classes\Util;
 Server::is_post();
 Session::is_logged();
 
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 $cole = DB::table('colegio')->where([
     ['usuario', 'administrador'],
 ])->orderBy('usuario')->first();
 
-//$cole= new School();
-//$year = $cole->info('year');
-//echo $cole->colegio;
-//$q = "SELECT * from colegio where usuario = 'administrador'";
-//$res = mysql_query($q);
-//$cole = mysql_fetch_object($res);
-$year = $cole->year;
 class PDF extends PDF_Codabar
 {
     function RoundedRect($x, $y, $w, $h, $r, $corners = '1234', $style = '')
@@ -97,23 +93,17 @@ function StudentId()
     global $pdf;
     global $cole;
 
-    //	$result = mysql_query("SELECT * FROM profesor WHERE id = '$id'");
-    //	$profe = mysql_fetch_object($result);
     $profe = DB::table('profesor')->where([
         ['id', $id],
     ])->orderBy('grado, apellidos')->first();
-    //    echo $id;
     $pdf->SetLineWidth(1);
     $pdf->RoundedRect($pdf->GetX(), $pdf->GetY(), 80, 40, 2, '1234');
-    //	$pdf->Image('../logo/fondo.png', $pdf->GetX() + 35, $pdf->GetY() + 11, 30, 28);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(55, 5, $cole->colegio);
     $pdf->Cell(25, 5, $cole->telefono, 0, 1, 'R');
     $pdf->SetFont('Times', '', 8);
     $pdf->Cell(.5);
     $pdf->Cell(79, 5, "$cole->dir1 $cole->dir3, $cole->pueblo1, $cole->esta1 $cole->zip1", 0, 1, 'L', true);
-    // $pdf->Image('../logo/logo.gif', $pdf->GetX() + 53, $pdf->GetY() - 7.5, 25);
-
     if (file_exists("../picture/{$profe->foto_name}.jpg")) {
         $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
         $pdf->Image("../picture/{$profe->foto_name}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
@@ -125,7 +115,7 @@ function StudentId()
     $pdf->Cell(79, 5, !mb_detect_encoding($profe->apellidos, 'UTF-8', true) ? $profe->apellidos : utf8_decode($profe->apellidos), 0, 1, 'R');
     $pdf->Cell(35);
     $pdf->Cell(40, 5, "S. Hogar: $profe->grado ID: #$profe->id", 0, 1, 'C', true);
-    if (sizeof($profe->id) > 0) $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $profe->id, '*', '*', 0.29, 5);
+    $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $profe->id ?? '***', '*', '*', 0.29, 5);
     $pdf->Ln(30);
 }
 $count = 1;
