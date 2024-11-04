@@ -27,6 +27,8 @@ $lang = new Lang([
 ]);
 $year = $students->info('year');
 
+$selectedStudent = Session::get('ss') ? Session::get('ss', true) : ($_REQUEST['student'] ?? null);
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -51,8 +53,8 @@ $year = $students->info('year');
                 <form method="POST">
                     <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
                         <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
-                        <?php foreach ($students->All() as $student) : ?>
-                            <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $student->ss ? 'selected=""' : '' ?> value="<?= $student->ss ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
+                        <?php foreach ($students->All() as $student): ?>
+                            <option <?= $selectedStudent == $student->ss ? 'selected=""' : '' ?> value="<?= $student->ss ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                         <?php endforeach ?>
                     </select>
                     <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar") ?></button>
@@ -60,22 +62,22 @@ $year = $students->info('year');
 
             </div>
         </div>
-        <?php if (isset($_REQUEST['student'])) :
-            $documents = DB::table('estudiantes_docs')->where(['ss_estudiante', $_REQUEST['student']])->get();
-        ?>
+        <?php if ($selectedStudent):
+            $documents = DB::table('estudiantes_docs')->where(['ss_estudiante', $selectedStudent])->get();
+            ?>
             <h2 class="text-center mt-3 <?php sizeof($documents) > 0 ? '' : 'invisible' ?>"><?= $lang->translation("Lista de documentos") ?></h2>
 
             <button id="addDocument" class="btn btn-info my-2"><?= $lang->translation("Agregar documento") ?></button>
 
             <div id="documentsList" class="row row-cols-1 row-cols-md-4">
-                <?php if (sizeof($documents) > 0) : ?>
-                    <?php foreach ($documents as $document) : ?>
+                <?php if (sizeof($documents) > 0): ?>
+                    <?php foreach ($documents as $document): ?>
                         <div class="col mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
                                     <h5 class="card-title title"><?= $document->titulo ?></h5>
                                     <p class="card-text"><?= $lang->translation("Fecha de entrega:") ?> <br /> <span class="date"><?= Util::formatDate($document->fecha) ?></span></p>
-                                    <a href="<?= Route::url("/admin/users/documents/files/$document->nombre_archivo") ?>" class="btn btn-sm btn-info btn-block" download><?= $lang->translation("Descargar") .' '. File::faIcon(File::extension($document->nombre_archivo))?></a>
+                                    <a href="<?= Route::url("/admin/users/documents/files/$document->nombre_archivo") ?>" class="btn btn-sm btn-info btn-block" download><?= $lang->translation("Descargar") . ' ' . File::faIcon(File::extension($document->nombre_archivo)) ?></a>
                                 </div>
                                 <div class="card-footer text-center">
                                     <button class="btn btn-primary edit" data-id=<?= $document->id ?>><?= $lang->translation("Editar") ?></button>
@@ -115,7 +117,7 @@ $year = $students->info('year');
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <label for="file">Archivo</label>                                    
+                                    <label for="file">Archivo</label>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="file" name="file">
                                         <label class="custom-file-label" for="file" data-browse="<?= $lang->translation("Buscar") ?>">Seleccionar archivo</label>
