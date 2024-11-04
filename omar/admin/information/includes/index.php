@@ -5,9 +5,6 @@ use Classes\Session;
 include '../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    echo '<pre>';
-    var_dump($_POST);
-    echo '</pre>';
 
     $constants = $environments = [];
     foreach ($_POST['environments'] as $key => $values) {
@@ -28,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
     if (isset($_POST['save'])) {
         $update = [
+            'idioma' => $_POST['idioma'],
             'colegio' => $_POST['colegio'],
             'director' => $_POST['director'],
             'telefono' => $_POST['telefono'],
@@ -72,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         ]);
         Session::set('passwordSaved', true);
     }
-    Route::redirect('/information/');
+    Route::redirect('/information');
 } else {
     Route::error();
 }
