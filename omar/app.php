@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'database.php';
-require_once 'config.php';
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -54,3 +54,4 @@ include __ROOT . '/autoload.php';
 // require '../../vendor/autoload.php';
 require_once __ROOT . '/vendor/autoload.php';
 require_once 'constants.php';
+require_once 'config.php';
