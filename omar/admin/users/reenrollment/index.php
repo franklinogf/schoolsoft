@@ -16,13 +16,13 @@ $fullYear2 = "20$year2[0]$year2[1]-20$year2[3]$year2[4]";
 
 $grades = DB::table("year")->select('DISTINCT grado')->where('year', $year1)->orderBy('grado')->get();
 $oldGrades = array_values(array_filter($grades, function ($grade) {
-    list($g1, $g2) = explode('-', $grade->grado);
+    [$g1] = explode('-', $grade->grado);
 
     return $g1 !== '12';
 }));
 $oldAllStudents = array_values(array_filter($students->all(), function ($student) use ($year2) {
 
-    list($g1, $g2) = explode('-', $student->grado);
+    [$g1] = explode('-', $student->grado);
     $data = DB::table('year')->where([
         ['year', $year2],
         ['ss', $student->ss]
@@ -76,8 +76,8 @@ $lang = new Lang([
                 <p class="font-weight-bold"><?= $lang->translation("Año escolar") ?> <?= $fullYear1 ?></p>
                 <select name="oldGrade" id="oldGrade" class="form-control">
                     <option value=""><?= $lang->translation("Seleccione este para trabajar sin grados") ?></option>
-                    <?php foreach ($oldGrades as $grade) : ?>
-                        <option <?= $teacher->grado === $grade->grado ? 'selected=""' : '' ?> value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
+                    <?php foreach ($oldGrades as $grade): ?>
+                        <option value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
                     <?php endforeach ?>
                 </select>
                 <small class="text-muted"><?= $lang->translation("Grado del que quiera enviar") ?></small>
@@ -94,7 +94,7 @@ $lang = new Lang([
                     <button id="selectAll" class="btn btn-sm btn-secondary"><?= $lang->translation("Seleccionar todos") ?></button>
                 </div>
                 <select id="old" class="custom-select" multiple size="15">
-                    <?php foreach ($oldAllStudents as $student) : ?>
+                    <?php foreach ($oldAllStudents as $student): ?>
                         <option value="<?= $student->mt ?>"><?= "$student->apellidos, $student->nombre ($student->id) $student->grado" ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -104,8 +104,8 @@ $lang = new Lang([
             <div class="col-12 col-lg-2 my-3 my-lg-0 d-flex justify-content-center flex-column">
                 <button id="pass" class="btn btn-outline-primary align-self-center" data-type="regular"><?= $lang->translation("Pasar") ?> <i class="fas fa-angle-double-right d-none d-lg-block"></i> <i class="fas fa-angle-double-down d-lg-none"></i></button>
                 <select name="passGrade" id="passGrade" class="form-control align-self-center mt-2 invisible">
-                    <?php foreach ($grades as $grade) : ?>
-                        <option <?= $teacher->grado === $grade->grado ? 'selected=""' : '' ?> value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
+                    <?php foreach ($grades as $grade): ?>
+                        <option value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -114,8 +114,8 @@ $lang = new Lang([
                 <p class="font-weight-bold"><?= $lang->translation("Siguiente año escolar") ?> <?= $fullYear2 ?></p>
                 <select name="newGrade" id="newGrade" class="form-control" disabled>
                     <option value=""><?= $lang->translation("Seleccione el grado donde quiere recibir") ?></option>
-                    <?php foreach ($grades as $grade) : ?>
-                        <option <?= $teacher->grado === $grade->grado ? 'selected=""' : '' ?> value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
+                    <?php foreach ($grades as $grade): ?>
+                        <option value="<?= $grade->grado ?>"><?= $grade->grado ?></option>
                     <?php endforeach ?>
                 </select>
                 <small class="text-muted mb-3"><?= $lang->translation("Grado al que va a recibir") ?></small>
@@ -123,7 +123,7 @@ $lang = new Lang([
                 <p id="newStudentsTitle mt-3"><?= $lang->translation("Todos los estudiantes") ?> <span id="newStudentsAmount" class="badge badge-primary"><?= sizeof($students->all($year2)) ?></span></p>
                 <input type="hidden" id="hiddenNewStudentsTitle" value="Todos los estudiantes <span class='badge badge-primary'><?= sizeof($students->all($year2)) ?></span>">
                 <select id="new" class="custom-select" multiple size="15">
-                    <?php foreach ($students->all($year2) as $student) : ?>
+                    <?php foreach ($students->all($year2) as $student): ?>
                         <option value="<?= $student->mt ?>"><?= "$student->apellidos, $student->nombre ($student->id) $student->grado" ?></option>
                     <?php endforeach; ?>
                 </select>

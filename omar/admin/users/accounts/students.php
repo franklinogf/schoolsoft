@@ -103,9 +103,9 @@ $lang = new Lang([
     ["Guardar", "Save"],
     ["Atrás", "Go back"]
 ]);
-$accountNumber = $_GET['id'];
-$mt = $_GET['pk'];
-if (isset($mt)) {
+$accountNumber = $_GET['id'] ?? null;
+$mt = $_GET['pk'] ?? null;
+if ($mt) {
     $student = new Student($mt);
 }
 $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->orderBy('codigo')->get();
@@ -127,7 +127,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
     <div class="container-fluid px-3">
         <div class="text-center my-5">
             <h1><?= $lang->translation("Información del estudiante") ?> <i class="far fa-id-card"></i></h1>
-            <?php if (isset($mt)) : ?>
+            <?php if (isset($student)): ?>
                 <p class="text-muted"><?= strtoupper("$student->nombre $student->apellidos") ?></p>
             <?php endif; ?>
         </div>
@@ -144,7 +144,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                     <div class="container-fluid p-3">
                         <div class="row">
                             <div class="col-12">
-                                <img src="<?= isset($mt) ? $student->profilePicture() : __NO_PROFILE_PICTURE_STUDENT_MALE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
+                                <img src="<?= isset($student) ? $student->profilePicture() : __NO_PROFILE_PICTURE_STUDENT_MALE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
                                 <div class="form-group text-center mt-2">
                                     <button id="pictureBtn" type='button' class="btn btn-secondary"><?= $lang->translation("Cambiar foto de perfil") ?></button>
                                     <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
@@ -156,7 +156,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                 <div class="row">
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="ss"><?= $lang->translation("Seguro social") ?></label>
-                                        <input type="text" class="form-control socialSecurity" name="ss" id="ss" required value="<?= $student->ss ?>">
+                                        <input type="text" class="form-control socialSecurity" name="ss" id="ss" required value="<?= isset($student) ? $student->ss : '' ?>">
                                         <div class="invalid-feedback">
                                             <?= $lang->translation("Este seguro social ya existe") ?>
                                         </div>
@@ -166,19 +166,19 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="grade"><?= $lang->translation("Grado") ?></label>
-                                        <input type="text" class="form-control" name="grade" id="grade" required value="<?= $student->grado ?>">
+                                        <input type="text" class="form-control" name="grade" id="grade" required value="<?= isset($student) ? $student->grado : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="name"><?= $lang->translation("Nombre") ?></label>
-                                        <input type="text" class="form-control" name="name" id="name" required value="<?= $student->nombre ?>">
+                                        <input type="text" class="form-control" name="name" id="name" required value="<?= isset($student) ? $student->nombre : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="surnames"><?= $lang->translation("Apellidos") ?></label>
-                                        <input type="text" class="form-control" name="surnames" id="surnames" required value="<?= $student->apellidos ?>">
+                                        <input type="text" class="form-control" name="surnames" id="surnames" required value="<?= isset($student) ? $student->apellidos : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="reference"><?= $lang->translation("Referencia") ?></label>
-                                        <input type="text" class="form-control" name="reference" id="reference" value="<?= $student->nuref ?>">
+                                        <input type="text" class="form-control" name="reference" id="reference" value="<?= isset($student) ? $student->nuref : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="accountNumber"><?= $lang->translation("Número de cuenta") ?></label>
@@ -186,58 +186,58 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="dateOfBirth"><?= $lang->translation("Fecha de nacimiento") ?></label>
-                                        <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth" required value="<?= $student->fecha ?>">
+                                        <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth" required value="<?= isset($student) ? $student->fecha : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="enrollmentDate"><?= $lang->translation("Fecha de matrícula") ?></label>
-                                        <input type="date" class="form-control" name="enrollmentDate" id="enrollmentDate" required value="<?= $student->fecha_matri ?>">
+                                        <input type="date" class="form-control" name="enrollmentDate" id="enrollmentDate" required value="<?= isset($student) ? $student->fecha_matri : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="placeOfBirth"><?= $lang->translation("Lugar de nacimiento") ?></label>
-                                        <input type="text" class="form-control" name="placeOfBirth" id="placeOfBirth" value="<?= $student->lugar_nac ?>">
+                                        <input type="text" class="form-control" name="placeOfBirth" id="placeOfBirth" value="<?= isset($student) ? $student->lugar_nac : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="gender"><?= $lang->translation("Género") ?></label>
                                         <select name="gender" id="gender" class="form-control" required>
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->genero === 'M' || $student->genero === "2" ? 'selected' : '' ?> value="M"><?= $lang->translation("Masculino") ?></option>
-                                            <option <?= $student->genero === 'F' || $student->genero === "1" ? 'selected' : '' ?> value="F"><?= $lang->translation("Femenino") ?></option>
+                                            <option <?= isset($student) && ($student->genero === 'M' || $student->genero === "2") ? 'selected' : '' ?> value="M"><?= $lang->translation("Masculino") ?></option>
+                                            <option <?= isset($student) && ($student->genero === 'F' || $student->genero === "1") ? 'selected' : '' ?> value="F"><?= $lang->translation("Femenino") ?></option>
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="liveWith"><?= $lang->translation("Vive con") ?></label>
                                         <select name="liveWith" id="liveWith" class="form-control" required>
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->vivecon === 'Ambos Padres' ? 'selected' : '' ?> value="Ambos Padres"><?= $lang->translation("Ambos padres") ?></option>
-                                            <option <?= $student->vivecon === 'Madre' ? 'selected' : '' ?> value="Madre"><?= $lang->translation("Madre") ?></option>
-                                            <option <?= $student->vivecon === 'Padre' ? 'selected' : '' ?> value="Padre"><?= $lang->translation("Padre") ?></option>
-                                            <option <?= $student->vivecon === 'Encargado' ? 'selected' : '' ?> value="Encargado"><?= $lang->translation("Encargado") ?></option>
+                                            <option <?= isset($student) && $student->vivecon === 'Ambos Padres' ? 'selected' : '' ?> value="Ambos Padres"><?= $lang->translation("Ambos padres") ?></option>
+                                            <option <?= isset($student) && $student->vivecon === 'Madre' ? 'selected' : '' ?> value="Madre"><?= $lang->translation("Madre") ?></option>
+                                            <option <?= isset($student) && $student->vivecon === 'Padre' ? 'selected' : '' ?> value="Padre"><?= $lang->translation("Padre") ?></option>
+                                            <option <?= isset($student) && $student->vivecon === 'Encargado' ? 'selected' : '' ?> value="Encargado"><?= $lang->translation("Encargado") ?></option>
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="new"><?= $lang->translation("Nuevo") ?>?</label>
                                         <select name="new" id="new" class="form-control" required>
-                                            <option <?= $student->nuevo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
-                                            <option <?= $student->nuevo === 'No' ? 'selected' : '' ?> value="No">No</option>
-                                            <option <?= $student->nuevo === 'M1' ? 'selected' : '' ?> value="M1">M-1</option>
-                                            <option <?= $student->nuevo === 'M2' ? 'selected' : '' ?> value="M2">M-2</option>
-                                            <option <?= $student->nuevo === 'M3' ? 'selected' : '' ?> value="M3">M-3</option>
-                                            <option <?= $student->nuevo === 'R1' ? 'selected' : '' ?> value="R1">R-1</option>
-                                            <option <?= $student->nuevo === 'R2' ? 'selected' : '' ?> value="R2">R-2</option>
-                                            <option <?= $student->nuevo === 'R3' ? 'selected' : '' ?> value="R3">R-3</option>
-                                            <option <?= $student->nuevo === 'R4' ? 'selected' : '' ?> value="R4">R-4</option>
+                                            <option <?= isset($student) && $student->nuevo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
+                                            <option <?= isset($student) && $student->nuevo === 'No' ? 'selected' : '' ?> value="No">No</option>
+                                            <option <?= isset($student) && $student->nuevo === 'M1' ? 'selected' : '' ?> value="M1">M-1</option>
+                                            <option <?= isset($student) && $student->nuevo === 'M2' ? 'selected' : '' ?> value="M2">M-2</option>
+                                            <option <?= isset($student) && $student->nuevo === 'M3' ? 'selected' : '' ?> value="M3">M-3</option>
+                                            <option <?= isset($student) && $student->nuevo === 'R1' ? 'selected' : '' ?> value="R1">R-1</option>
+                                            <option <?= isset($student) && $student->nuevo === 'R2' ? 'selected' : '' ?> value="R2">R-2</option>
+                                            <option <?= isset($student) && $student->nuevo === 'R3' ? 'selected' : '' ?> value="R3">R-3</option>
+                                            <option <?= isset($student) && $student->nuevo === 'R4' ? 'selected' : '' ?> value="R4">R-4</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="cell"><?= $lang->translation("Celular") ?></label>
-                                        <input type="tel" value="<?= $student->cel ?>" class="form-control phone" id="cell" name="cell" />
+                                        <input type="tel" value="<?= isset($student) ? $student->cel : '' ?>" class="form-control phone" id="cell" name="cell" />
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="cellCompany"><?= $lang->translation("Compañia telefonica") ?></label>
                                         <select id="cellCompany" class="form-control" name="cellCompany">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <?php foreach (Util::phoneCompanies() as $company) : ?>
-                                                <option <?= $student->comp === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
+                                            <?php foreach (Util::phoneCompanies() as $company): ?>
+                                                <option <?= isset($student) && $student->comp === $company ? 'selected=""' : '' ?> value="<?= $company ?>"><?= $company ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -245,11 +245,11 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <label for="race"><?= $lang->translation("Raza") ?></label>
                                         <select name="race" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->raza === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Blanco") ?></option>
-                                            <option <?= $student->raza === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Negro") ?></option>
-                                            <option <?= $student->raza === '3' ? 'selected' : '' ?> value="3"><?= $lang->translation("Mestizo") ?></option>
-                                            <option <?= $student->raza === '4' ? 'selected' : '' ?> value="4"><?= $lang->translation("Indígena Norteamericano") ?></option>
-                                            <option <?= $student->raza === '5' ? 'selected' : '' ?> value="5"><?= $lang->translation("Otros") ?></option>
+                                            <option <?= isset($student) && $student->raza === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Blanco") ?></option>
+                                            <option <?= isset($student) && $student->raza === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Negro") ?></option>
+                                            <option <?= isset($student) && $student->raza === '3' ? 'selected' : '' ?> value="3"><?= $lang->translation("Mestizo") ?></option>
+                                            <option <?= isset($student) && $student->raza === '4' ? 'selected' : '' ?> value="4"><?= $lang->translation("Indígena Norteamericano") ?></option>
+                                            <option <?= isset($student) && $student->raza === '5' ? 'selected' : '' ?> value="5"><?= $lang->translation("Otros") ?></option>
                                         </select>
                                     </div>
                                 </div>
@@ -260,62 +260,62 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                     <div class="form-group col-12">
                                         <select name="discount1" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <?php foreach ($discounts as $discount) : ?>
-                                                <option <?= $student->desc1 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                            <?php foreach ($discounts as $discount): ?>
+                                                <option <?= isset($student) && $student->desc1 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="men" value="<?= $student->desc_men ?>">
+                                        <input type="text" class="form-control" name="men" value="<?= isset($student) ? $student->desc_men : '' ?>">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="cdb1" value="<?= $student->cdb1 ?>">
+                                        <input type="text" class="form-control" name="cdb1" value="<?= isset($student) ? $student->cdb1 : '' ?>">
                                     </div>
                                     <div class="form-group col-12">
                                         <select name="discount2" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <?php foreach ($discounts as $discount) : ?>
-                                                <option <?= $student->desc2 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                            <?php foreach ($discounts as $discount): ?>
+                                                <option <?= isset($student) && $student->desc2 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="mat" value="<?= $student->desc_mat ?>">
+                                        <input type="text" class="form-control" name="mat" value="<?= isset($student) ? $student->desc_mat : '' ?>">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="cdb2" value="<?= $student->cdb2 ?>">
+                                        <input type="text" class="form-control" name="cdb2" value="<?= isset($student) ? $student->cdb2 : '' ?>">
                                     </div>
                                     <div class="form-group col-12">
                                         <select name="discount3" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <?php foreach ($discounts as $discount) : ?>
-                                                <option <?= $student->desc3 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                            <?php foreach ($discounts as $discount): ?>
+                                                <option <?= isset($student) && $student->desc3 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="otro1" value="<?= $student->desc_otro1 ?>">
+                                        <input type="text" class="form-control" name="otro1" value="<?= isset($student) ? $student->desc_otro1 : '' ?>">
                                     </div>
                                     <div class="form-group col-6">
-                                        <input type="text" class="form-control" name="cdb3" value="<?= $student->cdb3 ?>">
+                                        <input type="text" class="form-control" name="cdb3" value="<?= isset($student) ? $student->cdb3 : '' ?>">
                                     </div>
                                     <div class="form-group col-12 row">
                                         <div class="col-3"><label><?= $lang->translation("Escuela") ?>:</label></div>
                                         <div class="col">
                                             <select name="school" class="form-control">
                                                 <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                                <option <?= $student->pop === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Privada") ?></option>
-                                                <option <?= $student->pop === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Publica") ?></option>
+                                                <option <?= isset($student) && $student->pop === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Privada") ?></option>
+                                                <option <?= isset($student) && $student->pop === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Publica") ?></option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group col-12">
-                                        <input type="text" class="form-control" name="colpro" value="<?= $student->colpro ?>">
+                                        <input type="text" class="form-control" name="colpro" value="<?= isset($student) ? $student->colpro : '' ?>">
                                     </div>
                                     <div class="form-group col-12 row">
                                         <div class="col-3"><label><?= $lang->translation("Municipio") ?>:</label></div>
                                         <div class="col">
-                                            <input type="text" class="form-control" name="municipio" value="<?= $student->municipio ?>">
+                                            <input type="text" class="form-control" name="municipio" value="<?= isset($student) ? $student->municipio : '' ?>">
                                         </div>
                                     </div>
                                     <div class="form-group col-12 row">
@@ -323,8 +323,8 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <div class="col">
                                             <select name="transporte" class="form-control">
                                                 <option value=""><?= $lang->translation("Ninguno") ?></option>
-                                                <option <?= $student->transporte === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Interno") ?></option>
-                                                <option <?= $student->transporte === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Externo") ?></option>
+                                                <option <?= isset($student) && $student->transporte === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Interno") ?></option>
+                                                <option <?= isset($student) && $student->transporte === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Externo") ?></option>
                                             </select>
                                         </div>
                                     </div>
@@ -342,26 +342,26 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="doctor" class="text-center"><?= $lang->translation("Médico") ?></label>
-                                        <input type="text" class="form-control" name="doctor" id="doctor" value="<?= $student->medico ?>">
+                                        <input type="text" class="form-control" name="doctor" id="doctor" value="<?= isset($student) ? $student->medico : '' ?>">
                                     </div>
                                     <div class="form-group">
                                         <label for="accommodation" class="text-center"><?= $lang->translation("Acomodo razonable") ?></label>
                                         <select class="form-control" name="accommodation" id="accommodation">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->acomodo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
-                                            <option <?= $student->acomodo === 'No' ? 'selected' : '' ?> value="No">No</option>
+                                            <option <?= isset($student) && $student->acomodo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
+                                            <option <?= isset($student) && $student->acomodo === 'No' ? 'selected' : '' ?> value="No">No</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label><?= $lang->translation("Impedimentos/Condiciones") ?></label>
-                                        <?php for ($i = 1; $i <= 4; $i++) : ?>
-                                            <input type="text" class="form-control" name="<?= "imp$i" ?>" value="<?= $student->{"imp$i"} ?>">
+                                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                                            <input type="text" class="form-control" name="<?= "imp$i" ?>" value="<?= isset($student) ? $student->{"imp$i"} : '' ?>">
                                         <?php endfor ?>
                                     </div>
                                     <div class="form-group">
                                         <label><?= $lang->translation("Medicamentos") ?></label>
-                                        <?php for ($i = 1; $i <= 4; $i++) : ?>
-                                            <input type="text" class="form-control" name="<?= "med$i" ?>" value="<?= $student->{"med$i"} ?>">
+                                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                                            <input type="text" class="form-control" name="<?= "med$i" ?>" value="<?= isset($student) ? $student->{"med$i"} : '' ?>">
                                         <?php endfor ?>
                                     </div>
                                 </div>
@@ -371,33 +371,33 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                             <label><?= $lang->translation("Teléfonos") ?></label>
                                         </div>
                                         <div class="col">
-                                            <input type="tel" class="form-control phone" name="tel1" value="<?= $student->tel1 ?>">
+                                            <input type="tel" class="form-control phone" name="tel1" value="<?= isset($student) ? $student->tel1 : '' ?>">
                                         </div>
                                         <div class="col">
-                                            <input type="tel" class="form-control phone" name="tel2" value="<?= $student->tel2 ?>">
+                                            <input type="tel" class="form-control phone" name="tel2" value="<?= isset($student) ? $student->tel2 : '' ?>">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="professionalEvaluation" class="text-center"><?= $lang->translation("Trajo Evaluación Profesional") ?></label>
                                         <select class="form-control" name="professionalEvaluation" id="professionalEvaluation">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->trajo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
-                                            <option <?= $student->trajo === 'No' ? 'selected' : '' ?> value="No">No</option>
+                                            <option <?= isset($student) && $student->trajo === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
+                                            <option <?= isset($student) && $student->trajo === 'No' ? 'selected' : '' ?> value="No">No</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label><?= $lang->translation("Enfermedades") ?></label>
-                                        <?php for ($i = 1; $i <= 4; $i++) : ?>
-                                            <input type="text" class="form-control" name="<?= "enf$i" ?>" value="<?= $student->{"enf$i"} ?>">
+                                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                                            <input type="text" class="form-control" name="<?= "enf$i" ?>" value="<?= isset($student) ? $student->{"enf$i"} : '' ?>">
                                         <?php endfor ?>
                                     </div>
                                     <div class="form-group">
                                         <label><?= $lang->translation("Recetas") ?></label>
-                                        <?php for ($i = 1; $i <= 4; $i++) : ?>
-                                            <input type="text" class="form-control" name="<?= "rec$i" ?>" value="<?= $student->{"rec$i"} ?>">
+                                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                                            <input type="text" class="form-control" name="<?= "rec$i" ?>" value="<?= isset($student) ? $student->{"rec$i"} : '' ?>">
                                         <?php endfor ?>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -412,45 +412,45 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                 <label for="religion" class="text-center"><?= $lang->translation("Religión") ?></label>
                                 <select class="form-control" name="religion" id="religion">
                                     <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                    <option <?= $student->religion === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Adventista") ?></option>
-                                    <option <?= $student->religion === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Bautista") ?></option>
-                                    <option <?= $student->religion === '3' ? 'selected' : '' ?> value="3"><?= $lang->translation("Católico") ?></option>
-                                    <option <?= $student->religion === '4' ? 'selected' : '' ?> value="4"><?= $lang->translation("Evangélico") ?></option>
-                                    <option <?= $student->religion === '5' ? 'selected' : '' ?> value="5"><?= $lang->translation("Mita") ?></option>
-                                    <option <?= $student->religion === '6' ? 'selected' : '' ?> value="6"><?= $lang->translation("Metodista") ?></option>
-                                    <option <?= $student->religion === '7' ? 'selected' : '' ?> value="7"><?= $lang->translation("Pentecostal") ?></option>
-                                    <option <?= $student->religion === '8' ? 'selected' : '' ?> value="8"><?= $lang->translation("Luterano") ?></option>
+                                    <option <?= isset($student) && $student->religion === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Adventista") ?></option>
+                                    <option <?= isset($student) && $student->religion === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Bautista") ?></option>
+                                    <option <?= isset($student) && $student->religion === '3' ? 'selected' : '' ?> value="3"><?= $lang->translation("Católico") ?></option>
+                                    <option <?= isset($student) && $student->religion === '4' ? 'selected' : '' ?> value="4"><?= $lang->translation("Evangélico") ?></option>
+                                    <option <?= isset($student) && $student->religion === '5' ? 'selected' : '' ?> value="5"><?= $lang->translation("Mita") ?></option>
+                                    <option <?= isset($student) && $student->religion === '6' ? 'selected' : '' ?> value="6"><?= $lang->translation("Metodista") ?></option>
+                                    <option <?= isset($student) && $student->religion === '7' ? 'selected' : '' ?> value="7"><?= $lang->translation("Pentecostal") ?></option>
+                                    <option <?= isset($student) && $student->religion === '8' ? 'selected' : '' ?> value="8"><?= $lang->translation("Luterano") ?></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="church"><?= $lang->translation("Iglesia") ?></label>
-                                <input type="text" class="form-control" name="church" id="church" value="<?= $student->iglesia ?>">
+                                <input type="text" class="form-control" name="church" id="church" value="<?= isset($student) ? $student->iglesia : '' ?>">
                             </div>
                             <div class="form-group row">
                                 <label class="col-12"><?= $lang->translation("Bautismo") ?></label>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="baptism" id="baptism" value="<?= $student->bau ?>">
+                                    <input type="text" class="form-control" name="baptism" id="baptism" value="<?= isset($student) ? $student->bau : '' ?>">
                                 </div>
                                 <div class="col">
-                                    <input class="form-control" type="date" name="baptismDate" value="<?= $student->fbau ?>">
+                                    <input class="form-control" type="date" name="baptismDate" value="<?= isset($student) ? $student->fbau : '' ?>">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-12"><?= $lang->translation("Comunión") ?></label>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="communion" id="communion" value="<?= $student->com ?>">
+                                    <input type="text" class="form-control" name="communion" id="communion" value="<?= isset($student) ? $student->com : '' ?>">
                                 </div>
                                 <div class="col">
-                                    <input class="form-control" type="date" name="communionDate" value="<?= $student->fcom ?>">
+                                    <input class="form-control" type="date" name="communionDate" value="<?= isset($student) ? $student->fcom : '' ?>">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-12"><?= $lang->translation("Confirmación") ?></label>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="confirmation" id="confirmation" value="<?= $student->con ?>">
+                                    <input type="text" class="form-control" name="confirmation" id="confirmation" value="<?= isset($student) ? $student->con : '' ?>">
                                 </div>
                                 <div class="col">
-                                    <input class="form-control" type="date" name="confirmationDate" value="<?= $student->fcon ?>">
+                                    <input class="form-control" type="date" name="confirmationDate" value="<?= isset($student) ? $student->fcon : '' ?>">
                                 </div>
                             </div>
 
@@ -467,13 +467,13 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <label for="biologicalParent"><?= $lang->translation("Quien es?") ?></label>
                                         <select name="biologicalParent" id="biologicalParent" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                            <option <?= $student->padre === 'P' ? 'selected' : '' ?> value="P"><?= $lang->translation("Padre") ?></option>
-                                            <option <?= $student->padre === 'M' ? 'selected' : '' ?> value="M"><?= $lang->translation("Madre") ?></option>
+                                            <option <?= isset($student) && $student->padre === 'P' ? 'selected' : '' ?> value="P"><?= $lang->translation("Padre") ?></option>
+                                            <option <?= isset($student) && $student->padre === 'M' ? 'selected' : '' ?> value="M"><?= $lang->translation("Madre") ?></option>
                                         </select>
                                     </div>
                                     <div class="col-6">
                                         <label for="biologicalParentName"><?= $lang->translation("Nombre Completo") ?></label>
-                                        <input type="text" class="form-control" name='biologicalParentName' id="biologicalParentName" value="<?= $student->nombre_padre ?>">
+                                        <input type="text" class="form-control" name='biologicalParentName' id="biologicalParentName" value="<?= isset($student) ? $student->nombre_padre : '' ?>">
                                     </div>
 
                                 </div>
@@ -481,32 +481,32 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                             <label class="my-2"><?= $lang->translation("Dirección") ?></label>
                             <div class="form-row">
                                 <div class="col-12">
-                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Dirección") ?> 1" name="dir1" value="<?= $student->dir1 ?>">
+                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Dirección") ?> 1" name="dir1" value="<?= isset($student) ? $student->dir1 : '' ?>">
                                 </div>
                                 <div class="col-12 mt-1">
-                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Dirección") ?> 2" name="dir2" value="<?= $student->dir2 ?>">
+                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Dirección") ?> 2" name="dir2" value="<?= isset($student) ? $student->dir2 : '' ?>">
                                 </div>
                                 <div class="col-5 mt-1">
-                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Ciudad") ?>" name="city" value="<?= $student->pueblo ?>">
+                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Ciudad") ?>" name="city" value="<?= isset($student) ? $student->pueblo : '' ?>">
                                 </div>
                                 <div class="col-3 mt-1">
-                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Estado") ?>" name="state" value="<?= $student->estado ?>">
+                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Estado") ?>" name="state" value="<?= isset($student) ? $student->estado : '' ?>">
                                 </div>
                                 <div class="col-4 mt-1">
-                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Codigo Postal") ?>" name="zip" value="<?= $student->zip ?>">
+                                    <input class="form-control" type="text" placeholder="<?= $lang->translation("Codigo Postal") ?>" name="zip" value="<?= isset($student) ? $student->zip : '' ?>">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="biologicalParentEmail"><?= $lang->translation("Correo electrónico") ?></label>
-                                <input type="email" class="form-control" name='biologicalParentEmail' id="biologicalParentEmail" value="<?= $student->emailp ?>">
+                                <input type="email" class="form-control" name='biologicalParentEmail' id="biologicalParentEmail" value="<?= isset($student) ? $student->emailp : '' ?>">
                             </div>
                             <div class="form-group">
                                 <label for="biologicalParentPhone"><?= $lang->translation("Teléfono") ?></label>
-                                <input type="tel" class="form-control phone" name='biologicalParentPhone' id="biologicalParentPhone" value="<?= $student->telp ?>">
+                                <input type="tel" class="form-control phone" name='biologicalParentPhone' id="biologicalParentPhone" value="<?= isset($student) ? $student->telp : '' ?>">
                             </div>
                             <div class="form-group">
                                 <label for="biologicalParentCell"><?= $lang->translation("Celular") ?></label>
-                                <input type="tel" class="form-control phone" name='biologicalParentCell' id="biologicalParentCell" value="<?= $student->celp ?>">
+                                <input type="tel" class="form-control phone" name='biologicalParentCell' id="biologicalParentCell" value="<?= isset($student) ? $student->celp : '' ?>">
                             </div>
                         </div>
                     </div>
@@ -519,13 +519,13 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                 <label for="retainedEnrollment" class="text-center"><?= $lang->translation("Matrícula retenida") ?></label>
                                 <select class="form-control" name="retainedEnrollment" id="retainedEnrollment">
                                     <option value=""><?= $lang->translation("Seleccionar") ?></option>
-                                    <option <?= $student->mat_retenida === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
-                                    <option <?= $student->mat_retenida === 'No' ? 'selected' : '' ?> value="No">No</option>
+                                    <option <?= isset($student) && $student->mat_retenida === 'Si' ? 'selected' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
+                                    <option <?= isset($student) && $student->mat_retenida === 'No' ? 'selected' : '' ?> value="No">No</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="reason" class="text-center"><?= $lang->translation("Razón") ?></label>
-                                <textarea class="form-control" name="reason" id="reason"><?= $student->alias ?></textarea>
+                                <textarea class="form-control" name="reason" id="reason"><?= isset($student) ? $student->alias : '' ?></textarea>
                             </div>
                         </div>
                     </div>
