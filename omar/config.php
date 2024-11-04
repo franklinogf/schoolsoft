@@ -1,23 +1,26 @@
 <?php
+require_once 'app.php';
+use Classes\DataBase\DB;
 /* -------------------------------------------------------------------------- */
 /*                                   Config                                   */
 /* -------------------------------------------------------------------------- */
 
 // Language: es = Spanish, en = English
-define('__LANG', 'en');
-define('__DEFAULT_LOGO', 'logo.gif');
+$school = DB::table('colegio')->where('usuario', 'administrador')->first();
+define('__LANG', $school->idioma ?? 'es');
+const __DEFAULT_LOGO = 'logo.gif';
 // regular is 72 x 72
-define('__LOGO_SIZE', 100);
-define('__HOME_LOGO_SIZE', 200);
-define('__LOGIN_LOGO_SIZE', 300);
+const __LOGO_SIZE = 100;
+const __HOME_LOGO_SIZE = 200;
+const __LOGIN_LOGO_SIZE = 300;
 /* ----------------------------------- PDF ---------------------------------- */
 
 // RGB $pdf->SetFillColor(red,green,blue)
-define('__PDF_FILL_COLOR_RED', 89);
-define('__PDF_FILL_COLOR_GREEN', 171);
-define('__PDF_FILL_COLOR_BLUE', 227);
+const __PDF_FILL_COLOR_RED = 89;
+const __PDF_FILL_COLOR_GREEN = 171;
+const __PDF_FILL_COLOR_BLUE = 227;
 
-define('__PDF_LOGO_SIZE', 30);
+const __PDF_LOGO_SIZE = 30;
 
 /* -------------------------------- time zone ------------------------------- */
 

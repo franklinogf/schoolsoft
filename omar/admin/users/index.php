@@ -102,7 +102,7 @@ $options = [
                 'link' => 'search_email/'
             ],
             [
-                'name' => ["es" => 'Bloqueo de re-matrícula',   "en" => "Re-Enrollment lock"],
+                'name' => ["es" => 'Bloqueo de re-matrícula', "en" => "Re-Enrollment lock"],
                 'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Access or blockage of re-enrollment to parents.'],
                 'link' => 'regis_deactivation.php'
             ],
@@ -112,42 +112,32 @@ $options = [
         'title' => ["es" => 'Entrada de codigos', "en" => 'Code entry'],
         'buttons' => [
             [
-                'name' => ["es" => 'Códigos de bajas',   "en" => "Unenrollment codes"],
+                'name' => ["es" => 'Códigos de bajas', "en" => "Unenrollment codes"],
                 'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
                 'link' => 'unenrollment/codes.php'
             ],
             [
-                'name' => ["es" => 'Socio económico',   "en" => "Socioeconomic"],
+                'name' => ["es" => 'Socio económico', "en" => "Socioeconomic"],
                 'desc' => ['es' => 'Entrada de valores para el Socio Económico.', 'en' => 'Input of values for the Socioeconomic.'],
                 'link' => 'socioeconomic/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos especiales',   "en" => "Special codes"],
+                'name' => ["es" => 'Códigos especiales', "en" => "Special codes"],
                 'desc' => ['es' => 'Entrada de valores Especiales.', 'en' => 'Entry of Special values.'],
                 'link' => 'Special_codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos documentos',   "en" => "Documents codes"],
+                'name' => ["es" => 'Códigos documentos', "en" => "Documents codes"],
                 'desc' => ['es' => 'Definir la entrada de los documentos para entregar.', 'en' => 'Define the entry of documents to deliver.'],
                 'link' => 'documentsDelivery/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos Departamentos',   "en" => "Department codes"],
+                'name' => ["es" => 'Códigos Departamentos', "en" => "Department codes"],
                 'desc' => ['es' => 'Entra los códigos de los departamentos del Colegio.', 'en' => 'Enter the codes of the College departments.'],
                 'link' => 'deparment/codes.php'
             ],
             [
-                'name' => ["es" => 'Paypal',   "en" => "Paypal"],
-                'desc' => ['es' => 'Códigos para activar PayPal.', 'en' => 'Códigos para activar PayPal.'],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Código de email',   "en" => "Código de email"],
-                'desc' => ['es' => 'Configuración del email para envio de mensajes.', 'en' => 'Configuración del email para envio de mensajes.'],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Códigos de memos',   "en" => "Memos codes"],
+                'name' => ["es" => 'Códigos de memos', "en" => "Memos codes"],
                 'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
                 'link' => 'memos/codes.php'
             ]
@@ -183,13 +173,13 @@ $lang = new Lang([
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
-            <?php foreach ($options as $option) : ?>
+            <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button) : ?>
+                                <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
                                         <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
                                     </div>

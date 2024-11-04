@@ -14,6 +14,7 @@ Server::is_post();
 $filePath = "admin/users/documents/files/";
 
 if ($_POST['option'] === 'save') {
+   $ss = $_POST['addDocumentStudentSs'];
    $title = $_POST['title'];
    $date = $_POST['date'];
    $file = new File();
@@ -28,9 +29,9 @@ if ($_POST['option'] === 'save') {
          'nombre_archivo' => $newName,
       ]);
    }
-   $ss = $_POST['addDocumentStudentSs'];
 
-   Route::redirect("/users/documents/index.php?student=$ss");
+
+   Route::redirect("/users/documents/index.php");
 } else if ($_POST['option'] === 'edit') {
    $title = $_POST['title'];
    $date = $_POST['date'];
@@ -46,7 +47,7 @@ if ($_POST['option'] === 'save') {
    ]);
    $ss = $_POST['addDocumentStudentSs'];
 
-   Route::redirect("/users/documents/index.php?student=$ss");
+   Route::redirect("/users/documents/index.php");
 } else if ($_POST['option'] === 'delete') {
    $id = $_POST['addDocumentId'];
    $document = DB::table("estudiantes_docs")->select('nombre_archivo')->where(['id', $id])->first();

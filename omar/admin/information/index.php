@@ -46,6 +46,15 @@ $constantsKeys = ['cafeteria_deposit'];
                 </div>
                 <div class="row mt-2">
                     <div class="form-group col-md-6">
+                        <label for="idioma">Idioma</label>
+                        <select class="form-control" name="idioma" id="idioma">
+                            <option value="es" <?= $school->info('idioma') === 'es' ? 'selected' : '' ?>>Español</option>
+                            <option value="en" <?= $school->info('idioma') === 'en' ? 'selected' : '' ?>>Inglés</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="form-group col-md-6">
                         <label for="telefono">Teléfono</label>
                         <input type="tel" class="form-control" name="telefono" id="telefono" value="<?= $school->info('telefono') ?>">
                     </div>
