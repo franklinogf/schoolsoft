@@ -20,7 +20,8 @@ if ($_POST['option'] === 'save') {
    $file = new File();
    if ($file->amount > 0) {
       $nextId = DB::getNextAutoIncrementIdFromTable('estudiantes_docs');
-      $newName = "$ss($nextId).jpg";
+      $extension = pathinfo($file->files->name, PATHINFO_EXTENSION);
+      $newName = "{$ss}($nextId).{$extension}";
       $file::upload($file->files, $filePath, $newName);
       DB::table("estudiantes_docs")->insert([
          'ss_estudiante' => $ss,
@@ -30,9 +31,10 @@ if ($_POST['option'] === 'save') {
       ]);
    }
 
-
+   Session::set('ss', $ss);
    Route::redirect("/users/documents/index.php");
 } else if ($_POST['option'] === 'edit') {
+   $ss = $_POST['addDocumentStudentSs'];
    $title = $_POST['title'];
    $date = $_POST['date'];
    $file = new File();
@@ -45,8 +47,8 @@ if ($_POST['option'] === 'save') {
       'titulo' => $title,
       'fecha' => $date,
    ]);
-   $ss = $_POST['addDocumentStudentSs'];
 
+   Session::set('ss', $ss);
    Route::redirect("/users/documents/index.php");
 } else if ($_POST['option'] === 'delete') {
    $id = $_POST['addDocumentId'];
