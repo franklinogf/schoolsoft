@@ -17,31 +17,35 @@ if (isset($_POST['saveDocument'])) {
     $student = new Student($studentSS);
     $year = $student->info('year');
     foreach ($documents as $index => $document) {
-        if (DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->first()) {
-            DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->update([                
-                'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : '',
-                'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
-                'fecha' => $_POST["date$index"],
-                'fesp' => $_POST["expirationDate$index"],
-            ]);
-                // Util::toJson([
-                //     'year' => $year,
-                //     'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : '',
-                //     'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
-                //     'fecha' => $_POST["date$index"],
-                //     'fesp' => $_POST["expirationDate$index"],
-                // ]);
+        if (DB::table("docu_estudiantes")->where([['ss', $studentSS], ['codigo', $document->codigo]])->first()) {
+
+            $data = [
+                'entrego' => isset($_POST["delivered$index"]) && $_POST["delivered$index"] === 'on' ? 'Si' : '',
+                'nap' => isset($_POST["doesntApply$index"]) && $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
+                'fecha' => isset($_POST["date$index"]) ? $_POST["date$index"] : '',
+                'fesp' => isset($_POST["expirationDate$index"]) ? $_POST["expirationDate$index"] : '',
+            ];
+            var_dump($data);
+
+            DB::table("docu_estudiantes")->where([['ss', $studentSS], ['codigo', $document->codigo]])->update($data);
+            // Util::toJson([
+            //     'year' => $year,
+            //     'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : '',
+            //     'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
+            //     'fecha' => $_POST["date$index"],
+            //     'fesp' => $_POST["expirationDate$index"],
+            // ]);
         } else {
-            DB::table("docu_estudiantes")->where([['ss',$studentSS],['codigo',$document->codigo]])->insert([
+            DB::table("docu_estudiantes")->where([['ss', $studentSS], ['codigo', $document->codigo]])->insert([
                 'id' => $student->id,
                 'ss' => $studentSS,
                 'codigo' => $document->codigo,
                 'desc1' => $document->desc1,
                 'year' => $year,
-                'entrego' => $_POST["delivered$index"] === 'on' ? 'Si' : '',
-                'nap' => $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
-                'fecha' => $_POST["date$index"],
-                'fesp' => $_POST["expirationDate$index"],
+                'entrego' => isset($_POST["delivered$index"]) && $_POST["delivered$index"] === 'on' ? 'Si' : '',
+                'nap' => isset($_POST["doesntApply$index"]) && $_POST["doesntApply$index"] === 'on' ? 'Si' : '',
+                'fecha' => isset($_POST["date$index"]) ? $_POST["date$index"] : '',
+                'fesp' => isset($_POST["expirationDate$index"]) ? $_POST["expirationDate$index"] : '',
             ]);
         }
     }

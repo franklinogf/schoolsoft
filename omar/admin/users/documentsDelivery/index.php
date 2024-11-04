@@ -79,9 +79,9 @@ $documents = DB::table('docu_entregados')->get();
                                     </div>
                                     <br>
                                     <label for="date<?= $index ?>">Fecha</label>
-                                    <input type="date" class="form-control" name="date<?= $index ?>" id="date<?= $index ?>" value="<?= $docu && $docu->fecha ?>">
+                                    <input type="date" class="form-control" name="date<?= $index ?>" id="date<?= $index ?>" value="<?= $docu ? $docu->fecha : '' ?>">
                                     <label for="expirationDate<?= $index ?>">Fecha de expiración</label>
-                                    <input type="date" class="form-control" name="expirationDate<?= $index ?>" id="expirationDate<?= $index ?>" value="<?= $docu && $docu->fesp ?>">
+                                    <input type="date" class="form-control" name="expirationDate<?= $index ?>" id="expirationDate<?= $index ?>" value="<?= $docu ? $docu->fesp : '' ?>">
 
                                 </div>
 
