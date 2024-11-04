@@ -10,18 +10,17 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Lista de direcci�n postal', 'Postal address List'],
+$lang = new Lang([['Lista de dirección postal', 'Postal address List'],
     ['Nombre Estudiante', 'Student name'],
-    ['Direcci�n', 'Address'],
+   ['Dirección', 'Address'],
     ['Trabajos', 'Works'],
     ['Padres', 'Fathers'],
     ['Madres', 'Mothers'],
 ]);
 $grade = $_POST['grade'];
 
-$school = new School();
-$year = $school->year();
+$school = new School(Session::id());
+$year = $school->info('year2');
 
 $grupo = '';
 class nPDF extends PDF
@@ -33,18 +32,18 @@ class nPDF extends PDF
         global $grupo;
         parent::header();
         $this->SetFont('Arial', 'B', 15);
-        $this->Cell(0, 5, $lang->translation("Lista de direcci�n postal") . " $year / ".$grupo, 0, 1, 'C');
+      $this->Cell(0, 5, $lang->translation("Lista de dirección postal") . " $year / " . $grupo, 0, 1, 'C');
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombre Estudiante"), 1, 0, 'C', true);
-        $this->Cell(90, 5, $lang->translation("Direcci�n"), 1, 1, 'C', true);
+      $this->Cell(90, 5, $lang->translation("Dirección"), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }
 }
 $pdf = new nPDF();
-$pdf->SetTitle($lang->translation("Lista de direcci�n postal") . " $year / ".$grupo, true);
+$pdf->SetTitle($lang->translation("Lista de dirección postal") . " $year / " . $grupo, true);
 $pdf->Fill();
 
 $grade = $_POST['grade'];
@@ -81,15 +80,15 @@ $parent = DB::table('madre')->where([
               }
            $pdf->Cell(10, 5, $count, 0, 0, 'C');
            $pdf->Cell(15, 5, $student->id, 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($student->apellidos.' '.$student->nombre), 0, 0, 'L');
-           $pdf->Cell(70, 5, utf8_decode($parent->dir1), 0, 1, 'L');
+      $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre, 0, 0, 'L');
+      $pdf->Cell(70, 5, $parent->dir1, 0, 1, 'L');
            if ($parent->dir3 !='')
               {
               $pdf->Cell(95, 5, '', 0, 0, 'C');
-              $pdf->Cell(70, 5, utf8_decode($parent->dir3), 0, 1, 'L');
+         $pdf->Cell(70, 5, $parent->dir3, 0, 1, 'L');
               }
            $pdf->Cell(95, 5, '', 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($parent->pueblo1).' '.$parent->est1.' '.$parent->zip1, 0, 1, 'L');
+      $pdf->Cell(70, 5, $parent->pueblo1 . ' ' . $parent->est1 . ' ' . $parent->zip1, 0, 1, 'L');
            $count++;
            }
         if ($est =='T')
@@ -102,19 +101,17 @@ $parent = DB::table('madre')->where([
               }
            $pdf->Cell(10, 5, $count, 0, 0, 'C');
            $pdf->Cell(15, 5, $student->id, 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($student->apellidos.' '.$student->nombre), 0, 0, 'L');
-           $pdf->Cell(70, 5, utf8_decode($parent->dir1), 0, 1, 'L');
+      $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre, 0, 0, 'L');
+      $pdf->Cell(70, 5, $parent->dir1, 0, 1, 'L');
            if ($parent->dir3 !='')
               {
               $pdf->Cell(95, 5, '', 0, 0, 'C');
-              $pdf->Cell(70, 5, utf8_decode($parent->dir3), 0, 1, 'L');
+         $pdf->Cell(70, 5, $parent->dir3, 0, 1, 'L');
               }
            $pdf->Cell(95, 5, '', 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($parent->pueblo1).' '.$parent->est1.' '.$parent->zip1, 0, 1, 'L');
+      $pdf->Cell(70, 5, $parent->pueblo1 . ' ' . $parent->est1 . ' ' . $parent->zip1, 0, 1, 'L');
            $count++;
-           }
-           
+   }
 }
-
 
 $pdf->Output();
