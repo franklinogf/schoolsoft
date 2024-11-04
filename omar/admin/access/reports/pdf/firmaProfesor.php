@@ -44,7 +44,7 @@ $teachers = DB::table('profesor')->where([
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(10, 7, $count + 1, 0, 0, 'C');
     $pdf->Cell(20, 7, $teacher->id, 0, 0, 'C');
-    $pdf->Cell(70, 7, utf8_decode($teacher->apellidos).' '.utf8_decode($teacher->nombre));
+    $pdf->Cell(70, 7, $teacher->apellidos . ' ' . $teacher->nombre);
     $pdf->Cell(70, 7, '', 'B', 1, 'C');
 }
 
