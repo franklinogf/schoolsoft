@@ -16,9 +16,10 @@ $lang = new Lang([
     ['Teléfonos', 'Phone'],
     ['Departamento', 'Deparment'],
 ]);
-$prof = $_POST['prof'];
-$school = new School();
-$year = $school->year();
+$prof = $_POST['prof'] ?? '';
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista No docentes") . " $year", true);
 $pdf->Fill();
@@ -32,7 +33,7 @@ $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
 $pdf->Cell(70, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
-$pdf->Cell(50, 5, $lang->translation("Teléfonos"), 1, 0, 'C', true);
+$pdf->Cell(50, 5, utf8_encode($lang->translation("Teléfonos")), 1, 0, 'C', true);
 $pdf->Cell(40, 5, $lang->translation("Departamento"), 1, 1, 'C', true);
 $pdf->ln(2);
 $pdf->SetFont('Arial', '', 10);
@@ -44,11 +45,9 @@ $teachers = DB::table('profesor')->where([
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
     $pdf->Cell(20, 5, $teacher->id, 0, 0, 'C');
-    $pdf->Cell(70, 5, utf8_decode($teacher->apellidos).' '.utf8_decode($teacher->nombre));
+    $pdf->Cell(70, 5, $teacher->apellidos . ' ' . $teacher->nombre);
     $pdf->Cell(50, 5, $teacher->cel.' / '.$teacher->tel_res, 0, 0, 'L');
-    $pdf->Cell(40, 5, utf8_decode($teacher->dep_des), 0, 1, 'L');
-
+    $pdf->Cell(40, 5, $teacher->dep_des, 0, 1, 'L');
 }
-
 
 $pdf->Output();
