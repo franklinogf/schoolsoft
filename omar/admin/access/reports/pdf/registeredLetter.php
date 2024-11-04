@@ -21,17 +21,18 @@ $lang = new Lang([
     [', certifica que el/la/los/las', ', certifies that he/she/they'],
     ['estudiante(s) ha sido estudiante(s) regular(es) de', 'student(s) has been a regular student(s) of'],
     ['nuestro Colegio durante el curso escolar 20', 'our School during the school year 20'],
-    ['Cualquier informaci�n favor de comunicarse a nuestras', 'Any information please contact our'],
+    ['Cualquier información favor de comunicarse a nuestras', 'Any information please contact our'],
     ['Oficinas de Finanzas.', 'Finance Offices.'],
 ]);
 $grade = $_POST['grade'];
 $opcion = $_POST['option'];
 $id = $_POST['student'];
-$school = new School();
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->year();
 $colegio = $school->info('colegio');
 list($y1,$y2) = explode("-",$year);
 
@@ -78,13 +79,13 @@ if ($opcion == 'grade')
        $pdf->Ln(5);
        foreach ($students2 as $stud) {
            $pdf->Cell(25, 5, '', 0, 0, 'C');
-           $pdf->Cell(100, 5, utf8_decode($stud->apellidos).' '.utf8_decode($stud->nombre));
+                $pdf->Cell(100, 5, $stud->apellidos . ' ' . $stud->nombre);
            $pdf->Cell(30, 5, $stud->grado, 0, 1, 'L');
            }
        $pdf->Ln(10);
        $pdf->Cell(25, 7, '', 0, 0, 'C');
-       $pdf->Cell(100, 7, $lang->translation("Cualquier informaci�n favor de comunicarse a nuestras"), 0, 1, 'L');
-       $pdf->Cell(25, 7, '', 0, 0, 'C');
+            $pdf->Cell(100, 7, utf8_encode($lang->translation("Cualquier información favor de comunicarse a nuestras")), 0, 1, 'L');
+            $pdf->Cell(25, 7, 'ÑÑñ', 0, 0, 'C');
        $pdf->Cell(100, 7, $lang->translation("Oficinas de Finanzas."), 0, 1, 'L');
        }
      }
@@ -123,12 +124,12 @@ else
        $pdf->Ln(5);
        foreach ($students2 as $stud) {
            $pdf->Cell(25, 5, '', 0, 0, 'C');
-           $pdf->Cell(100, 5, utf8_decode($stud->apellidos).' '.utf8_decode($stud->nombre));
+        $pdf->Cell(100, 5, $stud->apellidos . ' ' . $stud->nombre);
            $pdf->Cell(30, 5, $stud->grado, 0, 1, 'L');
            }
        $pdf->Ln(10);
        $pdf->Cell(25, 7, '', 0, 0, 'C');
-       $pdf->Cell(100, 7, $lang->translation("Cualquier informaci�n favor de comunicarse a nuestras"), 0, 1, 'L');
+    $pdf->Cell(100, 7, utf8_encode($lang->translation("Cualquier información favor de comunicarse a nuestras")), 0, 1, 'L');
        $pdf->Cell(25, 7, '', 0, 0, 'C');
        $pdf->Cell(100, 7, $lang->translation("Oficinas de Finanzas."), 0, 1, 'L');
    }
