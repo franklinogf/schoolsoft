@@ -16,9 +16,10 @@ $lang = new Lang([
     ["Hoja de matrícula", "Enrollment"],
 
 ]);
-$school = new School();
-$year = $school->year();
-$todayDate = $_POST['todayDate'] === 'si' ? true : false;
+$school = new School(Session::id());
+$year = $school->info('year2');
+
+$todayDate = $_POST['todayDate'] ?? '' === 'si' ? true : false;
 $enrollmentYear = $_POST['enrollmentYear'];
 $option = $_POST['option'];
 
@@ -48,7 +49,7 @@ foreach ($students as $student) {
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(40, 5, 'NUMERO DE CUENTA: ____________', 0, 0);
     $pdf->Cell(95, 5, '', 0, 0, 'R');
-    $pdf->Cell(40, 5, utf8_decode('AÑO ACADEMICO: ____________'), 0, 1);
+    $pdf->Cell(40, 5, utf8_encode('AÑO ACADEMICO: ____________'), 0, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(44, -5, '', 0, 0, 'R');
     $pdf->Cell(130, -5, $student->id, 0, 0);
@@ -70,7 +71,7 @@ foreach ($students as $student) {
     $pdf->Cell(20, 5, 'Grado Actual: _______', 0, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(38, -5, '', 0, 0, 'R');
-    $pdf->Cell(108, -5, utf8_decode("$student->apellidos $student->nombre"), 0, 0);
+    $pdf->Cell(108, -5, utf8_encode("$student->apellidos $student->nombre"), 0, 0);
 
     $pdf->Cell(32, -5, Util::gender($student->genero), 0, 0);
     $pdf->Cell(20, -5, $student->grado, 0, 1);
@@ -96,37 +97,37 @@ foreach ($students as $student) {
     $pdf->SetFont('Times', 'B', 10);
 
     $pdf->Cell(190, 6, 'Escuela de Procedencia (Nuevo Ingreso): _____________________________________________________________________', 0, 1);
-    $pdf->Cell(190, 6, utf8_decode('¿Padece alguna Condición Física?: ____ Especifique: ___________________________________________________________'), 0, 1);
-    $pdf->Cell(190, 6, utf8_decode('Tratamiento Médico si alguno: ______________________________________________________________________________'), 0, 1);
-    $pdf->Cell(90, 6, utf8_decode('Autorización para medicamentos: _____'), 0, 0);
-    $pdf->Cell(90, 6, utf8_decode('Autorización para Fotos: _____'), 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('¿Tiene hermanos en el Colegio?: _____________________________________________________________________________'), 0, 1);
+    $pdf->Cell(190, 6, utf8_encode('¿Padece alguna Condición Física?: ____ Especifique: ___________________________________________________________'), 0, 1);
+    $pdf->Cell(190, 6, utf8_encode('Tratamiento Médico si alguno: ______________________________________________________________________________'), 0, 1);
+    $pdf->Cell(90, 6, utf8_encode('Autorización para medicamentos: _____'), 0, 0);
+    $pdf->Cell(90, 6, utf8_encode('Autorización para Fotos: _____'), 0, 1);
+    $pdf->Cell(190, 10, utf8_encode('¿Tiene hermanos en el Colegio?: _____________________________________________________________________________'), 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(190, 10, 'Padre o encargado: _______________________________________ Indique: __________________ Celular: ______________', 1, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(32, -10, '', 0, 0);
-    $pdf->Cell(90, -10, utf8_decode($parent->padre), 0, 0);
+    $pdf->Cell(90, -10, utf8_encode($parent->padre), 0, 0);
     $pdf->Cell(42, -10, '', 0, 0);
     $pdf->Cell(20, -10, $parent->cel_p, 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Dirección: _______________________________________________________________________________________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Dirección: _______________________________________________________________________________________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(20, -10, '', 0, 0);
     $pdf->Cell(190, -10, "$parent->dir2 $parent->dir4 $parent->pueblo2 $parent->est2 $parent->zip2", 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Correo Electrónico: _______________________________________________________________________________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Correo Electrónico: _______________________________________________________________________________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(35, -10, '', 0, 0);
     $pdf->Cell(190, -10, $parent->email_p, 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Ocupación: ___________________________________________________________ Teléfono trabajo: ___________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Ocupación: ___________________________________________________________ Teléfono trabajo: ___________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
     
     $pdf->Cell(20, -10, '', 0, 0);
@@ -135,30 +136,30 @@ foreach ($students as $student) {
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Nombre de La Madre: __________________________________________________ Número Celular: ___________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Nombre de La Madre: __________________________________________________ Número Celular: ___________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
    
     $pdf->Cell(37, -10, '', 0, 0);
-    $pdf->Cell(120, -10, utf8_decode($parent->madre), 0, 0);
+    $pdf->Cell(120, -10, utf8_encode($parent->madre), 0, 0);
     $pdf->Cell(100, -10, $parent->cel_m, 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Dirección: _______________________________________________________________________________________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Dirección: _______________________________________________________________________________________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(20, -10, '', 0, 0);
     $pdf->Cell(190, -10, "$parent->dir1 $parent->dir3 $parent->pueblo1 $parent->est1 $parent->zip1", 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Correo Electrónico: _______________________________________________________________________________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Correo Electrónico: _______________________________________________________________________________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(35, -10, '', 0, 0);
     $pdf->Cell(190, -10, $parent->email_m, 0, 1);
 
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 10, '', 0, 1);
-    $pdf->Cell(190, 10, utf8_decode('Ocupación: ___________________________________________________________ Teléfono trabajo: ___________________'), 1, 1);
+    $pdf->Cell(190, 10, utf8_encode('Ocupación: ___________________________________________________________ Teléfono trabajo: ___________________'), 1, 1);
     $pdf->SetFont('Times', '', 10);
    
     $pdf->Cell(20, -10, '', 0, 0);
@@ -175,29 +176,19 @@ foreach ($students as $student) {
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(32, 8, '', 0, 1);
     $pdf->Cell(190, 20, '', 1, 1);
-    $pdf->Cell(190, -30, utf8_decode('*Estudio Socio-Económico: Ingreso Anual de la Familia: _____________________  Grupo familiar: _____________'), 0, 1);
+    $pdf->Cell(190, -30, utf8_encode('*Estudio Socio-Económico: Ingreso Anual de la Familia: _____________________  Grupo familiar: _____________'), 0, 1);
     $pdf->SetFont('Times', '', 10);
     $pdf->Cell(32, 12, '', 0, 1);
     $pdf->Cell(100, 10, '', 0, 0);
-    $soc = '';
-    $fam = '';
-    if ($reg[44] > 0) {
-        $fam = $reg[44];
-    }
-    if ($reg[40] + $reg[41] > 0) {
-        $soc = $reg[40] + $reg[41];
-    }
     $pdf->Cell(60, 5, $parent->sueldop + $parent->sueldom, 0, 0);
     $pdf->Cell(90, 5, $parent->nfam, 0, 1);
-    $pdf->Cell(58, 5, utf8_decode('* Esta información solo se utilizara para fines estadísticos del Departamento de Educación. El colegio tiene que preparar anualmente'), 0, 1);
-    $pdf->Cell(58, 5, utf8_decode('* un estudio Socio-Económico el cual es un requisito'), 0, 1);
+    $pdf->Cell(58, 5, utf8_encode('* Esta información solo se utilizara para fines estadísticos del Departamento de Educación. El colegio tiene que preparar anualmente'), 0, 1);
+    $pdf->Cell(58, 5, utf8_encode('* un estudio Socio-Económico el cual es un requisito'), 0, 1);
 
     $pdf->Ln(5);
     $pdf->Rect($pdf->GetX(), $pdf->GetY(), 63, 55);
     $pdf->Rect($pdf->GetX()+63, $pdf->GetY(), 64, 55);
     $pdf->Rect($pdf->GetX()+127, $pdf->GetY(), 63, 55);
-
-  
 
     $pdf->Cell(63, 6, '', 0, 0);
     $pdf->Cell(64, 6, 'Costo Matricula _____________________', 0, 0);
@@ -208,7 +199,7 @@ foreach ($students as $student) {
     $pdf->Cell(63, 6, 'Primer Pago: _________ ________', 0, 1);
 
     $pdf->Cell(63, 6, 'Firma del Padre o Persona Autorizada', 0, 0, 'C');
-    $pdf->Cell(64, 6, utf8_decode('Cuota Graduación: __________________'), 0, 0);
+    $pdf->Cell(64, 6, utf8_encode('Cuota Graduación: __________________'), 0, 0);
     $pdf->Cell(63, 6, '', 0, 1);
 
     $pdf->Cell(63, 6, '', 0, 0);
