@@ -9,23 +9,22 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ["Lista Tel�fono Profesor", "Teacher phone list"],
+$lang = new Lang([["Lista Teléfono Profesor", "Teacher phone list"],
     ['Profesor', 'Teacher'],
     ['Casa', 'Home'],
     ['Celular', 'Cel Phone'],
-    ['Contrase�a', 'Password'],
+    ['Contraseña', 'Password'],
 ]);
 
 $school = new School();
 $year = $school->year();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista Tel�fono Profesor") . " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Lista Teléfono Profesor")) . " $year", true);
 $pdf->Fill();
 
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 15);
-$pdf->Cell(0, 5, $lang->translation("Lista Tel�fono Profesor") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_encode($lang->translation("Lista Teléfono Profesor")) . " $year", 0, 1, 'C');
 
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);
@@ -42,7 +41,7 @@ $teachers = DB::table('profesor')->where([
 ])->orderBy('apellidos')->get();
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
-    $pdf->Cell(70, 5, utf8_decode($teacher->apellidos).' '.utf8_decode($teacher->nombre));
+    $pdf->Cell(70, 5, $teacher->apellidos . ' ' . $teacher->nombre);
     $pdf->Cell(40, 5, utf8_decode($teacher->tel_res), 0, 0, 'C');
     $pdf->Cell(40, 5, utf8_decode($teacher->cel), 0, 1, 'C');
 }
