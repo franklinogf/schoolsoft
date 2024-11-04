@@ -11,15 +11,14 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Informaci�n por grado', 'Information by grade'],
+$lang = new Lang([['Información por grado', 'Information by grade'],
     ['Celular', 'Cell Phone'],
     ['Padres', 'Parents'],
     ['Grado ', 'Grade '],
-    ['Ocupaci�n', 'Occupation'],
+    ['Ocupación', 'Occupation'],
     ['Nombre del estudiante', 'Student name'],
-    ['Direcci�n', 'Addess'],
-    ['Tel�fono', 'Phone'],
+    ['Dirección', 'Addess'],
+    ['Teléfono', 'Phone'],
 ]);
 $grade = $_POST['grade'];
 
@@ -36,22 +35,22 @@ class nPDF extends PDF
         global $grupo;
         parent::header();
         $this->SetFont('Arial', 'B', 15);
-        $this->Cell(0, 5, $lang->translation("Informaci�n por grado") . " $year ". $lang->translation("Grado ").$grupo, 0, 1, 'C');
+        $this->Cell(0, 5, utf8_encode($lang->translation("Información por grado")) . " $year " . $lang->translation("Grado ") . $grupo, 0, 1, 'C');
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
 //        $this->Cell(10, 5, $lang->translation("Grado ").$grupo, 0, 1);
         $this->Cell(10, 5, '', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
         $this->Cell(55, 5, $lang->translation("Padres"), 1, 0, 'C', true);
-        $this->Cell(22, 5, $lang->translation("Celular"), 1, 0, 'C', true);
-        $this->Cell(40, 5, $lang->translation("Ocupaci�n"), 1, 0, 'C', true);
-        $this->Cell(55, 5, $lang->translation("Direcci�n"), 1, 0, 'C', true);
-        $this->Cell(28, 5, $lang->translation("Tel�fono"), 1, 1, 'C', true);
+        $this->Cell(22, 5, utf8_encode($lang->translation("Celular")), 1, 0, 'C', true);
+        $this->Cell(40, 5, utf8_encode($lang->translation("Ocupación")), 1, 0, 'C', true);
+        $this->Cell(55, 5, utf8_encode($lang->translation("Dirección")), 1, 0, 'C', true);
+        $this->Cell(28, 5, utf8_encode($lang->translation("Teléfono")), 1, 1, 'C', true);
         $this->SetFont('Arial', '', 10);
     }
 }
 $pdf = new nPDF();
-$pdf->SetTitle($lang->translation("Informaci�n por grado") . " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Información por grado")) . " $year", true);
 $pdf->Fill();
 
 $unegrade = $_POST['grade'];
@@ -83,7 +82,7 @@ $parent = DB::table('madre')->where([
            }
 
          $pdf->Cell(10, 5, $count, 0, 0, 'C');
-         $pdf->Cell(70, 5, utf8_decode($student->apellidos.' '.$student->nombre));
+        $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre);
          $pdf->Cell(55, 5, $parent->madre);
          $pdf->Cell(22, 5, $parent->cel_m);
          $pdf->Cell(40, 5, $parent->posicion_m);
@@ -109,7 +108,4 @@ $parent = DB::table('madre')->where([
     }
 }
 
-
 $pdf->Output();
-
-
