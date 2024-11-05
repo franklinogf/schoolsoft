@@ -8,7 +8,7 @@ use Classes\Lang;
 
 Session::is_logged();
 $lang = new Lang([
-    ["Códigos Departamento", "Department codes"],
+    ["Códigos de documentos", "Documents codes"],
     ['Guardar', 'Save'],
     ['Código', 'Code'],
     ['Descripción', 'Description'],
@@ -17,14 +17,14 @@ $lang = new Lang([
     ['Debe de llenar todos los campos', 'You must fill all fields'],
     ['Lista de codigos', 'Codes list']
 ]);
-$codes = DB::table('departamentos')->get();
+$codes = DB::table('docu_entregados')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = $lang->translation('Códigos Departamento');
+    $title = $lang->translation('Códigos de documentos');
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -34,7 +34,7 @@ $codes = DB::table('departamentos')->get();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Códigos Departamento') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Códigos de documentos') ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 25rem;">
             <div class="row">
                 <div class="input-group mb-3 col-6">
@@ -62,10 +62,10 @@ $codes = DB::table('departamentos')->get();
                     <div id="<?= $code->codigo ?>" class="col mb-4">
                         <div class="card h-100">
                             <div class="card-body">
-                                <p class="card-text float-left"><span class="badge badge-info code"><?= $code->codigo ?></span></p>
+                                <h5 class="card-title code"><?= $code->codigo ?></h5>
                             </div>
                             <div class="card-body">
-                                <p class="card-text description"><?= $code->descripcion ?></p>
+                                <p class="card-text description"><?= $code->desc1 ?></p>
                             </div>
                             <div class="card-footer text-center">
                                 <button class="btn btn-primary edit" data-code=<?= $code->codigo ?>><?= $lang->translation("Editar") ?></button>

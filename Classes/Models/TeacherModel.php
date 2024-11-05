@@ -53,7 +53,7 @@ class TeacherModel extends School
           ['id', $id]
         ])->orderBy('curso', 'ASC')->get();
     } else {
-      $desc = (__LANG === "es") ? "descripcion" : "desc2";
+      $desc = (__LANG === "es") ? "desc1" : "desc2";
       $obj = parent::table('cursos')->select("*, {$desc} as desc1")
         ->where([
           ['year', $year],

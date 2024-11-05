@@ -120,13 +120,13 @@ $codes = DB::table('socio_economico')->orderBy('dependientes')->get();
           <tr>
             <form method="post">
               <td style="width: 80px">
-                <input maxlength="2" name="dependientes" size="2" type="text" required value="<?= $reg4->dependientes ?? '' ?>" />
+                <input class="form-control" maxlength="2" name="dependientes" size="2" type="text" required value="<?= $reg4->dependientes ?? '' ?>" />
               </td>
               <td style="width: 80px">
-                <input maxlength="10" name="bajo_nivel" size="12" style="width: 190px" type="text" required placeholder="999999.99" value="<?= $reg4->bajo_nivel ?? '' ?>">
+                <input class="form-control" maxlength="10" name="bajo_nivel" size="12" style="width: 190px" type="text" required placeholder="999999.99" value="<?= $reg4->bajo_nivel ?? '' ?>">
               </td>
               <td style="width: 80px">
-                <input id="ex-91" name="sobre_nivel" class="text" size="12" type="text" style="width: 190px" maxlength="10" required placeholder="999999.99" value="<?= $reg4->sobre_nivel ?? '' ?>" />
+                <input class="form-control" id="ex-91" name="sobre_nivel" class="text" size="12" type="text" style="width: 190px" maxlength="10" required placeholder="999999.99" value="<?= $reg4->sobre_nivel ?? '' ?>" />
               </td>
               <td style="width: 100px">
                 <input type=hidden name=nn0 value='<?= $reg4->dependientes ?>'>
