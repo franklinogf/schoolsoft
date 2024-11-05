@@ -8,30 +8,24 @@ use Classes\DataBase\DB;
 Session::is_logged();
 Server::is_post();
 if (isset($_POST['addCode'])) {
-    $id = $_POST['id'];
     $code = $_POST['code'];
     $description = $_POST['description'];
 
     DB::table('departamentos')->insert([
-        'id' => $id,
         'codigo' => $code,
         'descripcion' => $description
     ]);
-    
-}else if(isset($_POST['editCode'])) {
+
+} else if (isset($_POST['editCode'])) {
     $code = $_POST['code'];
-    $id = $_POST['id'];
     $code = $_POST['code'];
     $description = $_POST['description'];
 
     DB::table('departamentos')->where(['codigo', $_POST['editCode']])->update([
-        'id' => $id,
         'codigo' => $code,
         'descripcion' => $description
     ]);
-}
-else if(isset($_POST['deleteCode'])) {
+} else if (isset($_POST['deleteCode'])) {
     $code = $_POST['code'];
     DB::table('departamentos')->where(['codigo', $code])->delete();
 }
-?>

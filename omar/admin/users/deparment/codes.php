@@ -39,13 +39,6 @@ $codes = DB::table('departamentos')->get();
             <div class="row">
                 <div class="input-group mb-3 col-6">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">ID</span>
-                    </div>
-                    <input type="text" class="form-control" id="id">
-                </div>
-
-                <div class="input-group mb-3 col-6">
-                    <div class="input-group-prepend">
                         <span class="input-group-text"><?= $lang->translation("Código") ?></span>
                     </div>
                     <input type="text" class="form-control" id="code">
