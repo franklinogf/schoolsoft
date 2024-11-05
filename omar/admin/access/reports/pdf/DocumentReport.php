@@ -26,9 +26,9 @@ $lang = new Lang([
     ['Fecha', 'Date'],
     ['Entregado Si / No', 'Delivered Yes / No'],
     ['Masculinos', 'Males'],
-    ['Femeninas', 'Females'],
-
+  ['Femeninas', 'Females'],
 ]);
+
 
 $school = new School(Session::id());
 $teacherClass = new Teacher();
@@ -37,10 +37,12 @@ $studentClass = new Student();
 $year = $school->info('year2');
 $allGrades = $school->allGrades();
 $pdf = new PDF();
+
 $pdf->SetTitle($lang->translation("Informe de documentos"). " $year", true);
 $pdf->Fill();
+
 $docs = $_POST['option'];
-$doc = DB::table('docu_entregados')->where([
+$doc1 = DB::table('docu_entregados')->where([
       ['codigo', $docs]
      ])->orderBy('codigo')->first();
 
@@ -50,10 +52,12 @@ foreach ($allGrades as $grade) {
     $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Informe de documentos").' / '.$doc->desc1. " / $year", 0, 1, 'C');
+  $pdf->Cell(0, 5, $lang->translation("Informe de documentos") . ' / ' . $doc1->desc1 . " / $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+  $nom = $teacher->nombre ?? '';
+  $ape = utf8_encode($teacher->apellidos ?? '');
+  $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
@@ -64,9 +68,9 @@ foreach ($allGrades as $grade) {
     $pdf->SetFont('Arial', '', 10);
 
     foreach ($students as $count => $student) {
-        $dia=date(j);
-        $mes=date(n);
-        $ano=date(Y);
+    $dia = date('j');
+    $mes = date('n');
+    $ano = date('Y');
         $fec=$student->fecha; 
         list($anonaz, $mesnaz, $dianaz) = explode('-', $fec);
         if (($mesnaz == $mes) && ($dianaz > $dia)) {$ano=($ano-1);}
@@ -85,10 +89,9 @@ foreach ($allGrades as $grade) {
         $pdf->Cell(10, 5, $count + 1, 1, 0, 'C');
         $pdf->Cell(19, 5, $student->id, 1, 0, 'C');
         $pdf->Cell(55, 5, $student->apellidos, 1);
-        $pdf->Cell(50, 5, $student->nombre, 1, 0);
-//        $pdf->Cell(56, 5, $edad, 1, 1, 'C');
-		$pdf->SetFont('Times','B',10);						
-        if ($doc->codigo == $docs)
+    $pdf->Cell(50, 5, $student->nombre, 1, 0);
+		$pdf->SetFont('Times','B',10);
+    if ($doc->codigo ?? '' == $docs)
            {
            $pdf->Cell(56,5,$lang->translation("ENTREGADO"),1,1,'C');
            }
@@ -96,8 +99,7 @@ foreach ($allGrades as $grade) {
            {
            $pdf->Cell(56,5,$lang->translation("NO ENTREGADO"),1,1,'C');
            }
-		$pdf->SetFont('Times','',10);
-
+    $pdf->SetFont('Times', '', 10);
     }
     $pdf->Ln(2);
     $pdf->Cell(40, 5, $lang->translation("Total de estudiantes"), 1, 0, 'C', true);
@@ -107,8 +109,5 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(40, 5, $lang->translation("Femeninas"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['F'], 1, 1, 'C');
 }
-
-
-
 
 $pdf->Output();
