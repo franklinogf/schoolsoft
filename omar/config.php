@@ -7,7 +7,7 @@ use Classes\DataBase\DB;
 
 // Language: es = Spanish, en = English
 $school = DB::table('colegio')->where('usuario', 'administrador')->first();
-define('__LANG', $school->idioma ?? 'es');
+define('__LANG', $school->idioma ? strtolower($school->idioma) : 'es');
 const __DEFAULT_LOGO = 'logo.gif';
 // regular is 72 x 72
 const __LOGO_SIZE = 100;
