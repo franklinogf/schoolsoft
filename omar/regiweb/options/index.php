@@ -44,9 +44,6 @@ $options = [
             ['name' => ["es" => 'Informe de cambios de notas', "en" => "Grades Changes Report"], 'link' => './reports/pdf/gradesChanges.php', 'target' => '_blank'],
             ['name' => ["es" => 'Listado de 100', "en" => "List of 100"], 'link' => './reports/100.php'],
             ['name' => ["es" => 'Lista de promedios', "en" => "List of averages"], 'link' => './reports/pdf/averages.php', 'target' => '_blank'],
-            ['name' => ["es" => 'Tarjeta de notas', "en" => "Tarjeta de notas"], 'link' => './reports/pdf/grades.php', 'target' => '_blank'],
-            ['name' => ["es" => 'Hoja de progreso', "en" => "Hoja de progreso"], 'link' => './reports/pdf/progress.php', 'target' => '_blank'],
-            ['name' => ["es" => 'Informe de deficiencia', "en" => "Informe de deficiencia"], 'link' => './reports/pdf/deficience.php', 'target' => '_blank'],
         ]
     ],
     [
