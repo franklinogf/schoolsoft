@@ -45,7 +45,7 @@ $lang = new Lang([
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-2">
                 <div class="col mb-3">
-                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= __ONLY_CBTM__ && $teacher->grado !== '' ? '' : 'disabled' ?>"><?= $lang->translation('Entrada de asistencias') ?></a>
+                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado !== '' ? '' : 'disabled' ?>"><?= $lang->translation('Entrada de asistencias') ?></a>
                 </div>
                 <div class="col mb-3">
                     <a href="dailyAttendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= $lang->translation('Informe de asistencias diarias') ?></a>

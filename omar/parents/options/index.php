@@ -15,6 +15,8 @@ $buttons = [
     ['name' => 'Tareas', 'link' => 'homeworks/'],
     ['name' => 'Tarjeta de notas', 'link' => 'grades/'],
     ['name' => 'Documentos', 'link' => 'documents/'],
+    ['name' => 'Hoja de progreso', 'link' => 'progress/'],
+    ['name' => 'Informe de deficiencia', 'link' => 'deficiency/'],
 ];
 $lang = new Lang([
     ["Mensajes y Opciones", " Messages and Options"],
@@ -24,6 +26,8 @@ $lang = new Lang([
     ["Tareas", "Homeworks"],
     ["Tarjeta de notas", "Grades card"],
     ["Documentos", "Documents"],
+    ["Hoja de progreso", "Progress sheet"],
+    ["Informe de deficiencia", "Deficiency report"],
 ]);
 ?>
 <!DOCTYPE html>
