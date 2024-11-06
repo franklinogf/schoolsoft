@@ -54,7 +54,7 @@ $options = [
             // ['name' => ["es"=> 'Mi Registro',"en"=>""], 'link' => '#'],
             // ['name' => ["es"=> 'Crear clase diaria',"en"=>""], 'link' => '#'],
             ['name' => ["es" => 'Documentos', "en" => "Documents"], 'link' => './documents/'],
-            ['name' => ["es" => 'Notas por examen', "en" => "Grades by exam"], 'link' => '#'],
+            ['name' => ["es" => 'Notas por examen', "en" => "Grades by exam"], 'link' => './examennota/examennota.php'],
             // ['name' => ["es"=> 'Planilla de disciplina',"en"=>""], 'link' => '#'],
             // ['name' => ["es"=> 'Planilla de uniformes',"en"=>""], 'link' => '#'],
             ['name' => ["es" => 'Curva de notas', "en" => "Grades curve"], 'link' => '#'],
