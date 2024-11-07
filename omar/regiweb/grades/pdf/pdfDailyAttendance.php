@@ -148,7 +148,7 @@ if ($_option === 'home') {
             ['codigo', '>', 0],
             ['ss', $ss]
         ])->orderBy('fecha')->get();
-    $pdf->splitCells($lang->translation("Nombre") . ": {$asis[0]->apellidos}, {$asis[0]->nombre}", $lang->translation("Grado") . ": {$asis[0]->grado}");
+    $pdf->splitCells($lang->translation("Nombre") . utf8_encode(": {$asis[0]->apellidos}, {$asis[0]->nombre}"), $lang->translation("Grado") . ": {$asis[0]->grado}");
     $pdf->Ln(10);
     $pdf->Cell(40);
     $pdf->Cell(10, 5, '', 'LTB', 0, 'C', true);
