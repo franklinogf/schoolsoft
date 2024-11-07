@@ -23,6 +23,8 @@ if (isset($_POST['save'])) {
         'asis6' => $_POST['quater3_end'],
         'asis7' => $_POST['quater4_start'],
         'asis8' => $_POST['quater4_end'],
+        'asist' => $_POST['asist'],
+        'asis' => $_POST['asis'],
     ];
 
     DB::table('colegio')->where('usuario', 'administrador')->update($updates);
