@@ -481,6 +481,7 @@ $_columns = null;
 if (isset($_info[$_report]['columns'])) {
     $_columns = isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
 }
+
 $_trimesterNumber = $_schoolInfo[$_trimester]['number'];
 $_thisReport = $_info[$_report];
 $students = new Student();
@@ -732,7 +733,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                     <?php foreach ($_columns as $index => $column): ?>
                                         <th scope="col">
                                             <?= $column ?>
-                                            <?php if ($_info[$_report]['columns']['text'][$index]): ?>
+                                            <?php if (isset($_info[$_report]['columns']['text'][$index])): ?>
                                                 <span style="font-size: 15px;" class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
                                             <?php endif ?>
                                         </th>
@@ -880,7 +881,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                         <?= $index + 1 ?>
                                         <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
-                                    <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                    <td><?= "$student->apellidos $student->nombre" ?></td>
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++): ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
                                         </td>
@@ -908,7 +909,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                         <?= $index + 1 ?>
                                         <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
-                                    <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                    <td><?= "$student->apellidos $student->nombre" ?></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "con-{$student->ss}" ?>" value="<?= $student->{$_options[0]} ?>"></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "aus-{$student->ss}" ?>" value="<?= $student->{$_options[1]} ?>"></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "tar-{$student->ss}" ?>" value="<?= $student->{$_options[2]} ?>"></td>
@@ -937,7 +938,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                             <?= $index + 1 ?>
                                             <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                         </th>
-                                        <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                        <td><?= "$student->apellidos $student->nombre" ?></td>
                                         <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text" name="<?= "ex-{$student->ss}" ?>" value="<?= $student->{$_options} ?>"></td>
                                     <?php endforeach ?>
                             </tbody>
