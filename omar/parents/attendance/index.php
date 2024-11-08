@@ -10,8 +10,16 @@ use Classes\Controllers\Parents;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
+
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+$year = $colegio->year;
+
 $students = DB::table('year')->where([
-    ['id', $parents->id]
+    ['id', $parents->id],
+    ['year', $year]
 ])->get();
 if (isset($_POST['student'])) {
     [$ss, $year] = explode(',', $_POST['student']);
@@ -34,6 +42,7 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -73,14 +82,14 @@ $lang = new Lang([
                     <?php if (isset($attendances) && sizeof($attendances) > 0):
                         $count = 1;
                         $codes = [0, 0];
-                        ?>
+                    ?>
                         <?php foreach ($attendances as $attendance): ?>
                             <tr>
                                 <td class="text-center"><?= $count ?></td>
                                 <td class="text-center"><?= $attendance->fecha ?></td>
                                 <td><?= Util::$attendanceCodes[$attendance->codigo]['description'][__LANG] ?></td>
                             </tr>
-                            <?php $count++;
+                        <?php $count++;
                             $codes[0] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'A' ? 1 : 0;
                             $codes[1] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'T' ? 1 : 0;
                         endforeach ?>
