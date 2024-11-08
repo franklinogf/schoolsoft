@@ -45,26 +45,28 @@ $lang = new Lang([
                 <input class="form-control" type="date" id="date" value="<?= date('Y-m-d') ?>">
             </div>
         </div>
-        <?php if (__SCHOOL_ACRONYM !== 'cbtm') : ?>
-            <?php if ($attendanceOption === "3") : ?>
+        <?php if (__SCHOOL_ACRONYM !== 'cbtm'): ?>
+            <?php if ($attendanceOption === "3"): ?>
                 <div id="classButtons" class="d-flex flex-wrap justify-content-center">
-                    <?php foreach ($teacher->classes() as $class) : ?>
+                    <?php foreach ($teacher->classes() as $class): ?>
                         <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-class="<?= $class->curso ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $class->desc1 ?>"><?= $class->curso ?></button>
                     <?php endforeach ?>
                 </div>
-            <?php elseif ($attendanceOption === "2") :
+            <?php elseif ($attendanceOption === "2"):
                 $grades = DB::table('year')
                     ->select('DISTINCT grado')
                     ->where('year', $teacher->info('year'))
                     ->orderBy('grado')->get();
-            ?>
+                ?>
                 <div id="gradesButtons" class="d-flex flex-wrap justify-content-center">
-                    <?php foreach ($grades as $grade) : ?>
+                    <?php foreach ($grades as $grade): ?>
                         <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-grade="<?= $grade->grado ?>"><?= $grade->grado ?></button>
                     <?php endforeach ?>
                 </div>
+            <?php else: ?>
+                <input type="hidden" id="grade" value="<?= $teacher->grado ?>">
             <?php endif ?>
-        <?php else :
+        <?php else:
             if ($teacher->grado === '02-01') {
                 $grades = ['02-01', 'K5'];
             } else if ($teacher->grado === '06-01') {
@@ -73,10 +75,10 @@ $lang = new Lang([
                 $grades = [$teacher->grado];
             }
 
-        ?>
+            ?>
 
             <div id="gradesButtons" class="d-flex flex-wrap justify-content-center <?= sizeof($grades) === 1 ? 'invisible' : '' ?>">
-                <?php foreach ($grades as $grade) : ?>
+                <?php foreach ($grades as $grade): ?>
                     <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1 <?= sizeof($grades) === 1 ? 'active' : '' ?>" data-grade="<?= $grade ?>"><?= $grade ?></button>
                 <?php endforeach ?>
             </div>
