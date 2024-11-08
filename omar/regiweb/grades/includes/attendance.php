@@ -19,53 +19,42 @@ $day = date('j', $newDate); //day without "0"
 
 if (isset($_POST['getStudents'])) {
     $attendanceOption = $_POST['getStudents'];
-
+    $isCourse = $attendanceOption === '3';
     $attendanceArray = [];
-    if ($attendanceOption === '3') {
-        $class = $_POST['class'];
-        $students = DB::table('padres')
-            ->where([
-                ['id', $teacher->id],
-                ['curso', $class],
-                ['year', $year],
-            ])
-            ->orderBy('apellidos, nombre')
-            ->get();
+    $studentsWhere = [
 
-        foreach ($students as $student) {
-            if ($attendance = DB::table('asispp')
-                ->where([
-                    ['ss', $student->ss],
-                    ['curso', $class],
-                    ['year', $year],
-                    ['fecha', $date],
-                ])
-                ->orderBy('apellidos, nombre')
-                ->first()
-            ) {
-                $attendanceArray[$student->ss] = $attendance->codigo;
-            } else {
-                $attendanceArray[$student->ss] = '';
-            }
-        }
-    } else {
-        $students = DB::table('asisdia')
+        [$isCourse ? 'curso' : 'grado', $isCourse ? $_POST['class'] : $_POST['grade']],
+        ['year', $year],
+    ];
+    if ($isCourse) {
+        $studentsWhere[] = ['id', $teacher->id];
+    }
+
+    $students = DB::table($isCourse ? 'padres' : 'year')->select('DISTINCT ss, nombre, apellidos')
+        ->where($studentsWhere)
+        ->orderBy('apellidos, nombre')
+        ->get();
+
+    foreach ($students as $student) {
+
+        $attendance = DB::table('asispp')
             ->where([
-                ['baja', ''],
-                ['grado', $attendanceOption === '1' && __SCHOOL_ACRONYM !== 'cbtm' ? $teacher->grado : $_POST['grade']],
+                ['ss', $student->ss],
+                [$isCourse ? 'curso' : 'grado', $isCourse ? $_POST['class'] : $_POST['grade']],
                 ['year', $year],
-                ['mes', $month],
+                ['fecha', $date],
             ])
             ->orderBy('apellidos, nombre')
-            ->get();
+            ->first();
+
+        $attendanceArray[$student->ss] = $attendance ? $attendance->codigo : '';
+
     }
+
     // create array with the students
     if ($students) {
-
         $array = [
-            'response' => true,
             'data' => $students,
-
         ];
         if (count($attendanceArray) > 0) {
             $array = array_merge(
@@ -74,56 +63,50 @@ if (isset($_POST['getStudents'])) {
             );
         }
     } else {
-        $array = ['response' => false];
+        $array = ['error' => true];
     }
     echo Util::toJson($array);
 } else if (isset($_POST['changeAttendance'])) {
     $attendanceOption = $_POST['changeAttendance'];
+    $isCourse = $attendanceOption === '3';
     $value = $_POST['value'];
     $ss = $_POST['ss'];
+    $student = new Student($ss);
     // update the attendance value
-    if ($attendanceOption === '3') {
-        $class = $_POST['class'];
-        if (DB::table('asispp')
-                ->where([
-                    ['ss', $ss],
-                    ['curso', $class],
-                    ['year', $year],
-                    ['fecha', $date],
-                ])
-                ->orderBy('apellidos, nombre')
-                ->first()
-            ) {
-                DB::table('asispp')
-                ->where([
-                    ['ss', $ss],
-                    ['curso', $class],
-                    ['fecha', $date],
-                ])->update(['codigo'=>$value]);
-                echo "existe";
-                
-            } else {
-                echo "no existe";
-                $student = new Student($ss);
-                DB::table('asispp')
-                ->insert([
-                    'ss'=> $ss,
-                    'curso'=> $class,
-                    'fecha'=> $date,
-                    'year' => $year,
-                    'codigo'=>$value,
-                    'nombre'=>$student->nombre,
-                    'apellidos'=>$student->apellidos,
-                    'grado'=>$student->grado,
-                ]);
-            }
-        
-    }else{
-        DB::table('asisdia')->where([
-            ['ss', $ss],
-            ['year', $year],
-            ['grado', $attendanceOption === '1' ? $teacher->grado : $_POST['grade']],
-            ['mes', $month],
-        ])->update(["d$day" => $value]);
+    if (
+        DB::table('asispp')
+            ->where([
+                ['ss', $ss],
+                [$isCourse ? 'curso' : 'grado', $isCourse ? $_POST['class'] : $student->grado],
+                ['year', $year],
+                ['fecha', $date],
+            ])
+            ->first()
+    ) {
+        DB::table('asispp')
+            ->where([
+                ['ss', $ss],
+                [$isCourse ? 'curso' : 'grado', $isCourse ? $_POST['class'] : $student->grado],
+                ['year', $year],
+                ['fecha', $date],
+            ])->update(['codigo' => $value]);
+
+    } else {
+        $insert = [
+            'ss' => $ss,
+            'fecha' => $date,
+            'year' => $year,
+            'codigo' => $value,
+            'nombre' => $student->nombre,
+            'apellidos' => $student->apellidos,
+            'grado' => $student->grado,
+        ];
+        if ($isCourse) {
+            $insert['curso'] = $_POST['class'];
+        }
+        DB::table('asispp')
+            ->insert($insert);
     }
+
+
 }
