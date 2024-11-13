@@ -11,8 +11,7 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Clasificación de notas', 'Note classification'],
+$lang = new Lang([['ClasificaciÃ³n de notas', 'Note classification'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
     ['Apellidos', 'Lasname'],
@@ -50,15 +49,13 @@ $pdf = new PDF();
 
 $school = new School(Session::id());
 $grado = $_POST['grade'];
-$nota = $_POST['nota'];
-$divicion= $_POST['divicion'];
-list($nota,$tt) = explode("-",$_POST['nota']);
+$nota = $_POST['nota'] ?? '';
+$divicion = $_POST['divicion'] ?? '';
 
-$cl = $_POST['cl'];
+$cl = $_POST['cl'] ?? '';
 $grade = $_POST['grade'];
 
 $year = $school->info('year2');
-//$pdf = new nPDF();
 $pdf = new PDF();
 
 //llGrades = $school->allGrades();
@@ -146,7 +143,7 @@ foreach ($students as $student)
 //foreach ($allGrades as $grade) 
 //        {
         $pdf->AddPage('L');
-        $pdf->Cell(0, 5, $lang->translation("Clasificación de notas").' / '.$grade." / $tt / $year", 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_encode($lang->translation("ClasificaciÃ³n de notas")) . ' / ' . $grade . " / $year", 0, 1, 'C');
         $pdf->Ln(5);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Fill();
