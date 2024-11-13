@@ -15,7 +15,7 @@ $lang = new Lang([
     ['Descripción', 'Description'],
     ['español', 'spanish'],
     ['inglés', 'english'],
-    ['Credito', 'Credit'],
+    ['Crédito', 'Credit'],
     ['Peso', 'Peso'],
     ['Maestro', 'Teacher'],
     ['Horario entrada', 'Enter time'],
@@ -64,7 +64,7 @@ $courses = DB::table('cursos')->where([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
-<button type="submit" class="btn btn-danger" name="delete" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que desea borrar el curso a todos los Estudiante?') ?>')"><?= $lang->translation('Eliminar') ?></button>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -101,32 +101,32 @@ $courses = DB::table('cursos')->where([
                             <div class="col-12">
                                 <div class="form-group col-6 px-0">
                                     <label for="curso"><?= $lang->translation("Curso") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->curso ?>' class="form-control" name='curso' id="curso" required>
-                                    <input type="hidden" name="course" value="<?= $thisCourse->curso ?>">
+                                    <input type="text" disabled value='<?= $thisCourse->curso ?? '' ?>' class="form-control" name='curso' id="curso" required>
+                                    <input type="hidden" name="course" value="<?= $thisCourse->curso ?? '' ?>">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="desc1"><?= $lang->translation("Descripción") . ' ' . $lang->translation("español") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->desc1 ?>' class="form-control" maxlength="40" name='desc1' id="desc1" required>
+                                    <input type="text" disabled value='<?= $thisCourse->desc1 ?? '' ?>' class="form-control" maxlength="40" name='desc1' id="desc1" required>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="desc2"><?= $lang->translation("Descripción") . ' ' . $lang->translation("inglés") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->desc2 ?>' class="form-control" maxlength="40" name='desc2' id="desc2" required>
+                                    <input type="text" disabled value='<?= $thisCourse->desc2 ?? '' ?>' class="form-control" maxlength="40" name='desc2' id="desc2" required>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="credito"><?= $lang->translation("Credito") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->credito ?>' class="form-control --float" name='credito' id="credito" required>
+                                    <label for="credito"><?= $lang->translation("Crédito") ?></label>
+                                    <input type="text" disabled value='<?= $thisCourse->credito ?? '' ?>' class="form-control --float" name='credito' id="credito" required>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="peso"><?= $lang->translation("Peso") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->peso ?>' class="form-control --float" name='peso' id="peso" required>
+                                    <input type="text" disabled value='<?= $thisCourse->peso ?? '' ?>' class="form-control --float" name='peso' id="peso" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -135,7 +135,7 @@ $courses = DB::table('cursos')->where([
                                     <select class="form-control selectpicker w-100" name="teacherId" id="teacherId" data-live-search="true" disabled required>
                                         <option value=""><?= $lang->translation("Seleccionar") ?></option>
                                         <?php foreach ($teachers as $teacher) : ?>
-                                            <option <?= $thisCourse->id == $teacher->id ? 'selected=""' : '' ?> value="<?= $teacher->id ?>"><?= "$teacher->id - $teacher->nombre $teacher->apellidos" ?></option>
+                                            <option <?= $thisCourse->id ?? '' == $teacher->id ? 'selected=""' : '' ?> value="<?= $teacher->id ?>"><?= "$teacher->id - $teacher->nombre $teacher->apellidos" ?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
@@ -143,37 +143,37 @@ $courses = DB::table('cursos')->where([
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="entrada"><?= $lang->translation("Horario entrada") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->entrada ?>' class="form-control" maxlength="7" name='entrada' id="entrada">
+                                    <input type="text" disabled value='<?= $thisCourse->entrada ?? '' ?>' class="form-control" maxlength="7" name='entrada' id="entrada">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="salida"><?= $lang->translation("Horario salida") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->salida ?>' class="form-control" maxlength="7" name='salida' id="salida">
+                                    <input type="text" disabled value='<?= $thisCourse->salida ?? '' ?>' class="form-control" maxlength="7" name='salida' id="salida">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group col-6 px-0">
                                     <label for="dias"><?= $lang->translation("Días") ?></label>
-                                    <input type="text" disabled value='<?= $thisCourse->dias ?>' class="form-control" maxlength="6" name='dias' id="dias">
+                                    <input type="text" disabled value='<?= $thisCourse->dias ?? '' ?>' class="form-control" maxlength="6" name='dias' id="dias">
                                 </div>
                             </div>
                             <div class="col-5">
                                 <div class="form-group">
                                     <label for="ava"><?= $lang->translation("Avanzada") ?></label>
                                     <select class="form-control" name="ava" id="ava" disabled required>
-                                        <option <?= $thisCourse->ava == 'No' ? 'selected=""' : '' ?> value="No">No</option>
-                                        <option <?= $thisCourse->ava == 'Si' ? 'selected=""' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
+                                        <option <?= $thisCourse->ava ?? '' == 'No' ? 'selected=""' : '' ?> value="No">No</option>
+                                        <option <?= $thisCourse->ava ?? '' == 'Si' ? 'selected=""' : '' ?> value="Si"><?= $lang->translation("Si") ?></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-7">
                                 <label for="valor"><?= $lang->translation("Valor") ?></label>
                                 <div class="input-group">
-                                    <input type="text" value='<?= $thisCourse->valor ?>' class="form-control --float" name='valor' id="valor" disabled>
+                                    <input type="text" value='<?= $thisCourse->valor ?? '' ?>' class="form-control --float" name='valor' id="valor" disabled>
                                     <select class="form-control" name="verano" id="verano" disabled>
-                                        <option <?= $thisCourse->verano == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Regular") ?></option>
-                                        <option <?= $thisCourse->verano == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Verano") ?></option>
+                                        <option <?= $thisCourse->verano ?? '' == '' ? 'selected=""' : '' ?> value=""><?= $lang->translation("Regular") ?></option>
+                                        <option <?= $thisCourse->verano ?? '' == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Verano") ?></option>
                                     </select>
                                 </div>
                             </div>
