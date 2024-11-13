@@ -30,8 +30,7 @@ $lang = new Lang([
     ['T-1', 'Q-1'],
     ['T-2', 'Q-2'],
     ['T-3', 'Q-3'],
-    ['T-4', 'Q-4'],
-
+   ['T-4', 'Q-4'],
 ]);
 
 $school = new School();
@@ -72,7 +71,9 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(0, 5, $lang->translation("Asistencia perfecta/tardanzaa") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+   $nom = $teacher->nombre ?? '';
+   $ape = utf8_encode($teacher->apellidos ?? '');
+   $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 11);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
@@ -191,6 +192,5 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(40, 5, $lang->translation("Femeninas"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['F'], 1, 1, 'C');
 }
-
 
 $pdf->Output();
