@@ -11,15 +11,14 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Comparación de notas', 'Comparison of notes'],
+$lang = new Lang([['ComparaciÃ³n de notas', 'Comparison of notes'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Curso', 'Course'],
     ['Trimestre', 'Quarter'],
-    ['Descripción', 'Description'],
+   ['DescripciÃ³n', 'Description'],
     ['Nota B', 'Note B'],
     ['Nota C', 'Note C'],
     ['Nota D', 'Note D'],
@@ -42,47 +41,29 @@ $lang = new Lang([
     ['T-4', 'Q-4'],
     ['S-1', 'S-1'],
     ['S-2', 'S-2'],
-    ['Final', 'Final'],
-
+   ['Final', 'Final'],
 ]);
 
 $pdf = new PDF();
-
 $school = new School(Session::id());
 $grado = $_POST['grade'];
 $nota = $_POST['nota'];
-$divicion= $_POST['divicion'];
-//list($nota,$tt) = explode("-",$_POST['nota']);
+$divicion = $_POST['divicion'] ?? '';
 
 $cl = $_POST['cl'];
 $notar = $_POST['notar'];
 
-
-//$year = $school->year();
 $year = $school->info('year2');
-//$pdf = new nPDF();
 $pdf = new PDF();
-
-
-
-
-
-//if ($grado == 'all')
-//   {
-//   $allGrades = $school->allGrades();
-//   }
-//else
-//   {
-   $allGrades = DB::table('padres')->select("distinct grado, curso, descripcion")->where([
+$allGrades = DB::table('padres')->select("distinct grado, curso, descripcion")->where([
           ['year', $year],
           ['grado', $grado],
-        ])->orderBy('curso')->get();
-//   }
+])->orderBy('curso')->get();
 
 foreach ($allGrades as $grade) 
         {
         $pdf->AddPage('');
-        $pdf->Cell(0, 5, $lang->translation("Comparación de notas").' / '.$grado." / $tt / $year", 0, 1, 'C');
+   $pdf->Cell(0, 5, utf8_encode($lang->translation("ComparaciÃ³n de notas")) . ' / ' . $grade->grado . " / $year", 0, 1, 'C');
         $pdf->Ln(5);
         $pdf->SetFont('Arial', '', 11);
         $pdf->Fill();
@@ -114,11 +95,8 @@ foreach ($allGrades as $grade)
         $materias = [];
         $curs = [];
         $estudiantes = [];
-        $c = 0;
-//**********************
-
-
-         $students = DB::table('padres')->where([
+   $c = 0;
+   $students = DB::table('padres')->where([
                   ['year', $year],
                   ['grado', $grade->grado],
                   ['curso', $grade->curso]
@@ -151,11 +129,7 @@ foreach ($allGrades as $grade)
                    $pdf->Cell(15, 5, $student->sem2, $cl, 0, 'R');
                    $pdf->Cell(15, 5, $student->final, $cl, 1, 'R');
                    }
-                }
-
-
-
-//**********************
+   }
          }
 
 
