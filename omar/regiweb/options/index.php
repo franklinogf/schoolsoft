@@ -57,7 +57,7 @@ $options = [
             ['name' => ["es" => 'Notas por examen', "en" => "Grades by exam"], 'link' => './examennota/examennota.php'],
             // ['name' => ["es"=> 'Planilla de disciplina',"en"=>""], 'link' => '#'],
             // ['name' => ["es"=> 'Planilla de uniformes',"en"=>""], 'link' => '#'],
-            ['name' => ["es" => 'Curva de notas', "en" => "Grades curve"], 'link' => '#'],
+            ['name' => ["es" => 'Curva de notas', "en" => "Grades curve"], 'link' => './gradescurve/'],
             ['name' => ["es" => 'Clasificación de notas', "en" => "grades classification"], 'link' => './pdf/pdfNoteClasification.php', 'target' => '_blank'],
         ]
     ]
