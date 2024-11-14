@@ -1,9 +1,7 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\File;
 use Classes\Lang;
-use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Teacher;
@@ -47,18 +45,9 @@ $lang = new Lang([
     ["Sin fecha de finalización", "No final date"]
 ]);
 
-$colegio = DB::table('colegio')->where([
-    ['usuario', 'administrador']
-])->orderBy('id')->first();
-$year = $colegio->year2;
-
-$result = DB::table('T_examenes')->where([
-    ['id_maestro', Session::id()]
-])->orderBy('id_maestro')->first();
-
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= __LANG ?>">
 
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -93,7 +82,7 @@ $result = DB::table('T_examenes')->where([
                                 <tr>
                                     <td>
                                         <select class="big" name="curso">
-                                            <?php foreach ($cursos as $row) : ?>
+                                            <?php foreach ($cursos as $row): ?>
                                                 <option value="<?= $row->curso ?>"><?= "$row->curso - $row->desc1"; ?></option>
                                             <?php endforeach ?>
                                         </select>
@@ -122,7 +111,7 @@ $result = DB::table('T_examenes')->where([
                         <br>
                         <br>
                         <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-primary" name="Continuar" type="submit"><?= $lang->translation('Continuar') ?></button>
+                            <button type="submit" class="btn btn-primary"><?= $lang->translation('Continuar') ?></button>
                             <a href="../index.php" class="btn btn-primary"><?= $lang->translation('Atrás') ?></a>
                         </div>
 
