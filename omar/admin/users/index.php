@@ -140,6 +140,11 @@ $options = [
                 'name' => ["es" => 'Códigos de memos', "en" => "Memos codes"],
                 'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
                 'link' => 'memos/codes.php'
+            ],
+            [
+                'name' => ["es" => 'Códigos de mensajes', "en" => "Message codes"],
+                'desc' => ['es' => 'Definir los mensajes para la Tarjeta de notas y Hoja de progreso.', 'en' => 'Define messages for the Note Card and Progress Sheet.'],
+                'link' => 'messagecode/codes.php'
             ]
         ]
     ],
@@ -156,6 +161,7 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
