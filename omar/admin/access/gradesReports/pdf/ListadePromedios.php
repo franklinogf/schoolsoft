@@ -16,7 +16,7 @@ $lang = new Lang([
     ["Maestro(a)", "Teacher"],
     ["Grado:", "Grade:"],
     ["Curso", "Course"],
-    ["Descripci&#65533;n", "Description"],
+   ["Descripción", "Description"],
     ['Primer Semestre', 'First semester'],
     ['Segundo Semestre', 'Second semester'],
     ['D&#65533;as', 'Days'],
@@ -58,13 +58,10 @@ function NLetra($valor){
 }
 
 
-//$pdf = new NPDF();
-//$pdf->useFooter(false);
 $school = new School(Session::id());
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-//$year = $school->year();
 $year = $school->info('year2');
 
 // $allGrades = $school->allGrades();
@@ -93,8 +90,7 @@ foreach ($students as $estu) {
 //    $pdf->Ln(5);
     $pdf->Cell(0, 5, $lang->translation("Lista de promedios") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
-    $pdf->SetFont('Arial', '', 12);
-//    $pdf->splitCells($lang->translation("A&#65533;o escolar:") . " $year", $lang->translation("Fecha:") . " ".date("m-d-Y"));
+   $pdf->SetFont('Arial', '', 12);
 
     $materias = [];
     $cursos = [];
@@ -115,7 +111,6 @@ foreach ($students as $estu) {
     $pdf->Cell(15, 5, $lang->translation("S-2"), 1, 0, 'C');
     $pdf->Cell(15, 5, $lang->translation("N-F"), 1, 1, 'C');
 
-
     $pdf->Cell(70, 5, $estu->nombre.' '.$estu->apellidos, 'LR', 0, 'L');
     $pdf->Cell(17, 5, '', 'LR', 0, 'C');
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
@@ -124,11 +119,7 @@ foreach ($students as $estu) {
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
-    $pdf->Cell(15, 5, '', 'LR', 1, 'C');
-    
-    
-//    $pdf->Cell(13, 5, "CRS", 1, 1, 'C', true);
-    
+   $pdf->Cell(15, 5, '', 'LR', 1, 'C');
     $pdf->SetFillColor(89, 171, 227);
     $cursos = DB::table('padres')->where([
           ['year', $year],
@@ -139,8 +130,22 @@ foreach ($students as $estu) {
         ])->orderBy('orden DESC')->get();
     $crs = 0;    
     $a1 = 0;
-    $nf = [];
-    $cr = [];
+   $nf = [];
+   $nf[1] = 0;
+   $nf[2] = 0;
+   $nf[3] = 0;
+   $nf[4] = 0;
+   $nf[5] = 0;
+   $nf[6] = 0;
+   $nf[7] = 0;
+   $cr = [];
+   $cr[1] = 0;
+   $cr[2] = 0;
+   $cr[3] = 0;
+   $cr[4] = 0;
+   $cr[5] = 0;
+   $cr[6] = 0;
+   $cr[7] = 0;
     foreach ($cursos as $curso) {
     if ($pro==1 and $curso->credito > 0)
        {
@@ -255,8 +260,7 @@ foreach ($students as $estu) {
           $cr[7] += $curso->peso;
           $nf[7] += round($curso->final * $curso->peso);
           }
-       }
-
+      }
        
     $a1 = $a1 + 1 ;
     $pdf->SetFont('Arial', '', 10);
@@ -273,8 +277,6 @@ foreach ($students as $estu) {
 
         }
 
-//       $pdf->Cell(15, 5, $_POST['profb'] == 'Si' ? $curso->final : '', 1, 0, 'C');
-//       $pdf->Cell(25, 5, number_format($curso->credito,2), 1, 1, 'C');
 
     $pdf->Cell(70, 5, 'Total', 'LRB', 0, 'R');
     $pdf->Cell(17, 5, '', 'LRB', 0, 'L');
@@ -285,7 +287,6 @@ foreach ($students as $estu) {
     $pdf->Cell(15, 5, $cr[5] > 0 ? number_format($nf[5]/$cr[5],0) : '', 'LRB', 0, 'R');
     $pdf->Cell(15, 5, $cr[6] > 0 ? number_format($nf[6]/$cr[6],0) : '', 'LRB', 0, 'R');
     $pdf->Cell(15, 5, $cr[7] > 0 ? number_format($nf[7]/$cr[7],0) : '', 'LRB', 1, 'R');
-
 
        if ($p==2){$pdf->Ln(25);}
        if ($p==3){$pdf->Ln(15);}
