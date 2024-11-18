@@ -37,11 +37,14 @@ $lang = new Lang([
     ['Promedio final', 'Final average'],
     ['CURSOS A MEJORAR', 'COURSES TO IMPROVE'],
     ['INFORME DE DEFICIENCIA', 'DEFICIENCY REPORT'],
-
+    
 ]);
 $school = new School(Session::id());
 $year = $school->info('year2');
-$allGrades = $school->allGrades();
+
+$allGrades = DB::table('padres')->select("DISTINCT grado")->where([
+    ['year', $year]
+])->orderBy('grado')->get();
 
 function LN($valor)
 {
@@ -99,19 +102,17 @@ $cursos = [
     'CIE' => 'Ciencias',
     'SOC' => 'Estudios Sociales',
     'REL' => 'Religión',
-    'EDF' => 'Edu. Fí­sica'
+    'EDF' => 'Edu. Fícica'
 ];
 $pdf = new PDF();
-
-$pdf->SetFillColor(220);
 $pdf->SetLeftMargin(20);
+$pdf->Fill();
 
 foreach ($allGrades as $grade) {
-
-    $grado = $grade;
+    $grado = $grade->grado;
     $pdf->AddPage('L');
     $pdf->SetFont('Arial', 'B', 16);
-    $pdf->Cell(0, 5, $lang->translation("Sabana de Notas") . ' / ' . $grade . " / $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, $lang->translation("Sabana de Notas") . ' / ' . $grado . " / $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 11);
 
@@ -130,8 +131,6 @@ foreach ($allGrades as $grade) {
         $pdf->Cell(26 / 3, 5, 'S1', 1, 0, 'C', true);
     }
     $pdf->Ln();
-
-
     $estus = DB::table('padres')->select("DISTINCT nombre, apellidos, ss")->where([
         ['year', $year],
         ['grado', $grado],
@@ -139,26 +138,17 @@ foreach ($allGrades as $grade) {
 
     foreach ($estus as $estu) {
         $pdf->SetFont('Arial', '', 8);
-
         $pdf->Cell(60, 5, ucwords(strtolower("$estu->apellidos, $estu->nombre")), 1);
         foreach ($cursos as $key => $value) {
-            $nota = DB::table('padres')->select("nota1,nota2,sem1")->where([
-                ['year', $year],
-                ['grado', $grado],
-                ['curso', 'like', '$key%'],
-                ['ss', $estu->ss],
-            ])->orderBy('apellidos')->first();
-
+            $nota = DB::table('padres')->select("nota1, nota2, sem1")->whereRaw("year='$year' and grado='$grado' and curso LIKE '$key%' and ss='$estu->ss'")->orderBy('apellidos')->first();
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(26 / 3, 5, $nota->nota1 ?? '', 1, 0, 'C');
             $pdf->Cell(26 / 3, 5, $nota->nota2 ?? '', 1, 0, 'C');
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->Cell(26 / 3, 5, $nota->sem1 ?? '', 1, 0, 'C');
         }
-        $pdf->Ln(); // salto de linea por estudiante
+        $pdf->Ln();
     }
 }
-
-
 
 $pdf->Output();
