@@ -48,6 +48,7 @@ if ($grado == 'Todos') {
 
     foreach ($allGrades as $gr) {
         $pdf->SetFont('Times', 'B', 12);
+        $pdf->Fill();
         $pdf->AddPage();
         $pdf->Cell(0, 5, $lang->translation('Grado') . " $gr->grado / " . utf8_decode($lang->translation('Año')) . " $year", 0, 1, 'C');
         $ESTUDIANTES = array();
@@ -62,14 +63,14 @@ if ($grado == 'Todos') {
         foreach ($ESTUDIANTES as $key => $value) {
             $cant = 0;
             for ($i = 1; $i <= 6; $i++) {
-                $padre = ($i == 1) ? 'padres' : "$padres$i";
+                $padre = ($i == 1) ? 'padres' : "padres$i";
                 for ($i = 1; $i <= 40; $i++) {
 
                     $re = DB::table($padre)->select("not{$i} as nota")->where([
                         ['ss', $key],
                         ['year', $year],
-                        ['grado', $grado],
-                    ])->orderBy('curso')->get();
+                            ['grado', $gr->grado],
+                        ])->orderBy('curso')->get();
 
                     foreach ($re as $row) {
                         if ($row->nota >= 100) {
@@ -83,14 +84,12 @@ if ($grado == 'Todos') {
         usort($ESTUDIANTES, function ($first, $second) {
             return $first->cantidad < $second->cantidad;
         });
-        $pdf->SetFillColor(200);
+        $pdf->Fill();
         $pdf->Ln(10);
         $pdf->Cell(30);
         $pdf->Cell(100, 5, $lang->translation('Estudiante'), 1, 0, 'C', true);
         $pdf->Cell(30, 5, $lang->translation('Cantidad'), 1, 1, 'C', true);
-
         $pdf->SetFont('Times', '', 12);
-
         foreach ($ESTUDIANTES as $key => $value) {
             $pdf->Cell(30);
             $pdf->Cell(100, 5, $value->nombre . " " . $value->apellidos, 1);
@@ -111,7 +110,7 @@ if ($grado == 'Todos') {
     foreach ($ESTUDIANTES as $key => $value) {
         $cant = 0;
         for ($i = 1; $i <= 6; $i++) {
-            $padre = ($i == 1) ? 'padres' : "$padres$i";
+            $padre = ($i == 1) ? 'padres' : "padres$i";
             for ($i = 1; $i <= 40; $i++) {
                 $re = DB::table($padre)->select("not{$i} as nota")->where([
                     ['ss', $key],
@@ -134,8 +133,8 @@ if ($grado == 'Todos') {
 
     $pdf->Ln(3);
     $pdf->SetFont('Times', 'B', 12);
-    $pdf->Cell(0, 5, $lang->translation('Grado') . " $grado / " . utf8_decode($lang->translation('Año')) . " $year", 0, 1, 'C');
-    $pdf->SetFillColor(200);
+    $pdf->Cell(0, 5, $lang->translation('Grado') . " $grado / " . utf8_decode($lang->translation('A&#65533;o')) . " $year", 0, 1, 'C');
+    $pdf->Fill();
     $pdf->Ln(5);
     $pdf->Cell(30);
     $pdf->Cell(100, 5, $lang->translation('Estudiante'), 1, 0, 'C', true);
@@ -149,6 +148,8 @@ if ($grado == 'Todos') {
         $pdf->Cell(100, 5, $value->nombre . " " . $value->apellidos, 1);
         $pdf->Cell(30, 5, $value->cantidad, 1, 1, 'C');
     }
+
 }
 
 $pdf->Output();
+?>
