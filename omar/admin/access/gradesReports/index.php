@@ -182,9 +182,9 @@ $options = [
                 'target' => 'AsistenciaSemanal'
             ],
             [
-                'name' => ["es" => 'Notas por examen', "en" => "Notas por examen"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Notas por examen', "en" => "Exams grades"],
+                'desc' => ['es' => 'calificaciones de los exámenes', 'en' => 'Grades of exams given by Teachers'],
+                'link' => 'maestros_examen_op.php'
             ],
             [
                 'name' => ["es" => 'Aprove. Academico', "en" => "Aprove. Academico"],
