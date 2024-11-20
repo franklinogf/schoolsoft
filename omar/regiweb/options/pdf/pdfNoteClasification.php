@@ -1,21 +1,19 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\PDF;
-use Classes\Lang;
-use Classes\Session;
-use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
+use Classes\DataBase\DB;
+use Classes\Lang;
+use Classes\PDF;
+use Classes\Session;
 
 Session::is_logged();
-
 
 $teacher = new Teacher(Session::id());
 $student = new Student;
 $students = $student->findByGrade($teacher->grado);
 $gradesNumbers = [[1, 10], [11, 20], [21, 30], [31, 40]];
-
 
 $lang = new Lang([
     ["Clasificación de notas", "Grades classification"],
@@ -25,7 +23,6 @@ $lang = new Lang([
     ["Nombre del estudiante", "Student name"],
 
 ]);
-
 
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Clasificación de notas"), true);
@@ -70,9 +67,14 @@ foreach ($students as $student) {
     $finalGrade = $totalFinal = $totalFinalAmount = 0;
     $fathers = DB::table('padres')->where([
         ['ss', $student->ss],
-        ['year', $teacher->info('year')]
+        ['year', $teacher->info('year')],
     ])->get();
-    $grades = [];
+    $grades = [
+        1 => ['A' => 0, 'B' => 0, 'C' => 0, 'D' => 0, 'F' => 0],
+        2 => ['A' => 0, 'B' => 0, 'C' => 0, 'D' => 0, 'F' => 0],
+        3 => ['A' => 0, 'B' => 0, 'C' => 0, 'D' => 0, 'F' => 0],
+        4 => ['A' => 0, 'B' => 0, 'C' => 0, 'D' => 0, 'F' => 0],
+    ];
     // echo "$student->ss <br>";
     foreach ($fathers as $father) {
         $final = $finalAmount = 0;
@@ -124,34 +126,18 @@ foreach ($students as $student) {
         ['ss', $student->ss],
         ['year', $teacher->info('year')],
     ])->update([
-                'fin' => $finalGrade
-            ]);
+        'fin' => $finalGrade,
+    ]);
     // echo "<hr>";
 
     $pdf->Cell(110, 7, "$student->nombre $student->apellidos", 1);
-    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[1]) ?? $grades[1]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[2]) ?? $grades[2]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[3]) ?? $grades[3]['F'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['A'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['B'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['C'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['D'], 1, 0, 'C');
-    $pdf->Cell(8, 7, isset($grades[4]) ?? $grades[4]['F'], 1, 0, 'C');
+    foreach ($grades as $gradesNumber) {
+        foreach ($gradesNumber as $grade) {
+            $pdf->Cell(8, 7, $grade === 0 ? '' : $grade, 1, 0, 'C');
+        }
+    }
     $pdf->Cell(15, 7, $finalGrade, 1, 1, 'C');
+
 }
-
-
 
 $pdf->Output();
