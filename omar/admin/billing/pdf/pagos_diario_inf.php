@@ -45,22 +45,8 @@ $school = new School(Session::id());
 $year = $school->info('year2');
 
 
-session_start();
+//session_start();
 //$grados =  $_COOKIE["variable1"];
-$tarjeta =  $_COOKIE["variable2"];
-$tnot =  $_COOKIE["variable3"];
-$grado =  $_COOKIE["variable4"];
-$idioma =  $_COOKIE["variable5"];
-$opcion =  $_COOKIE["variable6"];
-$grados =  $_COOKIE["variable7"];
-//$Year =  $_COOKIE["variable8"];
-$estu =  $_COOKIE["variable9"];
-$cep =  $_COOKIE["variable10"];
-$fg =  $_COOKIE["variable11"];
-$fdg =  $_COOKIE["variable12"];
-$memsa1 =  $_COOKIE["variable13"];
-$memsa2 =  $_COOKIE["variable14"];
-$nhc     =  $_COOKIE["variable15"];
 
 class nPDF extends PDF
 {
@@ -100,7 +86,7 @@ function Footer()
 }
 }
 
-session_start();
+//session_start();
 $id=$_SESSION['id1'];
 $usua=$_SESSION['usua1'];
 
@@ -121,7 +107,9 @@ $codigo=$_POST['codigo'];
 
 $consult1 = "select * from colegio where usuario = '$usua'";
 
-//if ($caja==''){$caja=$row0[142];}
+if ($caja == '') {
+   $caja = $school->info('caja');
+}
 if ($caja=='0')
    {
    if ($codigo=='Todos')
@@ -161,7 +149,10 @@ $tot8=0;
 $tot9=0;
 $tot10=0;
 $tot11=0;
+$tot12 = 0;
+$tot13 = 0;
 $tot19=0;
+$tot20 = 0;
 foreach ($result as $row)
         {
       if ($caja=='0')
@@ -257,7 +248,7 @@ foreach ($result21 as $row1)
 foreach ($result2 as $row2)
         {
 
-    if ($_POST['efe']==$row2->tdp or $_POST['che']==$row2->tdp or $_POST['ath']==$row2->tdp or $_POST['tar']==$row2->tdp or $_POST['gir']==$row2->tdp or $_POST['nom']==$row2->tdp or $_POST['ban']==$row2->tdp or $_POST['pay']==$row2->tdp or $_POST['telp']==$row2->tdp or $_POST['pdir']==$row2->tdp or $_POST['bec']==$row2->tdp or $_POST['athm']==$row2->tdp or $_POST['cac']==$row2->tdp or $_POST['vt1']==$row2->tdp)
+         if ($_POST['efe'] ?? '' == $row2->tdp or $_POST['che'] ?? '' == $row2->tdp or $_POST['ath'] ?? '' == $row2->tdp or $_POST['tar'] ?? '' == $row2->tdp or $_POST['gir'] ?? '' == $row2->tdp or $_POST['nom'] ?? '' == $row2->tdp or $_POST['ban'] ?? '' == $row2->tdp or $_POST['pay'] ?? '' == $row2->tdp or $_POST['telp'] ?? '' == $row2->tdp or $_POST['pdir'] ?? '' == $row2->tdp or $_POST['bec'] ?? '' == $row2->tdp or $_POST['athm'] ?? '' == $row2->tdp or $_POST['cac'] ?? '' == $row2->tdp or $_POST['vt1'] ?? '' == $row2->tdp)
        {
        if ($est==0)
           {
@@ -268,20 +259,48 @@ foreach ($result2 as $row2)
           $pdf->Cell(70,5,$row22->apellidos.' '.$row22->nombre,0,1,'L');
           $est=1;
           }
-       if ($_POST['efe']==$row2->tdp){$tot1=$tot1+$row2->pago;}
-       if ($_POST['che']==$row2->tdp){$tot2=$tot2+$row2->pago;}
-       if ($_POST['ath']==$row2->tdp){$tot3=$tot3+$row2->pago;}
-       if ($_POST['tar']==$row2->tdp){$tot4=$tot4+$row2->pago;}
-       if ($_POST['gir']==$row2->tdp){$tot5=$tot5+$row2->pago;}
-       if ($_POST['nom']==$row2->tdp){$tot6=$tot6+$row2->pago;}
-       if ($_POST['ban']==$row2->tdp){$tot7=$tot7+$row2->pago;}
-       if ($_POST['pdir']==$row2->tdp){$tot8=$tot8+$row2->pago;}
-       if ($_POST['telp']==$row2->tdp){$tot9=$tot9+$row2->pago;}
-       if ($_POST['pay']==$row2->tdp){$tot10=$tot10+$row2->pago;}
-       if ($_POST['bec']==$row2->tdp){$tot12=$tot12+$row2->pago;}
-       if ($_POST['athm']==$row2->tdp){$tot13=$tot13+$row2->pago;}
-       if ($_POST['cac']==$row2->tdp){$tot19=$tot19+$row2->pago;}
-       if ($_POST['vt1']==$row2->tdp){$tot20=$tot20+$row2->pago;}
+            if ($_POST['efe'] ?? '' == $row2->tdp) {
+               $tot1 = $tot1 + $row2->pago;
+            }
+            if ($_POST['che'] ?? '' == $row2->tdp) {
+               $tot2 = $tot2 + $row2->pago;
+            }
+            if ($_POST['ath'] ?? '' == $row2->tdp) {
+               $tot3 = $tot3 + $row2->pago;
+            }
+            if ($_POST['tar'] ?? '' == $row2->tdp) {
+               $tot4 = $tot4 + $row2->pago;
+            }
+            if ($_POST['gir'] ?? '' == $row2->tdp) {
+               $tot5 = $tot5 + $row2->pago;
+            }
+            if ($_POST['nom'] ?? '' == $row2->tdp) {
+               $tot6 = $tot6 + $row2->pago;
+            }
+            if ($_POST['ban'] ?? '' == $row2->tdp) {
+               $tot7 = $tot7 + $row2->pago;
+            }
+            if ($_POST['pdir'] ?? '' == $row2->tdp) {
+               $tot8 = $tot8 + $row2->pago;
+            }
+            if ($_POST['telp'] ?? '' == $row2->tdp) {
+               $tot9 = $tot9 + $row2->pago;
+            }
+            if ($_POST['pay'] ?? '' == $row2->tdp) {
+               $tot10 = $tot10 + $row2->pago;
+            }
+            if ($_POST['bec'] ?? '' == $row2->tdp) {
+               $tot12 = $tot12 + $row2->pago;
+            }
+            if ($_POST['athm'] ?? '' == $row2->tdp) {
+               $tot13 = $tot13 + $row2->pago;
+            }
+            if ($_POST['cac'] ?? '' == $row2->tdp) {
+               $tot19 = $tot19 + $row2->pago;
+            }
+            if ($_POST['vt1'] ?? '' == $row2->tdp) {
+               $tot20 = $tot20 + $row2->pago;
+            }
        $tot11=$tot11+$row2->pago;
        $tot0=$tot0+$row2->pago;
        $pdf->SetFont('Times','',10);
