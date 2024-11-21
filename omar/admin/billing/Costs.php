@@ -69,7 +69,7 @@ if (isset($_POST['borra']))
    {
    DB::table('costos')->where('mt', $_POST['mt1'])->delete();
    }
-$add2=$_GET['add2'];
+$add2 = $_GET['add2'] ?? '';
 if (isset($_POST['add']) and $add2==0)
    {
     list($r1,$r2) = explode(", ",$_POST['desc']);
@@ -79,20 +79,20 @@ if (isset($_POST['add']) and $add2==0)
         'descripcion' => $r2,
         'costo' => $_POST['costo'],
         'activo' => $_POST['activo'],
-        'm8' => $_POST['m8'],
-        'm9' => $_POST['m9'],
-        'm10' => $_POST['m10'],
-        'm11' => $_POST['m11'],
-        'm12' => $_POST['m12'],
-        'm1' => $_POST['m1'],
-        'm2' => $_POST['m2'],
-        'm3' => $_POST['m3'],
-        'm4' => $_POST['m4'],
-        'm5' => $_POST['m5'],
-        'm6' => $_POST['m6'],
-        'm7' => $_POST['m7'],
-        'esn' => $_POST['esn'],
-        'pf' => $_POST['pf'],
+		'm8' => $_POST['m8'] ?? '',
+		'm9' => $_POST['m9'] ?? '',
+		'm10' => $_POST['m10'] ?? '',
+		'm11' => $_POST['m11'] ?? '',
+		'm12' => $_POST['m12'] ?? '',
+		'm1' => $_POST['m1'] ?? '',
+		'm2' => $_POST['m2'] ?? '',
+		'm3' => $_POST['m3'] ?? '',
+		'm4' => $_POST['m4'] ?? '',
+		'm5' => $_POST['m5'] ?? '',
+		'm6' => $_POST['m6'] ?? '',
+		'm7' => $_POST['m7'] ?? '',
+		'esn' => $_POST['esn'] ?? '',
+		'pf' => $_POST['pf'] ?? '',
         'year' => $year,
     ]);
   }
