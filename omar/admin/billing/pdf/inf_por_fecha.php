@@ -38,16 +38,14 @@ $grades = $school->allGrades();
 class nPDF extends PDF
 {
 
-    //Cabecera de p&#65533;gina
     function Header()
     {
-
         global $year;
         parent::header();
         global $lang;
 
         //Salto de lnea
-        $this->Ln(5);
+        $this->Ln(-5);
         $this->SetFont('Arial', 'B', 11);
         $this->Cell(120);
         $this->Cell(30, 10, $_POST['ft1'] . ' / ' . $_POST['ft2'], 0, 0, 'C');
@@ -72,10 +70,7 @@ class nPDF extends PDF
     function Footer()
     {
         global $lang;
-        //Posici&oacute;n: a 1,5 cm del final
         $this->SetY(-15);
-
-        //Arial italic 8
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, $lang->translation('Pagina ') . $this->PageNo() . '/{nb} ' . date('m-d-Y'), 0, 0, 'C');
     }
@@ -91,7 +86,7 @@ $pdf->SetFont('Times', '', 11);
 
 list($code, $desc) = explode(", ", $_POST['desc']);
 $result7 = DB::table('year')->select("DISTINCT id, ss, nombre, apellidos")
-    ->whereRaw("year='$year' and activo !='B'")->orderBy('ID')->get();
+    ->whereRaw("year='$year' and activo !='B'")->orderBy('id')->get();
 
 $a = 0;
 $id = '';
@@ -101,21 +96,21 @@ foreach ($result7 as $row7) {
     $deu = 0;
     $pag = 0;
     $resultad2 = DB::table('pagos')
-        ->whereRaw(" year='$year' and id='$row7->id' and ss='$row7->ss' and codigo='$code' and fecha_d >= '" . $_POST['ft1'] . "' and fecha_d <= '" . $_POST['ft2'] . "'")->get();
+        ->whereRaw(" year='$year' and id='$row7->id' and ss='$row7->ss' and codigo='$code' and fecha_p >= '" . $_POST['ft1'] . "' and fecha_p <= '" . $_POST['ft2'] . "'")->get();
     foreach ($resultad2 as $row8) {
         $pag = $pag + $row8->pago;
-        $deu = $deu + $row8->deuda;
         $pagt = $pagt + $row8->pago;
+    }
+    list($y, $m, $d) = explode("-", $_POST['ft1']);
+    $fec = $y . '-' . $m . '-01';
+
+    $resultad3 = DB::table('pagos')
+        ->whereRaw(" year='$year' and id='$row7->id' and ss='$row7->ss' and codigo='$code' and fecha_d >= '" . $fec . "' and fecha_d <= '" . $_POST['ft2'] . "'")->get();
+    foreach ($resultad3 as $row8) {
+        $deu = $deu + $row8->deuda;
         $deut = $deut + $row8->deuda;
     }
-    //      $resultad2 = DB::table('pagos')
-    //          ->whereRaw("year='$year' and id='$row7->id' and ss='$row7->ss' and codigo='$code' and fecha_p >= '".$_POST['ft1']."' and fecha_p <= '".$_POST['ft2']."'")->get();
-    //    foreach ($resultad2 as $row8)
-    //            {
-    //            $deu=$deu+$row8->deuda;
-    //            $deut=$deut+$row8->deuda;
-    //            }
-    if ($deu > 0) {
+    if ($deu > 0 or $pag > 0) {
         if ($id != $row7->id) {
             $a = $a + 1;
             $id = $row7->id;
