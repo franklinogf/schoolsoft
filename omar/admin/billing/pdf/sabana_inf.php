@@ -72,6 +72,7 @@ class nPDF extends PDF
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, $lang->translation('Pagina ') . $this->PageNo() . '/{nb} ' . date('m-d-Y'), 0, 0, 'C');
     }
+
 }
 //Creacin del objeto de la clase heredada
 $pdf = new nPDF();
@@ -115,7 +116,7 @@ foreach ($result1 as $row1) {
     $debe = 0;
     if ($_POST['desc'] == 'Todos') {
         $result3 = DB::table('pagos')
-            ->whereRaw("id='$row1->id' and ss='$row1->ss' and year='$year' and baja=''")->orderBy('id, nombre')->get();
+            ->whereRaw("id='$row1->id' and ss='$row1->ss' and year='$year' and baja='' and fecha_d < '" . $_POST['ft1'] . "'")->orderBy('id, nombre')->get();
     } else {
         $code = $_POST['desc'];
         $result3 = DB::table('pagos')
@@ -145,10 +146,10 @@ foreach ($result1 as $row1) {
     if ($debe > 0) {
         if ($_POST['desc'] == 'Todos') {
             $result31 = DB::table('presupuesto')
-                ->whereRaw("year='$year'")->orderBy('codigo')->get();
+            ->whereRaw("year='$year'")->orderBy('codigo')->get();
         } else {
             $result31 = DB::table('presupuesto')
-                ->whereRaw("codigo='$code' and year='$year'")->orderBy('codigo')->get();
+            ->whereRaw("codigo='$code' and year='$year'")->orderBy('codigo')->get();
         }
         $debe = 0;
         $mes1 = 0;
@@ -156,6 +157,7 @@ foreach ($result1 as $row1) {
         $mes3 = 0;
         $mes4 = 0;
         $mes5 = 0;
+        //     list($y1,$y2) = explode("-",$year);
         list($yy1, $mm1, $dd1) = explode("-", $_POST['ft1']);
         list($yy2, $mm2, $dd2) = explode("-", $_POST['ft1']);
         list($yy3, $mm3, $dd3) = explode("-", $_POST['ft1']);
@@ -164,6 +166,10 @@ foreach ($result1 as $row1) {
         $m2 = '-';
         $m3 = '-';
         $m4 = '-';
+        //     $yy1 = '20'.$y1;
+        //     $yy2 = '20'.$y1;
+        //     $yy3 = '20'.$y1;
+        //     $yy4 = '20'.$y1;
         if ($mm1 == 1) {
             $mm1 = 12;
             $yy1 = $yy1 - 1;
@@ -243,7 +249,7 @@ foreach ($result1 as $row1) {
             $mm2 = 0;
             $mes1 = 0;
             $result10 = DB::table('pagos')
-                ->whereRaw("id='$row1->id' and ss='$row1->ss' and codigo='$row3->codigo' and year='$year' and baja='' and fecha_d < '" . date($fec1) . "'")->orderBy('codigo')->get();
+                ->whereRaw("id='$row1->id' and ss='$row1->ss' and codigo='$row3->codigo' and year='$year' and baja='' and fecha_d = '" . date($fec1) . "'")->orderBy('codigo')->get();
             foreach ($result10 as $row10) {
                 $debe = $debe + ($row10->deuda - $row10->pago);
                 $mes1 = $mes1 + ($row10->deuda - $row10->pago);
@@ -272,6 +278,7 @@ foreach ($result1 as $row1) {
             $mes1 = 0;
             $result10 = DB::table('pagos')
                 ->whereRaw(" id='$row1->id' and ss='$row1->ss' and year='$year' and codigo='$row3->codigo' and baja='' and fecha_d = '" . date($fec2) . "'")->orderBy('codigo')->get();
+            //echo "id='$row1->id' and ss='$row1->ss' and codigo='$row3->codigo' and year='$year' and baja='' and fecha_d = '".date($fec2)."'".'<br>';
             foreach ($result10 as $row10) {
                 $debe = $debe + ($row10->deuda - $row10->pago);
                 $mes1 = $mes1 + ($row10->deuda - $row10->pago);
@@ -410,14 +417,18 @@ $tot2 = 0;
 $tot3 = 0;
 $tot4 = 0;
 $tot5 = 0;
+$l2 = 0;
 
 $result1 = DB::table('deudores')->select("DISTINCT cta, ss, nombre")
-    ->orderBy('cta, ss')->get();
+->orderBy('cta, ss')->get();
 $l = 0;
+$m = 0;
 foreach ($result1 as $row0) {
     $pdf->SetFont('Arial', '', 12);
     $l = $l + 1;
-    $result2 = DB::table('deudores')->orderBy('cta, linia')->get();
+    $m = $m + 1;
+    $result2 = DB::table('deudores')
+        ->whereRaw(" cta='$row0->cta' and ss='$row0->ss'")->orderBy('cta, linia')->get();
     $pdf->Cell(10, 5, $l, $cl, 0, 'R');
     $pdf->Cell(12, 5, $row0->cta, $cl, 0, 'R');
     $pdf->SetFont('Arial', '', 10);
@@ -430,6 +441,7 @@ foreach ($result1 as $row0) {
     $de5 = 0;
     foreach ($result2 as $row1) {
         $l2 = $l2 + 1;
+        $m = $m + 1;
         if ($l2 > 1) {
             $pdf->Cell(97, 5, '', 0, 0, 'R');
         }
@@ -449,6 +461,10 @@ foreach ($result1 as $row0) {
         $pdf->Cell(40, 5, $row1->dam, $cl, 0, 'L');
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(15, 5, $row1->dbm, $cl, 1, 'R');
+        if ($m >= 25) {
+            $pdf->AddPage('L', 'Legal');
+            $m = 1;
+        }
         $tot1 = $tot1 + $row1->db30;
         $tot2 = $tot2 + $row1->db60;
         $tot3 = $tot3 + $row1->db90;
@@ -461,6 +477,7 @@ foreach ($result1 as $row0) {
         $de4 = $de4 + $row1->dbm;
         $de5 = $de5 + $row1->db30 + $row1->db60 + $row1->db90 + $row1->dbm;
     }
+    $m = $m + 1;
     $pdf->Cell(97, 5, '', 0, 0, 'R');
     $pdf->SetFont('Arial', '', 9);
     $pdf->Cell(40, 5, '', $cl, 0, 'L');
@@ -480,6 +497,10 @@ foreach ($result1 as $row0) {
     $pdf->Cell(15, 5, number_format($de4, 2), $cl, 0, 'R');
     $pdf->Cell(18, 5, number_format($de5, 2), $cl, 1, 'R');
     $pdf->Cell(15, 5, '', 0, 1, 'R');
+    if ($m >= 25) {
+        $pdf->AddPage('L', 'Legal');
+        $m = 1;
+    }
 }
 $pdf->Cell(10, 5, '', 0, 0, 'R');
 $pdf->Cell(12, 5, '', 0, 0, 'R');
@@ -491,3 +512,4 @@ $pdf->Cell(54, 5, number_format($tot4, 2), 1, 0, 'R');
 $pdf->Cell(22, 5, number_format($tot5, 2), 1, 1, 'R');
 
 $pdf->Output();
+?>
