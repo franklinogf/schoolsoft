@@ -52,9 +52,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Re-enviar recibo',   "en" => "Re-enviar recibo"],
-                'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Pantalla para reenviar recibos de los pagos automáticos.'],
-                'link' => '#'
+                'name' => ["es" => 'Re-enviar recibo',   "en" => "Resend receipt"],
+                'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Screen to resend receipts for automatic payments.'],
+                'link' => 'reenviar.php'
             ],
 
 
