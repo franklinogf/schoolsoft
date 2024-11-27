@@ -124,9 +124,9 @@ $options = [
                 'link' => 'cobros_testos.php'
             ],
             [
-                'name' => ["es" => 'Recibos', "en" => "Recibos"],
-                'desc' => ['es' => 'Pantalla Para Buscar Recibos', 'en' => 'Pantalla Para Buscar Recibos'],
-                'link' => '#'
+                'name' => ["es" => 'Recibos', "en" => "Receipts"],
+                'desc' => ['es' => 'Pantalla Para Buscar Recibos', 'en' => 'Screen to Search Receipts'],
+                'link' => 'receipts.php'
             ],
             [
                 'name' => ["es" => 'Pasar balances', "en" => "Pasar balances"],
