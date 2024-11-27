@@ -129,14 +129,14 @@ $options = [
                 'link' => 'receipts.php'
             ],
             [
-                'name' => ["es" => 'Pasar balances', "en" => "Pasar balances"],
-                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => 'Pantalla para pasar los balances de los padres de un año al otro.'],
-                'link' => '#'
+                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
+                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'link' => 'pass_balances.php'
             ],
             [
-                'name' => ["es" => 'Deudores', "en" => "Deudores"],
-                'desc' => ['es' => 'Informe detallado por cuentas y año.', 'en' => 'Informe detallado por cuentas y año.'],
-                'link' => '#'
+                'name' => ["es" => 'Deudores', "en" => "Debtors"],
+                'desc' => ['es' => 'Informe detallado por cuentas y año.', 'en' => 'Detailed report by accounts and year.'],
+                'link' => 'deudores_op.php'
             ],
             [
                 'name' => ["es" => 'Listado', "en" => "Listado"],
