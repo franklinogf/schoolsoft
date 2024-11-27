@@ -144,9 +144,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Matrícula estudiante', "en" => "Matrícula estudiante"],
-                'desc' => ['es' => 'Informe por deudas detalladas.', 'en' => 'Informe por deudas detalladas.'],
-                'link' => '#'
+                'name' => ["es" => 'Matrícula estudiante', "en" => "Student registration"],
+                'desc' => ['es' => 'Informe por deudas detalladas.', 'en' => 'Detailed debt report.'],
+                'link' => 'inf_mat_est_op.php'
             ],
             [
                 'name' => ["es" => 'Deuda salón', "en" => "Deuda salón"],
