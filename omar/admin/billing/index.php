@@ -154,9 +154,10 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Reporte de pagos', "en" => "Reporte de pagos"],
-                'desc' => ['es' => 'Reporte totales por código por año.', 'en' => 'Reporte totales por código por año.'],
-                'link' => '#'
+                'name' => ["es" => 'Reporte de pagos', "en" => "Payment report"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => 'pdf/inf_reporte_pago.php',
+                'target' => 'inf_reporte_pago'
             ],
             [
                 'name' => ["es" => 'Descuentos', "en" => "Descuentos"],
