@@ -175,9 +175,10 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Presupuesto por grado', "en" => "Presupuesto por grado"],
-                'desc' => ['es' => 'Informe presupuesto por grado.', 'en' => 'Informe presupuesto por grado.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto por grado', "en" => "Budget by grade"],
+                'desc' => ['es' => 'Informe presupuesto por grado.', 'en' => 'Budget report by grade.'],
+                'link' => 'pdf/inf_presu.php',
+                'target' => 'inf_presu'
             ],
             [
                 'name' => ["es" => 'Presupuesto por matrícula', "en" => "Presupuesto por matrícula"],
