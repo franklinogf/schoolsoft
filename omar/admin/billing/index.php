@@ -186,9 +186,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Misma descripcion', "en" => "Misma descripcion"],
-                'desc' => ['es' => 'Informe por la misma descripciones.', 'en' => 'Informe por la misma descripciones.'],
-                'link' => '#'
+                'name' => ["es" => 'Reporte descripción', "en" => "Report description"],
+                'desc' => ['es' => 'Informe por descripciones.', 'en' => 'Report by description'],
+                'link' => 'inf_descp_op.php'
             ],
             [
                 'name' => ["es" => 'Deuda familia', "en" => "Deuda familia"],
