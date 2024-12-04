@@ -261,7 +261,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <select name="discount1" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
                                             <?php foreach ($discounts as $discount): ?>
-                                                <option <?= isset($student) && $student->desc1 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                                <option <?= isset($student) && $student->desc1 === strval($discount->codigo) ? 'selected' : '' ?> value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -275,7 +275,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <select name="discount2" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
                                             <?php foreach ($discounts as $discount): ?>
-                                                <option <?= isset($student) && $student->desc2 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                                <option <?= isset($student) && $student->desc2 === strval($discount->codigo) ? 'selected' : '' ?> value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -289,7 +289,7 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <select name="discount3" class="form-control">
                                             <option value=""><?= $lang->translation("Seleccionar") ?></option>
                                             <?php foreach ($discounts as $discount): ?>
-                                                <option <?= isset($student) && $student->desc3 === $discount->codigo ? 'selected' : '' ?>value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
+                                                <option <?= isset($student) && $student->desc3 === strval($discount->codigo) ? 'selected' : '' ?> value="<?= $discount->codigo ?>"><?= $discount->descripcion ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -323,8 +323,8 @@ $discounts = DB::table("presupuesto")->where('year', $school->info('year'))->ord
                                         <div class="col">
                                             <select name="transporte" class="form-control">
                                                 <option value=""><?= $lang->translation("Ninguno") ?></option>
-                                                <option <?= isset($student) && $student->transporte === '1' ? 'selected' : '' ?> value="1"><?= $lang->translation("Interno") ?></option>
-                                                <option <?= isset($student) && $student->transporte === '2' ? 'selected' : '' ?> value="2"><?= $lang->translation("Externo") ?></option>
+                                                <option <?= isset($student) && $student->transporte === 1 ? 'selected' : '' ?> value="1"><?= $lang->translation("Interno") ?></option>
+                                                <option <?= isset($student) && $student->transporte === 2 ? 'selected' : '' ?> value="2"><?= $lang->translation("Externo") ?></option>
                                             </select>
                                         </div>
                                     </div>
