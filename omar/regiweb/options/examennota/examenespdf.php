@@ -151,7 +151,7 @@ $pdf->setCurso("$profe ($curso - $cur->desc1 $year)");
 //$pdf->setCurso(utf8_encode("$profe ($curso - $cur->desc1 $year)"));
 $cuatri = str_replace('-', ' ', $cuatri);
 $pagina = str_replace('-', ' ', $pagina);
-$pdf->setInfo(utf8_decode("$cuatri - $pagina"));
+$pdf->setInfo("$cuatri - $pagina");
 $pdf->AddPage('L');
 $pdf->SetFont('Arial', '', 12);
 $count = 1;
@@ -180,8 +180,8 @@ foreach ($notas as $not) {
 
     foreach ($rs as $e) {
         $puntos = $e->puntos;
-        if ($not < 100) {
-            $puntos = ($e->puntos / $not) * 100;
+        if (intval($not) < 100) {
+            $puntos = (intval($e->puntos) / intval($not)) * 100;
         }
 
         if (is_numeric($puntos) && $puntos != '') {
