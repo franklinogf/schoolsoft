@@ -139,9 +139,9 @@ $options = [
                 'link' => 'deudores_op.php'
             ],
             [
-                'name' => ["es" => 'Listado', "en" => "Listado"],
-                'desc' => ['es' => 'Informe por descripción mensual.', 'en' => 'Informe por descripción mensual.'],
-                'link' => '#'
+                'name' => ["es" => 'Listado', "en" => "List"],
+                'desc' => ['es' => 'Informe por descripción mensual.', 'en' => 'Report by monthly description.'],
+                'link' => 'inf_desc_op.php'
             ],
             [
                 'name' => ["es" => 'Matrícula estudiante', "en" => "Student registration"],
