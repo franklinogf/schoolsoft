@@ -149,9 +149,9 @@ $options = [
                 'link' => 'inf_mat_est_op.php'
             ],
             [
-                'name' => ["es" => 'Deuda salón', "en" => "Deuda salón"],
-                'desc' => ['es' => 'Informe por deudas por salón hogar.', 'en' => 'Informe por deudas por salón hogar.'],
-                'link' => '#'
+                'name' => ["es" => 'Deuda salón hogar', "en" => "Debt for home room"],
+                'desc' => ['es' => 'Informe por deudas por salón hogar.', 'en' => 'Debt report for home room.'],
+                'link' => 'inf_deuda_salon_op'
             ],
             [
                 'name' => ["es" => 'Reporte de pagos', "en" => "Payment report"],
