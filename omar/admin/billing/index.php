@@ -160,9 +160,10 @@ $options = [
                 'target' => 'inf_reporte_pago'
             ],
             [
-                'name' => ["es" => 'Descuentos', "en" => "Descuentos"],
-                'desc' => ['es' => 'Reporte totales de descuento por código.', 'en' => 'Reporte totales de descuento por código.'],
-                'link' => '#'
+                'name' => ["es" => 'Descuentos', "en" => "Discounts"],
+                'desc' => ['es' => 'Reporte totales de descuento por código.', 'en' => 'Total discount report by code.'],
+                'link' => 'pdf/inf_reporte_descuentos.php',
+                'target' => 'inf_reporte_descuentos'
             ],
             [
                 'name' => ["es" => 'Pagos mensual', "en" => "Pagos mensual"],
