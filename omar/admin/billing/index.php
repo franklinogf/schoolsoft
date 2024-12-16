@@ -171,9 +171,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Deudores', "en" => "Deudores"],
-                'desc' => ['es' => 'Informe pagado completo', 'en' => 'Informe pagado completo'],
-                'link' => '#'
+                'name' => ["es" => 'No Deudores', "en" => "Non-Debtors"],
+                'desc' => ['es' => 'Informe pagado completo', 'en' => 'Complete paid report'],
+                'link' => 'inf_pagados_op.php'
             ],
             [
                 'name' => ["es" => 'Presupuesto por grado', "en" => "Budget by grade"],
