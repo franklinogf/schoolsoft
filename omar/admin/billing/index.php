@@ -182,9 +182,9 @@ $options = [
                 'target' => 'inf_presu'
             ],
             [
-                'name' => ["es" => 'Presupuesto por matrícula', "en" => "Presupuesto por matrícula"],
-                'desc' => ['es' => 'Informe presupuesto por matricula y mensualidad.', 'en' => 'Informe presupuesto por matricula y mensualidad.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto por matrícula', "en" => "Tuition budget"],
+                'desc' => ['es' => 'Informe presupuesto por matricula y mensualidad.', 'en' => 'Budget report for enrollment and monthly payment.'],
+                'link' => 'inf_presu_op.php'
             ],
             [
                 'name' => ["es" => 'Reporte descripción', "en" => "Report description"],
