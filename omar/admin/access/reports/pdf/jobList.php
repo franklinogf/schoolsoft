@@ -14,14 +14,15 @@ $lang = new Lang([
     ['Lista trabajo de padres', 'Parents work List'],
     ['Nombres padres', 'Parents Name'],
     ['Celular', 'Cel-Phone'],
-    ['Tel�fono', 'Phone'],
+    ['Teléfono', 'Phone'],
     ['Trabajos', 'Works'],
     ['Padres', 'Fathers'],
     ['Madres', 'Mothers'],
 ]);
 $grade = $_POST['grade'];
-$school = new School();
-$year = $school->year();
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 class nPDF extends PDF
 {
     function header()
@@ -39,7 +40,7 @@ class nPDF extends PDF
         $this->Cell(15, 5, 'ID', 1, 0, 'C', true);
         $this->Cell(70, 5, $lang->translation("Nombres padres"), 1, 0, 'C', true);
         $this->Cell(35, 5, $lang->translation("Celular"), 1, 0, 'C', true);
-        $this->Cell(35, 5, $lang->translation("Tel�fono"), 1, 0, 'C', true);
+        $this->Cell(35, 5, $lang->translation("Teléfono"), 1, 0, 'C', true);
         $this->Cell(80, 5, $lang->translation("Trabajos"), 1, 1, 'C', true);
 //        $this->Cell(65, 5, $lang->translation("Padres"), 1, 0, 'C', true);
 //        $this->Cell(65, 5, $lang->translation("Madres"), 1, 1, 'C', true);
@@ -85,15 +86,15 @@ $parent = DB::table('madre')->where([
            {
            $pdf->Cell(10, 5, $count, 0, 0, 'C');
            $pdf->Cell(15, 5, $student->id, 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($parent->madre), 0, 0, 'L');
+        $pdf->Cell(70, 5, $parent->madre, 0, 0, 'L');
            $pdf->Cell(35, 5, $parent->cel_m, 0, 0, 'L');
            $pdf->Cell(35, 5, $parent->tel_t_m, 0, 0, 'L');
-           $pdf->Cell(70, 5, utf8_decode($parent->trabajo_m), 0, 1, 'L');
+        $pdf->Cell(70, 5, $parent->trabajo_m, 0, 1, 'L');
            $pdf->Cell(25, 5, '', 0, 0, 'C');
-           $pdf->Cell(70, 5, utf8_decode($parent->padre), 0, 0, 'L');
+        $pdf->Cell(70, 5, $parent->padre, 0, 0, 'L');
            $pdf->Cell(35, 5, $parent->cel_p, 0, 0, 'L');
            $pdf->Cell(35, 5, $parent->tel_t_p, 0, 0, 'L');
-           $pdf->Cell(70, 5, utf8_decode($parent->trabajo_p), 0, 1, 'L');
+        $pdf->Cell(70, 5, $parent->trabajo_p, 0, 1, 'L');
            $count++;
            }
 }

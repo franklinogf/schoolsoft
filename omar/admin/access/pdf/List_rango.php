@@ -24,7 +24,7 @@ $lang = new Lang([
 ]);
 
 
-session_start();
+//session_start();
 $grados =  $_COOKIE["variable1"];
 
 $gg='09-12';
@@ -181,8 +181,14 @@ $pdf->Fill();
         ->whereRaw("ss = '$student->ss' and curso like '%".$cur1."%' and grado like '%".$gra8."%' or ss = '$student->ss' and curso like '%".$cur2."%' and grado like '%".$gra8."%'")->orderBy('orden')->first();
 
               $n1=0;$n2=0;$n3a=0;$n3b=0;$n3c=0;$n3d=0;$n3e=0;$n3f=0;$n3g=0;$n3h=0;$n4=0;$n5=0;$n6=0;
-              if ($studa->sem1 > 0){$n1=$n1+1;$n2=$n2+$studa->sem1;}
-              if ($studa->sem2 > 0){$n1=$n1+1;$n2=$n2+$studa->sem2;}
+      if ($studa->sem1 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studa->sem1;
+      }
+      if ($studa->sem2 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studa->sem2;
+      }
               if ($n1 > 0)
                  {
                  $n3a = round($n2 / $n1,2);
@@ -190,8 +196,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3a;
                  }
               $n1=0;$n2=0;
-              if ($studb->sem1 > 0){$n1=$n1+1;$n2=$n2+$studb->sem1;}
-              if ($studb->sem2 > 0){$n1=$n1+1;$n2=$n2+$studb->sem2;}
+      if ($studb->sem1 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studb->sem1;
+      }
+      if ($studb->sem2 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studb->sem2;
+      }
               if ($n1 > 0)
                  {
                  $n3b = round($n2 / $n1,2);
@@ -199,8 +211,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3b;
                  }
               $n1=0;$n2=0;
-              if ($studc->sem1 > 0){$n1=$n1+1;$n2=$n2+$studc->sem1;}
-              if ($studc->sem2 > 0){$n1=$n1+1;$n2=$n2+$studc->sem2;}
+      if ($studc->sem1 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studc->sem1;
+      }
+      if ($studc->sem2 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studc->sem2;
+      }
               if ($n1 > 0)
                  {
                  $n3c = round($n2 / $n1,2);
@@ -208,8 +226,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3c;
                  }
               $n1=0;$n2=0;
-              if ($studd->sem1 > 0){$n1=$n1+1;$n2=$n2+$studd->sem1;}
-              if ($studd->sem2 > 0){$n1=$n1+1;$n2=$n2+$studd->sem2;}
+      if ($studd->sem1 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studd->sem1;
+      }
+      if ($studd->sem2 ?? 0 > 0) {
+         $n1 = $n1 + 1;
+         $n2 = $n2 + $studd->sem2;
+      }
               if ($n1 > 0)
                  {
                  $n3d = round($n2 / $n1,2);
@@ -220,8 +244,14 @@ $pdf->Fill();
            if ($grados=='A')
               {
               $n1=0;$n2=0;
-              if ($stude->sem1 > 0){$n1=$n1+1;$n2=$n2+$stude->sem1;}
-              if ($stude->sem2 > 0){$n1=$n1+1;$n2=$n2+$stude->sem2;}
+         if ($stude->sem1 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $stude->sem1;
+         }
+         if ($stude->sem2 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $stude->sem2;
+         }
               if ($n1 > 0)
                  {
                  $n3e = round($n2 / $n1,2);
@@ -229,8 +259,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3e;
                  }
               $n1=0;$n2=0;
-              if ($studf->sem1 > 0){$n1=$n1+1;$n2=$n2+$studf->sem1;}
-              if ($studf->sem2 > 0){$n1=$n1+1;$n2=$n2+$studf->sem2;}
+         if ($studf->sem1 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studf->sem1;
+         }
+         if ($studf->sem2 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studf->sem2;
+         }
               if ($n1 > 0)
                  {
                  $n3f = round($n2 / $n1,2);
@@ -238,8 +274,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3f;
                  }
               $n1=0;$n2=0;
-              if ($studg->sem1 > 0){$n1=$n1+1;$n2=$n2+$studg->sem1;}
-              if ($studg->sem2 > 0){$n1=$n1+1;$n2=$n2+$studg->sem2;}
+         if ($studg->sem1 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studg->sem1;
+         }
+         if ($studg->sem2 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studg->sem2;
+         }
               if ($n1 > 0)
                  {
                  $n3g = round($n2 / $n1,2);
@@ -247,8 +289,14 @@ $pdf->Fill();
                  $n5 = $n5 + $n3g;
                  }
               $n1=0;$n2=0;
-              if ($studh->sem1 > 0){$n1=$n1+1;$n2=$n2+$studh->sem1;}
-              if ($studh->sem2 > 0){$n1=$n1+1;$n2=$n2+$studh->sem2;}
+         if ($studh->sem1 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studh->sem1;
+         }
+         if ($studh->sem2 ?? 0 > 0) {
+            $n1 = $n1 + 1;
+            $n2 = $n2 + $studh->sem2;
+         }
               if ($n1 > 0)
                  {
                  $n3h = round($n2 / $n1,2);

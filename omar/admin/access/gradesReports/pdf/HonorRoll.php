@@ -17,7 +17,7 @@ $lang = new Lang([
     ['Cuadro de honor por Curso', 'Honor roll by Course'],
     ["Nombre", "Name"],
     ["Apellidos", "Surnames"],
-  ["Año escolar:", "School year:"],
+  ["A&#65533;o escolar:", "School year:"],
     ["T-1", "Q-1"],
     ["T-2", "Q-2"],
     ["T-3", "Q-3"],
@@ -61,7 +61,6 @@ $studentClass = new Student();
 $year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
-//$pdf->useFooter(false);
 
 $pdf->SetTitle($lang->translation("Lista de fracasados por ".$_POST['cursos']) . " $year", true);
 $pdf->Fill();
@@ -75,10 +74,11 @@ $cl = $_POST['conlinia'] ?? '';
     $pdf->SetFillColor(89, 171, 227);
     $valor = $_POST['valor'];
     $nota = $_POST['nota'];
+$not = $_POST['nota'] . '+0';
     $orden = $_POST['curso'];
     $gs = $_POST['gradossep'];
     $cur = $_POST['curso'];
-    $data = 'grado ASC, curso, '.$nota.' DESC';
+$data = "'grado ASC, curso, '.$not.' DESC'";
 //    grado ASC, curso, final DESC
 if (empty($cur))
    {
@@ -89,16 +89,10 @@ if (empty($cur))
           [$nota, '<', '150'],
           ['curso', '!=', ''],
           ['curso', 'NOT LIKE', '%AA-%']
-        ])->orderBy($data)->get();
-  } else {
-    $cursos = DB::table('padres')->where([
-          ['baja', ''],
-          ['year', $year],
-      ['grado', $grade],
-      [$nota, '<', '150'],
-      ['curso', '!=', ''],
-      ['curso', 'NOT LIKE', '%AA-%']
     ])->orderBy($data)->get();
+  } else {
+    $cursos = DB::table('padres')->whereRaw("year = '$year' and baja='' and curso !='' and curso NOT LIKE '%AA-%' ORDER BY grado ASC, curso ASC, $not DESC")
+      ->get();
   }
 } else {
   if ($grade == 'all') {
@@ -111,15 +105,9 @@ if (empty($cur))
           ['curso', 'NOT LIKE', '%AA-%']
         ])->orderBy($data)->get();
   } else {
-    $cursos = DB::table('padres')->where([
-      ['baja', ''],
-      ['year', $year],
-      ['grado', $grade],
-      [$nota, '<', '150'],
-      ['curso', '!=', ''],
-      ['curso', 'LIKE', '%' . $cur . '%'],
-      ['curso', 'NOT LIKE', '%AA-%']
-    ])->orderBy($data)->get();
+
+    $cursos = DB::table('padres')->whereRaw("year = '$year' and baja='' and curso !='' and curso LIKE '%'.$cur.'%' ORDER BY grado ASC, curso ASC, $not DESC")
+    ->get();
   }
    }
     $c = 0;
@@ -157,17 +145,16 @@ if (empty($cur))
        $pdf->Cell(70, 5, $curso->apellidos, $cl, 0, 'L');
        $pdf->Cell(60, 5, $curso->nombre, $cl, 0, 'L');
        $pdf->Cell(20, 5, $curso->curso, $cl, 0, 'L');
-       $pdf->Cell(15, 5, $_POST['tri1b'] == 'Si' ? $curso->nota1 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['tri2b'] == 'Si' ? $curso->nota2 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['sem1b'] == 'Si' ? $curso->sem1 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['tri3b'] == 'Si' ? $curso->nota3 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['tri4b'] == 'Si' ? $curso->nota4 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['sem2b'] == 'Si' ? $curso->sem2 : '', $cl, 0, 'R');
-       $pdf->Cell(15, 5, $_POST['profb'] == 'Si' ? $curso->final : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['tri1b'] ?? '' == 'Si' ? $curso->nota1 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['tri2b'] ?? '' == 'Si' ? $curso->nota2 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['sem1b'] ?? '' == 'Si' ? $curso->sem1 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['tri3b'] ?? '' == 'Si' ? $curso->nota3 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['tri4b'] ?? '' == 'Si' ? $curso->nota4 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['sem2b'] ?? '' == 'Si' ? $curso->sem2 : '', $cl, 0, 'R');
+    $pdf->Cell(15, 5, $_POST['profb'] ?? '' == 'Si' ? $curso->final : '', $cl, 0, 'R');
        $pdf->Cell(1, 5, '', 0, 1, 'R');
        }
 
     }
-    $pdf->SetFont('Arial', '', 10);
-
+$pdf->SetFont('Arial', '', 10);
 $pdf->Output();

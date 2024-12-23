@@ -189,7 +189,7 @@ foreach ($_students as $student) {
         $pdf->Cell(15);
         $pdf->Cell(20, 5, $count, 1, 0, 'C');
         $pdf->Cell(100, 5, $student['fullName'], 1);
-        $pdf->Cell(30, 5, $student['cantidad'], 1, 1, 'C');
+        $pdf->Cell(30, 5, $student['cantidad'] ?? '', 1, 1, 'C');
         $count++;
     }
 }

@@ -33,7 +33,7 @@ $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(60, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
 $pdf->Cell(60, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
 $pdf->Cell(30, 5, $lang->translation("Usuario"), 1, 0, 'C', true);
-$pdf->Cell(30, 5, utf8_decode($lang->translation("Contraseña")), 1, 1, 'C', true);
+$pdf->Cell(30, 5, utf8_encode($lang->translation("Contraseña")), 1, 1, 'C', true);
 $pdf->ln(2);
 $pdf->SetFont('Arial', '', 10);
 
@@ -43,13 +43,10 @@ $teachers = DB::table('profesor')->where([
 ])->orderBy('apellidos')->get();
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
-    $pdf->Cell(60, 5, utf8_decode($teacher->apellidos));
-    $pdf->Cell(60, 5, utf8_decode($teacher->nombre));
-    $pdf->Cell(30, 5, utf8_decode($teacher->usuario), 0, 0, 'C');
-    $pdf->Cell(30, 5, utf8_decode($teacher->clave), 0, 1, 'C');
+    $pdf->Cell(60, 5, $teacher->apellidos);
+    $pdf->Cell(60, 5, $teacher->nombre);
+    $pdf->Cell(30, 5, $teacher->usuario, 0, 0, 'C');
+    $pdf->Cell(30, 5, $teacher->clave, 0, 1, 'C');
 }
-
-
-
 
 $pdf->Output();

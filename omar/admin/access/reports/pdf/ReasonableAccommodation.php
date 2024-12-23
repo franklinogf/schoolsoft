@@ -32,10 +32,9 @@ $lang = new Lang([
 
 ]);
 
-$school = new School();
+$school = new School(Session::id());
 $teacherClass = new Teacher();
-
-$year = $school->year();
+$year = $school->info('year2');
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Informe Acomodo Razonable") . " $year", true);
 $pdf->Fill();
@@ -59,9 +58,9 @@ foreach ($allGrades as $grade1) {
     $pdf->Cell(0, 5, $lang->translation("Informe Acomodo Razonable") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade1->grado");
-
-    $pdf->Ln(5);
+    $nom = $teacher->nombre ?? '';
+    $ape = utf8_encode($teacher->apellidos ?? '');
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade1->grado");
 
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(100, 5, $lang->translation("Nombre del estudiante"), 1, 0, 'C', true);
@@ -75,9 +74,9 @@ foreach ($allGrades as $grade1) {
             ['codigo', $student->codigobaja],
         ])->orderBy('codigo')->first();
 
-        $dia = date(j);
-        $mes = date(n);
-        $ano = date(Y);
+        $dia = date('j');
+        $mes = date('n');
+        $ano = date('Y');
         $fec = $student->fecha;
         list($anonaz, $mesnaz, $dianaz) = explode('-', $fec);
         if (($mesnaz == $mes) && ($dianaz > $dia)) {

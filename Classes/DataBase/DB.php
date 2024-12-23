@@ -4,6 +4,7 @@ namespace Classes\DataBase;
 
 use Classes\Session;
 use Classes\Util;
+use Classes\DataBase\DataBase;
 
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase queries                        */
@@ -31,7 +32,18 @@ class DB extends DataBase
   private static $innerJoinCol2 = [];
   private static $innerJoinOperator = [];
   private static $cosey = true;
+  public static function admin($schoolId = __SCHOOL_ACRONYM)
+  {
+    self::$instance ??= new self;
+    parent::$admin = true;
+    self::table('schools');
+    self::$whereCols[] = 'id';
+    self::$whereValues[] = $schoolId;
+    self::$whereOperators[] = '=';
 
+
+    return self::$instance;
+  }
   /* -------------------- Get the next autoincrement number ------------------- */
   // table that has autoincrement
   public static function getNextAutoIncrementIdFromTable($table)
@@ -71,7 +83,7 @@ class DB extends DataBase
 
   public static function table($table, $cosey = true)
   {
-    self::$instance = new self;
+    self::$instance ??= new self;
     self::$table = '`' . trim($table) . '`';
     self::$cosey = $cosey;
 
@@ -84,7 +96,7 @@ class DB extends DataBase
   {
     self::$columns = trim($columns);
 
-    return self::$instance;
+    return $this;
   }
 
   /* --------------------- Insert one row or multiple rows -------------------- */
@@ -101,7 +113,7 @@ class DB extends DataBase
         $columns = '';
         foreach ($array as $key => $value) {
           $coma = ($count > 0 ? ',' : '');
-          $columns .= "{$coma}{$key}";
+          $columns .= "{$coma} `{$key}`";
           $values .= "{$coma}?";
           $count++;
         }
@@ -115,7 +127,7 @@ class DB extends DataBase
       foreach ($insertArray as $key => $value) {
         $valuesArray[] = $value;
         $coma = ($count > 0 ? ',' : '');
-        $columns .= "{$coma}{$key}";
+        $columns .= "{$coma} `{$key}`";
         $values .= "{$coma}?";
         $count++;
       }
@@ -140,7 +152,7 @@ class DB extends DataBase
     foreach ($updateArray as $key => $value) {
       $valuesArray[] = $value;
       $coma = ($count > 0 ? ',' : '');
-      $set .= "$coma $key = ?";
+      $set .= "$coma `{$key}` = ?";
       $count++;
     }
     $where = $this->buildWhere();
@@ -180,24 +192,41 @@ class DB extends DataBase
   public function where($w1, $w2 = false, $w3 = false)
   {
     if ($w2) {
-      self::$whereCols[] = trim($w1);
-      self::$whereValues[] = ($w3 ? trim($w3) : trim($w2));
-      self::$whereOperators[] = ($w3 ? trim($w2) : '=');
+      if (strpos($w1, '.') !== false) {
+        [$table, $col] = explode('.', $w1);
+        self::$whereCols[] = trim("`$table`.`$col`");
+      } else {
+        self::$whereCols[] = trim("`$w1`");
+      }
+      self::$whereValues[] = $w3 ? trim($w3) : trim($w2);
+      self::$whereOperators[] = $w3 ? trim($w2) : '=';
     } else if (!$w2) {
-      if ($this->isMultiArray($w1)) {
+      if (parent::isMultiArray($w1)) {
         foreach ($w1 as $w) {
-          self::$whereCols[] = trim($w[0]);
-          self::$whereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
-          self::$whereOperators[] = (isset($w[2]) ? trim($w[1]) : '=');
+          if (strpos($w[0], '.') !== false) {
+            [$table, $col] = explode('.', $w[0]);
+            self::$whereCols[] = trim("`$table`.`$col`");
+          } else {
+            self::$whereCols[] = trim("`$w[0]`");
+          }
+
+          self::$whereValues[] = isset($w[2]) ? trim($w[2]) : trim($w[1]);
+          self::$whereOperators[] = isset($w[2]) ? trim($w[1]) : '=';
         }
       } else {
-        self::$whereCols[] = trim($w1[0]);
-        self::$whereValues[] = (isset($w1[2]) ? trim($w1[2]) : trim($w1[1]));
-        self::$whereOperators[] = (isset($w1[2]) ? trim($w1[1]) : '=');
+
+        if (strpos($w1[0], '.') !== false) {
+          [$table, $col] = explode('.', $w1[0]);
+          self::$whereCols[] = trim("`$table`.`$col`");
+        } else {
+          self::$whereCols[] = trim("`$w1[0]`");
+        }
+        self::$whereValues[] = isset($w1[2]) ? trim($w1[2]) : trim($w1[1]);
+        self::$whereOperators[] = isset($w1[2]) ? trim($w1[1]) : '=';
       }
     }
 
-    return self::$instance;
+    return $this;
   }
 
   /* ----------------------------- OR WHERE clause ---------------------------- */
@@ -209,7 +238,7 @@ class DB extends DataBase
       self::$orWhereValues[] = ($w3 ? trim($w3) : trim($w2));
       self::$orWhereOperators[] = ($w3 ? trim($w2) : '=');
     } else if (!$w2) {
-      if ($this->isMultiArray($w1)) {
+      if (parent::isMultiArray($w1)) {
         foreach ($w1 as $w) {
           self::$orWhereCols[] = trim($w[0]);
           self::$orWhereValues[] = (isset($w[2]) ? trim($w[2]) : trim($w[1]));
@@ -223,7 +252,7 @@ class DB extends DataBase
     }
 
 
-    return self::$instance;
+    return $this;
   }
 
   /* -------------------------------- Where Raw ------------------------------- */
@@ -231,7 +260,7 @@ class DB extends DataBase
   {
     self::$whereRaw = $query;
     self::$whereRawValues = $values;
-    return self::$instance;
+    return $this;
   }
 
   /* ------------------------------- Inner join ------------------------------- */
@@ -242,23 +271,23 @@ class DB extends DataBase
     self::$innerJoinCol1[] = $table1Col;
     self::$innerJoinCol2[] = $table2Col;
     self::$innerJoinOperator[] = $operator;
-    return self::$instance;
+    return $this;
   }
 
   /* ----------------------------- Order by filter ---------------------------- */
 
-  public function orderBy($col, $mode = null)
+  public function orderBy($by, $mode = null)
   {
 
-    self::$orderBy = ' ORDER BY ' . trim($col) . ' ' . trim($mode);
-    return self::$instance;
+    self::$orderBy = ' ORDER BY ' . trim($by) . ' ' . trim($mode);
+    return $this;
   }
 
   public function cosey($active = false)
   {
 
     self::$cosey = $active;
-    return self::$instance;
+    return $this;
   }
 
   /* ----------------------------- group by filter ---------------------------- */
@@ -267,7 +296,7 @@ class DB extends DataBase
   {
 
     self::$groupBy = ' GROUP BY ' . trim($col);
-    return self::$instance;
+    return $this;
   }
 
   /* ----------------------------- echo the query ----------------------------- */
@@ -277,8 +306,10 @@ class DB extends DataBase
     echo self::$query . "<br/> ";
     var_dump(self::$where);
     echo "<hr/>";
-    if ($exit)
+    $this->closeDB();
+    if ($exit) {
       exit;
+    }
   }
 
   /* ---------------------------- get multiple rows --------------------------- */
@@ -299,6 +330,7 @@ class DB extends DataBase
   public function first()
   {
     $this->buildSelectQuery('limit 1');
+
     $obj = $this->selectOne(self::$query, self::$where);
     $this->closeDB();
     return $obj;
@@ -380,6 +412,7 @@ class DB extends DataBase
     self::$innerJoinCol1 = [];
     self::$innerJoinCol2 = [];
     self::$innerJoinOperator = [];
+    parent::$admin = false;
   }
 
   /* -------------------------------- var_dump -------------------------------- */

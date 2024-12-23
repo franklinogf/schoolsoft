@@ -14,16 +14,25 @@ use Classes\Util;
 class DataBase
 {
 
-
+  protected static $admin = false;
   private $host = __HOST;
   private $username = __USERNAME;
   private $password = __PASSWORD;
   private $dbName = __DB_NAME;
+  private $adminHost = __ADMIN_HOST;
+  private $adminUsername = __ADMIN_USERNAME;
+  private $adminPassword = __ADMIN_PASSWORD;
+  private $adminDbName = __ADMIN_DB_NAME;
 
 
   protected function connect()
   {
-    $db = new mysqli($this->host, $this->username, $this->password, $this->dbName);
+    if (self::$admin) {
+      $db = new mysqli($this->adminHost, $this->adminUsername, $this->adminPassword, $this->adminDbName);
+    } else {
+      $db = new mysqli($this->host, $this->username, $this->password, $this->dbName);
+    }
+
     if ($db->connect_errno) {
       echo "Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     }
@@ -34,7 +43,12 @@ class DataBase
   protected function normalQuery($query)
   {
     $db = $this->connect();
-    return $db->query($query);
+    try {
+      return $db->query($query);
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+
   }
   protected function deleteTable($table, $pk, $wherePk)
   {
@@ -220,7 +234,7 @@ class DataBase
     return $result;
   }
   // check if the array given is a associative  array
-  protected function isMultiArray($array)
+  protected static function isMultiArray($array)
   {
     $rv = array_filter($array, 'is_array');
     if (count($rv) > 0)

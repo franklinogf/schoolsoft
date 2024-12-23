@@ -23,10 +23,10 @@ $lang = new Lang([
 
 ]);
 
-$school = new School();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $studentClass = new Student();
-
-$year = $school->year();
+$a = 0;
 $allGrades = $school->allGrades();
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de totales por grado") . " $year", true);
@@ -46,12 +46,28 @@ $pdf->Cell(15, 5, "Total", 1, 0, 'C', true);
 $pdf->Cell(20, 5, $lang->translation("Grado"), 1, 1, 'C', true);
 $pdf->SetFont('Arial', '', 10);
 $genderCountByGrade = $totalGenderCountByGrade = [];
+$totalGenderCountByGrade['N'] = 0;
+$totalGenderCountByGrade['M'] = 0;
+$totalGenderCountByGrade['F'] = 0;
+
+$totalGenderCountByGrade['students'] = 0;
 foreach ($allGrades as $count => $grade) {
     $teacher = DB::table('profesor')->where([['grado', $grade], ['baja', '']])->first();
     $students = $studentClass->findByGrade($grade);
     $pdf->Cell(15, 5, $count + 1, 1, 0, 'C');
-    $pdf->Cell(65, 5, utf8_decode("$teacher->nombre $teacher->apellidos"), 1);
+
+    //    $nom = utf8_encode($teacher->nombre ?? '');
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+
+    $pdf->Cell(65, 5, "$nom $ape", 1);
     $totalGenderCountByGrade['students'] += sizeof($students);
+    $genderCountByGrade[$grade]['N'] = 0;
+    $genderCountByGrade[$grade]['F'] = 0;
+    $genderCountByGrade[$grade]['M'] = 0;
+    $genderCountByGrade[$grade]['N'] = 0;
+    $genderCountByGrade[$grade]['T'] = 0;
+
     foreach ($students as $count => $student) {
         $gender = Util::gender($student->genero);
         if ($student->nuevo === 'Si') {
@@ -61,7 +77,6 @@ foreach ($allGrades as $count => $grade) {
         $genderCountByGrade[$grade][$gender]++;
         $totalGenderCountByGrade[$gender]++;
         $genderCountByGrade[$grade]['T']++;
-        $totalGenderCountByGrade['T']++;
     }
     $pdf->Cell(20, 5, $genderCountByGrade[$grade]['N'], 1, 0, 'C');
     $pdf->Cell(25, 5, $genderCountByGrade[$grade]['F'], 1, 0, 'C');
@@ -78,9 +93,5 @@ $pdf->Cell(40, 5, $lang->translation("Masculinos"), 1, 0, 'C', true);
 $pdf->Cell(25, 5, $totalGenderCountByGrade['F'], 1, 1, 'C');
 $pdf->Cell(40, 5, $lang->translation("Femeninas"), 1, 0, 'C', true);
 $pdf->Cell(25, 5, $totalGenderCountByGrade['M'], 1, 1, 'C');
-
-
-
-
 
 $pdf->Output();

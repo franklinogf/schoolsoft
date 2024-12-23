@@ -18,8 +18,9 @@ $lang = new Lang([
     ['Correo de los padres', 'Parent E-Mail'],
 ]);
 $grade = $_POST['grade'];
-$school = new School();
-$year = $school->year();
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 class nPDF extends PDF
 {
     function header()
@@ -80,8 +81,8 @@ $parent = DB::table('madre')->where([
            {
            $pdf->Cell(8, 5, $count, 0, 0, 'C');
            $pdf->Cell(15, 5, $student->id, 0, 0, 'C');
-           $pdf->Cell(55, 5, utf8_decode($student->apellidos));
-           $pdf->Cell(50, 5, utf8_decode($student->nombre));
+        $pdf->Cell(55, 5, $student->apellidos);
+        $pdf->Cell(50, 5, $student->nombre);
            $pdf->Cell(20, 5, $student->grado, 0, 0, 'C');
            $pdf->Cell(65, 5, $parent->email_m, 0, 0, 'L');
            $pdf->Cell(65, 5, $parent->email_p, 0, 1, 'L');

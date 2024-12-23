@@ -108,7 +108,7 @@ else
    }
 $n = 0;
 foreach ($students as $estu) {
-    $ct = $_POST['nota'];
+    $ct = $_POST['nota'] . '+0';
     $cur = $estu->curso;
     $cursos = DB::table('padres')->where([
           ['year', $year],

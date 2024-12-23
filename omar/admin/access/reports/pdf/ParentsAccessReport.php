@@ -38,7 +38,6 @@ $pdf->Fill();
 if ($option === 'student') {
     $studentMt = $_POST['student'];
     $student = new Student($studentMt);
-//    $year = $student->info('year');
 
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
@@ -48,10 +47,9 @@ if ($option === 'student') {
     $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
 
     $pdf->Ln(5);
-    $pdf->splitCells($lang->translation("Nombre") . ": " . $student->fullName(), $lang->translation("Grado") . ": $student->grado");
+    $pdf->splitCells($lang->translation("Nombre") . ": " . utf8_encode($student->fullName()), $lang->translation("Grado") . ": $student->grado");
     $pdf->SetFont('Arial', 'B', 10);
 
-//    $pdf->Cell(10);
     $pdf->Cell(20, 5, '', 1, 0, 'C', true);
     $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
     $pdf->Cell(50, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
@@ -73,11 +71,10 @@ if ($option === 'student') {
         $pdf->Cell(50, 5, $attendance->ip, 1, 1, 'C');
     }
 } else {
-    $school = new School();
-    $year = $school->year();
+    $school = new School(Session::id());
+    $year = $school->year('year2');
     $grade = $_POST['grade'];
-//    $separatedGrade = $_POST['separatedGrade'] === 'si' ? true : false;
-    $type = $_POST['type'];
+    $type = $_POST['type'] ?? 'list';
     $grades = $grade !== '' ? [$grade] : $school->allGrades();
         foreach ($grades as $grade) {
         $students = DB::table('year')->where([

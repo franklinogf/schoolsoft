@@ -129,9 +129,10 @@ $options = [
                 'link' => 'NoteClassification.php'
             ],
             [
-                'name' => ["es" => 'Sabana de notas', "en" => "Sabana de notas"],
+                'name' => ["es" => 'Sabana de notas', "en" => "Sheet of Notes"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'pdf/sabana_notas.php',
+                'target' => 'HorasComunitarias'
             ],
             [
                 'name' => ["es" => 'Distri/Notas maestros', "en" => "Teacher Notes Distribution"],
@@ -139,9 +140,9 @@ $options = [
                 'link' => 'DistriNotasMaestros.php'
             ],
             [
-                'name' => ["es" => 'Listado de 100', "en" => "Listado de 100"],
+                'name' => ["es" => 'Listado de 100', "en" => "Average Listing 100"],
                 'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'link' => 'Listade100.php'
             ],
             [
                 'name' => ["es" => 'Informe acumulativo de notas', "en" => "Cumulative grade report"],
@@ -181,9 +182,9 @@ $options = [
                 'target' => 'AsistenciaSemanal'
             ],
             [
-                'name' => ["es" => 'Notas por examen', "en" => "Notas por examen"],
-                'desc' => ['es' => '', 'en' => ''],
-                'link' => '#'
+                'name' => ["es" => 'Notas por examen', "en" => "Exams grades"],
+                'desc' => ['es' => 'calificaciones de los exámenes', 'en' => 'Grades of exams given by Teachers'],
+                'link' => 'maestros_examen_op.php'
             ],
             [
                 'name' => ["es" => 'Aprove. Academico', "en" => "Aprove. Academico"],
@@ -239,7 +240,7 @@ $lang = new Lang([
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
-            <?php foreach ($options as $option) : ?>
+            <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto">
@@ -247,9 +248,9 @@ $lang = new Lang([
                         </legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button) : ?>
+                                <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
+                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'][__LANG] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
                                             <?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?>
                                         </a>
                                     </div>

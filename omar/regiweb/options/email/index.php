@@ -48,7 +48,7 @@ $lang = new Lang([
                 </div>
             </div>
         </div>
-        <?php if (Session::get('emailSent')) : ?>
+        <?php if (Session::get('emailSent')): ?>
             <div class="alert alert-info" role="alert">
                 <?= Session::get('emailSent', true) ?>
             </div>
@@ -66,7 +66,7 @@ $lang = new Lang([
                     $__tableDataName = 'students';
                     $__dataPk = 'ss';
                     Route::includeFile('/includes/layouts/table.php', true)
-                    ?>
+                        ?>
                 </div>
 
                 <div id="classes" class="mb-3 option hidden">
@@ -86,7 +86,7 @@ $lang = new Lang([
                     ];
                     $__dataPk = 'curso';
                     Route::includeFile('/includes/layouts/table.php', true)
-                    ?>
+                        ?>
                 </div>
 
 
@@ -97,10 +97,11 @@ $lang = new Lang([
                     </div>
                     <select name="admin" class="custom-select" required>
                         <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
-                        <?php foreach ($admins as $admin) : ?>
+                        <?php foreach ($admins as $admin): ?>
                             <option value="<?= $admin->usuario ?>"><?= "$admin->usuario" ?></option>
                         <?php endforeach ?>
                     </select>
+                    <button type="submit" class="btn btn-primary btn-block mt-4"><?= $lang->translation("Continuar"); ?></button>
                 </div>
 
         </div>

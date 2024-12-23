@@ -1,6 +1,6 @@
 <?php
 require_once '../../../app.php';
-
+//2.76 + 2.54 / 2.65  
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -144,9 +144,7 @@ class nPDF extends PDF
         }
         $this->Cell(14, $anc, number_format($cr, 2), $ll, 1, 'R');
     }
-    function Footer()
-    {
-    }
+    function Footer() {}
 }
 
 $pdf = new nPDF();
@@ -162,9 +160,9 @@ $row = DB::table('colegio')
 
 $fecg = '';
 if ($grado == 'A') {
-    $gra1 = '01';
-    $gra2 = '02';
-    $gra3 = '03';
+    $gra1 = '01-';
+    $gra2 = '02-';
+    $gra3 = '03-';
     $gra4 = '04';
 }
 if ($grado == 'B') {
@@ -194,15 +192,16 @@ if ($opcion == '2') {
     $students = DB::table('year')
         ->whereRaw("year = '$Year' and grado = '$grados' and activo = ''")->orderBy('apellidos')->get();
 } else {
-    $q7 = "select DISTINCT ss, ss, ss, nombre, apellidos from acumulativa where ss = '$nombre' ORDER BY orden";
+    //  $q7 = "select DISTINCT ss, ss, ss, nombre, apellidos from acumulativa where ss = '$nombre' ORDER BY orden";
+    //   $students = DB::table('year')
     $students = DB::table('year')->select("DISTINCT ss, ss, ss, nombre, apellidos")
         ->whereRaw("ss = '$estu'")->orderBy('apellidos')->get();
 }
 
 foreach ($students as $student) {
     $pdf->AddPage();
-    $ape = $row7[4];
-    $nom = $row7[3];
+    //        $ape=$row7[4];
+    //        $nom=$row7[3];
     $nm = 0;
     $nm7 = 0;
 
@@ -263,13 +262,13 @@ foreach ($students as $student) {
             $pdf->Cell(30, 5, DATE('m-d-Y'), 1, 1, 'C', true);
         }
         $pdf->Cell(24, 5, $gra, 1, 0, 'C', true);
-        $pdf->Cell(24, 5, $rega1->grado, 1, 0, 'C', true);
+        $pdf->Cell(24, 5, $rega1->grado ?? '', 1, 0, 'C', true);
         $pdf->Cell(22, 5, utf8_encode($ano), 1, 0, 'C', true);
-        $pdf->Cell(25, 5, $rega1->year, 1, 0, 'C', true);
+        $pdf->Cell(25, 5, $rega1->year ?? '', 1, 0, 'C', true);
         $pdf->Cell(24, 5, $gra, 1, 0, 'C', true);
-        $pdf->Cell(24, 5, $regb1->grado, 1, 0, 'C', true);
+        $pdf->Cell(24, 5, $regb1->grado ?? '', 1, 0, 'C', true);
         $pdf->Cell(22, 5, utf8_encode($ano), 1, 0, 'C', true);
-        $pdf->Cell(25, 5, $regb1->year, 1, 1, 'C', true);
+        $pdf->Cell(25, 5, $regb1->year ?? '', 1, 1, 'C', true);
 
         $pdf->Cell(53, 5, $des, 1, 0, 'C', true);
         $pdf->Cell(14, 5, 'SEM-1', 1, 0, 'C', true);
@@ -303,11 +302,11 @@ foreach ($students as $student) {
         $cnt5 = 0;
 
         if ($num_resultados1 > $num_resultados2) {
-            $result3 = $result;
-            $result4 = $result2;
+            $result3 = $result ?? 0;
+            $result4 = $result2 ?? 0;
         } else {
-            $result3 = $result2;
-            $result4 = $result;
+            $result3 = $result2 ?? 0;
+            $result4 = $result ?? 0;
         }
 
         $pfa1 = '';
@@ -454,6 +453,9 @@ foreach ($students as $student) {
     } else {
         $nm = $num_resultados2;
     }
+
+    // $nm2=$nm;
+    // $pdf->SetFont('Arial','B',11);
 
 
     if ($num_resultados1 + $num_resultados2 > 0) {
@@ -613,9 +615,10 @@ foreach ($students as $student) {
     //************************************************************************************************************************
 
     $inicio = '';
-    $fecg = $student->fechagra;
+    $fecg = $student->fechagra ?? '';
     if ($idioma == 'A') {
         setlocale(LC_TIME, 'spanish');
+        //     if (!empty($fecg))
         if ($fecg != '0000-00-00') {
             $fechaComite = date($fecg);
             $inicio = strftime("%B %d, %Y", strtotime($fechaComite));

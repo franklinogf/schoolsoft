@@ -11,19 +11,13 @@ use Classes\Util;
 Server::is_post();
 Session::is_logged();
 
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 $cole = DB::table('colegio')->where([
     ['usuario', 'administrador'],
 ])->orderBy('usuario')->first();
 
-//$cole= new School();
-//$year = $cole->info('year');
-//echo $cole->colegio;
-
-
-//$q = "SELECT * from colegio where usuario = 'administrador'";
-//$res = mysql_query($q);
-//$cole = mysql_fetch_object($res);
-$year = $cole->year;
 class PDF extends PDF_Codabar
 {
     function RoundedRect($x, $y, $w, $h, $r, $corners = '1234', $style = '')
@@ -119,9 +113,9 @@ function StudentId()
     }
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, $estu->nombre, 0, 1, 'R');
+    $pdf->Cell(79, 5, utf8_decode($estu->nombre), 0, 1, 'R');
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, $estu->apellidos, 0, 1, 'R');
+    $pdf->Cell(79, 5, utf8_decode($estu->apellidos), 0, 1, 'R');
     $pdf->Cell(35);
     $pdf->Cell(40, 5, "Grado $estu->grado ID #$estu->id", 0, 1, 'C', true);
     if ($estu->cbarra !== '') $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $estu->cbarra, '*', '*', 0.29, 5);

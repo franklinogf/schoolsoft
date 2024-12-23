@@ -18,10 +18,9 @@ $lang = new Lang([
     ['GENERO', 'GENDER'],
     ['FECHA N.', 'BIRTH DATE'],
 ]);
-$grade = $_POST['grade'];
 
-$school = new School();
-$year = $school->info('year');
+$school = new School(Session::id());
+$year = $school->info('year2');
 $grupo = '';
 class nPDF extends PDF
 {
@@ -56,6 +55,7 @@ $studentsa = DB::table('year')
         ->whereRaw("grado < '13-01' and grado > '06-00' and grado NOT LIKE '%06-%' and activo='' and year = '$year'")->orderBy('grado DESC, apellidos')->get();
 
 $c=0;
+$a = 0; 	 
 foreach ($studentsa as $studenta)
         {
         if ($c==30 or $c==0)
@@ -63,8 +63,8 @@ foreach ($studentsa as $studenta)
            $pdf->AddPage();$c=0;
            }
         $c=$c+1;
-      $a=$a+1; 	 
- 	  $x=1;
+        $a = $a + 1;
+        $x = 1;
       $pdf->Cell(10,5,$a,0,0,'C');
 $students = DB::table('year')
         ->whereRaw("grado < '13-01' and grado > '06-00' and grado NOT LIKE '%06-%' and activo='' and year = '$year' and id = '$studenta->id'")->orderBy('grado DESC, apellidos')->get();
@@ -73,8 +73,8 @@ $students = DB::table('year')
                if ($x==0)
 	              {
                   $pdf->Cell(10,5,'',0,0,'C');
-		          }
-               $x=0;
+                }
+                $x = 0;
 	   	       $pdf->Cell(15,5,$student->id,0,0,'R');
 		       $pdf->Cell(45,5,$student->nombre,0,0);
 		       $pdf->Cell(55,5,$student->apellidos,0,0);

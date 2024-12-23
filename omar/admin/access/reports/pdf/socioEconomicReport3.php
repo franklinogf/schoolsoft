@@ -85,23 +85,23 @@ foreach ($_grades as $grade) {
 		}
 	}
 	$pdf->Cell(20, 5, $grade, 1, 0, 'C');
-	$pdf->Cell(30, 5, $totalsByGrade['registration'], 1, 0, 'C');
-	$pdf->Cell(20, 5, $totalsByGrade["M"], 1, 0, 'C');
-	$pdf->Cell(20, 5, $totalsByGrade["F"], 1, 0, 'C');
-	$pdf->Cell(30, 5,  $totalsByGrade["over"], 1, 0, 'C');
-	$pdf->Cell(30, 5,  $totalsByGrade["under"], 1, 0, 'C');
+	$pdf->Cell(30, 5, $totalsByGrade['registration'] ?? 0, 1, 0, 'C');
+	$pdf->Cell(20, 5, $totalsByGrade["M"] ?? 0, 1, 0, 'C');
+	$pdf->Cell(20, 5, $totalsByGrade["F"] ?? 0, 1, 0, 'C');
+	$pdf->Cell(30, 5,  $totalsByGrade["over"] ?? 0, 1, 0, 'C');
+	$pdf->Cell(30, 5,  $totalsByGrade["under"] ?? 0, 1, 0, 'C');
 
-	$percent = $totalsByGrade['registration'] > 0 ? round(($totalsByGrade["under"] / $totalsByGrade["registration"]) * 100, 2) : '';
+	$percent = $totalsByGrade['registration'] ?? 0 > 0 ? round(($totalsByGrade["under"] / $totalsByGrade["registration"]) * 100, 2) : '';
 
 	$pdf->Cell(30, 5, $percent !== '' ? "$percent%" : '', 1, 1, 'C');
 }
 $pdf->Cell(20, 5, "Total", 1, 0, 'C');
-$pdf->Cell(30, 5, $totals['registration'], 1, 0, 'C');
-$pdf->Cell(20, 5, $totals['M'], 1, 0, 'C');
-$pdf->Cell(20, 5, $totals['F'], 1, 0, 'C');
-$pdf->Cell(30, 5, $totals['over'], 1, 0, 'C');
-$pdf->Cell(30, 5, $totals['under'], 1, 0, 'C');
-$percent = $totals['registration'] > 0 ? round(($totals["under"] / $totals["registration"]) * 100, 2) : '';
+$pdf->Cell(30, 5, $totals['registration'] ?? 0, 1, 0, 'C');
+$pdf->Cell(20, 5, $totals['M'] ?? 0, 1, 0, 'C');
+$pdf->Cell(20, 5, $totals['F'] ?? 0, 1, 0, 'C');
+$pdf->Cell(30, 5, $totals['over'] ?? 0, 1, 0, 'C');
+$pdf->Cell(30, 5, $totals['under'] ?? 0, 1, 0, 'C');
+$percent = $totals['registration'] ?? 0 > 0 ? round(($totals["under"] / $totals["registration"]) * 100, 2) : '';
 
 $pdf->Cell(30, 5, "$percent%", 1, 1, 'C');
 $pdf->Ln(10);

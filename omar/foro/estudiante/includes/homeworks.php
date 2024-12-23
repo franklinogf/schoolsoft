@@ -11,11 +11,13 @@ use Classes\Controllers\Homework;
 Server::is_post();
 if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['getDoneHomeworkById'];
-   if ($doneHw = DB::table('tareas_enviadas',!__COSEY)->where([
-      ['id_tarea', $id_doneHomework],
-      ['id_estudiante', Session::id()],
-      ])->first()) {
-      $files = DB::table('t_tareas_archivos',!__COSEY)->where('id_tarea',$doneHw->id)->get();
+   if (
+      $doneHw = DB::table('tareas_enviadas', !__COSEY)->where([
+         ['id_tarea', $id_doneHomework],
+         ['id_estudiante', Session::id()],
+      ])->first()
+   ) {
+      $files = DB::table('t_tareas_archivos', !__COSEY)->where('id_tarea', $doneHw->id)->get();
       $array = [
          'response' => true,
          'data' => $doneHw,
@@ -38,13 +40,13 @@ if (isset($_POST['getDoneHomeworkById'])) {
 
    $id_doneHomework = DB::table('tareas_enviadas')->insertGetId([
       "id_tarea" => $id_homework,
-      "id_estudiante" =>  Session::id(),
+      "id_estudiante" => Session::id(),
       "id_profesor" => $id_teacher,
       "curso" => $class,
       "nota" => $note,
       "fecha" => Util::date(),
       "hora" => Util::time(),
-      "`year`" => $hw->info('year')
+      "year" => $hw->info('year')
    ]);
 
    $uniqueId = uniqid();
@@ -58,13 +60,13 @@ if (isset($_POST['getDoneHomeworkById'])) {
          ]);
       }
    }
-}else if (isset($_POST['editDoneHomework'])) {
+} else if (isset($_POST['editDoneHomework'])) {
 
-   $id_doneHomework = $_POST['editDoneHomework'];  
+   $id_doneHomework = $_POST['editDoneHomework'];
    $note = $_POST['note'];
 
-   DB::table('tareas_enviadas',!__COSEY)->where('id',$id_doneHomework)->update([      
-      "nota" => $note    
+   DB::table('tareas_enviadas', !__COSEY)->where('id', $id_doneHomework)->update([
+      "nota" => $note
    ]);
 
    $uniqueId = uniqid();
@@ -78,14 +80,14 @@ if (isset($_POST['getDoneHomeworkById'])) {
          ]);
       }
    }
-}else if (isset($_POST['delExistingFile'])) {
+} else if (isset($_POST['delExistingFile'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('t_tareas_archivos',!__COSEY)->where('id', $file_id)->first();
+   $file = DB::table('t_tareas_archivos', !__COSEY)->where('id', $file_id)->first();
 
    File::delete(__STUDENT_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('t_tareas_archivos',!__COSEY)->where('id', $file_id)->delete();
+   DB::table('t_tareas_archivos', !__COSEY)->where('id', $file_id)->delete();
 }
 

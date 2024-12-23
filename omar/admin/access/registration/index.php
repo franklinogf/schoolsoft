@@ -3,8 +3,10 @@ require_once '../../../app.php';
 
 use Classes\Route;
 use Classes\Session;
+use Classes\Controllers\School;
 use Classes\Controllers\Teacher;
 use Classes\Lang;
+use Classes\DataBase\DB;
 
 Session::is_logged();
 $teacher = new Teacher();
@@ -20,10 +22,14 @@ $lang = new Lang([
     ["Profesor", "Teacher"],
     ["Seleccionar profesor", "Select teacher"],
 ]);
+$school = new School(Session::id());
+$year = $school->info('year2');
+
 
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -59,7 +65,11 @@ $lang = new Lang([
         </div>
         <?php if (isset($_POST['teacherId'])) :
             $teacher = $teacher->findPK($_POST['teacherId']);
-            $classes = $teacher->classes();
+            $classes = DB::table('padres')->select("DISTINCT curso, descripcion, verano")->where([
+                ['id', $_POST['teacherId']],
+                ['year', $year],
+            ])->get();
+
         ?>
 
             <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Cursos') ?></h1>
@@ -74,7 +84,7 @@ $lang = new Lang([
                             <select name="class" class="custom-select" id="class" required>
                                 <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                                 <?php foreach ($classes as $class) : ?>
-                                    <option data-verano=<?= $class->verano ?? '' === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                                    <option data-verano=<?= $class->verano ?? '' === '2' ? 'true' : 'false' ?> value="<?= $class->curso ?>"><?= "$class->curso - $class->descripcion" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>

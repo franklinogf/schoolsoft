@@ -12,7 +12,7 @@ use Classes\Controllers\School;
 Session::is_logged();
 $school = new School(Session::id());
 $lang = new Lang([
-    ["Información","Information"],
+    ["Información", "Information"],
     ["Bienvenido", "Welcome"],
     ["Nombre:", "Name:"],
     ["Grupo:", "Group:"],
@@ -22,18 +22,18 @@ $lang = new Lang([
 ]);
 
 $user = $school->info("usuario");
-$date =  Util::date();
+$date = Util::date();
 $ip = Util::getIp();
 
 DB::table("entradas")->insert([
     'id' => $school->info('id'),
-    'usuario'=>$user,
-    'fecha' =>$date,
-    'hora' =>  Util::time(),
+    'usuario' => $user,
+    'fecha' => $date,
+    'hora' => Util::time(),
     'ip' => $ip,
-    'nombre'=>'',
-    'apellidos'=>'',
-    'control'=>'',
+    'nombre' => '',
+    'apellidos' => '',
+    'control' => '',
 ]);
 ?>
 <!DOCTYPE html>
@@ -42,14 +42,14 @@ DB::table("entradas")->insert([
 <head>
     <?php
     $title = $lang->translation("Información");
-Route::includeFile('/admin/includes/layouts/header.php');
-?>
+    Route::includeFile('/admin/includes/layouts/header.php');
+    ?>
 </head>
 
 <body>
     <div class="container-lg mt-lg-3  px-0">
         <div class="text-center">
-            <img class="img-fluid my-4" width="400px" src="<?=__DEFAULT_LOGO_SCHOOLSOFT ?>" />
+            <img class="img-fluid my-4" width="400px" src="<?= __DEFAULT_LOGO_SCHOOLSOFT ?>" />
         </div>
         <div class="jumbotron pt-4 shadow">
             <h1 class="text-center"><?= $lang->translation("Bienvenido") ?></h1>
@@ -58,7 +58,7 @@ Route::includeFile('/admin/includes/layouts/header.php');
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Nombre:") ?></span>
                 </div>
-                <div class="col-6"><?= $user ?></div>                
+                <div class="col-6"><?= $user ?></div>
                 <div class="col-6 text-right">
                     <span class="badge badge-info"><?= $lang->translation("Grupo:") ?></span>
                 </div>
@@ -81,10 +81,10 @@ Route::includeFile('/admin/includes/layouts/header.php');
         </div>
     </div>
     <?php
-$school->ufecha = $date;
-$school->save();
-Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+    $school->set('ufecha', $date);
+    $school->save();
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    ?>
 
 </body>
 

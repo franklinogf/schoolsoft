@@ -29,14 +29,14 @@ $lang = new Lang([
 
 ]);
 
-$school = new School();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Informe sobre pruebas de selección") . " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Informe sobre pruebas de selección")) . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -45,10 +45,12 @@ foreach ($allGrades as $grade) {
     $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Informe sobre pruebas de selección") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, utf8_encode($lang->translation("Informe sobre pruebas de selección")) . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = utf8_encode($teacher->apellidos ?? '');
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 10, '', 1, 0, 'C', true);

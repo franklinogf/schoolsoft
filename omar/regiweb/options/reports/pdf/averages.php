@@ -23,37 +23,50 @@ Session::is_logged();
 $teacher = new Teacher(Session::id());
 $year = $teacher->info('year');
 $grade = $teacher->grado;
-$students0 = new Student();
-$students0 = $students0->findByGrade($grade);
+//$students0 = new Student();
+//$students0 = $students0->findByGrade($grade);
 
 $students2 = new Student();
 $students2 = $students2->findByGrade($grade);
 
 foreach ($students2 as $student2) {
-    //$data = DB::table('padres')->where([
-    //        ['ss', $student2->ss],
-    //        ['year', $year],
-    //        ['verano', '']
-    //])->orderBy('apellidos')->first();
     $students = new Student();
     $students = $students->findByCurs2($student2->ss);
 
     //      echo $_class.'787'.$student2->ss;
     $s1a = 0;
     $s1b = 0;
+    $s1c = 0;
     $s2a = 0;
     $s2b = 0;
+    $s2c = 0;
     foreach ($students as $nts5) {
-        if ($nts5->sem1 > 0) {
-            $s1a = $s1a + $nts5->sem1;
+        if ($nts5->nota1 > 0) {
+            $s1a = $s1a + $nts5->nota1;
             $s1b = $s1b + 1;
         }
-        if ($nts5->sem2 > 0) {
-            $s2a = $s2a + $nts5->sem2;
+        if ($nts5->nota2 > 0) {
+            $s1a = $s1a + $nts5->nota2;
+            $s1b = $s1b + 1;
+        }
+        //        if ($nts5->sem1 > 0) {
+        //            $s1a = $s1a + $nts5->sem1;
+        //            $s1b = $s1b + 1;
+        //        }
+        if ($nts5->nota3 > 0) {
+            $s2a = $s2a + $nts5->nota3;
             $s2b = $s2b + 1;
         }
-        //              echo '<br>'.$nts5->sem1.'<br>';
-        //              echo '777 1 '.$nts5->curso.'/'.$nts5->ss;
+        if ($nts5->nota4 > 0) {
+            $s2a = $s2a + $nts5->nota4;
+            $s2b = $s2b + 1;
+        }
+//        if ($nts5->sem2 > 0) {
+//            $s2a = $s2a + $nts5->sem2;
+//            $s2b = $s2b + 1;
+//        }
+//                      echo '<br>'.$nts5->nota1.'<br>';
+//                      echo $s1a.'777 1 '.$nts5->curso.'/'.$nts5->ss;
     }
 
     $sem1 = $s1b !== 0 ? round($s1a / $s1b, 0) : 0;
@@ -77,6 +90,8 @@ foreach ($students2 as $student2) {
 
 }
 
+$students0 = new Student();
+$students0 = $students0->findByGrade($grade);
 
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de promedios"));

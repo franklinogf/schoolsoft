@@ -46,7 +46,9 @@ $gradeInfo = DB::table('padres')->where([
     ['curso', $_class],
     ['year', $year],
 ])->first();
-$optionLetter = $gradeInfo->letra === "ON";
+
+$optionLetter = !$gradeInfo ? false : $gradeInfo->letra === "ON";
+
 
 // only this school
 if (__ONLY_CBTM__) {
@@ -479,6 +481,7 @@ $_columns = null;
 if (isset($_info[$_report]['columns'])) {
     $_columns = isset($_info[$_report]['columns'][__LANG]) ? $_info[$_report]['columns'][__LANG] : $_info[$_report]['columns'];
 }
+
 $_trimesterNumber = $_schoolInfo[$_trimester]['number'];
 $_thisReport = $_info[$_report];
 $students = new Student();
@@ -564,6 +567,8 @@ $lang = new Lang([
 
 ]);
 
+$canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0]));
+// $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) && $teacher->fechas && ($teacher->tri === $_trimesterNumber || $teacher->tri === 5);
 
 ?>
 <!DOCTYPE html>
@@ -608,7 +613,7 @@ $lang = new Lang([
                         </p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span>
+                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo && $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span>
                         </p>
                     </div>
                 </div>
@@ -624,7 +629,7 @@ $lang = new Lang([
                     <div id="options" class="row row-cols-1">
                         <div class="col">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
+                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo && $gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
                                 <label class="custom-control-label" for="letra"><?= $lang->translation("Pasar a letras") ?></label>
                             </div>
                             <small><?= $lang->translation("Está opción se aplica en la columna") ?>
@@ -633,7 +638,7 @@ $lang = new Lang([
                         </div>
                         <div class="col mt-2">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
+                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo && $gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
                                 <label class="custom-control-label" for="pal"><?= $lang->translation("Conversión") ?></label>
                             </div>
                             <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
@@ -642,7 +647,7 @@ $lang = new Lang([
                             <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4'): ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
+                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo && $gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
                                         <label class="custom-control-label" for="<?= $_end ?>"><?= $lang->translation("Aviso terminar") ?></label>
                                     </div>
                                     <small><?= $lang->translation("Cuando termine el trimestre marque está Opción.") ?></small>
@@ -728,7 +733,7 @@ $lang = new Lang([
                                     <?php foreach ($_columns as $index => $column): ?>
                                         <th scope="col">
                                             <?= $column ?>
-                                            <?php if ($_info[$_report]['columns']['text'][$index]): ?>
+                                            <?php if (isset($_info[$_report]['columns']['text'][$index])): ?>
                                                 <span style="font-size: 15px;" class="text-muted"><?= $_info[$_report]['columns']['text'][$index] ?></span>
                                             <?php endif ?>
                                         </th>
@@ -811,7 +816,7 @@ $lang = new Lang([
                                         <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
                                     <td>
-                                        <?= utf8_decode("$student->apellidos $student->nombre"); ?>
+                                        <?= "$student->apellidos $student->nombre"; ?>
                                     </td>
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++): ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
@@ -876,7 +881,7 @@ $lang = new Lang([
                                         <?= $index + 1 ?>
                                         <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
-                                    <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                    <td><?= "$student->apellidos $student->nombre" ?></td>
                                     <?php for ($i = $_options['grades'][0]; $i <= $_options['grades'][1]; $i++): ?>
                                         <td><input class="form-control form-control-sm text-center grade" type="text" name="<?= "grade-$student->ss" ?>" value="<?= $student->{"not{$i}"} ?>" disabled>
                                         </td>
@@ -904,7 +909,7 @@ $lang = new Lang([
                                         <?= $index + 1 ?>
                                         <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                     </th>
-                                    <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                    <td><?= "$student->apellidos $student->nombre" ?></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "con-{$student->ss}" ?>" value="<?= $student->{$_options[0]} ?>"></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "aus-{$student->ss}" ?>" value="<?= $student->{$_options[1]} ?>"></td>
                                     <td><input class="form-control form-control-sm text-center" type="text" name="<?= "tar-{$student->ss}" ?>" value="<?= $student->{$_options[2]} ?>"></td>
@@ -933,7 +938,7 @@ $lang = new Lang([
                                             <?= $index + 1 ?>
                                             <input type="hidden" name="ss" value="<?= $student->ss ?>">
                                         </th>
-                                        <td><?= utf8_decode("$student->apellidos $student->nombre"); ?></td>
+                                        <td><?= "$student->apellidos $student->nombre" ?></td>
                                         <td><input class="form-control form-control-sm text-center w-auto mx-auto" type="text" name="<?= "ex-{$student->ss}" ?>" value="<?= $student->{$_options} ?>"></td>
                                     <?php endforeach ?>
                             </tbody>
@@ -947,7 +952,7 @@ $lang = new Lang([
 
                 <!-- <button type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3">Guardar</button> -->
                 <?php if ($_options !== null): ?>
-                    <?php if ((Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) && $teacher->fechas && ($teacher->tri === $_trimesterNumber || $teacher->tri === 5)): ?>
+                    <?php if ($canEdit): ?>
                         <button id="save" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
                     <?php else: ?>
                         <h4 class="text-center text-danger">
@@ -963,44 +968,46 @@ $lang = new Lang([
                 *<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*
             </h2>
         <?php endif ?>
-        <!-- Values -->
-        <div class="container my-5">
-            <div class="accordion" id="valuesAccordion">
-                <div class="card">
-                    <div class="card-header bg-secondary" id="valuesHead">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
-                                <?= $lang->translation("Valores") ?>
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="values" class="collapse" aria-labelledby="valuesHead" data-parent="#valuesAccordion">
-                        <input type="hidden" id="valueId" value="<?= $_value->id ?>">
-                        <div class="card-body">
-                            <div class="form-row">
-                                <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
-                                <?php for ($i = 1; $i <= $cant; $i++): ?>
-                                    <div class="form-row col-12 col-md-8 mb-2">
-                                        <div class="form-group col-12">
-                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?>     <?= $i ?></label>
-                                            <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
+        <?php if ($canEdit): ?>
+            <!-- Values -->
+            <div class="container my-5">
+                <div class="accordion" id="valuesAccordion">
+                    <div class="card">
+                        <div class="card-header bg-secondary" id="valuesHead">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
+                                    <?= $lang->translation("Valores") ?>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="values" class="collapse" aria-labelledby="valuesHead" data-parent="#valuesAccordion">
+                            <input type="hidden" id="valueId" value="<?= $_value->id ?>">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
+                                    <?php for ($i = 1; $i <= $cant; $i++): ?>
+                                        <div class="form-row col-12 col-md-8 mb-2">
+                                            <div class="form-group col-12">
+                                                <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?>         <?= $i ?></label>
+                                                <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
+                                            </div>
+                                            <div class="form-group col-4 col-md-2 text-center">
+                                                <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
+                                                <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
+                                            </div>
+                                            <div class="form-group col-8 col-md-3">
+                                                <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
+                                                <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
+                                            </div>
                                         </div>
-                                        <div class="form-group col-4 col-md-2 text-center">
-                                            <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
-                                            <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
-                                        </div>
-                                        <div class="form-group col-8 col-md-3">
-                                            <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
-                                            <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
-                                        </div>
-                                    </div>
-                                <?php endfor ?>
+                                    <?php endfor ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <?php endif ?>
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);

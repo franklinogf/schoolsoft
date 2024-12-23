@@ -1,11 +1,6 @@
 <?php
 require_once '../../../../app.php';
 
-
-// I, as the parent, guardian, or responsible party, hereby acknowledge and affirm that I will actively monitor and oversee my child's online activities. The system will maintain a record to verify that I have reviewed and acknowledged the disciplinary actions.
-// Yo, como padre, tutor o responsable, por la presente reconozco y afirmo que supervisar&#65533; activamente las actividades en l&#65533;nea de mi hijo/a. El sistema mantendr&#65533; un registro para verificar que he revisado y aceptado las acciones disciplinarias.
-
-
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -16,16 +11,15 @@ use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ['Informaci&#65533;n sobre el rendimiento acad&#65533;mico', 'Information on academic performance'],
+$lang = new Lang([['Información sobre el rendimiento académico', 'Information on academic performance'],
     ["Profesor", "Teacher:"],
     ["Grado", "Grade"],
-    ["A&#65533;o escolar:", "School year:"],
-    ["Descripci&#65533;n", "Description"],
+  ["Año escolar:", "School year:"],
+  ["Descripción", "Description"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Curso', 'Course'],
-    ['Cr&#65533;dito', 'Credit'],
+  ['Crédito', 'Credit'],
     ['Trimestre', 'Quarter'],
     ['NF', 'FN'],
     ['T-D', 'DW'],
@@ -33,7 +27,7 @@ $lang = new Lang([
     ['P-C', 'QZ'],
     ['TPA', 'TAP'],
     ['PROMEDIO:', 'AVERAGE:'],
-    ['Matr&#65533;cula', 'Tuition'],
+  ['Matrícula', 'Tuition'],
     ['Trabajos Diarios', 'Daily Homework'],
     ['Trabajos Libreta', 'Homework'],
     ['Fecha', 'Date'],
@@ -61,53 +55,37 @@ function NLetra($valor){
     return 'C';
   }else if ($valor <= '69' && $valor >= '60') {
     return 'D';
-  }else  if ($valor <= '59') {
+  } else  if ($valor <= '59' && $valor >= '0') {
     return 'F';
   }
 }
 
-
-//$pdf = new PDF();
-//$pdf->useFooter(false);
 $school = new School(Session::id());
 
 $year = $school->info('year2');
 $pdf = new PDF();
 $pdf->useFooter(false);
 $pdf->AddPage('');
-$pdf->SetTitle($lang->translation("Informaci&#65533;n sobre el rendimiento acad&#65533;mico") . " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Información sobre el rendimiento académico")) . " $year", true);
 $pdf->Fill();
 
 $id = $_POST['teacher'];
 $nota = $_POST['nota'];
-//$teacher = DB::table('profesor')->where([
-//       ['id', $id],
-//       ])->orderBy('id')->first();
 
 $cursos = DB::table('padres')->select("distinct curso, descripcion, credito, grado")->where([
        ['id', $id],
        ['year', $year],
        ])->orderBy('curso')->get();
 
-//$stu = DB::table('padres')->where([
-//       ['id', $id],
-//       ['curso', $estu->curso],
-//       ['year', $year],
-//       ])->orderBy('curso')->get();
-//    $te = count($stu);
-//    $pdf->AddPage('');
     $pdf->useFooter(false);
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Informaci&#65533;n sobre el rendimiento acad&#65533;mico") . " $year", 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_encode($lang->translation("Información sobre el rendimiento académico")) . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', '', 10);
 
-//    $materias = [];
-//    $cursos = [];
-//    $estudiantes = [];
     $pdf->Cell(15, 10, $lang->translation("Grado"), 1, 0, 'C', true);
-    $pdf->Cell(15, 10, $lang->translation("Curso"), 1, 0, 'C', true);
-    $pdf->Cell(22, 10, $lang->translation("Matr&#65533;cula"), 1, 0, 'C', true);
+$pdf->Cell(17, 10, $lang->translation("Curso"), 1, 0, 'C', true);
+$pdf->Cell(22, 10, utf8_encode($lang->translation("Matrícula")), 1, 0, 'C', true);
     $pdf->Cell(8, 10, 'A', 1, 0, 'C', true);
     $pdf->Cell(10, 10, '%', 1, 0, 'C', true);
     $pdf->Cell(8, 10, 'B', 1, 0, 'C', true);
@@ -123,7 +101,7 @@ $cursos = DB::table('padres')->select("distinct curso, descripcion, credito, gra
     $pdf->Cell(12, 5, 'Total', 'LTR', 0, 'C', true);
     $pdf->Cell(12, 10, '%DF', 1, 0, 'C', true);
     $pdf->Ln(5);
-$pdf->Cell(142);
+$pdf->Cell(144);
 $pdf->Cell(12,5,"ABC","LBR",0,'C', true);
 $pdf->Cell(12,5,"",0,0,'C');
 $pdf->Cell(12,5,"DF","LBR",0,'C', true);
@@ -153,7 +131,7 @@ $pdf->Ln(5);
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(15, 5, $curso->grado, 1, 0, 'L');
-    $pdf->Cell(15, 5, $curso->curso, 1, 0, 'L');
+  $pdf->Cell(17, 5, $curso->curso, 1, 0, 'L');
     $pdf->Cell(22, 5, $te, 1, 0, 'C');
     $pdf->Cell(8, 5, $a, 1, 0, 'C');
     $p=0;

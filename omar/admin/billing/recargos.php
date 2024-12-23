@@ -119,6 +119,10 @@ IF(isset($_POST['proce']))
                  {
                  if ($cc==0)
                     {
+                $buscar = DB::table('pagos')->whereRaw("id='$row5->id' and fecha_d='$fec1' and year='$year' and codigo=$n1 and ss='$ss' and fecha_p='0000-00-00' and grado='$grado' and code1=0 and add1=0 and rec=0 and tdp=''")->orderBy('codigo')->first();
+                $bu = $buscar->nombre ?? '0';
+                if ($bu == 0) {
+
                     DB::table('pagos')->insert([
                     'id' => $row5->id,
                     'nombre' => $nom,
@@ -131,8 +135,12 @@ IF(isset($_POST['proce']))
                     'deuda' => $_POST['cantidad'],
                     ]);
                     }
+            }
                  if ($cc==1 and $_POST['recargo']=='2')
                     {
+                $buscar = DB::table('pagos')->whereRaw("id='$row5->id' and fecha_d='$fec1' and year='$year' and codigo=$n1 and ss='$ss' and fecha_p='0000-00-00' and grado='$grado' and code1=0 and add1=0 and rec=0 and tdp=''")->orderBy('codigo')->first();
+                $bu = $buscar->nombre ?? '0';
+                if ($bu == 0) {
                     DB::table('pagos')->insert([
                     'id' => $row5->id,
                     'nombre' => $nom,
@@ -145,6 +153,7 @@ IF(isset($_POST['proce']))
                     'deuda' => $_POST['cantidad2'],
                     ]);
                     }
+            }
                  $idc=$row5->id;
                  }
         }

@@ -2,10 +2,8 @@
 require_once '../../../app.php';
 
 use Classes\Mail;
-use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 use Classes\Controllers\Teacher;
 
@@ -82,10 +80,23 @@ if ($lang === 'es') {
 </html>
 ";
 }
-if ($teacher->email1 != "") $mail->addAddress($teacher->email1, "$teacher->nombre $teacher->apellidos");
-if ($teacher->email2 != "") $mail->addAddress($teacher->email2, "$teacher->nombre $teacher->apellidos");
-if ($teacher->info('email3') != "") $mail->addAddress($teacher->info('email3'));
-if ($teacher->info('email5') != "") $mail->addAddress($teacher->info('email5'));
-$mail->send();
+if ($teacher->email1 !== "") {
+  $mail->addAddress($teacher->email1, "$teacher->nombre $teacher->apellidos");
+}
+if ($teacher->email2 !== "") {
+  $mail->addAddress($teacher->email2, "$teacher->nombre $teacher->apellidos");
+}
+if ($teacher->info('email3') !== "") {
+  $mail->addAddress($teacher->info('email3'));
+}
+if ($teacher->info('email5') !== "") {
+  $mail->addAddress($teacher->info('email5'));
+}
+
+if (!$mail->send()) {
+  echo "Mailer Error: " . $mail->ErrorInfo;
+} else {
+  echo "Message sent!";
+}
 
 Route::redirect('/options/appointment');

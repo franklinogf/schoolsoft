@@ -15,7 +15,7 @@ $lang = new Lang([
     ['Trimestres', 'Quarters'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
-    ['Es la Direcci�n unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
+    ['Es la Dirección unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.', 'It is the unique address that the Internet assigns to a PC, and it is registered with your Internet provider.'],
     ['Fecha', 'Date'],
     ['Hora', 'Hour'],
     ['Tarjeta de notas', 'Note card'],
@@ -24,7 +24,7 @@ $lang = new Lang([
 
 ]);
 $hoja = $_POST['hoja'];
-$grade = $_POST['grade'];
+$grade = $_POST['grade'] ?? '';
 $ss = $_POST['student'];
 
 $school = new School();
@@ -45,10 +45,7 @@ if ($hoja == '3'){$title=$lang->translation("Hoja de progreso");}
 $pdf->Cell(0, 5, $title, 0, 1, 'C');
 $pdf->Ln(10);
 
-
 $pdf->SetFont('Arial', 'B', 10);
-//$pdf->Cell(15, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
-//$pdf->Cell(15, 5, $lang->translation("Grado"), 1, 0, 'C', true);
 
 $students = DB::table('year')->where([
     ['activo', ''],
@@ -62,14 +59,14 @@ foreach ($students as $student) {
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(70, 5, utf8_decode($student->apellidos.' '.$student->nombre),0,1,'L');
+    $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre, 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, $lang->translation("Grado"), 1, 0, 'C', true);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(70, 5, $student->grado,0,1,'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Ln(5);
-        $pdf->Cell(0, 5, '*IP = '.$lang->translation("Es la Direcci�n unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet."), 0, 1, 'L');
+    $pdf->Cell(0, 5, '*IP = ' . utf8_encode($lang->translation("Es la Dirección unica que asigna el internet a una PC, y queda registrada en su proveedor del Internet.")), 0, 1, 'L');
         $pdf->Cell(15, 5, '', 1, 0, 'C', true);
         $pdf->Cell(43, 5, $lang->translation("Trimestres"), 1, 0, 'C', true);
         $pdf->Cell(43, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
@@ -92,6 +89,5 @@ $acuse1 = DB::table('acuse')->where([
              $count++;
              }
 }
-
 
 $pdf->Output();

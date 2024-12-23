@@ -7,7 +7,7 @@ use Classes\Route;
 use Classes\Session;
 
 Session::is_logged();
-$teachers = new Student();
+$students = new Student();
 $lang = new Lang([
     ['Seleccionar estudiantes para enviar correo electrónico', 'Select students to send email'],
 
@@ -35,9 +35,30 @@ $lang = new Lang([
             <form id="form" action="<?= Route::url('/admin/messages/email/') ?>">
 
                 <?php
-                $__tableData = $teachers->all();
+                $__tableData = $students->all();
                 $__tableDataCheckbox = true;
-                $__dataPk = 'ss';
+                $__dataPk = 'mt';
+                $__tableDataInfo = [
+                    [
+                        'title' => ["es" => "ID", 'en' => "ID"],
+                        'values' => [
+                            'id'
+                        ]
+                    ],
+                    [
+                        'title' => ["es" => "Nombre completo", 'en' => "Full name"],
+                        'values' => [
+                            'apellidos',
+                            'nombre'
+                        ]
+                    ],
+                    [
+                        'title' => ["es" => "Grado", 'en' => "Grade"],
+                        'values' => [
+                            'grado'
+                        ]
+                    ]
+                ];
                 Route::includeFile('/includes/layouts/table.php', true)
                     ?>
 

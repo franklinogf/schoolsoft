@@ -9,7 +9,6 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
-
 $lang = new Lang([
     ['Hoja de progreso', 'Progress Sheet'],
     ['Reporte de Notas', 'Grade Report'],
@@ -34,28 +33,48 @@ $lang = new Lang([
     ['Trabajo libreta', 'Daily Homework'],
     ['Trabajos diarios', 'Homework'],
     ['Prueba cortas', 'Quiz'],
-    
-    
-    
 ]);
 $school = new School(Session::id());
-//$grades = DB::table('materias')->where('year', $school->info('year2'))->orderBy('grado')->get();
 $grades = $school->allGrades();
 
 $re = $school->info('tar');
-$in1='';$in2='';$in3='';$in4='';$in5='';$in6=''; $in7='';$in8='';
-$in9='';$in10='';$in11='';$in12='';$in13='';$in14='';$in15='';$in16='';$in17='';$in18='';$in19='';$in20='';
-if ($re=='1'){$in1='selected';}
-if ($re=='2'){$in2='selected';}
-if ($re=='3'){$in3='selected';}
+$in1 = '';
+$in2 = '';
+$in3 = '';
+$in4 = '';
+$in5 = '';
+$in6 = '';
+$in7 = '';
+$in8 = '';
+$in9 = '';
+$in10 = '';
+$in11 = '';
+$in12 = '';
+$in13 = '';
+$in14 = '';
+$in15 = '';
+$in16 = '';
+$in17 = '';
+$in18 = '';
+$in19 = '';
+$in20 = '';
+if ($re == '1') {
+    $in1 = 'selected';
+}
+if ($re == '2') {
+    $in2 = 'selected';
+}
+if ($re == '3') {
+    $in3 = 'selected';
+}
 
 $mensaj = DB::table('codigos')->orderBy('codigo')->get();
-
 
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
 <head>
     <?php
     $title = $lang->translation('Hoja de progreso');
@@ -88,9 +107,9 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="tarjeta" name="tarjeta" class="form-control" onclick="return activarTrimestre(); return true">
-                            <option value='1' <?= $in1 ?> >Tarjeta 1</option>
-                            <option value='2' <?= $in2 ?> >Tarjeta 2</option>
-                            <option value='3' <?= $in3 ?> >Tarjeta 3</option>
+                            <option value='1' <?= $in1 ?>>Tarjeta 1</option>
+                            <option value='2' <?= $in2 ?>>Tarjeta 2</option>
+                            <option value='3' <?= $in3 ?>>Tarjeta 3</option>
                         </select>
                         <select id="tri" name="tri" class="form-control">
                             <option value='1'><?= $lang->translation('Trimestre 1') ?></option>
@@ -98,7 +117,6 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             <option value='3'><?= $lang->translation('Trimestre 3') ?></option>
                             <option value='4'><?= $lang->translation('Trimestre 4') ?></option>
                         </select>
-                        
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -109,6 +127,19 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         <select id="idioma" name="idioma" class="form-control" required>
                             <option value='1'>Español</option>
                             <option value='2'>English</option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="grade">
+                                <?= $lang->translation('Mensaje') ?>
+                            </label>
+                        </div>
+                        <select id="mensaj" name="mensaj" class="form-control" required>
+                            <option value='0'><?= $lang->translation('Selección') ?></option>
+                            <?php foreach ($mensaj as $men): ?>
+                                <option value='<?= $men->codigo ?>'>
+                                    <?= $men->t1e ?>
+                                </option>
+                            <?php endforeach ?>
                         </select>
                     </div>
                     <div class="input-group mb-3">
@@ -124,7 +155,6 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                                 </option>
                             <?php endforeach ?>
                         </select>
-
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="grade">
                                 <?= $lang->translation('Sheet') ?>
@@ -132,29 +162,23 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </div>
                         <select id="hoja" name="hoja" class="form-control" onclick="return activarTrimestre(); return true">
                             <option value='1'>
-                                 <?= $lang->translation('Notas') ?>
+                                <?= $lang->translation('Notas') ?>
                             </option>
                             <option value='2'>
-                                 <?= $lang->translation('Trabajos diarios') ?>
+                                <?= $lang->translation('Trabajos diarios') ?>
                             </option>
                             <option value='3'>
-                                 <?= $lang->translation('Prueba cortas') ?>
+                                <?= $lang->translation('Prueba cortas') ?>
                             </option>
                             <option value='4'>
-                                 <?= $lang->translation('Trabajo libreta') ?>
+                                <?= $lang->translation('Trabajo libreta') ?>
                             </option>
                         </select>
-
                     </div>
                     <div class="input-group mb-3">
                     </div>
-
-
                     <div class="input-group mb-3">
                     </div>
-
-
-
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>

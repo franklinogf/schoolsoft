@@ -19,8 +19,8 @@ $lang = new Lang([
     ['Secretario(a)', 'Secretary'],
 ]);
 
-$school = new School();
-$year = $school->year();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Lista de clud") . " $year", true);
 $pdf->Fill();
@@ -48,43 +48,43 @@ $teachers = DB::table('profesor')->where([
 ])->orderBy('apellidos')->get();
 foreach ($teachers as $count => $teacher) {
     $pdf->Cell(7, 5, $count + 1, 0, 0, 'C');
-//    $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
-    $pdf->Cell(60, 5, utf8_decode($teacher->apellidos).' '.utf8_decode($teacher->nombre));
-    $pdf->Cell(50, 5, utf8_decode($teacher->club1));
-    $pdf->Cell(55, 5, utf8_decode($teacher->pre1));
-    $pdf->Cell(55, 5, utf8_decode($teacher->vi1));
-    $pdf->Cell(55, 5, utf8_decode($teacher->se1), 0, 1);
+    //    $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
+    $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
+    $pdf->Cell(50, 5, $teacher->club1);
+    $pdf->Cell(55, 5, $teacher->pre1);
+    $pdf->Cell(55, 5, $teacher->vi1);
+    $pdf->Cell(55, 5, $teacher->se1, 0, 1);
     if ($teacher->club2 !='')
        {
        $pdf->Cell(67, 5, '', 0, 0, 'C');
-       $pdf->Cell(50, 5, utf8_decode($teacher->club2));
-       $pdf->Cell(55, 5, utf8_decode($teacher->pre2));
-       $pdf->Cell(55, 5, utf8_decode($teacher->vi2));
-       $pdf->Cell(55, 5, utf8_decode($teacher->se2), 0, 1);
+        $pdf->Cell(50, 5, $teacher->club2);
+        $pdf->Cell(55, 5, $teacher->pre2);
+        $pdf->Cell(55, 5, $teacher->vi2);
+        $pdf->Cell(55, 5, $teacher->se2, 0, 1);
        }
     if ($teacher->club3 !='')
        {
        $pdf->Cell(67, 5, '', 0, 0, 'C');
-       $pdf->Cell(50, 5, utf8_decode($teacher->club3));
-       $pdf->Cell(55, 5, utf8_decode($teacher->pre3));
-       $pdf->Cell(55, 5, utf8_decode($teacher->vi3));
-       $pdf->Cell(55, 5, utf8_decode($teacher->se3), 0, 1);
+        $pdf->Cell(50, 5, $teacher->club3);
+        $pdf->Cell(55, 5, $teacher->pre3);
+        $pdf->Cell(55, 5, $teacher->vi3);
+        $pdf->Cell(55, 5, $teacher->se3, 0, 1);
        }
     if ($teacher->club4 !='')
        {
        $pdf->Cell(67, 5, '', 0, 0, 'C');
-       $pdf->Cell(50, 5, utf8_decode($teacher->club4));
-       $pdf->Cell(55, 5, utf8_decode($teacher->pre4));
-       $pdf->Cell(55, 5, utf8_decode($teacher->vi4));
-       $pdf->Cell(55, 5, utf8_decode($teacher->se4), 0, 1);
+        $pdf->Cell(50, 5, $teacher->club4);
+        $pdf->Cell(55, 5, $teacher->pre4);
+        $pdf->Cell(55, 5, $teacher->vi4);
+        $pdf->Cell(55, 5, $teacher->se4, 0, 1);
        }
     if ($teacher->club5 !='')
        {
        $pdf->Cell(67, 5, '', 0, 0, 'C');
-       $pdf->Cell(50, 5, utf8_decode($teacher->club5));
-       $pdf->Cell(55, 5, utf8_decode($teacher->pre5));
-       $pdf->Cell(55, 5, utf8_decode($teacher->vi5));
-       $pdf->Cell(55, 5, utf8_decode($teacher->se5), 0, 1);
+        $pdf->Cell(50, 5, $teacher->club5);
+        $pdf->Cell(55, 5, $teacher->pre5);
+        $pdf->Cell(55, 5, $teacher->vi5);
+        $pdf->Cell(55, 5, $teacher->se5, 0, 1);
        }
 
 

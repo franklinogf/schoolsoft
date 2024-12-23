@@ -14,12 +14,12 @@ $parents = new Parents(Session::id());
 $year = $parents->info('year');
 $studentSS = $_POST['studentSS'];
 $trimester = $_POST['trimester'];
-$trimesterNumber = substr($trimester,-1);
+$trimesterNumber = substr($trimester, -1);
 $report = $_POST['area'];
 $student = new Student($studentSS);
 $sumTrimester = $student->info('sutri') === 'NO'; //NO === SI
 DB::table('acuse')->insert([
-    'id'=> $parents->id,
+    'id' => $parents->id,
     'ss' => $studentSS,
     'grado' => $student->grado,
     'year' => $year,
@@ -89,11 +89,13 @@ $_info = [
     ]
 ];
 
-$thisReport = $_info[$report][$trimester];
-$otherReports = $_info[$report]["values"];
+$thisReport = $_info[$report][$trimester] ?? null;
+$otherReports = $_info[$report]["values"] ?? null;
 $trimesterNumber = substr($trimester, -1);
-$totalGradeColumn = $_info[$report]['totalGrade'] . $trimesterNumber;
-
+$totalGradeColumn = $_info[$report]['totalGrade'] ?? null;
+if ($totalGradeColumn !== null) {
+    $totalGradeColumn .= $trimesterNumber;
+}
 $lang = new Lang([
     ["Selección de notas", "Selection of grades"],
     ["Tarjeta de notas por curso", "Grades card per class"],
@@ -119,9 +121,9 @@ $lang = new Lang([
     ["Ausencia", "Absence"],
     ["Tardanza", "Tardy"],
     ["Totales por curso", "Total per class"],
-    ["Primer Semestre","First semester"],
-    ["Segundo Semestre","Second semester"],
-    ["Atrás","Go back"]
+    ["Primer Semestre", "First semester"],
+    ["Segundo Semestre", "Second semester"],
+    ["Atrás", "Go back"]
 ]);
 
 ?>
@@ -131,25 +133,26 @@ $lang = new Lang([
 <head>
     <?php
     $title = $lang->translation("Selección de notas");
-Route::includeFile('/parents/includes/layouts/header.php');
-?>
+    Route::includeFile('/parents/includes/layouts/header.php');
+    ?>
 </head>
 
 <body>
     <?php
-Route::includeFile('/parents/includes/layouts/menu.php');
-?>
+    Route::includeFile('/parents/includes/layouts/menu.php');
+    ?>
     <div class="container mt-3 mb-5">
-        <?php if ($report === 'Notas') : ?>
+        <div class="text-right">
+            <a class="btn btn-primary" href="<?= Route::url("/parents/grades/gradesOptions.php?studentSS=$studentSS") ?>"><?= $lang->translation("Atrás") ?></a>
+        </div>
+        <?php if ($report === 'Notas'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Tarjeta de notas por curso") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
             <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
             <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
-            <div class="text-right">
-            <a class="btn btn-primary" href="<?= Route::url("/parents/grades/gradesOptions.php?studentSS=$studentSS") ?>"><?= $lang->translation("Atrás") ?></a>
-            </div>
+
             <div class="accordion my-4" id="classesAccordion">
-                <?php foreach ($student->classes() as $class) : ?>
+                <?php foreach ($student->classes() as $class): ?>
                     <div class="card">
                         <div class="card-header" id="heading<?= $class->curso ?>">
                             <h2 class="mb-0">
@@ -162,20 +165,20 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                         <div id="collapse<?= $class->curso ?>" class="collapse" aria-labelledby="heading<?= $class->curso ?>" data-parent="#classesAccordion">
                             <div class="card-body">
                                 <?php
-                            $fatherTable = DB::table($_info[$report]['table'])->Where([
-                                ['ss', $studentSS],
-                                ['year', $year],
-                                ['curso', $class->curso]
-                            ])->first();
-                    $value = DB::table('valores')->where([
-                        ['curso', $class->curso],
-                        ['trimestre', $trimester],
-                        ['nivel', $report],
-                        ['year', $year]
-                    ])->first();
-                    ?>
+                                $fatherTable = DB::table($_info[$report]['table'])->Where([
+                                    ['ss', $studentSS],
+                                    ['year', $year],
+                                    ['curso', $class->curso]
+                                ])->first();
+                                $value = DB::table('valores')->where([
+                                    ['curso', $class->curso],
+                                    ['trimestre', $trimester],
+                                    ['nivel', $report],
+                                    ['year', $year]
+                                ])->first();
+                                ?>
                                 <h5><?= $lang->translation($report) ?></h5>
-                                <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
+                                <?php if (is_numeric($fatherTable->{$totalGradeColumn})): ?>
                                     <table class="table table-bordered table-sm">
                                         <thead class="thead-light">
                                             <tr>
@@ -188,12 +191,12 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                                         </thead>
                                         <tbody>
                                             <?php
-                                $valIndex = 1;
-                                    $grades = $thisReport['grades'];
-                                    for ($i = $grades[0]; $i <= $grades[1]; $i++) :
-                                        // var_dump($fatherTable);
-                                        if (is_numeric($fatherTable->{"not$i"})) :
-                                            ?>
+                                            $valIndex = 1;
+                                            $grades = $thisReport['grades'];
+                                            for ($i = $grades[0]; $i <= $grades[1]; $i++):
+                                                // var_dump($fatherTable);
+                                                if (is_numeric($fatherTable->{"not$i"})):
+                                                    ?>
                                                     <tr>
                                                         <td><?= $valIndex ?></td>
                                                         <td><?= $fatherTable->{"not$i"} ?></td>
@@ -206,11 +209,11 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                                             <?php endfor ?>
                                         </tbody>
                                     </table>
-                                <?php else : ?>
+                                <?php else: ?>
                                     <p><?= $lang->translation("Aun no tiene notas en este trimestre") ?></p>
                                 <?php endif ?>
                                 <!-- Others grades -->
-                                <?php foreach ($otherReports as $other) :
+                                <?php foreach ($otherReports as $other):
                                     $fatherTable = DB::table($other['table'])->Where([
                                         ['ss', $studentSS],
                                         ['year', $year],
@@ -224,7 +227,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                                     ])->first();
                                     ?>
                                     <h5><?= $lang->translation($other['title']) ?></h5>
-                                    <?php if (is_numeric($fatherTable->{$totalGradeColumn})) : ?>
+                                    <?php if (is_numeric($fatherTable->{$totalGradeColumn})): ?>
                                         <table class="table table-bordered table-sm">
                                             <thead class="thead-light">
                                                 <th>#</th>
@@ -235,12 +238,12 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                    $valIndex = 1;
-                                        $grades = $thisReport['grades'];
-                                        for ($i = $grades[0]; $i <= $grades[1]; $i++) :
-                                            // var_dump($fatherTable);
-                                            if (is_numeric($fatherTable->{"not$i"})) :
-                                                ?>
+                                                $valIndex = 1;
+                                                $grades = $thisReport['grades'];
+                                                for ($i = $grades[0]; $i <= $grades[1]; $i++):
+                                                    // var_dump($fatherTable);
+                                                    if (is_numeric($fatherTable->{"not$i"})):
+                                                        ?>
                                                         <tr>
                                                             <td><?= $valIndex ?></td>
                                                             <td><?= $fatherTable->{"not$i"} ?></td>
@@ -253,7 +256,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                                                 <?php endfor ?>
                                             </tbody>
                                         </table>
-                                    <?php else : ?>
+                                    <?php else: ?>
                                         <p><?= $lang->translation("Aun no tiene notas en este trimestre") ?></p>
                                     <?php endif ?>
                                 <?php endforeach ?>
@@ -262,7 +265,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     </div>
                 <?php endforeach ?>
             </div>
-        <?php elseif ($report === 'Trimestral') : ?>
+        <?php elseif ($report === 'Trimestral'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Notas trimestrales") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
             <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
@@ -276,7 +279,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class) :
+                    <?php foreach ($student->classes() as $class):
                         $fatherTable = DB::table($_info[$report]['table'])->Where([
                             ['ss', $studentSS],
                             ['year', $year],
@@ -292,7 +295,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     <?php endforeach ?>
                 </tbody>
             </table>
-        <?php elseif ($report === 'Cond-Asis') : ?>
+        <?php elseif ($report === 'Cond-Asis'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Conducta y Asistencia") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
             <p class="my-0"><small class="text-muted"><?= $lang->translation("Con") ?> = <?= $lang->translation("Conducta") ?></small></p>
@@ -323,7 +326,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class) :
+                    <?php foreach ($student->classes() as $class):
                         $fatherTable = DB::table($_info[$report]['table'])->Where([
                             ['ss', $studentSS],
                             ['year', $year],
@@ -332,7 +335,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                         ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
-                            <?php for ($i = 1; $i <= 4; $i++) : ?>
+                            <?php for ($i = 1; $i <= 4; $i++): ?>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]['conduct'] . $i} ?></td>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]['absence'] . $i} ?></td>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]['tardy'] . $i} ?></td>
@@ -341,7 +344,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     <?php endforeach ?>
                 </tbody>
             </table>
-        <?php else : ?>
+        <?php else: ?>
             <h1 class="text-center my-2"><?= $lang->translation("Totales por curso") ?></h1>
             <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
             <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
@@ -353,12 +356,12 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                         <th colspan="<?= $sumTrimester ? '2' : '3' ?>"><?= $lang->translation("Segundo Semestre") ?></th>
                     </tr>
                     <tr>
-                        <?php if ($sumTrimester) : ?>
+                        <?php if ($sumTrimester): ?>
                             <th>Tri-1</th>
                             <th>Sem-1</th>
                             <th>Tri-3</th>
                             <th>Sem-2</th>
-                        <?php else : ?>
+                        <?php else: ?>
                             <th>Tri-1</th>
                             <th>Tri-2</th>
                             <th>Sem-1</th>
@@ -370,7 +373,7 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class) :
+                    <?php foreach ($student->classes() as $class):
                         $fatherTable = DB::table($_info[$report]['table'])->Where([
                             ['ss', $studentSS],
                             ['year', $year],
@@ -379,10 +382,10 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                         ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
-                            <?php for ($i = 1; $i <= 2; $i++) : ?>
+                            <?php for ($i = 1; $i <= 2; $i++): ?>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][0]} ?></td>
                                 <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][1]} ?></td>
-                                <?php if (!$sumTrimester) : ?>
+                                <?php if (!$sumTrimester): ?>
                                     <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][2]} ?></td>
                                 <?php endif ?>
                             <?php endfor ?>
@@ -391,14 +394,10 @@ Route::includeFile('/parents/includes/layouts/menu.php');
                 </tbody>
             </table>
         <?php endif ?>
-
-
-
-
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+    ?>
 </body>
 
 </html>

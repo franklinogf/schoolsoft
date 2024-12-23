@@ -20,7 +20,7 @@ class TeacherModel extends School
 
   protected function getTeacherByPK($pk)
   {
-    $obj =  parent::table($this->table)->where($this->primary_key, $pk)->first();
+    $obj = parent::table($this->table)->where($this->primary_key, $pk)->first();
     return $obj;
   }
 
@@ -28,7 +28,7 @@ class TeacherModel extends School
   protected function getAllTeachers()
   {
 
-    $obj =  parent::table($this->table)->where(['baja', ''])->orderBy('apellidos')->get();
+    $obj = parent::table($this->table)->where(['baja', ''])->orderBy('apellidos')->get();
     return $obj;
   }
   protected function getTeacherByGrade($grade)
@@ -47,14 +47,14 @@ class TeacherModel extends School
     $year = $this->year();
     if (__COSEY) {
       $desc = (__LANG === "es") ? "descripcion" : "desc2";
-      $obj =  parent::table('padres')->select("DISTINCT curso, {$desc} as desc1")
+      $obj = parent::table('cursos')->select("*, {$desc} as desc1")
         ->where([
           ['year', $year],
           ['id', $id]
         ])->orderBy('curso', 'ASC')->get();
     } else {
-      $desc = (__LANG === "es") ? "descripcion" : "desc2";
-      $obj =  parent::table('padres')->select("DISTINCT curso, {$desc} as desc1")
+      $desc = (__LANG === "es") ? "desc1" : "desc2";
+      $obj = parent::table('cursos')->select("*, {$desc} as desc1")
         ->where([
           ['year', $year],
           ['id', $id]
@@ -65,7 +65,7 @@ class TeacherModel extends School
   protected function getTeacherClassCredit($id, $class)
   {
     $year = $this->year();
-    $obj =  parent::table('cursos')->select('credito')
+    $obj = parent::table('cursos')->select('credito')
       ->where([
         ['curso', $class],
         ['year', $year],
@@ -81,7 +81,7 @@ class TeacherModel extends School
       ['year', $year],
       ['id', $id]
     ])->groupBy('ss')->orderBy('apellidos')->get();
-    
+
     return $obj;
     // $students = new Student();
     // return $students->findById($id, $table);
@@ -91,7 +91,7 @@ class TeacherModel extends School
   {
     $year = $this->year();
     if (__COSEY) {
-      $obj =  parent::table(StudentModel::TABLE)
+      $obj = parent::table(StudentModel::TABLE)
         ->where([
           // ['grado', $grade],
           ['year', $year],
@@ -99,7 +99,7 @@ class TeacherModel extends School
         ])
         ->orderBy('apellidos')->get();
     } else {
-      $obj =  parent::table(StudentModel::TABLE)
+      $obj = parent::table(StudentModel::TABLE)
         ->where([
           ['grado', $grade],
           ['year', $year],
@@ -128,7 +128,7 @@ class TeacherModel extends School
 
     $year = $this->year();
     if (__COSEY) {
-      $obj =  parent::table('detalle_foro_entradas', !__COSEY)
+      $obj = parent::table('detalle_foro_entradas', !__COSEY)
         ->select('foro_entradas.titulo,foro_entradas.curso,padres.descripcion as desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
         ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
         ->join('padres', 'foro_entradas.curso', '=', 'padres.curso')
@@ -142,7 +142,7 @@ class TeacherModel extends School
     } else {
 
 
-      $obj =  parent::table('detalle_foro_entradas')
+      $obj = parent::table('detalle_foro_entradas')
         ->select('foro_entradas.titulo,foro_entradas.curso,cursos.desc1,foro_entradas.id,detalle_foro_entradas.fecha,detalle_foro_entradas.hora')
         ->join('foro_entradas', 'detalle_foro_entradas.entrada_id', '=', 'foro_entradas.id')
         ->join('cursos', 'foro_entradas.curso', '=', 'cursos.curso')
@@ -162,7 +162,7 @@ class TeacherModel extends School
   {
 
     $year = $this->year();
-    $obj =  parent::table('foro_entradas', !__COSEY)
+    $obj = parent::table('foro_entradas', !__COSEY)
       ->where([
         ['creador_id', $id],
         ['curso', $class],
@@ -176,7 +176,7 @@ class TeacherModel extends School
   {
 
     $year = $this->year();
-    $obj =  parent::table('foro_entradas', !__COSEY)
+    $obj = parent::table('foro_entradas', !__COSEY)
       ->where([
         ['creador_id', $id],
         ['year', $year]
@@ -195,7 +195,7 @@ class TeacherModel extends School
 
   protected function teacherLogin($username, $password)
   {
-    $obj =  parent::table($this->table, !__COSEY)
+    $obj = parent::table($this->table, !__COSEY)
       ->where([
         ['usuario', $username],
         ['clave', $password]

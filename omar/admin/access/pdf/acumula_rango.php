@@ -27,7 +27,6 @@ $lang = new Lang([
 $school = new School(Session::id());
 $year = $school->info('year2');
 
-session_start();
 $grados =  $_COOKIE["variable1"];
 $pdf = new PDF;
 $pdf->SetTitle('INFORME PROMEDIO POR CLASE ACUMULADO');
@@ -77,14 +76,14 @@ $db->query('Truncate acumula_totales');
 
 IF ($grados=='A')
    {
-   $gra1='08';
-   $gra2='07';
-   $gra3='06';
-   $gra4='05';
-   $gra5='04';
-   $gra6='03-';
-   $gra7='02-';
-   $gra8='01-';
+   $gra8 = '08';
+   $gra7 = '07';
+   $gra6 = '06';
+   $gra5 = '05';
+   $gra4 = '04';
+   $gra3 = '03-';
+   $gra2 = '02-';
+   $gra1 = '01-';
    $gra0 = '08';
    }
 IF ($grados=='B')
@@ -169,6 +168,7 @@ foreach ($students as $student)
 
         $studd = DB::table('acumulativa')
         ->whereRaw("ss = '$student->ss' and grado like '%".$gra4."%'")->orderBy('orden')->get();
+   if ($grados == 'A') {
 
         $stude = DB::table('acumulativa')
         ->whereRaw("ss = '$student->ss' and grado like '%".$gra5."%'")->orderBy('orden')->get();
@@ -178,6 +178,7 @@ foreach ($students as $student)
         ->whereRaw("ss = '$student->ss' and grado like '%".$gra7."%'")->orderBy('orden')->get();
         $studh = DB::table('acumulativa')
         ->whereRaw("ss = '$student->ss' and grado like '%".$gra8."%'")->orderBy('orden')->get();
+   }
 
 
       $let1=0;
@@ -255,11 +256,11 @@ foreach ($students as $student)
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
             }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
       if ($cnt1 > 0 or $cnt3 > 0)
          {
          $lets1=0;
@@ -308,11 +309,11 @@ foreach ($students as $student)
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
             }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
       if ($cnt1 > 0 or $cnt3 > 0)
          {
          $lets1=0;
@@ -360,11 +361,11 @@ foreach ($students as $student)
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
             }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
       if ($cnt1 > 0 or $cnt3 > 0)
          {
          $lets1=0;
@@ -390,7 +391,8 @@ foreach ($students as $student)
            'not4' => number_format($lets1/$lets2,2),
         ]);
          }
-////**********************
+   ////**********************
+   if ($grados == 'A') {
 
       $let1=0;
       $cnt1=0;
@@ -410,14 +412,14 @@ foreach ($students as $student)
                IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
-            }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+      }
       if ($cnt1 > 0 or $cnt3 > 0)
          {
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
          $lets1=0;
          $lets2=0;
          if ($cnt1 > 0)
@@ -459,14 +461,14 @@ foreach ($students as $student)
                IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
-            }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+      }
       if ($cnt1 > 0 or $cnt3 > 0)
          {
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
          $lets1=0;
          $lets2=0;
          if ($cnt1 > 0)
@@ -508,14 +510,14 @@ foreach ($students as $student)
                IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
-            }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+      }
       if ($cnt1 > 0 or $cnt3 > 0)
          {
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
          $lets1=0;
          $lets2=0;
          if ($cnt1 > 0)
@@ -560,14 +562,14 @@ foreach ($students as $student)
                IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
                IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
                }
-            }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
+      }
       if ($cnt1 > 0 or $cnt3 > 0)
          {
+//    $acumula = DB::table('acumula_totales')->insert([
+//        'ss' => $student->ss,
+//        'nombre' => $student->nombre,
+//        'apellidos' => $student->apellidos,
+//    ]);
          $lets1=0;
          $lets2=0;
          if ($cnt1 > 0)
@@ -591,8 +593,8 @@ foreach ($students as $student)
            'not8' => number_format($lets1/$lets2,2),
         ]);
          }
-
-      if ($cnt2> 0)
+   }
+   if ($cnt2 > 0)
          {
          $thisCourse2 = DB::table('acumula_totales')->where([
            ['ss', $student->ss]

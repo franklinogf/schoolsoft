@@ -46,7 +46,7 @@ $gradeInfo = DB::table('padres')->where([
     ['curso', $_class],
     ['year', $year],
 ])->first();
-$optionLetter = $gradeInfo->letra === "ON";
+$optionLetter = $gradeInfo->letra ?? '' === "ON";
 
 // only this school
 if (__ONLY_CBTM__) {
@@ -545,6 +545,7 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -580,7 +581,7 @@ $lang = new Lang([
                         <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo->nota_por === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span></p>
+                        <p class="text-monospace"><?= $lang->translation("Tipo de nota:") ?> <span class="badge badge-info"><?= $gradeInfo->nota_por ?? '' === "1" ? $lang->translation("Porciento") : $lang->translation("Suma") ?></span></p>
                     </div>
                 </div>
             </div>
@@ -595,14 +596,14 @@ $lang = new Lang([
                     <div id="options" class="row row-cols-1">
                         <div class="col">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra === "ON") ? 'checked=""' : '' ?> disabled>
+                                <input type="checkbox" class="custom-control-input" id="letra" value="<?= $letterNumber ?>" <?= ($gradeInfo->letra ?? '' === "ON") ? 'checked=""' : '' ?> disabled>
                                 <label class="custom-control-label" for="letra"><?= $lang->translation("Pasar a letras") ?></label>
                             </div>
                             <small><?= $lang->translation("Está opción se aplica en la columna") ?> <b><?= $_report === 'Notas' ? $lang->translation("Nota") . '-9' : $lang->translation("Nota") . '-7' ?></b> <?= $lang->translation("exclusivamente.") ?></small>
                         </div>
                         <div class="col mt-2">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal === "ON") ? 'checked=""' : '' ?> disabled>
+                                <input type="checkbox" class="custom-control-input" id="pal" value="ON" <?= ($gradeInfo->pal ?? '' === "ON") ? 'checked=""' : '' ?> disabled>
                                 <label class="custom-control-label" for="pal"><?= $lang->translation("Conversión") ?></label>
                             </div>
                             <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
@@ -611,7 +612,7 @@ $lang = new Lang([
                             <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4') : ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
+                                        <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo->{$_end}  ?? '' === "X") ? 'checked=""' : '' ?> disabled>
                                         <label class="custom-control-label" for="<?= $_end ?>"><?= $lang->translation("Aviso terminar") ?></label>
                                     </div>
                                     <small><?= $lang->translation("Cuando termine el trimestre marque está Opción.") ?></small>
@@ -628,7 +629,7 @@ $lang = new Lang([
                     <div class="card-body">
                         <div class="row row-cols-1">
                             <div class="col">
-                                <h4><?= $lang->translation("¿Quieres que estas notas sean?") ?></h4>
+                                <h4><?= $lang->translation("&#65533;Quieres que estas notas sean?") ?></h4>
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="noteType1" class="custom-control-input" name="noteType" value="1" <?= $gradeInfo->nota_por === "1" ? 'checked=""' : '' ?> disabled>
                                     <label class="custom-control-label" for="noteType1"><?= $lang->translation("Porciento") ?></label>

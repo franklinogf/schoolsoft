@@ -12,8 +12,6 @@ use Classes\DataBase0\DB;
 
 Session::is_logged();
 
-session_start();
-//$grados =  $_COOKIE["variable1"];
 $tarjeta =  $_COOKIE["variable2"];
 $tnot =  $_COOKIE["variable3"];
 $grado =  $_COOKIE["variable4"];
@@ -29,7 +27,7 @@ $memsa1 =  $_COOKIE["variable13"];
 $memsa2 =  $_COOKIE["variable14"];
 $nhc     =  $_COOKIE["variable15"];
 
-//$ =  $_COOKIE["variable15"];
+//echo $grado.' / '.$grados;
 
 if ($opcion=='2' and $fg=='true')
    {
@@ -45,6 +43,7 @@ if ($opcion=='2' and $fg=='true')
 
 
 $tar= 'Tarjeta'.$tarjeta.'.php';
+
 if ($grado == 'C' and $tarjeta == '33') {
     $tar = 'Tarjeta' . $tarjeta . 'b.php';
 }
@@ -52,4 +51,3 @@ if ($grado == 'C' and $tarjeta == '33') {
 require_once $tar;
 
 exit;
-

@@ -52,9 +52,9 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Re-enviar recibo',   "en" => "Re-enviar recibo"],
-                'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Pantalla para reenviar recibos de los pagos automáticos.'],
-                'link' => '#'
+                'name' => ["es" => 'Re-enviar recibo',   "en" => "Resend receipt"],
+                'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Screen to resend receipts for automatic payments.'],
+                'link' => 'reenviar.php'
             ],
 
 
@@ -69,99 +69,101 @@ $options = [
                 'link' => 'Daily_payments.php'
             ],
             [
-                'name' => ["es" => 'Estado de cuenta', "en" => "Estado de cuenta"],
-                'desc' => ['es' => 'Imprimir o enviar el informe de estado de cuentas a los padres.', 'en' => 'Imprimir o enviar el informe de estado de cuentas a los padres.'],
-                'link' => '#'
+                'name' => ["es" => 'Estado de cuenta', "en" => "Statement"],
+                'desc' => ['es' => 'Imprimir o enviar el informe de estado de cuentas a los padres.', 'en' => 'Print or send the account status report to parents.'],
+                'link' => 'Statement.php'
             ],
             [
-                'name' => ["es" => 'Lista de deudores', "en" => "Lista de deudores"],
-                'desc' => ['es' => 'Informe de deudores por grado puede seleccionar código.', 'en' => 'Informe de deudores por grado puede seleccionar código.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista de deudores', "en" => "List of debtors"],
+                'desc' => ['es' => 'Informe de deudores por grado puede seleccionar código.', 'en' => 'Debtors report by grade you can select code.'],
+                'link' => 'deudores.php'
             ],
             [
                 'name' => ["es" => '30, 60, 90', "en" => "30, 60, 90"],
-                'desc' => ['es' => 'Lista de deudores por meses por cuentas.', 'en' => 'Lista de deudores por meses por cuentas.'],
-                'link' => '#'
+                'desc' => ['es' => 'Lista de deudores por meses por cuentas.', 'en' => 'List of debtors by month by accounts.'],
+                'link' => 'deudores369.php'
             ],
             [
-                'name' => ["es" => 'Carta de cobro', "en" => "Carta de cobro"],
-                'desc' => ['es' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.', 'en' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.'],
-                'link' => '#'
+                'name' => ["es" => 'Carta de cobro', "en" => "Collection letter"],
+                'desc' => ['es' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.', 'en' => 'You can select letters to print or send by E-Mail.'],
+                'link' => 'letter/index.php'
             ],
             [
-                'name' => ["es" => 'Libreta de pago', "en" => "Libreta de pago"],
-                'desc' => ['es' => 'Imprime las libretas de pagos a los padres.', 'en' => 'Imprime las libretas de pagos a los padres.'],
-                'link' => '#'
+                'name' => ["es" => 'Carta de Suspensión', "en" => "Suspension Letter"],
+                'desc' => ['es' => 'Listado de deudores para suspensión.', 'en' => 'List of debtors for suspension.'],
+                'link' => 'letter.php'
             ],
             [
-                'name' => ["es" => 'Presupuesto', "en" => "Presupuesto"],
-                'desc' => ['es' => 'Informe para contabilizar las partidas de cada código.', 'en' => 'Informe para contabilizar las partidas de cada código.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto', "en" => "Budget"],
+                'desc' => ['es' => 'Informe para contabilizar las partidas de cada código.', 'en' => 'Report to account for the items of each code.'],
+                'link' => 'inf_presupuesto_op.php'
             ],
             [
-                'name' => ["es" => 'Pagos', "en" => "Pagos"],
-                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'Listado por grupo para saber quienes pagaron.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos', "en" => "Payments"],
+                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'List by group to know who paid.'],
+                'link' => 'inf_pagos_op.php'
             ],
             [
-                'name' => ["es" => 'Lista por fechas', "en" => "Lista por fechas"],
-                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Informe de totales por meses por código.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista por fechas', "en" => "List by dates"],
+                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Monthly totals report by code.'],
+                'link' => 'inf_por_fecha_op.php'
             ],
             [
-                'name' => ["es" => 'Lista de pagos', "en" => "Lista de pagos"],
-                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'Lista de estudiantes que pagaron o no.'],
-                'link' => '#'
+                'name' => ["es" => 'Lista de pagos', "en" => "Payment list"],
+                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'List of students who paid or not.'],
+                'link' => 'lista_pagos.php'
             ],
             [
                 'name' => ["es" => 'Descripción', "en" => "Descripción"],
-                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'Lista de deudores detallada por mes por cuentas.'],
-                'link' => '#'
+                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'List of debtors detailed by month by accounts.'],
+                'link' => 'sabana.php'
             ],
             [
-                'name' => ["es" => 'Cobros', "en" => "Cobros"],
-                'desc' => ['es' => 'Pantalla para enviar mensajes de cobros a los deudores.', 'en' => 'Pantalla para enviar mensajes de cobros a los deudores.'],
-                'link' => '#'
+                'name' => ["es" => 'Cobros', "en" => "Late Payment"],
+                'desc' => ['es' => 'Pantalla para enviar mensajes de cobros a los deudores.', 'en' => 'Screen to send a late payment message to debtors.'],
+                'link' => 'cobros_testos.php'
             ],
             [
-                'name' => ["es" => 'Recibos', "en" => "Recibos"],
-                'desc' => ['es' => 'Pantalla Para Buscar Recibos', 'en' => 'Pantalla Para Buscar Recibos'],
-                'link' => '#'
+                'name' => ["es" => 'Recibos', "en" => "Receipts"],
+                'desc' => ['es' => 'Pantalla Para Buscar Recibos', 'en' => 'Screen to Search Receipts'],
+                'link' => 'receipts.php'
             ],
             [
-                'name' => ["es" => 'Pasar balances', "en" => "Pasar balances"],
-                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => 'Pantalla para pasar los balances de los padres de un año al otro.'],
-                'link' => '#'
+                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
+                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'link' => 'pass_balances.php'
             ],
             [
-                'name' => ["es" => 'Deudores', "en" => "Deudores"],
-                'desc' => ['es' => 'Informe detallado por cuentas y año.', 'en' => 'Informe detallado por cuentas y año.'],
-                'link' => '#'
+                'name' => ["es" => 'Deudores', "en" => "Debtors"],
+                'desc' => ['es' => 'Informe detallado por cuentas y año.', 'en' => 'Detailed report by accounts and year.'],
+                'link' => 'deudores_op.php'
             ],
             [
-                'name' => ["es" => 'Listado', "en" => "Listado"],
-                'desc' => ['es' => 'Informe por descripción mensual.', 'en' => 'Informe por descripción mensual.'],
-                'link' => '#'
+                'name' => ["es" => 'Listado', "en" => "List"],
+                'desc' => ['es' => 'Informe por descripción mensual.', 'en' => 'Report by monthly description.'],
+                'link' => 'inf_desc_op.php'
             ],
             [
-                'name' => ["es" => 'Matrícula estudiante', "en" => "Matrícula estudiante"],
-                'desc' => ['es' => 'Informe por deudas detalladas.', 'en' => 'Informe por deudas detalladas.'],
-                'link' => '#'
+                'name' => ["es" => 'Matrícula estudiante', "en" => "Student registration"],
+                'desc' => ['es' => 'Informe por deudas detalladas.', 'en' => 'Detailed debt report.'],
+                'link' => 'inf_mat_est_op.php'
             ],
             [
-                'name' => ["es" => 'Deuda salón', "en" => "Deuda salón"],
-                'desc' => ['es' => 'Informe por deudas por salón hogar.', 'en' => 'Informe por deudas por salón hogar.'],
-                'link' => '#'
+                'name' => ["es" => 'Deuda salón hogar', "en" => "Debt for home room"],
+                'desc' => ['es' => 'Informe por deudas por salón hogar.', 'en' => 'Debt report for home room.'],
+                'link' => 'inf_deuda_salon_op.php'
             ],
             [
-                'name' => ["es" => 'Reporte de pagos', "en" => "Reporte de pagos"],
-                'desc' => ['es' => 'Reporte totales por código por año.', 'en' => 'Reporte totales por código por año.'],
-                'link' => '#'
+                'name' => ["es" => 'Reporte de pagos', "en" => "Payment report"],
+                'desc' => ['es' => '', 'en' => ''],
+                'link' => 'pdf/inf_reporte_pago.php',
+                'target' => 'inf_reporte_pago'
             ],
             [
-                'name' => ["es" => 'Descuentos', "en" => "Descuentos"],
-                'desc' => ['es' => 'Reporte totales de descuento por código.', 'en' => 'Reporte totales de descuento por código.'],
-                'link' => '#'
+                'name' => ["es" => 'Descuentos', "en" => "Discounts"],
+                'desc' => ['es' => 'Reporte totales de descuento por código.', 'en' => 'Total discount report by code.'],
+                'link' => 'pdf/inf_reporte_descuentos.php',
+                'target' => 'inf_reporte_descuentos'
             ],
             [
                 'name' => ["es" => 'Pagos mensual', "en" => "Pagos mensual"],
@@ -169,24 +171,25 @@ $options = [
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Deudores', "en" => "Deudores"],
-                'desc' => ['es' => 'Informe pagado completo', 'en' => 'Informe pagado completo'],
-                'link' => '#'
+                'name' => ["es" => 'No Deudores', "en" => "Non-Debtors"],
+                'desc' => ['es' => 'Informe pagado completo', 'en' => 'Complete paid report'],
+                'link' => 'inf_pagados_op.php'
             ],
             [
-                'name' => ["es" => 'Presupuesto por grado', "en" => "Presupuesto por grado"],
-                'desc' => ['es' => 'Informe presupuesto por grado.', 'en' => 'Informe presupuesto por grado.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto por grado', "en" => "Budget by grade"],
+                'desc' => ['es' => 'Informe presupuesto por grado.', 'en' => 'Budget report by grade.'],
+                'link' => 'pdf/inf_presu.php',
+                'target' => 'inf_presu'
             ],
             [
-                'name' => ["es" => 'Presupuesto por matrícula', "en" => "Presupuesto por matrícula"],
-                'desc' => ['es' => 'Informe presupuesto por matricula y mensualidad.', 'en' => 'Informe presupuesto por matricula y mensualidad.'],
-                'link' => '#'
+                'name' => ["es" => 'Presupuesto por matrícula', "en" => "Tuition budget"],
+                'desc' => ['es' => 'Informe presupuesto por matricula y mensualidad.', 'en' => 'Budget report for enrollment and monthly payment.'],
+                'link' => 'inf_presu_op.php'
             ],
             [
-                'name' => ["es" => 'Misma descripcion', "en" => "Misma descripcion"],
-                'desc' => ['es' => 'Informe por la misma descripciones.', 'en' => 'Informe por la misma descripciones.'],
-                'link' => '#'
+                'name' => ["es" => 'Reporte descripción', "en" => "Report description"],
+                'desc' => ['es' => 'Informe por descripciones.', 'en' => 'Report by description'],
+                'link' => 'inf_descp_op.php'
             ],
             [
                 'name' => ["es" => 'Deuda familia', "en" => "Deuda familia"],

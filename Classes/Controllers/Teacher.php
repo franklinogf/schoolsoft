@@ -51,7 +51,7 @@ class Teacher extends TeacherModel
     if (!isset($this->id)) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeacherClasses($this->id);
+    return $this->getTeacherClasses(id: $this->id);
   }
 
   public function classCredit($class)

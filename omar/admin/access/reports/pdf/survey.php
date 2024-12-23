@@ -45,11 +45,11 @@ $pdf->SetFont('Arial', '', 10);
 $totals = ['YES' => 0, 'NO' => 0, 'OTHERS' => 0];
 foreach ($surveyAnswers as $count => $answer) {
     $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
-    $pdf->Cell(100, 5, utf8_decode("$answer->nombre $answer->apellidos"), 0);
+    $pdf->Cell(100, 5, "$answer->nombre $answer->apellidos", 0);
     $pdf->Cell(30, 5, $answer->fecha, 0, 0, 'C');
     $pdf->Cell(30, 5, $answer->dijo, 0, 1, 'C');
     $pdf->Ln(1);
-    $pdf->MultiCell(170, 5, utf8_decode($answer->comentario));
+    $pdf->MultiCell(170, 5, $answer->comentario);
     $pdf->Line($pdf->GetX(), $pdf->GetY(), $pdf->GetX() + 170, $pdf->GetY());
     if ($answer->dijo === 'SI') {
         $totals['YES']++;

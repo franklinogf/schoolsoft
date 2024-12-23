@@ -18,8 +18,8 @@ $lang = new Lang([
     ['Grado', 'Grade'],
     ['Grados separados', 'Separted grades'],
     ['estudiante', 'student'],
-    ['Atr醩', 'Go back'],
-    ['Opci髇', 'Option'],
+    ['Atr谩s', 'Go back'],
+    ['Opci贸n', 'Option'],
     ['Por estudiante', 'By student'],
     ['Por grado', 'By grade'],
     ['Estudiante', 'Student'],
@@ -41,6 +41,7 @@ $grades = $school->allGrades();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -56,7 +57,7 @@ $grades = $school->allGrades();
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center my-3"><?= $lang->translation('Acuse de recibo') ?></h1>
-        <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atr醩") ?></a>
+        <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atr谩s") ?></a>
         <div class="container bg-white shadow-lg py-3 rounded">
             <form action="<?= Route::url('/admin/access/reports/pdf/AcknowledgmentReceipt1.php') ?>" target="AcknowledgmentReceipt" method="POST">
                 <div class="mx-auto" style="width: 25rem;">
@@ -76,7 +77,7 @@ $grades = $school->allGrades();
 
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <label class='input-group-text' for="option"><?= $lang->translation("Opci髇") ?></label>
+                            <label class='input-group-text' for="option"><?= $lang->translation("Opci贸n") ?></label>
                         </div>
                         <select name="hoja" id="option" class="form-control">
                             <option value="0"><?= $lang->translation("Tarjeta de notas") ?></option>
@@ -84,7 +85,7 @@ $grades = $school->allGrades();
                             <option value="3"><?= $lang->translation("Hoja de progreso") ?></option>
                         </select>
                     </div>
-                   
+
                     <div class="text-center">
                         <button class="btn btn-primary mt-4" type="submit"><?= $lang->translation("Continuar") ?></button>
                     </div>
@@ -112,19 +113,19 @@ $grades = $school->allGrades();
 
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <label class='input-group-text' for="option"><?= $lang->translation("Opci髇") ?></label>
+                            <label class='input-group-text' for="option"><?= $lang->translation("Opci贸n") ?></label>
                         </div>
                         <select name="trimestre" id="option" class="form-control">
-                            <option ><?= $lang->translation("Trimestre 1") ?></option>
-                            <option ><?= $lang->translation("Trimestre 2") ?></option>
-                            <option ><?= $lang->translation("Trimestre 3") ?></option>
-                            <option ><?= $lang->translation("Trimestre 4") ?></option>
+                            <option><?= $lang->translation("Trimestre 1") ?></option>
+                            <option><?= $lang->translation("Trimestre 2") ?></option>
+                            <option><?= $lang->translation("Trimestre 3") ?></option>
+                            <option><?= $lang->translation("Trimestre 4") ?></option>
                         </select>
                     </div>
 
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <label class='input-group-text' for="option"><?= $lang->translation("Opci髇") ?></label>
+                            <label class='input-group-text' for="option"><?= $lang->translation("Opci贸n") ?></label>
                         </div>
                         <select name="hoja" id="option" class="form-control">
                             <option value="0"><?= $lang->translation("Tarjeta de notas") ?></option>
@@ -132,7 +133,7 @@ $grades = $school->allGrades();
                             <option value="3"><?= $lang->translation("Hoja de progreso") ?></option>
                         </select>
                     </div>
-                    
+
                     <div class="text-center">
                         <button class="btn btn-primary mt-4" type="submit"><?= $lang->translation("Continuar") ?></button>
                     </div>
@@ -140,7 +141,6 @@ $grades = $school->allGrades();
             </form>
         </div>
     </div>
-
 
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
