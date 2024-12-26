@@ -192,9 +192,10 @@ $options = [
                 'link' => 'inf_descp_op.php'
             ],
             [
-                'name' => ["es" => 'Deuda familia', "en" => "Deuda familia"],
-                'desc' => ['es' => 'Informe por deudas por familias.', 'en' => 'Informe por deudas por familias.'],
-                'link' => '#'
+                'name' => ["es" => 'Deuda familia', "en" => "Family debt"],
+                'desc' => ['es' => 'Informe por deudas por familias.', 'en' => 'Debt report for families.'],
+                'link' => 'pdf/inf_lista_cta.php',
+                'target' => 'inf_lista_cta'
             ],
             [
                 'name' => ["es" => 'Depositos', "en" => "Depositos"],
