@@ -198,9 +198,9 @@ $options = [
                 'target' => 'inf_lista_cta'
             ],
             [
-                'name' => ["es" => 'Depositos', "en" => "Depositos"],
-                'desc' => ['es' => 'Informe depósitos cafeteria por fechas.', 'en' => 'Informe depósitos cafeteria por fechas.'],
-                'link' => '#'
+                'name' => ["es" => 'Depositos', "en" => "Deposits"],
+                'desc' => ['es' => 'Informe depósitos cafeteria por fechas.', 'en' => 'Report cafeteria deposits by date.'],
+                'link' => 'inf_dep_dia_op.php'
             ],
             [
                 'name' => ["es" => 'Balances', "en" => "Balances"],
