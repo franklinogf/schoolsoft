@@ -204,8 +204,9 @@ $options = [
             ],
             [
                 'name' => ["es" => 'Balances', "en" => "Balances"],
-                'desc' => ['es' => 'Informe balances depositados a los estudiantes.', 'en' => 'Informe balances depositados a los estudiantes.'],
-                'link' => '#'
+                'desc' => ['es' => 'Informe balances depositados a los estudiantes.', 'en' => 'Report balances deposited to students.'],
+                'link' => 'pdf/inf_dep_balances.php',
+                'target' => 'inf_dep_balances'
             ],
             [
                 'name' => ["es" => 'Re-matrícula pagada', "en" => "Re-matrícula pagada"],
