@@ -209,9 +209,10 @@ $options = [
                 'target' => 'inf_dep_balances'
             ],
             [
-                'name' => ["es" => 'Re-matrícula pagada', "en" => "Re-matrícula pagada"],
-                'desc' => ['es' => 'Informe Matrículas pagadas.', 'en' => 'Informe Matrículas pagadas.'],
-                'link' => '#'
+                'name' => ["es" => 'Re-matrícula pagadas', "en" => "Re-registration paid"],
+                'desc' => ['es' => 'Informe Matrículas pagadas.', 'en' => 'Paid registration report.'],
+                'link' => 'pdf/re_pagadas.php',
+                'target' => 're_pagadas'
             ],
             [
                 'name' => ["es" => 'Cafeteria', "en" => "Cafeteria"],
