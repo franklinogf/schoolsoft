@@ -215,9 +215,9 @@ $options = [
                 'target' => 're_pagadas'
             ],
             [
-                'name' => ["es" => 'Cafeteria', "en" => "Cafeteria"],
-                'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes', 'en' => 'Detalle de compras de articulos de los estudiantes'],
-                'link' => '#'
+                'name' => ["es" => 'Cafetería', "en" => "Cafeteria"],
+                'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes.', 'en' => 'Details of student item purchases.'],
+                'link' => 'cafeteria_op.php'
             ],
             [
                 'name' => ["es" => 'Descuento mensual', "en" => "Descuento mensual"],
