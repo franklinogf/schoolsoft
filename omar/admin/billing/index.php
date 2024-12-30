@@ -192,24 +192,27 @@ $options = [
                 'link' => 'inf_descp_op.php'
             ],
             [
-                'name' => ["es" => 'Deuda familia', "en" => "Deuda familia"],
-                'desc' => ['es' => 'Informe por deudas por familias.', 'en' => 'Informe por deudas por familias.'],
-                'link' => '#'
+                'name' => ["es" => 'Deuda familia', "en" => "Family debt"],
+                'desc' => ['es' => 'Informe por deudas por familias.', 'en' => 'Debt report for families.'],
+                'link' => 'pdf/inf_lista_cta.php',
+                'target' => 'inf_lista_cta'
             ],
             [
-                'name' => ["es" => 'Depositos', "en" => "Depositos"],
-                'desc' => ['es' => 'Informe depósitos cafeteria por fechas.', 'en' => 'Informe depósitos cafeteria por fechas.'],
-                'link' => '#'
+                'name' => ["es" => 'Depositos', "en" => "Deposits"],
+                'desc' => ['es' => 'Informe depósitos cafeteria por fechas.', 'en' => 'Report cafeteria deposits by date.'],
+                'link' => 'inf_dep_dia_op.php'
             ],
             [
                 'name' => ["es" => 'Balances', "en" => "Balances"],
-                'desc' => ['es' => 'Informe balances depositados a los estudiantes.', 'en' => 'Informe balances depositados a los estudiantes.'],
-                'link' => '#'
+                'desc' => ['es' => 'Informe balances depositados a los estudiantes.', 'en' => 'Report balances deposited to students.'],
+                'link' => 'pdf/inf_dep_balances.php',
+                'target' => 'inf_dep_balances'
             ],
             [
-                'name' => ["es" => 'Re-matrícula pagada', "en" => "Re-matrícula pagada"],
-                'desc' => ['es' => 'Informe Matrículas pagadas.', 'en' => 'Informe Matrículas pagadas.'],
-                'link' => '#'
+                'name' => ["es" => 'Re-matrícula pagadas', "en" => "Re-registration paid"],
+                'desc' => ['es' => 'Informe Matrículas pagadas.', 'en' => 'Paid registration report.'],
+                'link' => 'pdf/re_pagadas.php',
+                'target' => 're_pagadas'
             ],
             [
                 'name' => ["es" => 'Cafeteria', "en" => "Cafeteria"],
