@@ -221,6 +221,12 @@ $options = [
                 'target' => 're_pagadas2'
             ],
             [
+                'name' => ["es" => 'Lista Est. Sup.', "en" => "List Sup. Stu."],
+                'desc' => ['es' => 'Lista por grado de Estudios Supervisados.', 'en' => 'List by grade of Supervised Studies.'],
+                'link' => 'pdf/re_pagadas3.php',
+                'target' => 're_pagadas3'
+            ],
+            [
                 'name' => ["es" => 'Cafetería', "en" => "Cafeteria"],
                 'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes.', 'en' => 'Details of student item purchases.'],
                 'link' => 'cafeteria_op.php'
