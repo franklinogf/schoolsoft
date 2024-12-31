@@ -227,6 +227,12 @@ $options = [
                 'target' => 're_pagadas3'
             ],
             [
+                'name' => ["es" => 'Primera Comunión', "en" => "First Communion"],
+                'desc' => ['es' => 'Lista por grado de Primera Comunión..', 'en' => 'List by degree of First Communion.'],
+                'link' => 'pdf/pc_pagadas.php',
+                'target' => 'pc_pagadas'
+            ],
+            [
                 'name' => ["es" => 'Cafetería', "en" => "Cafeteria"],
                 'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes.', 'en' => 'Details of student item purchases.'],
                 'link' => 'cafeteria_op.php'
