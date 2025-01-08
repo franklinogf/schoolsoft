@@ -56,6 +56,11 @@ $options = [
                 'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Screen to resend receipts for automatic payments.'],
                 'link' => 'reenviar.php'
             ],
+            [
+                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
+                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'link' => 'pass_balances.php'
+            ],
 
 
         ]
