@@ -171,9 +171,9 @@ $options = [
                 'target' => 'inf_reporte_descuentos'
             ],
             [
-                'name' => ["es" => 'Pagos mensual', "en" => "Pagos mensual"],
-                'desc' => ['es' => 'Informe mensual de pagos.', 'en' => 'Informe mensual de pagos.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos mensual', "en" => "Monthly payment"],
+                'desc' => ['es' => 'Informe mensual de pagos.', 'en' => 'Monthly payment report.'],
+                'link' => 'Pagos_mensual.php'
             ],
             [
                 'name' => ["es" => 'No Deudores', "en" => "Non-Debtors"],
