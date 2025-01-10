@@ -13,9 +13,6 @@ if ($enviroments) {
 }
 if ($features) {
     foreach ($features as $key => $feature) {
-        define("__" . strtoupper($key) . "__", $feature);
+        define("__" . strtoupper($key), $feature);
     }
 }
-
-
-
