@@ -56,6 +56,11 @@ $options = [
                 'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Screen to resend receipts for automatic payments.'],
                 'link' => 'reenviar.php'
             ],
+            [
+                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
+                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'link' => 'pass_balances.php'
+            ],
 
 
         ]
@@ -166,9 +171,9 @@ $options = [
                 'target' => 'inf_reporte_descuentos'
             ],
             [
-                'name' => ["es" => 'Pagos mensual', "en" => "Pagos mensual"],
-                'desc' => ['es' => 'Informe mensual de pagos.', 'en' => 'Informe mensual de pagos.'],
-                'link' => '#'
+                'name' => ["es" => 'Pagos mensual', "en" => "Monthly payment"],
+                'desc' => ['es' => 'Informe mensual de pagos.', 'en' => 'Monthly payment report.'],
+                'link' => 'Pagos_mensual.php'
             ],
             [
                 'name' => ["es" => 'No Deudores', "en" => "Non-Debtors"],
@@ -215,9 +220,27 @@ $options = [
                 'target' => 're_pagadas'
             ],
             [
-                'name' => ["es" => 'Cafeteria', "en" => "Cafeteria"],
-                'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes', 'en' => 'Detalle de compras de articulos de los estudiantes'],
-                'link' => '#'
+                'name' => ["es" => 'Matrícula Estu. Sup.', "en" => "Enr. Sup. Stu."],
+                'desc' => ['es' => 'Informe Matrículas Estudios Supervisados.', 'en' => 'Enrollment Report Supervised Studies.'],
+                'link' => 'pdf/re_pagadas2.php',
+                'target' => 're_pagadas2'
+            ],
+            [
+                'name' => ["es" => 'Lista Est. Sup.', "en" => "List Sup. Stu."],
+                'desc' => ['es' => 'Lista por grado de Estudios Supervisados.', 'en' => 'List by grade of Supervised Studies.'],
+                'link' => 'pdf/re_pagadas3.php',
+                'target' => 're_pagadas3'
+            ],
+            [
+                'name' => ["es" => 'Primera Comunión', "en" => "First Communion"],
+                'desc' => ['es' => 'Lista por grado de Primera Comunión..', 'en' => 'List by degree of First Communion.'],
+                'link' => 'pdf/pc_pagadas.php',
+                'target' => 'pc_pagadas'
+            ],
+            [
+                'name' => ["es" => 'Cafetería', "en" => "Cafeteria"],
+                'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes.', 'en' => 'Details of student item purchases.'],
+                'link' => 'cafeteria_op.php'
             ],
             [
                 'name' => ["es" => 'Descuento mensual', "en" => "Descuento mensual"],
