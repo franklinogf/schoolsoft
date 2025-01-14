@@ -243,6 +243,11 @@ $options = [
                 'link' => 'cafeteria_op.php'
             ],
             [
+                'name' => ["es" => 'Reporte de cuadre', "en" => "Balance report"],
+                'desc' => ['es' => 'Compras, depositos y balances.', 'en' => 'Purchases, deposits and balances.'],
+                'link' => 'pdf/inf_cuadre.php'
+            ],
+            [
                 'name' => ["es" => 'Descuento mensual', "en" => "Descuento mensual"],
                 'desc' => ['es' => 'Informe mensual detallado por Código', 'en' => 'Informe mensual detallado por Código'],
                 'link' => '#'
