@@ -22,7 +22,7 @@ class PDF extends FPDF
             $this->leftMargin = $this->lMargin;
             $this->SetXY(10, 10);
             $this->SetMargins(10, 10);
-            $this->SetFont('Arial', 'B', 15);
+            $this->SetFont('times', 'B', 15);
             $this->SetTextColor(0);
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
                 $school = new School('administrador');
@@ -89,7 +89,7 @@ class PDF extends FPDF
                 $footer = 'Page ' . $this->PageNo() . ' of {nb} ' . ' | ' . Util::formatDate(Util::date(), true, true);
             }
             $this->SetY(-$this->footer);
-            $this->SetFont('Arial', 'I', 8);
+            $this->SetFont('times', 'I', 8);
             $this->Cell(0, 10, $footer, 0, 0, 'C');
         }
     }
