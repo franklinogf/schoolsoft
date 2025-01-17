@@ -34,7 +34,7 @@ $lang = new Lang([
 
 <body>
     <header class="bg-dark py-3">
-        <div class="container px-md-5 d-flex justify-content-between align-items-center">
+        <div class="px-md-2 d-flex justify-content-center align-items-center">
             <img class="img-fluid" src="<?= School::logo() ?>" alt="School Logo" width='<?= __HOME_LOGO_SIZE ?>'>
             <h1 class="display-4 text-white"><?= $school->info('colegio') ?></h1>
         </div>
