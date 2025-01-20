@@ -26,7 +26,7 @@ $lang = new Lang([
     ['Fecha:', 'Date:'],
     ['Documentos sin entregar', 'Undelivered documents'],
     ['Masculinos', 'Males'],
-    ['Femeninas', 'Females'],
+  ['AÑO', 'YEAR'],
 ]);
 
 function NLetra($valor){
@@ -40,8 +40,10 @@ function NLetra($valor){
     return 'C';
   }else if ($valor <= '69' && $valor >= '60') {
     return 'D';
-  }else  if ($valor <= '59') {
+  } else  if ($valor <= '59' && $valor >= '1') {
     return 'F';
+  } else  if ($valor == '') {
+    return '';
   }
 }
 
@@ -210,24 +212,58 @@ foreach ($students as $estu) {
   $ta3 = 0;
   $au4 = 0;
   $ta4 = 0;
-    
     foreach ($cursos as $curso) {
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(60, 5, $curso->descripcion, 1, 0, 'L');
-    $pdf->Cell(10, 5, $curso->nota1, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->nota1), 1, 0, 'C');
-    $pdf->Cell(10, 5, $curso->nota2, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->nota2), 1, 0, 'C');
-    $pdf->Cell(10, 5, $curso->sem1, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->sem1), 1, 0, 'C');
-    $pdf->Cell(10, 5, $curso->nota3, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->nota3), 1, 0, 'C');
-    $pdf->Cell(10, 5, $curso->nota4, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->nota4), 1, 0, 'C');
-    $pdf->Cell(10, 5, $curso->sem2, 1, 0, 'R');
-    $pdf->Cell(7, 5, NLetra($curso->sem2), 1, 0, 'C');
-    $pdf->Cell(9, 5, $curso->final, 1, 0, 'R');
-    $pdf->Cell(6, 5, NLetra($curso->final), 1, 0, 'C');
+    if ($tri1 == 'Si') {
+      $pdf->Cell(10, 5, $curso->nota1, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->nota1), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($tri2 == 'Si') {
+      $pdf->Cell(10, 5, $curso->nota2, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->nota2), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($sem1 == 'Si') {
+      $pdf->Cell(10, 5, $curso->sem1, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->sem1), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($tri3 == 'Si') {
+      $pdf->Cell(10, 5, $curso->nota3, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->nota3), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($tri4 == 'Si') {
+      $pdf->Cell(10, 5, $curso->nota4, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->nota4), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($sem2 == 'Si') {
+      $pdf->Cell(10, 5, $curso->sem2, 1, 0, 'R');
+      $pdf->Cell(7, 5, NLetra($curso->sem2), 1, 0, 'C');
+    } else {
+      $pdf->Cell(10, 5, '', 1, 0, 'R');
+      $pdf->Cell(7, 5, '', 1, 0, 'C');
+    }
+    if ($prof == 'Si') {
+      $pdf->Cell(9, 5, $curso->final, 1, 0, 'R');
+      $pdf->Cell(6, 5, NLetra($curso->final), 1, 0, 'C');
+    } else {
+      $pdf->Cell(9, 5, '', 1, 0, 'R');
+      $pdf->Cell(6, 5, '', 1, 0, 'C');
+    }
     $pdf->Cell(13, 5, number_format($curso->credito,2), 1, 1, 'R');
     $pdf->SetFont('Arial', '', 8);
     $crs = $crs + number_format($curso->credito,2);
@@ -259,7 +295,6 @@ foreach ($students as $estu) {
       $n7 = $n7 + ($curso->final * $curso->credito);
       $t7 = $t7 + $curso->credito;
     }
-
     if ($curso->aus1 > 0) {
       $au = $au + $curso->aus1;
     }
@@ -284,8 +319,6 @@ foreach ($students as $estu) {
     if ($curso->tar4 > 0) {
       $ta4 = $ta4 + $curso->tar4;
     }
-    
-
     $pdf->Cell(60, 5, "   ".$curso->profesor, 1, 0, 'L');
     $pdf->Cell(10, 5, '', 1, 0, 'R');
     $pdf->Cell(7, 5, '', 1, 0, 'R');
@@ -307,59 +340,61 @@ foreach ($students as $estu) {
     $pdf->Cell(60, 5, $lang->translation("PROMEDIO:"), 1, 0, 'R', true);
   if ($t1 > 0 and $tri1 == 'Si') {
     $pdf->Cell(10, 5, number_format($n1 / $t1, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n1 / $t1, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
   }
-    $pdf->Cell(7, 5, '', 1, 0, 'R', true);
   if ($t2 > 0 and $tri2 == 'Si') {
     $pdf->Cell(10, 5, number_format($n2 / $t2, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n2 / $t2, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(7, 5, '', 1, 0, 'R', true);
+  }
   if ($t5 > 0 and $sem1 == 'Si') {
     $pdf->Cell(10, 5, number_format($n5 / $t5, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n5 / $t5, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(7, 5, '', 1, 0, 'R', true);
+  }
   if ($t3 > 0 and $tri3 == 'Si') {
     $pdf->Cell(10, 5, number_format($n3 / $t3, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n3 / $t3, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(7, 5, '', 1, 0, 'R', true);
+  }
   if ($t4 > 0 and $tri4 == 'Si') {
     $pdf->Cell(10, 5, number_format($n4 / $t4, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n4 / $t4, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(7, 5, '', 1, 0, 'R', true);
+  }
   if ($t6 > 0 and $sem2 == 'Si') {
     $pdf->Cell(10, 5, number_format($n6 / $t6, 0), 1, 0, 'R', true);
+    $pdf->Cell(7, 5, NLetra(number_format($n6 / $t6, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(10, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(7, 5, '', 1, 0, 'R', true);
+  }
   if ($t7 > 0 and $prof == 'Si') {
     $pdf->Cell(9, 5, number_format($n7 / $t7, 0), 1, 0, 'R', true);
+    $pdf->Cell(6, 5, NLetra(number_format($n7 / $t7, 0)), 1, 0, 'R', true);
   } else {
     $pdf->Cell(9, 5, '', 1, 0, 'R', true);
-  }
     $pdf->Cell(6, 5, '', 1, 0, 'R', true);
+  }
     $pdf->Cell(13, 5, number_format($crs,2), 1, 1, 'R', true);
-
   $pdf->Cell(60, 5, 'AUSENCIAS Y TARDANZAS', 1, 0, 'R', true);
-
   $pdf->Cell(17, 5, $au . '  /  ' . $ta, 1, 0, 'C', true);
   $pdf->Cell(17, 5, $au2 . '  /  ' . $ta2, 1, 0, 'C', true);
   $pdf->Cell(17, 5, $au + $au2 . '  /  ' . $ta + $ta2, 1, 0, 'C', true);
-
   $pdf->Cell(17, 5, $au3 . '  /  ' . $ta3, 1, 0, 'C', true);
   $pdf->Cell(17, 5, $au4 . '  /  ' . $ta4, 1, 0, 'C', true);
   $pdf->Cell(17, 5, $au3 + $au4 . '  /  ' . $ta3 + $ta4, 1, 0, 'C', true);
   $pdf->Cell(28, 5, $au + $au2 + $au3 + $au4 . '  /  ' . $ta + $ta2 + $ta3 + $ta4, 1, 1, 'C', true);
-
   $pdf->Cell(190, 10, '', 1, 1, 'L');
   $pdf->Cell(1, -15, '', 0, 0, 'R');
   $pdf->Cell(190, -15, $mensaj->t1e ?? '', 0, 1, 'C');
