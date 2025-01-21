@@ -2,6 +2,8 @@
 
 namespace Classes\FPDF;
 
+use \Exception;
+
 /*******************************************************************************
  * FPDF                                                                         *
  *                                                                              *
@@ -1127,8 +1129,9 @@ class FPDF
 	{
 		// Convert UTF-8 to UTF-16BE with BOM
 		$res = "\xFE\xFF";
-		if ($this->iconv)
-			return $res . iconv('UTF-8', 'UTF-16BE', $s);
+		// if ($this->iconv) {
+		// 	return $res . iconv('UTF-8', 'UTF-16BE', $s);
+		// }
 		$nb = strlen($s);
 		$i = 0;
 		while ($i < $nb) {
