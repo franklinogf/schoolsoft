@@ -27,22 +27,22 @@ class PDF extends FPDF
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
                 $school = new School('administrador');
                 // dafault values
-                $this->SetAuthor(utf8_decode($school->info('colegio')), true);
+                $this->SetAuthor($school->info('colegio'), true);
                 $this->setCreator('School Soft');
                 // $this->SetAutoPageBreak(true, -15);
                 if (file_exists(__ROOT . School::logo()) && $this->logo) {
                     $this->Image(__ROOT . School::logo(), 10, 10, __PDF_LOGO_SIZE);
                 }
 
-                $this->Cell(0, 5, utf8_decode($school->info('colegio')), 0, 1, 'C');
+                $this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
                 $this->SetFontSize(9);
                 if ($school->info('dir1') !== '') {
-                    $this->Cell(0, 4, utf8_decode($school->info('dir1')), 0, 1, 'C');
+                    $this->Cell(0, 4, $school->info('dir1'), 0, 1, 'C');
                 }
                 if ($school->info('dir2') !== '') {
-                    $this->Cell(0, 4, utf8_decode($school->info('dir2')), 0, 1, 'C');
+                    $this->Cell(0, 4, $school->info('dir2'), 0, 1, 'C');
                 }
-                $this->Cell(0, 4, utf8_decode($school->info('pueblo1')) . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
+                $this->Cell(0, 4, $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
                 $this->SetFontSize(8);
                 $this->Cell(0, 4, 'Tel: ' . $school->info('telefono') . ' Fax: ' . $school->info('fax'), 0, 1, 'C');
                 $this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
@@ -69,8 +69,8 @@ class PDF extends FPDF
 
     public function splitCells($value1, $value2)
     {
-        $this->Cell(0, 5, utf8_decode($value1), 0, 0, "L");
-        $this->Cell(0, 5, utf8_decode($value2), 0, 1, "R");
+        $this->Cell(0, 5, $value1, 0, 0, "L");
+        $this->Cell(0, 5, $value2, 0, 1, "R");
     }
 
     public function Fill($red = __PDF_FILL_COLOR_RED, $green = __PDF_FILL_COLOR_GREEN, $blue =  __PDF_FILL_COLOR_BLUE)
