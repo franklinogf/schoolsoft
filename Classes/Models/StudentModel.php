@@ -51,7 +51,7 @@ class StudentModel extends School
     $year = $year !== null ? $year : $this->year();
 
     if (!$includeUnenrolled) {
-      $data = [['year', $year], ['fecha_baja', '0000-00-00']];
+      $data = [['year', $year], ['codigobaja', '0']];
     } else {
       $data = ['year', $year];
     }
