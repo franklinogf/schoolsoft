@@ -5,6 +5,7 @@ use Classes\File;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
+use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
 use Classes\Lang;
@@ -12,17 +13,24 @@ use Classes\Lang;
 Session::is_logged();
 $parents = new Parents(Session::id());
 $lang = new Lang([
-    ["Tarjeta de notas","Grades card"],
-    ["La tarjeta <b>NO</b> está disponible en estos momentos.","The card is <b>NOT</b> currently available."],
+    ["Tarjeta de notas", "Grades card"],
+    ["La tarjeta <b>NO</b> está disponible en estos momentos.", "The card is <b>NOT</b> currently available."],
     ["Yo, padre, madre o encargado, certifico que veré la tarjeta de notas de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las notas diarias en curso.", "I, the parent, mother or guardian, certify that I will see the grades card of my child(ren) through the Internet. The system will save a receipt in evidence that I saw the daily notes in progress."],
-    ["He leido y estoy de acuerdo.","I have read and I agree."],
+    ["He leido y estoy de acuerdo.", "I have read and I agree."],
     ["Estudiantes inscritos", "Registered students"]
 
 ]);
 
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+$tar = $colegio->tar;
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -49,7 +57,7 @@ $lang = new Lang([
                     <label class="custom-control-label" for="accept"><?= $lang->translation("He leido y estoy de acuerdo.") ?></label>
                 </div>
             </div>
-            <form action="<?= Route::url('/parents/options/grades/pdfGrades.php') ?>" method="POST" target="_blank">
+            <form action="<?= Route::url('/parents/options/grades/pdfGrades' . $tar . '.php') ?>" method="POST" target="_blank">
                 <div class="form-row">
                     <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiantes inscritos") ?></label>
                     <select name="studentSS" id="studentSS" class="form-control col-12 col-lg-6">
