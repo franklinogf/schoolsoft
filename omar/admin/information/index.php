@@ -48,8 +48,8 @@ $constantsKeys = ['cafeteria_deposit'];
                     <div class="form-group col-md-6">
                         <label for="idioma">Idioma</label>
                         <select class="form-control" name="idioma" id="idioma">
-                            <option value="es" <?= $school->info('idioma') === 'es' ? 'selected' : '' ?>>Español</option>
-                            <option value="en" <?= $school->info('idioma') === 'en' ? 'selected' : '' ?>>Inglés</option>
+                            <option value="ES" <?= $school->info('idioma') === 'ES' ? 'selected' : '' ?>>Español</option>
+                            <option value="EN" <?= $school->info('idioma') === 'EN' ? 'selected' : '' ?>>Inglés</option>
                         </select>
                     </div>
                 </div>
@@ -218,8 +218,8 @@ $constantsKeys = ['cafeteria_deposit'];
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
     <script>
-        $(document).ready(function () {
-            $("#advancedOptionsBtn").click(function (e) {
+        $(document).ready(function() {
+            $("#advancedOptionsBtn").click(function(e) {
                 const advancedOptions = $("#advancedOptions")
                 if (!advancedOptions.hasClass('show')) {
                     if (prompt("Password") === '123456') {
