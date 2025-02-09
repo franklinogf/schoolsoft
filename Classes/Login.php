@@ -13,7 +13,7 @@ class Login
 
    private static function startSession()
    {
-      $_SESSION["start"] = time(); 
+      $_SESSION["start"] = time();
    }
 
    public static function login($request, $location)
@@ -29,6 +29,7 @@ class Login
       if ($parents->login(trim($request['username']), trim($request['password']))->logged === true) {
 
          $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
             'location' => "parents",
             "user" => ['id' => $parents->id],
          ];
@@ -45,11 +46,13 @@ class Login
       if ($school->login(trim($request['username']), trim($request['password']))->logged === true) {
 
          $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
             'location' => "admin",
             "user" => ['id' => $school->usuario],
          ];
          $_SESSION['id1'] = $school->id;
          $_SESSION['usua1'] = $school->usuario;
+
          Route::redirect('/');
       } else {
          $_SESSION['errorLogin'] = self::$errorLoginMessage;
@@ -63,6 +66,7 @@ class Login
       if ($school->login(trim($request['username']), trim($request['password']))->logged === true) {
 
          $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
             'location' => "cafeteria",
             "user" => ['id' => $school->usuario],
          ];
@@ -81,6 +85,7 @@ class Login
       if ($teacher->login(trim($request['username']), trim($request['password']))->logged === true) {
 
          $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
             'location' => "regiweb",
             "user" => ['id' => $teacher->id],
          ];
@@ -97,21 +102,23 @@ class Login
       $student = new Student();
       if ($teacher->login(trim($request['username']), trim($request['password']))->logged === true) {
          $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
             'location' => "foro",
             "user" => ['id' => $teacher->id],
             'type' => 'profesor'
-         ];         
+         ];
          Route::redirect('/profesor');
-      } else if ($student->login(trim($request['username']), trim($request['password']))->logged === true){
-            $_SESSION['logged'] = [
-               'location' => "foro",
-               "user" => ['id' => $student->mt],
-               'type' => 'estudiante'
-            ];
-            Route::redirect('/estudiante');
-      }else {
+      } else if ($student->login(trim($request['username']), trim($request['password']))->logged === true) {
+         $_SESSION['logged'] = [
+            'acronym' => __SCHOOL_ACRONYM,
+            'location' => "foro",
+            "user" => ['id' => $student->mt],
+            'type' => 'estudiante'
+         ];
+         Route::redirect('/estudiante');
+      } else {
          $_SESSION['errorLogin'] = self::$errorLoginMessage;
          Route::redirect();
-       }
+      }
    }
 }
