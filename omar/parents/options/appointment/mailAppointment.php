@@ -94,7 +94,7 @@ if ($teacher->info('email5') !== "") {
 }
 
 $mail->send(
-  to: ['franklinomarflores@gmail.com'],
+  to: $to,
   subject: $subject,
   message: $body
 );
