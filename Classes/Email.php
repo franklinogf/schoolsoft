@@ -57,6 +57,12 @@ class Email
                     'html' => $message,
                     'text' => $text,
                     'attachments' => array_map(function ($file) {
+                        if (isset($file['content'])) {
+                            return [
+                                'filename' => $file['filename'],
+                                'content' => base64_encode($file['content']),
+                            ];
+                        }
                         return [
                             'path' => $file,
                         ];
@@ -83,6 +89,10 @@ class Email
                     $mail->AltBody = $text;
                 }
                 foreach ($attachments as $attachment) {
+                    if (isset($attachment['content'])) {
+                        $mail->addStringAttachment($attachment['content'], $attachment['filename']);
+                        continue;
+                    }
                     $mail->addAttachment($attachment);
                 }
 
