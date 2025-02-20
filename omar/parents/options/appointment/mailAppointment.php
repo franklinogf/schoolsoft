@@ -1,7 +1,7 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Mail;
+use Classes\Email;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Parents;
@@ -23,12 +23,11 @@ $lang = __LANG;
 $parentName = $parents->{$parent};
 $teacher = new Teacher($teacherId);
 
-$mail = new Mail(true, "Parents");
-$mail->setFrom($email, $parentName);
-$mail->isHTML(true);
-$mail->Subject = $lang === 'es' ? "Padre solicitando cita" : "Parent requesting an appointment";
+$mail = new Email();
+$subject = $lang === 'es' ? "Padre solicitando cita" : "Parent requesting an appointment";
+
 if ($lang === 'es') {
-  $mail->Body = "
+  $body = "
 <!DOCTYPE html>
 <html lang='{$lang}'>
 <head>
@@ -54,7 +53,7 @@ if ($lang === 'es') {
 </html>
 ";
 } else {
-  $mail->Body = "
+  $body = "
 <!DOCTYPE html>
 <html lang='{$lang}'>
 <head>
@@ -80,23 +79,23 @@ if ($lang === 'es') {
 </html>
 ";
 }
+$to = [];
 if ($teacher->email1 !== "") {
-  $mail->addAddress($teacher->email1, "$teacher->nombre $teacher->apellidos");
+  $to[] = $teacher->email1;
 }
 if ($teacher->email2 !== "") {
-  $mail->addAddress($teacher->email2, "$teacher->nombre $teacher->apellidos");
+  $to[] = $teacher->email2;
 }
 if ($teacher->info('email3') !== "") {
-  $mail->addAddress($teacher->info('email3'));
+  $to[] = $teacher->info('email3');
 }
 if ($teacher->info('email5') !== "") {
-  $mail->addAddress($teacher->info('email5'));
+  $to[] = $teacher->info('email5');
 }
 
-if (!$mail->send()) {
-  echo "Mailer Error: " . $mail->ErrorInfo;
-} else {
-  echo "Message sent!";
-}
-
+$mail->send(
+  to: ['franklinomarflores@gmail.com'],
+  subject: $subject,
+  message: $body
+);
 Route::redirect('/options/appointment');
