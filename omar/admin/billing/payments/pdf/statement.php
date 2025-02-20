@@ -1,7 +1,9 @@
 <?php
+
 use Classes\PDF;
 use Classes\Controllers\Student;
 use Classes\DataBase\DB;
+use Classes\Email;
 
 require_once '../../../../app.php';
 $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
@@ -26,6 +28,14 @@ $accountId = $_GET['accountId'] ?? null;
 $month = $_GET['month'] ?? date('m');
 $student = new Student();
 $title = $type === '5' ? 'Estado de depositos' : 'Estado de cuentas';
+$emails = [];
+if (isset($_GET['email'])) {
+    $emails = array_filter(explode(',', $_GET['email']));
+}
+if (isset($_GET['newEmail'])) {
+    $emails[] = $_GET['newEmail'];
+}
+
 $pdf = new PDF();
 $pdf->SetTitle($title);
 $pdf->Fill();
@@ -131,3 +141,24 @@ if ($type === '5') {
 
 
 $pdf->Output();
+
+
+if (empty($emails)) {
+    exit;
+}
+
+$file = $pdf->Output('S');
+
+// Send email with the PDF attachment
+$mail = new Email();
+$result = $mail->send(
+    to: $emails,
+    subject: 'Estado de cuenta',
+    message: "Adjunto el estado de cuenta de la cuenta $accountId",
+    attachments: [
+        [
+            'filename' => "estado_de_cuenta_$accountId.pdf",
+            'content' => $file,
+        ]
+    ]
+);

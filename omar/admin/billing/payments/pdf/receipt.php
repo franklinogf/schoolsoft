@@ -1,7 +1,9 @@
 <?php
+
 use Classes\PDF;
 use Classes\Controllers\Student;
 use Classes\DataBase\DB;
+use Classes\Email;
 
 require_once '../../../../app.php';
 $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
@@ -26,7 +28,13 @@ $months = __LANG === 'es' ?
     : ['07' => 'July', '08' => 'August', '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December', '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April', '05' => 'May', '06' => 'June'];
 $type = $_GET['type'] ?? null;
 $transaction = $_GET['transaction'] ?? null;
-
+$emails = [];
+if (isset($_GET['email'])) {
+    $emails = array_filter(explode(',', $_GET['email']));
+}
+if (isset($_GET['newEmail'])) {
+    $emails[] = $_GET['newEmail'];
+}
 $student = new Student();
 $title = "Recibo de pago";
 $pdf = new PDF();
@@ -99,3 +107,22 @@ if ($type !== '1') {
 }
 
 $pdf->Output();
+
+if (empty($emails)) {
+    exit;
+}
+$file = $pdf->Output('S');
+
+// Send email with the PDF attachment
+$mail = new Email();
+$result = $mail->send(
+    to: $emails,
+    subject: 'Recibo de pago',
+    message: "Adjunto el recibo de pago de la transacción $transaction",
+    attachments: [
+        [
+            'filename' => "recíbo_de_pago_$transaction.pdf",
+            'content' => $file,
+        ]
+    ]
+);

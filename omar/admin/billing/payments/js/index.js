@@ -63,11 +63,19 @@ $(document).ready(function () {
     const transaction = fd.get("transaction");
     const email = fd.get("email");
     const newEmail = fd.get("newEmail");
-    window.open(
-      `./pdf/receipt.php?type=${type}&transaction=${transaction}`,
-      "receipt"
-    );
+    const searchParams = new URLSearchParams({
+      type,
+      transaction,
+    });
+    if (email) {
+      searchParams.append("email", email);
+    }
+    if (newEmail) {
+      searchParams.append("newEmail", newEmail);
+    }
+    window.open("./pdf/receipt.php?" + searchParams.toString(), "receipt");
   });
+
   $("#statementForm").submit(function (e) {
     e.preventDefault();
     const accountId = $("#accountId").val();
@@ -76,12 +84,21 @@ $(document).ready(function () {
     const type = fd.get("type");
     const email = fd.get("email");
     const newEmail = fd.get("newEmail");
-    window.open(
-      `./pdf/statement.php?type=${type}&accountId=${accountId}${
-        type === "3" ? `&month=${_month}` : ""
-      }`,
-      "statement"
-    );
+
+    const searchParams = new URLSearchParams({
+      type,
+      accountId,
+    });
+    if (email) {
+      searchParams.append("email", email);
+    }
+    if (type === "3") {
+      searchParams.append("month", _month);
+    }
+    if (newEmail) {
+      searchParams.append("newEmail", newEmail);
+    }
+    window.open("./pdf/statement.php?" + searchParams.toString(), "statement");
   });
   $("#expiredModal").on("show.bs.modal", async function (event) {
     console.log("promise modal");
