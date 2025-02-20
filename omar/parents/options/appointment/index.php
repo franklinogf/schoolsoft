@@ -55,7 +55,7 @@ $lang = new Lang([
     ?>
     <section class="container">
         <h1 class="text-center my-3"><?= $lang->translation("Solicitud de cita con maestro(a)") ?></h1>
-        <?php if ($amountOfStudents > 1): ?>
+        <?php if ($amountOfStudents > 0): ?>
             <form method="POST">
                 <div class="form-row my-4">
                     <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiante") ?></label>
