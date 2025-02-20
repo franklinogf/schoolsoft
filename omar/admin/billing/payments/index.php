@@ -106,7 +106,7 @@ $depositTypes = [
             }
 
 
-            ?>
+        ?>
             <input type="hidden" id="accountId" value="<?= $accountId ?>">
             <!-- students -->
 
@@ -742,7 +742,7 @@ $depositTypes = [
                             <select class="form-control" name="email" id="statementEmail">
                                 <option value="">Selección</option>
                                 <?php if ($parent->email_m && $parent->email_p): ?>
-                                    <option value="ambos">Ambos</option>
+                                    <option value="<?= "$parent->email_m,$parent->email_p" ?>">Ambos</option>
                                 <?php endif ?>
                                 <?php if ($parent->email_m): ?>
                                     <option><?= $parent->email_m ?></option>
