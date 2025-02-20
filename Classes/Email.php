@@ -4,6 +4,7 @@
 namespace Classes;
 
 use Classes\Controllers\School;
+use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
 use Classes\Mail;
 
@@ -38,6 +39,15 @@ class Email
 
         if (__RESEND && defined('__RESEND_KEY__') && defined('__RESEND_KEY_OTHER__')) {
             try {
+                if ($replyTo === null) {
+                    if ($this->type === 'School') {
+                        $school = new School();
+                        $replyTo = $school->info('correo');
+                    } else {
+                        $teacher = new Teacher(Session::id());
+                        $replyTo = $teacher->email1;
+                    }
+                }
                 $resend = \Resend::client(__RESEND_KEY__);
                 $resend->emails->send([
                     'from' => __RESEND_KEY_OTHER__,
@@ -52,8 +62,9 @@ class Email
                         ];
                     }, $attachments),
                 ]);
+                return ['error' => false, 'message' => 'Email sent'];
             } catch (\Exception $e) {
-                throw new \Exception($e);
+                return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
             try {
@@ -75,9 +86,12 @@ class Email
                     $mail->addAttachment($attachment);
                 }
 
-                $mail->send();
+                if (!$mail->send()) {
+                    return ['error' => true, 'message' => $mail->ErrorInfo];
+                }
+                return ['error' => false, 'message' => 'Email sent'];
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
+                return ['error' => true, 'message' => $e->getMessage()];
             }
         }
     }
