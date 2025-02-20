@@ -75,7 +75,7 @@ $lang = new Lang([
                 ['ss', $_POST['studentSS']]
             ])->get();
             $student = new Student($_POST['studentSS']);
-            ?>
+        ?>
             <form method="POST">
                 <input type="hidden" name="studentSS" value="<?= $_POST['studentSS'] ?>">
                 <div class="form-row my-4">
@@ -84,11 +84,11 @@ $lang = new Lang([
                         <?php foreach ($teachers as $teacher):
                             if (isset($_POST['teacher']))
                                 [$teacherId, $teacherClass] = explode(',', $_POST['teacher']);
-                            ?>
+                        ?>
                             <option <?= isset($_POST['teacher']) && $teacherId === $teacher->id && $teacherClass === $teacher->curso ? 'selected=""' : '' ?> value="<?= "$teacher->id,$teacher->curso" ?>"><?= "$teacher->curso - $teacher->profesor" ?></option>
                         <?php endforeach ?>
                     </select>
-                    <small class="text-muted col-12"><?= $lang->translation("Pare el estudiante") ?>     <?= $student->fullName() ?></small>
+                    <small class="text-muted col-12"><?= $lang->translation("Pare el estudiante") ?> <?= $student->fullName() ?></small>
                 </div>
                 <button class="btn btn-primary" type="submit"><?= $lang->translation("Crear cita con este maestro") ?></button>
             </form>
@@ -102,7 +102,7 @@ $lang = new Lang([
                 ['id', $teacherId],
                 ['curso', $teacherClass]
             ])->first();
-            ?>
+        ?>
             <div class="container shadow-lg p-3 my-4">
                 <form action="<?= Route::url('/parents/options/appointment/mailAppointment.php') ?>" method="POST">
                     <input type="hidden" name="teacherId" value="<?= $teacherId ?>">
