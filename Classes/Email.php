@@ -1,22 +1,22 @@
 <?php
 
+
 namespace Classes;
 
+use Classes\Controllers\School;
+use Classes\DataBase\DB;
 use Classes\Mail;
 
 class Email
 {
 
-    public function __construct(public string $type = 'School')
-    {
-
-    }
+    public function __construct(public string $type = 'School') {}
     public static function queue(string $from, array $to, string $subject, string $message, string $replyTo = '', ?string $text = null, array $attachments = [])
     {
         if (count($to) === 0) {
             return;
         }
-
+        $school = new School();
         DB::table('email_queue')->insert([
             'from' => $from,
             'to' => json_encode($to),
@@ -26,6 +26,7 @@ class Email
             'subject' => $subject,
             'attachments' => json_encode($attachments, JSON_UNESCAPED_UNICODE),
             'user' => Session::id() ?? null,
+            'year' => $school->year(),
         ]);
     }
 
@@ -51,13 +52,13 @@ class Email
                         ];
                     }, $attachments),
                 ]);
-
             } catch (\Exception $e) {
-                throw new Exception($e);
+                throw new \Exception($e);
             }
         } else {
             try {
                 $mail = new Mail(false, $this->type);
+
                 foreach ($to as $t) {
                     $mail->addAddress($t);
                 }
@@ -76,7 +77,7 @@ class Email
 
                 $mail->send();
             } catch (\Exception $e) {
-                throw new Exception($e->getMessage());
+                throw new \Exception($e->getMessage());
             }
         }
     }
