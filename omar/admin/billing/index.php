@@ -256,6 +256,11 @@ $options = [
                 'desc' => ['es' => 'Informe mensual detallado por Código', 'en' => 'Informe mensual detallado por Código'],
                 'link' => '#',
             ],
+            [
+                'name' => ["es" => 'Inf. Diarios', "en" => "Daily Inf."],
+                'desc' => ['es' => 'Informes diario por fechas y horas.', 'en' => 'Daily reports by dates and times.'],
+                'link' => 'inf_diario_op.php',
+            ],
         ],
     ],
 
