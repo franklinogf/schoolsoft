@@ -7,9 +7,7 @@ use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\School;
 
-if (Session::is_logged(false)) {
-   Route::redirect('/home.php');
-}
+
 $lang = new Lang([
    ["Admin - Iniciar Sesión", "Admin - Login"],
    ["Iniciar Sesión", "Login"],
