@@ -121,7 +121,7 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=1 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $result = DB::table('compras')
-        ->whereRaw("shopping=1 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2")->orderBy('date')->get();
+        ->whereRaw("shopping=1 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -224,7 +224,7 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=2 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=2 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2")->orderBy('date')->get();
+        ->whereRaw("shopping=2 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -323,7 +323,7 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=3 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=3 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2")->orderBy('date')->get();
+        ->whereRaw("shopping=3 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -420,7 +420,7 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=4 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=4 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2")->orderBy('date')->get();
+        ->whereRaw("shopping=4 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -527,7 +527,7 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("year='$year' and fecha >= '" . $_POST['ft1'] . "' AND fecha <= '" . $_POST['ft2'] . "'")->orderBy('fecha, hora')->get();
 } else {
     $result = DB::table('depositos')
-        ->whereRaw("year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2")->orderBy('date')->get();
+        ->whereRaw("year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
