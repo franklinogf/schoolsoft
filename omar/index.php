@@ -64,7 +64,7 @@ $lang = new Lang([
                     <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Documentos") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafetería") ?> ss</a>
+                    <a href="<?= Route::url('/cafeteria/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafetería") ?></a>
                 </div>
             </div>
         </div>
