@@ -2,6 +2,8 @@
 
 namespace Classes;
 
+use Classes\Controllers\Student;
+
 class Util
 {
     public static $attendanceCodes = [
@@ -18,6 +20,7 @@ class Util
         "11" => ['type' => 'T', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
         "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
     ];
+
 
     public static function getAge($date)
     {
@@ -151,15 +154,11 @@ class Util
     }
     public static function studentProfilePicture($student)
     {
-        if ($student->imagen != '') {
-            $picturePath = __STUDENT_PROFILE_PICTURE_URL . $student->imagen;
-        } else {
-            if ($student->genero === 'F' || $student->genero === '1') {
-                $picturePath = __NO_PROFILE_PICTURE_STUDENT_FEMALE;
-            } else {
-                $picturePath = __NO_PROFILE_PICTURE_STUDENT_MALE;
-            }
-        }
+        $picturePath = $student->imagen != ''
+        ? __STUDENT_PROFILE_PICTURE_URL . $student->imagen
+        : ($student->genero === 'F' || $student->genero === '1'
+          ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
+          : __NO_PROFILE_PICTURE_STUDENT_MALE);
 
         return $picturePath;
     }
