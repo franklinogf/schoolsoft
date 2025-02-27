@@ -1,11 +1,19 @@
-<?php 
-include('../../control.php'); 
+<?php
+
+use Classes\DataBase\DB;
+
+require_once '../../app.php';
 
 $titulo = $_POST['titulo'];
 $precio = $_POST['precio'];
 $image = $_POST['image'];
 $orden = $_POST['orden'];
 
-mysql_query("INSERT INTO T_cafeteria (articulo,precio,foto,orden) VALUES ('$titulo','$precio','$image','$orden')");
 
+DB::table('T_cafeteria')->insert([
+    'articulo' => $titulo,
+    'precio' => $precio,
+    'foto' => $image,
+    'orden' => $orden
+]);
 header("Location: index.php");

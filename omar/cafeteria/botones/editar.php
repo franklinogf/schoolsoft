@@ -1,10 +1,16 @@
-<?php 
-include('../../control.php'); 
+<?php
+
+use Classes\DataBase\DB;
+
+require_once '../../app.php';
 $id = $_POST['id'];
 $titulo = $_POST['titulo'];
 $precio = $_POST['precio'];
 $image = $_POST['image'];
 
-mysql_query("UPDATE T_cafeteria SET articulo = '$titulo',precio = '$precio',foto = '$image' WHERE id = '$id'");
-
+DB::table('T_cafeteria')->where('id', $id)->update([
+    'articulo' => $titulo,
+    'precio' => $precio,
+    'foto' => $image
+]);
 header("Location: index.php");
