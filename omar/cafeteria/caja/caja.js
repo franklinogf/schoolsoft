@@ -428,22 +428,7 @@ $(document).ready(function () {
             alert(data.rec1)
           }
           $('#cantidadDeposito').val(data.cantidad)
-          if (data.tipo !== '') {
-            $.get(`../../picture/${data.tipo}.jpg`)
-              .success(function () {
-                $('#nombre_estudiante').text('')
-                $('#profilePicture')
-                  .prop('src', `../../picture/${data.tipo}.jpg`)
-                  .removeClass('d-none')
-              })
-              .fail(function () {
-                $('#nombre_estudiante').text('No tiene foto')
-                $('#profilePicture').prop('src', '#').addClass('d-none')
-              })
-          } else {
-            $('#nombre_estudiante').text('No tiene foto')
-            $('#profilePicture').prop('src', '#').addClass('d-none')
-          }
+          $('#profilePicture').prop('src', data.tipo).removeClass('d-none')
 
           if (parseFloat($('#cantidadPagar').val()) > parseFloat(data.cantidad)) {
             if (parseFloat(data.cantidad) < 0) {
@@ -472,7 +457,9 @@ $(document).ready(function () {
           }
         },
         'json'
-      )
+      ).fail(function (err) {
+        console.error('error', err)
+      })
       $('#btnPagar').focus()
     }
   })

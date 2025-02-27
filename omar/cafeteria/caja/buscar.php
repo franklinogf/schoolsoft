@@ -2,6 +2,7 @@
 
 use Classes\Controllers\School;
 use Classes\DataBase\DB;
+use Classes\Util;
 
 require_once '../../app.php';
 $colegio = new School();
@@ -10,11 +11,18 @@ $year = $colegio->year();
 if (isset($_POST['estudiante'])) {
 	$code = $_POST['estudiante'];
 	$student = DB::table('year')
-		->select('cantidad,nombre,apellidos,tipo,rec1')
 		->where([['year', $year], ['cbarra', $code]])
 		->first();
 
 	if ($student) {
+		$student=[
+			'cantidad' => $student->cantidad,
+			'tipo' => Util::studentProfilePicture($student),
+			'nombre'=> $student->nombre,
+			'apellidos'=> $student->apellidos,
+			'rec1' => $student->rec1
+	
+		];
 		echo json_encode($student);
 	} else {
 		echo json_encode(null);
@@ -23,12 +31,18 @@ if (isset($_POST['estudiante'])) {
 
 	$code = $_POST['estu'];
 
-	$students = DB::table('year')
-		->select('cantidad,tipo,rec1')
+	$student = DB::table('year')		
 		->where([['year', $year], ['ss', $code]])
 		->first();
 
-	echo json_encode($students);
+	$student=[
+		'cantidad' => $student->cantidad,
+		'tipo' => Util::studentProfilePicture($student),
+		'rec1' => $student->rec1
+
+	];
+
+	echo json_encode($student);
 } else {
 	$code = $_POST['code'];
 	$result = DB::table('inventario')->where('cbarra', $code)->first();

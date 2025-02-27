@@ -317,11 +317,13 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
 
 
               <div class="row">
-                <div class="col-4">
+                <div class="col-4 mx-auto">
                   <img id="profilePicture" class="img-fluid img-thumbnail d-none mb-3" src="#" style="width: 7rem;" alt="Profile Picture">
                 </div>
-                <div class="col-8">
-                  <h4 id="nombre_estudiante"></h4>
+                <div class="row">
+                  <div class="col-8">
+                    <h4 id="nombre_estudiante"></h4>
+                  </div>
                 </div>
               </div>
 
