@@ -1,4 +1,4 @@
-<?
+<?php
 require_once '../app.php';
 
 use Classes\Lang;
@@ -8,10 +8,10 @@ use Classes\Session;
 Session::is_logged();
 
 $lang = new Lang([
-['Salir','Go back'],
-['Menú de la cafeteria','Cafeteria menu']
+    ['Salir', 'Go back'],
+    ['Menú de la cafeteria', 'Cafeteria menu']
 ]);
-   $options = [
+$options = [
     [
         'title' => ["es" => 'Opciones', "en" => 'Options'],
         'buttons' => [
@@ -35,7 +35,7 @@ $lang = new Lang([
                 'desc' => ['es' => 'Ordenes de los estudiantes.', 'en' => 'Students orders.'],
                 'link' => 'orders/'
             ],
-		]
+        ]
     ],
     [
         'title' => ["es" => 'Informes', "en" => 'Reports'],
@@ -44,7 +44,7 @@ $lang = new Lang([
                 'name' => ["es" => 'Informe',   "en" => "Report"],
                 'desc' => ['es' => 'Informe de inventario.', 'en' => 'Inventory report.'],
                 'link' => 'info_inventario.php',
-				'target' => 'Informe de inventario'
+                'target' => 'Informe de inventario'
             ],
             [
                 'name' => ["es" => 'Ajuste de cuentas',   "en" => "Reckoning"],
@@ -60,9 +60,9 @@ $lang = new Lang([
                 'name' => ["es" => 'Compras',   "en" => "Purchases"],
                 'desc' => ['es' => 'Informe de compras.', 'en' => 'Purchasing Report.'],
                 'link' => 'info_compra.php',
-				'target' => 'compras'
+                'target' => 'compras'
             ]
-            
+
         ]
     ],
 
@@ -73,8 +73,9 @@ $lang = new Lang([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+
 <head>
-	<?php
+    <?php
     $title = $lang->translation("Menú de la cafeteria");
     Route::includeFile('/cafeteria/includes/layouts/header.php');
     ?>
@@ -82,7 +83,7 @@ $lang = new Lang([
 
 <body>
 
-<div class="container-md mt-md-3 mb-md-5 px-0">
+    <div class="container-md mt-md-3 mb-md-5 px-0">
 
         <h1 class="text-center my-5"><?= $lang->translation("Menú de la cafeteria") ?></h1>
 
@@ -96,11 +97,11 @@ $lang = new Lang([
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button) : ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= $button['target'] ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ?? "target='{$button['target']}'" ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
                                     </div>
-									<div class="col mt-1">
-										<p class="mb-0 align-middle"><?= $button['desc'][__LANG] ?></p>
-									</div>
+                                    <div class="col mt-1">
+                                        <p class="mb-0 align-middle"><?= $button['desc'][__LANG] ?></p>
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -109,9 +110,9 @@ $lang = new Lang([
             <?php endforeach ?>
 
         </div>
-		<div class="text-center">
-		<a href="../" class="btn btn-primary"><?= $lang->translation("Salir") ?></a>
-		</div>
+        <div class="text-center">
+            <a href="../" class="btn btn-primary"><?= $lang->translation("Salir") ?></a>
+        </div>
     </div>
 </body>
 
