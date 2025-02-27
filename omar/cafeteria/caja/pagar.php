@@ -1,13 +1,13 @@
 <?php
-include('../../control.php');
-$ra = mysql_query("SELECT * FROM colegio where usuario = 'administrador'");
-$colegio = mysql_fetch_object($ra);
+
+use Classes\Controllers\School;
+use Classes\DataBase\DB;
+
+require_once '../../app.php';
+$colegio = new School();
+$year = $colegio->year();
 $metodo = ['1' => 'Efectivo', '2' => 'Tarjeta', '3' => 'ID', '4' => 'Nombre'];
 
-// echo "<pre>";
-// var_dump($_POST);
-// echo "<hr/>";
-// exit;
 $fecha = date('Y-m-d');
 
 if ($_POST['metodo'] === "4") {
@@ -18,8 +18,11 @@ if ($_POST['metodo'] === "4") {
 
 	$tdp2 = $_POST['tdp2'];
 
-	$estudiantes = mysql_query("SELECT id,ss,nombre,apellidos,grado,avisar FROM year where year = '$colegio->year' and ss= '{$_POST['estu']}' ORDER BY apellidos");
-	$estu = mysql_fetch_object($estudiantes);
+	$estu = DB::table('year')
+		->select('id,ss,nombre,apellidos,grado,avisar')
+		->where([['year', $year], ['ss', $_POST['estu']]])
+		->orderBy('apellidos')
+		->first();
 
 	if ($cantidadPagar > $cantidadDeposito) {
 		$pago1 = $cantidadDeposito;
@@ -39,9 +42,29 @@ if ($_POST['metodo'] === "4") {
 	}
 	$TOTAL = $pago1 + $pago2;
 
-	$query = "INSERT INTO compra_cafeteria (`id2`,`nombre`, `apellido`, `ss`, `grado`, `fecha`, `tdp`, `total`, `year`,pago1,pago2,tdp2) VALUES ('$estu->id','$estu->nombre','$estu->apellidos','$estu->ss','$estu->grado','$fecha','{$_POST['metodo']}','{$TOTAL}','$colegio->year','$pago1','$pago2','$tdp2')";
+	// $query = "INSERT INTO compra_cafeteria (`id2`,`nombre`, `apellido`, `ss`, `grado`, `fecha`, `tdp`, `total`, `year`,pago1,pago2,tdp2)
+	//  VALUES ('$estu->id','$estu->nombre','$estu->apellidos','$estu->ss','$estu->grado','$fecha','{$_POST['metodo']}','{$TOTAL}','$year','$pago1','$pago2','$tdp2')";
+	$id_compra = DB::table('compra_cafeteria')->insertGetId(
+		[
+			'id2' => $estu->id,
+			'nombre' => $estu->nombre,
+			'apellido' => $estu->apellidos,
+			'ss' => $estu->ss,
+			'grado' => $estu->grado,
+			'fecha' => $fecha,
+			'tdp' => $_POST['metodo'],
+			'total' => $TOTAL,
+			'year' => $year,
+			'pago1' => $pago1,
+			'pago2' => $pago2,
+			'tdp2' => $tdp2
+		]
+	);
 
-	mysql_query("UPDATE year SET cantidad = '$descuento' WHERE year = '$colegio->year' and ss= '{$_POST['estu']}'");
+	DB::table('year')
+	->where([['year', $year], ['ss', $_POST['estu']]])
+	->update(['cantidad' => $descuento]);
+	
 	$estudiante = "$estu->nombre $estu->apellidos";
 	$id_estudiante = $estu->id;
 	$avisar = $estu->avisar;
@@ -53,10 +76,11 @@ if ($_POST['metodo'] === "4") {
 
 	$cantidadPagar = $_POST['cantidadPagar'];
 
-
-	$estudiantes = mysql_query("SELECT id,ss,nombre,apellidos,grado,avisar FROM year where year = '$colegio->year' and cbarra= '{$_POST['cbarra']}' ORDER BY apellidos");
-	$estu = mysql_fetch_object($estudiantes);
-
+	$estu = DB::table('year')
+	->select('id,ss,nombre,apellidos,grado,avisar')
+	->where([['year', $year], ['cbarra', $_POST['cbarra']]])
+	->orderBy('apellidos')
+	->first();
 	if ($cantidadPagar > $cantidadDeposito) {
 		$pago1 = $cantidadDeposito;
 		$pago2 = $cantidadPagar - $cantidadDeposito;
@@ -74,39 +98,79 @@ if ($_POST['metodo'] === "4") {
 		$pago1 = $cantidadDeposito < 0 ? 0 : $cantidadDeposito;
 		$pago2 = $cantidadEfectivo;
 	}
-	$TOTAL = $pago1 + $pago2;
-	$query = "INSERT INTO compra_cafeteria (`id2`,`nombre`, `apellido`, `ss`, `grado`, `fecha`, `tdp`, `total`, `year`,pago1,pago2,tdp2) VALUES ('$estu->id','$estu->nombre','$estu->apellidos','$estu->ss','$estu->grado','$fecha','{$_POST['metodo']}','{$TOTAL}','$colegio->year','$pago1','$pago2','$tdp2')";
+	$TOTAL = $pago1 + $pago2;	
 
-
-	mysql_query("UPDATE year SET cantidad = '$descuento' WHERE year = '$colegio->year' and cbarra= '{$_POST['cbarra']}'");
+$id_compra = DB::table('compra_cafeteria')->insertGetId(
+		[
+			'id2' => $estu->id,
+			'nombre' => $estu->nombre,
+			'apellido' => $estu->apellidos,
+			'ss' => $estu->ss,
+			'grado' => $estu->grado,
+			'fecha' => $fecha,
+			'tdp' => $_POST['metodo'],
+			'total' => $TOTAL,
+			'year' => $year,
+			'pago1' => $pago1,
+			'pago2' => $pago2,
+			'tdp2' => $tdp2
+		]
+	);
+	DB::table('year')
+	->where([['year', $year], ['cbarra', $_POST['cbarra']]])
+	->update(['cantidad' => $descuento]);
+	
 	$estudiante = "$estu->nombre $estu->apellidos";
 	$id_estudiante = $estu->id;
 	$avisar = $estu->avisar;
 } else {
 
-	$query = "INSERT INTO compra_cafeteria (`fecha`, `tdp`, `total`, `year`) VALUES ('$fecha','{$_POST['metodo']}','{$_POST['cantidadPagar']}','$colegio->year')";
+	$id_compra = DB::table('compra_cafeteria')->insertGetId(
+		[
+			'fecha' => $fecha,
+			'tdp' => $_POST['metodo'],
+			'total' => $_POST['cantidadPagar'],
+			'year' => $year
+		]
+	);
 }
 
 
-mysql_query($query);
-$id_compra = mysql_insert_id();
-
 // Para aparecer en las ordenes
 if ($_POST['metodo'] === '3' || $_POST['metodo'] === '4') {
-	mysql_query("INSERT INTO cafeteria_orders (ss,id_compra,year) VALUES ('$estu->ss','$id_compra','$colegio->year')");
+DB::table('cafeteria_orders')->insert(
+		[
+			'ss' => $estu->ss,
+			'id_compra' => $id_compra,
+			'year' => $year
+		]
+	);
 }
 
 
 if (isset($_POST['credito']) && $_POST['credito'] === 'si') {
-	mysql_query("INSERT INTO compra_cafeteria_detalle (id_compra,descripcion,precio) VALUES ('$id_compra','Un dolar por credito','1.00')");
+
+	DB::table('compra_cafeteria_detalle')->insert(
+		[
+			'id_compra' => $id_compra,
+			'descripcion' => 'Un dolar por credito',
+			'precio' => '1.00'
+		]
+	);
 }
 
 if (isset($_POST['id'])) {
 	foreach ($_POST['id'] as $id) {
-
-		$res = mysql_query("SELECT * FROM T_cafeteria WHERE id = '$id'");
-		$art = mysql_fetch_object($res);
-		mysql_query("INSERT INTO compra_cafeteria_detalle (id_compra,descripcion,precio,id_boton) VALUES ('$id_compra','$art->articulo','$art->precio','$id')");
+		
+		$art = DB::table('T_cafeteria')->where('id', $id)->first();
+		DB::table('compra_cafeteria_detalle')->insert(
+			[
+				'id_compra' => $id_compra,
+				'descripcion' => $art->articulo,
+				'precio' => $art->precio,
+				'id_boton' => $id
+			]
+		);
 	}
 }
 
@@ -114,12 +178,22 @@ if (isset($_POST['id'])) {
 if (isset($_POST['barcode'])) {
 	foreach ($_POST['barcode'] as $id) {
 
-		$res = mysql_query("SELECT * FROM inventario WHERE cbarra = '$id'");
-		$art = mysql_fetch_object($res);
+		// $res = mysql_query("SELECT * FROM inventario WHERE cbarra = '$id'");
+		// $art = mysql_fetch_object($res);
+		$art = DB::table('inventario')->where('cbarra', $id)->first();
 
-		mysql_query("INSERT INTO compra_cafeteria_detalle (id_compra,descripcion,precio,id_inv,cbarra) VALUES ('$id_compra','$art->articulo','$art->precio','$art->id2','$id')");
-		$cantidad = $art->cantidad - 1;
-		mysql_query("UPDATE inventario SET cantidad='$cantidad' WHERE cbarra = '$id'");
+		// mysql_query("INSERT INTO compra_cafeteria_detalle (id_compra,descripcion,precio,id_inv,cbarra) VALUES ('$id_compra','$art->articulo','$art->precio','$art->id2','$id')");
+		DB::table('compra_cafeteria_detalle')->insert(
+			[
+				'id_compra' => $id_compra,
+				'descripcion' => $art->articulo,
+				'precio' => $art->precio,
+				'id_inv' => $art->id2,
+				'cbarra' => $id
+			]
+		);
+		$cantidad = intval($art->cantidad) - 1;
+		DB::table('inventario')->where('cbarra', $id)->update(['cantidad' => $cantidad]);
 	}
 }
 
