@@ -261,6 +261,11 @@ $options = [
                 'desc' => ['es' => 'Informes diario por fechas y horas.', 'en' => 'Daily reports by dates and times.'],
                 'link' => 'inf_diario_op.php',
             ],
+            [
+                'name' => ["es" => 'T-Shirts', "en" => "T-Shirts"],
+                'desc' => ['es' => 'Informes de compras por tamaños.', 'en' => 'Purchase reports by size.'],
+                'link' => 'pdf/compras_camisas.php',
+            ],
         ],
     ],
 
