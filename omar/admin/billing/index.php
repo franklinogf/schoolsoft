@@ -265,6 +265,13 @@ $options = [
                 'name' => ["es" => 'T-Shirts', "en" => "T-Shirts"],
                 'desc' => ['es' => 'Informes de compras por tamaños.', 'en' => 'Purchase reports by size.'],
                 'link' => 'pdf/compras_camisas.php',
+                'target' => 'T-Shirts',
+            ],
+            [
+                'name' => ["es" => 'T-Shirts Size', "en" => "T-Shirts Size"],
+                'desc' => ['es' => 'Informe por tamaño de camisas por grado resumen.', 'en' => 'Report by t-shirt size by grade summary.'],
+                'link' => 'pdf/inf_size.php',
+                'target' => 'T-Shirts',
             ],
         ],
     ],
