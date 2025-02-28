@@ -1,46 +1,50 @@
 <?php
-include('../../control.php');
+
+use Classes\Controllers\School;
+use Classes\DataBase\DB;
+use Classes\Lang;
+use Classes\Route;
+
+require_once '../../app.php';
+
+$lang = new Lang([
+  ['Caja', 'Cash register'],
+  ['Buscar pagos', 'Search payments'],
+  ['Buscar', 'Search'],
+  ['Eliminar compra', 'Delete purchase'],
+  ['Modificar el Total', 'Edit total'],
+  ['Modificar', 'Edit'],
+  ['Eliminar', 'Delete'],
+  ['Cancelar', 'Cancel'],
+  ['Enviar recibos', 'Send receipts']
+]);
 // agregar nueva columna a la tabla de detalles
-mysql_query("ALTER TABLE `compra_cafeteria_detalle` ADD `precio_final` FLOAT(7,2) NULL DEFAULT NULL AFTER `precio`;");
-$ra = mysql_query("SELECT * FROM colegio where usuario = 'administrador'");
-$colegio = mysql_fetch_object($ra);
-$foods = [];
+DB::table('compra_cafeteria_detalle')->alter("ADD `precio_final` FLOAT(7,2) NULL DEFAULT NULL AFTER `precio`;");
+
+$colegio = new School();
+$year = $colegio->year();
 $estudiantes = [];
-$result = mysql_query("SELECT * FROM T_cafeteria ORDER BY orden");
-$resEstu = mysql_query("SELECT ss,nombre,apellidos FROM year where year = '$colegio->year' ORDER BY apellidos");
-while ($estu = mysql_fetch_object($resEstu)) {
-  $estudiantes[] = [
-    "ss" => $estu->ss,
-    "nombre" => utf8_encode($estu->nombre),
-    "apellidos" => utf8_encode($estu->apellidos),
-  ];
-}
+$foods = DB::table('T_cafeteria')->orderBy('orden')->get();
 
-while ($row = mysql_fetch_object($result)) {
-  $foods[] = [
-    "id" => $row->id,
-    "foto" => $row->foto,
-    "articulo" => utf8_encode($row->articulo),
-    "precio" => $row->precio,
-  ];
-}
 
-$foods = json_decode(json_encode($foods));
-$estudiantes = json_decode(json_encode($estudiantes));
+$estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $year)->orderBy('apellidos')->get();
+
+
 ?>
 <!doctype html>
-<html lang="es">
+<html lang="<?= __LANG ?>">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Cafeteria </title>
+  <title>Cafeteria</title>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-  <!-- Select Picker -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <?php
+  $title = $lang->translation("Caja");
+  Route::includeFile('/cafeteria/includes/layouts/header.php');
+  Route::selectPicker();
+  ?>
   <!-- Icons -->
   <link rel="stylesheet" type="text/css" href="../css/all.css">
   <link rel="stylesheet" href="caja.css">
@@ -74,9 +78,9 @@ $estudiantes = json_decode(json_encode($estudiantes));
               <div class="col mb-3">
                 <div class="card  h-100">
                   <input type="hidden" class="id" value="<?= $food->id ?>">
-                  <a href="#"><img class="card-img-top mx-auto d-block" src="<?= (isset($food->foto)) ? "../../../cafeteria_im/$food->foto" : '../../../cafeteria_im/no-image.png' ?>" alt="Card image cap"></a>
+                  <a href="#"><img class="card-img-top mx-auto d-block" src="<?= isset($food->foto) ? "../../../cafeteria_im/$food->foto" : '../../../cafeteria_im/no-image.png' ?>" alt="Card image cap"></a>
                   <div class="card-body">
-                    <p class="card-title"><?= utf8_decode($food->articulo) ?></p>
+                    <p class="card-title"><?= $food->articulo ?></p>
                     <span class="price"><b><?= $food->precio ?></b></span>
                   </div>
                 </div>
@@ -105,11 +109,11 @@ $estudiantes = json_decode(json_encode($estudiantes));
           </ul>
           <button type="button" class="btn btn-outline-info btn-block mt-auto" data-toggle="modal" data-target="#searchModal">Buscar pagos</button>
 
-          <div class="input-group my-3">            
-              <input type="date" id="date" class="form-control" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>" aria-describedby="button-addon">
-              <div class="input-group-append">
-                <button id="sendReceipts" class="btn btn-outline-secondary" type="button" id="button-addon">Enviar recibos</button>
-              </div>            
+          <div class="input-group my-3">
+            <input type="date" id="date" class="form-control" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>" aria-describedby="button-addon">
+            <div class="input-group-append">
+              <button id="sendReceipts" class="btn btn-outline-secondary" type="button" id="button-addon">Enviar recibos</button>
+            </div>
           </div>
         </div>
         <!-- END SHOPPING CART -->
@@ -313,11 +317,13 @@ $estudiantes = json_decode(json_encode($estudiantes));
 
 
               <div class="row">
-                <div class="col-4">
+                <div class="col-4 mx-auto">
                   <img id="profilePicture" class="img-fluid img-thumbnail d-none mb-3" src="#" style="width: 7rem;" alt="Profile Picture">
                 </div>
-                <div class="col-8">
-                  <h4 id="nombre_estudiante"></h4>
+                <div class="row">
+                  <div class="col-8">
+                    <h4 id="nombre_estudiante"></h4>
+                  </div>
                 </div>
               </div>
 
@@ -396,9 +402,10 @@ $estudiantes = json_decode(json_encode($estudiantes));
         </div>
       </div>
     </form>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <?php
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::selectPicker('js');
+    ?>
     <script src='caja.js' type="text/javascript"></script>
 
 </body>

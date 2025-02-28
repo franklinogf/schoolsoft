@@ -8,6 +8,7 @@ use Classes\Models\SchoolModel;
 class School extends SchoolModel
 {
    protected $props = [];
+   public $logged = false;
 
    public function login($username, $password)
    {
@@ -50,7 +51,7 @@ class School extends SchoolModel
       return $this->props[$key];
    }
 
-   public function year()
+   public function year(): string
    {
       $yearToUse = Session::location() === 'admin' ? 'year2' : 'year';
       return $this->props[$yearToUse];

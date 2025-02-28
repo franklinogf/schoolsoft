@@ -35,11 +35,14 @@ if (isset($_POST['orderId'])) {
         foreach ($orderDetails as $detail) {
             $ordersList .= "<li>$detail->descripcion</li>";
         }
-        $ordersList .= '</ol>
-                        <button class="btn btn-primary float-right dispatch" data-order-id="' . $order->id . '">' . $lang->translation("Despachar orden") . '</button>
+        $ordersList .= "</ol>
+                        <div class='mt-2 d-flex flex-row-reverse'>
+                            <button class='btn btn-sm btn-danger float-right dispatchUp'>Despachar hacia arriba</button>
+                            <button class='btn btn-sm btn-primary float-right dispatch mx-2' data-order-id='$order->id'>Despachar orden</button>
+                        </div>
                     </div>
-                </li>
-                ';
+                </li>                
+                ";
     }
-    echo $ordersList;
+    echo json_encode(['list' => $ordersList, "amount" => count($orders), "listOfDetails" => $listOfDetails]);
 }

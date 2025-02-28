@@ -1,6 +1,11 @@
-<?php 
-include('../../control.php'); 
+<?php
+
+use Classes\DataBase\DB;
+
+require_once '../../app.php';
+
 $id = $_POST['id'];
-mysql_query("DELETE FROM T_cafeteria  WHERE id = '$id'");
+
+DB::table('T_cafeteria')->where('id', $id)->delete();
 
 header("Location: index.php");
