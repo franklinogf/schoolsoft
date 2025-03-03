@@ -8,19 +8,6 @@ require_once '../app.php';
 $items = DB::table('inventario')->orderBy('articulo')->get();
 $isAdding = isset($_GET['add']);
 $item_id = $_GET['item'] ?? null;
-// if (isset($_POST['barra'])) {
-//     $ssqla = "select * from inventario where cbarra='" . $_POST['barra'] . "'";
-//     $rssqla = mysql_query($ssqla);
-//     $data = mysql_fetch_array($rssqla);
-//     //echo $ssqla;
-// }
-
-// if (isset($_POST['buscar'])) {
-//     $ssqla = "select * from inventario where id='" . $_POST['inv'] . "'";
-//     $rssqla = mysql_query($ssqla);
-//     $data = mysql_fetch_array($rssqla);
-//     //echo $ssqla;
-// }
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
