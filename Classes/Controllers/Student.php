@@ -12,6 +12,7 @@ class Student extends StudentModel
   public $nombre;
   public $apellidos;
   public $ss;
+  public $cantidad;
 
   public function __construct($value = '')
   {
