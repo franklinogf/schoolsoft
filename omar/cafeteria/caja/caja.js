@@ -115,7 +115,7 @@ $(document).ready(function () {
       complete: function (response) {
         const purchaseItems = response.responseJSON
         $('#editItems').text('')
-        purchaseItems.forEach((item) => {
+        purchaseItems.data.forEach((item) => {
           $('#editItems').append(`<li class="list-group list-group-flush">
               <div class="form-group row">
                 <label class="col-4 align-middle" for="${item.id}">${item.descripcion}</label>
@@ -161,6 +161,7 @@ $(document).ready(function () {
         ss: $('#searchEstu').val()
       },
       complete: function (response) {
+        console.log('response:', response)
         $(`#payments tbody tr#${$('#delId').val()}`).remove()
         $('#delSearchModal').modal('hide')
         if ($('#payments tbody tr').length === 0) {
@@ -244,37 +245,38 @@ $(document).ready(function () {
       dataType: 'json',
       complete: function (response) {
         const payments = response.responseJSON
-        if (Object.keys(data)[0] === 'code') {
-          if ('exist' in payments) {
+        console.log('payments:', payments)
+        if (!payments?.exist) {
+          if (Object.keys(data)[0] === 'code') {
             $('#alert').html(`
               <div class="alert alert-warning" role="alert">
                 No existe un estudiante con este codigo.
               </div>                  
               `)
-          }
-        } else if (Object.keys(data)[0] === 'id') {
-          if ('exist' in payments) {
+          } else if (Object.keys(data)[0] === 'id') {
             $('#alert').html(`
             <div class="alert alert-warning" role="alert">
             No existe un pago con este ID.
             </div>                  
             `)
-          } else {
-            $('#searchSs').val(payments[0].ss)
           }
+          return
         }
-        if (payments.length > 0) {
+        if (Object.keys(data)[0] === 'id') {
+          $('#searchSs').val(payments.data[0].ss)
+        }
+        if (payments?.data.length > 0) {
           $('#payments tbody').text('')
-          payments.forEach((payment) => {
+          payments.data.forEach((payment) => {
             $('#payments').removeClass('d-none')
             $('#payments tbody').append(`<tr id="${payment.id}">
-                  <td>${payment.id}</td>
-                  <td>${payment.total}</td>
-                  <td>
-                  <i data-toggle="modal" data-target="#editSearchModal" data-total="${payment.total}" data-id="${payment.id}" class="far fa-edit text-info" role="button"></i>
-                  <i data-toggle="modal" data-target="#delSearchModal" data-total="${payment.total}" data-id="${payment.id}" class="far fa-trash-alt text-danger"  role="button"></i>
-                  </td>
-                </tr>`)
+                <td>${payment.id}</td>
+                <td>${payment.total}</td>
+                <td>
+                <i data-toggle="modal" data-target="#editSearchModal" data-total="${payment.total}" data-id="${payment.id}" class="far fa-edit text-info" role="button"></i>
+                <i data-toggle="modal" data-target="#delSearchModal" data-total="${payment.total}" data-id="${payment.id}" class="far fa-trash-alt text-danger"  role="button"></i>
+                </td>
+              </tr>`)
             $('#alert').text('')
           })
         } else {
@@ -282,10 +284,10 @@ $(document).ready(function () {
           $('#payments tbody').text('')
           if (Object.keys(data)[0] !== 'code' && Object.keys(data)[0] !== 'id') {
             $('#alert').html(`
-              <div class="alert alert-warning" role="alert">
-                Este estudiante no ha realizado ninguna compra.
-              </div>                  
-              `)
+            <div class="alert alert-warning" role="alert">
+              Este estudiante no ha realizado ninguna compra.
+            </div>                  
+            `)
           }
         }
       }

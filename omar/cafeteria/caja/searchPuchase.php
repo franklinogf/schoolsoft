@@ -1,37 +1,59 @@
 <?php
-require_once '../../control.php';
-$ra = mysql_query("SELECT * FROM colegio where usuario = 'administrador'");
-$colegio = mysql_fetch_object($ra);
-$date = $_POST['date'];
+
+use Classes\Controllers\School;
+use Classes\DataBase\DB;
+
+require_once '../../app.php';
+
+$school = new School();
+$year = $school->year();
+$date = $_POST['date'] ?? null;
 $array = [];
 if (isset($_POST['ss'])) {
     $ss = $_POST['ss'];
-    $res = mysql_query("SELECT * FROM compra_cafeteria WHERE ss = '$ss' and fecha = '$date'");
+
+    $result = DB::table('compra_cafeteria')
+        ->where([['ss', $ss], ['fecha', $date]])
+        ->get();
+
+    if(count($result) === 0){
+        $data = ['exist' => false];            
+    } else {
+        $data = ['exist' => true, 'data' => $result];
+    }    
+   
 } else if (isset($_POST['code'])) {
     $code = $_POST['code'];
-    $result = mysql_query("SELECT ss FROM year WHERE year='$colegio->year' AND cbarra = '$code'");
-    if (mysql_num_rows($result) > 0) {
-        $estu = mysql_fetch_object($result);
-        $ss = $estu->ss;
-        $res = mysql_query("SELECT * FROM compra_cafeteria WHERE ss = '$ss' and fecha = '$date'");
+
+    $student = DB::table('year')
+        ->select('ss')
+        ->where([['year', $year], ['cbarra', $code]])
+        ->first();
+
+    if ($student) {       
+
+        $ss = $student->ss;
+
+        $result = DB::table('compra_cafeteria')
+            ->where([['ss', $ss], ['fecha', $date]])
+            ->get();
+            $data = ['exist' => true, 'data' => $result];    
     } else {
-        $array = ['exist' => false];
+        $data = ['exist' => false];
     }
 } else {
     $id = $_POST['id'];
-    $res = mysql_query("SELECT * FROM compra_cafeteria WHERE id = '$id'");
-    if (mysql_num_rows($res) === 0) {
-        $array = ['exist' => false];
-    }
-}
+    
+    $result = DB::table('compra_cafeteria')
+        ->where('id', $id)
+        ->get();
 
-
-if (isset($res)) {
-    while ($pay = mysql_fetch_object($res)) {
-
-        $array[] = $pay;
+    if (!$result) {
+        $data = ['exist' => false];
+    }else{
+        $data = ['exist' => true, 'data' => $result];
     }
 }
 
 header('Content-Type: application/json');
-echo json_encode($array);
+echo json_encode($data);
