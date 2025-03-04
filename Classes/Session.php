@@ -44,7 +44,7 @@ class Session
         $location = str_replace('/', "", __SUB_ROOT_URL);
 
         $logged = true;
-        if ($_SESSION['logged']['acronym'] !== __SCHOOL_ACRONYM) {
+        if (isset($_SESSION['logged']['acronym']) && $_SESSION['logged']['acronym'] !== __SCHOOL_ACRONYM) {
             $logged = false;
         } else if (time() - $_SESSION['start'] > self::$sessionDuration) {
             $logged = false;
