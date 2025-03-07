@@ -28,7 +28,7 @@ $lang = new Lang([
     ['Fecha:', 'Date:'],
     ['Documentos sin entregar', 'Undelivered documents'],
     ['Masculinos', 'Males'],
-    ['A&#65533;O', 'YEAR'],
+    ['AÑO', 'YEAR'],
 ]);
 
 function NLetra($valor)
@@ -404,7 +404,7 @@ foreach ($students as $estu) {
             $pdf->Cell(7, 5, '', 1, 0, 'C');
             $pdf->Cell(10, 5, '', 1, 0, 'C', true);
         }
-        if ($prof == 'Si' and $not5 > 0) {
+        if ($colegio->tri >= '4' and $not5 > 0) {
             $nnf1 = VPuntos(round($not6 / $not5, 2));
             $pdf->Cell(14, 5, $nnf1, 1, 0, 'C', true);
             $notas7 = $notas7 + LValor($nnf1) * $curso->credito;
@@ -445,7 +445,7 @@ foreach ($students as $estu) {
     $nnf2 = '';
     if ($colegio->tri >= '2' and $cr2 > 0) {
         $nnf1 = VPuntos(round($notas2 / $cr2, 2));
-        $nnf2 = round($notas5 / $cr5, 2);
+        $nnf2 = number_format(round($notas5 / $cr5, 2), 2);
     }
     $pdf->Cell(9, 5, $nnf1, 1, 0, 'C', true);
     $pdf->Cell(14, 5, $nnf2, 1, 0, 'C', true);
@@ -465,7 +465,7 @@ foreach ($students as $estu) {
     $nnf2 = '';
     if ($colegio->tri >= '4' and $cr4 > 0) {
         $nnf1 = VPuntos(round($notas4 / $cr4, 2));
-        $nnf2 = round($notas4 / $cr4, 2);
+        $nnf2 = number_format(round($notas4 / $cr4, 2), 2);
     }
     $pdf->Cell(9, 5, $nnf1, 1, 0, 'C', true);
     $pdf->Cell(14, 5, $nnf2, 1, 0, 'C', true);
