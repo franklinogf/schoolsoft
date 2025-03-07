@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../app.php';
+require_once '../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;
@@ -59,7 +59,7 @@ class nPDF extends PDF
     {
         $fir = $_POST['fir'] ?? '';
         if ($fir == 'Si') {
-            $this->Image('../../../../logo/firma.gif', 22, 260, 45);
+            $this->Image('../../../logo/firma.gif', 22, 260, 45);
         }
         $idi = '';
         if ($idi == 'Ingles') {
