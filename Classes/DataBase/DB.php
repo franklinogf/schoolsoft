@@ -159,6 +159,7 @@ class DB extends DataBase
 
     $query = 'UPDATE ' . self::$table . ' SET' . $set . ' ' . $where;
     $values = array_merge($valuesArray, self::$whereValues);
+
     $result = $this->updateQuery($query, $values);
     $this->closeDB();
     if (isset($result['error'])) {
@@ -336,7 +337,7 @@ class DB extends DataBase
     return $obj;
   }
 
-  private function buildWhere()
+  private function buildWhere(): string
   {
     $where = '';
     if (count(self::$whereCols) > 0) {
