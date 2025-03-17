@@ -47,7 +47,6 @@ class DataBase
         } catch (\Throwable $th) {
             //throw $th;
         }
-
     }
     protected function deleteTable($table, $pk, $wherePk)
     {
@@ -97,13 +96,7 @@ class DataBase
             return $this->exception($db->error, $query, $valuesArray);
         }
         $bind = str_repeat('s', count($valuesArray));
-        // php 5 version
-        // $refs = array();
-        // foreach ($valuesArray as $key => $value) {
-        //   $refs[$key] = &$valuesArray[$key];
-        // }
-        // call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
-        // php 7 version
+
         $stmt->bind_param($bind, ...$valuesArray);
         if (!$stmt->execute()) {
             return $this->exception("Error executing query", $query, $valuesArray);
@@ -156,28 +149,27 @@ class DataBase
                 if (Session::is_logged(false)) {
                     $stmt->execute();
                 }
-
             }
         } else {
             $stmt = $db->prepare($query[0]);
             $bind = str_repeat('s', count($valuesArray));
             // php 5 version
-            $refs = [];
-            foreach ($valuesArray as $key => $value) {
-                $refs[$key] = &$valuesArray[$key];
-            }
-            call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+            // $refs = [];
+            // foreach ($valuesArray as $key => $value) {
+            //     $refs[$key] = &$valuesArray[$key];
+            // }
+            // call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
             // php 7 version
-            // $stmt->bind_param($bind, ...$valuesArray);
-            if (Session::is_logged(false)) {
-                if ($stmt->execute()) {
-                    if ($insertId === true) {
-                        return $stmt->insert_id;
-                    }
-                    return true;
-                } else {
-                    throw new Exception($stmt->error);
+            $stmt->bind_param($bind, ...$valuesArray);
+        }
+        if (Session::is_logged(false)) {
+            if ($stmt->execute()) {
+                if ($insertId === true) {
+                    return $stmt->insert_id;
                 }
+                return true;
+            } else {
+                throw new Exception($stmt->error);
             }
         }
     }
@@ -216,15 +208,14 @@ class DataBase
 
             $bind = str_repeat('s', count($whereArray));
             // php 5 version
-            $refs = array();
-            foreach ($whereArray as $key => $value) {
-                $refs[$key] = &$whereArray[$key];
-            }
+            // $refs = array();
+            // foreach ($whereArray as $key => $value) {
+            //     $refs[$key] = &$whereArray[$key];
+            // }
             // var_dump($refs);
-            call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
+            // call_user_func_array(array($stmt, "bind_param"), array_merge([$bind], $refs));
             // php 7 version
-            // $stmt->bind_param($bind, ...$whereArray);
-
+            $stmt->bind_param($bind, ...$whereArray);
         }
         if (!$stmt->execute()) {
             throw new Exception($stmt->error);

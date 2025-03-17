@@ -39,7 +39,7 @@ class Lang
         }
     }
 
-    public function translation($text)
+    public function translation($text): string
     {
         $key = strtolower(utf8_decode($text));
         if (!isset($this->translations[$key])) {
