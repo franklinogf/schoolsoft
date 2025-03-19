@@ -13,9 +13,9 @@ Session::is_logged();
 $teacher = new Teacher();
 $lang = new Lang([
     ['Informe socioeconómico', 'Socioeconomic report'],
-    ['Repartidas', 'Distributed'],    
+    ['Repartidas', 'Distributed'],
     ['Atrás', 'Go back'],
-    ['Opción', 'Option'],    
+    ['Opción', 'Option'],
     ['Lista', 'List'],
     ['Resumen bajo nivel', 'Under level summary'],
     ['Resumen sobre nivel', 'Over level summary'],
@@ -36,6 +36,7 @@ $grades = $school->allGrades();
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
@@ -59,15 +60,16 @@ $grades = $school->allGrades();
                                 <label class='input-group-text'><?= $lang->translation("Opción") ?></label>
                             </div>
                             <select class="form-control w-100" id="option" name="option" required>
-                               <option value="1"><?= $lang->translation('Lista') ?></option>
-                               <option value="2"><?= $lang->translation('Resumen bajo nivel') ?></option>
-                               <option value="5"><?= $lang->translation('Resumen sobre nivel') ?></option>
-                               <option value="3"><?= $lang->translation('Totales') ?></option>
-                               <!-- <option value="4"><?= $lang->translation('Lista de estudiantes') ?></option> -->
+                                <option value="1"><?= $lang->translation('Lista') ?></option>
+                                <option value="2"><?= $lang->translation('Resumen bajo nivel') ?></option>
+                                <option value="5"><?= $lang->translation('Resumen sobre nivel') ?></option>
+                                <option value="3"><?= $lang->translation('Totales') ?></option>
+                                <option value="6"><?= $lang->translation('Tabla') ?></option>
+                                <!-- <option value="4"><?= $lang->translation('Lista de estudiantes') ?></option> -->
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="text-center">
                         <button class="btn btn-primary mt-4" type="submit"><?= $lang->translation("Continuar") ?></button>
                     </div>
