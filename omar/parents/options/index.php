@@ -1,7 +1,6 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Parents;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -17,9 +16,10 @@ $buttons = [
     ['name' => 'Documentos', 'link' => 'documents/'],
     ['name' => 'Hoja de progreso', 'link' => 'progress/'],
     ['name' => 'Informe de deficiencia', 'link' => 'deficiency/'],
+    ['name' => 'Tiendas', 'link' => 'stores/'],
 ];
 $lang = new Lang([
-    ["Mensajes y Opciones", " Messages and Options"],
+    ["Mensajes y Opciones", "Messages and Options"],
     ["Ver mensajes", "View messages"],
     ["Hacer cita", "Make an appointment"],
     ["Re-Matrícula", "Re-Enrollment"],
