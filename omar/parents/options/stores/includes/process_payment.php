@@ -13,8 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Load the Evertec Payment class
-require_once 'EvertecPayment.php';
 
 // Check if payment data is provided
 $postData = json_decode(file_get_contents('php://input'), true);
