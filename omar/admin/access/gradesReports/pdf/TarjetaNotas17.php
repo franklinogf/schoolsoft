@@ -3,11 +3,11 @@
 list($gra, $sec) = explode("-", $_POST['grade']);
 
 if ($gra == 'PK') {
-    require('tarjetadenotas18b.php');
+    require('TarjetaNotas17b.php');
     exit;
 }
 if ($gra == 'KG') {
-    require('tarjetadenotas18c.php');
+    require('TarjetaNotas17c.php');
     exit;
 }
 require_once '../../../../app.php';
