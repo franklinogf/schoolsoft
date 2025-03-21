@@ -5,6 +5,7 @@ namespace Classes\DataBase;
 use Classes\Session;
 use Classes\Util;
 use Classes\DataBase\DataBase;
+use PDO;
 
 /* -------------------------------------------------------------------------- */
 /*                      Class for the DataBase queries                        */
@@ -202,7 +203,7 @@ class DB extends DataBase
    * @param string $query
    * @return mixed
    */
-  public function query(string $query)
+  public function query(string $query): bool|\PDOStatement
   {
     return $this->normalQuery($query);
   }
@@ -250,7 +251,7 @@ class DB extends DataBase
     if ($this->isMultiArray($insertArray)) {
       foreach ($insertArray as $array) {
         $count = 0;
-        $valuesArray[] = $array;
+        $valuesArray[] = array_values($array);
         $values = '';
         $columns = '';
         foreach ($array as $key => $value) {
@@ -266,14 +267,16 @@ class DB extends DataBase
       $columns = '';
       $values = '';
       $query = [];
+      $paramValues = [];
       foreach ($insertArray as $key => $value) {
-        $valuesArray[] = $value;
+        $paramValues[] = $value;
         $coma = ($count > 0 ? ',' : '');
         $columns .= "{$coma} `{$key}`";
         $values .= "{$coma}?";
         $count++;
       }
       $query[] = 'INSERT INTO ' . self::$table . "($columns) VALUES ($values)";
+      $valuesArray[] = $paramValues;
     }
 
     return $this->insertQuery($query, $valuesArray, $getId);
@@ -314,10 +317,8 @@ class DB extends DataBase
 
     $result = $this->updateQuery($query, $values);
     $this->closeDB();
-    if (isset($result['error'])) {
-      return true;
-    }
-    return false;
+
+    return $result !== false && !isset($result['error']);
   }
 
   /**
@@ -531,9 +532,9 @@ class DB extends DataBase
   /**
    * Get the first row
    *
-   * @return object|null
+   * @return object|bool
    */
-  public function first(): ?object
+  public function first(): bool|object
   {
     $this->buildSelectQuery('limit 1');
     $obj = $this->selectOne(self::$query, self::$where);
@@ -626,23 +627,5 @@ class DB extends DataBase
     self::$innerJoinCol2 = [];
     self::$innerJoinOperator = [];
     parent::$admin = false;
-  }
-
-  /**
-   * Dump the query result
-   *
-   * @return void
-   */
-  public function dump(): void
-  {
-    $this->buildSelectQuery();
-    $result = $this->selectFromDB(self::$query, self::$where);
-    if ($result->num_rows == 1) {
-      $obj = $result->fetch_assoc();
-      Util::dump($obj);
-    } else if ($result->num_rows > 1) {
-      $obj = $result->fetch_all(MYSQLI_ASSOC);
-      Util::dump($obj);
-    }
   }
 }
