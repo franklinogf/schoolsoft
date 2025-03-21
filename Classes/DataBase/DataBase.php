@@ -13,7 +13,6 @@ use mysqli;
 
 class DataBase
 {
-
     protected static $admin = false;
     private $host = __HOST;
     private $username = __USERNAME;
@@ -24,8 +23,16 @@ class DataBase
     private $adminPassword = __ADMIN_PASSWORD;
     private $adminDbName = __ADMIN_DB_NAME;
 
+    // Conexión singleton para reutilización
+    private static $connection = null;
+
     protected function connect()
     {
+        // Reutilizar conexión existente si está disponible
+        if (self::$connection !== null) {
+            return self::$connection;
+        }
+
         if (self::$admin) {
             $db = new mysqli($this->adminHost, $this->adminUsername, $this->adminPassword, $this->adminDbName);
         } else {
@@ -33,61 +40,133 @@ class DataBase
         }
 
         if ($db->connect_errno) {
-            echo "Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
+            throw new Exception("Fallo al conectar a MySQL: (" . $db->connect_errno . ") " . $db->connect_error);
         }
         $db->set_charset("utf8");
 
+        self::$connection = $db;
         return $db;
     }
+
+    // Método para cerrar la conexión
+    public function closeConnection()
+    {
+        if (self::$connection !== null) {
+            self::$connection->close();
+            self::$connection = null;
+        }
+    }
+
+    // Método para iniciar una transacción
+    protected function beginTransaction()
+    {
+        $db = $this->connect();
+        $db->autocommit(false);
+        return $db->begin_transaction();
+    }
+
+    // Método para confirmar una transacción
+    protected function commit()
+    {
+        if (self::$connection !== null) {
+            return self::$connection->commit();
+        }
+        return false;
+    }
+
+    // Método para revertir una transacción
+    protected function rollback()
+    {
+        if (self::$connection !== null) {
+            return self::$connection->rollback();
+        }
+        return false;
+    }
+
     protected function normalQuery($query)
     {
         $db = $this->connect();
         try {
-            return $db->query($query);
-        } catch (\Throwable $th) {
-            //throw $th;
+            // Usa consulta preparada en lugar de query() directo
+            $stmt = $db->prepare($query);
+            if (!$stmt) {
+                throw new Exception("Error en la preparación de la consulta: " . $db->error);
+            }
+
+            if (!$stmt->execute()) {
+                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+
+            $result = $stmt->get_result();
+            $stmt->close();
+            return $result;
+        } catch (Exception $e) {
+            // Mejorado el manejo de excepciones
+            return $this->exception($e->getMessage(), $query);
         }
     }
+
     protected function deleteTable($table, $pk, $wherePk)
     {
-
-        $query = "DELETE FROM {$table}";
-        $query .= " WHERE {$pk} = '{$wherePk}'";
-        return $this->deleteQuery($query);
+        $query = "DELETE FROM {$table} WHERE {$pk} = ?";
+        return $this->deleteQuery($query, [$wherePk]);
     }
 
-    protected function deleteQuery($query)
+    protected function deleteQuery($query, $valuesArray = [])
     {
+        // Verifica la sesión antes de ejecutar operaciones destructivas
+        if (!Session::is_logged(false)) {
+            return $this->exception("Usuario no autenticado", $query);
+        }
+
         $db = $this->connect();
         if (!$stmt = $db->prepare($query)) {
-            $this->exception($db->error, $query);
+            return $this->exception($db->error, $query);
         }
-        if (Session::is_logged(false)) {
 
-            if ($stmt->execute()) {
-                return true;
-            }
-            return false;
+        if (count($valuesArray) > 0) {
+            $bind = str_repeat('s', count($valuesArray));
+            $stmt->bind_param($bind, ...$valuesArray);
         }
+
+        if ($stmt->execute()) {
+            $affectedRows = $stmt->affected_rows;
+            $stmt->close();
+            return $affectedRows > 0;
+        }
+
+        $error = $stmt->error;
+        $stmt->close();
+        return $this->exception($error, $query, $valuesArray);
     }
 
     // update tables
     protected function updateTable($table, $pk, $wherePk, $propsArray)
     {
+        // Elimina la clave primaria del arreglo de actualización
+        unset($propsArray[$pk]);
+
+        if (empty($propsArray)) {
+            return $this->exception("No hay campos para actualizar", "updateTable", ["table" => $table, "pk" => $pk]);
+        }
+
         $query = "UPDATE {$table} SET ";
         $count = 0;
         $valuesArray = [];
-        // Remove primary key from the array to update (pk is not supose to update)
-        unset($propsArray[$pk]);
+
         foreach ($propsArray as $key => $value) {
             $valuesArray[] = $value;
             $coma = ($count > 0 ? ',' : '');
             $query .= "$coma $key = ?";
             $count++;
         }
-        $query .= " WHERE {$pk} = '{$wherePk}'";
+
+        $query .= " WHERE {$pk} = ?";
+        $valuesArray[] = $wherePk; // Agrega la clave primaria al final
+
         return $this->updateQuery($query, $valuesArray);
     }
+
     protected function updateQuery($query, $valuesArray)
     {
         $db = $this->connect();
@@ -238,6 +317,14 @@ class DataBase
 
     private function exception($message, $query, $values = null)
     {
+        // Registrar el error en algún lugar (log)
+        error_log("Database error: $message, Query: $query");
         return ["error" => true, "message" => $message, "query" => $query, "values" => $values];
+    }
+
+    // Añadir un método para destructor que cierre la conexión
+    public function __destruct()
+    {
+        $this->closeConnection();
     }
 }
