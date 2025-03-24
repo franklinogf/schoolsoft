@@ -22,14 +22,16 @@ class EvertecPayment
         if ($isDevelopment) {
             $this->creditCardEndpoint = 'https://uat.mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessCredit/';
             $this->achEndpoint = 'https://uat.mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/';
+            // Set credentials
+            $this->username = "CERT4549444000033";
+            $this->password = "5B034VrA";
         } else {
+            // Set credentials
+            $this->username = "ECOM4549555000561";
+            $this->password = "h1MT6Eh24WDQ8LNJ";
             $this->creditCardEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessCredit/';
             $this->achEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/';
         }
-
-        // Set credentials
-        $this->username = "CERT4549444000033";
-        $this->password = "5B034VrA";
     }
 
     /**

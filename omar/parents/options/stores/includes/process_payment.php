@@ -1,6 +1,7 @@
 <?php
 require_once '../../../../app.php';
 
+use Classes\Controllers\School;
 use Classes\Session;
 use Classes\Services\EvertecPayment;
 use Classes\DataBase\DB;
@@ -72,6 +73,8 @@ if (isset($response['success']) && $response['success']) {
 
     if (!empty($cart)) {
         try {
+            $school = new School();
+            $year = $school->year();
             // Create order in database using the correct 'compras' table
             $orderId = DB::table('compras')->insertGetId([
                 'accountID' => Session::id(),
@@ -84,7 +87,7 @@ if (isset($response['success']) && $response['success']) {
                 'total' => $postData['amount'],
                 'deliveryTo' => $postData['address1'] ?? '',
                 'shopping' => 1,
-                'year' => date('Y'),
+                'year' => $year,
                 'paid' => 1, // Payment is complete
                 'payment_type' => $postData['paymentMethod'],
                 'refNumber' => json_encode($response) // Store payment details in refNumber field
@@ -121,8 +124,8 @@ if (isset($response['success']) && $response['success']) {
                         'amount' => $quantity,
                         'size' => $size,
                         'price' => $price,
-                        'year' => date('Y'),
-                        'orden' => $cart_key + 1 // Using cart key for order sequence
+                        'year' => $year,
+                        // 'orden' => $cart_key + 1 // Using cart key for order sequence
                     ]);
                 }
             }
