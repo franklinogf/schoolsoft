@@ -1,4 +1,8 @@
 <?php
+require_once('TarjetaNotas' . $_POST['tarjeta'] . '.php');
+exit;
+
+
 if ($_POST['tarjeta'] == '1') {
     require_once('TarjetaNotas1.php');
 }
