@@ -1,6 +1,6 @@
 <?php
 // colegio bautista de gurabo
-list($gra, $sec) = explode("-", $_POST['grade']);
+list($gra, $sec) = explode("-", $_POST['grade'] . '-');
 
 if ($gra == 'PK') {
     require('TarjetaNotas17b.php');
