@@ -40,31 +40,31 @@ class Teacher extends TeacherModel
   //get all the students of a teacher from padres table
   public function getAllStudents($table = 'padres')
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getAllTeacherStudents($this->id, $table);
+    return $this->getAllTeacherStudents($this->{$this->primary_key}, $table);
   }
 
   public function classes()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeacherClasses(id: $this->id);
+    return $this->getTeacherClasses(id: $this->{$this->primary_key});
   }
 
   public function classCredit($class)
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeacherClassCredit($this->id, $class);
+    return $this->getTeacherClassCredit($this->{$this->primary_key}, $class);
   }
 
   public function homeStudents()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
     return $this->getHomeStudents($this->grado);
@@ -72,15 +72,15 @@ class Teacher extends TeacherModel
 
   public function unreadMessages()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getUnreadMessages($this->id);
+    return $this->getUnreadMessages($this->{$this->primary_key});
   }
 
   public function profilePicture()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
 
@@ -99,39 +99,39 @@ class Teacher extends TeacherModel
 
   public function lastTopic()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getLastTeacherTopic($this->id);
+    return $this->getLastTeacherTopic($this->{$this->primary_key});
   }
 
   public function topicsByClass($class)
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeachersTopicsByClass($this->id, $class);
+    return $this->getTeachersTopicsByClass($this->{$this->primary_key}, $class);
   }
 
   public function topics()
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeachersTopics($this->id);
+    return $this->getTeachersTopics($this->{$this->primary_key});
   }
   public function homeworks($class = false, $all = true)
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
-    return $this->getTeachersHomeworks($this->id, $class, $all);
+    return $this->getTeachersHomeworks($this->{$this->primary_key}, $class, $all);
   }
 
 
   public function fullName($utf8Decode = false)
   {
-    if (!isset($this->id)) {
+    if (!isset($this->{$this->primary_key})) {
       throw new \Exception('Primero debe de buscar un profesor');
     }
     $fullName = $utf8Decode ? utf8_decode("{$this->nombre} {$this->apellidos}")

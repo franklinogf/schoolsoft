@@ -47,7 +47,7 @@ class Student extends StudentModel
   public function findBySS($ss, $table = 'year')
   {
     $array = $this->getStudentBySS($ss, $table);
-    if(!$array) return false;
+    if (!$array) return false;
     foreach ($array as $key => $value) {
       $this->{$key} = $value;
     }
@@ -73,12 +73,12 @@ class Student extends StudentModel
     // if (!isset($this->{$this->primary_key})) {
     //   $this->exception();
     // }
-      $picturePath = $this->imagen != ''
-        ? __STUDENT_PROFILE_PICTURE_URL . $this->imagen
-        : ($this->genero === 'F' || $this->genero === '1'
-          ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
-          : __NO_PROFILE_PICTURE_STUDENT_MALE);
-    
+    $picturePath = $this->imagen != ''
+      ? __STUDENT_PROFILE_PICTURE_URL . $this->imagen
+      : ($this->genero === 'F' || $this->genero === '1'
+        ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
+        : __NO_PROFILE_PICTURE_STUDENT_MALE);
+
 
     return $picturePath;
   }
@@ -192,7 +192,7 @@ class Student extends StudentModel
     }
   }
 
-  public function delete()
+  public function delete(): void
   {
     $propsArray = array_diff_key(get_object_vars($this), get_class_vars(get_parent_class($this)));
     if (count($propsArray) > 0) {
