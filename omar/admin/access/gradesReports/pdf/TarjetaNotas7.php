@@ -27,7 +27,7 @@ $lang = new Lang([
     ['Fecha:', 'Date:'],
     ['Documentos sin entregar', 'Undelivered documents'],
     ['Masculinos', 'Males'],
-    ['A&#65533;O', 'YEAR'],
+    ['AÑO', 'YEAR'],
 ]);
 
 function NLetra($valor)
