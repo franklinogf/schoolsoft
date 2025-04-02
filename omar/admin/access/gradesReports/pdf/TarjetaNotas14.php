@@ -142,7 +142,7 @@ $year = $school->info('year2');
 $pdf = new nPDF();
 $pdf->useFooter(false);
 $pdf->SetTitle($lang->translation("Reporte de Notas") . " $year", true);
-$pdf->Fill();
+//$pdf->Fill();
 
 $pdf->AliasNbPages();
 $pdf->SetFont('Times', '', 11);
@@ -155,7 +155,7 @@ $tri4 = $_POST['tri4'] ?? '';
 $sem1 = $_POST['sem1'] ?? '';
 $sem2 = $_POST['sem2'] ?? '';
 $prof = $_POST['prof'] ?? '';
-$cr = $_POST['cr'] ?? '';
+$ccr = $_POST['cr'] ?? '';
 
 $mensaj = DB::table('codigos')->where([
     ['codigo', $men],
@@ -213,6 +213,7 @@ $teacher = $teacherClass->findByGrade($grade);
 $students = $studentClass->findByGrade($grade);
 
 foreach ($students as $estu) {
+    $pdf->Fill();
     $pdf->AddPage('L');
     $a = $a + 1;
     $gra = '';
@@ -351,19 +352,37 @@ foreach ($students as $estu) {
             $notas7 = $notas7 + $row->final;
         }
 
-        $au = $au + $row->aus1;
-        $ta = $ta + $row->tar1;
-        $au2 = $au2 + $row->aus2;
-        $ta2 = $ta2 + $row->tar2;
-        $au3 = $au3 + $row->aus3;
-        $ta3 = $ta3 + $row->tar3;
-        $au4 = $au4 + $row->aus4;
-        $ta4 = $ta4 + $row->tar4;
+        if ($row->aus1 > 0) {
+            $au = $au + number_format($row->aus1, 0);
+        }
+        if ($row->tar1 > 0) {
+            $ta = $ta + $row->tar1;
+        }
+        if ($row->aus2 > 0) {
+            $au2 = $au2 + number_format($row->aus2, 0);
+        }
+        if ($row->tar2 > 0) {
+            $ta2 = $ta2 + $row->tar2;
+        }
+        if ($row->aus3 > 0) {
+            $au3 = $au3 + number_format($row->aus3, 0);
+        }
+        if ($row->tar3 > 0) {
+            $ta3 = $ta3 + $row->tar3;
+        }
+        if ($row->aus4 > 0) {
+            $au4 = $au4 + number_format($row->aus4, 0);
+        }
+        if ($row->tar4 > 0) {
+            $ta4 = $ta4 + $row->tar4;
+        }
+
 
         $pdf->SetFont('Times', '', 9);
         $b = $b + 1;
         $t = '';
         if ($b == 2) {
+            $pdf->SetFillColor(224, 235, 255);
             $t = 'true';
             $b = 0;
         }
@@ -406,7 +425,7 @@ foreach ($students as $estu) {
         }
 
         $cr1 = '';
-        if ($cr == 'Si') {
+        if ($ccr == 'Si') {
             $cr1 = $row->credito;
         }
         $pdf->Cell(15, 5, $cr1, 1, 1, 'R', $t);
@@ -427,7 +446,7 @@ foreach ($students as $estu) {
         $pdf->Cell(15, 5, '', 1, 0, 'L', $t);
         $pdf->Cell(15, 5, '', 1, 1, 'L', $t);
     }
-
+    $pdf->Fill();
     $pdf->SetFont('Times', 'B', 10);
     $pdf->Cell(60, 5, $pq, 1, 0, 'R', true);
     if ($cr > 0) {
@@ -443,8 +462,8 @@ foreach ($students as $estu) {
     }
     $pdf->Cell(15, 5, '', 1, 0, 'C', true);
 
-    $notas7 = '';
-    $cr7 = '';
+    $notas7 = 0;
+    $cr7 = 0;
     if ($cr5 > 0 and $sem1 == 'Si') {
         $notas7 = $notas7 + round($notas5 / $cr5, 0);
         $cr7 = $cr7 + 1;
@@ -468,7 +487,7 @@ foreach ($students as $estu) {
     }
     $pdf->Cell(15, 5, '', 1, 0, 'C', true);
 
-    if ($cr6 > 0) {
+    if ($cr6 > 0 and $sem2 == 'Si') {
         $notas7 = $notas7 + round($notas6 / $cr6, 0);
         $cr7 = $cr7 + 1;
         $pdf->Cell(15, 5, round($notas6 / $cr6, 0), 1, 0, 'C', true);
@@ -543,3 +562,4 @@ foreach ($students as $estu) {
 }
 
 $pdf->Output();
+?>
