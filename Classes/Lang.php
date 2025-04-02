@@ -34,14 +34,14 @@ class Lang
     public function addTranslation(array $translationArray)
     {
         foreach ($translationArray as $translation) {
-            $this->translations[strtolower(utf8_decode($translation[0]))]['es'] = $translation[0];
-            $this->translations[strtolower(utf8_decode($translation[0]))]['en'] = $translation[1];
+            $this->translations[strtolower($translation[0])]['es'] = $translation[0];
+            $this->translations[strtolower($translation[0])]['en'] = $translation[1];
         }
     }
 
     public function translation($text): string
     {
-        $key = strtolower(utf8_decode($text));
+        $key = strtolower($text);
         if (!isset($this->translations[$key])) {
             return $text;
         }
