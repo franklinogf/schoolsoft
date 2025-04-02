@@ -66,6 +66,19 @@ $in17 = '';
 $in18 = '';
 $in19 = '';
 $in20 = '';
+$in21 = '';
+$in22 = '';
+$in23 = '';
+$in24 = '';
+$in25 = '';
+$in26 = '';
+$in27 = '';
+$in28 = '';
+$in29 = '';
+$in30 = '';
+$in31 = '';
+$in32 = '';
+$in33 = '';
 if ($re == '1') {
     $in1 = 'selected';
 }
@@ -205,7 +218,8 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
                         <select id="tarjeta" name="tarjeta" class="form-control" onclick="return activarTrimestre(); return true">
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
                             <option value='2' <?= $in2 ?>>Tarjeta 2</option>
-                            <option value='9' <?= $in3 ?>>Tarjeta 9</option>
+                            <option value='9' <?= $in9 ?>>Tarjeta 9</option>
+                            <option value='14' <?= $in14 ?>>Tarjeta 14</option>
                             <option value='32' <?= $in3 ?>>Tarjeta 32</option>
                             <option value='33' <?= $in3 ?>>Tarjeta 33</option>
                         </select>
