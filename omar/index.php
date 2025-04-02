@@ -1,7 +1,6 @@
 <?php
 require_once 'app.php';
 
-use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Controllers\School;
