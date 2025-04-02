@@ -3,7 +3,7 @@
   "description": "Web app for schools",
   "type": "project",
   "require": {
-    "resend/resend-php": "^0.13.0"
+    "resend/resend-php": "^v0.16.0"
   },
   "autoload": {
     "psr-4": {
