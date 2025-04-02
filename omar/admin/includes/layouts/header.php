@@ -1,4 +1,5 @@
 <?php
+
 use Classes\Route;
 use Classes\Controllers\School;
 
@@ -7,7 +8,7 @@ global $title;
 ?>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>Admin <?= $title ? "- {$title}":'' ?></title>
+<title>Admin <?= $title ? "- {$title}" : '' ?></title>
 <link rel="icon" href="<?= School::logo() ?>" />
 <?php
 
