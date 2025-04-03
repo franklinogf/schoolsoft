@@ -27,7 +27,7 @@ $lang = new Lang([
    <title><?= $lang->translation("Admin - Iniciar Sesión") ?></title>
    <link rel="icon" href="<?= School::logo() ?>" />
    <?php
-   Route::css("/css/main-bootstrap.css");
+   echo Route::bootstrapCSS();
    Route::css("/css/main.css", true);
    Route::css("/css/login.css", true);
    ?>
