@@ -1,7 +1,6 @@
 <?php
 require_once 'app.php';
 
-use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Controllers\School;
@@ -27,7 +26,7 @@ $lang = new Lang([
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $school->info('colegio') ?></title>
     <link rel="icon" href="<?= School::logo() ?>" />
-    <?php Route::css("/css/main-bootstrap.css") ?>
+    <?= Route::bootstrapCSS() ?>
     <?php Route::css("/css/main.css", true) ?>
     <?php Route::fontawasome(); ?>
 </head>

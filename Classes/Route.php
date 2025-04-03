@@ -29,6 +29,15 @@ class Route
       echo '<link rel="stylesheet" href="' . $root . $path . '" />';
    }
 
+   public static function bootstrapCSS(): string
+   {
+      $path = __SCHOOL_URL . '/css/main-bootstrap.css';
+      if (!file_exists(__ROOT_SCHOOL . '/css/main-bootstrap.css')) {
+         $path = '/css/main-bootstrap.css';
+      }
+      return "<link rel='stylesheet' href='{$path}'/>";
+   }
+
    public static function js($path, $serverRoot = false)
    {
       $root = '';
@@ -58,7 +67,6 @@ class Route
    {
       echo '<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>';
    }
-
    public static function fontawasome()
    {
       echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
