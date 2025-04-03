@@ -48,7 +48,7 @@ class School extends SchoolModel
 
    public function info($key)
    {
-      return $this->props[$key];
+      return $this->props[$key] ?? null;
    }
 
    public function year(): string
