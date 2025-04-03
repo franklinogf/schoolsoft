@@ -1,179 +1,179 @@
-@import "./animate.css";
-@import "./fa-all.min.css";
+@import './animate.css';
+@import './fa-all.min.css';
 
 /* ------------------------------ Google Fonts ------------------------------ */
 
-@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Markazi+Text&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text&display=swap');
 
 .dataTables_filter {
-	float: right;
+  float: right;
 }
 textarea {
-	resize: vertical !important; /* user can resize vertically, but width is fixed */
-	min-height: 100px !important;
+  resize: vertical !important; /* user can resize vertically, but width is fixed */
+  min-height: 100px !important;
 }
 /* Menu links colors */
 #navbarNavDropdown > ul.navbar-nav > li > a {
-	color: #ffffff !important;
+  color: #ffffff !important;
 }
 #navbarNavDropdown > ul.navbar-nav > li > a:hover {
-	color: #ffffffcc !important;
+  color: #ffffffcc !important;
 }
 #navbarNavDropdown > ul.navbar-nav > li.active > a {
-	color: var(--primary) !important;
+  color: var(--primary) !important;
 }
 
 th.checkbox {
-	width: 2rem !important;
+  width: 2rem !important;
 }
 
 .bg-secondary.custom-control-input:checked ~ .custom-control-label::before,
 .bg-secondary.custom-control-input:indeterminate ~ .custom-control-label::before {
-	background: var(--secondary) !important;
-	border-color: var(--secondary) !important;
+  background: var(--secondary) !important;
+  border-color: var(--secondary) !important;
 }
 .bg-success.custom-control-input:checked ~ .custom-control-label::before,
 .bg-success.custom-control-input:indeterminate ~ .custom-control-label::before {
-	background: var(--success) !important;
-	border-color: var(--success) !important;
+  background: var(--success) !important;
+  border-color: var(--success) !important;
 }
 
 .bg-info.custom-control-input:checked ~ .custom-control-label::before,
 .bg-info.custom-control-input:indeterminate ~ .custom-control-label::before {
-	background: var(--info) !important;
-	border-color: var(--info) !important;
+  background: var(--info) !important;
+  border-color: var(--info) !important;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
 
 .opacity-0 {
-	opacity: 0;
+  opacity: 0;
 }
 .opacity-1 {
-	opacity: 1;
+  opacity: 1;
 }
 
 .custom-file-label::after {
-	content: "Buscar";
-	background: var(--primary);
-	color: var(--dark);
+  content: 'Buscar';
+  background: var(--primary);
+  color: var(--dark);
 }
 
 .blend-screen {
-	mix-blend-mode: screen !important;
+  mix-blend-mode: screen !important;
 }
 
 /* body background to be gradient */
 body {
-	background-image: linear-gradient(white, var(--light));
+  background-image: linear-gradient(white, var(--light));
 
-	background-attachment: fixed;
+  background-attachment: fixed;
 }
 
 /* custom border gradient */
 .border-primary-gradient-top {
-	border-style: solid;
-	border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--primary)) 1;
+  border-style: solid;
+  border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--primary)) 1;
 }
 
 .border-primary-gradient-bottom {
-	border-style: solid;
-	border-image: linear-gradient(to top, rgba(0, 0, 0, 0), var(--primary)) 1;
+  border-style: solid;
+  border-image: linear-gradient(to top, rgba(0, 0, 0, 0), var(--primary)) 1;
 }
 
 .border-secondary-gradient-top {
-	border-style: solid;
-	border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--secondary)) 1;
+  border-style: solid;
+  border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--secondary)) 1;
 }
 
 .border-secondary-gradient-bottom {
-	border-style: solid;
-	border-image: linear-gradient(to top, rgba(0, 0, 0, 0), var(--secondary)) 1;
+  border-style: solid;
+  border-image: linear-gradient(to top, rgba(0, 0, 0, 0), var(--secondary)) 1;
 }
 
 .-border-right {
-	border-right: 5px solid;
+  border-right: 5px solid;
 }
 
 .-border-left {
-	border-left: 5px solid;
+  border-left: 5px solid;
 }
 
 .-border-top {
-	border-top: 5px solid;
+  border-top: 5px solid;
 }
 
 .-border-bottom {
-	border-bottom: 5px solid;
+  border-bottom: 5px solid;
 }
 
 .table-pointer tbody tr td {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .pointer-cursor {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .pointer-cursor:hover {
-	opacity: 0.75;
+  opacity: 0.75;
 }
 
 /* Custom scroll bar */
 /* width */
 .custom-scroll::-webkit-scrollbar {
-	width: 0.35rem;
+  width: 0.35rem;
 }
 
 /* Track */
 .custom-scroll::-webkit-scrollbar-track {
-	background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 /* Handle */
 .custom-scroll::-webkit-scrollbar-thumb {
-	background: var(--primary);
+  background: var(--primary);
 }
 
 /* Handle on hover */
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-	background: var(--secondary);
+  background: var(--secondary);
 }
 
 /* custom fonts */
 
 .font-bree {
-	font-family: "Bree Serif", serif;
+  font-family: 'Bree Serif', serif;
 }
 
 .font-markazi {
-	font-family: "Markazi Text", serif;
+  font-family: 'Markazi Text', serif;
 }
 
 .profile-picture {
-	width: 250px;
-	height: 250px;
+  width: 250px;
+  height: 250px;
 }
 
 .blur {
-	filter: blur(15px) brightness(0.7);
-	pointer-events: none;
-	cursor: not-allowed;
+  filter: blur(15px) brightness(0.7);
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 tr.disabled {
-	pointer-events: none;
-	opacity: 0.5;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* smooth scroll for animation */
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
-.btn{
-	font-weight: bold !important;
+.btn {
+  font-weight: bold !important;
 }
