@@ -98,6 +98,7 @@ class Route
 
    public static function redirect($path = '/login.php', $rootSchool = true)
    {
+      $path = '/' . ltrim($path, '/');
       $newPath = "";
       if ($rootSchool) {
          $newPath = __SUB_ROOT_URL;
