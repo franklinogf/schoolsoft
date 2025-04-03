@@ -237,14 +237,14 @@ $defaultTheme = require __ROOT . '/config/theme.php';
                             <?php if ($themeKey === 'colors'): ?>
                                 <div class="col-2">
                                     <label for="<?= $key ?>"><?= $label ?></label>
-                                    <input name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" class="form-control" type="color" value="<?= $theme->{$themeKey}->{$key} ?? $value ?>">
+                                    <input name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" class="form-control" type="color" value="<?= $theme?->{$themeKey}->{$key} ?? $value ?>">
                                 </div>
-                            <?php elseif ($themeKey === 'booleans') : ?>
+                            <?php elseif ($themeKey === 'booleans') : var_dump($theme?->{$themeKey}->{$key} ?? $value) ?>
 
                                 <div class="col-12">
                                     <div class="form-check form-check-inline">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" <?= (bool) $theme->{$themeKey}->{$key} ?? (bool) $value ? 'checked' : '' ?>> <?= $label ?>
+                                            <input class="form-check-input" type="checkbox" name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" <?= $theme?->{$themeKey}->{$key} ?? $value ? 'checked' : '' ?>> <?= $label ?>
                                         </label>
                                     </div>
                                 </div>
