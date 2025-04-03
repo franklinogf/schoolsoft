@@ -5,12 +5,6 @@ use Classes\Lang;
 use Classes\Route;
 use Classes\Controllers\School;
 
-
-use Classes\Services\SccsCompiler;
-
-$compiler = new SccsCompiler();
-$compiler->compile(primary: '#6610f2');
-
 $school = new School();
 $lang = new Lang([
     ['Administración', 'Administration'],
