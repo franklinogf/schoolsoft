@@ -9,45 +9,55 @@ class SccsCompiler
 {
 
     public function compile(
-        ?string $primary = null,
-        ?string $secondary = null,
-        ?string $light = null,
-        ?bool $enable_shadows = null,
-        ?bool $enable_responsive_font_sizes = null,
-    ): void {
+        array $theme,
+    ): bool {
+        if (empty($theme) || !is_array($theme) || !isset($theme['colors']) || !isset($theme['booleans'])) {
+            return false;
+        }
 
-        $config = include __ROOT . '/config/theme.php';
+        $defaultTheme = include __ROOT . '/config/theme.php';
 
-        $primary ??= $config['theme-colors']['primary'];
-        $secondary ??= $config['theme-colors']['secondary'];
-        $light ??= $config['theme-colors']['light'];
-        $enable_shadows ??= $config['enable-shadows'];
-        $enable_responsive_font_sizes ??= $config['enable-responsive-font-sizes'];
+        $colors = $defaultTheme['colors'];
+        $booleans = $defaultTheme['booleans'];
+        $themeColors = "";
+
+        $themeBooleans = "";
+        foreach ($colors as $key => $value) {
+            $value = isset($theme['colors'][$key]) ? $theme['colors'][$key] : $value;
+            $themeColors .= "{$key}: {$value},";
+        }
+
+        foreach ($booleans as $key => $value) {
+            $value = isset($theme['booleans'][$key]) ? ((bool) $theme['booleans'][$key] ? 'true' : 'false') : ((bool) $value ? 'true' : 'false');
+            $themeBooleans .=  "\${$key}: {$value};";
+        }
 
         try {
             $compiler = new Compiler();
             $compiler->setOutputStyle(OutputStyle::COMPRESSED);
             $compiler->setImportPaths(__ROOT . '/node_modules/bootstrap/scss/');
 
-            $result = $compiler->compileString('
-                    $theme-colors: (
-                        primary: ' . $primary . ',
-                        secondary: ' . $secondary . ',
-                        light: ' . $light . '
+            $result = $compiler->compileString("
+                    \$theme-colors: (
+                        $themeColors
                     );
+
+                    $themeBooleans
                     
-                    $enable-shadows: ' . ($enable_shadows ? 'true' : 'false') . ';  
-                    $enable-responsive-font-sizes: ' . ($enable_responsive_font_sizes ? 'true' : 'false') . ';  
+                    \$enable-shadows: true;  
                     
-                    @import "bootstrap.scss";
-            ');
+                    \$enable-responsive-font-sizes: true;  
+                    
+                    @import 'bootstrap.scss';
+            ");
 
             $css = $result->getCss();
             $this->createSchoolCssDirectory();
 
             file_put_contents(__ROOT_SCHOOL . '/css/main-bootstrap.css', $css);
-        } catch (\Throwable $th) {
-            throw $th;
+            return true;
+        } catch (\Throwable) {
+            return false;
         }
     }
 

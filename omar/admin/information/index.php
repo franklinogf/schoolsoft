@@ -9,12 +9,15 @@ use Classes\DataBase\DB;
 
 Session::is_logged();
 DB::table('colegio')->alter("ADD COLUMN constants JSON NULL;");
+DB::table('colegio')->alter("ADD COLUMN theme JSON NULL;");
 $lang = new Lang([
     ["Información del colegio", "School information"],
 ]);
 $school = new School(Session::id());
 $environmtsKeys = ["whatsapp", "resend", 'evertec'];
 $constantsKeys = ['cafeteria_deposit'];
+
+$defaultTheme = require __ROOT . '/config/theme.php';
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -212,26 +215,72 @@ $constantsKeys = ['cafeteria_deposit'];
                 </div>
             </form>
         </div>
-    </div>
+        <div class="container bg-white shadow-lg py-3 mt-4 rounded mx-auto">
+            <?php
+            $theme = $school->info('theme') ? json_decode($school->info('theme')) : null;
 
-    <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    ?>
-    <script>
-        $(document).ready(function() {
-            $("#advancedOptionsBtn").click(function(e) {
-                const advancedOptions = $("#advancedOptions")
-                if (!advancedOptions.hasClass('show')) {
-                    if (prompt("Password") === '123456') {
-                        advancedOptions.collapse('show')
+            ?>
+            <h6>Tema de la pagína</h6>
+            <div>
+                <small class="text-info"><?= Session::get('theme', true) ?></small>
+            </div>
+
+            <form id="themeForm" method="POST" action="<?= Route::url('/admin/information/includes/theme.php') ?>">
+                <?php foreach ($defaultTheme as $themeKey => $themeValue): ?>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <h7><?= ucfirst($themeKey) ?></h>
+                        </div>
+                        <?php foreach ($themeValue as $key => $value):
+                            $label = ucfirst(str_replace('-', ' ', $key));
+                        ?>
+                            <?php if ($themeKey === 'colors'): ?>
+                                <div class="col-2">
+                                    <label for="<?= $key ?>"><?= $label ?></label>
+                                    <input name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" class="form-control" type="color" value="<?= $theme->{$themeKey}->{$key} ?? $value ?>">
+                                </div>
+                            <?php elseif ($themeKey === 'booleans') : ?>
+
+                                <div class="col-12">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="theme[<?= $themeKey ?>][<?= $key ?>]" id="<?= $key ?>" <?= (bool) $theme->{$themeKey}->{$key} ?? (bool) $value ? 'checked' : '' ?>> <?= $label ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    </div>
+
+                <?php endforeach ?>
+                <button class="btn btn-primary mt-2" type="submit">Actualizar tema</button>
+            </form>
+            <form method="POST" action="<?= Route::url('/admin/information/includes/resetTheme.php') ?>">
+                <button class="btn btn-warning mt-2" type="submit">Restaurar tema por defecto</button>
+            </form>
+
+
+        </div>
+
+        <?php
+        Route::includeFile('/includes/layouts/scripts.php', true);
+        ?>
+        <script>
+            $(document).ready(function() {
+                $("#advancedOptionsBtn").click(function(e) {
+                    const advancedOptions = $("#advancedOptions")
+                    if (!advancedOptions.hasClass('show')) {
+                        if (prompt("Password") === '123456') {
+                            advancedOptions.collapse('show')
+                        }
+                    } else {
+                        advancedOptions.collapse('hide')
+
                     }
-                } else {
-                    advancedOptions.collapse('hide')
-
-                }
-            })
-        });
-    </script>
+                })
+            });
+        </script>
 </body>
 
 </html>
