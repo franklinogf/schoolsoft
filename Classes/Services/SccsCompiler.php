@@ -56,7 +56,7 @@ class SccsCompiler
 
             file_put_contents(__ROOT_SCHOOL . '/css/main-bootstrap.css', $css);
             return true;
-        } catch (\Throwable) {
+        } catch (\ScssPhp\ScssPhp\Exception\SassException) {
             return false;
         }
     }
