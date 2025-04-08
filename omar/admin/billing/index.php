@@ -273,6 +273,11 @@ $options = [
                 'link' => 'pdf/inf_size.php',
                 'target' => 'T-Shirts',
             ],
+            [
+                'name' => ["es" => 'Inf. Compras', "en" => "Purchasing Report"],
+                'desc' => ['es' => 'Informe de compras en cafeterias por fechas.', 'en' => 'Report on purchases in cafeterias by date.'],
+                'link' => 'inf_compras_op.php',
+            ],
         ],
     ],
 
