@@ -26,13 +26,13 @@ $lang = new Lang([
 $school = new School(Session::id());
 $year = $school->info('year2');
 $students = new Student();
-//$students = $students->all();
+$students = $students->all();
 
 $debe = 0;
 foreach ($students as $student) {
     $debe = 0;
     $result10 = DB::table('pagos')
-        ->whereRaw(" id='$student->id' and ss='$student->ss' and year='$year' and baja='' and fecha_d <= '" . date('Y-m-d') . "'")->orderBy('codigo')->get();
+        ->whereRaw("id='$student->id' and ss='$student->ss' and year='$year' and baja='' and fecha_d <= '" . date('Y-m-d') . "'")->orderBy('codigo')->get();
     foreach ($result10 as $row10) {
         $debe = $debe + ($row10->deuda - $row10->pago);
     }
@@ -51,6 +51,7 @@ $students = DB::table('year')
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
