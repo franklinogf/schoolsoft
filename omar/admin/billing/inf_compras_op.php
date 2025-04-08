@@ -25,7 +25,6 @@ $lang = new Lang([
 ]);
 $school = new School(Session::id());
 $year = $school->info('year2');
-$year = '13-14';
 $students = new Student();
 $students = $students->all();
 $target = 'excel_compra';
