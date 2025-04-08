@@ -59,12 +59,12 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                 </button>
             </form>
 
-            <?php if ($_REQUEST['student']):
+            <?php if ($_REQUEST['student'] ?? ''):
                 $studentCourses = DB::table('padres')->where([
                     ['ss', $_REQUEST['student']],
                     ['year', $school->year()]
                 ])->orderBy('curso')->get();
-                ?>
+            ?>
                 <input type="hidden" id="studentSS" value="<?= $_REQUEST['student'] ?>">
                 <div class="row mt-4">
                     <div class="col-12 col-md-6 gap-2">
@@ -77,7 +77,7 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                             <ul id="availableCourses" class="list-group">
                                 <?php foreach ($availableCourses as $course):
                                     $desc = __LANG === 'es' ? $course->desc1 : $course->desc2;
-                                    ?>
+                                ?>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span>
                                             <?= "$course->curso - $desc ($course->id)" ?>
@@ -104,7 +104,7 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                             <ul id="studentCourses" class="list-group">
                                 <?php foreach ($studentCourses as $course):
                                     $desc = __LANG === 'es' ? $course->descripcion : $course->desc2;
-                                    ?>
+                                ?>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span>
                                             <?= "$course->curso - $desc ($course->id)" ?>
@@ -136,8 +136,8 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
     Route::selectPicker('js');
     ?>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#availableCourses").on('click', '.addCourse', function (e) {
+        $(document).ready(function() {
+            $("#availableCourses").on('click', '.addCourse', function(e) {
                 const text = $(this).prev('span').text().trim()
                 const id = $(this).data('id')
                 let canBeAdded = true
@@ -153,7 +153,7 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                         addCourse: true,
                         courseID: id,
                         studentSS: $("#studentSS").val(),
-                    }, function (data) {
+                    }, function(data) {
                         console.log('Add course --> ', data);
                         $("#studentCourses").prepend(`
                         <li class="list-group-item d-flex justify-content-between bg-info">
@@ -174,7 +174,7 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
 
             })
 
-            $("#studentCourses").on('click', ".removeCourse", function (e) {
+            $("#studentCourses").on('click', ".removeCourse", function(e) {
                 if (confirm('Esta seguro que desea eliminar este curso?')) {
                     const id = $(this).data('id')
                     const $li = $(this).parent('li')
@@ -182,19 +182,19 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
                         removeCourse: true,
                         courseID: id,
                         studentSS: $("#studentSS").val(),
-                    }, function (data) {
+                    }, function(data) {
                         console.log('Remove course --> ', data);
                         $li.remove()
                     });
                 }
 
             })
-            $("#removeAllCourses").on('click', function (e) {
+            $("#removeAllCourses").on('click', function(e) {
                 if (confirm('Esta seguro que desea eliminar todos los cursos?')) {
                     $.post(includeThisFile(), {
                         removeAllCourses: true,
                         studentSS: $("#studentSS").val(),
-                    }, function (data) {
+                    }, function(data) {
                         console.log('Remove all courses --> ', data);
                         $("#studentCourses li").remove();
                     });
@@ -204,7 +204,6 @@ $availableCourses = DB::table('cursos')->where(['year', $school->year()])->order
 
 
         })
-
     </script>
 
 </body>
