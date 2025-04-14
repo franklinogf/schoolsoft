@@ -79,9 +79,17 @@ if (!function_exists('school_logo')) {
         return  school_asset(school_config('app.logo.default'));
     }
 }
+
 if (!function_exists('__')) {
-    function __($key, $replace = [], $locale = null): string
+    function __(string $key, array $replace = [], ?string $locale = null): string
     {
         return TranslatorFactory::get()->get($key, $replace, $locale);
+    }
+}
+
+if (!function_exists('trans_choice')) {
+    function trans_choice(string $key, int $choice, array $replace = [], ?string $locale = null): string
+    {
+        return TranslatorFactory::get()->choice($key, $choice, $replace, $locale);
     }
 }
