@@ -8,7 +8,7 @@ Session::is_logged();
 
 $options = [
     [
-        'title' => ["es" => __("Opciones"), "en" => __("Options")],
+        'title' => __("Opciones"),
         'buttons' => [
             [
                 'name' => __("Cuentas / Matricula"),
@@ -108,7 +108,7 @@ $options = [
         ]
     ],
     [
-        'title' => ["es" => __("Entrada de codigos"), "en" => __("Code entry")],
+        'title' => __("Entrada de codigos"),
         'buttons' => [
             [
                 'name' => __("Códigos de bajas"),
@@ -176,7 +176,7 @@ $options = [
             <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
-                        <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
+                        <legend class="w-auto"><?= $option['title'] ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
