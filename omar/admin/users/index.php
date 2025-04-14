@@ -9,141 +9,141 @@ Session::is_logged();
 
 $options = [
     [
-        'title' => ["es" => 'Opciones', "en" => 'Options'],
+        'title' => ["es" => __("Opciones"), "en" => __("Options")],
         'buttons' => [
             [
-                'name' => ["es" => 'Cuentas / Matricula', "en" => "Accounts / Enrollment"],
-                'desc' => ['es' => 'Crear, añadir, modificar las cuentas de los padres y estudiantes.', 'en' => 'Create, add, modify parents and students accounts.'],
+                'name' => __("Cuentas / Matricula"),
+                'desc' => __("Crear, añadir, modificar las cuentas de los padres y estudiantes."),
                 'link' => 'accounts/'
             ],
             [
-                'name' => ["es" => 'Entrega de documentos', "en" => "Documents delivery"],
-                'desc' => ['es' => 'Documentación que se pide y entregan a la oficina.', 'en' => 'Documents to be handle to the office.'],
+                'name' => __("Entrega de documentos"),
+                'desc' => __("Documentación que se pide y entregan a la oficina."),
                 'link' => 'documentsDelivery/'
             ],
             [
-                'name' => ["es" => 'Re-matrícula', "en" => "Re-enrollment"],
-                'desc' => ['es' => 'Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A', 'en' => 'Screen to pass the students of a grade to the next grade. e.i. 01-A to 02-A'],
+                'name' => __("Re-matrícula"),
+                'desc' => __("Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A."),
                 'link' => 'reenrollment/'
             ],
             [
-                'name' => ["es" => 'Maestros', "en" => "Teachers"],
-                'desc' => ['es' => 'Añadir, borrar o modificar información de los maestros.', 'en' => 'Add, update or delete teachers information.'],
+                'name' => __("Maestros"),
+                'desc' => __("Añadir, borrar o modificar información de los maestros."),
                 'link' => 'teachers/'
             ],
             [
-                'name' => ["es" => 'Administración', "en" => "Administración"],
-                'desc' => ['es' => 'Pantalla para crear los usuarios administrativos con areas de acceso.', 'en' => 'Pantalla para crear los usuarios administrativos con areas de acceso.'],
+                'name' => __("Administración"),
+                'desc' => __("Pantalla para crear los usuarios administrativos con areas de acceso."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Usuarios de padres', "en" => "Usuarios de padres"],
-                'desc' => ['es' => 'Es para añadir un usuario adicional al que tiene, para que entren diferentes usuario a la misma cuenta.', 'en' => 'Es para añadir un usuario adicional al que tiene, para que entren diferentes usuario a la misma cuenta.'],
+                'name' => __("Usuarios de padres"),
+                'desc' => __("Es para añadir un usuario adicional al que tiene, para que entren diferentes usuario a la misma cuenta."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Modificar nombres', "en" => "Modificar nombres"],
-                'desc' => ['es' => 'Pantalla para cambiar los nombre y apellidos de los estudiantes.', 'en' => 'Pantalla para cambiar los nombre y apellidos de los estudiantes.'],
+                'name' => __("Modificar nombres"),
+                'desc' => __("Pantalla para cambiar los nombre y apellidos de los estudiantes."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Memos y deméritos', "en" => "Memos and demerits"],
-                'desc' => ['es' => 'Pantalla para entrar los memos y deméritos a los estudiantes.', 'en' => 'Screen to enter the memos and demerit to the students.'],
+                'name' => __("Memos y deméritos"),
+                'desc' => __("Pantalla para entrar los memos y deméritos a los estudiantes."),
                 'link' => 'memos/'
             ],
             [
-                'name' => ["es" => 'Pantalla de bajas', "en" => "Unenrollment"],
-                'desc' => ['es' => 'Pantalla para dar de bajas a los estudiantes.', 'en' => 'Screen to unenroll students.'],
+                'name' => __("Pantalla de bajas"),
+                'desc' => __("Pantalla para dar de bajas a los estudiantes."),
                 'link' => 'unenrollment/'
             ],
             [
-                'name' => ["es" => 'Enfermeria', "en" => "Enfermeria"],
-                'desc' => ['es' => 'Ingrese o vea información médica de los estudiantes.', 'en' => 'Ingrese o vea información médica de los estudiantes.'],
+                'name' => __("Enfermeria"),
+                'desc' => __("Ingrese o vea información médica de los estudiantes."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Informe de enfermeria', "en" => "Informe de enfermeria"],
-                'desc' => ['es' => 'Informes de Enfermeria.', 'en' => 'Informes de Enfermeria.'],
+                'name' => __("Informe de enfermeria"),
+                'desc' => __("Informes de Enfermeria."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Documentos', "en" => "Documents"],
-                'desc' => ['es' => 'Pantalla para guardar los archivos de los estudiantes.', 'en' => 'Screen to save the files for the students.'],
+                'name' => __("Documentos"),
+                'desc' => __("Pantalla para guardar los archivos de los estudiantes."),
                 'link' => 'documents/'
             ],
             [
-                'name' => ["es" => 'Impresiones', "en" => "Impresiones"],
-                'desc' => ['es' => 'Pantalla para llevar control de copias.', 'en' => 'Pantalla para llevar control de copias.'],
+                'name' => __("Impresiones"),
+                'desc' => __("Pantalla para llevar control de copias."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Cambiar grado', "en" => "Cambiar grado"],
-                'desc' => ['es' => 'Pantalla para cambiar el grado', 'en' => 'Screen to change grade'],
+                'name' => __("Cambiar grado"),
+                'desc' => __("Pantalla para cambiar el grado"),
                 'link' => 'changeGrade/'
             ],
             [
-                'name' => ["es" => 'Cambiar cuenta', "en" => "Change account"],
-                'desc' => ['es' => 'Pantalla para cambiar una cuenta a otra.', 'en' => 'Screen to change one account to another.'],
+                'name' => __("Cambiar cuenta"),
+                'desc' => __("Pantalla para cambiar una cuenta a otra."),
                 'link' => 'change_account/'
             ],
             [
-                'name' => ["es" => 'Admisión', "en" => "Admisión"],
-                'desc' => ['es' => 'Pantalla para matrículas nuevas.', 'en' => 'Pantalla para matrículas nuevas.'],
+                'name' => __("Admisión"),
+                'desc' => __("Pantalla para matrículas nuevas."),
                 'link' => '#'
             ],
             [
-                'name' => ["es" => 'Enviar usuarios', "en" => "Send users"],
-                'desc' => ['es' => 'Pantalla para enviar los usuarios a los padres.', 'en' => 'Screen to send users to parents.'],
+                'name' => __("Enviar usuarios"),
+                'desc' => __("Pantalla para enviar los usuarios a los padres."),
                 'link' => 'email/sendUsers.php'
             ],
             [
-                'name' => ["es" => 'Buscar correo electrónico', "en" => "Search email"],
-                'desc' => ['es' => 'Pantalla para buscar de quien es el email.', 'en' => 'Screen to search for who the email is from.'],
+                'name' => __("Buscar correo electrónico"),
+                'desc' => __("Pantalla para buscar de quien es el email."),
                 'link' => 'search_email/'
             ],
             [
-                'name' => ["es" => 'Bloqueo de re-matrícula', "en" => "Re-Enrollment lock"],
-                'desc' => ['es' => 'Acceso o bloqueo de las re-matricula a los padres.', 'en' => 'Access or blockage of re-enrollment to parents.'],
+                'name' => __("Bloqueo de re-matrícula"),
+                'desc' => __("Acceso o bloqueo de las re-matricula a los padres."),
                 'link' => 'regis_deactivation.php'
             ],
         ]
     ],
     [
-        'title' => ["es" => 'Entrada de codigos', "en" => 'Code entry'],
+        'title' => ["es" => __("Entrada de codigos"), "en" => __("Code entry")],
         'buttons' => [
             [
-                'name' => ["es" => 'Códigos de bajas', "en" => "Unenrollment codes"],
-                'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
+                'name' => __("Códigos de bajas"),
+                'desc' => __("Pantalla para entrar los código de bajas."),
                 'link' => 'unenrollment/codes.php'
             ],
             [
-                'name' => ["es" => 'Socio económico', "en" => "Socioeconomic"],
-                'desc' => ['es' => 'Entrada de valores para el Socio Económico.', 'en' => 'Input of values for the Socioeconomic.'],
+                'name' => __("Socio económico"),
+                'desc' => __("Entrada de valores para el Socio Económico."),
                 'link' => 'socioeconomic/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos especiales', "en" => "Special codes"],
-                'desc' => ['es' => 'Entrada de valores Especiales.', 'en' => 'Entry of Special values.'],
+                'name' => __("Códigos especiales"),
+                'desc' => __("Entrada de valores Especiales."),
                 'link' => 'Special_codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos documentos', "en" => "Documents codes"],
-                'desc' => ['es' => 'Definir la entrada de los documentos para entregar.', 'en' => 'Define the entry of documents to deliver.'],
+                'name' => __("Códigos documentos"),
+                'desc' => __("Definir la entrada de los documentos para entregar."),
                 'link' => 'documentsDelivery/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos Departamentos', "en" => "Department codes"],
-                'desc' => ['es' => 'Entra los códigos de los departamentos del Colegio.', 'en' => 'Enter the codes of the College departments.'],
+                'name' => __("Códigos Departamentos"),
+                'desc' => __("Entra los códigos de los departamentos del Colegio."),
                 'link' => 'deparment/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos de memos', "en" => "Memos codes"],
-                'desc' => ['es' => 'Pantalla para entrar los código de bajas.', 'en' => 'Screen to enter the deregistration codes.'],
+                'name' => __("Códigos de memos"),
+                'desc' => __("Pantalla para entrar los código de bajas."),
                 'link' => 'memos/codes.php'
             ],
             [
-                'name' => ["es" => 'Códigos de mensajes', "en" => "Message codes"],
-                'desc' => ['es' => 'Definir los mensajes para la Tarjeta de notas y Hoja de progreso.', 'en' => 'Define messages for the Note Card and Progress Sheet.'],
+                'name' => __("Códigos de mensajes"),
+                'desc' => __("Definir los mensajes para la Tarjeta de notas y Hoja de progreso."),
                 'link' => 'messagecode/codes.php'
             ]
         ]
@@ -153,11 +153,6 @@ $options = [
 ];
 
 
-$lang = new Lang([
-    ["Opciones", "Options"]
-]);
-
-
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -165,7 +160,7 @@ $lang = new Lang([
 
 <head>
     <?php
-    $title = $lang->translation("Opciones");
+    $title = __("Opciones");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -175,7 +170,7 @@ $lang = new Lang([
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation("Opciones") ?></h1>
+        <h1 class="text-center my-3"><?= __("Opciones") ?></h1>
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
@@ -187,7 +182,7 @@ $lang = new Lang([
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
