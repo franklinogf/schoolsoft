@@ -1,7 +1,6 @@
 <?php
 
-use Classes\Controllers\School;
-use Classes\DataBase\DB;
+use App\Models\School;
 use Classes\Route;
 use Classes\Session;
 use Classes\Services\SccsCompiler;
@@ -11,6 +10,7 @@ include '../../../app.php';
 Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    $admin = School::admin()->first();
 
     $colors = $theme['colors'];
     $booleans = $theme['booleans'];
@@ -18,11 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $compiler = new SccsCompiler;
     $compiler->useDefault();
 
-    DB::table('colegio')->where('usuario', 'administrador')->update([
+    $admin->update([
         'theme' => null,
     ]);
 
-    Session::set('theme', 'Theme updated successfully.');
+    Session::set('theme', __('Tema actualizado correctamente'));
 
     Route::redirect('/information');
 } else {

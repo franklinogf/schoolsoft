@@ -6,9 +6,9 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\School;
+use App\Models\School;
 use Classes\Controllers\Parents;
-use Classes\Controllers\Student;
+use App\Models\Student;
 
 Session::is_logged();
 $students = new Student();
@@ -76,8 +76,8 @@ $lang = new Lang([
 
 ]);
 
-$school = new School();
-$students = $students->All();
+$school = School::find(Session::id());
+$students = Student::all();
 $year = $school->year();
 $female = $male = 0;
 foreach ($students as $student) {
@@ -141,7 +141,7 @@ if (Session::get('accountNumber')) {
                 </form>
                 <?php if (Session::get("edited")):
                     Session::delete('edited');
-                    ?>
+                ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se ha actualizado con éxito") ?>
@@ -153,7 +153,7 @@ if (Session::get('accountNumber')) {
                 <?php endif; ?>
                 <?php if (Session::get("added")):
                     Session::delete('added');
-                    ?>
+                ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= $lang->translation("Se ha agregado con éxito") ?>
@@ -195,7 +195,7 @@ if (Session::get('accountNumber')) {
             } else {
                 $nextId = DB::getNextIdFromTable('madre');
             }
-            ?>
+        ?>
             <form method="POST" action="<?= Route::url('/admin/users/accounts/includes/index.php') ?>">
                 <div class="row mt-5">
                     <div class="col-12">
@@ -642,8 +642,8 @@ if (Session::get('accountNumber')) {
                                     <div class="card-body">
                                         <img src="<?= Util::studentProfilePicture($kid) ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
                                         <h6 class="card-title"><?= "$kid->nombre $kid->apellidos" ?></h6>
-                                        <p class="card-text"><?= $lang->translation("Grado:") ?>             <?= $kid->grado ?></p>
-                                        <p class="card-text"><?= $lang->translation("Fecha de nacimiento:") ?>             <?= Util::formatDate($kid->fecha, true, true) ?></p>
+                                        <p class="card-text"><?= $lang->translation("Grado:") ?> <?= $kid->grado ?></p>
+                                        <p class="card-text"><?= $lang->translation("Fecha de nacimiento:") ?> <?= Util::formatDate($kid->fecha, true, true) ?></p>
                                     </div>
                                     <div class="card-footer">
                                         <a href="<?= Route::url("/admin/users/accounts/students.php?pk=$kid->mt&id=$parents->id") ?>" class="btn btn-primary btn-block stretched-link">Edit student</a>
@@ -662,17 +662,17 @@ if (Session::get('accountNumber')) {
                 </div>
             <?php endif ?>
 
-        </div>
-    <?php endif ?>
-
     </div>
+<?php endif ?>
+
+</div>
 
 
-    <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    Route::selectPicker('js');
+<?php
+Route::includeFile('/includes/layouts/scripts.php', true);
+Route::selectPicker('js');
 
-    ?>
+?>
 
 </body>
 

@@ -3,9 +3,13 @@ require_once 'app.php';
 
 use Classes\Lang;
 use Classes\Route;
-use Classes\Controllers\School;
+use App\Models\School;
+use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager;
 
-$school = new School();
+
+$school = School::find('administrador');
+
 $lang = new Lang([
     ['Administración', 'Administration'],
     ["Regiweb", 'Regiweb'],
@@ -16,6 +20,7 @@ $lang = new Lang([
     ["Documentos", "Documents"],
     ["Cafetería", "Cafeteria"]
 ]);
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -24,8 +29,8 @@ $lang = new Lang([
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $school->info('colegio') ?></title>
-    <link rel="icon" href="<?= School::logo() ?>" />
+    <title><?= $school->colegio ?></title>
+    <link rel="icon" href="<?= school_logo() ?>" />
     <?= Route::bootstrapCSS() ?>
     <?php Route::css("/css/main.css", true) ?>
     <?php Route::fontawasome(); ?>
@@ -34,7 +39,7 @@ $lang = new Lang([
 <body>
     <header class="bg-dark py-3">
         <div class="px-md-2 d-flex justify-content-center align-items-center">
-            <img class="img-fluid" src="<?= School::logo() ?>" alt="School Logo" width='<?= __HOME_LOGO_SIZE ?>'>
+            <img class="img-fluid" src="<?= school_logo() ?>" alt="School Logo" width='<?= school_config('app.logo.size.home') ?>'>
             <h1 class="display-4 text-white"><?= $school->info('colegio') ?></h1>
         </div>
     </header>

@@ -1,8 +1,14 @@
 <?php
+
+use App\Models\School;
 use Classes\DataBase\DB;
 use Classes\Route;
 use Classes\Session;
+
 include '../../../app.php';
+Session::is_logged();
+
+$admin = School::find(Session::id());
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
@@ -24,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     }
 
     if (isset($_POST['save'])) {
-        $update = [
+        $updateData = [
             'idioma' => $_POST['idioma'],
             'colegio' => $_POST['colegio'],
             'director' => $_POST['director'],
@@ -61,13 +67,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
         ];
 
-        DB::table('colegio')->where('usuario', Session::id())->update($update);
+        $admin->update($updateData);
 
         // var_dump($result);
     } else if (isset($_POST['savePassword'])) {
-        DB::table('colegio')->where('usuario', Session::id())->update([
-            "clave" => $_POST['clave'],
+        if (empty($_POST['clave'])) {
+            Session::set('passwordError', true);
+            Route::redirect('/information');
+        }
+
+        $admin->update([
+            'clave' => $_POST['clave'],
         ]);
+
         Session::set('passwordSaved', true);
     }
     Route::redirect('/information');

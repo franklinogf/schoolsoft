@@ -182,7 +182,7 @@ class StudentModel extends School
 
     return $obj;
   }
-  protected function getStudentsByGrade($grade, $table = 'year', $year)
+  protected function getStudentsByGrade($grade, $table = 'year', $year = null)
   {
     $year = $year !== null ? $year : $this->year();
     $where = [

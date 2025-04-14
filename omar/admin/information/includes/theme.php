@@ -1,21 +1,23 @@
 <?php
 
-use Classes\DataBase\DB;
+use App\Models\School;
 use Classes\Route;
 use Classes\Session;
 use Classes\Services\SccsCompiler;
+
 
 include '../../../app.php';
 
 Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    $admin = School::admin()->first();
 
     $theme = $_POST['theme'] ?? null;
-    $defaultTheme = include __ROOT . '/config/theme.php';
+    $defaultTheme = config('theme');
 
     if (empty($theme)) {
-        Session::set('theme', 'Please fill in all fields.');
+        Session::set('theme', __('El tema no puede estar vacío'));
         Route::redirect('information/');
     }
     foreach ($defaultTheme['booleans'] as $key => $value) {
@@ -26,12 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $compiled = $compiler->compile($theme);
 
     if ($compiled) {
-        DB::table('colegio')->where('usuario', 'administrador')->update([
+        $admin->update([
             'theme' => json_encode($theme),
         ]);
-        Session::set('theme', 'Theme updated successfully.');
+        Session::set('theme', __('Tema actualizado correctamente'));
     } else {
-        Session::set('theme', 'Failed to update theme.');
+        Session::set('theme', __('Error al actualizar tema'));
     }
     Route::redirect('/information');
 } else {
