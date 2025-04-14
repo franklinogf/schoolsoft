@@ -1,6 +1,9 @@
 <?php
 
+use App\Enums\LanguageCode;
+use App\Models\School;
 use Core\Database;
+use Core\TranslatorFactory;
 
 session_start();
 require_once 'database.php';
@@ -62,3 +65,7 @@ require __ROOT . '/core/translator.php';
 
 
 new Database();
+
+
+$admin = School::admin()->first();
+TranslatorFactory::get()->setLocale($admin->idioma ?? LanguageCode::SPANISH->value);
