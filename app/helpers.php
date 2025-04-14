@@ -79,3 +79,9 @@ if (!function_exists('school_logo')) {
         return  school_asset(school_config('app.logo.default'));
     }
 }
+if (!function_exists('__')) {
+    function __($key, $replace = [], $locale = null): string
+    {
+        return TranslatorFactory::get()->get($key, $replace, $locale);
+    }
+}

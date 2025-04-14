@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 use Illuminate\Translation\Translator;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Filesystem\Filesystem;
@@ -45,12 +47,5 @@ class TranslatorFactory
         }
 
         return self::$translator;
-    }
-}
-
-if (!function_exists('__')) {
-    function __($key, $replace = [], $locale = null)
-    {
-        return TranslatorFactory::get()->get($key, $replace, $locale);
     }
 }
