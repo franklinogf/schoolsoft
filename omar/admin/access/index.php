@@ -1,7 +1,6 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 
@@ -9,214 +8,207 @@ Session::is_logged();
 
 $options = [
     [
-        'title' => ["es" => 'Opciones', "en" => 'Options'],
+        'title' => __("Opciones"),
         'buttons' => [
             [
-                'name' => ["es" => 'Registro', "en" => "Record"],
-                'desc' => ['es' => 'Registro de notas', 'en' => 'Record of notes'],
+                'name' => __("Registro"),
+                'desc' => __('Registro de notas'),
                 'link' => 'registration/',
             ],
             [
-                'name' => ["es" => 'Informes', "en" => "Reports"],
-                'desc' => ['es' => 'Pantalla con todos los informes', 'en' => 'Screen with all the reports'],
+                'name' => __("Informes"),
+                'desc' => __('Pantalla con todos los informes'),
                 'link' => 'reports/',
             ],
-
             [
-                'name' => ["es" => 'Fechas', "en" => "Dates"],
-                'desc' => ['es' => 'Entrada de fechas para los inicios y cierres de los cuatrimestres.', 'en' => 'Dates entry for the beginnings and closures of the quarter.'],
+                'name' => __("Fechas"),
+                'desc' => __('Entrada de fechas para los inicios y cierres de los cuatrimestres.'),
                 'link' => 'changeDates.php',
             ],
             [
-                'name' => ["es" => 'Activaciones', "en" => "Activations"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Activaciones"),
+                'desc' => __(''),
                 'link' => 'activations.php',
             ],
             [
-                'name' => ["es" => 'Re-matrícula', "en" => "Re-matrícula"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Re-matrícula"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Tiendas', "en" => "Stores"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Tiendas"),
+                'desc' => __(''),
                 'link' => 'stores/',
             ],
-
         ],
     ],
     [
-        'title' => ["es" => 'Notas', "en" => 'Notes'],
+        'title' => __("Notas"),
         'buttons' => [
             [
-                'name' => ["es" => 'Opciones de notas', "en" => "Note options"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Opciones de notas"),
+                'desc' => __(''),
                 'link' => 'notesOptions.php',
             ],
             [
-                'name' => ["es" => 'Informes de notas', "en" => "Note reports"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Informes de notas"),
+                'desc' => __(''),
                 'link' => 'gradesReports/',
             ],
             [
-                'name' => ["es" => 'Acumulativa', "en" => "Credit transcription"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Acumulativa"),
+                'desc' => __(''),
                 'link' => 'acumulativa.php',
             ],
             [
-                'name' => ["es" => 'Catálogo', "en" => "Catalog"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Catálogo"),
+                'desc' => __(''),
                 'link' => 'catalog.php',
             ],
             [
-                'name' => ["es" => 'Crear grados', "en" => "Create grades"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Crear grados"),
+                'desc' => __(''),
                 'link' => 'createGrades.php',
             ],
             [
-                'name' => ["es" => 'Cursos por grados', "en" => "Courses by grade"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Cursos por grados"),
+                'desc' => __(''),
                 'link' => 'gradesCourses.php',
             ],
             [
-                'name' => ["es" => 'Programas especiales', "en" => "Specials Programs"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Programas especiales"),
+                'desc' => __(''),
                 'link' => 'specialsPrograms.php',
             ],
             [
-                'name' => ["es" => 'Cambiar curso', "en" => "Course change"],
-                'desc' => ['es' => 'Para cambiar de un curso a otro curso.', 'en' => 'To change from one course to another course.'],
+                'name' => __("Cambiar curso"),
+                'desc' => __('Para cambiar de un curso a otro curso.'),
                 'link' => 'CourseChange.php',
             ],
             [
-                'name' => ["es" => 'Ordenar cursos', "en" => "Order courses"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Ordenar cursos"),
+                'desc' => __(''),
                 'link' => 'OrderCourses.php',
             ],
             [
-                'name' => ["es" => 'Eliminar', "en" => "Eliminate"],
-                'desc' => ['es' => 'Para eliminar el curso a todos los estudiantes.', 'en' => 'To remove the course from all students.'],
+                'name' => __("Eliminar"),
+                'desc' => __('Para eliminar el curso a todos los estudiantes.'),
                 'link' => 'Eliminate.php',
             ],
             [
-                'name' => ["es" => 'Asistencia', "en" => "Attendance"],
-                'desc' => ['es' => 'Entrada de fecha para asistencia trimestral.', 'en' => 'Date entry for quarterly attendance.'],
+                'name' => __("Asistencia"),
+                'desc' => __('Entrada de fecha para asistencia trimestral.'),
                 'link' => 'Attendance.php',
             ],
             [
-                'name' => ["es" => 'Entrada de asistencia', "en" => "Attendance entry"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Entrada de asistencia"),
+                'desc' => __(''),
                 'link' => 'attendance/',
             ],
             [
-                'name' => ["es" => 'Clases diaras', "en" => "Clases diaras"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Clases diaras"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Plan de trabajo', "en" => "Plan de trabajo"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Plan de trabajo"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Mensajes de notas', "en" => "Note messages"],
-                'desc' => ['es' => 'Mensajes por clase para la tarjeta de notas', 'en' => 'Class Note Card Messages'],
+                'name' => __("Mensajes de notas"),
+                'desc' => __('Mensajes por clase para la tarjeta de notas'),
                 'link' => 'MensajesNotas.php',
             ],
             [
-                'name' => ["es" => 'Deporte', "en" => "Deporte"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Deporte"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Clases de verano', "en" => "Clases de verano"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Clases de verano"),
+                'desc' => __(''),
                 'link' => '#',
             ],
-
         ],
     ],
     [
-        'title' => ["es" => 'Información', "en" => 'Information'],
+        'title' => __("Información"),
         'buttons' => [
             [
-                'name' => ["es" => 'Año escolar', "en" => "School year"],
-                'desc' => ['es' => 'Seleccionar el año para trabajar.', 'en' => 'Select the year to work with.'],
+                'name' => __("Año escolar"),
+                'desc' => __('Seleccionar el año para trabajar.'),
                 'link' => 'schoolYear.php',
             ],
             [
-                'name' => ["es" => 'Mensaje inicial', "en" => "Initial message"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Mensaje inicial"),
+                'desc' => __(''),
                 'link' => 'InitialMessage.php',
             ],
             [
-                'name' => ["es" => 'Mensaje grupal', "en" => "Group message"],
-                'desc' => ['es' => 'Envío de mensajes a padres y profesores en su zona de la plataforma.', 'en' => 'Sending messages to parents and teachers in their area of the platform.'],
+                'name' => __("Mensaje grupal"),
+                'desc' => __('Envío de mensajes a padres y profesores en su zona de la plataforma.'),
                 'link' => 'GroupMessage.php',
             ],
             [
-                'name' => ["es" => 'Mensaje inactivar', "en" => "Inactivate message"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Mensaje inactivar"),
+                'desc' => __(''),
                 'link' => 'MensajeInactivar.php',
             ],
             [
-                'name' => ["es" => 'Encuestas', "en" => "Surveys"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Encuestas"),
+                'desc' => __(''),
                 'link' => 'Encuestas.php',
             ],
             [
-                'name' => ["es" => 'Requisitos', "en" => "Requirements"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Requisitos"),
+                'desc' => __(''),
                 'link' => 'Requisitos.php',
             ],
         ],
     ],
     [
-        'title' => ["es" => 'Datos', "en" => 'Data'],
+        'title' => __("Datos"),
         'buttons' => [
             [
-                'name' => ["es" => 'Exportar', "en" => "Exportar"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Exportar"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Importar', "en" => "Importar"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Importar"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Documentos', "en" => "Documentos"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Documentos"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Clave padres', "en" => "Parent password"],
-                'desc' => ['es' => 'Para esforzar cambiar la contraseña de los padres.', 'en' => 'To force change the parent password.'],
+                'name' => __("Clave padres"),
+                'desc' => __('Para esforzar cambiar la contraseña de los padres.'),
                 'link' => 'ClavePadres.php',
             ],
             [
-                'name' => ["es" => 'Backup', "en" => "Backup"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Backup"),
+                'desc' => __(''),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Pasar data', "en" => "Transfer data"],
-                'desc' => ['es' => 'Transferir información de un año al siguiente.', 'en' => 'Transfer information from one year to the next.'],
+                'name' => __("Pasar data"),
+                'desc' => __('Transferir información de un año al siguiente.'),
                 'link' => 'PasarData.php',
             ],
             [
-                'name' => ["es" => 'Exportar data', "en" => "Export data"],
-                'desc' => ['es' => 'Exportación de data a Excel.', 'en' => 'Data export to Excel.'],
+                'name' => __("Exportar data"),
+                'desc' => __('Exportación de data a Excel.'),
                 'link' => 'ExportarData.php',
             ],
         ],
     ],
-
 ];
 
-$lang = new Lang([
-    ["Opciones", "Options"],
-]);
 
 ?>
 <!DOCTYPE html>
@@ -225,7 +217,7 @@ $lang = new Lang([
 
 <head>
     <?php
-    $title = $lang->translation("Opciones");
+    $title = __("Opciones");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -235,19 +227,19 @@ $lang = new Lang([
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation("Opciones") ?></h1>
+        <h1 class="text-center my-3"><?= __("Opciones") ?></h1>
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
             <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
-                        <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
+                        <legend class="w-auto"><?= $option['title'] ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -255,8 +247,6 @@ $lang = new Lang([
                     </fieldset>
                 </div>
             <?php endforeach ?>
-
-
 
         </div>
     </div>
