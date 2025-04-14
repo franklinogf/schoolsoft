@@ -40,13 +40,12 @@ $school = new School(Session::id());
 $teachers = new Teacher;
 $teachers = $teachers->all();
 if (isset($_REQUEST['search'])) {
-//    $thisCourse = DB::table('cursos')->where('mt', $_REQUEST['course'])->first();
+    //    $thisCourse = DB::table('cursos')->where('mt', $_REQUEST['course'])->first();
 
-$MyCourses = DB::table('padres')->where([
-    ['year', $school->info('year2')],
-    ['ss', $_POST['ss']]
-])->get();
-
+    $MyCourses = DB::table('padres')->where([
+        ['year', $school->info('year2')],
+        ['ss', $_POST['ss']]
+    ])->get();
 }
 if (isset($_REQUEST['save'])) {
     $course1 = $_POST['course1'];
@@ -54,12 +53,12 @@ if (isset($_REQUEST['save'])) {
     $ss = $_POST['ss'];
 
     $courses = DB::table('cursos')->where([
-       ['year', $school->info('year2')],
-       ['curso', $course2]
+        ['year', $school->info('year2')],
+        ['curso', $course2]
     ])->first();
     $teacher = new Teacher($courses->id);
 
-//echo $courses->curso.' / '.$ss.' / '.$teacher->nombre;
+    //echo $courses->curso.' / '.$ss.' / '.$teacher->nombre;
     $thisCourse2 = DB::table('padres')->where([
         ['curso', $course1],
         ['ss', $ss],
@@ -89,11 +88,10 @@ if (isset($_REQUEST['save'])) {
             'profesor' => "$teacher->nombre $teacher->apellidos",
         ]);
     }
-
 }
 
 if (isset($_REQUEST['delete2'])) {
-//    DB::table('cursos')->where('mt', $_REQUEST['courseId'])->delete();
+    //    DB::table('cursos')->where('mt', $_REQUEST['courseId'])->delete();
 }
 
 
@@ -133,7 +131,7 @@ $estudiantes = DB::table('year')->where([
                     <label for="valor"><?= $lang->translation("Selección") ?></label>
                     <select class="form-control selectpicker w-100" name="ss" data-live-search="true" required>
                         <?php foreach ($estudiantes as $estudiante) : ?>
-                            <option <?= $_POST['ss'] == $estudiante->ss ? 'selected=""' : '' ?> value="<?= $estudiante->ss ?>"><?= "$estudiante->apellidos - $estudiante->nombre ($estudiante->grado)" ?></option>
+                            <option <?= $_POST['ss'] ?? '' == $estudiante->ss ? 'selected=""' : '' ?> value="<?= $estudiante->ss ?>"><?= "$estudiante->apellidos - $estudiante->nombre ($estudiante->grado)" ?></option>
                         <?php endforeach ?>
                     </select>
                     <input name="search" class="btn btn-primary mx-auto d-block mt-1" type="submit" value="<?= $lang->translation("Buscar") ?>">
@@ -142,43 +140,43 @@ $estudiantes = DB::table('year')->where([
 
                 <?php if (isset($_POST['search'])) : ?>
 
-                <form method="POST">
-            <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
-                    <label for="valor"><?= $lang->translation("Selección del curso") ?></label>
-                    <div class="row">
-                    <select class="form-control selectpicker w-100" name="course1" data-live-search="true" required>
-                        <?php foreach ($MyCourses as $course) : ?>
-                            <option value="<?= $course->curso ?>"><?= "$course->curso - $course->descripcion ($course->id)" ?></option>
-                        <?php endforeach ?>
-                    </select>
-                    </div>
-            </div>
-
-            <div class="mx-auto0 bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
-                    <div class="row">
-                        <div class="col-7">
-                            <label for="valor"><?= $lang->translation("Curso nuevo para cambiar") ?></label>
-                            <div class="input-group">
-                    <select class="form-control selectpicker w-100" name="course2" data-live-search="true" required>
-                        <?php foreach ($courses as $course) : ?>
-                            <option value="<?= $course->curso ?>"><?= "$course->curso - $course->desc1 ($course->id)" ?></option>
-                        <?php endforeach ?>
-                    </select>
+                    <form method="POST">
+                        <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
+                            <label for="valor"><?= $lang->translation("Selección del curso") ?></label>
+                            <div class="row">
+                                <select class="form-control selectpicker w-100" name="course1" data-live-search="true" required>
+                                    <?php foreach ($MyCourses as $course) : ?>
+                                        <option value="<?= $course->curso ?>"><?= "$course->curso - $course->descripcion ($course->id)" ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <input type="hidden" name="ss" value="<?= $_POST['ss'] ?>">
 
-                <div class="mx-auto0 bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
-                     <div class="col-12 text-center">
-                         <a href="CourseChange.php" class="btn btn-secondary"><?= $lang->translation('Cancelar') ?></a>
-                         <button type="submit" class="btn btn-danger" name="save" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que quieres cambiar el curso del estudiante?') ?>')"><?= $lang->translation('Cambiar') ?></button>
-                     </div>
-                </div>
-              </form>
-             <?php endif ?>
-           </div>
+                        <div class="mx-auto0 bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
+                            <div class="row">
+                                <div class="col-7">
+                                    <label for="valor"><?= $lang->translation("Curso nuevo para cambiar") ?></label>
+                                    <div class="input-group">
+                                        <select class="form-control selectpicker w-100" name="course2" data-live-search="true" required>
+                                            <?php foreach ($courses as $course) : ?>
+                                                <option value="<?= $course->curso ?>"><?= "$course->curso - $course->desc1 ($course->id)" ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ss" value="<?= $_POST['ss'] ?>">
+
+                        <div class="mx-auto0 bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
+                            <div class="col-12 text-center">
+                                <a href="CourseChange.php" class="btn btn-secondary"><?= $lang->translation('Cancelar') ?></a>
+                                <button type="submit" class="btn btn-danger" name="save" type="submit" onclick="return confirmar('<?= $lang->translation('Estás seguro que quieres cambiar el curso del estudiante?') ?>')"><?= $lang->translation('Cambiar') ?></button>
+                            </div>
+                        </div>
+                    </form>
+                <?php endif ?>
+            </div>
         </div>
 
     </div>

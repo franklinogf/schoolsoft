@@ -13,7 +13,7 @@ use Classes\Util;
 
 Session::is_logged();
 $lang = new Lang([
-    ['Lista de deudores', 'List of debtors'],
+    ['Lista de estudiantes', 'Student List'],
     ['Atrás', 'Go back'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
@@ -27,6 +27,8 @@ $school = new School(Session::id());
 $year = $school->info('year2');
 $students = new Student();
 $students = $students->all();
+$target = 'excel_compra';
+$target = 'pdf/pdf_compra';
 
 $debe = 0;
 foreach ($students as $student) {
@@ -55,7 +57,7 @@ $students = DB::table('year')
 
 <head>
     <?php
-    $title = $lang->translation('Lista de deudores');
+    $title = $lang->translation('Lista de estudiantes');
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::fontawasome();
     ?>
@@ -66,11 +68,11 @@ $students = DB::table('year')
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de deudores') . ' ' . $year ?> </h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de estudiantes') . ' ' . $year ?> </h1>
         <div class="container mt-1">
-            <form id="form" action="pdf/letter_inf.php" method="post" target="studentID" target="_blank">
+            <form id="form" action="<?php echo $target ?>.php" method="post" target="studentID" target="_blank">
                 <?php
-                $students = DB::table('year')->where([['tr1', '>', 0], ['year', $year], ['activo', '']])->orderBy('tr1 DESC, apellidos')->get();
+                $students = DB::table('compra_cafeteria')->select("DISTINCT ss, apellido, nombre, grado")->where([['year', $year]])->orderBy('apellido, nombre')->get();
                 $__tableData = $students;
                 //            $__tableData = DB::table('year')->where([['tr1','>', 0], ['year', $year], ['activo', '']])->orderBy('tr1 DESC, apellidos')->get();
                 $__tableDataCheckbox = true; #decirle que quiere usar los check box
@@ -79,7 +81,7 @@ $students = DB::table('year')
                 $__tableDataInfo = [
                     [
                         'title' => ['es' => 'Apellidos', 'en' => 'Last name'],
-                        'values' => ['apellidos']
+                        'values' => ['apellido']
                     ],
                     [
                         'title' => ['es' => 'Nombre', 'en' => 'Name'],
@@ -89,19 +91,10 @@ $students = DB::table('year')
                         'title' => ['es' => 'Grado', 'en' => 'Grade'],
                         'values' => ['grado']
                     ],
-                    [
-                        'title' => ['es' => 'Deuda pendiente', 'en' => 'Outstanding debt'],
-                        'values' => ['tr1']
-                    ],
                 ];
                 Route::includeFile('/includes/layouts/table.php', true);
                 ?>
                 <div><b>
-                        <center>
-                            <span lang="en-us"><?= $lang->translation("Enviar por E-mail") ?></span>
-                            <input name="correo" type="checkbox" value="Si" style="height: 25px; width: 25px"><br />
-                            <span lang="en-us"><?= $lang->translation("Se enviaron por correo electrónico todas las deudas que están marcadas en la lista.") ?></span>
-                        </center>
                     </b></div>
                 <input name="buscar" style="width: 140px;" class="btn btn-primary mx-auto d-block mt-2" type="submit" value="<?= $lang->translation("Procesar") ?>" />
             </form>
@@ -115,6 +108,17 @@ $students = DB::table('year')
         $(document).ready(function() {
             $("#form").submit(function(e) {
                 tableDataToSubmit("#form", dataTable[0], 'students[]')
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            idioma = '<?php echo $idioma; ?>';
+            $('#excel_compra').click(function(e) {
+                e.preventDefault()
+                $('form').prop('action', 'pdf_compra.php');
+                $('form').submit();
             });
         });
     </script>

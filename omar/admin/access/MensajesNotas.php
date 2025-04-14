@@ -47,8 +47,6 @@ if (isset($_REQUEST['save'])) {
         'code' => $_POST['code'],
         'comenta' => $_POST['comenta'],
     ]);
-
-
 }
 if (isset($_REQUEST['create'])) {
     DB::table('comentarios')->insert([
@@ -102,13 +100,13 @@ $courses = DB::table('comentarios')->orderBy('code')->get();
                         <div class="col-12">
                             <div class="form-group col-6 px-0">
                                 <label for="curso"><?= $lang->translation("Código") ?></label>
-                                <input type="text" value='<?= $thisCourse->code ?>' class="form-control" name='code' id="curso" required>
+                                <input type="text" value='<?= $thisCourse->code ?? '' ?>' class="form-control" name='code' id="curso" required>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="desc1"><?= $lang->translation("Comentario") ?></label>
-                                <input type="text" value='<?= $thisCourse->comenta ?>' class="form-control" maxlength="40" name='comenta' id="desc1" required>
+                                <input type="text" value='<?= $thisCourse->comenta ?? '' ?>' class="form-control" maxlength="40" name='comenta' id="desc1" required>
                             </div>
                         </div>
                         <div class="col-12 text-center">

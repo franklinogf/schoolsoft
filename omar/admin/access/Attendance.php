@@ -39,6 +39,7 @@ $colegio = DB::table('colegio')->where([
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -154,7 +155,7 @@ $colegio = DB::table('colegio')->where([
                                 <p><?= $lang->translation('Asistencia diaria por') ?></p>
                             </div>
                             <select class="form-control" name="asist" id="asist" required style="width: 140px">
-                                <option <?= $colegio->asist == '1' ? 'selected=""' : '' ?> value="1"><?= utf8_encode($lang->translation("Salón Hogar")) ?></option>
+                                <option <?= $colegio->asist == '1' ? 'selected=""' : '' ?> value="1"><?= $lang->translation("Salón Hogar") ?></option>
                                 <option <?= $colegio->asist == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Grados") ?></option>
                                 <option <?= $colegio->asist == '3' ? 'selected=""' : '' ?> value="3"><?= $lang->translation("Materias") ?></option>
                             </select><span lang="en-us">&nbsp;&nbsp;&nbsp;

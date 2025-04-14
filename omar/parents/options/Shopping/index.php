@@ -1,5 +1,5 @@
 <?php
-require_once '../../app.php';
+require_once '../../../app.php';
 
 use Classes\Controllers\Parents;
 use Classes\Lang;
@@ -13,7 +13,7 @@ use Classes\Util;
 
 Session::is_logged();
 $lang = new Lang([
-    ['Lista de deudores', 'List of debtors'],
+    ['Lista de estudiantes', 'Student List'],
     ['Atrás', 'Go back'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
@@ -23,30 +23,18 @@ $lang = new Lang([
     ['Enviar por E-mail', 'Send E-mail'],
     ['Se enviaron por correo electrónico todas las deudas que están marcadas en la lista.', 'All debts that are marked on the list were sent by email.'],
 ]);
-$school = new School(Session::id());
-$year = $school->info('year2');
-$students = new Student();
-$students = $students->all();
+$parents = new Parents(Session::id());
+$id = $parents->id;
 
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+$year = $colegio->year;
+$target = 'pdf_compra';
 $debe = 0;
-foreach ($students as $student) {
-    $debe = 0;
-    $result10 = DB::table('pagos')
-        ->whereRaw("id='$student->id' and ss='$student->ss' and year='$year' and baja='' and fecha_d <= '" . date('Y-m-d') . "'")->orderBy('codigo')->get();
-    foreach ($result10 as $row10) {
-        $debe = $debe + ($row10->deuda - $row10->pago);
-    }
-    $thisCourse2 = DB::table("year")->where([
-        ['id', $student->id],
-        ['ss', $student->ss],
-        ['year', $year]
-    ])->update([
-        'tr1' => $debe,
-    ]);
-}
-
 $students = DB::table('year')
-    ->whereRaw("year='$year' and activo='' and tr1 > 0 ")->orderBy('tr1 DESC')->get();
+    ->whereRaw("year='$year' and activo='' and id = '$id'")->orderBy('apellidos, nombre')->get();
 
 ?>
 <!DOCTYPE html>
@@ -55,7 +43,7 @@ $students = DB::table('year')
 
 <head>
     <?php
-    $title = $lang->translation('Lista de deudores');
+    $title = $lang->translation('Lista de estudiantes');
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::fontawasome();
     ?>
@@ -66,13 +54,13 @@ $students = DB::table('year')
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de deudores') . ' ' . $year ?> </h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de estudiantes') . ' ' . $year ?> </h1>
         <div class="container mt-1">
-            <form id="form" action="pdf/letter_inf.php" method="post" target="studentID" target="_blank">
+            <form id="form" action="<?php echo $target ?>.php" method="post" target="studentID" target="_blank">
                 <?php
-                $students = DB::table('year')->where([['tr1', '>', 0], ['year', $year], ['activo', '']])->orderBy('tr1 DESC, apellidos')->get();
+                //                $students = DB::table('compra_cafeteria')->select("DISTINCT ss, apellido, nombre, grado")->where([['year', $year]])->orderBy('apellido, nombre')->get();
                 $__tableData = $students;
-                //            $__tableData = DB::table('year')->where([['tr1','>', 0], ['year', $year], ['activo', '']])->orderBy('tr1 DESC, apellidos')->get();
+                //                $__tableData = DB::table('year')->where([['year', $year], ['activo', '']])->orderBy('apellidos')->get();
                 $__tableDataCheckbox = true; #decirle que quiere usar los check box
                 $__dataPk = 'ss'; #el identificador principal
                 // Un array de las columnas y sus respectivos valores
@@ -90,18 +78,13 @@ $students = DB::table('year')
                         'values' => ['grado']
                     ],
                     [
-                        'title' => ['es' => 'Deuda pendiente', 'en' => 'Outstanding debt'],
-                        'values' => ['tr1']
+                        'title' => ['es' => 'Id', 'en' => 'Id'],
+                        'values' => ['id']
                     ],
                 ];
                 Route::includeFile('/includes/layouts/table.php', true);
                 ?>
                 <div><b>
-                        <center>
-                            <span lang="en-us"><?= $lang->translation("Enviar por E-mail") ?></span>
-                            <input name="correo" type="checkbox" value="Si" style="height: 25px; width: 25px"><br />
-                            <span lang="en-us"><?= $lang->translation("Se enviaron por correo electrónico todas las deudas que están marcadas en la lista.") ?></span>
-                        </center>
                     </b></div>
                 <input name="buscar" style="width: 140px;" class="btn btn-primary mx-auto d-block mt-2" type="submit" value="<?= $lang->translation("Procesar") ?>" />
             </form>
@@ -115,6 +98,17 @@ $students = DB::table('year')
         $(document).ready(function() {
             $("#form").submit(function(e) {
                 tableDataToSubmit("#form", dataTable[0], 'students[]')
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            idioma = '<?php echo $idioma; ?>';
+            $('#excel_compra').click(function(e) {
+                e.preventDefault()
+                $('form').prop('action', 'pdf_compra.php');
+                $('form').submit();
             });
         });
     </script>

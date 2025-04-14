@@ -68,11 +68,23 @@ if ($re == '2') {
 if ($re == '3') {
     $in3 = 'selected';
 }
+if ($re == '5') {
+    $in5 = 'selected';
+}
 if ($re == '7') {
     $in7 = 'selected';
 }
+if ($re == '13') {
+    $in13 = 'selected';
+}
 if ($re == '14') {
     $in14 = 'selected';
+}
+if ($re == '17') {
+    $in17 = 'selected';
+}
+if ($re == '18') {
+    $in18 = 'selected';
 }
 
 $mensaj = DB::table('codigos')->orderBy('codigo')->get();
@@ -85,7 +97,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 <script language="JavaScript">
     function activarTrimestre() {
         var dis = document.TarjetaNotas.tarjeta.value;
-        if (dis == '2') {
+        if (dis == '2' || dis == '1b') {
             document.TarjetaNotas.tri.disabled = false;
         } else {
             document.TarjetaNotas.tri.disabled = true;
@@ -113,7 +125,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
         <div class="container bg-white shadow-lg py-3 rounded">
             <form id="TarjetaNotas" name="TarjetaNotas" method="POST" target="_blank" action="<?= Route::url('/admin/access/gradesReports/pdf/TarjetaOpciones.php') ?>">
                 <div class="mx-auto" style="max-width: 500px;">
-                    <?php if (Session::get('createGrades')) : ?>
+                    <?php if (Session::get('createGrades')): ?>
                         <div class="alert alert-primary col-6 mx-auto mt-1" role="alert">
                             <i class="fa-solid fa-square-check"></i>
                             <?= Session::get('gradesReports', true) ?>
@@ -129,8 +141,13 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
                             <option value='2' <?= $in2 ?>>Tarjeta 2</option>
                             <option value='3' <?= $in3 ?>>Tarjeta 3</option>
-                            <option value='7' <?= $in3 ?>>Tarjeta 7</option>
-                            <option value='14' <?= $in3 ?>>Tarjeta 14</option>
+                            <option value='1b' <?= $in4 ?>>Tarjeta 4</option>
+                            <option value='5' <?= $in5 ?>>Tarjeta 5</option>
+                            <option value='7' <?= $in7 ?>>Tarjeta 7</option>
+                            <option value='13' <?= $in13 ?>>Tarjeta 13</option>
+                            <option value='14' <?= $in14 ?>>Tarjeta 14</option>
+                            <option value='17' <?= $in17 ?>>Tarjeta 17</option>
+                            <option value='18' <?= $in18 ?>>Tarjeta 18</option>
                         </select>
                         <select id="tri" name="tri" class="form-control" disabled="disable">
                             <option value='1'><?= $lang->translation('Trimestre 1') ?></option>
@@ -139,6 +156,15 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             <option value='4'><?= $lang->translation('Trimestre 4') ?></option>
                             <option value='5'><?= $lang->translation('Semestre 1') ?></option>
                             <option value='6'><?= $lang->translation('Semestre 2') ?></option>
+                            <option value='7'><?= $lang->translation('Q-1') ?></option>
+                            <option value='8'><?= $lang->translation('Q-2') ?></option>
+                            <option value='9'><?= $lang->translation('Q-3') ?></option>
+                            <option value='10'><?= $lang->translation('Q-4') ?></option>
+                            <option value='11'><?= $lang->translation('Q-5') ?></option>
+                            <option value='12'><?= $lang->translation('Q-6') ?></option>
+                            <option value='13'><?= $lang->translation('Q-7') ?></option>
+                            <option value='14'><?= $lang->translation('Q-8') ?></option>
+                            <option value='15'><?= $lang->translation('Final') ?></option>
                         </select>
 
                     </div>
@@ -160,7 +186,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
-                            <?php foreach ($grades as $grade) : ?>
+                            <?php foreach ($grades as $grade): ?>
                                 <option value='<?= $grade ?>'>
                                     <?= $grade ?>
                                 </option>
@@ -257,6 +283,12 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </select>
                     </div>
 
+
+
+
+
+
+
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>
@@ -271,9 +303,9 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 <script language="JavaScript">
     var dis = document.TarjetaNotas.tarjeta.value;
     if (dis == '2') {
-        document.TarjetaNotas.tri.disabled = false;
+        //   document.TarjetaNotas.tri.disabled=false;
     } else {
-        document.TarjetaNotas.tri.disabled = true;
+        //   document.TarjetaNotas.tri.disabled=true;
     }
 </script>
 

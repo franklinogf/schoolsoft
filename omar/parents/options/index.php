@@ -17,6 +17,7 @@ $buttons = [
     ['name' => 'Hoja de progreso', 'link' => 'progress/'],
     ['name' => 'Informe de deficiencia', 'link' => 'deficiency/'],
     ['name' => 'Tiendas', 'link' => 'stores/'],
+    ['name' => 'Reporte de compras', 'link' => 'Shopping/'],
 ];
 $lang = new Lang([
     ["Mensajes y Opciones", "Messages and Options"],
@@ -28,6 +29,7 @@ $lang = new Lang([
     ["Documentos", "Documents"],
     ["Hoja de progreso", "Progress sheet"],
     ["Informe de deficiencia", "Deficiency report"],
+    ["Reporte de compras", "Purchase report"],
 ]);
 ?>
 <!DOCTYPE html>
