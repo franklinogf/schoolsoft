@@ -3,7 +3,6 @@ require_once '../../app.php';
 
 use Classes\Route;
 use Classes\Session;
-use Classes\Lang;
 
 Session::is_logged();
 
