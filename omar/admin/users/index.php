@@ -18,67 +18,67 @@ $options = [
                 'name' => __("Cuentas / Matricula"),
                 'desc' => __("Crear, añadir, modificar las cuentas de los padres y estudiantes."),
                 'link' => 'accounts/',
-                'hidden' => $user->hasPermissionTo(AdminPermission::USER_ACCOUNTS_ENROLLMENT)
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ENROLLMENT)
             ],
             [
                 'name' => __("Entrega de documentos"),
                 'desc' => __("Documentación que se pide y entregan a la oficina."),
                 'link' => 'documentsDelivery/',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_DOCUMENT_DELIVERY)
             ],
             [
                 'name' => __("Re-matrícula"),
                 'desc' => __("Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A."),
                 'link' => 'reenrollment/',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_RE_ENROLLMENT)
             ],
             [
                 'name' => __("Maestros"),
                 'desc' => __("Añadir, borrar o modificar información de los maestros."),
                 'link' => 'teachers/',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_TEACHERS)
             ],
             [
                 'name' => __("Administración"),
                 'desc' => __("Pantalla para crear los usuarios administrativos con areas de acceso."),
                 'link' => 'administration/',
-                'hidden' => false
+                'hidden' => false //!$user->hasPermissionTo(AdminPermission::USER_ADMINISTRATIVE)
             ],
             [
                 'name' => __("Usuarios de padres"),
                 'desc' => __("Es para añadir un usuario adicional al que tiene, para que entren diferentes usuario a la misma cuenta."),
                 'link' => '#',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_PARENT_USERS)
             ],
             [
                 'name' => __("Modificar nombres"),
                 'desc' => __("Pantalla para cambiar los nombre y apellidos de los estudiantes."),
                 'link' => '#',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_RENAME_STUDENTS)
             ],
             [
                 'name' => __("Memos y deméritos"),
                 'desc' => __("Pantalla para entrar los memos y deméritos a los estudiantes."),
                 'link' => 'memos/',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_MEMOS_DEMERITS)
             ],
             [
                 'name' => __("Pantalla de bajas"),
                 'desc' => __("Pantalla para dar de bajas a los estudiantes."),
                 'link' => 'unenrollment/',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_WITHDRAWAL_SCREEN)
             ],
             [
                 'name' => __("Enfermeria"),
                 'desc' => __("Ingrese o vea información médica de los estudiantes."),
                 'link' => '#',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_NURSE_OFFICE)
             ],
             [
                 'name' => __("Informe de enfermeria"),
                 'desc' => __("Informes de Enfermeria."),
                 'link' => '#',
-                'hidden' => false
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_NURSE_REPORTS)
             ],
             [
                 'name' => __("Documentos"),
