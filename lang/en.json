@@ -359,5 +359,9 @@
     "Razón": "Reason",
     "Atrás": "Back",
     "Si": "Yes",
-    "No": "No"
+    "No": "No",
+    "Activo": "Active",
+    "Inactivo": "Inactive",
+    "Activar": "Activate",
+    "Desactivar": "Deactivate"
 }

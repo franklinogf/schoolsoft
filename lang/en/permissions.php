@@ -11,7 +11,7 @@ return [
             'document_delivery' => 'Document Delivery',
             're_enrollment' => 'Re-enrollment',
             'teachers' => [
-                'teachers' => 'Teachers',
+                'enter' => 'Teachers',
                 'edit' => 'Edit',
                 'add' => 'Add',
             ],
@@ -77,6 +77,14 @@ return [
             'cumulative_card' => 'Cumulative Card',
             'print_transcript' => 'Print Transcript',
         ],
+        'codes' => [
+            'withdrawal' => 'Withdrawal Codes',
+            'socio_economic' => 'Socio economic',
+            'special' => 'Special Codes',
+            'enter_description' => 'Enter Description',
+            'departments' => 'Departments',
+        ],
+
         'grades_reports' => [
             'note_registry' => 'Note Registry',
             'note_card' => 'Note Card',

@@ -12,7 +12,7 @@ return [
             'document_delivery' => 'Entrega de Doc.',
             'user_re_enrollment' => 'Usuario Re-Matrícula',
             'teachers' => [
-                'teachers' => 'Profesores',
+                'enter' => 'Profesores',
                 'edit' => 'Modificar',
                 'add' => 'Añadir',
             ],
@@ -77,6 +77,14 @@ return [
             'summer_classes' => 'Clases de Verano',
             'cumulative_card' => 'Tarjeta Acumulativa',
             'print_transcript' => 'Imprimir Transcripción',
+        ],
+
+        'codes' => [
+            'withdrawal' => 'Códigos de Bajas',
+            'socio_economic' => 'Socio Económico',
+            'special' => 'Códigos Especiales',
+            'enter_description' => 'Entrar Descripción',
+            'departments' => 'Departamentos',
         ],
 
         'grades_reports' => [

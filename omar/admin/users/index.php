@@ -33,7 +33,7 @@ $options = [
             [
                 'name' => __("Administración"),
                 'desc' => __("Pantalla para crear los usuarios administrativos con areas de acceso."),
-                'link' => '#'
+                'link' => 'administration/'
             ],
             [
                 'name' => __("Usuarios de padres"),

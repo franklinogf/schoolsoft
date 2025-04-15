@@ -10,7 +10,7 @@ enum AdminPermission: string
     case USER_ACCOUNTS_ADD = 'users.accounts.add';
     case USER_DOCUMENT_DELIVERY = 'users.document_delivery';
     case USER_RE_ENROLLMENT = 'users.re_enrollment';
-    case USER_TEACHERS = 'users.teachers';
+    case USER_TEACHERS = 'users.teachers.enter';
     case USER_TEACHERS_EDIT = 'users.teachers.edit';
     case USER_TEACHERS_ADD = 'users.teachers.add';
     case USER_ADMINISTRATIVE = 'users.administrative';
@@ -42,7 +42,7 @@ enum AdminPermission: string
     case ACCESS_ACTIVATIONS = 'access.activations';
     case ACCESS_SURVEYS = 'access.surveys';
     case ACCESS_REQUIREMENTS = 'access.requirements';
-    case ACCESS_FORCE_PARENT_PASSWORD_RESET = 'access.force_parent_password_reset';
+    case ACCESS_FORCE_PARENT_PASSWORD_CHANGE = 'access.force_change_parent_passwords';
     case ACCESS_RE_ENROLLMENT = 'access.re_enrollment';
 
         // Utilidades
