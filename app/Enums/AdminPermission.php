@@ -5,22 +5,22 @@ namespace App\Enums;
 enum AdminPermission: string
 {
     // Usuarios
-    case USER_ACCOUNTS_ENROLLMENT = 'users.accounts.enrollment';
-    case USER_ACCOUNTS_EDIT = 'users.accounts.edit';
-    case USER_ACCOUNTS_ADD = 'users.accounts.add';
-    case USER_DOCUMENT_DELIVERY = 'users.document_delivery';
-    case USER_RE_ENROLLMENT = 'users.re_enrollment';
-    case USER_TEACHERS = 'users.teachers.enter';
-    case USER_TEACHERS_EDIT = 'users.teachers.edit';
-    case USER_TEACHERS_ADD = 'users.teachers.add';
-    case USER_ADMINISTRATIVE = 'users.administrative';
-    case USER_PARENT_USERS = 'users.parent_users';
-    case USER_RENAME_STUDENTS = 'users.rename_students';
-    case USER_MEMOS_DEMERITS = 'users.memos_demerits';
-    case USER_WITHDRAWAL_SCREEN = 'users.withdrawal_screen';
-    case USER_NURSE_OFFICE = 'users.nurse_office';
-    case USER_NURSE_REPORTS = 'users.nurse_reports';
-    case USER_PAYPAL = 'users.paypal';
+    case USERS_ACCOUNTS_ENROLLMENT = 'users.accounts.enrollment';
+    case USERS_ACCOUNTS_EDIT = 'users.accounts.edit';
+    case USERS_ACCOUNTS_ADD = 'users.accounts.add';
+    case USERS_DOCUMENT_DELIVERY = 'users.document_delivery';
+    case USERS_RE_ENROLLMENT = 'users.re_enrollment';
+    case USERS_TEACHERS = 'users.teachers.enter';
+    case USERS_TEACHERS_EDIT = 'users.teachers.edit';
+    case USERS_TEACHERS_ADD = 'users.teachers.add';
+    case USERS_ADMINISTRATIVE = 'users.administrative';
+    case USERS_PARENT_USERS = 'users.parent_users';
+    case USERS_RENAME_STUDENTS = 'users.rename_students';
+    case USERS_MEMOS_DEMERITS = 'users.memos_demerits';
+    case USERS_WITHDRAWAL_SCREEN = 'users.withdrawal_screen';
+    case USERS_NURSE_OFFICE = 'users.nurse_office';
+    case USERS_NURSE_REPORTS = 'users.nurse_reports';
+    case USERS_PAYPAL = 'users.paypal';
 
         // Mensajes
     case MESSAGES_SEND_EMAIL = 'messages.send_email';
