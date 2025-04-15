@@ -3,7 +3,7 @@
 require_once '../../../../app.php';
 
 use App\Models\Family;
-use App\Models\School;
+use App\Models\Admin;
 use Classes\Util;
 use Classes\Route;
 use Classes\Server;
@@ -114,7 +114,7 @@ if (isset($_POST['searchUsername'])) {
     Route::redirect('/users/accounts/');
 } else if (isset($_POST['save'])) {
     $family = Family::create([
-        'year' => School::admin()->first()->year(),
+        'year' => Admin::primaryAdmin()->first()->year(),
         'grupo' => 'Padres',
         'activo' => 'Activo',
         'nfam' => 0,

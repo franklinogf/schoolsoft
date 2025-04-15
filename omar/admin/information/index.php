@@ -2,9 +2,7 @@
 require_once '../../app.php';
 
 use App\Enums\LanguageCode;
-use App\Models\School;
-use Carbon\Carbon;
-use Classes\Lang;
+use App\Models\Admin;
 use Classes\Route;
 use Classes\Session;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -28,7 +26,7 @@ Capsule::schema()->table('colegio', function (Blueprint $table) use ($columns): 
     }
 });
 
-$school = School::find(Session::id());
+$school = Admin::find(Session::id());
 $environmtsKeys = ["whatsapp", "resend", 'evertec'];
 $constantsKeys = ['cafeteria_deposit'];
 

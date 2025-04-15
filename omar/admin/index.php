@@ -6,10 +6,10 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use App\Models\School;
+use App\Models\Admin;
 
 Session::is_logged();
-$school = School::find(Session::id());
+$school = Admin::find(Session::id());
 
 $user = $school->usuario;
 $date = Util::date();

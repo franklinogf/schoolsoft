@@ -2,7 +2,7 @@
 require_once '../../../app.php';
 
 use App\Enums\Gender;
-use App\Models\School;
+use App\Models\Admin;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
@@ -17,7 +17,7 @@ $mt = $_GET['pk'] ?? null;
 if ($mt) {
     $student = Student::find($mt);
 }
-$discounts = Manager::table("presupuesto")->where('year', School::admin()->first()->year())->orderBy('codigo')->get();
+$discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()->first()->year())->orderBy('codigo')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

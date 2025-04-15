@@ -1,10 +1,11 @@
 <?php
 
 use App\Enums\LanguageCode;
-use App\Models\School;
+use App\Models\Admin;
 use Core\Database;
 use Core\TranslatorFactory;
 use Dotenv\Dotenv;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 session_start();
 require_once 'database.php';
@@ -69,5 +70,10 @@ $dotenv->load();
 
 new Database();
 
-$admin = School::admin()->first();
+Relation::enforceMorphMap([
+    'student' => \App\Models\Student::class,
+    'admin' => Admin::class,
+]);
+
+$admin = Admin::primaryAdmin()->first();
 TranslatorFactory::get()->setLocale($admin->idioma ?? LanguageCode::SPANISH->value);

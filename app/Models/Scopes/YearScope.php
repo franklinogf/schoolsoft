@@ -2,7 +2,7 @@
 
 namespace App\Models\Scopes;
 
-use App\Models\School;
+use App\Models\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -14,6 +14,6 @@ class YearScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where("{$model->getTable()}.year", School::admin()->first()->year());
+        $builder->where("{$model->getTable()}.year", Admin::primaryAdmin()->first()->year());
     }
 }

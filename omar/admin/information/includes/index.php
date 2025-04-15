@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\School;
+use App\Models\Admin;
 use Classes\DataBase\DB;
 use Classes\Route;
 use Classes\Session;
@@ -8,7 +8,7 @@ use Classes\Session;
 include '../../../app.php';
 Session::is_logged();
 
-$admin = School::find(Session::id());
+$admin = Admin::find(Session::id());
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 

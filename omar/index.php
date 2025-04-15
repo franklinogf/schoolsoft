@@ -3,12 +3,10 @@ require_once 'app.php';
 
 use Classes\Lang;
 use Classes\Route;
-use App\Models\School;
-use Classes\DataBase\DB;
-use Illuminate\Database\Capsule\Manager;
+use App\Models\Admin;
 
 
-$school = School::find('administrador');
+$school = Admin::find('administrador');
 
 $lang = new Lang([
     ['Administración', 'Administration'],

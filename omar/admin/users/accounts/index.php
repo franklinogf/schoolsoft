@@ -6,14 +6,14 @@ use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use App\Models\School;
+use App\Models\Admin;
 use App\Models\Family;
 use App\Models\Student;
 
 Session::is_logged();
 
 
-$school = School::find(Session::id());
+$school = Admin::find(Session::id());
 $students = Student::all();
 $year = $school->year();
 $female = $male = 0;

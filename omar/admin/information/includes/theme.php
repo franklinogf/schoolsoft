@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\School;
+use App\Models\Admin;
 use Classes\Route;
 use Classes\Session;
 use Classes\Services\SccsCompiler;
@@ -11,7 +11,7 @@ include '../../../app.php';
 Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    $admin = School::admin()->first();
+    $admin = Admin::primaryAdmin()->first();
 
     $theme = $_POST['theme'] ?? null;
     $defaultTheme = config('theme');

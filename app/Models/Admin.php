@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Classes\Session;
-use Illuminate\Database\Eloquent\Attributes\Scope;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
-class School extends Model
+
+class Admin extends Model
 {
     protected $table = 'colegio';
     protected $primaryKey = 'usuario';
@@ -30,7 +30,7 @@ class School extends Model
     }
 
 
-    protected function scopeAdmin(Builder $query): void
+    protected function scopePrimaryAdmin(Builder $query): void
     {
         $query->where('usuario', 'administrador');
     }

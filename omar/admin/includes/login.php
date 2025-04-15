@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\School;
+use App\Models\Admin;
 use Classes\Route;
 
 
@@ -9,7 +9,7 @@ require '../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
-   $admin =  School::where([
+   $admin =  Admin::where([
       ['usuario', $_POST['username']],
       ['clave', $_POST['password']]
    ])->first();
