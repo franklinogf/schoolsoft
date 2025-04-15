@@ -76,7 +76,7 @@ $admins = Admin::all();
                                     <a href="<?= Route::url("/admin/users/administration/edit.php?id=$admin->id") ?>" class="btn btn-primary btn-sm mr-2"><?= __("Editar") ?></a>
                                     <form method="POST" action="<?= Route::url("/admin/users/administration/includes/delete.php") ?>">
                                         <input type="hidden" name="id" value="<?= $admin->id ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger"><?= __("Eliminar") ?></button>
+                                        <button type="submit" class="btn btn-sm btn-danger deleteUser"><?= __("Eliminar") ?></button>
                                     </form>
                                 </div>
                             </td>
@@ -89,7 +89,34 @@ $admins = Admin::all();
     </div>
 
 
-    <?php Route::includeFile('/includes/layouts/scripts.php', true) ?>
+    <?php
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::sweetAlert();
+    ?>
+
+    <script type="module">
+        import {
+            ConfirmationAlert
+        } from '/js/alerts.js';
+
+
+        $(document).ready(() => {
+            $(".deleteUser").click(async function(e) {
+                e.preventDefault();
+
+                const alert = await ConfirmationAlert.fire({
+                    title: 'Esta seguro que desea eliminar este usuario?'
+                })
+
+
+                if (alert.isConfirmed) {
+                    $(this).parent('form').submit();
+                }
+
+            });
+
+        });
+    </script>
 
 </body>
 

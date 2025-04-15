@@ -2,6 +2,7 @@
 require '../../../../app.php';
 
 use App\Models\Admin;
+use Carbon\Carbon;
 use Classes\Route;
 use Classes\Session;
 
@@ -17,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'idioma' => $_POST['idioma'],
         'grupo' => 'Administrador',
         'year2' => $primaryAdmin->year,
+        'ufecha' => Carbon::now()->format('Y-m-d'),
     ]);
 
     Session::set('success', __("El usuario ha sido creado"));
