@@ -1,10 +1,14 @@
 <?php
 require_once '../../app.php';
 
+use App\Enums\AdminPermission;
 use Classes\Route;
 use Classes\Session;
+use App\Models\Admin;
 
 Session::is_logged();
+
+$user  = Admin::user(Session::id())->first();
 
 $options = [
     [
@@ -13,97 +17,116 @@ $options = [
             [
                 'name' => __("Cuentas / Matricula"),
                 'desc' => __("Crear, añadir, modificar las cuentas de los padres y estudiantes."),
-                'link' => 'accounts/'
+                'link' => 'accounts/',
+                'hidden' => $user->hasPermissionTo(AdminPermission::USER_ACCOUNTS_ENROLLMENT)
             ],
             [
                 'name' => __("Entrega de documentos"),
                 'desc' => __("Documentación que se pide y entregan a la oficina."),
-                'link' => 'documentsDelivery/'
+                'link' => 'documentsDelivery/',
+                'hidden' => false
             ],
             [
                 'name' => __("Re-matrícula"),
                 'desc' => __("Pantalla para pasar los estudiantes de un grado al próximo grado. Ejem. 01-A al 02-A."),
-                'link' => 'reenrollment/'
+                'link' => 'reenrollment/',
+                'hidden' => false
             ],
             [
                 'name' => __("Maestros"),
                 'desc' => __("Añadir, borrar o modificar información de los maestros."),
-                'link' => 'teachers/'
+                'link' => 'teachers/',
+                'hidden' => false
             ],
             [
                 'name' => __("Administración"),
                 'desc' => __("Pantalla para crear los usuarios administrativos con areas de acceso."),
-                'link' => 'administration/'
+                'link' => 'administration/',
+                'hidden' => false
             ],
             [
                 'name' => __("Usuarios de padres"),
                 'desc' => __("Es para añadir un usuario adicional al que tiene, para que entren diferentes usuario a la misma cuenta."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Modificar nombres"),
                 'desc' => __("Pantalla para cambiar los nombre y apellidos de los estudiantes."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Memos y deméritos"),
                 'desc' => __("Pantalla para entrar los memos y deméritos a los estudiantes."),
-                'link' => 'memos/'
+                'link' => 'memos/',
+                'hidden' => false
             ],
             [
                 'name' => __("Pantalla de bajas"),
                 'desc' => __("Pantalla para dar de bajas a los estudiantes."),
-                'link' => 'unenrollment/'
+                'link' => 'unenrollment/',
+                'hidden' => false
             ],
             [
                 'name' => __("Enfermeria"),
                 'desc' => __("Ingrese o vea información médica de los estudiantes."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Informe de enfermeria"),
                 'desc' => __("Informes de Enfermeria."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Documentos"),
                 'desc' => __("Pantalla para guardar los archivos de los estudiantes."),
-                'link' => 'documents/'
+                'link' => 'documents/',
+                'hidden' => false
             ],
             [
                 'name' => __("Impresiones"),
                 'desc' => __("Pantalla para llevar control de copias."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Cambiar grado"),
                 'desc' => __("Pantalla para cambiar el grado"),
-                'link' => 'changeGrade/'
+                'link' => 'changeGrade/',
+                'hidden' => false
             ],
             [
                 'name' => __("Cambiar cuenta"),
                 'desc' => __("Pantalla para cambiar una cuenta a otra."),
-                'link' => 'change_account/'
+                'link' => 'change_account/',
+                'hidden' => false
             ],
             [
                 'name' => __("Admisión"),
                 'desc' => __("Pantalla para matrículas nuevas."),
-                'link' => '#'
+                'link' => '#',
+                'hidden' => false
             ],
             [
                 'name' => __("Enviar usuarios"),
                 'desc' => __("Pantalla para enviar los usuarios a los padres."),
-                'link' => 'email/sendUsers.php'
+                'link' => 'email/sendUsers.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Buscar correo electrónico"),
                 'desc' => __("Pantalla para buscar de quien es el email."),
-                'link' => 'search_email/'
+                'link' => 'search_email/',
+                'hidden' => false
             ],
             [
                 'name' => __("Bloqueo de re-matrícula"),
                 'desc' => __("Acceso o bloqueo de las re-matricula a los padres."),
-                'link' => 'regis_deactivation.php'
+                'link' => 'regis_deactivation.php',
+                'hidden' => false
             ],
         ]
     ],
@@ -113,37 +136,44 @@ $options = [
             [
                 'name' => __("Códigos de bajas"),
                 'desc' => __("Pantalla para entrar los código de bajas."),
-                'link' => 'unenrollment/codes.php'
+                'link' => 'unenrollment/codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Socio económico"),
                 'desc' => __("Entrada de valores para el Socio Económico."),
-                'link' => 'socioeconomic/codes.php'
+                'link' => 'socioeconomic/codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Códigos especiales"),
                 'desc' => __("Entrada de valores Especiales."),
-                'link' => 'Special_codes.php'
+                'link' => 'Special_codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Códigos documentos"),
                 'desc' => __("Definir la entrada de los documentos para entregar."),
-                'link' => 'documentsDelivery/codes.php'
+                'link' => 'documentsDelivery/codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Códigos Departamentos"),
                 'desc' => __("Entra los códigos de los departamentos del Colegio."),
-                'link' => 'deparment/codes.php'
+                'link' => 'deparment/codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Códigos de memos"),
                 'desc' => __("Pantalla para entrar los código de bajas."),
-                'link' => 'memos/codes.php'
+                'link' => 'memos/codes.php',
+                'hidden' => false
             ],
             [
                 'name' => __("Códigos de mensajes"),
                 'desc' => __("Definir los mensajes para la Tarjeta de notas y Hoja de progreso."),
-                'link' => 'messagecode/codes.php'
+                'link' => 'messagecode/codes.php',
+                'hidden' => false
             ]
         ]
     ],
@@ -180,6 +210,7 @@ $options = [
                         <div class="pb-3">
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
+                                    <?php if ($button['hidden']) continue  ?>
                                     <div class="col mt-1">
                                         <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>

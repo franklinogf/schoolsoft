@@ -3,12 +3,13 @@ require_once '../../../app.php';
 
 use App\Enums\Status;
 use App\Models\Admin;
+use App\Models\Permission;
 use Classes\Route;
 use Classes\Session;
 
 
 Session::is_logged();
-$admins = Admin::all();
+$admins = Admin::where('usuario', '!=', 'administrador')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -55,7 +56,8 @@ $admins = Admin::all();
                     <tr>
                         <th><?= __("Usuario") ?></th>
                         <th><?= __("Nombre") ?></th>
-                        <th><?= __("Activo") ?></th>
+                        <th class="text-center"><?= __("Activo") ?></th>
+                        <th class="text-center"><?= __("Permisos") ?></th>
                         <th style="width: 0;"></th>
                     </tr>
                 </thead>
@@ -66,6 +68,9 @@ $admins = Admin::all();
                             <td><?= $admin->director ?></td>
                             <td class="text-center">
                                 <span class="badge badge-pill <?= $admin->activo === Status::ACTIVE->value ? 'badge-primary' : 'badge-secondary' ?>"><?= Status::tryFrom($admin->activo)?->label() ?></span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge badge-pill badge-info" style="min-width: 70px;"><?= $admin->permissions()->count() ?> / <?= Permission::count() ?></span>
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end">
