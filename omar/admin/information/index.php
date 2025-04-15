@@ -26,7 +26,7 @@ Capsule::schema()->table('colegio', function (Blueprint $table) use ($columns): 
     }
 });
 
-$school = Admin::find(Session::id());
+$school = Admin::user(Session::id())->first();
 $environmtsKeys = ["whatsapp", "resend", 'evertec'];
 $constantsKeys = ['cafeteria_deposit'];
 

@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use Classes\Session;
 
+use Classes\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Traits\HasPermissions;
 
 class Admin extends Model
 {
+    use HasPermissions;
     protected $table = 'colegio';
-    protected $primaryKey = 'usuario';
-    protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = false;
 
     protected $guarded = [];
+
+
 
     public function info(string $key): mixed
     {
@@ -34,6 +35,12 @@ class Admin extends Model
     {
         $query->where('usuario', 'administrador');
     }
+    protected function scopeUser(Builder $query, string $user): void
+    {
+        $query->where('usuario', $user);
+    }
+
+
 
     public function casts()
     {

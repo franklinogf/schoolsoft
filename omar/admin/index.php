@@ -9,7 +9,7 @@ use Classes\DataBase\DB;
 use App\Models\Admin;
 
 Session::is_logged();
-$school = Admin::find(Session::id());
+$school = Admin::user(Session::id())->first();
 
 $user = $school->usuario;
 $date = Util::date();

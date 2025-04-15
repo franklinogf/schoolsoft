@@ -5,8 +5,6 @@ namespace Core;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 
-
-
 class Database
 {
 
@@ -25,6 +23,7 @@ class Database
             'port' => $config['port'] ?? '3306',
             'prefix' => $config['prefix'] ?? '',
         ], 'mysql');
+
 
         $capsule->setAsGlobal();
 

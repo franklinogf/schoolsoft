@@ -13,7 +13,7 @@ use App\Models\Student;
 Session::is_logged();
 
 
-$school = Admin::find(Session::id());
+$school = Admin::user(Session::id())->first();
 $students = Student::all();
 $year = $school->year();
 $female = $male = 0;

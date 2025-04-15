@@ -8,7 +8,7 @@ use Classes\Session;
 include '../../../app.php';
 Session::is_logged();
 
-$admin = Admin::find(Session::id());
+$admin = Admin::user(Session::id())->first();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 

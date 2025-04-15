@@ -60,7 +60,13 @@ if (!function_exists('school_config')) {
     }
 }
 
-
+if (!function_exists('asset')) {
+    function asset(string $path): string
+    {
+        $appUrl = config('app.url');
+        return "$appUrl/$path";
+    }
+}
 
 if (!function_exists('school_asset')) {
     function school_asset(string $path): string
