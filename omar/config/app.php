@@ -5,7 +5,7 @@ return [
 
     'timezone' => 'America/Puerto_Rico',
 
-    'language' => 'es',
+    'locale' => 'en',
 
     'logo' => [
         'default' => 'logo/logo.gif',
