@@ -34,6 +34,7 @@ class Session
     public static function is_logged($redirect = true)
     {
 
+
         if (!isset($_SESSION['logged'])) {
             if ($redirect) {
                 Route::redirect();

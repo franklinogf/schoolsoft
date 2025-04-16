@@ -68,9 +68,8 @@ th.checkbox {
 
 /* body background to be gradient */
 body {
-  background-image: linear-gradient(white, var(--light));
-
-  background-attachment: fixed;
+  background-color: var(--body-bg);
+  color: var(--body-color);
 }
 
 /* custom border gradient */

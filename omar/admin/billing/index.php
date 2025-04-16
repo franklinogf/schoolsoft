@@ -1,7 +1,7 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Lang;
+
 use Classes\Route;
 use Classes\Session;
 
@@ -9,283 +9,277 @@ Session::is_logged();
 
 $options = [
     [
-        'title' => ["es" => 'Opciones', "en" => 'Options'],
+        'title' => __("Opciones"),
         'buttons' => [
             [
-                'name' => ["es" => 'Presupuesto', "en" => "Budget"],
-                'desc' => ['es' => 'Para definir los códigos y las descripciones.', 'en' => 'To define codes and descriptions.'],
+                'name' => __("Presupuesto"),
+                'desc' => __('Para definir los códigos y las descripciones.'),
                 'link' => 'budget.php',
             ],
             [
-                'name' => ["es" => 'Costos', "en" => "Costs"],
-                'desc' => ['es' => 'Para definir los cargos a los grados.', 'en' => 'To define costs to grades.'],
+                'name' => __("Costos"),
+                'desc' => __('Para definir los cargos a los grados.'),
                 'link' => 'Costs.php',
             ],
             [
-                'name' => ["es" => 'Crear cargos', "en" => "Create costs"],
-                'desc' => ['es' => 'Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.', 'en' => 'Screen to create the different costs to the student accounts.'],
+                'name' => __("Crear cargos"),
+                'desc' => __('Pantalla para crear los diferentes cargos a las cuentas de los estudiantes.'),
                 'link' => 'Create_costs.php',
             ],
             [
-                'name' => ["es" => 'Entrar pagos', "en" => "Entrar pagos"],
-                'desc' => ['es' => 'Pantalla para realizar los pagos a las cuentas.', 'en' => 'Pantalla para realizar los pagos a las cuentas.'],
+                'name' => __("Entrar pagos"),
+                'desc' => __('Pantalla para realizar los pagos a las cuentas.'),
                 'link' => 'payments/',
             ],
             [
-                'name' => ["es" => 'Ver Pagos', "en" => "View transactions"],
-                'desc' => ['es' => 'Ver y borrar transacciones.', 'en' => 'View and delete transactions.'],
+                'name' => __("Ver Pagos"),
+                'desc' => __('Ver y borrar transacciones.'),
                 'link' => 'Ver_pagos.php',
             ],
             [
-                'name' => ["es" => 'Recargos', "en" => "Surcharges"],
-                'desc' => ['es' => 'Pantalla para aplicarle recargos a las cuentas atrazadas.', 'en' => 'Screen to apply surcharges to overdue accounts.'],
+                'name' => __("Recargos"),
+                'desc' => __('Pantalla para aplicarle recargos a las cuentas atrazadas.'),
                 'link' => 'recargos.php',
             ],
             [
-                'name' => ["es" => 'Posteos', "en" => "Posteos"],
-                'desc' => ['es' => 'Pantalla para agregar pagos automáticos.', 'en' => 'Pantalla para agregar pagos automáticos.'],
+                'name' => __("Posteos"),
+                'desc' => __('Pantalla para agregar pagos automáticos.'),
                 'link' => 'posteos/',
             ],
             [
-                'name' => ["es" => 'Pagos automaticos', "en" => "Pagos automaticos"],
-                'desc' => ['es' => 'Pantalla para procesar pagos automáticos.', 'en' => 'Pantalla para procesar pagos automáticos.'],
+                'name' => __("Pagos automaticos"),
+                'desc' => __('Pantalla para procesar pagos automáticos.'),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Re-enviar recibo', "en" => "Resend receipt"],
-                'desc' => ['es' => 'Pantalla para reenviar recibos de los pagos automáticos.', 'en' => 'Screen to resend receipts for automatic payments.'],
+                'name' => __("Re-enviar recibo"),
+                'desc' => __('Pantalla para reenviar recibos de los pagos automáticos.'),
                 'link' => 'reenviar.php',
             ],
             [
-                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
-                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'name' => __("Pasar balances"),
+                'desc' => __('Pantalla para pasar los balances de los padres de un año al otro.'),
                 'link' => 'pass_balances.php',
             ],
             [
-                'name' => ["es" => 'Activaciones', "en" => "Activations"],
-                'desc' => ['es' => 'Pantalla para activación y desactivación de pantallas.', 'en' => "Screen for activating and deactivating screens."],
+                'name' => __("Activaciones"),
+                'desc' => __('Pantalla para activación y desactivación de pantallas.'),
                 'link' => 'activacion.php',
             ],
-
         ],
     ],
     [
-        'title' => ["es" => 'Informes', "en" => 'Reports'],
+        'title' => __("Informes"),
         'buttons' => [
             [
-                'name' => ["es" => 'Pagos diarios', "en" => "Daily payments"],
-                'desc' => ['es' => 'Pagos Realizados, Cuadre del día, puede seleccionar las fechas.', 'en' => 'Payments Made, Square of the day, you can select the dates.'],
+                'name' => __("Pagos diarios"),
+                'desc' => __('Pagos Realizados, Cuadre del día, puede seleccionar las fechas.'),
                 'link' => 'Daily_payments.php',
             ],
             [
-                'name' => ["es" => 'Estado de cuenta', "en" => "Statement"],
-                'desc' => ['es' => 'Imprimir o enviar el informe de estado de cuentas a los padres.', 'en' => 'Print or send the account status report to parents.'],
+                'name' => __("Estado de cuenta"),
+                'desc' => __('Imprimir o enviar el informe de estado de cuentas a los padres.'),
                 'link' => 'Statement.php',
             ],
             [
-                'name' => ["es" => 'Lista de deudores', "en" => "List of debtors"],
-                'desc' => ['es' => 'Informe de deudores por grado puede seleccionar código.', 'en' => 'Debtors report by grade you can select code.'],
+                'name' => __("Lista de deudores"),
+                'desc' => __('Informe de deudores por grado puede seleccionar código.'),
                 'link' => 'deudores.php',
             ],
             [
-                'name' => ["es" => '30, 60, 90', "en" => "30, 60, 90"],
-                'desc' => ['es' => 'Lista de deudores por meses por cuentas.', 'en' => 'List of debtors by month by accounts.'],
+                'name' => __("30, 60, 90"),
+                'desc' => __('Lista de deudores por meses por cuentas.'),
                 'link' => 'deudores369.php',
             ],
             [
-                'name' => ["es" => 'Carta de cobro', "en" => "Collection letter"],
-                'desc' => ['es' => 'Puede seleccionar las cartas para imprimir o enviar por E-Mail.', 'en' => 'You can select letters to print or send by E-Mail.'],
+                'name' => __("Carta de cobro"),
+                'desc' => __('Puede seleccionar las cartas para imprimir o enviar por E-Mail.'),
                 'link' => 'letter/index.php',
             ],
             [
-                'name' => ["es" => 'Carta de Suspensión', "en" => "Suspension Letter"],
-                'desc' => ['es' => 'Listado de deudores para suspensión.', 'en' => 'List of debtors for suspension.'],
+                'name' => __("Carta de Suspensión"),
+                'desc' => __('Listado de deudores para suspensión.'),
                 'link' => 'letter.php',
             ],
             [
-                'name' => ["es" => 'Presupuesto', "en" => "Budget"],
-                'desc' => ['es' => 'Informe para contabilizar las partidas de cada código.', 'en' => 'Report to account for the items of each code.'],
+                'name' => __("Presupuesto"),
+                'desc' => __('Informe para contabilizar las partidas de cada código.'),
                 'link' => 'inf_presupuesto_op.php',
             ],
             [
-                'name' => ["es" => 'Pagos', "en" => "Payments"],
-                'desc' => ['es' => 'Listado por grupo para saber quienes pagaron.', 'en' => 'List by group to know who paid.'],
+                'name' => __("Pagos"),
+                'desc' => __('Listado por grupo para saber quienes pagaron.'),
                 'link' => 'inf_pagos_op.php',
             ],
             [
-                'name' => ["es" => 'Lista por fechas', "en" => "List by dates"],
-                'desc' => ['es' => 'Informe de totales por meses por código.', 'en' => 'Monthly totals report by code.'],
+                'name' => __("Lista por fechas"),
+                'desc' => __('Informe de totales por meses por código.'),
                 'link' => 'inf_por_fecha_op.php',
             ],
             [
-                'name' => ["es" => 'Lista de pagos', "en" => "Payment list"],
-                'desc' => ['es' => 'Lista de estudiantes que pagaron o no.', 'en' => 'List of students who paid or not.'],
+                'name' => __("Lista de pagos"),
+                'desc' => __('Lista de estudiantes que pagaron o no.'),
                 'link' => 'lista_pagos.php',
             ],
             [
-                'name' => ["es" => 'Descripción', "en" => "Descripción"],
-                'desc' => ['es' => 'Lista de deudores detallada por mes por cuentas.', 'en' => 'List of debtors detailed by month by accounts.'],
+                'name' => __("Descripción"),
+                'desc' => __('Lista de deudores detallada por mes por cuentas.'),
                 'link' => 'sabana.php',
             ],
             [
-                'name' => ["es" => 'Cobros', "en" => "Late Payment"],
-                'desc' => ['es' => 'Pantalla para enviar mensajes de cobros a los deudores.', 'en' => 'Screen to send a late payment message to debtors.'],
+                'name' => __("Cobros"),
+                'desc' => __('Pantalla para enviar mensajes de cobros a los deudores.'),
                 'link' => 'cobros_testos.php',
             ],
             [
-                'name' => ["es" => 'Recibos', "en" => "Receipts"],
-                'desc' => ['es' => 'Pantalla Para Buscar Recibos', 'en' => 'Screen to Search Receipts'],
+                'name' => __("Recibos"),
+                'desc' => __('Pantalla Para Buscar Recibos'),
                 'link' => 'receipts.php',
             ],
             [
-                'name' => ["es" => 'Pasar balances', "en" => "Pass balances"],
-                'desc' => ['es' => 'Pantalla para pasar los balances de los padres de un año al otro.', 'en' => "Screen to transfer the parents' balance sheets from one year to the next."],
+                'name' => __("Pasar balances"),
+                'desc' => __('Pantalla para pasar los balances de los padres de un año al otro.'),
                 'link' => 'pass_balances.php',
             ],
             [
-                'name' => ["es" => 'Deudores', "en" => "Debtors"],
-                'desc' => ['es' => 'Informe detallado por cuentas y año.', 'en' => 'Detailed report by accounts and year.'],
+                'name' => __("Deudores"),
+                'desc' => __('Informe detallado por cuentas y año.'),
                 'link' => 'deudores_op.php',
             ],
             [
-                'name' => ["es" => 'Listado', "en" => "List"],
-                'desc' => ['es' => 'Informe por descripción mensual.', 'en' => 'Report by monthly description.'],
+                'name' => __("Listado"),
+                'desc' => __('Informe por descripción mensual.'),
                 'link' => 'inf_desc_op.php',
             ],
             [
-                'name' => ["es" => 'Matrícula estudiante', "en" => "Student registration"],
-                'desc' => ['es' => 'Informe por deudas detalladas.', 'en' => 'Detailed debt report.'],
+                'name' => __("Matrícula estudiante"),
+                'desc' => __('Informe por deudas detalladas.'),
                 'link' => 'inf_mat_est_op.php',
             ],
             [
-                'name' => ["es" => 'Deuda salón hogar', "en" => "Debt for home room"],
-                'desc' => ['es' => 'Informe por deudas por salón hogar.', 'en' => 'Debt report for home room.'],
+                'name' => __("Deuda salón hogar"),
+                'desc' => __('Informe por deudas por salón hogar.'),
                 'link' => 'inf_deuda_salon_op.php',
             ],
             [
-                'name' => ["es" => 'Reporte de pagos', "en" => "Payment report"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Reporte de pagos"),
+                'desc' => __(''),
                 'link' => 'pdf/inf_reporte_pago.php',
                 'target' => 'inf_reporte_pago',
             ],
             [
-                'name' => ["es" => 'Descuentos', "en" => "Discounts"],
-                'desc' => ['es' => 'Reporte totales de descuento por código.', 'en' => 'Total discount report by code.'],
+                'name' => __("Descuentos"),
+                'desc' => __('Reporte totales de descuento por código.'),
                 'link' => 'pdf/inf_reporte_descuentos.php',
                 'target' => 'inf_reporte_descuentos',
             ],
             [
-                'name' => ["es" => 'Pagos mensual', "en" => "Monthly payment"],
-                'desc' => ['es' => 'Informe mensual de pagos.', 'en' => 'Monthly payment report.'],
+                'name' => __("Pagos mensual"),
+                'desc' => __('Informe mensual de pagos.'),
                 'link' => 'Pagos_mensual.php',
             ],
             [
-                'name' => ["es" => 'No Deudores', "en" => "Non-Debtors"],
-                'desc' => ['es' => 'Informe pagado completo', 'en' => 'Complete paid report'],
+                'name' => __("No Deudores"),
+                'desc' => __('Informe pagado completo'),
                 'link' => 'inf_pagados_op.php',
             ],
             [
-                'name' => ["es" => 'Presupuesto por grado', "en" => "Budget by grade"],
-                'desc' => ['es' => 'Informe presupuesto por grado.', 'en' => 'Budget report by grade.'],
+                'name' => __("Presupuesto por grado"),
+                'desc' => __('Informe presupuesto por grado.'),
                 'link' => 'pdf/inf_presu.php',
                 'target' => 'inf_presu',
             ],
             [
-                'name' => ["es" => 'Presupuesto por matrícula', "en" => "Tuition budget"],
-                'desc' => ['es' => 'Informe presupuesto por matricula y mensualidad.', 'en' => 'Budget report for enrollment and monthly payment.'],
+                'name' => __("Presupuesto por matrícula"),
+                'desc' => __('Informe presupuesto por matricula y mensualidad.'),
                 'link' => 'inf_presu_op.php',
             ],
             [
-                'name' => ["es" => 'Reporte descripción', "en" => "Report description"],
-                'desc' => ['es' => 'Informe por descripciones.', 'en' => 'Report by description'],
+                'name' => __("Reporte descripción"),
+                'desc' => __('Informe por descripciones.'),
                 'link' => 'inf_descp_op.php',
             ],
             [
-                'name' => ["es" => 'Deuda familia', "en" => "Family debt"],
-                'desc' => ['es' => 'Informe por deudas por familias.', 'en' => 'Debt report for families.'],
+                'name' => __("Deuda familia"),
+                'desc' => __('Informe por deudas por familias.'),
                 'link' => 'pdf/inf_lista_cta.php',
                 'target' => 'inf_lista_cta',
             ],
             [
-                'name' => ["es" => 'Depositos', "en" => "Deposits"],
-                'desc' => ['es' => 'Informe depósitos cafeteria por fechas.', 'en' => 'Report cafeteria deposits by date.'],
+                'name' => __("Depositos"),
+                'desc' => __('Informe depósitos cafeteria por fechas.'),
                 'link' => 'inf_dep_dia_op.php',
             ],
             [
-                'name' => ["es" => 'Balances', "en" => "Balances"],
-                'desc' => ['es' => 'Informe balances depositados a los estudiantes.', 'en' => 'Report balances deposited to students.'],
+                'name' => __("Balances"),
+                'desc' => __('Informe balances depositados a los estudiantes.'),
                 'link' => 'pdf/inf_dep_balances.php',
                 'target' => 'inf_dep_balances',
             ],
             [
-                'name' => ["es" => 'Re-matrícula pagadas', "en" => "Re-registration paid"],
-                'desc' => ['es' => 'Informe Matrículas pagadas.', 'en' => 'Paid registration report.'],
+                'name' => __("Re-matrícula pagadas"),
+                'desc' => __('Informe Matrículas pagadas.'),
                 'link' => 'pdf/re_pagadas.php',
                 'target' => 're_pagadas',
             ],
             [
-                'name' => ["es" => 'Matrícula Estu. Sup.', "en" => "Enr. Sup. Stu."],
-                'desc' => ['es' => 'Informe Matrículas Estudios Supervisados.', 'en' => 'Enrollment Report Supervised Studies.'],
+                'name' => __("Matrícula Estu. Sup."),
+                'desc' => __('Informe Matrículas Estudios Supervisados.'),
                 'link' => 'pdf/re_pagadas2.php',
                 'target' => 're_pagadas2',
             ],
             [
-                'name' => ["es" => 'Lista Est. Sup.', "en" => "List Sup. Stu."],
-                'desc' => ['es' => 'Lista por grado de Estudios Supervisados.', 'en' => 'List by grade of Supervised Studies.'],
+                'name' => __("Lista Est. Sup."),
+                'desc' => __('Lista por grado de Estudios Supervisados.'),
                 'link' => 'pdf/re_pagadas3.php',
                 'target' => 're_pagadas3',
             ],
             [
-                'name' => ["es" => 'Primera Comunión', "en" => "First Communion"],
-                'desc' => ['es' => 'Lista por grado de Primera Comunión..', 'en' => 'List by degree of First Communion.'],
+                'name' => __("Primera Comunión"),
+                'desc' => __('Lista por grado de Primera Comunión..'),
                 'link' => 'pdf/pc_pagadas.php',
                 'target' => 'pc_pagadas',
             ],
             [
-                'name' => ["es" => 'Cafetería', "en" => "Cafeteria"],
-                'desc' => ['es' => 'Detalle de compras de articulos de los estudiantes.', 'en' => 'Details of student item purchases.'],
+                'name' => __("Cafetería"),
+                'desc' => __('Detalle de compras de articulos de los estudiantes.'),
                 'link' => 'cafeteria_op.php',
             ],
             [
-                'name' => ["es" => 'Reporte de cuadre', "en" => "Balance report"],
-                'desc' => ['es' => 'Compras, depositos y balances.', 'en' => 'Purchases, deposits and balances.'],
-                'link' => 'pdf/inf_cuadre.php'
+                'name' => __("Reporte de cuadre"),
+                'desc' => __('Compras, depositos y balances.'),
+                'link' => 'pdf/inf_cuadre.php',
             ],
             [
-                'name' => ["es" => 'Descuento mensual', "en" => "Descuento mensual"],
-                'desc' => ['es' => 'Informe mensual detallado por Código', 'en' => 'Informe mensual detallado por Código'],
+                'name' => __("Descuento mensual"),
+                'desc' => __('Informe mensual detallado por Código'),
                 'link' => '#',
             ],
             [
-                'name' => ["es" => 'Inf. Diarios', "en" => "Daily Inf."],
-                'desc' => ['es' => 'Informes diario por fechas y horas.', 'en' => 'Daily reports by dates and times.'],
+                'name' => __("Inf. Diarios"),
+                'desc' => __('Informes diario por fechas y horas.'),
                 'link' => 'inf_diario_op.php',
             ],
             [
-                'name' => ["es" => 'T-Shirts', "en" => "T-Shirts"],
-                'desc' => ['es' => 'Informes de compras por tamaños.', 'en' => 'Purchase reports by size.'],
+                'name' => __("T-Shirts"),
+                'desc' => __('Informes de compras por tamaños.'),
                 'link' => 'pdf/compras_camisas.php',
                 'target' => 'T-Shirts',
             ],
             [
-                'name' => ["es" => 'T-Shirts Size', "en" => "T-Shirts Size"],
-                'desc' => ['es' => 'Informe por tamaño de camisas por grado resumen.', 'en' => 'Report by t-shirt size by grade summary.'],
+                'name' => __("T-Shirts Size"),
+                'desc' => __('Informe por tamaño de camisas por grado resumen.'),
                 'link' => 'pdf/inf_size.php',
                 'target' => 'T-Shirts',
             ],
             [
-                'name' => ["es" => 'Inf. Compras', "en" => "Purchasing Report"],
-                'desc' => ['es' => 'Informe de compras en cafeterias por fechas.', 'en' => 'Report on purchases in cafeterias by date.'],
+                'name' => __("Inf. Compras"),
+                'desc' => __('Informe de compras en cafeterias por fechas.'),
                 'link' => 'inf_compras_op.php',
             ],
         ],
     ],
-
 ];
-
-$lang = new Lang([
-    ["Cuentas a cobrar", "Billing statement"],
-]);
 
 ?>
 <!DOCTYPE html>
@@ -294,7 +288,7 @@ $lang = new Lang([
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <?php
-    $title = $lang->translation("Cuentas a cobrar");
+    $title = __("Cuentas a cobrar");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -304,19 +298,19 @@ $lang = new Lang([
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation("Cuentas a cobrar") ?></h1>
+        <h1 class="text-center my-3"><?= __("Cuentas a cobrar") ?></h1>
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
 
             <?php foreach ($options as $option): ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
-                        <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
+                        <legend class="w-auto"><?= $option['title'] ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -324,8 +318,6 @@ $lang = new Lang([
                     </fieldset>
                 </div>
             <?php endforeach ?>
-
-
 
         </div>
     </div>

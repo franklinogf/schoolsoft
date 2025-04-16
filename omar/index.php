@@ -1,21 +1,11 @@
 <?php
 require_once 'app.php';
 
-use Classes\Lang;
 use Classes\Route;
-use Classes\Controllers\School;
+use App\Models\Admin;
 
-$school = new School();
-$lang = new Lang([
-    ['Administración', 'Administration'],
-    ["Regiweb", 'Regiweb'],
-    ["Padres", 'Parents'],
-    ["Foro", 'Foro'],
-    ["Calendario", 'Calendar'],
-    ["Solicitudes", 'Requests'],
-    ["Documentos", "Documents"],
-    ["Cafetería", "Cafeteria"]
-]);
+$school = Admin::primaryAdmin()->first();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -24,8 +14,8 @@ $lang = new Lang([
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $school->info('colegio') ?></title>
-    <link rel="icon" href="<?= School::logo() ?>" />
+    <title><?= $school->colegio ?></title>
+    <link rel="icon" href="<?= school_logo() ?>" />
     <?= Route::bootstrapCSS() ?>
     <?php Route::css("/css/main.css", true) ?>
     <?php Route::fontawasome(); ?>
@@ -34,36 +24,36 @@ $lang = new Lang([
 <body>
     <header class="bg-dark py-3">
         <div class="px-md-2 d-flex justify-content-center align-items-center">
-            <img class="img-fluid" src="<?= School::logo() ?>" alt="School Logo" width='<?= __HOME_LOGO_SIZE ?>'>
-            <h1 class="display-4 text-white"><?= $school->info('colegio') ?></h1>
+            <img class="img-fluid" src="<?= school_logo() ?>" alt="School Logo" width='<?= school_config('app.logo.size.home') ?>'>
+            <h1 class="display-4 text-white"><?= $school->colegio ?></h1>
         </div>
     </header>
     <main class="bg-light">
         <div class="container d-flex align-items-center justify-content-center" style='height:15rem'>
             <div class="row row-cols-2 row-cols-md-4 w-100">
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/admin/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Administración") ?></a>
+                    <a href="<?= Route::url('/admin/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Administración") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Regiweb") ?></a>
+                    <a href="<?= Route::url('/regiweb/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Regiweb") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/parents/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Padres") ?></a>
+                    <a href="<?= Route::url('/parents/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Padres") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/foro/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Foro") ?></a>
+                    <a href="<?= Route::url('/foro/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Foro") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/calendarix/calendar.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Calendario") ?></a>
+                    <a href="<?= Route::url('/calendarix/calendar.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Calendario") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Solicitudes") ?></a>
+                    <a href="#" class="btn btn-primary btn-block shadow-lg"><?= __("Solicitudes") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Documentos") ?></a>
+                    <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Documentos") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/cafeteria/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= $lang->translation("Cafetería") ?></a>
+                    <a href="<?= Route::url('/cafeteria/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Cafetería") ?></a>
                 </div>
             </div>
         </div>
@@ -74,14 +64,14 @@ $lang = new Lang([
                 <div class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-body">
-                            <p class="card-text"><?= $school->info('men_ini') ?></p>
+                            <p class="card-text"><?= $school->men_ini ?></p>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="card h-100">
                         <div class="card-body">
-                            <p class="card-text"><?= $school->info('men_nota') ?></p>
+                            <p class="card-text"><?= $school->men_nota ?></p>
                         </div>
                     </div>
                 </div>
@@ -91,34 +81,34 @@ $lang = new Lang([
     <footer class="bg-dark py-5 position-relative">
         <div class="container" style='height:10rem'>
             <div class="row">
-                <div class="<?= $school->info('dir2') !== '' ? 'col-sm-6' : 'col-sm-12' ?>">
+                <div class="<?= $school->dir2 !== '' ? 'col-sm-6' : 'col-sm-12' ?>">
                     <div class="card bg-transparent border-0 text-white">
                         <div class="card-body">
-                            <p class="card-text"><?= $school->info('dir1') ?></p>
-                            <p class="card-text"><?= $school->info('dir3') ?></p>
-                            <p class="card-text"><?= $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1') ?></p>
-                            <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->info('telefono') ?></p>
-                            <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->info('fax') ?></p>
+                            <p class="card-text"><?= $school->dir1 ?></p>
+                            <p class="card-text"><?= $school->dir3 ?></p>
+                            <p class="card-text"><?= "$school->pueblo1, $school->esta1 $school->zip1" ?></p>
+                            <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->telefono ?></p>
+                            <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->fax ?></p>
                         </div>
                     </div>
                 </div>
-                <?php if ($school->info('dir2') !== ''): ?>
+                <?php if ($school->dir2 !== ''): ?>
                     <div class="col-sm-6">
                         <div class="card bg-transparent border-0 text-white">
                             <div class="card-body">
-                                <p class="card-text"><?= $school->info('dir2') ?></p>
-                                <p class="card-text"><?= $school->info('dir4') ?></p>
-                                <p class="card-text"><?= $school->info('pueblo2') . ', ' . $school->info('esta2') . ' ' . $school->info('zip2') ?></p>
-                                <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->info('telefono') ?></p>
-                                <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->info('fax') ?></p>
+                                <p class="card-text"><?= $school->dir2 ?></p>
+                                <p class="card-text"><?= $school->dir4 ?></p>
+                                <p class="card-text"><?= "$school->pueblo2, $school->esta2 $school->zip2" ?></p>
+                                <p class="card-text"><i class="fa-solid fa-phone"></i> <?= $school->telefono ?></p>
+                                <p class="card-text"><i class="fa-solid fa-fax"></i> <?= $school->fax ?></p>
                             </div>
                         </div>
                     </div>
                 <?php endif ?>
             </div>
         </div>
-        <img class="img-fluid position-absolute" src="<?= __DEFAULT_LOGO_SCHOOLSOFT ?>" alt="School Logo" style='width:15rem;top:50px;right:15px;'>
-        <p class="text-monospace text-center text-white mt-5 mb-0"><?= $lang->translation('Derechos reservados') ?> &copy; <?= date('Y') ?></p>
+        <img class="img-fluid position-absolute" src="<?= asset('images/logo-schoolsoft.gif') ?>" alt="School Logo" style='width:15rem;top:50px;right:15px;'>
+        <p class="text-monospace text-center text-white mt-5 mb-0"><?= __('Derechos reservados') ?> &copy; <?= date('Y') ?></p>
     </footer>
 
 </body>
