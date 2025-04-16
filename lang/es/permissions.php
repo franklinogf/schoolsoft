@@ -149,7 +149,7 @@ return [
             'teachers_license' => 'Licencia de Profesores',
             'non_teaching_staff' => 'Personal No Docente',
             'students_list' => 'Lista de Estudiantes',
-            'homeroom' => 'Aula',
+            'homeroom' => 'Salón hogar',
             'totals_by_grade' => 'Totales por Grado',
             'signature_list' => 'Lista de Firmas',
             'users_list' => 'Lista de Usuarios',
