@@ -13,7 +13,7 @@ if (!function_exists('dd')) {
 }
 
 if (!function_exists('config')) {
-    function config(string $keys): mixed
+    function config(string $keys, mixed $default = null): mixed
     {
 
         $keys = explode('.', $keys);
@@ -29,13 +29,13 @@ if (!function_exists('config')) {
         }
 
         if (count($keys) > 3) {
-            return $config[$keys[1]][$keys[2]][$keys[3]] ?? null;
+            return $config[$keys[1]][$keys[2]][$keys[3]] ?? $default;
         }
 
         if (count($keys) > 2) {
-            return $config[$keys[1]][$keys[2]] ?? null;
+            return $config[$keys[1]][$keys[2]] ?? $default;
         }
-        return $config[$keys[1]] ?? null;
+        return $config[$keys[1]] ?? $default;
     }
 }
 
@@ -56,11 +56,11 @@ if (!function_exists('school_config')) {
         }
 
         if (count($keys) > 3) {
-            return $config[$keys[1]][$keys[2]][$keys[3]] ?? null;
+            return $config[$keys[1]][$keys[2]][$keys[3]] ?? $default;
         }
 
         if (count($keys) > 2) {
-            return $config[$keys[1]][$keys[2]] ?? null;
+            return $config[$keys[1]][$keys[2]] ?? $default;
         }
         return $config[$keys[1]] ?? $default;
     }
