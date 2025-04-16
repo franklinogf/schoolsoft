@@ -212,7 +212,7 @@ $options = [
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <?php if ($button['hidden']) continue  ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= Route::url('admin/users/' . $button['link']) ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

@@ -2,7 +2,6 @@
 require_once '../../../app.php';
 
 use App\Enums\AdminPermission;
-use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use App\Models\Admin;
@@ -270,7 +269,7 @@ $options = [
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <?php if ($button['hidden']) continue  ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
+                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= Route::url('/admin/access/gradesReports/' . $button['link']) ?>">
                                             <?= mb_strtoupper($button['name'], 'UTF-8') ?>
                                         </a>
                                     </div>
