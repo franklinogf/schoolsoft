@@ -42,7 +42,7 @@ $options = [
                 'name' => __("Administración"),
                 'desc' => __("Pantalla para crear los usuarios administrativos con areas de acceso."),
                 'link' => 'administration/',
-                'hidden' => false //!$user->hasPermissionTo(AdminPermission::USER_ADMINISTRATIVE)
+                'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_ADMINISTRATIVE)
             ],
             [
                 'name' => __("Usuarios de padres"),

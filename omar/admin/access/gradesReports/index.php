@@ -13,213 +13,228 @@ $user  = Admin::user(Session::id())->first();
 
 $options = [
     [
-        'title' => ["es" => 'Opciones', "en" => 'Options'],
+        'title' => __('Opciones'),
         'buttons' => [
 
             [
-                'name' => ["es" => 'Tarjeta de notas', "en" => "Grade report"],
-                'desc' => ['es' => 'Pantalla para imprimir reporte de notas', 'en' => 'Screen to print grade report'],
+                'name' => __("Tarjeta de notas"),
+                'desc' => __("Pantalla para imprimir la tarjeta de notas"),
                 'link' => 'TarjetaOpciones.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_NOTE_CARD)
             ],
             [
-                'name' => ["es" => 'Hoja de progreso', "en" => "Progress sheet"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Hoja de progreso"),
+                'desc' => __("Pantalla para imprimir la hoja de progreso"),
                 'link' => 'HojaPrograso.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_PROGRESS_SHEET)
             ],
             [
-                'name' => ["es" => 'Registro de notas', "en" => "Record of notes"],
-                'desc' => ['es' => 'Informes del registro de los maestros', 'en' => 'Teacher Record Reports'],
+                'name' => __("Registro de notas"),
+                'desc' => __("Informes del registro de los maestros"),
                 'link' => 'RegistroNotas.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_NOTE_REGISTRY)
             ],
             [
-                'name' => ["es" => 'Distribucción de notas', "en" => "Note distribution"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Distribucción de notas"),
+                'desc' => '',
                 'link' => 'DistribuccionNotas.php ',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_NOTE_DISTRIBUTION)
             ],
             [
-                'name' => ["es" => 'Lista de fracasados', "en" => "List of failures"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Lista de fracasados"),
+                'desc' => '',
                 'link' => 'ListaFracasados.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_FAILED_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de promedios', "en" => "List of averages"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Lista de promedios"),
+                'desc' => '',
                 'link' => 'ListaPromedios.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_AVERAGE_LIST)
             ],
             [
-                'name' => ["es" => 'Notas en letras', "en" => "Notas en letras"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Notas en letras"),
+                'desc' => '',
                 'link' => '#',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_NOTES_IN_LETTERS)
             ],
             [
-                'name' => ["es" => 'Lista de rango', "en" => "Rank List"],
-                'desc' => ['es' => 'Listado de rango por materias', 'en' => 'Rank list by materials'],
+                'name' => __('Lista de rango'),
+                'desc' => __("Listado de rango por materias"),
                 'link' => 'ListaRango.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_RANK_LIST)
             ],
             [
-                'name' => ["es" => 'Rango por grado', "en" => "Rank by grade"],
-                'desc' => ['es' => 'Listado de rango por grado', 'en' => 'List of rank by grade'],
+                'name' => __("Rango por grado"),
+                'desc' => __("Listado de rango por grado"),
                 'link' => 'RangoGrado.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_GRADE_RANK)
             ],
             [
-                'name' => ["es" => 'Conducta', "en" => "Conduct"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Conducta"),
+                'desc' => '',
                 'link' => 'Conduct.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_AVERAGE_AND_BEHAVIOR)
             ],
             [
-                'name' => ["es" => 'Cambios en registro', "en" => "Registry changes"],
-                'desc' => ['es' => 'Cambio que los maestros hacen en el registro de notas', 'en' => 'Change that teachers make in the grade record'],
+                'name' => __("Cambios en registro"),
+                'desc' => __("Cambio que los maestros hacen en el registro de notas"),
                 'link' => 'gradesChanges.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_REGIWEB_CHANGES)
             ],
             [
-                'name' => ["es" => 'Boleta de verano', "en" => "Summer card"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Tarjeta de verano"),
+                'desc' => '',
                 'link' => 'SummerCard.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_SUMMER_REPORT)
             ],
             [
-                'name' => ["es" => 'Promedios decimales', "en" => "Promedios decimales"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Promedios decimales"),
+                'desc' => '',
                 'link' => '#',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_PERCENT_TO_DECIMAL)
             ],
             [
-                'name' => ["es" => 'Cuadro de honor', "en" => "Honor roll"],
-                'desc' => ['es' => 'Listado por curso o materias para el cuadro de honor.', 'en' => 'List by course or subjects for the honor roll.'],
+                'name' => __("Cuadro de honor"),
+                'desc' => __("Listado por curso o materias para el cuadro de honor"),
                 'link' => 'HonorRoll.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_HONOR_ROLL)
             ],
             [
-                'name' => ["es" => 'Inf. de Deficiencia', "en" => "Deficiency Report"],
-                'desc' => ['es' => 'Beleta de deficiencia por estudiante para los padres.', 'en' => 'Deficiency letter per student for parents.'],
+                'name' => __("Inf. de Deficiencia"),
+                'desc' => __("Tarjeta de deficiencia por estudiante para los padres"),
                 'link' => 'Deficiencia.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::GRADES_REPORTS_DEFICIENCY_REPORTS)
             ],
             [
-                'name' => ["es" => 'Notas finales', "en" => "Notas finales"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Notas finales"),
+                'desc' => '',
                 'link' => '#',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Programa de clases', "en" => "Class Program"],
-                'desc' => ['es' => 'Hoja de itinerario de las clases', 'en' => 'Class itinerary sheet'],
+                'name' => __("Programa de clases"),
+                'desc' => __("Hoja de itinerario de las clases"),
                 'link' => 'ProgramaClases.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista de promedios', "en" => "List of averages"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Lista de promedios"),
+                'desc' => '',
                 'link' => 'ListadePromedios.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Asistencia perfecta', "en" => "Perfect assistance"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Asistencia perfecta"),
+                'desc' => '',
                 'link' => 'AsistenciaPerfecta.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Horas comunitarias', "en" => "Communitary hours"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Horas comunitarias"),
+                'desc' => '',
                 'link' => 'pdf/HorasComunitarias.php',
+                'hidden' => false,
                 'target' => 'HorasComunitarias',
             ],
             [
-                'name' => ["es" => 'Comparación de notas', "en" => "Comparison of notes"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Comparación de notas"),
+                'desc' => '',
                 'link' => 'ComparacionNotas.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Inf. Aprove. Académico', "en" => "Inf. about academic achiev."],
-                'desc' => ['es' => 'Información sobre el rendimiento académico.', 'en' => 'Information on academic performance.'],
+                'name' => __("Inf. Aprove. Académico"),
+                'desc' => __("Información sobre el rendimiento académico"),
                 'link' => 'InfAproveAcademico.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Clasificación de notas', "en" => "Note classification"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Clasificación de notas"),
+                'desc' => '',
                 'link' => 'NoteClassification.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Sabana de notas', "en" => "Sheet of Notes"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Sabana de notas"),
+                'desc' => '',
                 'link' => 'pdf/sabana_notas.php',
+                'hidden' => false,
                 'target' => 'HorasComunitarias',
             ],
             [
-                'name' => ["es" => 'Distri/Notas maestros', "en" => "Teacher Notes Distribution"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Distri/Notas maestros"),
+                'desc' => '',
                 'link' => 'DistriNotasMaestros.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Listado de 100', "en" => "Average Listing 100"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Listado de 100"),
+                'desc' => '',
                 'link' => 'Listade100.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe acumulativo de notas', "en" => "Cumulative grade report"],
+                'name' => __("Informe acumulativo de notas"),
                 'link' => 'pdf/CumulativeGradeReport.php',
-                'desc' => ['es' => '', 'en' => ''],
+                'hidden' => false,
+                'desc' => '',
                 'target' => 'CumulativeGradeReport',
             ],
 
         ],
     ],
     [
-        'title' => ["es" => 'Informes', "en" => 'Reports'],
+        'title' => __("Informes"),
         'buttons' => [
             [
-                'name' => ["es" => 'Planes', "en" => "Planes"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Planes"),
+                'desc' => '',
                 'link' => '#',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Asistencia', "en" => "Attendance"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Asistencia"),
+                'desc' => '',
                 'link' => 'Attendance.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Notas', "en" => "Notas"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Notas"),
+                'desc' => '',
                 'link' => '#',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Asistencia semanal', "en" => "Weekly attendance"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Asistencia semanal"),
+                'desc' => '',
                 'link' => 'pdf/AsistenciaSemanal.php',
+                'hidden' => false,
                 'target' => 'AsistenciaSemanal',
             ],
             [
-                'name' => ["es" => 'Notas por examen', "en" => "Exams grades"],
-                'desc' => ['es' => 'calificaciones de los exámenes', 'en' => 'Grades of exams given by Teachers'],
+                'name' => __("Notas por examen"),
+                'desc' => '',
                 'link' => 'maestros_examen_op.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Aprove. Academico', "en" => "Aprove. Academico"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Aprove. Académico"),
+                'desc' => '',
                 'link' => '#',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Labor', "en" => "Labor"],
-                'desc' => ['es' => '', 'en' => ''],
+                'name' => __("Labor"),
+                'desc' => '',
                 'link' => '#',
+                'hidden' => false,
             ],
 
         ],
     ],
 
 ];
-
-$lang = new Lang([
-    ["Opciones", "Options"],
-]);
 
 ?>
 <!DOCTYPE html>
@@ -228,7 +243,7 @@ $lang = new Lang([
 
 <head>
     <?php
-    $title = $lang->translation("Opciones");
+    $title = __("Opciones");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -239,7 +254,7 @@ $lang = new Lang([
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
         <h1 class="text-center my-3">
-            <?= $lang->translation("Opciones") ?>
+            <?= __("Opciones") ?>
         </h1>
 
         <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
@@ -248,15 +263,15 @@ $lang = new Lang([
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
                         <legend class="w-auto">
-                            <?= $option['title'][__LANG] ?>
+                            <?= $option['title'] ?>
                         </legend>
                         <div class="pb-3">
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <?php if ($button['hidden']) continue  ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'][__LANG] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
-                                            <?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?>
+                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>">
+                                            <?= mb_strtoupper($button['name'], 'UTF-8') ?>
                                         </a>
                                     </div>
                                 <?php endforeach; ?>
