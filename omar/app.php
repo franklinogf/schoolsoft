@@ -57,13 +57,8 @@ define('__COSEY', false);
 define('__ONLY_CBTM__', false);
 
 
-
-// include __ROOT . '/autoload.php';
-// require '../../vendor/autoload.php';
-require __ROOT . '/vendor/autoload.php';
-require 'constants.php';
-require 'config.php';
-require __ROOT . '/core/translator.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/core/translator.php';
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__)); // path to your .env file
 $dotenv->load();
@@ -75,5 +70,11 @@ Relation::enforceMorphMap([
     'admin' => Admin::class,
 ]);
 
-$admin = Admin::primaryAdmin()->first();
-TranslatorFactory::get()->setLocale($admin->idioma ?? LanguageCode::SPANISH->value);
+$_admin = Admin::primaryAdmin()->first();
+$_locale = strtolower($_admin->idioma) ?? LanguageCode::SPANISH->value;
+
+TranslatorFactory::get()->setLocale($_locale);
+
+define('__LANG', $_locale);
+
+date_default_timezone_set(school_config('app.timezone', 'America/Puerto_Rico'));
