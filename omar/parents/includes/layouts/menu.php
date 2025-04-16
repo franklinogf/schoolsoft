@@ -21,7 +21,7 @@ $lang = new Lang([
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
     <a href="<?= Route::url('/regiweb/home.php') ?>">
-      <img class="img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE ?>">
+      <img class="img-fluid" src="<?= school_logo() ?>" alt="Logo" width="<?= school_config('logo.size.menu') ?>">
     </a>
   </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

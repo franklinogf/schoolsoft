@@ -27,7 +27,7 @@ $lang = new Lang([
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    <title><?= $lang->translation("Cafeteria - Iniciar Sesión") ?></title>
-   <link rel="icon" href="<?= School::logo() ?>" />
+   <link rel="icon" href="<?= school_logo() ?>" />
    <?php
    Route::css("/css/main-bootstrap.css");
    Route::css("/css/main.css", true);
@@ -36,7 +36,7 @@ $lang = new Lang([
 </head>
 
 <body class="text-center">
-   <img class="mb-4 img-fluid" src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGIN_LOGO_SIZE ?>">
+   <img class="mb-4 img-fluid" src="<?= school_logo() ?>" alt="Logo" width="<?= school_config('logo.size.login') ?>">
    <form class="form-signin" method='POST' action="<?= Route::url('/cafeteria/includes/login.php') ?>">
       <h1 class="h3 mb-3 font-weight-normal "><?= $lang->translation("Iniciar Sesión") ?></h1>
       <?php if (Session::get('errorLogin')) : ?>

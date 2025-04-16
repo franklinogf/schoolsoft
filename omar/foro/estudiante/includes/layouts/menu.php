@@ -7,13 +7,13 @@ use Classes\Controllers\School;
 $lang = new Lang([
   ['Inicio', 'Home'],
   ['Mis cursos', 'My classes'],
-  ['Salón virtual', 'Virtual classroom'],  
-  ['Mis tareas', 'My homeworks'],  
-  ['Tareas', 'Homeworks'],  
+  ['Salón virtual', 'Virtual classroom'],
+  ['Mis tareas', 'My homeworks'],
+  ['Tareas', 'Homeworks'],
   ['Mi perfil', 'My profile'],
   ['Cerrar sesión', 'Logout'],
   ['Foro', 'Forum'],
-  ['Exámenes','Exams']
+  ['Exámenes', 'Exams']
 
 
 ]);
@@ -23,7 +23,7 @@ $pathFile = Route::pathFolder();
 <nav class="navbar navbar-expand-xl navbar-dark bg-gradient-secondary bg-secondary">
   <span class="navbar-brand mr-5">
     <a href="<?= Route::url('/foro/estudiante/index.php') ?>">
-      <img src="<?= School::logo() ?>" alt="Logo" width="<?= __LOGO_SIZE ?>">
+      <img src="<?= school_logo() ?>" alt="Logo" width="<?= school_config('logo.size.menu') ?>">
     </a>
   </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

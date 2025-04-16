@@ -43,7 +43,7 @@ $lang = new Lang([
     <header class="jumbotron text-center">
         <div class="container">
             <h1><?= $school->info('colegio') ?></h1>
-            <img class="img-fluid" src="<?= School::logo() ?>" alt="School Logo" width='<?= __HOME_LOGO_SIZE ?>'>
+            <img class="img-fluid" src="<?= school_logo() ?>" alt="School Logo" width='<?= school_config('app.logo.size.home') ?>'>
         </div>
     </header>
     <section class="container">
