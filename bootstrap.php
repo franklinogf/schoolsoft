@@ -6,7 +6,6 @@ use Dotenv\Dotenv;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 require __DIR__ . "/vendor/autoload.php";
-require __DIR__ . '/core/translator.php';
 
 
 $dotenv = Dotenv::createImmutable(__DIR__); // path to your .env file
