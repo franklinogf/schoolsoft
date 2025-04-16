@@ -2,6 +2,7 @@
 
 namespace Classes;
 
+use App\Models\Admin;
 use Classes\FPDF\Traits\Codabar;
 use Classes\Util;
 use Classes\FPDF\FPDF;
@@ -80,10 +81,12 @@ class PDF extends FPDF
 
     public function Fill(?int $red = null, ?int $green = null, ?int $blue =  null)
     {
+        $pdf = Admin::primaryAdmin()->first()->pdf;
+        $pdfColor = $pdf ? json_decode($pdf) : null;
 
-        $red ??= config('pdf.fill_color.red');
-        $green ??= config('pdf.fill_color.green');
-        $blue ??= config('pdf.fill_color.blue');
+        $red = $pdfColor?->red ?? config('pdf.fill_color.red');
+        $green = $pdfColor?->green ?? config('pdf.fill_color.green');
+        $blue = $pdfColor?->blue  ?? config('pdf.fill_color.blue');
 
         $this->SetFillColor($red, $green, $blue);
     }
