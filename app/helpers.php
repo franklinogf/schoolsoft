@@ -40,11 +40,17 @@ if (!function_exists('config')) {
 }
 
 if (!function_exists('school_config')) {
-    function school_config(string $keys): mixed
+    function school_config(string $keys, mixed $default = null): mixed
     {
         $keys = explode('.', $keys);
 
-        $config = require  __ROOT_SCHOOL . "/config/{$keys[0]}.php";
+
+        if (is_string($keys)) {
+            $config = require __ROOT_SCHOOL . "/config/{$keys}.php";
+        } else {
+            $config = require __ROOT_SCHOOL . "/config/{$keys[0]}.php";
+        }
+
         if (count($keys) < 2) {
             return $config;
         }
@@ -56,7 +62,7 @@ if (!function_exists('school_config')) {
         if (count($keys) > 2) {
             return $config[$keys[1]][$keys[2]] ?? null;
         }
-        return $config[$keys[1]] ?? null;
+        return $config[$keys[1]] ?? $default;
     }
 }
 
