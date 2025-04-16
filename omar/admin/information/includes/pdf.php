@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             'blue' => $blue,
         ]),
     ]);
-    Session::set('pdf', __('Colore del pdf actualizado correctamente'));
+    Session::set('pdf', __('Color del pdf actualizado correctamente'));
 
     Route::redirect('/information');
 } else {
