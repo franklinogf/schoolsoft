@@ -2,6 +2,7 @@
 
 use App\Enums\LanguageCode;
 use App\Models\Admin;
+use Classes\Session;
 use Core\Database;
 use Core\TranslatorFactory;
 use Dotenv\Dotenv;
@@ -69,9 +70,13 @@ Relation::enforceMorphMap([
     'student' => \App\Models\Student::class,
     'admin' => Admin::class,
 ]);
+$_rootSegment = ltrim(__SUB_ROOT_URL, '/');
+$_locale =  school_config('app.locale', LanguageCode::SPANISH->value); // default locale
 
-$_admin = Admin::primaryAdmin()->first();
-$_locale = strtolower($_admin->idioma) ?? LanguageCode::SPANISH->value;
+if ($_rootSegment === 'admin') {
+    $_user = Admin::user(Session::id())->first();
+    $_locale = $_user !== null ? strtolower($_user->idioma) : $_locale;
+}
 
 TranslatorFactory::get()->setLocale($_locale);
 
