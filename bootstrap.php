@@ -19,4 +19,4 @@ Relation::enforceMorphMap([
     'admin' => \App\Models\Admin::class,
 ]);
 
-define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__))); # /home/admin/public_html
+define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html
