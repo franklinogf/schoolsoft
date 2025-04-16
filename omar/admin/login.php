@@ -1,9 +1,9 @@
 <?php
 require_once '../app.php';
-// require_once '../database_modifications.php';
 
 use Classes\Route;
 use Classes\Session;
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -11,7 +11,7 @@ use Classes\Session;
 <head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title><?= __("Admin - Iniciar Sesión") ?></title>
+   <title><?= __('Administración') . ' - ' . __("Iniciar Sesión") ?></title>
    <link rel="icon" href="<?= school_logo() ?>" />
    <?php
    echo Route::bootstrapCSS();
