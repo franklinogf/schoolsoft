@@ -128,7 +128,7 @@
     "Cambiar curso": "Course change",
     "Para cambiar de un curso a otro curso.": "To change from one course to another course.",
     "Ordenar cursos": "Order courses",
-    "Eliminar": "Eliminate",
+    "Eliminar": "Delete",
     "Para eliminar el curso a todos los estudiantes.": "To remove the course from all students.",
     "Asistencia": "Attendance",
     "Entrada de fecha para asistencia trimestral.": "Date entry for quarterly attendance.",
@@ -403,5 +403,7 @@
     "Asistencia semanal": "Weekly attendance",
     "Notas por examen": "Notes by exam",
     "Aprove. Académico": "Academic performance",
-    "Labor": "Labor"
+    "Labor": "Labor",
+    "Editar": "Edit",
+    "Añadir": "Add"
 }
