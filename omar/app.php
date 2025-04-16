@@ -5,8 +5,6 @@ use App\Models\Admin;
 use Classes\Session;
 use Core\Database;
 use Core\TranslatorFactory;
-use Dotenv\Dotenv;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 session_start();
 require_once 'database.php';
