@@ -13,12 +13,12 @@ $options = [
             [
                 'name' => __("Registro"),
                 'desc' => __('Registro de notas'),
-                'link' => 'registration/',
+                'link' => 'registration',
             ],
             [
                 'name' => __("Informes"),
                 'desc' => __('Pantalla con todos los informes'),
-                'link' => 'reports/',
+                'link' => 'reports',
             ],
             [
                 'name' => __("Fechas"),
@@ -53,7 +53,7 @@ $options = [
             [
                 'name' => __("Informes de notas"),
                 'desc' => __(''),
-                'link' => 'gradesReports/',
+                'link' => 'gradesReports',
             ],
             [
                 'name' => __("Acumulativa"),
@@ -103,7 +103,7 @@ $options = [
             [
                 'name' => __("Entrada de asistencia"),
                 'desc' => __(''),
-                'link' => 'attendance/',
+                'link' => 'attendance',
             ],
             [
                 'name' => __("Clases diaras"),
@@ -239,7 +239,7 @@ $options = [
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button): ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= $button['desc'] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= Route::url('/admin/access/' . $button['link']) ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

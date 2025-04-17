@@ -9,7 +9,7 @@ global $title;
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>Foro <?= $title ? "- {$title}" : '' ?></title>
-<link rel="icon" href="<?= School::logo() ?>" />
+<link rel="icon" href="<?= school_logo() ?>" />
 <?php
 
 if ($DataTable) Route::includeFile('/includes/datatable-css.php', true);

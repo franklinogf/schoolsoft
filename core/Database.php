@@ -10,25 +10,40 @@ class Database
 
     public function __construct()
     {
-        $config = school_config('database');
+        $schoolConfig = school_config('database', null);
+        $appConfig = config('database');
         $capsule = new Capsule;
+        if ($schoolConfig  !== null) {
+            $capsule->addConnection([
+                'driver' => 'mysql',
+                'host' => $schoolConfig['host'] ?? '127.0.0.1',
+                'database' => $schoolConfig['database'] ?? 'schoolsoft',
+                'username' => $schoolConfig['username'] ?? 'root',
+                'password' => $schoolConfig['password'] ?? '',
+                'charset' => $schoolConfig['charset'] ?? 'utf8',
+                'collation' => $schoolConfig['collation'] ?? 'utf8_unicode_ci',
+                'port' => $schoolConfig['port'] ?? '3306',
+                'prefix' => $schoolConfig['prefix'] ?? '',
+            ], 'tenant');
+        }
+
         $capsule->addConnection([
             'driver' => 'mysql',
-            'host' => $config['host'] ?? '127.0.0.1',
-            'database' => $config['database'] ?? 'schoolsoft',
-            'username' => $config['username'] ?? 'root',
-            'password' => $config['password'] ?? '',
-            'charset' => $config['charset'] ?? 'utf8',
-            'collation' => $config['collation'] ?? 'utf8_unicode_ci',
-            'port' => $config['port'] ?? '3306',
-            'prefix' => $config['prefix'] ?? '',
-        ], 'mysql');
+            'host' => $appConfig['host'] ?? '127.0.0.1',
+            'database' => $appConfig['database'] ?? 'schoolsoft',
+            'username' => $appConfig['username'] ?? 'root',
+            'password' => $appConfig['password'] ?? '',
+            'charset' => $appConfig['charset'] ?? 'utf8',
+            'collation' => $appConfig['collation'] ?? 'utf8_unicode_ci',
+            'port' => $appConfig['port'] ?? '3306',
+            'prefix' => $appConfig['prefix'] ?? '',
+        ], 'central');
 
 
         $capsule->setAsGlobal();
 
         $capsule->bootEloquent();
 
-        $capsule->getDatabaseManager()->setDefaultConnection('mysql');
+        $capsule->getDatabaseManager()->setDefaultConnection('tenant');
     }
 }

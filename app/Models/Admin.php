@@ -47,7 +47,8 @@ class Admin extends Model
         return [
             'environments' => 'array',
             'constants' => 'array',
-            'theme' => 'json'
+            'theme' => 'json',
+            'pdf' => 'json'
         ];
     }
 }

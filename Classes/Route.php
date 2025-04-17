@@ -88,11 +88,13 @@ class Route
 
    public static function url($path, $fullPath = false, $serverRoot = false)
    {
+      $path = '/' . ltrim($path, '/');
+      $path = str_replace(['\\', '//'], '/', $path);
       $root = '';
       if (!$serverRoot) {
          $root = __SCHOOL_URL;
       }
-      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL . $path : $root . $path;
+      $newPath = $fullPath ? Server::get('HTTP_HOST') . __SCHOOL_URL . $path : "{$root}{$path}";
       return $newPath;
    }
 

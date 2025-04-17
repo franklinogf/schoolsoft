@@ -24,9 +24,13 @@ Capsule::schema()->table('colegio', function (Blueprint $table) use ($columns): 
     if (!in_array('theme', $columns)) {
         $table->json('theme')->nullable();
     }
+    if (!in_array('pdf', $columns)) {
+        $table->json('pdf')->nullable();
+    }
 });
 
-$school = Admin::user(Session::id())->first();
+$school = Admin::primaryAdmin()->first();
+
 $environmtsKeys = ["whatsapp", "resend", 'evertec'];
 $constantsKeys = ['cafeteria_deposit'];
 
@@ -228,6 +232,32 @@ $defaultTheme = require __ROOT . '/config/theme.php';
 
                 </div>
             </form>
+        </div>
+        <div class="container bg-white shadow-lg py-3 mt-4 rounded mx-auto">
+            <?php
+            $pdf = $school->pdf ? json_decode($school->pdf) : null;
+            $pdfColor =  $pdf !== null
+                ? "#" . dechex($pdf->red) . dechex($pdf->green) . dechex($pdf->blue)
+                : "#" . dechex(config('pdf.fill_color.red')) . dechex(config('pdf.fill_color.green')) . dechex(config('pdf.fill_color.blue'));
+
+            ?>
+            <div>
+                <small class="text-info"><?= Session::get('pdf', true) ?></small>
+            </div>
+
+            <form id="pdfForm" method="POST" action="<?= Route::url('/admin/information/includes/pdf.php') ?>">
+
+                <div class="row my-2">
+                    <div class="col-2">
+                        <label for="pdf"><?= __('PDF RGB color') ?></label>
+                        <input name="pdf" id="<?= $key ?>" class="form-control" type="color" value="<?= $pdfColor ?>">
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary mt-2" type="submit"><?= __("Actualizar") ?></button>
+            </form>
+
         </div>
         <div class="container bg-white shadow-lg py-3 mt-4 rounded mx-auto">
             <?php

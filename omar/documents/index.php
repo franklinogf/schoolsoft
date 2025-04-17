@@ -20,8 +20,8 @@ $lang = new Lang([
     ["Fecha final", "Final date"],
     ["No hay documentos para descargar", "There is not documents to download"],
     ["Volver al menú principal", "Go back to home screen"],
-    ['Descargar','Download'],
-    ['Descargar archivo','Download File']
+    ['Descargar', 'Download'],
+    ['Descargar archivo', 'Download File']
 ]);
 ?>
 <!DOCTYPE html>
@@ -38,7 +38,7 @@ $lang = new Lang([
     <header class="jumbotron text-center">
         <div class="container">
             <h1><?= $school->info('colegio') ?></h1>
-            <img class="img-fluid" src="<?= School::logo() ?>" alt="School Logo" width='<?= __HOME_LOGO_SIZE ?>'>
+            <img class="img-fluid" src="<?= school_logo() ?>" alt="School Logo" width='<?= school_config('app.logo.size.home') ?>'>
         </div>
     </header>
     <section class="container">
@@ -49,9 +49,9 @@ $lang = new Lang([
                 <?php foreach ($documents as $document) : ?>
                     <div class="col mb-4">
                         <div class="card border-primary">
-                            <h5 class="card-header"><?= utf8_decode($document->titulo) ?></h5>
+                            <h5 class="card-header"><?= $document->titulo ?></h5>
                             <div class="card-body">
-                                <p class="card-text"><?= utf8_decode($document->descripcion) ?></p>
+                                <p class="card-text"><?= $document->descripcion ?></p>
                                 <p class="card-text d-flex justify-content-around text-info">
                                     <span><?= $lang->translation('Grado inicial') ?>: <?= $document->grado_desde ?></span>
                                     <span><?= $lang->translation('Grado final') ?>: <?= $document->grado_hasta ?></span>

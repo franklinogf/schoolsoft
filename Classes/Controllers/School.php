@@ -57,13 +57,6 @@ class School extends SchoolModel
       return $this->props[$yearToUse];
    }
 
-
-   public static function logo($path = __DEFAULT_LOGO, $root = false)
-   {
-      $newPath = ($root ? __ROOT : '');
-      $newPath .= __LOGO_PATH . $path;
-      return $newPath;
-   }
    public function save($type = 'edit')
    {
       // get self public class, no parents classes

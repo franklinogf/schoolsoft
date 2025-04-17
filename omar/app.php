@@ -2,10 +2,9 @@
 
 use App\Enums\LanguageCode;
 use App\Models\Admin;
+use Classes\Session;
 use Core\Database;
 use Core\TranslatorFactory;
-use Dotenv\Dotenv;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 session_start();
 require_once 'database.php';
@@ -19,7 +18,6 @@ require_once 'database.php';
 /* ------------------------------ don't change ------------------------------ */
 
 define('__ROOT_SCHOOL', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html/demo
-define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, dirname(__DIR__))); # /home/admin/public_html
 define('__SCHOOL_URL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(__ROOT_SCHOOL)))); # /demo
 $root = str_replace(__ROOT_SCHOOL, '', str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME']));
 define('__SUB_ROOT_URL', str_replace('\\', '/', substr($root, 0, strpos($root, DIRECTORY_SEPARATOR, 1)))); #  /foro
@@ -56,24 +54,20 @@ define('__COSEY', false);
 /* ---------------------------- Different schools --------------------------- */
 define('__ONLY_CBTM__', false);
 
-
-
-// include __ROOT . '/autoload.php';
-// require '../../vendor/autoload.php';
-require __ROOT . '/vendor/autoload.php';
-require 'constants.php';
-require 'config.php';
-require __ROOT . '/core/translator.php';
-
-$dotenv = Dotenv::createImmutable(dirname(__DIR__)); // path to your .env file
-$dotenv->load();
+require dirname(__DIR__) . '/bootstrap.php';
 
 new Database();
 
-Relation::enforceMorphMap([
-    'student' => \App\Models\Student::class,
-    'admin' => Admin::class,
-]);
+$_rootSegment = ltrim(__SUB_ROOT_URL, '/');
+$_locale =  school_config('app.locale', LanguageCode::SPANISH->value); // default locale
 
-$admin = Admin::primaryAdmin()->first();
-TranslatorFactory::get()->setLocale($admin->idioma ?? LanguageCode::SPANISH->value);
+if ($_rootSegment === 'admin') {
+    $_user = Admin::user(Session::id())->first();
+    $_locale = $_user !== null ? strtolower($_user->idioma) : $_locale;
+}
+
+TranslatorFactory::get()->setLocale($_locale);
+
+define('__LANG', $_locale);
+
+date_default_timezone_set(school_config('app.timezone', 'America/Puerto_Rico'));

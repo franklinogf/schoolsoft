@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use Illuminate\Translation\Translator;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Filesystem\Filesystem;
 
@@ -31,21 +30,5 @@ class JsonAwareFileLoader extends FileLoader
         }
 
         return $lines;
-    }
-}
-
-class TranslatorFactory
-{
-    protected static $translator;
-
-    public static function get()
-    {
-        if (!self::$translator) {
-            $filesystem = new Filesystem();
-            $loader = new JsonAwareFileLoader($filesystem, dirname(__DIR__) . '/lang');
-            self::$translator = new Translator($loader, 'en');
-        }
-
-        return self::$translator;
     }
 }

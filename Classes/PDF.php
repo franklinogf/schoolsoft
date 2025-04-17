@@ -2,6 +2,7 @@
 
 namespace Classes;
 
+use App\Models\Admin;
 use Classes\FPDF\Traits\Codabar;
 use Classes\Util;
 use Classes\FPDF\FPDF;
@@ -35,8 +36,8 @@ class PDF extends FPDF
                 $this->SetAuthor($school->info('colegio'), true);
                 $this->setCreator('School Soft');
                 // $this->SetAutoPageBreak(true, -15);
-                if (file_exists(__ROOT . School::logo()) && $this->logo) {
-                    $this->Image(__ROOT . School::logo(), 10, 10, __PDF_LOGO_SIZE);
+                if (file_exists(__ROOT . school_logo()) && $this->logo) {
+                    $this->Image(__ROOT . school_logo(), 10, 10, school_config('app.pdf.logo_size'));
                 }
 
                 $this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
@@ -60,7 +61,7 @@ class PDF extends FPDF
 
     public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
-        parent::Cell($w, $h, utf8_decode($txt), $border, $ln, $align, $fill, $link);
+        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
     }
     public function useHeader($bool = true)
     {
@@ -78,8 +79,15 @@ class PDF extends FPDF
         $this->Cell(0, 5, $value2, 0, 1, "R");
     }
 
-    public function Fill($red = __PDF_FILL_COLOR_RED, $green = __PDF_FILL_COLOR_GREEN, $blue =  __PDF_FILL_COLOR_BLUE)
+    public function Fill(?int $red = null, ?int $green = null, ?int $blue =  null)
     {
+        $pdf = Admin::primaryAdmin()->first()->pdf;
+        $pdfColor = $pdf ? json_decode($pdf) : null;
+
+        $red = $pdfColor?->red ?? config('pdf.fill_color.red');
+        $green = $pdfColor?->green ?? config('pdf.fill_color.green');
+        $blue = $pdfColor?->blue  ?? config('pdf.fill_color.blue');
+
         $this->SetFillColor($red, $green, $blue);
     }
 

@@ -24,6 +24,10 @@ if ($adminId) {
     Route::redirect('/users/administration/index.php');
 }
 
+$permissionsGroups = collect(AdminPermission::cases())
+    ->groupBy(fn($permission) => str($permission->name)->before('_'))
+    ->toArray();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -127,24 +131,30 @@ if ($adminId) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach (AdminPermission::cases() as $permission): ?>
+                        <?php foreach ($permissionsGroups as $group => $permissions): ?>
                             <tr>
-                                <td scope="row">
-                                    <label class="d-flex flex-column custom-control-label" for="<?= $permission->value ?>">
-
-                                        <span class="col-12"><?= $permission->label() ?></span>
-                                        <small class="col-12"><?= $permission->name ?></small>
-                                    </label>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <div class="custom-control custom-switch">
-                                            <input <?= $admin->hasPermissionTo($permission->value) ? 'checked' : '' ?> name="permissions[]" value="<?= $permission->value ?>" type="checkbox" class="custom-control-input" id="<?= $permission->value ?>">
-                                            <label class="custom-control-label" for="<?= $permission->value ?>"></label>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th scope="row" colspan="2">
+                                    <?= $group ?>
+                                </th>
                             </tr>
+                            <?php foreach ($permissions as $permission): ?>
+                                <tr>
+                                    <td scope="row">
+                                        <label class="d-flex flex-column custom-control-label" for="<?= $permission->value ?>">
+                                            <span class="col-12"><?= $permission->label() ?></span>
+                                            <small class="col-12"><?= $permission->name ?></small>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="custom-control custom-switch">
+                                                <input <?= $admin->hasPermissionTo($permission->value) ? 'checked' : '' ?> name="permissions[]" value="<?= $permission->value ?>" type="checkbox" class="custom-control-input" id="<?= $permission->value ?>">
+                                                <label class="custom-control-label" for="<?= $permission->value ?>"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
