@@ -1,7 +1,7 @@
 <?php
 require_once '../../../app.php';
 
-
+use App\Enums\AdminPermission;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
@@ -11,7 +11,11 @@ use App\Models\Family;
 use App\Models\Student;
 
 Session::is_logged();
+$user = Admin::user(Session::id())->first();
 
+if (!$user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ENROLLMENT)) {
+    Route::forbidden();
+}
 
 $school = Admin::user(Session::id())->first();
 $students = Student::all();
@@ -72,9 +76,11 @@ if (Session::get('accountNumber')) {
                     </select>
                     <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= __("Buscar información") ?></button>
                 </form>
-                <form method="POST">
-                    <button class="btn btn-outline-primary btn-sm btn-block mt-2" name="new" type="submit"><?= __("Agregar una familia nueva") ?></button>
-                </form>
+                <?php if ($user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ADD)): ?>
+                    <form method="POST">
+                        <button class="btn btn-outline-primary btn-sm btn-block mt-2" name="new" type="submit"><?= __("Agregar una familia nueva") ?></button>
+                    </form>
+                <?php endif ?>
                 <?php if (Session::get("edited")):
                     Session::delete('edited');
                 ?>
@@ -563,7 +569,12 @@ if (Session::get('accountNumber')) {
                     </div>
                 </div>
                 <div class="col-12 text-center mt-2">
-                    <button id="submit" class="btn btn-primary btn-block" name="<?= isset($_REQUEST['student']) ? 'edit' : 'save' ?>" type="submit"><?= __("Guardar") ?></button>
+                    <?php if ($user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_EDIT) && isset($_REQUEST['student'])): ?>
+                        <button id="submit" class="btn btn-primary btn-block" name="edit" type="submit"><?= __("Guardar") ?></button>
+                    <?php endif ?>
+                    <?php if ($user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ADD) && !isset($_REQUEST['student'])): ?>
+                        <button id="submit" class="btn btn-primary btn-block" name="save" type="submit"><?= __("Guardar") ?></button>
+                    <?php endif ?>
                 </div>
             </form>
             <div class="col-12 my-1">
@@ -583,19 +594,23 @@ if (Session::get('accountNumber')) {
                                         <p class="card-text"><?= __("Grado:") ?> <?= $kid->grado ?></p>
                                         <p class="card-text"><?= __("Fecha de nacimiento:") ?> <?= $kid->fecha->format('Y-m-d') ?></p>
                                     </div>
-                                    <div class="card-footer">
-                                        <a href="<?= Route::url("/admin/users/accounts/students.php?pk=$kid->mt&id={$kid->id}") ?>" class="btn btn-primary btn-block stretched-link"><?= __("Editar estudiante") ?></a>
-                                    </div>
+                                    <?php if ($user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_EDIT)): ?>
+                                        <div class="card-footer">
+                                            <a href="<?= Route::url("/admin/users/accounts/students.php?pk=$kid->mt&id={$kid->id}") ?>" class="btn btn-primary btn-block stretched-link"><?= __("Editar estudiante") ?></a>
+                                        </div>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         <?php endforeach ?>
-                        <div class="col mt-1" style="height:448px !important">
-                            <div class="card h-100">
-                                <div class="card-body d-flex flex-wrap align-content-center justify-content-center">
-                                    <a href="<?= Route::url("/admin/users/accounts/students.php?id={$kid->id}") ?>" class="btn btn-primary stretched-link"><?= __("Agregar") ?></a>
+                        <?php if ($user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ADD)): ?>
+                            <div class="col mt-1" style="height:448px !important">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-wrap align-content-center justify-content-center">
+                                        <a href="<?= Route::url("/admin/users/accounts/students.php?id={$kid->id}") ?>" class="btn btn-primary stretched-link"><?= __("Agregar") ?></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endif ?>
                     </div>
                 </div>
             <?php endif ?>
