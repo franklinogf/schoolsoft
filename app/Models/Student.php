@@ -40,6 +40,11 @@ class Student extends Model
         ];
     }
 
+    public function scopeById(Builder $query, int $id): Builder
+    {
+        return $query->where('id', $id);
+    }
+
 
     protected function profilePicture(): Attribute
     {
