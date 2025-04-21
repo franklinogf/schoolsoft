@@ -72,11 +72,22 @@ class Route
       echo '<script src="https://kit.fontawesome.com/f4bf4b6549.js" crossorigin="anonymous"></script>';
    }
 
-   public static function error()
+   public static function error(int $code = 404, $message = 'Page not found')
    {
-      http_response_code(404);
+      http_response_code($code);
+      if ($code == 404) {
+         include Server::get('DOCUMENT_ROOT') . "/404.php";
+         die($message);
+      } else {
+         echo $message;
+         die();
+      }
+   }
 
-      include Server::get('DOCUMENT_ROOT') . "/404.php";
+   public static function forbidden($message = 'Forbidden')
+   {
+      http_response_code(403);
+      echo $message;
       die();
    }
 

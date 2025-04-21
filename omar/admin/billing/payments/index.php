@@ -1,16 +1,22 @@
 <?php
 require_once '../../../app.php';
 
+use App\Enums\AdminPermission;
 use Classes\Route;
 use Classes\Session;
 use Classes\Lang;
-use Classes\Controllers\Student;
-use Classes\Controllers\Parents;
-use Classes\Controllers\School;
+use App\Models\Student;
+use App\Models\Family;
+use App\Models\Admin;
 use Classes\DataBase\DB;
 
 Session::is_logged();
 
+$user = Admin::user(Session::id())->first();
+
+if (!$user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS)) {
+    Route::forbidden();
+}
 
 $lang = new Lang([
     ["Pagos", "Payments"],
@@ -18,12 +24,12 @@ $lang = new Lang([
     ['Buscar información', 'Search information'],
 ]);
 
-$students = new Student();
+$students = Student::all();
 $months = __LANG === 'es' ?
     ['Julio' => '07', 'Agosto' => '08', 'Septiembre' => '09', 'Octubre' => '10', 'Noviembre' => '11', 'Diciembre' => '12', 'Enero' => '01', 'Febrero' => '02', 'Marzo' => '03', 'Abril' => '04', 'Mayo' => '05', 'Junio' => '06']
     : ['July' => '07', 'August' => '08', 'September' => '09', 'October' => '10', 'November' => '11', 'December' => '12', 'January' => '01', 'February' => '02', 'March' => '03', 'April' => '04', 'May' => '05', 'June' => '06'];
 $currentMonth = $_GET['month'] ?? date('m');
-$school = new School();
+$school = Admin::primaryAdmin()->first();
 $year = $school->year();
 $paymentTypes = [
     '1' => 'Efectivo',
@@ -79,7 +85,7 @@ $depositTypes = [
         <form method="GET">
             <select class="form-control selectpicker w-100" name="accountId" data-live-search="true" required>
                 <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
-                <?php foreach ($students->All() as $student): ?>
+                <?php foreach ($students as $student): ?>
                     <option <?= isset($_REQUEST['accountId']) && $_REQUEST['accountId'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                 <?php endforeach ?>
             </select>
@@ -88,8 +94,8 @@ $depositTypes = [
 
         <?php if (isset($_REQUEST['accountId'])):
             $accountId = $_REQUEST['accountId'];
-            $parent = new Parents($accountId);
-            $accountStudents = $students->findById($accountId);
+            $parent = Family::find($accountId);
+            $accountStudents = Student::byId($accountId)->get();
             $paymentsQuery = DB::table('pagos')->where([
                 ['id', $accountId],
                 ['year', $year],
@@ -143,9 +149,11 @@ $depositTypes = [
                 <div class="col mb-1">
                     <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentModal">Hacer un pago</button>
                 </div>
-                <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#addChargeModal">Añadir cargo</button>
-                </div>
+                <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_ADD)): ?>
+                    <div class="col mb-1">
+                        <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#addChargeModal">Añadir cargo</button>
+                    </div>
+                <?php endif ?>
                 <div class="col mb-1">
                     <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#statementModal">Estado de cuenta</button>
                 </div>
@@ -192,8 +200,12 @@ $depositTypes = [
                                         <td><?= $charge->tdp !== '' ? $paymentTypes[$charge->tdp] : '' ?></td>
                                         <td><?= $charge->rec !== 0 ? $charge->rec : '' ?></td>
                                         <td class="text-right">
-                                            <i data-id="<?= $charge->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
-                                            <i data-id="<?= $charge->mt ?>" role="button" class="<?= $charge->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+                                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_DELETE)): ?>
+                                                <i data-id="<?= $charge->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
+                                            <?php endif ?>
+                                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_CHANGE)): ?>
+                                                <i data-id="<?= $charge->mt ?>" role="button" class="<?= $charge->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+                                            <?php endif ?>
                                         </td>
                                     </tr>
                                 <?php endforeach ?>
@@ -293,65 +305,67 @@ $depositTypes = [
             </div>
         </div>
     </div>
-    <!-- Add Charge Modal -->
-    <div class="modal fade" id="addChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addChargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addChargeModalLabel">Añadir cargo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="addChargeForm" method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="code">Codigo</label>
-                            <select class="form-control" id="code" name="code">
-                                <?php foreach ($codes as $code): ?>
-                                    <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <input type="text" class="form-control" id="codeDescription" name="codeDescription" />
-                        </div>
-                        <div class="form-group">
-                            <label for="chargeTo">Aplicar a</label>
-                            <select class="form-control" id="chargeTo" name="chargeTo">
-                                <?php foreach ($accountStudents as $student): ?>
-                                    <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-
-
-                        <div class="form-row">
-                            <div class="form-group col-6">
-                                <label for="month">Mes para aplicar</label>
-                                <select class="form-control" id="month" name="month">
-                                    <?php foreach ($months as $fileName => $monthNumber): ?>
-                                        <option value="<?= $monthNumber ?>"><?= $fileName ?></option>
+    <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_ADD)): ?>
+        <!-- Add Charge Modal -->
+        <div class="modal fade" id="addChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addChargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addChargeModalLabel">Añadir cargo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addChargeForm" method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="code">Codigo</label>
+                                <select class="form-control" id="code" name="code">
+                                    <?php foreach ($codes as $code): ?>
+                                        <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
                                     <?php endforeach ?>
                                 </select>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="allMonths" name="allMonths">
-                                    <label class="custom-control-label w-100" for="allMonths">T.L.M</label>
+                                <input type="text" class="form-control" id="codeDescription" name="codeDescription" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chargeTo">Aplicar a</label>
+                                <select class="form-control" id="chargeTo" name="chargeTo">
+                                    <?php foreach ($accountStudents as $student): ?>
+                                        <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+
+
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="month">Mes para aplicar</label>
+                                    <select class="form-control" id="month" name="month">
+                                        <?php foreach ($months as $fileName => $monthNumber): ?>
+                                            <option value="<?= $monthNumber ?>"><?= $fileName ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="allMonths" name="allMonths">
+                                        <label class="custom-control-label w-100" for="allMonths">T.L.M</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="amount">Cantidad a pagar</label>
+                                    <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" required />
                                 </div>
                             </div>
-                            <div class="form-group col-6">
-                                <label for="amount">Cantidad a pagar</label>
-                                <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" required />
-                            </div>
-                        </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </div>
-                </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif ?>
     <!-- Edit Charge Modal -->
     <div class="modal fade" id="editChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="editChargeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
