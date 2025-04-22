@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
       $_SESSION['id1'] = $user->id;
       $_SESSION['usua1'] = $user->usuario;
 
-      Route::redirect('user/', false);
+      Route::redirect('parents/', false);
    } else {
       $_SESSION['errorLogin'] = self::$errorLoginMessage;
 
