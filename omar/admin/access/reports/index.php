@@ -13,431 +13,539 @@ $user  = Admin::user(Session::id())->first();
 
 $options = [
     [
-        'title' => ["es" => 'Informes', "en" => 'Reports'],
+        'title' => __("Informes"),
         'buttons' => [
             [
-                'name' => ["es" => 'Lista de estudiantes',   "en" => "Students list"],
+                'name' => __("Lista de Estudiantes"),
+                'desc' => '',
                 'link' => 'pdf/studentsList.php',
                 'target' => 'studentsList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_STUDENTS_LIST)
             ],
             [
-                'name' => ["es" => 'Salón hogar',   "en" => "Home classroom"],
+                'name' => __("Salón hogar"),
+                'desc' => '',
                 'link' => 'pdf/homeClassroom.php',
                 'target' => 'homeClassroom',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_HOMEROOM)
             ],
             [
-                'name' => ["es" => 'Totales por grado',   "en" => "Totals by grade"],
+                'name' => __("Totales por grado"),
+                'desc' => '',
                 'link' => 'pdf/totalsByGrade.php',
                 'target' => 'totalsByGrade',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TOTALS_BY_GRADE)
             ],
             [
-                'name' => ["es" => 'Lista de firmas',   "en" => "list of signs"],
+                'name' => __("Lista de firmas"),
+                'desc' => '',
                 'link' => 'pdf/listOfSigns.php',
                 'target' => 'listOfSigns',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_SIGNATURE_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de usuarios',   "en" => "Users list"],
+                'name' => __("Lista de usuarios"),
+                'desc' => '',
                 'link' => 'pdf/usersList.php',
                 'target' => 'usersList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_USERS_LIST)
             ],
             [
-                'name' => ["es" => 'Lista Re-Matrícula',   "en" => "Re-enroll list"],
+                'name' => __('Lista Re-Matrícula'),
+                'desc' => '',
                 'link' => 'pdf/reEnroll.php',
                 'target' => 'reEnroll',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_RE_ENROLLMENT_LIST)
             ],
             [
-                'name' => ["es" => 'Asistencia diaria',   "en" => "Daily attendance"],
+                'name' => __('Asistencia diaria'),
+                'desc' => '',
                 'link' => 'dailyAttendance.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_DAILY_ATTENDANCE)
             ],
             [
-                'name' => ["es" => 'Cuentas accesadas',   "en" => "Accessed accounts"],
+                'name' => __("Cuentas accesadas"),
+                'desc' => '',
                 'link' => 'pdf/accessedAccounts.php',
                 'target' => 'accessedAccounts',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_ACCESSED_ACCOUNTS)
             ],
             [
-                'name' => ["es" => 'Informe de encuestas',   "en" => "Survey report"],
+                'name' => __("Informe de encuestas"),
+                'desc' => '',
                 'link' => 'survey.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_SURVEY)
             ],
             [
-                'name' => ["es" => 'Informe de cuentas de padres',   "en" => "Parents accounts"],
+                'name' => __("Informe de cuentas de padres"),
+                'desc' => '',
                 'link' => 'pdf/parentsAccounts.php',
                 'target' => 'parentsAccounts',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_PARENT_ACCOUNTS)
             ],
             [
-                'name' => ["es" => 'Cuentas incompletas',   "en" => "Incomplete accounts"],
+                'name' => __("Cuentas incompletas"),
+                'desc' => '',
                 'link' => 'pdf/incompleteAccounts.php',
                 'target' => 'incompleteAccounts',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_INCOMPLETE_ACCOUNTS)
             ],
             [
-                'name' => ["es" => 'Label',   "en" => "Label"],
+                'name' => __("Label"),
+                'desc' => '',
                 'link' => 'label.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_LABEL)
             ],
             [
-                'name' => ["es" => 'Informe de familia por grado',   "en" => "Family report by grade"],
+                'name' => __("Informe de familia por grado"),
+                'desc' => '',
                 'link' => 'pdf/familyByGrade.php',
                 'target' => 'familyByGrade',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_FAMILY_GRADE)
             ],
             [
-                'name' => ["es" => 'Lista por cuentas',   "en" => "Accounts list"],
+                'name' => __("Lista por cuentas"),
+                'desc' => '',
                 'link' => 'pdf/accountsList.php',
                 'target' => 'accountsList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_ACCOUNTS_LIST)
             ],
             [
-                'name' => ["es" => 'Hoja de matrícula',   "en" => "Enrollment sheet"],
+                'name' => __("Hoja de matrícula"),
+                'desc' => '',
                 'link' => 'enrollment.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_ENROLLMENT_FORM)
             ],
             [
-                'name' => ["es" => 'Estudiantes nuevos',   "en" => "New students"],
+                'name' => __("Estudiantes nuevos"),
+                'desc' => '',
                 'link' => 'newStudent.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_NEW_STUDENTS)
             ],
             [
-                'name' => ["es" => 'Lista de descuentos',   "en" => "Discount list"],
+                'name' => __("Lista de descuentos"),
+                'desc' => '',
                 'link' => 'pdf/discountList.php',
                 'target' => 'discountList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_DISCOUNTS_LIST)
             ],
             [
-                'name' => ["es" => 'Medicamentos / Recetas',   "en" => "Medicine / Prescriptions"],
+                'name' => __("Medicamentos / Recetas"),
+                'desc' => '',
                 'link' => 'pdf/medicineStudent.php',
                 'target' => 'medicineStudent',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_MEDICATIONS)
             ],
             [
-                'name' => ["es" => 'Lista de bajas',   "en" => "Drop out list"],
+                'name' => __("Lista de bajas"),
+                'desc' => '',
                 'link' => 'pdf/dropList.php',
                 'target' => 'dropList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_DROPOUT_LIST)
             ],
             [
-                'name' => ["es" => 'Condiciones / alergias',   "en" => "Conditions / Allergy"],
+                'name' => __("Condiciones / alergias"),
+                'desc' => '',
                 'link' => 'pdf/allergyStudent.php',
                 'target' => 'allergyStudent',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_CONDITIONS_ALLERGIES)
             ],
             [
-                'name' => ["es" => 'Lista de teléfonos',   "en" => "Phone list"],
+                'name' => __("Lista de teléfonos"),
+                'desc' => '',
                 'link' => 'pdf/phoneList.php',
                 'target' => 'phoneList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_PHONE_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de cumpleaños',   "en" => "Birthday list"],
+                'name' => __("Lista de cumpleaños"),
+                'desc' => '',
                 'link' => 'birthdayList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_BIRTHDAYS_LIST)
             ],
             [
-                'name' => ["es" => 'Matrícula por salón',   "en" => "Enrollment classroom list"],
+                'name' => __("Matrícula por salón"),
+                'desc' => '',
                 'link' => 'enrollmentClassroom.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_ENROLLMENT_BY_CLASS)
             ],
             [
-                'name' => ["es" => 'Lista de correos',   "en" => "E-Mail list"],
+                'name' => __("Lista de correos"),
+                'desc' => '',
                 'link' => 'emailList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_EMAIL_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de padres',   "en" => "Parents list"],
+                'name' => __("Lista de padres"),
+                'desc' => '',
                 'link' => 'parentList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_PARENTS_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de trabajos de padres',   "en" => "Parents work list"],
+                'name' => __("Lista de trabajos de padres"),
+                'desc' => '',
                 'link' => 'jobList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_PARENT_WORK_LIST)
             ],
             [
-                'name' => ["es" => 'Lista de dirección postal',   "en" => "Postal address list"],
+                'name' => __("Lista de dirección postal"),
+                'desc' => '',
                 'link' => 'addressList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_POSTAL_ADDRESS)
             ],
             [
-                'name' => ["es" => 'Listado de religión',   "en" => "Religion list"],
+                'name' => __("Listado de religión"),
+                'desc' => '',
                 'link' => 'religionList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_RELIGION)
             ],
             [
-                'name' => ["es" => 'Usuarios y claves',   "en" => "Users and passwords"],
+                'name' => __("Usuarios y claves"),
+                'desc' => '',
                 'link' => 'UsersList.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_USERS_AND_PASSWORDS)
             ],
             [
-                'name' => ["es" => 'Carta certificada',   "en" => "Registered letter"],
+                'name' => __("Carta certificada"),
+                'desc' => '',
                 'link' => 'registeredLetter.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_CERTIFIED_LETTER)
             ],
             [
-                'name' => ["es" => 'Lista de maestros',   "en" => "Teachers list"],
+                'name' => __("Lista de maestros"),
+                'desc' => '',
                 'link' => 'pdf/teacherList.php',
                 'target' => 'teacherList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_LIST)
             ],
             [
-                'name' => ["es" => 'Correos de maestros',   "en" => "Teacher E-Mail"],
+                'name' => __("Correos de maestros"),
+                'desc' => '',
                 'link' => 'pdf/teacherEmails.php',
                 'target' => 'teacherEmails',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_EMAIL)
             ],
             [
-                'name' => ["es" => 'Teléfonos de maestros',   "en" => "Teacher Phone"],
+                'name' => __("Teléfonos de maestros"),
+                'desc' => '',
                 'link' => 'pdf/telProfesor.php',
                 'target' => 'telProfesor',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_PHONE)
             ],
             [
-                'name' => ["es" => 'Lista de niveles',   "en" => "Level List"],
+                'name' => __("Lista de niveles"),
+                'desc' => '',
                 'link' => 'pdf/levelList.php',
                 'target' => 'levelList',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_LEVELS_LIST)
             ],
             [
-                'name' => ["es" => 'Salón hogar de maestros',   "en" => "Teachers home room list"],
+                'name' => __("Salón hogar de maestros"),
+                'desc' => '',
                 'link' => 'pdf/homeProfesor.php',
                 'target' => 'homeProfesor',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_HOMEROOM_TEACHERS)
             ],
             [
-                'name' => ["es" => 'Lista de firmas de maestros',   "en" => "List oe signatures Teachers"],
+                'name' => __("Lista de firmas de maestros"),
+                'desc' => '',
                 'link' => 'pdf/firmaProfesor.php',
                 'target' => 'firmaProfesor',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_SIGNATURE_LIST)
             ],
             [
-                'name' => ["es" => 'Direcciones de maestros',   "en" => "Teacher address"],
+                'name' => __("Direcciones de maestros"),
+                'desc' => '',
                 'link' => 'addressProfesor.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_ADDRESS)
             ],
             [
-                'name' => ["es" => 'Preparación de maestros',   "en" => "Teachers preparation"],
+                'name' => __("Preparación de maestros"),
+                'desc' => '',
                 'link' => 'pdf/preProfesor.php',
                 'target' => 'preProfesor',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_PREPARATION)
             ],
             [
-                'name' => ["es" => 'Lista de club de maestros',   "en" => "Teachers clud List"],
+                'name' => __("Lista de club de maestros"),
+                'desc' => '',
                 'link' => 'pdf/clubProfesor.php',
                 'target' => 'clubProfesor',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_CLUB_LIST)
             ],
             [
-                'name' => ["es" => 'Informe socioeconómico',   "en" => "Socioeconomic report"],
+                'name' => __("Informe socioeconómico"),
+                'desc' => '',
                 'link' => 'socioEconomicReport.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_SOCIO_ECONOMIC)
             ],
             [
-                'name' => ["es" => 'Licencia de maestros',   "en" => "Teacher licenses"],
+                'name' => __("Licencia de maestros"),
+                'desc' => '',
                 'link' => 'licenseTeacher.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_TEACHERS_LICENSE)
             ],
             [
-                'name' => ["es" => 'No docentes',   "en" => "Not teachers"],
+                'name' => __("No docentes"),
+                'desc' => '',
                 'link' => 'notTeachers.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::ACCESS_REPORTS_NON_TEACHING_STAFF)
             ],
             [
-                'name' => ["es" => 'Total por grado',   "en" => "Total grade"],
+                'name' => __("Total por grado"),
+                'desc' => '',
                 'link' => 'pdf/totalGrade.php',
-                'target' => 'totalGrade'
+                'target' => 'totalGrade',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista con fotos',   "en" => "List with photos"],
+                'name' => __("Lista con fotos"),
+                'desc' => '',
                 'link' => 'pdf/ListPhotos.php',
-                'target' => 'ListPhotos'
+                'target' => 'ListPhotos',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Acuse de recibo',   "en" => "Acknowledgment of receipt"],
-                'link' => 'AcknowledgmentReceipt.php'
+                'name' => __("Acuse de recibo"),
+                'desc' => '',
+                'link' => 'AcknowledgmentReceipt.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe de grado y edad',   "en" => "Report by grade and age"],
+                'name' => __("Informe de grado y edad"),
+                'desc' => '',
                 'link' => 'pdf/ageClassroom.php',
-                'target' => 'ageClassroom'
+                'target' => 'ageClassroom',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Listado de clubes',   "en" => "Club List"],
+                'name' => __("Listado de clubes"),
+                'desc' => '',
                 'link' => 'pdf/clubList.php',
-                'target' => 'clubList'
+                'target' => 'clubList',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Información por grado',   "en" => "Information by grade"],
-                'link' => 'InformationByGrade.php'
+                'name' => __("Información por grado"),
+                'desc' => '',
+                'link' => 'InformationByGrade.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista personas autorizadas',   "en" => "List of authorized persons"],
+                'name' => __("Lista personas autorizadas"),
+                'desc' => '',
                 'link' => 'pdf/listOFauthorizedPersons.php',
-                'target' => 'listOFauthorizedPersons'
+                'target' => 'listOFauthorizedPersons',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Direcciones y telefonos por grado',   "en" => "Addresses and telephones by grade"],
+                'name' => __("Direcciones y telefonos por grado"),
+                'desc' => '',
                 'link' => 'pdf/listAddressphone.php',
-                'target' => 'listAddressphone'
+                'target' => 'listAddressphone',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista de exalumnos',   "en" => "Alumni list"],
+                'name' => __("Lista de exalumnos"),
+                'desc' => '',
                 'link' => 'pdf/alumniList.php',
-                'target' => 'alumniList'
+                'target' => 'alumniList',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista de no becados',   "en" => "List without scholarships"],
+                'name' => __("Lista de no becados"),
+                'desc' => '',
                 'link' => 'pdf/listWithoutScholarships.php',
-                'target' => 'listWithoutScholarships'
+                'target' => 'listWithoutScholarships',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista estudiantes KG-12',   "en" => "KG-12 Student list"],
+                'name' => __("Lista estudiantes KG-12"),
+                'desc' => '',
                 'link' => 'pdf/studentListK12.php',
-                'target' => 'studentListK12'
+                'target' => 'studentListK12',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista de E/P/G/E/T',   "en" => "S/F/G/P/C list"],
+                'name' => __("Lista de E/P/G/E/T"),
+                'desc' => '',
                 'link' => 'pdf/listInformation.php',
-                'target' => 'listInformation'
+                'target' => 'listInformation',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Plan semanal 3 pasar a notas',   "en" => "Plan semanal 3"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Informe de raza',   "en" => "Race List"],
+                'name' => __("Informe de raza"),
+                'desc' => '',
                 'link' => 'pdf/listInformeRaza.php',
-                'target' => 'listInformeRaza'
+                'target' => 'listInformeRaza',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe de religión',   "en" => "Religion Report"],
+                'name' => __("Informe de religión"),
+                'desc' => '',
                 'link' => 'pdf/listInformeReligion.php',
-                'target' => 'listInformeReligion'
+                'target' => 'listInformeReligion',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe de raza y religión',   "en" => "Race and Religion Report"],
+                'name' => __("Informe de raza y religión"),
+                'desc' => '',
                 'link' => 'pdf/listRaceeReligion.php',
-                'target' => 'listRaceReligion'
+                'target' => 'listRaceReligion',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Resumen de raza y religión',   "en" => "Summary of race and religion"],
+                'name' => __("Resumen de raza y religión"),
+                'desc' => '',
                 'link' => 'pdf/ResumRaceeReligion.php',
-                'target' => 'ResumRaceeReligion'
+                'target' => 'ResumRaceeReligion',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Documentos no entregados',   "en" => "Documents not delivered"],
-                'link' => 'pdf/DocumentsNotDelivered.php'
+                'name' => __("Documentos no entregados"),
+                'desc' => '',
+                'link' => 'pdf/DocumentsNotDelivered.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Formulario socioeconómico',   "en" => "Socioeconomic form"],
-                'link' => 'formSocio.php'
+                'name' => __("Formulario socioeconómico"),
+                'desc' => '',
+                'link' => 'formSocio.php',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Lista de edad y seguro social',   "en" => "Age and social security list"],
+                'name' => __("Lista de edad y seguro social"),
+                'desc' => '',
                 'link' => 'pdf/ageSsClassroom.php',
-                'target' => 'ageSsClassroom'
+                'target' => 'ageSsClassroom',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Distribución de notas pasar a notas',   "en" => "Distribución de notas"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Informe de procedencia',   "en" => "Provenance report"],
+                'name' => __("Informe de procedencia"),
+                'desc' => '',
                 'link' => 'pdf/infProcedencia.php',
-                'target' => 'infProcedencia'
+                'target' => 'infProcedencia',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Movimiento de matrícula',   "en" => "School enrollment movement"],
+                'name' => __("Carta de recomendación"),
+                'desc' => '',
+                'link' => 'LetterRecommendation.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Informe de acceso de maestros"),
+                'desc' => '',
+                'link' => 'TeacherAccessReport.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Informe de acceso de los padres"),
+                'desc' => '',
+                'link' => 'ParentsAccessReport.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Informe de acceso de los administradores"),
+                'desc' => '',
+                'link' => 'AdminAccessReport.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Informe de documentos"),
+                'desc' => '',
+                'link' => 'DocumentReport.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("ID del estudiante"),
+                'desc' => '',
+                'link' => 'studentID.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("ID del maestro"),
+                'desc' => '',
+                'link' => 'teacherID.php',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Acomodo Razonable"),
+                'desc' => '',
+                'link' => 'pdf/ReasonableAccommodation.php',
+                'target' => 'ReasonableAccommodation',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Listado PP - 06"),
+                'desc' => '',
+                'link' => 'pdf/inf_pp_06.php',
+                'target' => 'inf_pp_06',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Movimiento de matrícula"),
+                'desc' => '',
                 'link' => 'pdf/SchoolMovement.php',
-                'target' => 'SchoolMovement'
+                'target' => 'SchoolMovement',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Informe acumulativo de notas"],
-                'link' => '#'
+                'name' => __("Informe acumulativo de notas"),
+                'desc' => '',
+                'link' => 'pdf/CumulativeGradeReport.php',
+                'target' => 'CumulativeGradeReport',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Progreso de educación fisica pasar a notas',   "en" => "Progreso de educación fisica"],
-                'link' => '#'
+                'name' => __("Pruebas diagnósticas"),
+                'desc' => '',
+                'link' => 'pdf/diagnosticTests.php',
+                'target' => 'diagnosticTests',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Pruebas de selección"),
+                'desc' => '',
+                'link' => 'pdf/selectiontests.php',
+                'target' => 'selectiontests',
+                'hidden' => false,
             ],
             [
                 'name' => ["es" => 'Evaluación de educación fisica pasar a notas',   "en" => "Evaluación de educación fisica"],
-                'link' => '#'
-            ],
-            [
-                'name' => ["es" => 'Pruebas diagnósticas',   "en" => "Diagnostic tests"],
-                'link' => 'pdf/diagnosticTests.php',
-                'target' => 'diagnosticTests'
-            ],
-            [
-                'name' => ["es" => 'Pruebas de selección',   "en" => "Selection tests"],
-                'link' => 'pdf/selectiontests.php',
-                'target' => 'selectiontests'
-            ],
-            [
-                'name' => ["es" => 'Carta de recomendación',   "en" => "Letter of recommendation"],
-                'link' => 'LetterRecommendation.php'
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
             [
                 'name' => ["es" => 'Información personal',   "en" => "Información personal"],
-                'link' => '#'
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
             [
                 'name' => ["es" => 'Totales información personal',   "en" => "Totales información personal"],
-                'link' => '#'
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
             [
                 'name' => ["es" => 'Información básica',   "en" => "Información básica"],
-                'link' => '#'
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
             [
                 'name' => ["es" => 'Totales de información básica',   "en" => "Totales de información básica"],
-                'link' => '#'
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
             [
-                'name' => ["es" => 'Informe de acceso de maestros',   "en" => "Teacher Access Report"],
-                'link' => 'TeacherAccessReport.php'
-            ],
-            [
-                'name' => ["es" => 'Informe de acceso de los padres',   "en" => "Parents Access Report"],
-                'link' => 'ParentsAccessReport.php'
-            ],
-            [
-                'name' => ["es" => 'Informe de acceso de los administradores',   "en" => "Administrator Access Report"],
-                'link' => 'AdminAccessReport.php'
-            ],
-            [
-                'name' => ["es" => 'Informe de documentos',   "en" => "Document report"],
-                'link' => 'DocumentReport.php'
-            ],
-            [
-                'name' => ["es" => 'ID del estudiante',   "en" => "Student ID"],
-                'link' => 'studentID.php'
-            ],
-            [
-                'name' => ["es" => 'ID del maestro',   "en" => "Teacher ID"],
-                'link' => 'teacherID.php'
-            ],
-            [
-                'name' => ["es" => 'Acomodo Razonable',   "en" => "Reasonable accommodation"],
-                'link' => 'pdf/ReasonableAccommodation.php',
-                'target' => 'ReasonableAccommodation'
-            ],
-            [
-                'name' => ["es" => 'Informe acumulativo de notas pasar a notas',   "en" => "Cumulative grade report"],
-                'link' => 'pdf/CumulativeGradeReport.php',
-                'target' => 'CumulativeGradeReport'
-            ],
-            [
-                'name' => ["es" => 'Listado PP - 06',   "en" => "List PP - 06"],
-                'link' => 'pdf/inf_pp_06.php',
-                'target' => 'inf_pp_06'
+                'name' => ["es" => 'Progreso de educación fisica pasar a notas',   "en" => "Progreso de educación fisica"],
+                'desc' => '',
+                'link' => '#',
+                'hidden' => false,
             ],
         ]
     ],
@@ -459,7 +567,8 @@ $lang = new Lang([
 
 <head>
     <?php
-    $title = $lang->translation("Informes");
+    //    $title = $lang->translation("Informes");
+    $title = __("Informes");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -469,20 +578,22 @@ $lang = new Lang([
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation("Informes") ?></h1>
+        <h1 class="text-center my-3"><?= __("Informes") ?></h1>
 
         <div class="mx-2 mx-md-0 justify-content-around">
 
             <?php foreach ($options as $option) : ?>
                 <div class="col mb-4">
                     <fieldset class="border border-secondary rounded-bottom h-100 px-2">
-                        <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
+                        <legend class="w-auto"><?= $title ?></legend>
                         <div class="pb-3">
                             <div class="row row-cols-2 row-cols-md-3">
                                 <?php foreach ($option['buttons'] as $button) : ?>
                                     <?php if ($button['hidden']) continue  ?>
                                     <div class="col mt-1 d-flex">
-                                        <a style="font-size: .8em;" title="<?= isset($button['desc'][__LANG]) ? $button['desc'][__LANG] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block flex-shrink-1" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" title="<?= isset($button['desc']) ? $button['desc'] : '' ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= Route::url('/admin/access/reports/' . $button['link']) ?>">
+                                            <?= mb_strtoupper($button['name'], 'UTF-8') ?>
+                                        </a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
