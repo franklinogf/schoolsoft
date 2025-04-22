@@ -2,8 +2,6 @@
 require_once '../../app.php';
 
 use App\Models\Family;
-
-use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 
