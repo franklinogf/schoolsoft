@@ -1,15 +1,36 @@
 <?php
 
-
-use Classes\Login;
+use App\Models\Family;
 use Classes\Route;
-include '../../app.php';
 
-if($_SERVER["REQUEST_METHOD"] == 'POST'){
-   
-   Login::login($_POST,'parents');
 
-}else{
+require '../../app.php';
+
+
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+
+   $user =  Family::where([
+      ['usuario', $_POST['username']],
+      ['clave', $_POST['password']]
+   ])->first();
+
+   if ($user) {
+
+      $_SESSION['logged'] = [
+         'acronym' => __SCHOOL_ACRONYM,
+         'location' => "parents",
+         "user" => ['id' => $user->id],
+      ];
+      $_SESSION['start'] = time();
+      $_SESSION['id1'] = $user->id;
+      $_SESSION['usua1'] = $user->usuario;
+
+      Route::redirect('user/', false);
+   } else {
+      $_SESSION['errorLogin'] = self::$errorLoginMessage;
+
+      Route::redirect();
+   }
+} else {
    Route::error();
 }
- 
