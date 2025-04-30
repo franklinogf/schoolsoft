@@ -477,7 +477,6 @@
     "ID del estudiante": "Student ID",
     "ID del maestro": "Teacher ID",
     "Acomodo Razonable": "Reasonable accommodation",
-    "Informe acumulativo de notas": "Cumulative grade report",
     "Listado PP - 06": "List PP - 06",
     "Maestro": "Teacher",
     "Agregar un maestro nuevo": "Add a new teacher",
@@ -505,5 +504,15 @@
     "Nombre del club": "Club name",
     "Presidente": "President",
     "Vice presindente": "Vice president",
-    "Secretario(a)": "Secretary"
+    "Secretario(a)": "Secretary",
+    "Notas diarias": "Daily notes",
+    "Yo, padre, madre o encargado, certifico que veré las notas diarias de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las notas diarias en curso": "I, father, mother or guardian, certify that I will see the daily notes of my son (a) through the Internet. The system will keep a receipt as evidence that I saw the daily notes in course.",
+    "He leido y estoy de acuerdo": "I have read and I agree.",
+    "Estudiantes inscritos": "Enrolled students",
+    "Selección de notas": "Select notes",
+    "Área": "Area",
+    "Trimestral": "Quarterly",
+    "Conducta y Asistencia": "Behavior and attendance",
+    "Totales": "Total",
+    "Trimestre": "Trimester"
 }

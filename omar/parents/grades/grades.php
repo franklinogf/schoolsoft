@@ -1,24 +1,31 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Admin;
+use App\Models\Classes;
+use App\Models\Family;
+use App\Models\Scopes\YearScope;
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Parents;
-use Classes\Controllers\Student;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
-$parents = new Parents(Session::id());
-$year = $parents->info('year');
+$parents = Family::find(Session::id());
+$school = Admin::primaryAdmin()->first();
+$year = $school->year;
 $studentSS = $_POST['studentSS'];
 $trimester = $_POST['trimester'];
 $trimesterNumber = substr($trimester, -1);
 $report = $_POST['area'];
-$student = new Student($studentSS);
-$sumTrimester = $student->info('sutri') === 'NO'; //NO === SI
-DB::table('acuse')->insert([
+$student = Student::where('ss', $studentSS)->first();
+$sumTrimester = $school->sutri === 'NO'; //NO === SI
+
+
+Manager::table('acuse')->insert([
     'id' => $parents->id,
     'ss' => $studentSS,
     'grado' => $student->grado,
@@ -147,12 +154,12 @@ $lang = new Lang([
         </div>
         <?php if ($report === 'Notas'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Tarjeta de notas por curso") ?></h1>
-            <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
+            <h2 class="text-center mt-4"><?= $student->full_name ?></h2>
             <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
             <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
 
             <div class="accordion my-4" id="classesAccordion">
-                <?php foreach ($student->classes() as $class): ?>
+                <?php foreach ($student->classes as $class): ?>
                     <div class="card">
                         <div class="card-header" id="heading<?= $class->curso ?>">
                             <h2 class="mb-0">
@@ -165,12 +172,7 @@ $lang = new Lang([
                         <div id="collapse<?= $class->curso ?>" class="collapse" aria-labelledby="heading<?= $class->curso ?>" data-parent="#classesAccordion">
                             <div class="card-body">
                                 <?php
-                                $fatherTable = DB::table($_info[$report]['table'])->Where([
-                                    ['ss', $studentSS],
-                                    ['year', $year],
-                                    ['curso', $class->curso]
-                                ])->first();
-                                $value = DB::table('valores')->where([
+                                $value = Manager::table('valores')->where([
                                     ['curso', $class->curso],
                                     ['trimestre', $trimester],
                                     ['nivel', $report],
@@ -178,7 +180,7 @@ $lang = new Lang([
                                 ])->first();
                                 ?>
                                 <h5><?= $lang->translation($report) ?></h5>
-                                <?php if (is_numeric($fatherTable->{$totalGradeColumn})): ?>
+                                <?php if (is_numeric($class->{$totalGradeColumn})): ?>
                                     <table class="table table-bordered table-sm">
                                         <thead class="thead-light">
                                             <tr>
@@ -195,11 +197,11 @@ $lang = new Lang([
                                             $grades = $thisReport['grades'];
                                             for ($i = $grades[0]; $i <= $grades[1]; $i++):
                                                 // var_dump($fatherTable);
-                                                if (is_numeric($fatherTable->{"not$i"})):
-                                                    ?>
+                                                if (is_numeric($class->{"not$i"})):
+                                            ?>
                                                     <tr>
                                                         <td><?= $valIndex ?></td>
-                                                        <td><?= $fatherTable->{"not$i"} ?></td>
+                                                        <td><?= $class->{"not$i"} ?></td>
                                                         <td><?= $value->{"val$valIndex"} ?></td>
                                                         <td><?= $value->{"fec$valIndex"} ?></td>
                                                         <td><?= $value->{"tema$valIndex"} ?></td>
@@ -214,20 +216,20 @@ $lang = new Lang([
                                 <?php endif ?>
                                 <!-- Others grades -->
                                 <?php foreach ($otherReports as $other):
-                                    $fatherTable = DB::table($other['table'])->Where([
+                                    $fatherTable = Classes::table($other['table'])->where([
                                         ['ss', $studentSS],
                                         ['year', $year],
                                         ['curso', $class->curso]
-                                    ])->first();
-                                    $value = DB::table('valores')->where([
+                                    ])->withoutGlobalScope(YearScope::class)->first();
+                                    $value = Manager::table('valores')->where([
                                         ['curso', $class->curso],
                                         ['trimestre', $trimester],
                                         ['nivel', $other['report']],
                                         ['year', $year]
                                     ])->first();
-                                    ?>
+                                ?>
                                     <h5><?= $lang->translation($other['title']) ?></h5>
-                                    <?php if (is_numeric($fatherTable->{$totalGradeColumn})): ?>
+                                    <?php if (is_numeric($fatherTable?->{$totalGradeColumn})): ?>
                                         <table class="table table-bordered table-sm">
                                             <thead class="thead-light">
                                                 <th>#</th>
@@ -243,7 +245,7 @@ $lang = new Lang([
                                                 for ($i = $grades[0]; $i <= $grades[1]; $i++):
                                                     // var_dump($fatherTable);
                                                     if (is_numeric($fatherTable->{"not$i"})):
-                                                        ?>
+                                                ?>
                                                         <tr>
                                                             <td><?= $valIndex ?></td>
                                                             <td><?= $fatherTable->{"not$i"} ?></td>
@@ -267,7 +269,7 @@ $lang = new Lang([
             </div>
         <?php elseif ($report === 'Trimestral'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Notas trimestrales") ?></h1>
-            <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
+            <h2 class="text-center mt-4"><?= $student->full_name ?></h2>
             <p class="text-center"><?= str_replace('Trimestre', $lang->translation("Trimestre"), str_replace('-', ' ', $trimester)) ?></p>
             <table class="table table-bordered table-sm">
                 <thead class="thead-light text-center">
@@ -279,25 +281,19 @@ $lang = new Lang([
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class):
-                        $fatherTable = DB::table($_info[$report]['table'])->Where([
-                            ['ss', $studentSS],
-                            ['year', $year],
-                            ['curso', $class->curso]
-                        ])->first();
-                        ?>
+                    <?php foreach ($student->classes as $class): ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
-                            <td class="text-center"><?= $fatherTable->{$_info[$report]['totalGrade'] . $trimesterNumber} ?></td>
-                            <td class="text-center"><?= $fatherTable->{$_info[$report]['conduct'] . $trimesterNumber} ?></td>
-                            <td><?= $fatherTable->{$_info[$report]['message'] . $trimesterNumber} ?></td>
+                            <td class="text-center"><?= $class->{$_info[$report]['totalGrade'] . $trimesterNumber} ?></td>
+                            <td class="text-center"><?= $class->{$_info[$report]['conduct'] . $trimesterNumber} ?></td>
+                            <td><?= $class->{$_info[$report]['message'] . $trimesterNumber} ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
             </table>
         <?php elseif ($report === 'Cond-Asis'): ?>
             <h1 class="text-center my-2"><?= $lang->translation("Conducta y Asistencia") ?></h1>
-            <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
+            <h2 class="text-center mt-4"><?= $student->full_name ?></h2>
             <p class="my-0"><small class="text-muted"><?= $lang->translation("Con") ?> = <?= $lang->translation("Conducta") ?></small></p>
             <p class="my-0"><small class="text-muted"><?= $lang->translation("Aus") ?> = <?= $lang->translation("Ausencia") ?></small></p>
             <p class="my-0"><small class="text-muted"><?= $lang->translation("Tar") ?> = <?= $lang->translation("Tardanza") ?></small></p>
@@ -326,19 +322,13 @@ $lang = new Lang([
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class):
-                        $fatherTable = DB::table($_info[$report]['table'])->Where([
-                            ['ss', $studentSS],
-                            ['year', $year],
-                            ['curso', $class->curso]
-                        ])->first();
-                        ?>
+                    <?php foreach ($student->classes as $class): ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
                             <?php for ($i = 1; $i <= 4; $i++): ?>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]['conduct'] . $i} ?></td>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]['absence'] . $i} ?></td>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]['tardy'] . $i} ?></td>
+                                <td class="text-center"><?= $class->{$_info[$report]['conduct'] . $i} ?></td>
+                                <td class="text-center"><?= $class->{$_info[$report]['absence'] . $i} ?></td>
+                                <td class="text-center"><?= $class->{$_info[$report]['tardy'] . $i} ?></td>
                             <?php endfor ?>
                         </tr>
                     <?php endforeach ?>
@@ -346,7 +336,7 @@ $lang = new Lang([
             </table>
         <?php else: ?>
             <h1 class="text-center my-2"><?= $lang->translation("Totales por curso") ?></h1>
-            <h2 class="text-center mt-4"><?= $student->fullName() ?></h2>
+            <h2 class="text-center mt-4"><?= $student->full_name ?></h2>
             <p class="text-center text-info"><?= $lang->translation("Estás Notas No Necesariamente Son Finales, Pueden Cambiar") ?></p>
             <table class="table table-bordered table-sm">
                 <thead class="thead-light text-center">
@@ -373,20 +363,14 @@ $lang = new Lang([
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($student->classes() as $class):
-                        $fatherTable = DB::table($_info[$report]['table'])->Where([
-                            ['ss', $studentSS],
-                            ['year', $year],
-                            ['curso', $class->curso]
-                        ])->first();
-                        ?>
+                    <?php foreach ($student->classes as $class): ?>
                         <tr>
                             <td><?= $class->descripcion ?></td>
                             <?php for ($i = 1; $i <= 2; $i++): ?>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][0]} ?></td>
-                                <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][1]} ?></td>
+                                <td class="text-center"><?= $class->{$_info[$report]["semester$i"][0]} ?></td>
+                                <td class="text-center"><?= $class->{$_info[$report]["semester$i"][1]} ?></td>
                                 <?php if (!$sumTrimester): ?>
-                                    <td class="text-center"><?= $fatherTable->{$_info[$report]["semester$i"][2]} ?></td>
+                                    <td class="text-center"><?= $class->{$_info[$report]["semester$i"][2]} ?></td>
                                 <?php endif ?>
                             <?php endfor ?>
                         </tr>

@@ -1,15 +1,16 @@
 <?php
 require_once '../app.php';
 
+use App\Models\Family;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Parents;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
-$parents = new Parents(Session::id());
+$parents = Family::find(Session::id());
 $lang = new Lang([
     ["Información", "Information"],
     ["Bienvenido", "Welcome"],
@@ -23,7 +24,7 @@ $lang = new Lang([
 $date =  Util::date();
 $ip = Util::getIp();
 
-DB::table("entradas")->insert([
+Manager::table("entradas")->insert([
     'id' => $parents->id,
     'usuario' => $parents->usuario,
     'fecha' => $date,

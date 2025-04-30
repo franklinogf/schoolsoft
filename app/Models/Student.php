@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
@@ -21,7 +22,23 @@ class Student extends Model
         static::addGlobalScope(new YearScope);
     }
 
-    public function scopeUnerolled(Builder $query)
+    public function casts(): array
+    {
+        return [
+            'fecha' => 'date:Y-m-d',
+            'fecha_matri' => 'date:Y-m-d',
+            // 'genero' => Gender::class,
+        ];
+    }
+
+    public function classes(): HasMany
+    {
+        return $this->hasMany(Classes::class, 'ss', 'ss')->orderBy('curso');
+    }
+
+
+
+    public function scopeUnerolled(Builder $query): void
     {
         $query->where('codigobaja', '0');
     }
@@ -31,20 +48,20 @@ class Student extends Model
         return $this->belongsTo(Family::class, 'id', 'id');
     }
 
-    public function casts()
-    {
-        return [
-            'fecha' => 'date:Y-m-d',
-            'fecha_matri' => 'date:Y-m-d',
-            // 'genero' => Gender::class,
-        ];
-    }
+
 
     public function scopeById(Builder $query, int $id): Builder
     {
         return $query->where('id', $id);
     }
 
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, array $attributes) =>
+            $attributes['nombre'] . ' ' . $attributes['apellidos'],
+        );
+    }
 
     protected function profilePicture(): Attribute
     {

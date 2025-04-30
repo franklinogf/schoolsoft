@@ -1,16 +1,16 @@
 <?php
 require_once '../app.php';
 
+use App\Models\Family;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\School;
-use Classes\Controllers\Parents;
 
 
 $school = new School();
-$parents = new Parents(Session::id());
+$parents = Family::find(Session::id());
 $year = $school->info('year');
 
 
@@ -48,9 +48,9 @@ $lang = new Lang([
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
     // Route::js('/react-components/Clock.js', true);
-    
+
     if (isset($_POST['Grabar'])) {
-        for ($a = 1; $a <= $_POST[num_rec]; $a++) {
+        for ($a = 1; $a <= $_POST['num_rec']; $a++) {
             $codi = 'est(' . $a . ',1)';
             $dijo = 'est(' . $a . ',2)';
             $gra = 'est(' . $a . ',3)';
@@ -60,7 +60,7 @@ $lang = new Lang([
             $date = date("Y-m-d");
             if ($_POST[$dijo] !== '') {
                 // echo $q = "INSERT INTO respuestas set comentario='" . $_POST[$com] . "',id2='$parents->id', codigo='$_POST[$codi]', dijo='$_POST[$dijo]', fecha='$date', grado='$_POST[$gra]', year='$year', nombre='$_POST[$nom]', apellidos='$_POST[$ape]'";
-    
+
                 DB::table('respuestas')->insert([
                     'year' => $year,
                     'id2' => $parents->id,
@@ -86,7 +86,7 @@ $lang = new Lang([
     $can = count($mensages);
 
     if ($can > 0):
-        ?>
+    ?>
         <div class="container-lg mt-lg-3  px-0">
 
             <h1 class="display-12 mt-2">
@@ -96,14 +96,14 @@ $lang = new Lang([
             <table border="0" width="64%" cellspacing="0" cellpadding="3">
                 <?
                 foreach ($mensages as $mensage) {
-                    ?>
+                ?>
                     <tr>
                         <td bgcolor="#C0C0C0">
                             <p align="center"><b>
                                     <font size="4"><?= $lang->translation("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
                         </td>
                     </tr>
-                    <?
+                <?
                     echo '<tr>';
                     echo '<td>';
                     echo $mensage->text;
@@ -122,7 +122,7 @@ $lang = new Lang([
     <?php
 
     //********************************************
-    
+
 
     $date = date("Y-m-d");
 
@@ -135,7 +135,7 @@ $lang = new Lang([
     $can = count($mensages);
 
     if ($can > 0):
-        ?>
+    ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
@@ -151,14 +151,14 @@ $lang = new Lang([
                     <?
                     $a = 0;
                     foreach ($mensages as $mensage) {
-                        ?>
+                    ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
                                         <font size="4"><?= $lang->translation("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                        <?
+                    <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
