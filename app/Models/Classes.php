@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Classes extends Model
 {
     protected $table = 'padres';
-    protected $primaryKey = 'mt';
+    protected $primaryKey = 'aa';
     public $timestamps = false;
     protected $guarded = [];
 
