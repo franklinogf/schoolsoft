@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Student extends Model
 {
     protected $table = 'year';
-    protected $primaryKey = 'aa';
+    protected $primaryKey = 'mt';
     public $timestamps = false;
     protected $guarded = [];
 
