@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum LanguageCode: string
 {
-    case SPANISH = 'es';
-    case ENGLISH = 'en';
+    case SPANISH = 'ES';
+    case ENGLISH = 'EN';
 
     public function label(): string
     {
