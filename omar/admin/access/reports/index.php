@@ -512,7 +512,6 @@ $options = [
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Evaluación de educación fisica pasar a notas',   "en" => "Evaluación de educación fisica"],
                 'name' => __("Acomodo Razonable"),
                 'desc' => '',
                 'link' => 'pdf/ReasonableAccommodation2.php',
@@ -520,10 +519,10 @@ $options = [
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Evaluación de educación fisica pasar a notas',   "en" => "Evaluación de educación fisica"],
-                'name' => __(""),
+                'name' => __("Fotos no Autorizadas"),
                 'desc' => '',
-                'link' => '#',
+                'link' => 'pdf/inf_no_fotos.php',
+                'target' => 'Fotos no Autorizadas',
                 'hidden' => false,
             ],
             [
