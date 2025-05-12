@@ -152,6 +152,11 @@ $options = [
                 'link' => 'inf_desc_op.php',
             ],
             [
+                'name' => __("Listado 2"),
+                'desc' => __('Informe por descripción mensual.'),
+                'link' => 'inf_desc_op2.php',
+            ],
+            [
                 'name' => __("Matrícula estudiante"),
                 'desc' => __('Informe por deudas detalladas.'),
                 'link' => 'inf_mat_est_op.php',
