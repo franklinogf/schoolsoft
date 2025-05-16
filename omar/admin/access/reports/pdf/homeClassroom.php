@@ -1,68 +1,59 @@
 <?php
 require_once '../../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Student;
+use App\Models\Teacher;
+use App\Queries\StudentQuery;
 use Classes\PDF;
-use Classes\Lang;
 use Classes\Session;
-use Classes\Controllers\School;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
+
+// use Classes\Controllers\Student;
+
 use Classes\Util;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ["Lista de estudiantes por salón hogar", "Home classroom students list"],
-    ["Maestro(a):", "Teacher:"],
-    ["Grado:", "Grade:"],
-    ["Nombre del estudiante", "Student name"],
-    ['Cuenta', 'Account'],
-    ['Genero', 'Gender'],
-    ['Apellidos', 'Surnames'],
-    ['Nombre', 'Name'],
-    ['Total de estudiantes', 'Total students'],
-    ['Masculinos', 'Males'],
-    ['Femeninas', 'Females'],
 
-]);
 
-$school = new School();
-$teacherClass = new Teacher();
-$studentClass = new Student();
 
-$year = $school->year();
-$allGrades = $school->allGrades();
+
+
+$year = Admin::primaryAdmin()->first()->year();
+$allGrades = StudentQuery::getAllGrades();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de estudiantes por salón hogar"). " $year", true);
+$pdf->SetTitle(__("Lista de estudiantes por salón hogar") . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
-    $teacher = $teacherClass->findByGrade($grade);
-    $students = $studentClass->findByGrade($grade);
+    $teacher = Teacher::byGrade($grade)->first();
+    $students = Student::byGrade($grade)->get();
     $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Lista de estudiantes por salón hogar") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, __("Lista de estudiantes por salón hogar") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $nom = utf8_encode($teacher->nombre ?? '');
-    $ape = utf8_encode($teacher->apellidos ?? '');
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+    $pdf->splitCells(__("Maestro") . ": $nom $ape", __("Grado") . ": $grade");
 
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
-    $pdf->Cell(20, 5, $lang->translation("Cuenta"), 1, 0, 'C', true);
+    $pdf->Cell(20, 5, __("Cuenta"), 1, 0, 'C', true);
     $pdf->Cell(10, 5, 'ID', 1, 0, 'C', true);
-    $pdf->Cell(15, 5, $lang->translation("Genero"), 1, 0, 'C', true);
-    $pdf->Cell(65, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
-    $pdf->Cell(65, 5, $lang->translation("Nombre"), 1, 1, 'C', true);
+    $pdf->Cell(15, 5, __("Genero"), 1, 0, 'C', true);
+    $pdf->Cell(65, 5, __("Apellidos"), 1, 0, 'C', true);
+    $pdf->Cell(65, 5, __("Nombre"), 1, 1, 'C', true);
     $pdf->SetFont('Arial', '', 10);
 
     foreach ($students as $count => $student) {
         $gender = Util::gender($student->genero);
-        $genderCount[$gender]++;
-        $genderCount['T']++;
+        if ($gender !== '') {
+            $genderCount[$gender]++;
+            $genderCount['T']++;
+        }
         $pdf->Cell(10, 5, $count + 1, 1, 0, 'C');
         $pdf->Cell(20, 5, $student->id, 1, 0, 'C');
         $pdf->Cell(10, 5, Util::ssLast4Digits($student->ss), 1, 0, 'C');
@@ -71,11 +62,11 @@ foreach ($allGrades as $grade) {
         $pdf->Cell(65, 5, $student->nombre, 1, 1);
     }
     $pdf->Ln(2);
-    $pdf->Cell(40, 5, $lang->translation("Total de estudiantes"), 1, 0, 'C', true);
+    $pdf->Cell(40, 5, __("Total de estudiantes"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['T'], 1, 1, 'C');
-    $pdf->Cell(40, 5, $lang->translation("Masculinos"), 1, 0, 'C', true);
+    $pdf->Cell(40, 5, __("Masculinos"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['M'], 1, 1, 'C');
-    $pdf->Cell(40, 5, $lang->translation("Femeninas"), 1, 0, 'C', true);
+    $pdf->Cell(40, 5, __("Femeninas"), 1, 0, 'C', true);
     $pdf->Cell(15, 5, $genderCount['F'], 1, 1, 'C');
 }
 

@@ -61,7 +61,7 @@ class PDF extends FPDF
 
     public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
-        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+        parent::Cell($w, $h, mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8'), $border, $ln, $align, $fill, $link);
     }
     public function useHeader($bool = true)
     {

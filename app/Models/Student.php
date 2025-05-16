@@ -37,10 +37,14 @@ class Student extends Model
     }
 
 
-
-    public function scopeUnerolled(Builder $query): void
+    public function scopeUnerolled(Builder $query): Builder
     {
-        $query->where('codigobaja', '0');
+        return $query->where('codigobaja', '0');
+    }
+
+    public function scopeByGrade(Builder $query, string $grade): Builder
+    {
+        return $query->where('grado', $grade)->orderBy('grado');
     }
 
     public function family(): BelongsTo
