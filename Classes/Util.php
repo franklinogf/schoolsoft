@@ -37,7 +37,7 @@ class Util
     {
         return substr($ss, -4);
     }
-    public static function gender($gender, $fullGender = false)
+    public static function gender($gender, bool $fullGender = false): string
     {
         $thisGender = '';
         if ($gender === '2' || $gender === 'M') {
@@ -47,7 +47,7 @@ class Util
         }
         return $thisGender;
     }
-    
+
 
     public static function getNextYear($year)
     {
@@ -155,10 +155,10 @@ class Util
     public static function studentProfilePicture($student)
     {
         $picturePath = $student->imagen != ''
-        ? __STUDENT_PROFILE_PICTURE_URL . $student->imagen
-        : ($student->genero === 'F' || $student->genero === '1'
-          ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
-          : __NO_PROFILE_PICTURE_STUDENT_MALE);
+            ? __STUDENT_PROFILE_PICTURE_URL . $student->imagen
+            : ($student->genero === 'F' || $student->genero === '1'
+                ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
+                : __NO_PROFILE_PICTURE_STUDENT_MALE);
 
         return $picturePath;
     }

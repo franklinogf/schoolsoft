@@ -16,7 +16,10 @@ class Teacher extends Model
     public $timestamps = false;
     protected $guarded = [];
 
-
+    public function scopeByGrade(Builder $query, string $grade): Builder
+    {
+        return $query->where('grado', $grade);
+    }
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
