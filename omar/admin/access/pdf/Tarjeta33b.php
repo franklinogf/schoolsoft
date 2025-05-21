@@ -255,6 +255,19 @@ if ($opcion == '2') {
 }
 foreach ($students as $estu) {
     $pdf->AddPage();
+    $promedio['09'] = 0;
+    $promedio['10'] = 0;
+    $promedio['11'] = 0;
+    $promedio['12'] = 0;
+
+    $promedioLetters['09'] = 0;
+    $promedioLetters['10'] = 0;
+    $promedioLetters['11'] = 0;
+    $promedioLetters['12'] = 0;
+    $cant['09'] = 0;
+    $cant['10'] = 0;
+    $cant['11'] = 0;
+    $cant['12'] = 0;
 
     $info1 = DB::table('year')->select("id, ss, dir1, grado, fecha")
         ->whereRaw("ss = '$estu->ss'")->orderBy('apellidos')->first();
@@ -355,8 +368,8 @@ foreach ($students as $estu) {
     $pdf->Ln(5);
     $pdf->Cell(0, 5, "GPA: $gpa / $nota1->punto", 0, 1);
     $pdf->Cell(27, 5, "Comentarios:", 0, 1);
-    //    $pdf->Cell(0, 5, utf8_decode($observacion1), 'B', 1);
-    //    $pdf->Cell(0, 5, utf8_decode($observacion2), 'B', 1);
+    $pdf->Cell(0, 5, utf8_decode($memsa1), 'B', 1);
+    $pdf->Cell(0, 5, utf8_decode($memsa2), 'B', 1);
     $pdf->Ln(5);
 
     $pdf->Cell(0, 5, "Expedido en P.R. hoy " . date('Y-m-d'), 0, 1);
