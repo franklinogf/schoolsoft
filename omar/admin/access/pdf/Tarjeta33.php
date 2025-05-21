@@ -39,6 +39,19 @@ $promedio['06'] = 0;
 $promedio['07'] = 0;
 $promedio['08'] = 0;
 
+
+$promedioLetters  = [];
+$cant = [];
+$cant['01'] = 0;
+$cant['02'] = 0;
+$cant['03'] = 0;
+$cant['04'] = 0;
+$cant['05'] = 0;
+$cant['06'] = 0;
+$cant['07'] = 0;
+$cant['08'] = 0;
+
+
 function getAge($date)
 {
     if ($date !== '' && $date !== '0000-00-00') {
@@ -137,14 +150,14 @@ function Curso($grado, $cursos, $ss)
                     return $row->sem1;
                 } else {
                     if ($row->sem1 != '') {
-                        $promedio[$grado] += $row->sem1;
-                        $promedioLetters[$grado] += Con(NumberToletter(round($row->sem1)));
-                        $cant[$grado]++;
+                        //                        $promedio[$grado] += $row->sem1;
+                        //                        $promedioLetters[$grado] += Con(NumberToletter(round($row->sem1)));
+                        //                        $cant[$grado]++;
                     }
                     if ($row->sem2 != '') {
-                        $promedioLetters[$grado] += Con(NumberToletter(round($row->sem2)));
-                        $promedio[$grado] += $row->sem2;
-                        $cant[$grado]++;
+                        //                        $promedioLetters[$grado] += Con(NumberToletter(round($row->sem2)));
+                        //                        $promedio[$grado] += $row->sem2;
+                        //                        $cant[$grado]++;
                     }
                     $t1 = 0;
                     $t2 = 0;
@@ -159,6 +172,8 @@ function Curso($grado, $cursos, $ss)
                     }
                     if ($t1 > 0) {
                         $t3 = round($t1 / $t2, 0);
+                        $promedio[$grado] += $t3;
+                        $cant[$grado]++;
                     }
                     return $t3;
                 }
@@ -206,6 +221,26 @@ if ($opcion == '2') {
 }
 foreach ($students as $estu) {
     $pdf->AddPage();
+    $promedio['01'] = 0;
+    $promedio['02'] = 0;
+    $promedio['03'] = 0;
+    $promedio['04'] = 0;
+    $promedio['05'] = 0;
+    $promedio['06'] = 0;
+    $promedio['07'] = 0;
+    $promedio['08'] = 0;
+
+
+    $promedioLetters  = [];
+    $cant = [];
+    $cant['01'] = 0;
+    $cant['02'] = 0;
+    $cant['03'] = 0;
+    $cant['04'] = 0;
+    $cant['05'] = 0;
+    $cant['06'] = 0;
+    $cant['07'] = 0;
+    $cant['08'] = 0;
 
     $info1 = DB::table('year')->select("id, ss, dir1, grado, fecha")
         ->whereRaw("ss = '$estu->ss'")->orderBy('apellidos')->first();
@@ -214,7 +249,7 @@ foreach ($students as $estu) {
         ->whereRaw("id = '$info1->id'")->first();
 
     $pdf->Ln(8);
-    $pdf->Cell(0, 5, 'TRANSCRIPCIÓN DE CREDITOS', 0, 1, 'C');
+    $pdf->Cell(0, 5, utf8_encode('TRANSCRIPCIÓN DE CREDITOS'), 0, 1, 'C');
     $pdf->Cell(0, 5, 'ESCUELA ELEMENTAL', 0, 1, 'C');
     $pdf->Ln(8);
 
@@ -306,8 +341,8 @@ foreach ($students as $estu) {
     $pdf->Ln(5);
     $pdf->Cell(0, 5, "GPA: $gpa / $nota1->punto", 0, 1);
     $pdf->Cell(27, 5, "Comentarios:", 0, 1);
-    //    $pdf->Cell(0, 5, utf8_decode($observacion1), 'B', 1);
-    //    $pdf->Cell(0, 5, utf8_decode($observacion2), 'B', 1);
+    $pdf->Cell(0, 5, utf8_decode($memsa1), 'B', 1);
+    $pdf->Cell(0, 5, utf8_decode($memsa2), 'B', 1);
     $pdf->Ln(5);
 
     $pdf->Cell(0, 5, "Expedido en P.R. hoy " . date('Y-m-d'), 0, 1);
