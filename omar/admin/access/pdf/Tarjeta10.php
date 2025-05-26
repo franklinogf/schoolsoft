@@ -2,7 +2,6 @@
 // ACADEMIA LA MILAGROSA
 require_once '../../../app.php';
 $anc = 5;
-
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -214,6 +213,8 @@ if ($idioma == 'A') {
 
 $nm = 0;
 $ll = 1;
+$let6 = 0;
+$cnt6 = 0;
 if ($opcion == '2') {
     $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")
         ->whereRaw("year = '$Year' and grado = '$grados'")->orderBy('apellidos')->get();
@@ -622,7 +623,11 @@ foreach ($students as $estu) {
     if ($idioma == 'A') {
         $pdf->Cell(40, 5, '', 0, 1);
         $pdf->Cell(53, 5, 'PROMEDIO ACUMULATIVO', 1, 0, 'L', true);
-        $pdf->Cell(14, 5, number_format($let6 / $cnt6, 2), 1, 1, 'R');
+        if ($cnt6 > 0) {
+            $pdf->Cell(14, 5, number_format($let6 / $cnt6, 2), 1, 1, 'R');
+        } else {
+            $pdf->Cell(14, 5, '', 1, 1, 'R');
+        }
         $pdf->Cell(40, 15, '', 0, 1);
         $pdf->Cell(70, 5, 'Firma Autorizada', 'T', 0, 'C');
         $pdf->Cell(70, 5, '', 0, 0);
@@ -655,3 +660,4 @@ foreach ($students as $estu) {
     }
 }
 $pdf->Output();
+?>
