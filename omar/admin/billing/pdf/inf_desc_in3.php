@@ -112,8 +112,8 @@ class nPDF extends PDF
         if (empty($row2->descripcion)) {
             $cod = $lang->translation('Todos');
         }
-        //    $this->Cell(30,5,utf8_encode($lang->translation('Código')).' '.$cod.' / '.$lang->translation(' Mes de ').$lang->translation($mes),0,1,'C');
-        $this->Cell(30, 5, $lang->translation('Código') . ' ' . $cod . ' / ' . $lang->translation(' Mes de ') . $lang->translation($mes), 0, 1, 'C');
+        //    $this->Cell(30,5,utf8_encode($lang->translation('C&#65533;digo')).' '.$cod.' / '.$lang->translation(' Mes de ').$lang->translation($mes),0,1,'C');
+        $this->Cell(30, 5, utf8_encode($lang->translation('Código')) . ' ' . $cod . ' / ' . $lang->translation(' Mes de ') . $lang->translation($mes), 0, 1, 'C');
         $this->Ln(5);
 
         $this->Cell(8, 5, '', 1, 0, 'C', true);
