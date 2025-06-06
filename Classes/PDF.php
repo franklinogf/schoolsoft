@@ -23,7 +23,6 @@ class PDF extends FPDF
 
     public function Header()
     {
-
         if ($this->header) {
             $this->leftMargin = $this->lMargin;
             $this->SetXY(10, 10);
@@ -36,8 +35,8 @@ class PDF extends FPDF
                 $this->SetAuthor($school->info('colegio'), true);
                 $this->setCreator('School Soft');
                 // $this->SetAutoPageBreak(true, -15);
-                if (file_exists(__ROOT . school_logo()) && $this->logo) {
-                    $this->Image(__ROOT . school_logo(), 10, 10, school_config('app.pdf.logo_size'));
+                if (file_exists(school_logo_path()) && $this->logo) {
+                    $this->Image(school_logo_path(), 10, 10, school_config('app.pdf.logo_size'));
                 }
 
                 $this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');

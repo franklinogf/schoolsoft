@@ -78,10 +78,19 @@ if (!function_exists('school_asset')) {
     function school_asset(string $path): string
     {
         $appUrl = config('app.url');
-
         $acronym = school_config('app.acronym');
 
         return  "$appUrl/$acronym/$path";
+    }
+}
+
+if (!function_exists('school_asset_path')) {
+    function school_asset_path(string $path): string
+    {
+
+        $acronym = school_config('app.acronym');
+
+        return  __ROOT . "/$acronym/$path";
     }
 }
 
@@ -89,6 +98,12 @@ if (!function_exists('school_logo')) {
     function school_logo(): string
     {
         return  school_asset(school_config('app.logo.default'));
+    }
+}
+if (!function_exists('school_logo_path')) {
+    function school_logo_path(): string
+    {
+        return  school_asset_path(school_config('app.logo.default'));
     }
 }
 
