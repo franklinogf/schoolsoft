@@ -9,7 +9,7 @@ use Classes\Controllers\Student;
 
 Session::is_logged();
 $students = new Student();
-$year1 = $students->info('year');
+$year1 = $students->info('year2');
 $year2 = (($year1[0] . $year1[1]) + 1) . '-' . (($year1[3] . $year1[4]) + 1);
 $fullYear1 = "20$year1[0]$year1[1]-20$year1[3]$year1[4]";
 $fullYear2 = "20$year2[0]$year2[1]-20$year2[3]$year2[4]";
