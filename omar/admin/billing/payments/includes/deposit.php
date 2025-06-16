@@ -1,8 +1,9 @@
 <?php
+
+use App\Models\Admin;
+use App\Models\Student;
 use Classes\Route;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
-use Classes\Controllers\School;
+use Illuminate\Database\Capsule\Manager;
 
 require_once '../../../../app.php';
 $depositTypes = [
@@ -12,6 +13,8 @@ $depositTypes = [
     4 => "Recompensa",
     5 => "Correción",
     6 => "Devolución Balance",
+    10 => 'Correción ACH',
+    11 => 'Correción Tarjeta',
     7 => "Borrar",
     8 => "Balance",
     9 => "Otros",
@@ -19,30 +22,32 @@ $depositTypes = [
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $id = $_POST['id'];
-    $school = new School();
+    $school = Admin::primaryAdmin()->first();
     $year = $school->year();
-    $date = date('Y-m-d');
+    $date = $_POST['date'] ?: date('Y-m-d');
+    $time = $_POST['time'] ?: date('H:i:s');
+
+    $student = Student::find($id);
 
     if (isset($_POST['minDeposit'])) {
-        $result = DB::table('year')->where('mt', $id)->update([
+        $result = $student->update([
             "cantidad_alerta" => $_POST['minDeposit']
         ]);
         echo json_encode(["error" => $result]);
     } else if (isset($_POST['deleteDeposit'])) {
-        DB::table('year')->where('mt', $id)->update([
+        $student->update([
             'cantidad' => 0.00,
             'f_deposito' => $date,
         ]);
         echo json_encode(["error" => false]);
     } else {
-        $student = new Student($id);
+
         $type = intval($_POST['type']);
         $amount = floatval($_POST['amount']);
         $other = $_POST['other'];
         $oldAmount = floatval($student->cantidad);
         $newAmount = $oldAmount + $amount;
 
-        $time = date('H:m:i');
         $selectedType = $depositTypes[$type];
         $data = [
             'id' => $student->id,
@@ -58,15 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             if ($type === 9) {
                 $data['otros'] = $_POST['other'];
             }
-            DB::table('depositos')->insert($data);
-            DB::table('year')->where('mt', $id)->update([
+            Manager::table('depositos')->insert($data);
+            $student->update([
                 'cantidad' => $newAmount,
                 'f_deposito' => $date,
             ]);
         } else if ($type === 6) {
             $data['cantidad'] = floatval($student->cantidad) * -1;
-            DB::table('depositos')->insert($data);
-            DB::table('year')->where('mt', $id)->update([
+            Manager::table('depositos')->insert($data);
+            $student->update([
                 'cantidad' => 0.00,
                 'f_deposito' => $date,
             ]);
@@ -101,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     header('Content-Type: application/json; charset=utf-8');
 
     $id = $_GET['id'];
-    $student = new Student($id);
+    $student = Student::find($id);
 
     if ($student) {
         $data = [
@@ -113,8 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     } else {
         echo json_encode(['error' => true]);
     }
-
 } else {
     Route::error();
-
 }

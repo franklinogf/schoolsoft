@@ -1,4 +1,4 @@
-export const Toast = Swal.mixin({
+const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
@@ -10,7 +10,7 @@ export const Toast = Swal.mixin({
   }
 })
 
-export const ConfirmationAlert = Swal.mixin({
+const ConfirmationAlert = Swal.mixin({
   icon: 'warning',
   confirmButtonText: __LANG === 'es' ? 'Aceptar' : 'Accept',
   showCancelButton: true,
@@ -22,7 +22,7 @@ export const ConfirmationAlert = Swal.mixin({
   buttonsStyling: false
 })
 
-export const Alert = Swal.mixin({
+const Alert = Swal.mixin({
   confirmButtonText: __LANG === 'es' ? 'Aceptar' : 'Accept',
   customClass: {
     confirmButton: 'btn btn-primary'
