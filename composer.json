@@ -3,13 +3,13 @@
   "description": "Web app for schools",
   "type": "project",
   "require": {
-    "php": "^8.4",
+    "php": "^8.2",
     "resend/resend-php": "^v0.16.0",
     "scssphp/scssphp": "2.0.1",
-    "illuminate/database": "^12.8.1",
-    "illuminate/translation": "^12.8.1",
-    "illuminate/filesystem": "^12.8.1",
-    "vlucas/phpdotenv": "^5.6.1"
+    "illuminate/database": "^12.18.0",
+    "illuminate/translation": "^12.18.0",
+    "illuminate/filesystem": "^12.18.0",
+    "vlucas/phpdotenv": "^5.6.2"
   },
   "autoload": {
     "psr-4": {
