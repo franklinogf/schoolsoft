@@ -93,8 +93,8 @@ class Route
 
    public static function sweetAlert()
    {
-      echo ' <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-      echo '<script type="module" src="/js/alerts.js"></script>';
+      echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+      echo '<script src="/js/alerts.js"></script>';
    }
 
    public static function url($path, $fullPath = false, $serverRoot = false)

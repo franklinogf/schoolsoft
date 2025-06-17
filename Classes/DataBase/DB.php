@@ -470,7 +470,7 @@ class DB extends DataBase
    */
   public function orderBy(string $by, ?string $mode = null): self
   {
-    $mode = $mode ? strtoupper($mode) : 'ASC';
+    $mode = $mode ? strtoupper($mode) : null;
     self::$orderBy = ' ORDER BY ' . trim($by) . ' ' . $mode;
     return $this;
   }

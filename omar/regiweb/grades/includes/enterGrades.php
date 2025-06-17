@@ -112,7 +112,7 @@ if (isset($_POST['changeValue'])) {
         $_values = $_info[$_report][$data->trimester[0]]['values'];
         // foreach student ss
         foreach ($data->ss as $ss) {
-            echo $ss,' - ';
+            echo $ss, ' - ';
             $_gradeStart = (int) $data->gradeStart[0];
             $inputsGrades = [];
             $studentData = DB::table($_table)
@@ -197,11 +197,11 @@ if (isset($_POST['changeValue'])) {
             } else {
                 if ($_report !== 'Notas2') {
                     $studentData = DB::table($_table)
-                    ->where([
-                        ['ss', $ss],
-                        ['curso', $_subjectCode],
-                        ['year', $teacher->info('year')]
-                    ])->first();
+                        ->where([
+                            ['ss', $ss],
+                            ['curso', $_subjectCode],
+                            ['year', $teacher->info('year')]
+                        ])->first();
                     // Suma de trimestre
                     if (!$_sumTrimester) {
                         if ($data->trimester[0] === 'Trimestre-1' || $data->trimester[0] === 'Trimestre-2') {
@@ -217,7 +217,7 @@ if (isset($_POST['changeValue'])) {
                         $div = 0;
                         $div += $studentData->{$note1} !== '' ? 1 : 0;
                         $div += $studentData->{$note2} !== '' ? 1 : 0;
-                        $semNote = $div !== 0 ? round((+$studentData->{$note1} + +$studentData->{$note2}) / $div) : '';
+                        $semNote = $div !== 0 ? round(((int) $studentData->{$note1} + (int) $studentData->{$note2}) / $div) : '';
                     } else {
                         if ($data->trimester[0] === 'Trimestre-2') {
                             $note = 'nota2';
@@ -226,7 +226,7 @@ if (isset($_POST['changeValue'])) {
                             $note = 'nota4';
                             $sem = 'sem2';
                         }
-                        $semNote = round(+$studentData->{$note});
+                        $semNote = round((int) $studentData->{$note});
                     }
                     // Final Note
                     $sem1 = $sem === 'sem1' ? $semNote : $studentData->sem1;
@@ -234,7 +234,7 @@ if (isset($_POST['changeValue'])) {
                     $div = 0;
                     $div += $sem1 !== '' ? 1 : 0;
                     $div += $sem2 !== '' ? 1 : 0;
-                    $semFinalNote = $div !== 0 ? round((+$sem1 + +$sem2) / $div) : '';
+                    $semFinalNote = $div !== 0 ? round(((int)$sem1 + (int) $sem2) / $div) : '';
                     /* -------------------------------------------------------------------------- */
                     /*       // PARA QUE EL CBTM NO APAREZCA EL PROMEDIO CUANDO SEA PESO = 1      */
                     /* -------------------------------------------------------------------------- */
@@ -285,12 +285,12 @@ if (isset($_POST['changeValue'])) {
                             $quater = 35 / 100;
                             $ex = 30 / 100;
                         }
-                        $exStu=  DB::table('padres')
-                        ->where([
-                            ['ss', $ss],
-                            ['curso', $_subjectCode],
-                            ['year', $year]
-                        ])->first();
+                        $exStu =  DB::table('padres')
+                            ->where([
+                                ['ss', $ss],
+                                ['curso', $_subjectCode],
+                                ['year', $year]
+                            ])->first();
 
                         if ($data->trimester[0] === 'Trimestre-2') {
                             $q1 =  round($exStu->nota1 * $quater);
@@ -311,15 +311,15 @@ if (isset($_POST['changeValue'])) {
                             $updateArray["qex2"] = $qex;
                             $updateArray["sem2"] = $exTotal;
                         }
-                    }else{
+                    } else {
                         $updateArray["qex1"] = '';
                         $updateArray["qex2"] = '';
                         $studentData = DB::table($_table)
-                        ->where([
-                            ['ss', $ss],
-                            ['curso', $_subjectCode],
-                            ['year', $teacher->info('year')]
-                        ])->first();
+                            ->where([
+                                ['ss', $ss],
+                                ['curso', $_subjectCode],
+                                ['year', $teacher->info('year')]
+                            ])->first();
                         if ($data->trimester[0] === 'Trimestre-1' || $data->trimester[0] === 'Trimestre-2') {
                             $note1 = 'nota1';
                             $note2 = 'nota2';
@@ -336,7 +336,7 @@ if (isset($_POST['changeValue'])) {
                         $semNote = $div !== 0 ? round((+$studentData->{$note1} + +$studentData->{$note2}) / $div) : '';
                         $updateArray[$sem] = round($semNote);
                         // var_dump($updateArray);
-                    
+
                     }
                 }
             }

@@ -20,6 +20,10 @@ class Student extends Model
     protected static function booted(): void
     {
         static::addGlobalScope(new YearScope);
+
+        static::addGlobalScope('lastName', function (Builder $builder) {
+            $builder->orderBy('apellidos');
+        });
     }
 
     public function casts(): array

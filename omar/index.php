@@ -53,7 +53,15 @@ $school = Admin::primaryAdmin()->first();
                     <a href="<?= Route::url('/documents/') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Documentos") ?></a>
                 </div>
                 <div class="col mb-2 px-1">
-                    <a href="<?= Route::url('/cafeteria/login.php') ?>" class="btn btn-primary btn-block shadow-lg"><?= __("Cafetería") ?></a>
+                    <div class="dropdown dropdown-menu-lg-right">
+                        <button class="btn btn-primary btn-block shadow-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <?= __('Cafetería') ?>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="<?= Route::url('/cafeteria/login.php') ?>"><?= __('Caja registradora') ?></a>
+                            <a class="dropdown-item" href="<?= Route::url('/cafeteria/self-service/') ?>"><?= __('Auto servicio') ?></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,7 +118,7 @@ $school = Admin::primaryAdmin()->first();
         <img class="img-fluid position-absolute" src="<?= asset('images/logo-schoolsoft.gif') ?>" alt="School Logo" style='width:15rem;top:50px;right:15px;'>
         <p class="text-monospace text-center text-white mt-5 mb-0"><?= __('Derechos reservados') ?> &copy; <?= date('Y') ?></p>
     </footer>
-
+    <?= Route::includeFile('/includes/layouts/scripts.php', true) ?>
 </body>
 
 </html>

@@ -8,7 +8,7 @@ use Classes\Lang;
 use App\Models\Student;
 use App\Models\Family;
 use App\Models\Admin;
-use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
 
@@ -47,17 +47,17 @@ $paymentTypes = [
     '13' => 'Credito a Cuenta',
     '14' => 'Virtual Terminal',
 ];
-$codes = DB::table('presupuesto')->where([
-    ["year", $year]
-])->orderBy('codigo')->get();
+$codes = Manager::table('presupuesto')->where("year", $year)->orderBy('codigo')->get();
 
-$adminUsers = DB::table('colegio')->select('usuario')->get();
+$adminUsers = Admin::query()->select('usuario')->get();
 $depositTypes = [
     1 => "Cash",
     2 => "Donación",
     3 => "Intercambio LT",
     4 => "Recompensa",
     5 => "Correción",
+    10 => 'Correción ACH',
+    11 => 'Correción Tarjeta',
     6 => "Devolución Balance",
     // 7 => "Borrar",
     8 => "Balance",
@@ -96,7 +96,7 @@ $depositTypes = [
             $accountId = $_REQUEST['accountId'];
             $parent = Family::find($accountId);
             $accountStudents = Student::byId($accountId)->get();
-            $paymentsQuery = DB::table('pagos')->where([
+            $paymentsQuery = Manager::table('pagos')->where([
                 ['id', $accountId],
                 ['year', $year],
                 ['baja', '']
@@ -567,11 +567,20 @@ $depositTypes = [
                                         <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>
                                 </select>
-
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label for="depositAmount">Cantidad a Depositar</label>
                                 <input type="text" class="form-control" name="amount" id="depositAmount" placeholder="10.00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="depositDate">Fecha</label>
+                                <input type="date" class="form-control" name="date" id="depositDate" disabled>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label for="depositTime">Hora</label>
+                                <input type="time" class="form-control" name="time" id="depositTime" disabled>
                             </div>
                         </div>
                         <div class="form-group">

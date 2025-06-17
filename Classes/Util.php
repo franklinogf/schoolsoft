@@ -7,16 +7,16 @@ use Classes\Controllers\Student;
 class Util
 {
     public static $attendanceCodes = [
-        "1" => ['type' => 'A', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
-        "2" => ['type' => 'A', 'description' => ['es' => 'Determinación del hogar (viaje)', 'en' => 'Determination of the home (travel)']],
+        "1" => ['type' => 'A', 'description' => ['es' => 'Situacion en el hogar', 'en' => 'Situation at home']],
+        "2" => ['type' => 'A', 'description' => ['es' => 'Determinacion del hogar (viaje)', 'en' => 'Determination of the home (travel)']],
         "3" => ['type' => 'A', 'description' => ['es' => 'Actividad con padres (open house)', 'en' => 'Activity with parents (open house)']],
         "4" => ['type' => 'A', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
         "5" => ['type' => 'A', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
         "6" => ['type' => 'A', 'description' => ['es' => 'Actividad educativa del colegio', 'en' => 'School activity']],
         "7" => ['type' => 'A', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
         "8" => ['type' => 'T', 'description' => ['es' => 'Sin excusa del hogar', 'en' => 'No excuse from home']],
-        "9" => ['type' => 'T', 'description' => ['es' => 'Situación en el hogar', 'en' => 'Situation at home']],
-        "10" => ['type' => 'T', 'description' => ['es' => 'Problema en la transportación', 'en' => 'Problem with transportation']],
+        "9" => ['type' => 'T', 'description' => ['es' => 'Situacion en el hogar', 'en' => 'Situation at home']],
+        "10" => ['type' => 'T', 'description' => ['es' => 'Problema en la transportacion', 'en' => 'Problem with transportation']],
         "11" => ['type' => 'T', 'description' => ['es' => 'Enfermedad', 'en' => 'Sickness']],
         "12" => ['type' => 'T', 'description' => ['es' => 'Cita', 'en' => 'Appointment']],
     ];

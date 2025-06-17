@@ -623,7 +623,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
         <?php
         if ($_report === 'Notas' || $_report === 'V-Nota'):
             $letterNumber = $_report === 'Notas' ? '9' : '7';
-            ?>
+        ?>
             <div class="card border-secondary mt-2">
                 <div class="card-body">
                     <div id="options" class="row row-cols-1">
@@ -760,11 +760,11 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                         if ($_report === 'Notas' && !$optionCppd):
                                             if ($gradeInfo->nota_por === "2") {
                                                 $_student = findValue($_info['Trab-Diarios']['table'], $student);
-                                                $tdia = $_student->{$_values['tdp']};
+                                                $tdia = $_student ? $_student?->{$_values['tdp']} : null;
                                                 $_student = findValue($_info['Trab-Libreta']['table'], $student);
-                                                $tlib = $_student->{$_values['tdp']};
+                                                $tlib = $_student ? $_student?->{$_values['tdp']} : null;
                                                 $_student = findValue($_info['Pruebas-Cortas']['table'], $student);
-                                                $pcor = $_student->{$_values['tdp']};
+                                                $pcor = $_student ? $_student?->{$_values['tdp']} : null;
                                             } else {
                                                 if (__ONLY_CBTM__) {
                                                     $tdia = $student->{$_values['tdia']} ? '10' : '';
@@ -776,7 +776,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                                     $pcor = $student->{$_values['pcor']} ? '100' : '';
                                                 }
                                             }
-                                            ?>
+                                        ?>
                                             <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)): ?>
                                                 <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $student) ?>">
                                                 <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $student) ?>">
@@ -846,7 +846,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                                             } else {
                                                 $val = $student->{$value};
                                             }
-                                            ?>
+                                        ?>
                                             <td><input class="form-control-plaintext text-center <?= $fileName ?>" readonly type="text" name="<?= $fileName . "-$student->ss" ?>" value=<?= $val ?>></td>
                                         <?php endforeach ?>
                                     <?php endif ?>
@@ -968,46 +968,46 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                 *<?= $lang->translation("Recuerda ir a la pagina de notas y darle a grabar para tener los promédios correctos.") ?>*
             </h2>
         <?php endif ?>
-        <?php if ($canEdit): ?>
-            <!-- Values -->
-            <div class="container my-5">
-                <div class="accordion" id="valuesAccordion">
-                    <div class="card">
-                        <div class="card-header bg-secondary" id="valuesHead">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
-                                    <?= $lang->translation("Valores") ?>
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="values" class="collapse" aria-labelledby="valuesHead" data-parent="#valuesAccordion">
-                            <input type="hidden" id="valueId" value="<?= $_value->id ?>">
-                            <div class="card-body">
-                                <div class="form-row">
-                                    <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
-                                    <?php for ($i = 1; $i <= $cant; $i++): ?>
-                                        <div class="form-row col-12 col-md-8 mb-2">
-                                            <div class="form-group col-12">
-                                                <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?>         <?= $i ?></label>
-                                                <input class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
-                                            </div>
-                                            <div class="form-group col-4 col-md-2 text-center">
-                                                <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
-                                                <input class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
-                                            </div>
-                                            <div class="form-group col-8 col-md-3">
-                                                <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
-                                                <input class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
-                                            </div>
+
+        <!-- Values -->
+        <div class="container my-5">
+            <div class="accordion" id="valuesAccordion">
+                <div class="card">
+                    <div class="card-header bg-secondary" id="valuesHead">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left text-light font-weight-bold" type="button" data-toggle="collapse" data-target="#values" aria-expanded="true" aria-controls="values">
+                                <?= $lang->translation("Valores") ?>
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="values" class="collapse" aria-labelledby="valuesHead" data-parent="#valuesAccordion">
+                        <input type="hidden" id="valueId" value="<?= $_value->id ?>">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <?php $cant = ($_report === 'Ex-Final') ? 1 : $amountOfGrades ?>
+                                <?php for ($i = 1; $i <= $cant; $i++): ?>
+                                    <div class="form-row col-12 col-md-8 mb-2">
+                                        <div class="form-group col-12">
+                                            <label for="<?= "tema$i" ?>"><?= $lang->translation("Tema") ?> <?= $i ?></label>
+                                            <input <?= !$canEdit ? 'disabled' : '' ?> class="form-control" type="text" id="<?= "tema$i" ?>" value="<?= $_value->{"tema{$i}"} ?>" />
                                         </div>
-                                    <?php endfor ?>
-                                </div>
+                                        <div class="form-group col-4 col-md-2 text-center">
+                                            <label for="<?= "val$i" ?>"><?= $lang->translation("Valor") ?></label>
+                                            <input <?= !$canEdit ? 'disabled' : '' ?> class="form-control text-center" type="text" id="<?= "val$i" ?>" data-value="<?= $_value->{"val{$i}"} ?>" value="<?= $_value->{"val{$i}"} ?>" />
+                                        </div>
+                                        <div class="form-group col-8 col-md-3">
+                                            <label for="<?= "fec$i" ?>"><?= $lang->translation("Fecha") ?></label>
+                                            <input <?= !$canEdit ? 'disabled' : '' ?> class="form-control" type="date" id="<?= "fec$i" ?>" value="<?= $_value->{"fec{$i}"} ?>" />
+                                        </div>
+                                    </div>
+                                <?php endfor ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        <?php endif ?>
+        </div>
+
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);

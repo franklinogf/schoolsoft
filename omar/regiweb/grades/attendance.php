@@ -57,7 +57,7 @@ $lang = new Lang([
                     ->select('DISTINCT grado')
                     ->where('year', $teacher->info('year'))
                     ->orderBy('grado')->get();
-                ?>
+            ?>
                 <div id="gradesButtons" class="d-flex flex-wrap justify-content-center">
                     <?php foreach ($grades as $grade): ?>
                         <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-grade="<?= $grade->grado ?>"><?= $grade->grado ?></button>
@@ -75,7 +75,7 @@ $lang = new Lang([
                 $grades = [$teacher->grado];
             }
 
-            ?>
+        ?>
 
             <div id="gradesButtons" class="d-flex flex-wrap justify-content-center <?= sizeof($grades) === 1 ? 'invisible' : '' ?>">
                 <?php foreach ($grades as $grade): ?>
@@ -101,9 +101,8 @@ $lang = new Lang([
             </table>
         </div>
     </div>
-
     <script type="text/javascript">
-        const attendanceCodes = <?= json_encode(Util::$attendanceCodes) ?>
+        const attendanceCodes = <?= json_encode(Util::$attendanceCodes) ?>;
     </script>
     <?php
 
