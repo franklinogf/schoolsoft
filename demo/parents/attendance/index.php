@@ -16,7 +16,7 @@ $colegio = Admin::primaryAdmin()->first();
 
 $year = $colegio->year;
 
-$students = Student::byId(Session::id())->get();
+
 $attendances = collect();
 if (isset($_POST['student'])) {
     [$ss, $year] = explode(',', $_POST['student']);
@@ -46,7 +46,7 @@ if (isset($_POST['student'])) {
             <div class="form-row">
                 <label class="font-weight-bold col-12" for="student"><?= __("Estudiantes") ?></label>
                 <select name="student" id="student" class="form-control col-12 col-lg-6">
-                    <?php foreach ($students as $kid): ?>
+                    <?php foreach ($parents->kids as $kid): ?>
                         <option <?= isset($_POST['student']) && $_POST['student'] === "$kid->ss,$kid->year" ? 'selected=""' : '' ?> value="<?= "$kid->ss,$kid->year" ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado [$kid->year]" ?></option>
                     <?php endforeach ?>
                 </select>

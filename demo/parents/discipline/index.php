@@ -1,26 +1,22 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Controllers\Parents;
-use Classes\Lang;
+use App\Models\Admin;
+use App\Models\Family;
 use Classes\Route;
 use Classes\Session;
 
 Session::is_logged();
-$parents = new Parents(Session::id());
-$lang = new Lang([
-    ["Disciplina", "Discipline"],
-    ["Yo, padre, madre o encargado, certifico que veré las Disciplina de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las Disciplina en curso.", "I, father, mother or in charge, I certify that I will see the Discipline of my child through the Internet.The system will keep an evidence that I saw the Discipline."],
-    ["He leido y estoy de acuerdo.", "I have read and I agree."],
-    ["Estudiantes inscritos", "Registered students"]
-]);
+$parents = Family::find(Session::id());
+$school = Admin::primaryAdmin()->first();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = $lang->translation("Disciplina");
+    $title = __('Disciplina');
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -30,30 +26,30 @@ $lang = new Lang([
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container mt-3">
-        <h1 class="text-center my-2"><?= $lang->translation("Disciplina") ?></h1>
+        <h1 class="text-center my-2"><?= __("Disciplina") ?></h1>
         <?php if ($parents->activo == 'Activo') : ?>
             <div class="jumbotron mt-3">
-                <p><?= $lang->translation("Yo, padre, madre o encargado, certifico que veré las Disciplina de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las Disciplina en curso.") ?></p>
+                <p><?= __("Yo, padre, madre o encargado, certifico que veré las Disciplina de mi hijo(a) a través del Internet. El sistema guardará un recibo en evidencia de que ví las Disciplina en curso.") ?></p>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="accept">
-                    <label class="custom-control-label" for="accept"><?= $lang->translation("He leido y estoy de acuerdo.") ?></label>
+                    <label class="custom-control-label" for="accept"><?= __("He leido y estoy de acuerdo") ?></label>
                 </div>
             </div>
             <form action="<?= Route::url('/parents/discipline/pdfDiscipline.php') ?>" method="POST" target="_blank">
                 <div class="form-row">
-                    <label class="font-weight-bold col-12" for="studentSS"><?= $lang->translation("Estudiantes inscritos") ?></label>
+                    <label class="font-weight-bold col-12" for="studentSS"><?= __("Estudiantes inscritos") ?></label>
                     <select name="studentSS" id="studentSS" class="form-control col-12 col-lg-6">
-                        <?php foreach ($parents->kids() as $kid) : ?>
+                        <?php foreach ($parents->kids as $kid) : ?>
                             <option value="<?= $kid->ss ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado" ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
-                <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled><?= $lang->translation("Disciplina") ?></button>
+                <button id="gradesBtn" type="submit" class="btn btn-primary mt-3" disabled><?= __("Disciplina") ?></button>
             </form>
         <?php else : ?>
             <div class="jumbotron mt-3 border-danger">
                 <div class="alert alert-danger" role="alert">
-                    <?= $parents->info('men_inac') ?>
+                    <?= $school->men_inac ?>
                 </div>
             </div>
         <?php endif ?>
