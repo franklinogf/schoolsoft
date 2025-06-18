@@ -518,5 +518,11 @@
     "Lista de estudiantes por salón hogar": "Home classroom students list",
     "Nombre del estudiante": "Student name",
     "Cuenta": "Account",
-    "Genero": "Gender"
+    "Genero": "Gender",
+    "Informe de asistencia": "Attendance report",
+    "Asistencias": "Attendances",
+    "Fecha": "Date",
+    "No tiene información": "Has no information",
+    "Ausencias": "Absence",
+    "Tardanzas": "Tardy"
 }
