@@ -1,19 +1,16 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Admin;
+use App\Models\Subject;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
+use App\Models\Teacher;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
-$classes = $teacher->classes();
-// echo '<pre>';
-// var_dump($classes);
-// echo '</pre>';
-// exit;
-
+$teacher = Teacher::find(Session::id());
+$school = Admin::primaryAdmin()->first();
 
 $lang = new Lang([
     ['Cursos', 'Grades'],
@@ -31,7 +28,7 @@ $lang = new Lang([
 
 <head>
     <?php
-    $title = $lang->translation('Cursos');
+    $title = __('Cursos');
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -41,11 +38,11 @@ $lang = new Lang([
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Cursos') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= __('Cursos') ?></h1>
         <div class="jumbotron bg-secondary shadow-sm py-3">
             <div class="row row-cols-1 row-cols-md-2">
                 <div class="col mb-3">
-                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado !== '' ? '' : 'disabled' ?>"><?= $lang->translation('Entrada de asistencias') ?></a>
+                    <a href="attendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= $lang->translation('Entrada de asistencias') ?></a>
                 </div>
                 <div class="col mb-3">
                     <a href="dailyAttendance.php" class="btn btn-outline-light btn-block btn-lg <?= $teacher->grado === '' ? 'disabled' : '' ?>"><?= $lang->translation('Informe de asistencias diarias') ?></a>
@@ -66,20 +63,20 @@ $lang = new Lang([
                             <label class="input-group-text" for="class"><?= $lang->translation('Grado') ?></label>
                         </div>
                         <select name="class" class="custom-select" id="class" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
-                            <?php foreach ($classes as $class): ?>
-                                <option data-verano="<?= $class->verano === '2' ? 'true' : 'false' ?>" value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                            <option value="" selected><?= __("Seleccionar") ?></option>
+                            <?php foreach ($teacher->subjects as $subject): ?>
+                                <option data-verano="<?= $subject->verano === '2' ? 'true' : 'false' ?>" value="<?= $subject->curso ?>"><?= "$subject->curso - $subject->descripcion" ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="tri"><?= $lang->translation('Trimestre') ?></label>
+                            <label class="input-group-text" for="tri"><?= __('Trimestre') ?></label>
                         </div>
                         <select class="custom-select" id="tri" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
+                            <option value="" selected><?= __("Seleccionar") ?></option>
                             <!-- if decimals are active -->
-                            <?php if ($teacher->info('cppd') === 'Si'): ?>
+                            <?php if ($school->cppd === 'Si'): ?>
                                 <option value="Trimestre-1"><?= $lang->translation("Trimestre") ?> 1</option>
                                 <option value="Trimestre-3"><?= $lang->translation("Trimestre") ?> 3</option>
                                 <option value="Verano" disabled><?= $lang->translation("Verano") ?></option>
@@ -101,7 +98,7 @@ $lang = new Lang([
                         <select class="custom-select" id="tra" required>
                             <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
                             <!-- if decimals are active -->
-                            <?php if ($teacher->info('cppd') === 'Si'): ?>
+                            <?php if ($school->cppd === 'Si'): ?>
                                 <option value="Notas"><?= $lang->translation("Notas") ?></option>
                                 <option value="V-Nota" disabled><?= $lang->translation("Notas de verano") ?></option>
                             <?php else: ?>
@@ -111,11 +108,11 @@ $lang = new Lang([
                                 <?php endif ?>
                                 <option value="Pruebas-Cortas"><?= $lang->translation("Pruebas cortas") ?></option>
                                 <option value="Trab-Diarios"><?= $lang->translation("Trabajos diarios") ?></option>
-                                <?php if ($teacher->info('etd') === 'SI'): ?>
+                                <?php if ($school->etd === 'SI'): ?>
                                     <option value="Trab-Diarios2"><?= $lang->translation("Trabajos diarios") ?> 2</option>
                                 <?php endif ?>
                                 <option value="Trab-Libreta"><?= $lang->translation("Trabajos de libreta") ?></option>
-                                <?php if ($teacher->info('etd') === 'SI'): ?>
+                                <?php if ($school->etd === 'SI'): ?>
                                     <option value="Trab-Libreta2"><?= $lang->translation("Trabajos de libreta") ?> 2</option>
                                 <?php endif ?>
                                 <option value="Cond-Asis"><?= $lang->translation("Conducta y asistencia") ?></option>
@@ -125,7 +122,7 @@ $lang = new Lang([
                         </select>
                         <input type="hidden" name="tra" id="hiddenTra">
                     </div>
-                    <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= $lang->translation("Continuar") ?>">
+                    <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= __("Continuar") ?>">
                 </div>
             </form>
 

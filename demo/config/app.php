@@ -7,6 +7,8 @@ return [
 
     'locale' => 'en',
 
+    'cosey' => false,
+
     'logo' => [
         'default' => 'logo/logo.gif',
         'size' => [
