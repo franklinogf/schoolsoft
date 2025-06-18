@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes\Services;
+namespace App\Services;
 
 use Classes\Session;
 
@@ -11,12 +11,10 @@ class EvertecPayment
     private $username;
     private $password;
     private $prefix;
-    private $isDevelopment;
 
-    public function __construct($isDevelopment = true, $prefix = null)
+    public function __construct(?string $prefix = null, bool $isDevelopment = false)
     {
         $this->prefix = $prefix;
-        $this->isDevelopment = $isDevelopment;
 
         // Set endpoints based on environment
         if ($isDevelopment) {
@@ -27,8 +25,8 @@ class EvertecPayment
             $this->password = "5B034VrA";
         } else {
             // Set credentials
-            $this->username = "ECOM4549555000561";
-            $this->password = "h1MT6Eh24WDQ8LNJ";
+            $this->username = school_config('services.evertec.username');
+            $this->password = school_config('services.evertec.password');
             $this->creditCardEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessCredit/';
             $this->achEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/';
         }
@@ -37,33 +35,33 @@ class EvertecPayment
     /**
      * Process a credit card payment
      * 
-     * @param array $data Payment data
+     * @param array{
+     * customerName:string,
+     * customerEmail:string,
+     * address1?:string,
+     * address2?:string,
+     * city?:string,
+     * state?:string,
+     * zipcode?:string,
+     * trxID?:string,
+     * refNumber?:string,
+     * trxDescription:string,
+     * trxAmount:float,
+     * cardNumber:string,
+     * expDate:string,
+     * cvv:string,
+     * trxTipAmount?:float,
+     * trxTax1?:float,
+     * trxTax2?:float,
+     * filler1?:string,
+     * filler2?:string,
+     * filler3?:string} $data Payment data
      * 
-     * @param string $data['customerName'] Customer's name
-     * @param string $data['customerEmail'] Customer's email
-     * @param string $data['address1'] Customer's address line 1
-     * @param string $data['address2'] Customer's address line 2
-     * @param string $data['city'] Customer's city
-     * @param string $data['state'] Customer's state
-     * @param string $data['zipcode'] Customer's zipcode
-     * @param string $data['trxID'] Transaction ID
-     * @param string $data['refNumber'] Reference number
-     * @param string $data['trxDescription'] Transaction description
-     * @param float $data['trxAmount'] Transaction amount
-     * @param string $data['cardNumber'] Credit card number
-     * @param string $data['expDate'] Expiration date (MMYY format)
-     * @param string $data['cvv'] CVV code
-     * @param float $data['trxTipAmount'] Tip amount
-     * @param float $data['trxTax1'] Tax 1 amount
-     * @param float $data['trxTax2'] Tax 2 amount
-     * @param string $data['filler1'] Filler 1
-     * @param string $data['filler2'] Filler 2
-     * @param string $data['filler3'] Filler 3
-     * 
-     * @return array Response from Evertec
+     * @return array{success:false,error:string}|array{success:false,rCode:string,rMsg:string} Response from Evertec
      */
-    public function processCreditCard(array $data)
+    public function processCreditCard(array $data): array
     {
+
         $payload = [
             "username" => $this->username,
             "password" => $this->password,
@@ -76,9 +74,9 @@ class EvertecPayment
             "city" => $data['city'] ?? "",
             "state" => $data['state'] ?? "",
             "zipcode" => $data['zipcode'] ?? "",
-            "trxID" => $data['trxID'],
+            "trxID" => $data['trxID'] ?? self::generateTransactionId(),
             "refNumber" => $data['refNumber'] ?? "",
-            "trxDescription" => $data['trxDescription'],
+            "trxDescription" => substr($data['trxDescription'], 0, 50), // Limit to 50 characters
             "trxAmount" => $data['trxAmount'],
             "cardNumber" => $data['cardNumber'],
             "expDate" => $data['expDate'], // MMYY format
@@ -97,30 +95,31 @@ class EvertecPayment
     /**
      * Process an ACH payment
      * 
-     * @param array $data Payment data
+     * @param array{
+     * customerName:string,
+     * customerEmail:string,
+     * address1?:string,
+     * address2?:string,
+     * city?:string,
+     * state?:string,
+     * zipcode:string,
+     * trxID?:string,
+     * refNumber?:string,
+     * trxDescription?:string,
+     * trxAmount:float,
+     * bankAccount:string,
+     * routing:string,
+     * accType:'w'|'s',
+     * filler1?:string,
+     * filler2?:string,
+     * filler3?:string
+     *} $data Payment data
      * 
-     * @param string $data['customerName'] Customer's name
-     * @param string $data['customerEmail'] Customer's email
-     * @param string $data['address1'] Customer's address line 1
-     * @param string $data['address2'] Customer's address line 2
-     * @param string $data['city'] Customer's city
-     * @param string $data['state'] Customer's state
-     * @param string $data['zipcode'] Customer's zipcode
-     * @param string $data['trxID'] Transaction ID
-     * @param string $data['refNumber'] Reference number
-     * @param string $data['trxDescription'] Transaction description
-     * @param float $data['trxAmount'] Transaction amount
-     * @param string $data['bankAccount'] Bank account number
-     * @param string $data['routing'] Routing number
-     * @param string $data['accType'] Account type W|S|C (default to checking account)     
-     * @param string $data['filler1'] Filler 1
-     * @param string $data['filler2'] Filler 2
-     * @param string $data['filler3'] Filler 3
-     * 
-     * @return array Response from Evertec
+     *  @return array{success:false,error:string}|array{success:false,rCode:string,rMsg:string} Response from Evertec
      */
-    public function processACH($data)
+    public function processACH($data): array
     {
+
         $payload = [
             "username" => $this->username,
             "password" => $this->password,
@@ -132,10 +131,10 @@ class EvertecPayment
             "address2" => $data['address2'] ?? "",
             "city" => $data['city'] ?? "",
             "state" => $data['state'] ?? "",
-            "zipcode" => $data['zipcode'] ?? "00960",
-            "trxID" => $data['trxID'],
+            "zipcode" => $data['zipcode'],
+            "trxID" => $data['trxID'] ?? self::generateTransactionId(),
             "refNumber" => $data['refNumber'] ?? "",
-            "trxDescription" => $data['trxDescription'],
+            "trxDescription" => $data['trxDescription'] ?? "",
             "trxAmount" => $data['trxAmount'],
             "bankAccount" => $data['bankAccount'],
             "routing" => $data['routing'],
@@ -153,7 +152,7 @@ class EvertecPayment
      * 
      * @param string $endpoint API endpoint
      * @param array $payload Request payload
-     * @return array Response from API
+     * @return array{success:false,error:string}|array{success:false,rCode:string,rMsg:string} Response from API
      */
     private function sendRequest($endpoint, $payload)
     {
