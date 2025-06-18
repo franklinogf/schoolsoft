@@ -57,7 +57,26 @@ class EvertecPayment
      * filler2?:string,
      * filler3?:string} $data Payment data
      * 
-     * @return array{success:false,error:string}|array{success:false,rCode:string,rMsg:string} Response from Evertec
+     * @return array{
+     * success:false,
+     * error:string}|array{
+     * success:false,
+     * rCode:string,
+     * rMsg:string}|array{
+     * success:true,
+     * authNumber:string,
+     * merchantid:string,
+     * postingdate:string,
+     * rCode:string,
+     * rMsg:string,
+     * refNumber:string,
+     * requestID:string,
+     * success:true,
+     * systemTrace:string,
+     * trxDatetime:string,
+     * trxID:string,
+     * trxoper:string,
+     * trxtype:string} Response from Evertec
      */
     public function processCreditCard(array $data): array
     {
@@ -115,8 +134,27 @@ class EvertecPayment
      * filler3?:string
      *} $data Payment data
      * 
-     *  @return array{success:false,error:string}|array{success:false,rCode:string,rMsg:string} Response from Evertec
-     */
+     * @return array{
+     * success:false,
+     * error:string}|array{
+     * success:false,
+     * rCode:string,
+     * rMsg:string}|array{
+     * success:true,
+     * authNumber:string,
+     * merchantid:string,
+     * postingdate:string,
+     * rCode:string,
+     * rMsg:string,
+     * refNumber:string,
+     * requestID:string,
+     * success:true,
+     * systemTrace:string,
+     * trxDatetime:string,
+     * trxID:string,
+     * trxoper:string,
+     * trxtype:string} Response from Evertec
+     * */
     public function processACH($data): array
     {
 

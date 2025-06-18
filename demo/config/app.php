@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'acronym' => 'omar',
+    'acronym' => 'demo',
 
     'timezone' => 'America/Puerto_Rico',
 

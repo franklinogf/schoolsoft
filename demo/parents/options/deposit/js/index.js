@@ -95,6 +95,9 @@ $(function () {
 
   $('#cardForm').submit(function (event) {
     event.preventDefault()
+    if (studentId === null) {
+      Alert.fire('Error', 'Debe seleccionar un estudiante para realizar el deposito', 'error')
+    }
     if (!$(this)[0].checkValidity()) {
       event.stopPropagation()
       $(this).addClass('was-validated')
@@ -109,7 +112,8 @@ $(function () {
       cardNumber: $('#cc-number').cleanVal(),
       expDate: $('#cc-expiration').cleanVal(),
       cvv: $('#cc-cvv').cleanVal(),
-      trxDescription: `Deposito de ${total} a ${studentName}`
+      trxDescription: `Deposito de ${total} a ${studentName}`,
+      filler1: studentId
     }
 
     $.ajax({
@@ -122,13 +126,18 @@ $(function () {
         console.log({ response })
         if (!response.success) {
           Alert.fire('Error', response.rMsg, 'error')
+          return
         }
+        $(`#students button[data-student-id=${studentId}]`)
+          .children('.badge')
+          .text(`$${response.newDepositAmount}`)
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.error('There has been a problem with your ajax operation:', textStatus, errorThrown)
       }
     })
   })
+
   $('#achForm').submit(function (event) {
     event.preventDefault()
     if (!$(this)[0].checkValidity()) {
@@ -136,121 +145,38 @@ $(function () {
       $(this).addClass('was-validated')
       return false
     }
-    let data = {
-      username: userName,
-      password: password,
-      trxOper: 'sale',
+    const data = {
       accountID: $('#cuenta').val(),
       customerName: $('#ach-name').val(),
       customerEmail: $('#email').val(),
-      address1: '',
-      address2: '',
-      city: '',
-      state: '',
       zipcode: $('#ach-zip').val(),
-      trxID: '',
-      refNumber: '',
-      trxDescription: '',
+      trxDescription: `Deposito de ${total} a ${studentName}`,
       trxAmount: total,
       bankAccount: $('#ach-number').val(),
       routing: $('#ach-route').val(),
       accType: $('#ach-type').val(),
-      filler1: '',
-      filler2: '',
-      filler3: ''
+      filler1: studentId
     }
-    makePayment(
-      `https://${
-        demo ? 'uat.' : ''
-      }mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/`,
-      data,
-      'ACH'
-    )
-  })
-
-  function makePayment(_url, _data, _paymentMethod) {
-    $('.pagar').prop('disabled', true)
-    alertModal.show()
-    $('#alertModal .modal-body').html(`
-            <div class="d-flex justify-content-center w-100">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>                            
-        `)
 
     $.ajax({
-      url: 'getNextID.php',
-      type: 'GET',
+      url: './includes/achDeposit.php',
+      type: 'POST',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
       dataType: 'json',
-      complete: function (data) {
-        const trxID = data.responseJSON.trxID
-        console.log('NextID:', trxID)
-        _data.trxID = trxID
-        studentId = studentId || $('#students > button').data('student-id').toString()
-        _data.filler1 = studentId
-        studentName = studentName || $('#students > button').children('.name').text()
-        const desc = `Deposito de ${total} a ${studentName}`
-        _data.trxDescription = desc.substring(0, 50)
-        console.log('informacion que se envia:', _data)
-        let _emailData = {
-          ..._data
+      success: function (response) {
+        console.log({ response })
+        if (!response.success) {
+          Alert.fire('Error', response.rMsg, 'error')
+          return
         }
-        const dataJson = JSON.stringify(_data)
-
-        $.ajax({
-          type: 'POST',
-          url: _url,
-          data: dataJson,
-          crossDomain: true,
-          contentType: 'application/json',
-          dataType: 'json',
-          complete: function (data) {
-            const response = data.responseJSON
-            console.log({ response })
-
-            if (response.rCode === '00' || response.rCode === '0000') {
-              _emailData.refNumber = response.refNumber
-              _emailData.authNumber = response.authNumber
-              _emailData.paymentMethod = _paymentMethod
-              _emailData.trxDatetime = response.trxDatetime
-              $('#alertModal .modal-body').html(`
-                                <span><p class="badge bg-success fw-bold m-0">${response.rMsg}</p></span>
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>                            
-                            `)
-              $('#alertModal .modal-content')
-                .removeClass('border-danger')
-                .addClass('border-success')
-              // actualizar la cantidad en la tabla despues de que el pago sea completado
-              if (!demo) {
-                $.post(
-                  'makeDeposit.php',
-                  _emailData,
-                  function (data) {
-                    console.log({ data })
-                    const totalDeposited = data.deposited
-
-                    $(`#students button[data-student-id=${studentId}]`)
-                      .children('.badge')
-                      .text(`$${totalDeposited}`)
-                    // $.post("sendEmail.php", _emailData);
-                  },
-                  'json'
-                )
-              }
-            } else {
-              $('#alertModal .modal-body').html(`                            
-                <span><p class="badge bg-danger fw-bold m-0">${response.rMsg}</p></span>
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>   
-              `)
-              $('#alertModal .modal-content')
-                .removeClass('border-success')
-                .addClass('border-danger')
-              $('.pagar').prop('disabled', false)
-            }
-          }
-        })
+        $(`#students button[data-student-id=${studentId}]`)
+          .children('.badge')
+          .text(`$${response.newDepositAmount}`)
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error('There has been a problem with your ajax operation:', textStatus, errorThrown)
       }
     })
-  }
+  })
 })
