@@ -45,4 +45,11 @@ class Teacher extends Model
     {
         return $this->hasMany(Subject::class, 'id', 'id');
     }
+
+    public function homeStudents(): HasMany
+    {
+        return $this->hasMany(Student::class, 'grado', 'grado')
+            ->where('fecha_baja', '0000-00-00')
+            ->orderBy('apellidos');
+    }
 }
