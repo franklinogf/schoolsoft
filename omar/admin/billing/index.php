@@ -282,6 +282,11 @@ $options = [
                 'desc' => __('Informe de compras en cafeterias por fechas.'),
                 'link' => 'inf_compras_op.php',
             ],
+            [
+                'name' => __("Código de barra"),
+                'desc' => __('Asignar código de barra para la cafetería automaticamente a los estudiantes.'),
+                'link' => 'codigo_barra.php',
+            ],
         ],
     ],
 ];
