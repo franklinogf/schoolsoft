@@ -1,9 +1,10 @@
 <?php
 require_once '../../../../app.php';
 
+use App\Services\EvertecPayment;
 use Classes\Controllers\School;
 use Classes\Session;
-use Classes\Services\EvertecPayment;
+
 use Classes\DataBase\DB;
 
 Session::is_logged();
@@ -25,7 +26,7 @@ if (!$postData) {
 // Initialize payment processor
 $isDevelopmentMode = true; // Set to false for production
 $evertecPrefix  = $postData['evertecPrefix'] ?? null; // Set your prefix here
-$paymentProcessor = new EvertecPayment($isDevelopmentMode, $evertecPrefix);
+$paymentProcessor = new EvertecPayment($evertecPrefix, $isDevelopmentMode);
 
 // Generate transaction ID (use a more robust method in production)
 $trxID = EvertecPayment::generateTransactionId();

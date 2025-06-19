@@ -2,17 +2,23 @@
 
 require_once '../../app.php';
 
+use App\Models\Admin;
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Student;
+use App\Models\Student;
+use Classes\Route;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
 $studentSS = $_POST['studentSS'];
-$student = new Student($studentSS);
-$year = $student->info('year');
+$student = Student::bySS($studentSS)->first();
+
+
+$school = Admin::primaryAdmin()->first();
+$year = $school->year;
 
 
 $lang = new Lang([
@@ -26,7 +32,7 @@ $lang = new Lang([
     ['Deméritos', 'Demerits'],
 ]);
 
-DB::table('acuse')->insert([
+Manager::table('acuse')->insert([
     'id' => $student->id,
     'ss' => $studentSS,
     'grado' => $student->grado,

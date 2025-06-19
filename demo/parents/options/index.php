@@ -18,6 +18,7 @@ $buttons = [
     ['name' => 'Informe de deficiencia', 'link' => 'deficiency/'],
     ['name' => 'Tiendas', 'link' => 'stores/'],
     ['name' => 'Reporte de compras', 'link' => 'Shopping/'],
+    ['name' => 'Deposits', 'link' => 'deposit/'],
 ];
 $lang = new Lang([
     ["Mensajes y Opciones", "Messages and Options"],

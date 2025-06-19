@@ -1,72 +1,57 @@
 <?php
 require_once '../../app.php';
 
-use Classes\Lang;
+use App\Models\Admin;
+use App\Models\Family;
+use App\Models\Student;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Parents;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
-$parents = new Parents(Session::id());
+$parents = Family::find(Session::id());
 
-$colegio = DB::table('colegio')->where([
-    ['usuario', 'administrador']
-])->orderBy('id')->first();
+$colegio = Admin::primaryAdmin()->first();
 
 $year = $colegio->year;
 
-$students = DB::table('year')->where([
-    ['id', $parents->id],
-    ['year', $year]
-])->get();
+
+$attendances = collect();
 if (isset($_POST['student'])) {
     [$ss, $year] = explode(',', $_POST['student']);
-    $attendances = DB::table('asispp')->where([
+    $attendances = Manager::table('asispp')->where([
         ['ss', $ss],
         ['year', $year]
-    ])->orderBy('fecha DESC')->get();
+    ])->orderByDesc('fecha')->get();
 }
-$lang = new Lang([
-    ["Informe de asistencia", "Attendance report"],
-    ["Estudiantes", "Students"],
-    ["Asistencias", "Attendances"],
-    ["Fecha", "Date"],
-    ["Descripción", "Description"],
-    ["No tiene información", "Has no information"],
-    ["Ausencias", "Absence"],
-    ["Tardanzas", "Tardy"]
 
-]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-<head>
-    <?php
-    $title = $lang->translation('Asistencias');
-    Route::includeFile('/parents/includes/layouts/header.php');
-    ?>
+<head> <?php
+        $title = __('Asistencias');
+        Route::includeFile('/parents/includes/layouts/header.php');
+        ?>
 </head>
 
 <body>
     <?php
     Route::includeFile('/parents/includes/layouts/menu.php');
-    ?>
-    <div class="container mt-3">
-        <h1 class="text-center my-2"><?= $lang->translation("Informe de asistencia") ?></h1>
-        <form target="_self" method="POST">
+    ?> <div class="container mt-3">
+        <h1 class="text-center my-2"><?= __("Informe de asistencia") ?></h1>
+        <form method="post">
             <div class="form-row">
-                <label class="font-weight-bold col-12" for="student"><?= $lang->translation("Estudiantes") ?></label>
+                <label class="font-weight-bold col-12" for="student"><?= __("Estudiantes") ?></label>
                 <select name="student" id="student" class="form-control col-12 col-lg-6">
-                    <?php foreach ($students as $kid): ?>
+                    <?php foreach ($parents->kids as $kid): ?>
                         <option <?= isset($_POST['student']) && $_POST['student'] === "$kid->ss,$kid->year" ? 'selected=""' : '' ?> value="<?= "$kid->ss,$kid->year" ?>"><?= "$kid->nombre $kid->apellidos -> $kid->grado [$kid->year]" ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
-            <button id="attendanceBtn" type="submit" class="btn btn-primary mt-3"><?= $lang->translation("Asistencias") ?></button>
+            <button id="attendanceBtn" type="submit" class="btn btn-primary mt-3"><?= __("Asistencias") ?></button>
         </form>
 
         <div class="mt-5">
@@ -74,39 +59,37 @@ $lang = new Lang([
                 <thead class="thead-light text-center">
                     <tr>
                         <th></th>
-                        <th><?= $lang->translation("Fecha") ?></th>
-                        <th><?= $lang->translation("Descripción") ?></th>
+                        <th><?= __("Fecha") ?></th>
+                        <th><?= __("Descripción") ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (isset($attendances) && sizeof($attendances) > 0):
-                        $count = 1;
+                    <?php if (count($attendances) > 0):
                         $codes = [0, 0];
                     ?>
-                        <?php foreach ($attendances as $attendance): ?>
+                        <?php foreach ($attendances as $index => $attendance): ?>
                             <tr>
-                                <td class="text-center"><?= $count ?></td>
+                                <td class="text-center"><?= $index + 1 ?></td>
                                 <td class="text-center"><?= $attendance->fecha ?></td>
                                 <td><?= Util::$attendanceCodes[$attendance->codigo]['description'][__LANG] ?></td>
                             </tr>
-                        <?php $count++;
+                        <?php
                             $codes[0] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'A' ? 1 : 0;
                             $codes[1] += Util::$attendanceCodes[$attendance->codigo]['type'] === 'T' ? 1 : 0;
-                        endforeach ?>
-                    <?php else: ?>
+                        endforeach ?> <?php else: ?>
                         <tr>
-                            <td class="text-center" colspan="3"><?= $lang->translation("No tiene información") ?></td>
+                            <td class="text-center" colspan="3"><?= __("No tiene información") ?></td>
                         </tr>
                     <?php endif ?>
                 </tbody>
 
             </table>
-            <?php if (isset($attendances) && sizeof($attendances) > 0): ?>
+            <?php if (count($attendances) > 0): ?>
                 <table class="table table-bordered table-sm">
                     <thead class="thead-light text-center">
                         <tr>
-                            <th><?= $lang->translation("Ausencias") ?></th>
-                            <th><?= $lang->translation("Tardanzas") ?></th>
+                            <th><?= __("Ausencias") ?></th>
+                            <th><?= __("Tardanzas") ?></th>
                         </tr>
                     </thead>
                     <tbody>

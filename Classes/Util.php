@@ -2,8 +2,6 @@
 
 namespace Classes;
 
-use Classes\Controllers\Student;
-
 class Util
 {
     public static $attendanceCodes = [
@@ -166,21 +164,21 @@ class Util
     public static function formatDate($date, $month = false, $largeMonth = false)
     {
         if ($date !== '0000-00-00') {
-            $format = '%d-%m-%Y';
+            $format = 'd-m-Y';
             if ($month) {
                 if (is_bool($month)) {
-                    $format = '%d %b %Y';
+                    $format = 'd M Y'; // format 
                     if ($largeMonth) {
-                        $format = '%d %B %Y';
+                        $format = 'd F Y';
                     }
                 } elseif (is_string($month)) {
                     $format = $month;
                 } else {
-                    throw new \Exception('Introducir "true" o un formato de fecha correcto como (%d-%m-%Y)');
+                    throw new \Exception('Introducir "true" o un formato de fecha correcto como (d-m-Y)');
                 }
             }
             \setlocale(LC_ALL, __LANG === 'es' ? 'es_ES' : 'en_EN');
-            $newDate = strftime($format, strtotime($date));
+            $newDate = date($format, strtotime($date));
             return $newDate;
         }
     }

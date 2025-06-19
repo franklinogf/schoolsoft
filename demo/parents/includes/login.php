@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
       Route::redirect('parents/', false);
    } else {
-      $_SESSION['errorLogin'] = self::$errorLoginMessage;
+      $_SESSION['errorLogin'] = __("No coincide con los datos, intentelo otra vez");
 
       Route::redirect();
    }
