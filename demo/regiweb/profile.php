@@ -12,58 +12,6 @@ use Classes\Session;
 Session::is_logged();
 
 $teacher = Teacher::find(Session::id());
-$lang = new Lang([
-  ["Mi Perfil", "My profile"],
-  ["Información importante", "Important information"],
-  ["Usuario:", "User:"],
-  ["SI", "YES"],
-  ["Correo electrónico principal", "Primary email"],
-  ["Correo electrónico secundario", "Secondary email"],
-  ["Teléfono residencial", "Residential telephone"],
-  ["Celular", "Cellphone"],
-  ["Compañia telefonica", "Cellphone company"],
-  ["Dirección Residencial", "Residential Address"],
-  ["Dirección Postal", "Postal Address"],
-  ["Dirección", "Address"],
-  ["Direcciones", "Addresses"],
-  ["Ciudad", "City"],
-  ["Estado", "State"],
-  ["Codigo Postal", "Postal Code"],
-  ["Posición", "Position"],
-  ["Teléfono de emergencia", "Emergency phone"],
-  ["Nueva contraseña", "New Password"],
-  ["Confirmar contraseña", "Confirm Password"],
-  ["Las contraseñas no coinciden", "Passwords do not match"],
-  ["Salon hogar:", "Home grade:"],
-  ["Fecha de nacimiento:", "Date of Birth:"],
-  ["Guardar", "Save"],
-  ["Cambiar foto", "Change picture"],
-  ["Total de estudiantes:", "Total number of students:"],
-  ["Genero", "Gender"],
-  ["Masculino", "Male"],
-  ["Femenino", "Female"],
-  ["Información personal", "Personal information"],
-  ["Nombre", "Name"],
-  ["Apellidos", "Surnames"],
-  ["Misma dirección que la residencial", "Same address as the residential"],
-  ["Otras", "Others"],
-  ["Alias", "Alias"],
-  ["Nivel", "Level"],
-  ["Elemental", "Elemental School"],
-  ["Preescolar", "Preschool"],
-  ["Intermedia", "Middle School"],
-  ["Superior", "High School"],
-  ["Preparación", "Preparation"],
-  ["Fecha de inicio", "Start date"],
-  ["Fecha de baja", "End date"],
-  ["Recibir correos electronicos", "Receive email"],
-  ["Clubes", "Clubs"],
-  ["Presidente", "President"],
-  ["Vice Presidente", "Vice president"],
-  ["Secretario(a)", "Secretary"],
-  ["Licencias", "Licenses"]
-
-]);
 
 ?>
 <!DOCTYPE html>
@@ -101,9 +49,9 @@ $lang = new Lang([
             </h6>
             <div class="card-body">
               <p class="text-monospace">ID: <span class="badge badge-info"><?= $teacher->id ?> </span></p>
-              <p class="text-monospace"><?= __("Usuario:") ?> <span class="badge badge-info"><?= $teacher->usuario ?></span></p>
-              <p class="text-monospace"><?= __("Salon Hogar:") ?> <span class="badge badge-info"><?= $teacher->grado ?></span></p>
-              <p class="text-monospace"><?= __("Total de estudiantes:") ?> <span class="badge badge-info"><?= $teacher->homeStudents()->count() ?></span></p>
+              <p class="text-monospace"><?= __("Usuario") ?> <span class="badge badge-info"><?= $teacher->usuario ?></span></p>
+              <p class="text-monospace"><?= __("Salon Hogar") ?> <span class="badge badge-info"><?= $teacher->grado ?></span></p>
+              <p class="text-monospace"><?= __("Total de estudiantes") ?> <span class="badge badge-info"><?= $teacher->homeStudents()->count() ?></span></p>
             </div>
           </div>
         </div>
@@ -112,7 +60,7 @@ $lang = new Lang([
       <div class="row">
         <!-- Personal Information -->
         <div class="card col-12 col-lg-6 p-3">
-          <h5 class="card-title"><?= __("Información Personal") ?></h5>
+          <h5 class="card-title"><?= __("Información personal") ?></h5>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="name"><?= __("Nombre") ?></label>
@@ -257,7 +205,7 @@ $lang = new Lang([
                 <input class="form-control" type="date" name="dischargeDate" id="dischargeDate" value="<?= $teacher->fecha_daja ?>" />
               </div>
               <div class="form-group col-12 row">
-                <label class="col-6 col-form-label" for="getEmails"><?= __("Recibir correos electronicos") ?></label>
+                <label class="col-6 col-form-label" for="getEmails"><?= __("Recibir correo electrónico") ?></label>
                 <select class="form-control col-6" value="<?= $teacher->re_e ?>" name="getEmails" id="getEmails">
                   <option value="NO">NO</option>
                   <option value="SI"><?= __("SI") ?></option>
