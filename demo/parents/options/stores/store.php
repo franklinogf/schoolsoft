@@ -1,17 +1,18 @@
 <?php
 require_once '../../../app.php';
 
+use App\Models\Store;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
 
 Session::is_logged();
-$lang = new Lang([
-    ["Tiendas", "Stores"],
-]);
+
 // Get store ID from query parameter
 $store_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+$store = Store::find($store_id);
 
 // Include cart actions
 require_once 'includes/cart_actions.php';
@@ -21,7 +22,7 @@ require_once 'includes/cart_actions.php';
 
 <head>
     <?php
-    $title = $lang->translation("Tiendas");
+    $title = __("Tiendas");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -31,23 +32,15 @@ require_once 'includes/cart_actions.php';
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-4"><?= $lang->translation("Tiendas") ?></h1>
+        <h1 class="text-center my-4"><?= __("Tiendas") ?></h1>
         <?php
 
-        // Check if store ID is valid
-        if ($store_id <= 0) {
-            echo '<div class="alert alert-danger">ID de tienda inválido</div>';
-            exit;
-        }
-
-        // Get store information
-        $store = DB::table('stores')->where('id', $store_id)->first();
         if (!$store) {
             echo '<div class="alert alert-danger">Tienda no encontrada</div>';
             exit;
         }
         // Get products for this store
-        $products = DB::table('store_items')->where("store_id", $store_id)->get();
+        $products = $store->items;
 
         ?>
 
@@ -62,7 +55,7 @@ require_once 'includes/cart_actions.php';
                         <div class="row">
                             <?php if (empty($products)): ?>
                                 <div class="col-12">
-                                    <div class="alert alert-info">No hay productos disponibles</div>
+                                    <div class="alert alert-info"><?= __("No hay productos disponibles") ?></div>
                                 </div>
                             <?php else: ?>
                                 <?php foreach ($products as $product):
@@ -487,7 +480,7 @@ require_once 'includes/cart_actions.php';
         // Payment functionality
         document.addEventListener('DOMContentLoaded', function() {
             // Set payment amount in modal
-            document.getElementById('checkout-btn').addEventListener('click', function() {
+            document.getElementById('checkout-btn')?.addEventListener('click', function() {
                 const amount = this.getAttribute('data-amount');
                 document.getElementById('payment-amount').textContent = '$' + parseFloat(amount).toFixed(2);
             });

@@ -15,18 +15,22 @@ class EvertecPayment
     public function __construct(?string $prefix = null, bool $isDevelopment = false)
     {
         $this->prefix = $prefix;
+        $demoUsername = 'CERT4549444000033';
+        $demoPassword = '5B034VrA';
+
+        $this->username = school_config('services.evertec.username', $demoUsername);
+        $this->password = school_config('services.evertec.password', $demoPassword);
+
+        // Check if we are in a development environment
+        $isDevelopment = ($this->username === $demoUsername && $this->password === $demoPassword) || $isDevelopment ? true : false;
 
         // Set endpoints based on environment
         if ($isDevelopment) {
             $this->creditCardEndpoint = 'https://uat.mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessCredit/';
             $this->achEndpoint = 'https://uat.mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/';
-            // Set credentials
-            $this->username = "CERT4549444000033";
-            $this->password = "5B034VrA";
+            $this->username = $demoUsername;
+            $this->password = $demoPassword;
         } else {
-            // Set credentials
-            $this->username = school_config('services.evertec.username');
-            $this->password = school_config('services.evertec.password');
             $this->creditCardEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessCredit/';
             $this->achEndpoint = 'https://mmpay.evertecinc.com/WebPaymentAPI/WebPaymentAPI.svc/ProcessACH/';
         }

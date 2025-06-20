@@ -1,6 +1,9 @@
 <?php
 require_once '../../../../app.php';
 
+use App\Models\Admin;
+use App\Models\StoreItem;
+use App\Models\StoreOrder;
 use App\Services\EvertecPayment;
 use Classes\Controllers\School;
 use Classes\Session;
@@ -24,9 +27,15 @@ if (!$postData) {
 }
 
 // Initialize payment processor
-$isDevelopmentMode = true; // Set to false for production
+
 $evertecPrefix  = $postData['evertecPrefix'] ?? null; // Set your prefix here
-$paymentProcessor = new EvertecPayment($evertecPrefix, $isDevelopmentMode);
+
+if (!$evertecPrefix) {
+    echo json_encode(['success' => false, 'error' => 'Evertec prefix is required']);
+    exit;
+}
+
+$paymentProcessor = new EvertecPayment($evertecPrefix);
 
 // Generate transaction ID (use a more robust method in production)
 $trxID = EvertecPayment::generateTransactionId();
@@ -38,9 +47,6 @@ $paymentData = [
     'trxID' => $trxID,
     'trxDescription' => 'Payment for order at ' . date('Y-m-d H:i:s'),
     'trxAmount' => $postData['amount'],
-    'address1' => $postData['address1'] ?? '',
-    'city' => $postData['city'] ?? '',
-    'state' => $postData['state'] ?? '',
     'zipcode' => $postData['zipcode'] ?? '00960'
 ];
 
@@ -74,10 +80,10 @@ if (isset($response['success']) && $response['success']) {
 
     if (!empty($cart)) {
         try {
-            $school = new School();
-            $year = $school->year();
-            // Create order in database using the correct 'compras' table
-            $orderId = DB::table('compras')->insertGetId([
+            $school = Admin::primaryAdmin()->first();
+            $year = $school->year;
+
+            $order = StoreOrder::create([
                 'accountID' => Session::id(),
                 'trxID' => $trxID,
                 'customerName' => $postData['customerName'] ?? '',
@@ -87,11 +93,11 @@ if (isset($response['success']) && $response['success']) {
                 'ivu' => 0.00, // Set appropriate tax amount if available
                 'total' => $postData['amount'],
                 'deliveryTo' => $postData['address1'] ?? '',
-                'shopping' => 1,
+                'shopping' => $evertecPrefix,
                 'year' => $year,
                 'paid' => 1, // Payment is complete
                 'payment_type' => $postData['paymentMethod'],
-                'refNumber' => json_encode($response) // Store payment details in refNumber field
+                'refNumber' => $response['refNumber'] // Store payment details in refNumber field
             ]);
 
             // Save order items using the correct 'compras_detalle' table
@@ -100,7 +106,7 @@ if (isset($response['success']) && $response['success']) {
                 $option_index = $cart_item['option_index'];
                 $quantity = $cart_item['quantity'];
 
-                $product = DB::table('store_items')->where("id", $product_id)->first();
+                $product = StoreItem::find($product_id)->first();
 
                 if ($product) {
                     $price = $product->price;
@@ -119,14 +125,13 @@ if (isset($response['success']) && $response['success']) {
                         }
                     }
 
-                    DB::table('compras_detalle')->insert([
-                        'id_compra' => $orderId,
+                    $order->items()->create([
                         'item_name' => $product->name,
                         'amount' => $quantity,
                         'size' => $size,
                         'price' => $price,
                         'year' => $year,
-                        // 'orden' => $cart_key + 1 // Using cart key for order sequence
+                        // 'orden' => $cart_key + 1
                     ]);
                 }
             }
@@ -135,7 +140,7 @@ if (isset($response['success']) && $response['success']) {
             $_SESSION['cart'] = [];
 
             // Add order ID to response
-            $response['orderId'] = $orderId;
+            $response['orderId'] = $order->id;
         } catch (Exception $e) {
             $response['success'] = false;
             $response['error'] = 'Database error: ' . $e->getMessage();
