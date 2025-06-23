@@ -3,8 +3,11 @@
 
 namespace Classes;
 
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
+use App\Models\Admin;
+use App\Models\School;
+use App\Models\Teacher;
+// use Classes\Controllers\School;
+
 use Classes\DataBase\DB;
 use Classes\Mail;
 
@@ -17,7 +20,9 @@ class Email
         if (count($to) === 0) {
             return;
         }
-        $school = new School();
+
+        $admin = Admin::primaryAdmin()->first();
+
         DB::table('email_queue')->insert([
             'from' => $from,
             'to' => json_encode($to),
@@ -27,30 +32,33 @@ class Email
             'subject' => $subject,
             'attachments' => json_encode($attachments, JSON_UNESCAPED_UNICODE),
             'user' => Session::id() ?? null,
-            'year' => $school->year(),
+            'year' => $admin->year(),
         ]);
     }
 
-    public function send(array $to, string $subject, string $message, ?string $replyTo = null, ?string $text = null, array $attachments = [])
+    public function send(array $to, string $subject, string $message, ?string $replyTo = null, ?string $text = null, array $attachments = []): array
     {
         if (count($to) === 0) {
-            return;
+            throw new \Exception('No recipients specified');
         }
 
-        if (__RESEND && defined('__RESEND_KEY__') && defined('__RESEND_KEY_OTHER__')) {
+        $school = School::current();
+
+
+        if ($school->data['default_mailer'] === 'resend') {
             try {
                 if ($replyTo === null) {
                     if ($this->type === 'School') {
-                        $school = new School();
-                        $replyTo = $school->info('correo');
+                        $admin = Admin::primaryAdmin()->first();
+                        $replyTo = $admin->correo;
                     } else {
-                        $teacher = new Teacher(Session::id());
+                        $teacher = Teacher::where('id', Session::id())->first();
                         $replyTo = $teacher->email1;
                     }
                 }
-                $resend = \Resend::client(__RESEND_KEY__);
+                $resend = \Resend::client($school->data['resend_key']);
                 $resend->emails->send([
-                    'from' => __RESEND_KEY_OTHER__,
+                    'from' => $school->data['default_mail_from'],
                     'to' => $to,
                     'reply_to' => $replyTo,
                     'subject' => $subject,
@@ -73,36 +81,32 @@ class Email
                 return ['error' => true, 'message' => $e->getMessage()];
             }
         } else {
-            try {
-                $mail = new Mail(false, $this->type);
+            $mail = new Mail(false, $this->type);
 
-                foreach ($to as $t) {
-                    $mail->addAddress($t);
-                }
-                if ($replyTo !== null) {
-                    $mail->addReplyTo($t);
-                }
-                $mail->Subject = $subject;
-                $mail->isHTML(true);
-                $mail->Body = $message;
-                if ($text !== null) {
-                    $mail->AltBody = $text;
-                }
-                foreach ($attachments as $attachment) {
-                    if (isset($attachment['content'])) {
-                        $mail->addStringAttachment($attachment['content'], $attachment['filename']);
-                        continue;
-                    }
-                    $mail->addAttachment($attachment);
-                }
-
-                if (!$mail->send()) {
-                    return ['error' => true, 'message' => $mail->ErrorInfo];
-                }
-                return ['error' => false, 'message' => 'Email sent'];
-            } catch (\Exception $e) {
-                return ['error' => true, 'message' => $e->getMessage()];
+            foreach ($to as $t) {
+                $mail->addAddress($t);
             }
+            if ($replyTo !== null) {
+                $mail->addReplyTo($t);
+            }
+            $mail->Subject = $subject;
+            $mail->isHTML(true);
+            $mail->Body = $message;
+            if ($text !== null) {
+                $mail->AltBody = $text;
+            }
+            foreach ($attachments as $attachment) {
+                if (isset($attachment['content'])) {
+                    $mail->addStringAttachment($attachment['content'], $attachment['filename']);
+                    continue;
+                }
+                $mail->addAttachment($attachment);
+            }
+
+            if (!$mail->send()) {
+                return ['error' => true, 'message' => $mail->ErrorInfo];
+            }
+            return ['error' => false, 'message' => 'Email sent'];
         }
     }
 }
