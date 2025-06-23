@@ -1,37 +1,27 @@
 <?php
 require_once '../app.php';
 
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
-$school = new School();
-$teacher = new Teacher(Session::id());
-$year = $school->info('year');
+$school = Admin::primaryAdmin()->first();
+$teacher = Teacher::find(Session::id());
+$year = $school->year;
 
-$lang = new Lang([
-    ['Conectate desde cualquier parte del mundo.', "Connect from anywhere in the world."],
-    ['Mensaje(s) para los maestros', "Teacher's messages"],
-    ['Titulo del mensaje: ', "Message title: "],
-    ['Encuesta para los maestros', "Teacher's survey"],
-    ['Titulo de la encuesta: ', 'Survey title: '],
-    ['', ''],
-
-
-
-])
-    ?>
+?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
-    $title = "Inicio";
+    $title = __("Inicio");
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -42,7 +32,7 @@ $lang = new Lang([
     ?>
     <div class="container-lg mt-lg-3 px-0">
         <center>
-            <h1 class="display-4 mt-2"><?= $lang->translation("Conectate desde cualquier parte del Mundo.") ?></h1>
+            <h1 class="display-4 mt-2"><?= __("Conectate desde cualquier parte del Mundo") ?></h1>
             <img class="img-fluid mx-auto d-block mt-5 mt-lg-4 w-20" src="/images/globe.gif" height="150" width="150" />
         </center>
     </div>
@@ -57,8 +47,7 @@ $lang = new Lang([
             $ape = 'est(' . $a . ',4)';
             $com = 'est(' . $a . ',6)';
             $date = date("Y-m-d");
-            if ($_POST[$dijo] == '') {
-            } else {
+            if ($_POST[$dijo] !== '') {
 
                 DB::table('respuestas')->insert([
                     'year' => $year,
@@ -83,24 +72,24 @@ $lang = new Lang([
 
     $can = count($mensages);
     if ($can > 0) {
-        ?>
+    ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
-                    <font size="6"><b><?= $lang->translation("Mensaje(s) para los Maestros") ?></b></font>
+                    <font size="6"><b><?= __("Mensaje(s) para los Maestros") ?></b></font>
                 </h1>
 
                 <table border="0" width="64%" cellspacing="0" cellpadding="3">
                     <?
                     foreach ($mensages as $mensage) {
-                        ?>
+                    ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
-                                        <font size="4"><?= $lang->translation("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
+                                        <font size="4"><?= __("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                        <?
+                    <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
@@ -129,11 +118,11 @@ $lang = new Lang([
     $can = count($mensages);
 
     if ($can > 0) {
-        ?>
+    ?>
         <div class="container-lg mt-lg-3  px-0">
             <center>
                 <h1 class="display-12 mt-2">
-                    <font size="6"><b><?= $lang->translation("Encuesta para los Maestros") ?></b></font>
+                    <font size="6"><b><?= __("Encuesta para los Maestros") ?></b></font>
                 </h1>
             </center>
         </div>
@@ -146,14 +135,14 @@ $lang = new Lang([
                     $a = 0;
                     $b = 0;
                     foreach ($mensages as $mensage) {
-                        ?>
+                    ?>
                         <tr>
                             <td bgcolor="#C0C0C0">
                                 <p align="center"><b>
-                                        <font size="4"><?= $lang->translation("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
+                                        <font size="4"><?= __("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
                             </td>
                         </tr>
-                        <?
+                    <?
                         echo '<tr>';
                         echo '<td>';
                         echo $mensage->text;
@@ -224,7 +213,7 @@ $lang = new Lang([
                         if ($mensage->comentario == 'SI') {
                             echo '<tr>';
                             echo '<td>';
-                            echo '<p align="center"><font size="4"><b>' . $lang->translation("Comentario:") . '</b></font>';
+                            echo '<p align="center"><font size="4"><b>' . __("Comentario:") . '</b></font>';
                             echo '</td>';
                             echo '</tr>';
 

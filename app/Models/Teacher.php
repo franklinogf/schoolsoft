@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Teacher extends Model
 {
@@ -20,6 +22,7 @@ class Teacher extends Model
     {
         return $query->where('grado', $grade);
     }
+
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
@@ -29,5 +32,24 @@ class Teacher extends Model
                     ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
                     : __NO_PROFILE_PICTURE_STUDENT_MALE),
         );
+    }
+
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, array $attributes) => $attributes['nombre'] . ' ' . $attributes['apellidos'],
+        );
+    }
+
+    public function subjects(): HasMany
+    {
+        return $this->hasMany(Subject::class, 'id', 'id');
+    }
+
+    public function homeStudents(): HasMany
+    {
+        return $this->hasMany(Student::class, 'grado', 'grado')
+            ->where('fecha_baja', '0000-00-00')
+            ->orderBy('apellidos');
     }
 }

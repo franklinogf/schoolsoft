@@ -1,17 +1,17 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Lang;
+use App\Models\Store;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
 
 Session::is_logged();
-$lang = new Lang([
-    ["Tiendas", "Stores"],
-]);
+
 // Get store ID from query parameter
 $store_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+$store = Store::find($store_id);
 
 // Include cart actions
 require_once 'includes/cart_actions.php';
@@ -21,7 +21,7 @@ require_once 'includes/cart_actions.php';
 
 <head>
     <?php
-    $title = $lang->translation("Tiendas");
+    $title = __("Tiendas");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -31,24 +31,14 @@ require_once 'includes/cart_actions.php';
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-4"><?= $lang->translation("Tiendas") ?></h1>
+        <h1 class="text-center my-4"><?= __("Tiendas") ?></h1>
+        <?php if (!$store): ?>
+            <div class="alert alert-danger"><?= __("Tienda no encontrada") ?></div>
+        <?php exit;
+        endif; ?>
         <?php
-
-        // Check if store ID is valid
-        if ($store_id <= 0) {
-            echo '<div class="alert alert-danger">ID de tienda inválido</div>';
-            exit;
-        }
-
-        // Get store information
-        $store = DB::table('stores')->where('id', $store_id)->first();
-        if (!$store) {
-            echo '<div class="alert alert-danger">Tienda no encontrada</div>';
-            exit;
-        }
         // Get products for this store
-        $products = DB::table('store_items')->where("store_id", $store_id)->get();
-
+        $products = $store->items;
         ?>
 
         <div class="row" id="store" data-store-prefix="<?= $store->prefix_code ?>">
@@ -62,7 +52,7 @@ require_once 'includes/cart_actions.php';
                         <div class="row">
                             <?php if (empty($products)): ?>
                                 <div class="col-12">
-                                    <div class="alert alert-info">No hay productos disponibles</div>
+                                    <div class="alert alert-info"><?= __("No hay productos disponibles") ?></div>
                                 </div>
                             <?php else: ?>
                                 <?php foreach ($products as $product):
@@ -86,7 +76,7 @@ require_once 'includes/cart_actions.php';
 
                                                     <?php if (!empty($options)): ?>
                                                         <div class="form-group mb-3">
-                                                            <label for="option_<?= $product->id ?>">Opciones:</label>
+                                                            <label for="option_<?= $product->id ?>"><?= __("Opciones") ?>:</label>
                                                             <select class="form-control" id="option_<?= $product->id ?>" name="option_index">
                                                                 <?php foreach ($options as $index => $option):
                                                                     // Determine the price to display
@@ -108,7 +98,7 @@ require_once 'includes/cart_actions.php';
                                                     <?php if ($product->buy_multiple): ?>
                                                         <div class="input-group mb-3">
                                                             <div class="input-group-prepend">
-                                                                <span class="input-group-text">Cantidad</span>
+                                                                <span class="input-group-text"><?= __("Cantidad") ?></span>
                                                             </div>
                                                             <input type="number" class="form-control" name="quantity" value="1" min="1">
                                                         </div>
@@ -116,7 +106,7 @@ require_once 'includes/cart_actions.php';
                                                         <input type="hidden" name="quantity" value="1">
                                                     <?php endif; ?>
                                                     <button type="submit" name="add_to_cart" class="btn btn-primary btn-block">
-                                                        Añadir al carrito
+                                                        <?= __("Añadir al carrito") ?>
                                                     </button>
                                                 </form>
                                             </div>
@@ -132,11 +122,11 @@ require_once 'includes/cart_actions.php';
             <div class="col-md-4">
                 <div class="card sticky-top" style="top: 20px">
                     <div class="card-header bg-primary text-white">
-                        <h4>Carrito de compras</h4>
+                        <h4><?= __("Carrito de compras") ?></h4>
                     </div>
                     <div class="card-body">
                         <?php if (empty($_SESSION['cart'])): ?>
-                            <div class="alert alert-info">Su carrito está vacío</div>
+                            <div class="alert alert-info"><?= __("Su carrito está vacío") ?></div>
                         <?php else: ?>
                             <?php
                             $total = 0;
@@ -189,7 +179,7 @@ require_once 'includes/cart_actions.php';
                                             <div>
                                                 <h6 class="my-0"><?= htmlspecialchars($item['name']) ?></h6>
                                                 <?php if (!empty($item['option_name'])): ?>
-                                                    <small class="text-muted">Opción: <?= htmlspecialchars($item['option_name']) ?></small><br>
+                                                    <small class="text-muted"><?= __("Opción") ?>: <?= htmlspecialchars($item['option_name']) ?></small><br>
                                                 <?php endif; ?>
                                                 <small class="text-muted price-display">$<?= number_format($item['price'], 2) ?> x <span class="quantity-value"><?= $item['quantity'] ?></span></small>
                                             </div>
@@ -217,7 +207,7 @@ require_once 'includes/cart_actions.php';
                                             <form method="post">
                                                 <input type="hidden" name="cart_key" value="<?= $item['cart_key'] ?>">
                                                 <button type="submit" name="remove_from_cart" class="btn btn-sm btn-danger">
-                                                    Eliminar
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -226,12 +216,12 @@ require_once 'includes/cart_actions.php';
                             <?php endforeach; ?>
 
                             <div class="d-flex justify-content-between mt-3">
-                                <h5>Total:</h5>
+                                <h5><?= __("Total") ?>:</h5>
                                 <h5>$<?= number_format($total, 2) ?></h5>
                             </div>
 
                             <button type="button" class="btn btn-success btn-block mt-3" id="checkout-btn" data-toggle="modal" data-target="#paymentModal" data-amount="<?= $total ?>">
-                                Proceder al pago
+                                <?= __("Proceder al pago") ?>
                             </button>
                         <?php endif; ?>
                     </div>
@@ -245,22 +235,22 @@ require_once 'includes/cart_actions.php';
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="paymentModalLabel">Realizar Pago</h5>
+                    <h5 class="modal-title" id="paymentModalLabel"><?= __("Realizar Pago") ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-info">
-                        Monto a pagar: <strong id="payment-amount">$0.00</strong>
+                        <?= __("Monto a pagar") ?>: <strong id="payment-amount">$0.00</strong>
                     </div>
 
                     <ul class="nav nav-tabs" id="paymentTabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="credit-card-tab" data-toggle="tab" href="#credit-card" role="tab" aria-controls="credit-card" aria-selected="true">Tarjeta de Crédito</a>
+                            <a class="nav-link active" id="credit-card-tab" data-toggle="tab" href="#credit-card" role="tab" aria-controls="credit-card" aria-selected="true"><?= __("Tarjeta de Crédito") ?></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="ach-tab" data-toggle="tab" href="#ach" role="tab" aria-controls="ach" aria-selected="false">ACH</a>
+                            <a class="nav-link" id="ach-tab" data-toggle="tab" href="#ach" role="tab" aria-controls="ach" aria-selected="false"><?= __("ACH") ?></a>
                         </li>
                     </ul>
 
@@ -270,23 +260,23 @@ require_once 'includes/cart_actions.php';
                             <form id="credit-card-form">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="cc-name">Nombre en la tarjeta</label>
+                                        <label for="cc-name"><?= __("Nombre en la tarjeta") ?></label>
                                         <input type="text" class="form-control" id="cc-name" name="customerName" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="cc-email">Correo electrónico</label>
+                                        <label for="cc-email"><?= __("Correo electrónico") ?></label>
                                         <input type="email" class="form-control" id="cc-email" name="customerEmail" required>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="cc-number">Número de tarjeta</label>
+                                    <label for="cc-number"><?= __("Número de tarjeta") ?></label>
                                     <input type="text" class="form-control" id="cc-number" name="cardNumber" required placeholder="XXXX XXXX XXXX XXXX">
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label for="cc-exp-month">Mes de expiración</label>
+                                        <label for="cc-exp-month"><?= __("Mes de expiración") ?></label>
                                         <select class="form-control" id="cc-exp-month" name="expMonth" required>
                                             <?php for ($i = 1; $i <= 12; $i++): ?>
                                                 <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
@@ -294,28 +284,28 @@ require_once 'includes/cart_actions.php';
                                         </select>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="cc-exp-year">Año de expiración</label>
+                                        <label for="cc-exp-year"><?= __("Año de expiración") ?></label>
                                         <select class="form-control" id="cc-exp-year" name="expYear" required>
-                                            <?php $currentYear = date('Y'); ?>
+                                            <?php $currentYear = (int) date('Y'); ?>
                                             <?php for ($i = $currentYear; $i <= $currentYear + 10; $i++): ?>
-                                                <option value="<?= $i ?>"><?= $i ?></option>
+                                                <option value="<?= substr((string) $i, -2) ?>"><?= $i ?></option>
                                             <?php endfor; ?>
                                         </select>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="cc-cvv">CVV</label>
+                                        <label for="cc-cvv"><?= __("CVV") ?></label>
                                         <input type="text" class="form-control" id="cc-cvv" name="cvv" required placeholder="XXX">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="cc-zipcode">Código postal</label>
+                                        <label for="cc-zipcode"><?= __("Código postal") ?></label>
                                         <input type="text" class="form-control" id="cc-zipcode" name="zipcode">
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block mt-3">Pagar con Tarjeta de Crédito</button>
+                                <button type="submit" class="btn btn-primary btn-block mt-3"><?= __("Pagar con Tarjeta de Crédito") ?></button>
                             </form>
                         </div>
 
@@ -324,40 +314,40 @@ require_once 'includes/cart_actions.php';
                             <form id="ach-form">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-name">Nombre completo</label>
+                                        <label for="ach-name"><?= __("Nombre completo") ?></label>
                                         <input type="text" class="form-control" id="ach-name" name="customerName" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-email">Correo electrónico</label>
+                                        <label for="ach-email"><?= __("Correo electrónico") ?></label>
                                         <input type="email" class="form-control" id="ach-email" name="customerEmail" required>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-routing">Número de ruta (Routing Number)</label>
+                                        <label for="ach-routing"><?= __("Número de ruta") ?></label>
                                         <input type="text" class="form-control" id="ach-routing" name="routing" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-account">Número de cuenta</label>
+                                        <label for="ach-account"><?= __("Número de cuenta") ?></label>
                                         <input type="text" class="form-control" id="ach-account" name="bankAccount" required>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-account-type">Tipo de cuenta</label>
+                                        <label for="ach-account-type"><?= __("Tipo de cuenta") ?></label>
                                         <select class="form-control" id="ach-account-type" name="accType" required>
-                                            <option value="w">Cuenta corriente</option>
-                                            <option value="s">Cuenta de ahorros</option>
+                                            <option value="w"><?= __("Cuenta corriente") ?></option>
+                                            <option value="s"><?= __("Cuenta de ahorros") ?></option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label for="ach-zipcode">Código postal</label>
+                                        <label for="ach-zipcode"><?= __("Código postal") ?></label>
                                         <input type="text" class="form-control" id="ach-zipcode" name="zipcode">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-block mt-3">Pagar con ACH</button>
+                                <button type="submit" class="btn btn-primary btn-block mt-3"><?= __("Pagar con ACH") ?></button>
                             </form>
                         </div>
                     </div>
@@ -372,10 +362,10 @@ require_once 'includes/cart_actions.php';
             <div class="modal-content">
                 <div class="modal-body text-center py-5">
                     <div class="spinner-border text-primary mb-3" role="status">
-                        <span class="sr-only">Procesando...</span>
+                        <span class="sr-only"><?= __("Procesando...") ?></span>
                     </div>
-                    <h4>Procesando su pago...</h4>
-                    <p>Por favor no cierre esta ventana.</p>
+                    <h4><?= __("Procesando su pago...") ?></h4>
+                    <p><?= __("Por favor no cierre esta ventana.") ?></p>
                 </div>
             </div>
         </div>
@@ -386,13 +376,13 @@ require_once 'includes/cart_actions.php';
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="result-title">Resultado del Pago</h5>
+                    <h5 class="modal-title" id="result-title"><?= __("Resultado del Pago") ?></h5>
                 </div>
                 <div class="modal-body" id="payment-result-content">
                     <!-- Content will be inserted via JavaScript -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="result-ok-btn">Aceptar</button>
+                    <button type="button" class="btn btn-primary" id="result-ok-btn"><?= __("Aceptar") ?></button>
                 </div>
             </div>
         </div>
@@ -487,7 +477,7 @@ require_once 'includes/cart_actions.php';
         // Payment functionality
         document.addEventListener('DOMContentLoaded', function() {
             // Set payment amount in modal
-            document.getElementById('checkout-btn').addEventListener('click', function() {
+            document.getElementById('checkout-btn')?.addEventListener('click', function() {
                 const amount = this.getAttribute('data-amount');
                 document.getElementById('payment-amount').textContent = '$' + parseFloat(amount).toFixed(2);
             });
@@ -560,16 +550,16 @@ require_once 'includes/cart_actions.php';
                         let resultTitle = '';
 
                         if (data.success) {
-                            resultTitle = 'Pago Exitoso';
+                            resultTitle = '<?= __("Pago Exitoso") ?>';
                             resultContent = `
                             <div class="text-center">
                                 <div class="mb-4">
                                     <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                                 </div>
-                                <h4 class="mb-3">¡Su pago ha sido procesado exitosamente!</h4>
+                                <h4 class="mb-3"><?= __("¡Su pago ha sido procesado exitosamente!") ?></h4>
                                 <p>Número de autorización: ${data.authNumber}</p>
                                 <p>ID de transacción: ${data.trxID}</p>
-                                <p class="mt-4">Gracias por su compra.</p>
+                                <p class="mt-4"><?= __("Gracias por su compra.") ?></p>
                             </div>
                         `;
 
@@ -577,15 +567,15 @@ require_once 'includes/cart_actions.php';
                             document.getElementById('credit-card-form').reset();
                             document.getElementById('ach-form').reset();
                         } else {
-                            resultTitle = 'Error en el Pago';
+                            resultTitle = '<?= __("Error en el Pago") ?>';
                             resultContent = `
                             <div class="text-center">
                                 <div class="mb-4">
                                     <i class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
                                 </div>
-                                <h4 class="mb-3">Lo sentimos, ha ocurrido un error</h4>
-                                <p>${data.rMsg || data.error || 'No se pudo procesar su pago.'}</p>
-                                <p class="mt-4">Por favor intente nuevamente.</p>
+                                <h4 class="mb-3"><?= __("Lo sentimos, ha ocurrido un error") ?></h4>
+                                <p>${data.rMsg || data.error || '<?= __('No se pudo procesar su pago.') ?>'}</p>
+                                <p class="mt-4"><?= __("Por favor intente nuevamente.") ?></p>
                             </div>
                         `;
                         }
@@ -606,9 +596,9 @@ require_once 'includes/cart_actions.php';
                             <div class="mb-4">
                                 <i class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
                             </div>
-                            <h4 class="mb-3">Lo sentimos, ha ocurrido un error</h4>
-                            <p>No se pudo conectar con el servidor de pagos.</p>
-                            <p class="mt-4">Por favor intente nuevamente.</p>
+                            <h4 class="mb-3"><?= __("Lo sentimos, ha ocurrido un error") ?></h4>
+                            <p><?= __("No se pudo conectar con el servidor de pagos.") ?></p>
+                            <p class="mt-4"><?= __("Por favor intente nuevamente.") ?></p>
                         </div>
                     `;
                         $('#paymentResultModal').modal('show');

@@ -1,15 +1,34 @@
 <?php
 
-
-use Classes\Login;
+use App\Models\Teacher;
 use Classes\Route;
-include '../../app.php';
 
-if($_SERVER["REQUEST_METHOD"] == 'POST'){
-   
-   Login::login($_POST,'regiweb');
+require '../../app.php';
 
-}else{
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+
+   $user =  Teacher::where([
+      ['usuario', $_POST['username']],
+      ['clave', $_POST['password']]
+   ])->first();
+
+   if ($user) {
+
+      $_SESSION['logged'] = [
+         'acronym' => __SCHOOL_ACRONYM,
+         'location' => "regiweb",
+         "user" => ['id' => $user->id],
+      ];
+      $_SESSION['start'] = time();
+      $_SESSION['id1'] = $user->id;
+      $_SESSION['usua1'] = $user->usuario;
+
+      Route::redirect('regiweb/', false);
+   } else {
+      $_SESSION['errorLogin'] = __("No coincide con los datos, intentelo otra vez");
+
+      Route::redirect();
+   }
+} else {
    Route::error();
 }
- 

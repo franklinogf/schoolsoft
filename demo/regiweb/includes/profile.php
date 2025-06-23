@@ -2,9 +2,9 @@
 
 require_once '../../app.php';
 
+use App\Models\Teacher;
 use Classes\File;
 use Classes\Route;
-use Classes\Controllers\Teacher;
 use Classes\Server;
 use Classes\Session;
 
@@ -13,7 +13,7 @@ Server::is_post();
 
 $id_teacher = $_POST['id_teacher'];
 
-$teacher = new Teacher($id_teacher);
+$teacher = Teacher::find($id_teacher);
 // Personal Information
 $teacher->nombre = $_POST['name'];
 $teacher->apellidos = $_POST['lastName'];
@@ -52,7 +52,7 @@ $teacher->fecha_ini = $_POST['initialDate'];
 $teacher->fecha_daja = $_POST['dischargeDate'];
 $teacher->re_e = $_POST['getEmails'];
 // Clubs
-for ($i = 1; $i <= 5; $i++){
+for ($i = 1; $i <= 5; $i++) {
    $teacher->{"club$i"} = $_POST["club$i"];
    $teacher->{"pre$i"} = $_POST["pre$i"];
    $teacher->{"vi$i"} = $_POST["vi$i"];
@@ -65,7 +65,7 @@ $file = new File('picture');
 if ($file->amount > 0) {
    $newName = $teacher->id . '.jpg';
    $teacher->foto_name = $newName;
-   $file::upload($file->files, __TEACHER_PROFILE_PICTURE_PATH,$newName);
+   $file::upload($file->files, __TEACHER_PROFILE_PICTURE_PATH, $newName);
 }
 
 $teacher->save();
