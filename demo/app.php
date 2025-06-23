@@ -71,3 +71,5 @@ TranslatorFactory::get()->setLocale($_locale);
 define('__LANG', $_locale);
 
 date_default_timezone_set(school_config('app.timezone', 'America/Puerto_Rico'));
+
+require_once 'constants.php';

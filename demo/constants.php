@@ -1,9 +1,8 @@
 <?php
-require_once 'app.php';
 
-use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager;
 
-$admin = DB::admin()->first();
+$admin = Manager::connection('central')->table('schools')->where('id', __SCHOOL_ACRONYM)->first();
 if ($admin) {
 
     $enviroments = json_decode($admin->enviroments);
