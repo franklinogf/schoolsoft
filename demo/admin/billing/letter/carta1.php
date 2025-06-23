@@ -1,5 +1,6 @@
 <?php
 require_once '../../../app.php';
+date_default_timezone_set('America/Puerto_Rico');
 
 use Classes\Controllers\School;
 use Classes\DataBase\DB;
@@ -7,6 +8,7 @@ use Classes\Lang;
 use Classes\Mail;
 use Classes\PDF;
 use Classes\Session;
+
 
 Session::is_logged();
 $lang = new Lang([
@@ -113,7 +115,7 @@ $MES = array(
 );
 $pdf = new nPDF();
 $result = DB::table('pagos')->select("DISTINCT id")
-->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
+    ->whereRaw("fecha_d <= '$fecha' AND year = '$year' and baja=''")->orderBy('id')->get();
 
 foreach ($result as $r) {
     $pdf->SetFont('Arial', '', 12);
@@ -162,7 +164,7 @@ foreach ($result as $r) {
                 $deudas = 0;
                 $pagos = 0;
                 $p = DB::table('pagos')
-                ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                 foreach ($p as $row) {
                     $deudas += $row->deuda;
                     $pagos += $row->pago;
@@ -245,7 +247,7 @@ if ($_POST['tipo'] == 'email') {
                 $pdf->Ln(3);
                 $pdf->SetFont('Arial', 'B', 12);
                 $estu = DB::table('madre')
-                ->whereRaw("id='$r->id'")->first();
+                    ->whereRaw("id='$r->id'")->first();
                 $pdf->Cell(0, 5, $estu->madre ?? '', 0, 1);
                 $pdf->Cell(0, 5, $estu->padre ?? '', 0, 1);
                 $pdf->Ln(3);
@@ -260,7 +262,7 @@ if ($_POST['tipo'] == 'email') {
                     $deudas = 0;
                     $pagos = 0;
                     $p = DB::table('pagos')
-                    ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
+                        ->whereRaw("fecha_d='$rd->fecha_d' AND id='$r->id' AND year = '$year' AND fecha_d <= '$fecha' $fechaFinal and baja=''")->get();
                     foreach ($p as $row) {
                         $deudas += $row->deuda;
                         $pagos += $row->pago;
@@ -319,14 +321,18 @@ if ($_POST['tipo'] == 'email') {
                 if (!is_dir($target_dir)) {
                     mkdir($target_dir);
                 }
-                $files = [];
                 $target_file = $file_name;
-                $files[] = $uploadHost . '/' . $target_dir . $target_file;
-                if (__RESEND__ == '1') {
+                $files = [];
+
+                //$files[] = $uploadHost.'/'.$target_dir.$target_file;
+                //$files[] = ''.$target_dir.$target_file;
+                $files[] = $uploadHost . '/attachments/' . $file_name;
+
+                if (__RESEND == '1') {
                     $file = $pdf->Output("attachments/" . $file_name, 'F');
                 }
 
-                if (__PHPMAIL__ == '1') {
+                if (__PHPMAIL == '1') {
                     $file2 = $pdf->Output('', 'S');
                     $mail->addStringAttachment($file2, $file_name);
                 }
@@ -363,13 +369,15 @@ if ($_POST['tipo'] == 'email') {
             ";
                 //            <center><h2>{$title}</h2></center>
 
-                if (__PHPMAIL__ == '1') {
+
+
+                if (__PHPMAIL == '1') {
                     $mail->send();
                     $mail->ClearAddresses();
                 }
                 $mail->ClearAddresses();
                 $mail->ClearAttachments();
-                if (__RESEND__ == '1') {
+                if (__RESEND == '1') {
                     DB::table('email_queue')->insert([
                         'from' => $from,
                         'reply_to' => $reply_to,
@@ -380,6 +388,9 @@ if ($_POST['tipo'] == 'email') {
                         'attachments' => json_encode($files),
                         'user' => $user,
                         'year' => $year,
+                        'id2' => $r->id,
+                        'fecha' => date('Y-m-d'),
+                        'nombre' => '',
                     ]);
                 }
 
