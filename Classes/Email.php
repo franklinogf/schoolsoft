@@ -101,7 +101,7 @@ class Email
     }
 
 
-    public function queue(): void
+    public function queue(string|int|null $accountId = null): void
     {
         if (!$this->to  || count($this->to) === 0) {
             throw new Exception('No recipients specified');
@@ -126,6 +126,7 @@ class Email
             'attachments' => $this->attachments,
             'user' => Session::id() ?? null,
             'year' => $admin->year(),
+            'id2' => $accountId
         ]);
     }
 

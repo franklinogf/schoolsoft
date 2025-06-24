@@ -146,7 +146,7 @@ if ($_POST['tipo'] === 'email') {
         Email::to($to)
             ->subject(__('Primer aviso de cobro'))
             ->body(__('Adjunto el primer aviso de cobro para la cuenta #') . $familyId)
-            ->attach($file, 'letter_' . $familyId . '.pdf')
-            ->queue();
+            ->attach($file, "letter_{$familyId}.pdf")
+            ->queue($familyId);
     }
 }
