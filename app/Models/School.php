@@ -10,10 +10,18 @@ class School extends Model
 
     public static function current(): School
     {
-        $school = (new self)->where('id', __SCHOOL_ACRONYM)->first();
-        if (!$school) {
-            throw new \Exception("School not found with acronym: " . __SCHOOL_ACRONYM);
+        $acronym = school_config('app.acronym');
+
+        if (!$acronym) {
+            throw new \Exception("School acronym not set in configuration.");
         }
+
+        $school = (new self)->where('id', $acronym)->first();
+
+        if (!$school) {
+            throw new \Exception("School not found with acronym: " . $acronym);
+        }
+
         return $school;
     }
 
