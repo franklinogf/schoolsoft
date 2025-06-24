@@ -4,8 +4,6 @@ require_once __DIR__ . '/../app.php';
 use App\Models\EmailQueue;
 use Classes\Email;
 
-// $resend = Resend::client('re_GzfTyKBR_KAZCWkayT5v5so96DbbZhYNN');
-
 $emails = EmailQueue::pending()->limit(100)->get();
 
 
