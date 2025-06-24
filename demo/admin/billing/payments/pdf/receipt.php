@@ -113,16 +113,9 @@ if (empty($emails)) {
 }
 $file = $pdf->Output('S');
 
-// Send email with the PDF attachment
-$mail = new Email();
-$result = $mail->send(
-    to: $emails,
-    subject: 'Recibo de pago',
-    message: "Adjunto el recibo de pago de la transacción $transaction",
-    attachments: [
-        [
-            'filename' => "recíbo_de_pago_$transaction.pdf",
-            'content' => $file,
-        ]
-    ]
-);
+
+Email::to($emails)
+    ->subject('Recibo de pago')
+    ->body("Adjunto el recibo de pago de la transacción $transaction")
+    ->attach($file, "recibo_de_pago_$transaction.pdf")
+    ->send();

@@ -1,15 +1,19 @@
 <?php
 require_once '../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Family;
 use Classes\Email;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Parents;
-use Classes\Controllers\Teacher;
+use App\Models\Teacher;
 
 Session::is_logged();
 
-$parents = new Parents(Session::id());
+$admin = Admin::primaryAdmin()->first();
+
+$parents = Family::where('id', Session::id())->first();
+
 $teacherId = $_POST['teacherId'];
 $parent = $_POST['parent'];
 $phone = $_POST['phone'];
@@ -21,9 +25,8 @@ $time = $_POST['time'];
 $student = $_POST['student'];
 $lang = __LANG;
 $parentName = $parents->{$parent};
-$teacher = new Teacher($teacherId);
+$teacher = Teacher::find($teacherId)->first();
 
-$mail = new Email();
 $subject = $lang === 'es' ? "Padre solicitando cita" : "Parent requesting an appointment";
 
 if ($lang === 'es') {
@@ -86,16 +89,16 @@ if ($teacher->email1 !== "") {
 if ($teacher->email2 !== "") {
   $to[] = $teacher->email2;
 }
-if ($teacher->info('email3') !== "") {
-  $to[] = $teacher->info('email3');
+if ($admin->email3 !== "") {
+  $to[] = $admin->email3;
 }
-if ($teacher->info('email5') !== "") {
-  $to[] = $teacher->info('email5');
+if ($admin->email5 !== "") {
+  $to[] = $admin->email5;
 }
 
-$mail->send(
-  to: $to,
-  subject: $subject,
-  message: $body
-);
+Email::to($to)
+  ->subject($subject)
+  ->body($body)
+  ->send();
+
 Route::redirect('/options/appointment');

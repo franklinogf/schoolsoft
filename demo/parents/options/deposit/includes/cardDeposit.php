@@ -2,8 +2,6 @@
 
 use App\Models\Student;
 use App\Services\EvertecPayment;
-use Classes\Email;
-use Classes\Mail;
 use Illuminate\Database\Capsule\Manager;
 
 require_once '../../../../app.php';

@@ -6,11 +6,9 @@ namespace Classes;
 use App\Models\Admin;
 use App\Models\EmailQueue;
 use App\Models\School;
-use App\Models\Teacher;
 
 use Classes\Mail;
 use Exception;
-use Illuminate\Database\Capsule\Manager;
 
 class Email
 {
