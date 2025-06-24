@@ -122,7 +122,7 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Ln(3);
     $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
     $pdf->Ln(3);
-    $filePath = __DIR__ . '/attachments/letter_' . $id . '.pdf';
+    $filePath = __DIR__ . "/attachments/letter_{$id}.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
@@ -131,7 +131,7 @@ PDF::OutputFiles($files);
 
 if ($_POST['tipo'] === 'email') {
     foreach ($files as $familyId => $file) {
-        $family = Family::where('id', $id)->first();
+        $family = Family::where('id', $familyId)->first();
         $emails = [
             ['correo' => $family->email_p, 'nombre' => $family->padre],
             ['correo' => $family->email_m, 'nombre' => $family->madre]
