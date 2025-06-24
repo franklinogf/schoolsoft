@@ -578,5 +578,12 @@
     "Lo sentimos, ha ocurrido un error": "Sorry, an error has occurred",
     "No se pudo procesar su pago.": "Your payment could not be processed.",
     "Por favor intente nuevamente.": "Please try again.",
-    "No se pudo conectar con el servidor de pagos.": "Could not connect to the payment server."
+    "No se pudo conectar con el servidor de pagos.": "Could not connect to the payment server.",
+    "Nota importante": "Important Note",
+    "Balance": "Balance",
+    "Matrícula": "Enrollment",
+    "Hemos revisado nuestras cuentas a cobrar y encontramos que usted a la fecha de hoy :date no ha efectuado el pago correspondiente al mes de": "We have reviewed our billing accounts and found that as of today :date you have not made the payment corresponding to the month of",
+    "1. Despues del dia 10 de cada mes se cobraran $:amount de cargos por demora por cuenta.": "1. After the 10th of each month, $:amount late fees will be charged per account.",
+    "2. Los pagos pueden hacerse mediante tarjeta de credito, ath, athmovil business, efectivo, giro postal.": "2. Payments can be made by credit card, ATH, ATHMovil Business, cash, or postal money order.",
+    "3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.": "3. Please make the necessary arrangements so that your child(ren)'s educational services are not affected."
 }
