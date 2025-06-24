@@ -3,13 +3,15 @@
 namespace Classes;
 
 use App\Models\Admin;
-use Classes\FPDF\Traits\Codabar;
+use App\Models\School;
+use Classes\PDF\Traits\Codabar;
 use Classes\Util;
-use Classes\FPDF\FPDF;
-use Classes\Controllers\School;
-use Classes\FPDF\Traits\Dash;
-use Classes\FPDF\Traits\Html;
-use Classes\FPDF\Traits\Rotate;
+// use Classes\Controllers\School;
+use Classes\PDF\Traits\Dash;
+use Classes\PDF\Traits\Html;
+use Classes\PDF\Traits\Rotate;
+use FPDF;
+use setasign\Fpdi\Fpdi;
 
 class PDF extends FPDF
 {
@@ -30,27 +32,27 @@ class PDF extends FPDF
             $this->SetFont('times', 'B', 15);
             $this->SetTextColor(0);
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
-                $school = new School('administrador');
+                $admin = Admin::primaryAdmin()->first();
                 // dafault values
-                $this->SetAuthor($school->info('colegio'), true);
+                $this->SetAuthor($admin->colegio, true);
                 $this->setCreator('School Soft');
                 // $this->SetAutoPageBreak(true, -15);
                 if (file_exists(school_logo_path()) && $this->logo) {
                     $this->Image(school_logo_path(), 10, 10, school_config('app.pdf.logo_size'));
                 }
 
-                $this->Cell(0, 5, $school->info('colegio'), 0, 1, 'C');
+                $this->Cell(0, 5, $admin->colegio, 0, 1, 'C');
                 $this->SetFontSize(9);
-                if ($school->info('dir1') !== '') {
-                    $this->Cell(0, 4, $school->info('dir1'), 0, 1, 'C');
+                if ($admin->dir1 !== '') {
+                    $this->Cell(0, 4, $admin->dir1, 0, 1, 'C');
                 }
-                if ($school->info('dir2') !== '') {
-                    $this->Cell(0, 4, $school->info('dir2'), 0, 1, 'C');
+                if ($admin->dir2 !== '') {
+                    $this->Cell(0, 4, $admin->dir2, 0, 1, 'C');
                 }
-                $this->Cell(0, 4, $school->info('pueblo1') . ', ' . $school->info('esta1') . ' ' . $school->info('zip1'), 0, 1, 'C');
+                $this->Cell(0, 4, $admin->pueblo1 . ', ' . $admin->esta1 . ' ' . $admin->zip1, 0, 1, 'C');
                 $this->SetFontSize(8);
-                $this->Cell(0, 4, 'Tel: ' . $school->info('telefono') . ' Fax: ' . $school->info('fax'), 0, 1, 'C');
-                $this->Cell(0, 4, $school->info('correo'), 0, 1, 'C');
+                $this->Cell(0, 4, 'Tel: ' . $admin->telefono . ' Fax: ' . $admin->fax, 0, 1, 'C');
+                $this->Cell(0, 4, $admin->correo, 0, 1, 'C');
                 $this->Ln(10);
                 $this->SetFontSize(10);
                 $this->SetLeftMargin($this->leftMargin);
@@ -104,5 +106,21 @@ class PDF extends FPDF
             $this->SetFont('times', 'I', 8);
             $this->Cell(0, 10, $footer, 0, 0, 'C');
         }
+    }
+
+    public static function OutputFiles(array $files)
+    {
+        $mergedPdf = new Fpdi();
+        foreach ($files as $file) {
+            $pageCount = $mergedPdf->setSourceFile($file);
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $templateId = $mergedPdf->importPage($pageNo);
+                $size = $mergedPdf->getTemplateSize($templateId);
+
+                $mergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                $mergedPdf->useTemplate($templateId);
+            }
+        }
+        $mergedPdf->Output();
     }
 }
