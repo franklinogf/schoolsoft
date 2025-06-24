@@ -22,6 +22,11 @@ $year = $school->year2;
 $chk = $school->chk;
 $reply_to = $school->correo;
 $user = $school->usuario;
+$directory = __DIR__ . "/attachments";
+
+if (!is_dir($directory)) {
+    mkdir($directory, 0777, true);
+}
 
 
 $mes = $_REQUEST['mes'];
@@ -122,7 +127,7 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Ln(3);
     $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
     $pdf->Ln(3);
-    $filePath = __DIR__ . "/attachments/letter_{$id}.pdf";
+    $filePath = "{$directory}/letter_{$id}.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
