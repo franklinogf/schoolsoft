@@ -58,20 +58,9 @@ $lang = new Lang([
     ['Estás seguro que desea eliminar el costo?', 'Are you sure you want to eliminate the cost?'],
 
 ]);
-
 $school = new School(Session::id());
 $year = $school->info('year2');
 
-//session_start();
-//$id=$_SESSION['id1'];
-//$_SESSION['usua1']= 'administrador';
-///usua = $_SESSION['usua1'];
-//require_once '../../control.php';
-//$result = mysql_query("SELECT * FROM colegio WHERE usuario = '$usua'",$con);
-//$reg=mysql_fetch_object($result);
-//$year = $reg->year2;
-//$result = mysql_query("SELECT * FROM presupuesto WHERE year='$year'",$con);
-//$cartas = mysql_query("SELECT * FROM T_historial_cartas WHERE year='$year'",$con);
 ?>
 <!DOCTYPE html>
 <html>
@@ -92,7 +81,7 @@ $year = $school->info('year2');
     <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Carta de cobro') ?></h1>
     <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
         <div class="div">
-            <form method="POST">
+            <form method="post" action="carta.php" target="_blank">
                 <table align="center" cellspacing="2" cellpadding="0" border="0">
                     <thead>
                         <tr>
@@ -154,6 +143,7 @@ $year = $school->info('year2');
                                         <input class="btn btn-primary form-control" id='Aceptar' name="buscar" type="submit" value="<?= $lang->translation('Procesar') ?>" style="width: 129px;" />
                                     </center>
                                 </strong><br />
+
                             </td>
                         </tr>
                     </tfoot>
@@ -162,130 +152,6 @@ $year = $school->info('year2');
 
         </div>
     </div>
-    <script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript">
-        $(function() {
-            function CARTAS(data) {
-                var $data = $.parseJSON(data);
-                var $tbody = '';
-                if ($data.length > 0) {
-                    $.each($data, function(index, val) {
-                        $tbody += '<tr id="' + val.id + '" class="color"><td align="left" class="row">' + val.titulo + '</td><td><button class="myButton delete">Borrar</button></td></tr>';
-                    });
-                    $("#cartas").show();
-                } else {
-                    $("#cartas").hide();
-
-                }
-                $("#cartas > tbody").html($tbody);
-            }
-            $.post('acciones.php', {
-                'year': '<?php echo $year; ?>'
-            }, function(data) {
-                CARTAS(data);
-            });
-            $("#Aceptar").click(function() {
-                setTimeout(function() {
-                    $('.mensaje').val('');
-                }, 500);
-            });
-            $("form").submit(function(event) {
-                $(this).prop({
-                    'action': 'carta' + $("#carta").val() + '.php',
-                    'target': 'carta' + $("#carta").val()
-                });
-                if ($('#guardarM').prop('checked')) {
-                    if ($('#guardarM').prop('name') == 'guardar') {
-                        $.post('acciones.php', {
-                            'guardar': 'si',
-                            'titulo': $('#mensajeTitulo').val(),
-                            'mensaje': $('#mensaje').val(),
-                            'saludo': $('#mensajeSaludo').val(),
-                            'despedida': $('#mensajeDespedida').val(),
-                            'pt': $('#pt').val(),
-                            'pm': $('#pm').val(),
-                            'ps': $('#ps').val(),
-                            'pd': $('#pd').val(),
-                            'year': '<?php echo $year; ?>'
-                        }, function(data) {
-                            CARTAS(data);
-                        });
-                    } else if ($('#guardarM').prop('name') == 'actualizar') {
-                        $.post('acciones.php', {
-                            'actualizar': $('#id').val(),
-                            'titulo': $('#mensajeTitulo').val(),
-                            'mensaje': $('#mensaje').val(),
-                            'saludo': $('#mensajeSaludo').val(),
-                            'despedida': $('#mensajeDespedida').val(),
-                            'pt': $('#pt').val(),
-                            'pm': $('#pm').val(),
-                            'ps': $('#ps').val(),
-                            'pd': $('#pd').val(),
-                            'year': '<?php echo $year; ?>'
-                        }, function(data) {
-                            CARTAS(data);
-                        });
-                    }
-                }
-                $('#guardarM').prop('name', 'guardar');
-                $('#g').text('Guardar mensaje');
-                $('#id').remove();
-                $("#guardarM").prop('checked', false);
-                $('.delete').removeClass('disabledBtn');
-
-            });
-            $(document).on('click', '.row', function(event) {
-                event.preventDefault();
-                var $id = $(this).parent('tr').prop('id');
-                var $btn = $(this).next('td').find('.delete');
-                $('.delete').removeClass('disabledBtn');
-                $.post('acciones.php', {
-                    'buscar': $id
-                }, function(data) {
-                    var $carta = jQuery.parseJSON(data);
-                    $('#mensajeTitulo').val($carta.titulo);
-                    $('#mensaje').val($carta.mensaje);
-                    $('#mensajeSaludo').val($carta.saludo);
-                    $('#mensajeDespedida').val($carta.despedida);
-                    $('#pt').val($carta.p_t);
-                    $('#pm').val($carta.p_m);
-                    $('#ps').val($carta.p_s);
-                    $('#pd').val($carta.p_d);
-                    $('#guardarM').prop('name', 'actualizar');
-                    $('#g').text('Actualizar mensaje');
-                    $("#carta").val('4');
-                    $(".mensaje").prop('disabled', false);
-                    $('#presupuesto').prop('disabled', true);
-                    $("#id").remove();
-                    $('<input id="id" type="hidden" value="' + $carta.id + '">').insertAfter('#guardarM');
-                    $btn.addClass('disabledBtn');
-                });
-            });
-            $(document).on('click', '.delete', function(event) {
-                event.preventDefault();
-                var $id = $(this).parents('tr').prop('id');
-                if (confirm('ESTA SEGURO QUE DESEA BORRARLO?')) {
-                    $.post('acciones.php', {
-                        'borrar': $id
-                    }, function(data) {
-                        CARTAS(data);
-                    });
-                }
-            });
-            $('#carta').change(function(event) {
-                if ($(this).val() == 3) {
-                    $('#presupuesto').prop('disabled', false);
-                    $('.mensaje').prop('disabled', true);
-                } else if ($(this).val() == 4) {
-                    $('.mensaje').prop('disabled', false);
-                    $('#presupuesto').prop('disabled', true);
-
-                } else {
-                    $('#presupuesto,.mensaje').prop('disabled', true);
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

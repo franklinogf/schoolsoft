@@ -345,11 +345,11 @@ if ($_POST['tipo'] == 'email') {
                 $files = [];
                 $target_file = $file_name;
                 $files[] = $uploadHost . '/' . $target_dir . $target_file;
-                if (__RESEND__ == '1') {
+                if (__RESEND == '1') {
                     $file = $pdf->Output("attachments/" . $file_name, 'F');
                 }
 
-                if (__PHPMAIL__ == '1') {
+                if (__PHPMAIL == '1') {
                     $file2 = $pdf->Output('', 'S');
                     $mail->addStringAttachment($file2, $file_name);
                 }
@@ -386,13 +386,13 @@ if ($_POST['tipo'] == 'email') {
             ";
                 //            <center><h2>{$title}</h2></center>
 
-                if (__PHPMAIL__ == '1') {
+                if (__PHPMAIL == '1') {
                     $mail->send();
                     $mail->ClearAddresses();
                 }
                 $mail->ClearAddresses();
                 $mail->ClearAttachments();
-                if (__RESEND__ == '1') {
+                if (__RESEND == '1') {
                     DB::table('email_queue')->insert([
                         'from' => $from,
                         'reply_to' => $reply_to,
@@ -403,6 +403,9 @@ if ($_POST['tipo'] == 'email') {
                         'attachments' => json_encode($files),
                         'user' => $user,
                         'year' => $year,
+                        'id2' => $r->id,
+                        'fecha' => date('Y-m-d'),
+                        'nombre' => '',
                     ]);
                 }
             }

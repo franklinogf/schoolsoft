@@ -185,7 +185,7 @@ foreach ($result as $r) {
 
                     $pdf->Cell(0, 5, 'Estimados padres:', 0, 1);
                     $pdf->Ln(5);
-                    $pdf->Cell(0, 5, utf8_encode('¡La Paz de Cristo Resucitado sea con ustedes!'), 0, 1);
+                    $pdf->Cell(0, 5, utf8_encode('&#65533;La Paz de Cristo Resucitado sea con ustedes!'), 0, 1);
                     $pdf->Ln(5);
                     $pdf->Cell(0, 5, 'Son nuestros mejores deseos que ustedes y todos los miembros de su familia se', 0, 1);
                     $pdf->Cell(0, 5, 'encuentren bien de salud.', 0, 1);
@@ -197,10 +197,10 @@ foreach ($result as $r) {
                     $pdf->Cell(0, 5, 'por la cantidad de $' . number_format($TOTAL, 2) . '.  Favor de realizar el pago en efectivo en o antes del', 0, 1);
                     $pdf->Cell(0, 5, $d . ' de ' . $MES1 . ' de ' . $y . '.', 0, 1);
                     $pdf->Ln(5);
-                    $pdf->Cell(0, 5, utf8_encode('Para información específica sobre sus balances adeudados, agradeceremos que se '), 0, 1);
-                    $pdf->Cell(0, 5, utf8_encode('comuniquen vía teléfono (787) 842-1331. '), 0, 1);
+                    $pdf->Cell(0, 5, utf8_encode('Para informaci&#65533;n espec&#65533;fica sobre sus balances adeudados, agradeceremos que se '), 0, 1);
+                    $pdf->Cell(0, 5, utf8_encode('comuniquen v&#65533;a tel&#65533;fono (787) 842-1331. '), 0, 1);
                     $pdf->Ln(5);
-                    $pdf->Cell(0, 5, utf8_encode('Gracias anticipadas por su cooperación sobre el particular. '), 0, 1);
+                    $pdf->Cell(0, 5, utf8_encode('Gracias anticipadas por su cooperaci&#65533;n sobre el particular. '), 0, 1);
                     $pdf->Cell(0, 5, '', 0, 1);
                     $pdf->Ln(10);
                 }
@@ -286,7 +286,7 @@ if ($_POST['tipo'] == 'email') {
 
                 $pdf->Cell(0, 5, 'Estimados padres:', 0, 1);
                 $pdf->Ln(5);
-                $pdf->Cell(0, 5, utf8_encode('¡La Paz de Cristo Resucitado sea con ustedes!'), 0, 1);
+                $pdf->Cell(0, 5, utf8_encode('&#65533;La Paz de Cristo Resucitado sea con ustedes!'), 0, 1);
                 $pdf->Ln(5);
                 $pdf->Cell(0, 5, 'Son nuestros mejores deseos que ustedes y todos los miembros de su familia se', 0, 1);
                 $pdf->Cell(0, 5, 'encuentren bien de salud.', 0, 1);
@@ -297,10 +297,10 @@ if ($_POST['tipo'] == 'email') {
                 $pdf->Cell(0, 5, 'por la cantidad de $' . number_format($TOTAL, 2) . '.  Favor de realizar el pago en efectivo en o antes del', 0, 1);
                 $pdf->Cell(0, 5, $d . ' de ' . $MES1 . ' de ' . $y . '.', 0, 1);
                 $pdf->Ln(5);
-                $pdf->Cell(0, 5, utf8_encode('Para información específica sobre sus balances adeudados, agradeceremos que se '), 0, 1);
-                $pdf->Cell(0, 5, utf8_encode('comuniquen vía teléfono (787) 842-1331. '), 0, 1);
+                $pdf->Cell(0, 5, utf8_encode('Para informaci&#65533;n espec&#65533;fica sobre sus balances adeudados, agradeceremos que se '), 0, 1);
+                $pdf->Cell(0, 5, utf8_encode('comuniquen v&#65533;a tel&#65533;fono (787) 842-1331. '), 0, 1);
                 $pdf->Ln(5);
-                $pdf->Cell(0, 5, utf8_encode('Gracias anticipadas por su cooperación sobre el particular. '), 0, 1);
+                $pdf->Cell(0, 5, utf8_encode('Gracias anticipadas por su cooperaci&#65533;n sobre el particular. '), 0, 1);
                 $pdf->Cell(0, 5, '', 0, 1);
                 $pdf->Ln(10);
 
@@ -327,11 +327,11 @@ if ($_POST['tipo'] == 'email') {
                 $files = [];
                 $target_file = $file_name;
                 $files[] = $uploadHost . '/' . $target_dir . $target_file;
-                if (__RESEND__ == '1') {
+                if (__RESEND == '1') {
                     $file = $pdf->Output("attachments/" . $file_name, 'F');
                 }
 
-                if (__PHPMAIL__ == '1') {
+                if (__PHPMAIL == '1') {
                     $file2 = $pdf->Output('', 'S');
                     $mail->addStringAttachment($file2, $file_name);
                 }
@@ -368,13 +368,13 @@ if ($_POST['tipo'] == 'email') {
             ";
                 //            <center><h2>{$title}</h2></center>
 
-                if (__PHPMAIL__ == '1') {
+                if (__PHPMAIL == '1') {
                     $mail->send();
                     $mail->ClearAddresses();
                 }
                 $mail->ClearAddresses();
                 $mail->ClearAttachments();
-                if (__RESEND__ == '1') {
+                if (__RESEND == '1') {
                     DB::table('email_queue')->insert([
                         'from' => $from,
                         'reply_to' => $reply_to,
@@ -385,6 +385,9 @@ if ($_POST['tipo'] == 'email') {
                         'attachments' => json_encode($files),
                         'user' => $user,
                         'year' => $year,
+                        'id2' => $r->id,
+                        'fecha' => date('Y-m-d'),
+                        'nombre' => '',
                     ]);
                 }
             }
