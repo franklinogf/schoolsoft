@@ -101,144 +101,148 @@ $codes = DB::table('presupuesto')->where('year', $year)->orderBy('codigo')->get(
 <body>
 	<?php
 	Route::includeFile('/admin/includes/layouts/menu.php');
-	?>
-	<div class="container-lg mt-lg-3 mb-5 px-0">
-		<h1 class="text-center mb-3 mt-5"><?= $lang->translation('Códigos de Presupuesto') ?></h1>
-		<div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-
-
-
-
-			<form method="post">
-				<table align="center" cellspacing="0" style="width: 71%">
-					<tr>
-						<td style="width: 50px"><strong><?= $lang->translation('Código') ?></strong></td>
-						<td style="width: 500px"><strong><?= $lang->translation('Descripción') ?></strong></td>
-						<td style="width: 50px"><strong><?= $lang->translation('Cantidad') ?></strong></td>
-						<td style="width: 50px"><strong><?= $lang->translation('Precio') ?></strong></td>
-						<td style="width: 100px" colspan="2"><strong>
-								<center><?= $lang->translation('Opciones') ?></center>
-							</strong></td>
-					</tr>
-					<?php foreach ($codes as $code): ?>
-						<form method="post">
-							<tr>
-								<td style="width: 50px">
-									<?= $code->codigo ?>
-								</td>
-								<td style="width: 100px">
-									<?= $code->descripcion ?>
-									&nbsp;</td>
-								<td style="width: 50px">
-									<?= number_format($code->cantidad, 2) ?>
-								</td>
-								<td style="width: 50px">
-									<?= number_format($code->costo, 2) ?>
-								</td>
-								<td style="width: 100px">
-									<input class="btn btn-danger" name="borra" style="width: 90px;" type="submit" formnovalidate value="<?= $lang->translation('Borrar') ?>" onclick="return confirmar('&iquest;Est&aacute; seguro que desea eliminar los dependientes?')" />
-								</td>
-								<td style="width: 100px">
-									<input class="btn btn-primary" name="cambiar" style="width: 90px" type="submit" formnovalidate value="<?= $lang->translation('Editar') ?>" />
-								</td>
-							</tr>
-							<input type=hidden name=nn value='<?= $code->codigo ?>'>
-							<input type=hidden name=mt value='<?= $code->mt ?> '>
-							<input type=hidden name=add2 value='<?= $add2 ?>'>
-						</form>
-					<?php endforeach ?>
-					<tr>
-						<td style="width: 50px"><strong><?= $lang->translation('Código') ?></strong></td>
-						<td style="width: 100px"><strong><?= $lang->translation('Descripción') ?></strong></td>
-						<td style="width: 50px"><strong><?= $lang->translation('Cantidad') ?></strong></td>
-						<td style="width: 50px"><strong><?= $lang->translation('Precio') ?></strong></td>
-						<td style="width: 100px" colspan="2"><strong>
-								<center><?= $lang->translation('Opciones') ?></center>
-							</strong></td>
-					</tr>
-					<?php if ($add2 == 0): ?>
-						<form method="post" action="budget.php?add2=<?= $add2 ?>">
-							<tr>
-								<td style="width: 50px">
-									<input maxlength="2" name="codigo" size="2" type="text" required value="<?= $reg4->codigo ?? '' ?>" />
-								</td>
-								<td style="width: 100px">
-									<input maxlength="50" name="descripcion" size="30" type="text" required value="<?= $reg4->descripcion ?? '' ?>" />
-								</td>
-								<td style="width: 50px">
-									<input maxlength="10" name="bajo_nivel" size="10" style="width: 80px" type="text" placeholder="999.99" value="<?= $reg4->cantidad ?? '' ?>">
-								</td>
-								<td style="width: 50px">
-									<input id="ex-91" name="sobre_nivel" class="text" size="10" type="text" style="width: 80px" maxlength="10" placeholder="999.99" value="<?= $reg4->costo ?? '' ?>" />
-								</td>
-								<td style="width: 100px" colspan="2">
-									<strong>
-										<center>
-
-											<input type=hidden name=nn0 value='<?= $reg4->codigo ?> '>
-											<input type=hidden name=mt value='<?= $reg4->mt ?> '>
-											<input type=hidden name=add2 value='<?= $add2 ?> '>
-											<input class="btn btn-primary" name="add" style="width: 90px" type="submit" value="<?= $lang->translation('Grabar') ?>" />
-										</center>
-									</strong>
-								</td>
-							</tr>
-						</form>
-					<?php endif ?>
-					<?php if ($add2 == 1): ?>
-						<form method="post" action="budget.php?add2=<?= $add2 ?>">
-							<tr>
-								<td style="width: 50px">
-									<input maxlength="2" name="codigo" size="2" type="text" required value="" />
-								</td>
-								<td style="width: 100px">
-									<input maxlength="50" name="descripcion" size="30" type="text" required value="" />
-								</td>
-								<td style="width: 50px">
-									<input maxlength="10" name="bajo_nivel" size="10" style="width: 80px" type="text" placeholder="999.99" value="">
-								</td>
-								<td style="width: 50px">
-									<input id="ex-91" name="sobre_nivel" class="text" size="10" type="text" style="width: 80px" maxlength="10" placeholder="999.99" value="" />
-								</td>
-								<td style="width: 100px" colspan="2">
-									<strong>
-										<center>
-
-											<input type=hidden name=nn0 value='<?= $reg4->codigo ?> '>
-											<input type=hidden name=mt value='<?= $reg4->mt ?> '>
-											<input type=hidden name=add2 value='<?= $add2 ?> '>
-											<input class="btn btn-primary" name="add" style="width: 90px" type="submit" value="<?= $lang->translation('Grabar') ?>" />
-										</center>
-									</strong>
-								</td>
-							</tr>
-						</form>
-					<?php endif ?>
-					<tr>
-						<td class="style7" style="width: 80px">&nbsp;</td>
-						<td class="style7" style="width: 80px">&nbsp;</td>
-						<td class="style7" style="width: 80px">&nbsp;</td>
-						<td class="style1" style="width: 100px">&nbsp;</td>
-						<td class="style1" style="width: 100px">&nbsp;</td>
-					</tr>
-				</table>
-				<br>
-				<br />
-				<div class="style5">
-					<br><br><br><br><br />
+	?> <div class="container-lg mt-lg-3 mb-5 px-0">
+		<h1 class="text-center mb-4 mt-5"><?= $lang->translation('Códigos de Presupuesto') ?></h1>
+		<div class="row justify-content-center">
+			<div class="col-lg-10 col-xl-8">
+				<div class="card shadow-lg">
+					<div class="card-header bg-primary text-white">
+						<h5 class="card-title mb-0"><?= $lang->translation('Lista de codigos') ?></h5>
+					</div>
+					<div class="card-body p-0">
+						<div class="table-responsive">
+							<table class="table table-hover table-striped mb-0">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col"><?= $lang->translation('Código') ?></th>
+										<th scope="col"><?= $lang->translation('Descripción') ?></th>
+										<th scope="col" class="text-right"><?= $lang->translation('Cantidad') ?></th>
+										<th scope="col" class="text-right"><?= $lang->translation('Precio') ?></th>
+										<th scope="col" class="text-center"><?= $lang->translation('Opciones') ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($codes as $code): ?>
+										<tr>
+											<td><strong><?= $code->codigo ?></strong></td>
+											<td><?= $code->descripcion ?></td>
+											<td class="text-right"><?= number_format($code->cantidad, 2) ?></td>
+											<td class="text-right">$<?= number_format($code->costo, 2) ?></td>
+											<td class="text-center">
+												<form method="post" class="d-inline">
+													<input type="hidden" name="nn" value="<?= $code->codigo ?>">
+													<input type="hidden" name="mt" value="<?= $code->mt ?>">
+													<input type="hidden" name="add2" value="<?= $add2 ?>">
+													<button type="submit" name="cambiar" class="btn btn-sm btn-outline-primary mr-1" title="<?= $lang->translation('Editar') ?>">
+														<i class="fas fa-edit"></i>
+													</button>
+												</form>
+												<form method="post" class="d-inline">
+													<input type="hidden" name="nn" value="<?= $code->codigo ?>">
+													<input type="hidden" name="mt" value="<?= $code->mt ?>">
+													<input type="hidden" name="add2" value="<?= $add2 ?>">
+													<button type="submit" name="borra" class="btn btn-sm btn-outline-danger"
+														onclick="return confirmar('¿Está seguro que desea eliminar este código?')"
+														title="<?= $lang->translation('Borrar') ?>">
+														<i class="fas fa-trash"></i>
+													</button>
+												</form>
+											</td>
+										</tr>
+									<?php endforeach ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
-			</form>
 
+				<!-- Add/Edit Form Card -->
+				<div class="card shadow-lg mt-4">
+					<div class="card-header bg-success text-white">
+						<h5 class="card-title mb-0">
+							<?= $add2 == 1 ? $lang->translation('Editar') . ' Código' : $lang->translation('Añadir') . ' Nuevo Código' ?>
+						</h5>
+					</div>
+					<div class="card-body">
+						<form method="post" action="budget.php?add2=<?= $add2 ?>">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="codigo" class="form-label font-weight-bold"><?= $lang->translation('Código') ?></label>
+										<input type="text"
+											class="form-control"
+											id="codigo"
+											name="codigo"
+											maxlength="2"
+											required
+											value="<?= $add2 == 1 ? ($reg4->codigo ?? '') : '' ?>"
+											placeholder="01">
+									</div>
+								</div>
+								<div class="col-md-5">
+									<div class="form-group">
+										<label for="descripcion" class="form-label font-weight-bold"><?= $lang->translation('Descripción') ?></label>
+										<input type="text"
+											class="form-control"
+											id="descripcion"
+											name="descripcion"
+											maxlength="50"
+											required
+											value="<?= $add2 == 1 ? ($reg4->descripcion ?? '') : '' ?>"
+											placeholder="<?= $lang->translation('Descripción') ?>">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="bajo_nivel" class="form-label font-weight-bold"><?= $lang->translation('Cantidad') ?></label>
+										<input type="number"
+											class="form-control"
+											id="bajo_nivel"
+											name="bajo_nivel"
+											step="0.01"
+											min="0"
+											value="<?= $add2 == 1 ? ($reg4->cantidad ?? '') : '' ?>"
+											placeholder="0.00">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="sobre_nivel" class="form-label font-weight-bold"><?= $lang->translation('Precio') ?></label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text">$</span>
+											</div>
+											<input type="number"
+												class="form-control"
+												id="sobre_nivel"
+												name="sobre_nivel"
+												step="0.01"
+												min="0"
+												value="<?= $add2 == 1 ? ($reg4->costo ?? '') : '' ?>"
+												placeholder="0.00">
+										</div>
+									</div>
+								</div>
+							</div>
 
-
-
-
-
-
+							<div class="text-center mt-3">
+								<input type="hidden" name="nn0" value="<?= $add2 == 1 ? ($reg4->codigo ?? '') : '' ?>">
+								<input type="hidden" name="mt" value="<?= $add2 == 1 ? ($reg4->mt ?? '') : '' ?>">
+								<input type="hidden" name="add2" value="<?= $add2 ?>">
+								<button type="submit" name="add" class="btn btn-success btn-lg px-4">
+									<i class="fas fa-save mr-2"></i><?= $lang->translation('Grabar') ?>
+								</button>
+								<?php if ($add2 == 1): ?>
+									<a href="budget.php" class="btn btn-secondary btn-lg px-4 ml-2">
+										<i class="fas fa-times mr-2"></i>Cancelar
+									</a>
+								<?php endif ?>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
-
-
-
 	</div>
 	<?php
 	$jqMask = true;

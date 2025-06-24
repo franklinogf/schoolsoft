@@ -368,42 +368,27 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
 
    function cambiaPalabra() {
       var dis = document.algunNombre.grado.value;
+      var ctaField = document.getElementById('cta');
       if (dis == 'Selección') {
-         document.algunNombre.cta.disabled = false;
+         ctaField.disabled = false;
+         ctaField.required = true;
       } else {
-         document.algunNombre.cta.disabled = true;
+         ctaField.disabled = true;
+         ctaField.required = false;
+         ctaField.value = '';
       }
    }
 
    function cambiaPalabra2() {
       var dis = document.algunNombre.borrar.value;
-      if (dis == 'Si') {
-         document.algunNombre.m1.disabled = false;
-         document.algunNombre.m2.disabled = false;
-         document.algunNombre.m3.disabled = false;
-         document.algunNombre.m4.disabled = false;
-         document.algunNombre.m5.disabled = false;
-         document.algunNombre.m6.disabled = false;
-         document.algunNombre.m7.disabled = false;
-         document.algunNombre.m8.disabled = false;
-         document.algunNombre.m9.disabled = false;
-         document.algunNombre.m10.disabled = false;
-         document.algunNombre.m11.disabled = false;
-         document.algunNombre.m12.disabled = false;
-      } else {
-         document.algunNombre.m1.disabled = true;
-         document.algunNombre.m2.disabled = true;
-         document.algunNombre.m3.disabled = true;
-         document.algunNombre.m4.disabled = true;
-         document.algunNombre.m5.disabled = true;
-         document.algunNombre.m6.disabled = true;
-         document.algunNombre.m7.disabled = true;
-         document.algunNombre.m8.disabled = true;
-         document.algunNombre.m9.disabled = true;
-         document.algunNombre.m10.disabled = true;
-         document.algunNombre.m11.disabled = true;
-         document.algunNombre.m12.disabled = true;
-      }
+      var checkboxes = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10', 'm11', 'm12'];
+
+      checkboxes.forEach(function(id) {
+         var checkbox = document.getElementById(id);
+         if (checkbox) {
+            checkbox.disabled = (dis !== 'Si');
+         }
+      });
    }
 </script>
 
@@ -417,208 +402,185 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
 <body>
    <?php
    Route::includeFile('/admin/includes/layouts/menu.php');
-   ?>
-   <div class="container-lg mt-lg-3 mb-5 px-0">
-      <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Crear cargos') ?></h1>
-      <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-         <div class="div">
+   ?> <div class="container-lg mt-lg-3 mb-5 px-0">
+      <h1 class="text-center mb-4 mt-5"><?= $lang->translation('Crear cargos') ?></h1>
+      <div class="row justify-content-center">
+         <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg">
+               <div class="card-header bg-primary text-white">
+                  <h5 class="card-title mb-0"><?= $lang->translation('Opciones') ?></h5>
+               </div>
+               <div class="card-body">
+                  <form name="algunNombre" action="" method="post">
+                     <!-- Selection Options -->
+                     <div class="row mb-4">
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="grado" class="form-label font-weight-bold"><?= $lang->translation('Grados') ?></label>
+                              <select name="grado" id="grado" class="form-control" onchange="cambiaPalabra()">
+                                 <option value="Selección"><?= $lang->translation('Selección') ?></option>
+                                 <option value="Todos"><?= $lang->translation('Todos') ?></option>
+                                 <?php foreach ($grades as $grade): ?>
+                                    <option value='<?= $grade ?>'><?= $grade ?></option>
+                                 <?php endforeach ?>
+                              </select>
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="cargos" class="form-label font-weight-bold"><?= $lang->translation('Costos') ?></label>
+                              <select name="cargos" id="cargos" class="form-control">
+                                 <option value="Selección"><?= $lang->translation('Selección') ?></option>
+                                 <option value="Todos"><?= $lang->translation('Todos') ?></option>
+                                 <?php foreach ($tabla12 as $row2): ?>
+                                    <option value="<?= $row2->codigo ?>"><?= $row2->codigo . ', ' . $row2->descripcion ?></option>
+                                 <?php endforeach ?>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
 
-         </div>
-         <div class="div">
-            <form name="algunNombre" action="" method="post">
-               <table align="center" cellpadding="2" cellspacing="0" style="width: 29%">
-                  <tr>
-                     <td class="style3"><strong><?= $lang->translation('Opciones') ?></strong></td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <select name="grado" style="width: 92px" onclick="return cambiaPalabra(); return true">
-                           <option value="Selección"><?= $lang->translation('Selección') ?></option>
-                           <option value="Todos">Todos</option>
-                           <?php foreach ($grades as $grade): ?>
-                              <option value='<?= $grade ?>'>
-                                 <?= $grade ?>
-                              </option>
-                           <?php endforeach ?>
-                        </select>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <select name="cargos" style="width: 215px" onclick="return cambiaPalabra(); return true">
-                           <option value="Selección"><?= $lang->translation('Selección') ?></option>
-                           <option value="Todos"><?= $lang->translation('Todos') ?></option>
-                           <?php foreach ($tabla12 as $row2): ?>
-                              <option value="<?= $row2->codigo ?>"><?= $row2->codigo . ', ' . $row2->descripcion ?></option>
-                           <?php endforeach ?>
+                     <div class="row mb-4">
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="cta" class="form-label font-weight-bold">ID Específico</label>
+                              <input type="text" class="form-control" name="cta" id="cta" maxlength="10" placeholder="Ingrese ID específico" disabled>
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="form-group">
+                              <label for="borrar" class="form-label font-weight-bold"><?= $lang->translation('Borrar todos los Cargos') ?></label>
+                              <select name="borrar" id="borrar" class="form-control" onchange="cambiaPalabra2()">
+                                 <option value="No"><?= $lang->translation('No') ?></option>
+                                 <option value="Si"><?= $lang->translation('Si') ?></option>
+                              </select>
+                           </div>
+                        </div>
+                     </div> <!-- Month Selection Section -->
+                     <div class="mb-4">
+                        <h6 class="font-weight-bold mb-3"><?= $lang->translation('Selección de Meses') ?></h6>
 
-                        </select>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <input maxlength="10" name="cta" size="10" type="text">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style3">
-                        <strong><?= $lang->translation('Borrar todos los Cargos') ?></strong>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <select name="borrar" style="width: 47px" onclick="return cambiaPalabra2(); return true">
-                           <option value="No">No</option>
-                           <option value="Si"><?= $lang->translation('Si') ?></option>
-                        </select>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style6">
-                        <strong><?= $lang->translation('Selección de Meses') ?></strong>
-                     </td>
-                  </tr>
-               </table>
-               <table align="center" cellpadding="2" cellspacing="0" style="width: 550px">
-                  <tr>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Agosto') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Septiembre') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Octubre') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Noviembre') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Diciembre') ?></strong></center>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m8" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m9" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m10" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m11" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m12" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                  </tr>
+                        <!-- First Semester (August-December) -->
+                        <div class="card mb-3">
+                           <div class="card-header bg-info text-white">
+                              <h6 class="mb-0">Primer Semestre</h6>
+                           </div>
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m8" name="m8" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m8"><?= $lang->translation('Agosto') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m9" name="m9" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m9"><?= $lang->translation('Septiembre') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m10" name="m10" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m10"><?= $lang->translation('Octubre') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m11" name="m11" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m11"><?= $lang->translation('Noviembre') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m12" name="m12" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m12"><?= $lang->translation('Diciembre') ?></label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
 
-                  <tr>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Enero') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Febrero') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Marzo') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Abril') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Mayo') ?></strong></center>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m1" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m2" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m3" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m4" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input checked="checked" disabled="disabled" name="m5" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Matri/Junio') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong><?= $lang->translation('Julio') ?></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong></strong></center>
-                     </td>
-                     <td class="style1">
-                        <center><strong></strong></center>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style5">
-                        <center>
-                           <input disabled="disabled" name="m6" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                        <center>
-                           <input disabled="disabled" name="m7" type="checkbox" value="1" style="width: 20px; height: 20px">
-                        </center>
-                     </td>
-                     <td class="style5">
-                     </td>
-                     <td class="style5">
-                     </td>
-                     <td class="style5">
-                     </td>
-                  </tr>
-                  <tr>
-                     <td class="style3" colspan="5">
-                        <center><strong>
-                              <input class="btn btn-primary" name="pro" style="width: 140px;" type="submit" value="<?= $lang->translation('Procesar') ?>" /></strong></center>
-                     </td>
-                  </tr>
-               </table>
-            </form>
+                        <!-- Second Semester (January-May) -->
+                        <div class="card mb-3">
+                           <div class="card-header bg-success text-white">
+                              <h6 class="mb-0">Segundo Semestre</h6>
+                           </div>
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m1" name="m1" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m1"><?= $lang->translation('Enero') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m2" name="m2" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m2"><?= $lang->translation('Febrero') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m3" name="m3" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m3"><?= $lang->translation('Marzo') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m4" name="m4" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m4"><?= $lang->translation('Abril') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 col-lg mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m5" name="m5" value="1" checked disabled>
+                                       <label class="custom-control-label" for="m5"><?= $lang->translation('Mayo') ?></label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
 
+                        <!-- Special Months -->
+                        <div class="card mb-3">
+                           <div class="card-header bg-warning text-dark">
+                              <h6 class="mb-0">Meses Especiales</h6>
+                           </div>
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-6 col-md-4 mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m6" name="m6" value="1" disabled>
+                                       <label class="custom-control-label" for="m6"><?= $lang->translation('Matri/Junio') ?></label>
+                                    </div>
+                                 </div>
+                                 <div class="col-6 col-md-4 mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                       <input type="checkbox" class="custom-control-input" id="m7" name="m7" value="1" disabled>
+                                       <label class="custom-control-label" for="m7"><?= $lang->translation('Julio') ?></label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="text-center">
+                        <button type="submit" name="pro" class="btn btn-primary btn-lg px-5">
+                           <i class="fas fa-cogs mr-2"></i><?= $lang->translation('Procesar') ?>
+                        </button>
+                     </div>
+                  </form>
+               </div>
+            </div>
          </div>
       </div>
-      <?php
-      $jqMask = true;
-      Route::includeFile('/includes/layouts/scripts.php', true);
-      ?>
+   </div>
+   <?php
+   $jqMask = true;
+   Route::includeFile('/includes/layouts/scripts.php', true);
+   ?>
 
 </body>
 
