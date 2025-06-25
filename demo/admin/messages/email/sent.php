@@ -41,7 +41,7 @@ $teachers = new Teacher;
 
 if (isset($_REQUEST['search']) or isset($_REQUEST['search2'])) {
     $thisUser = DB::table('colegio')->where('id', $_POST['course'])->first();
-    $emails = DB::table('email_queue')->select("DISTINCT subject ")->where([
+    $emails = DB::table('email_queue')->select("DISTINCT subject, created_at")->where([
         ['user', $thisUser->usuario],
         ['year', $school->info('year2')]
     ])->get();
@@ -90,7 +90,7 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
                             <select class="form-control selectpicker w-100" name="course2" data-live-search="true" required>
                                 <option><?= $lang->translation('Selección') ?></option>
                                 <?php foreach ($emails as $email) : ?>
-                                    <option <?= isset($_REQUEST['course2']) && $_REQUEST['course2'] == $email->subject ? 'selected=""' : '' ?> value="<?= $email->subject ?>"><?= "$email->subject ()" ?></option>
+                                    <option <?= isset($_REQUEST['course2']) && $_REQUEST['course2'] == $email->subject . ',' . $email->created_at ? 'selected=""' : '' ?> value="<?= $email->subject . ',' . $email->created_at ?>"><?= "$email->subject ($email->created_at)" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -114,26 +114,31 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
     <?php if (isset($_POST['search2'])) : ?>
 
         <?php
+
+        list($sub, $fec) = explode(",", $_POST['course2']);
+        list($fec1, $fec2) = explode(" ", $fec ?? ' ');
+
         if ($_POST['env'] == '0') {
             $emails = DB::table('email_queue')->where([
-                ['subject', $_POST['course2']],
+                ['subject', $sub],
+                ['created_at', 'LIKE', '%' . $fec1 . '%'],
                 ['user', $thisUser->usuario],
                 ['year', $school->info('year2')]
             ])->get();
         } else {
             $emails = DB::table('email_queue')->where([
-                ['subject', $_POST['course2']],
+                ['subject', $sub],
+                ['created_at', 'LIKE', '%' . $fec1 . '%'],
                 ['user', $thisUser->usuario],
                 ['status', $_POST['env']],
                 ['year', $school->info('year2')]
             ])->get();
         }
+
         ?>
         <div class="container-lg mt-lg-3 mb-5 px-0">
             <div class="container">
                 <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 1700px;">
-
-
                     <p>&nbsp;</p>
                     <table align="center" style="width: 1695">
                         <tr>
@@ -174,7 +179,7 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
                                 <td style="width: 280px"><?= $em1 . '<br>' . $em2 ?></td>
                                 <td style="width: 370px"><?= $es1 . ' ' . $es2 ?></td>
                                 <td class="style1"><?= $email->status == '1' ? 'Si' : 'No' ?></td>
-                                <td style="width: 124px"><?= $email->created_at ?></td>
+                                <td style="width: 124px"><?= substr($email->created_at, 0, 10) ?></td>
                                 <td><?= $email->failed_reason ?></td>
                             </tr>
                         <?php endforeach ?>
@@ -184,6 +189,7 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
             </div>
         </div>
     <?php endif ?>
+
     <?php
     $jqMask = true;
     Route::includeFile('/includes/layouts/scripts.php', true);
