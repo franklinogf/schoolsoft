@@ -14,7 +14,7 @@ foreach ($emails as $email) {
     $count++;
     if ($count >= 2) {
         $count = 0;
-        sleep(1);
+        sleep(2);
     }
 }
 

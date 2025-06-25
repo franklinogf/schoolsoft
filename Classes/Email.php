@@ -6,24 +6,26 @@ namespace Classes;
 use App\Models\Admin;
 use App\Models\EmailQueue;
 use App\Models\School;
-
+use App\Models\Teacher;
 use Classes\Mail;
 use Exception;
+use Resend;
 
 class Email
 {
 
     protected ?string $from = null;
+    protected ?string $fromName = null;
     protected ?array $to = null;
     protected string $subject = 'No Subject';
     protected string $body = '';
     protected array $attachments = [];
-    protected string $replyTo = '';
+    protected ?string $replyTo = null;
     protected ?string $text = null;
 
-    public static function from(string $email): self
+    public static function from(string $email, ?string $name = null): self
     {
-        return (new self())->setFrom($email);
+        return (new self())->setFrom($email, $name);
     }
 
     public static function to(string|array $email): self
@@ -34,9 +36,10 @@ class Email
         return (new self())->setTo($email);
     }
 
-    public function setFrom(string $email): self
+    public function setFrom(string $email, ?string $name = null): self
     {
         $this->from = $email;
+        $this->fromName = $name;
         return $this;
     }
 
@@ -108,18 +111,40 @@ class Email
         }
 
         $from = $this->from;
+        $fromName = $this->fromName;
+        $replyTo = $this->replyTo;
 
-        if ($from === null) {
+        if ($from === null || $fromName === null) {
             $school = School::current();
-            $from = $school->data['default_mail_from'];
+            if ($from === null) {
+                $from = $school->data['default_mail_from'];
+            }
+            if ($fromName === null) {
+                $fromName = $school->name;
+            }
         }
+
+        if ($replyTo === null) {
+            if (Session::location() === 'admin') {
+                $admin = Admin::user(Session::id())->first();
+                $replyTo = $admin->correo;
+            } else if (Session::location() === 'teacher') {
+                $teacher = Teacher::find(Session::id())->first();
+                $replyTo = $teacher->email1;
+            } else {
+                $admin = Admin::primaryAdmin()->first();
+                $replyTo = $admin->correo;
+            }
+        }
+
 
         $admin = Admin::primaryAdmin()->first();
 
         EmailQueue::create([
             'from' => $from,
+            'from_name' => $fromName,
             'to' => $this->to,
-            'reply_to' => $this->replyTo,
+            'reply_to' => $replyTo,
             'message' => $this->body,
             'text' => $this->text,
             'subject' => $this->subject,
@@ -139,20 +164,42 @@ class Email
 
         $school = School::current();
 
-
         if ($school->data['default_mailer'] === 'resend') {
+            $from = $this->from;
+            $fromName = $this->fromName;
+            $replyTo = $this->replyTo;
+            if ($from === null || $fromName === null) {
+
+                if ($from === null) {
+                    $from = $school->data['default_mail_from'];
+                }
+                if ($fromName === null) {
+                    $fromName = $school->name;
+                }
+            }
+
+            if ($replyTo === null) {
+                if (Session::location() === 'admin') {
+                    $admin = Admin::user(Session::id())->first();
+                    $replyTo = $admin->correo;
+                } else if (Session::location() === 'teacher') {
+                    $teacher = Teacher::find(Session::id())->first();
+                    $replyTo = $teacher->email1;
+                } else {
+                    $admin = Admin::primaryAdmin()->first();
+                    $replyTo = $admin->correo;
+                }
+            }
+
+            $from = $fromName ? "$fromName <$from>" : $from;
+
             try {
 
-                if ($this->replyTo === null) {
-                    $admin = Admin::primaryAdmin()->first();
-                    $this->replyTo = $admin->correo;
-                }
-
-                $resend = \Resend::client($school->data['resend_key']);
+                $resend = Resend::client($school->data['resend_key']);
                 $resend->emails->send([
-                    'from' => $school->data['default_mail_from'],
+                    'from' => $from,
                     'to' => $this->to,
-                    'reply_to' => $this->replyTo,
+                    'reply_to' => $replyTo,
                     'subject' => $this->subject,
                     'html' => $this->body,
                     'text' => $this->text,
@@ -162,7 +209,7 @@ class Email
                 throw new Exception('Error sending email via Resend: ' . $e->getMessage());
             }
         } else {
-            $mail = new Mail();
+            $mail = new Mail;
 
             foreach ($this->to as $t) {
                 $mail->addAddress($t);
@@ -193,9 +240,8 @@ class Email
     public static function sendQueued(EmailQueue $queuedEmail): void
     {
         try {
-            self::from($queuedEmail->from)
+            self::from($queuedEmail->from, $queuedEmail->from_name)
                 ->to($queuedEmail->to)
-                ->setFrom($queuedEmail->from)
                 ->subject($queuedEmail->subject)
                 ->body($queuedEmail->message)
                 ->replyTo($queuedEmail->reply_to)
