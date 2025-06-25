@@ -43,9 +43,9 @@ class nPDF extends PDF
     {
         $this->SetFont('Arial', '', 11);
         $this->SetY(-40);
-        $this->Cell(0, 5, __('CORDIALMENTE'), 0, 1);
+        $this->Cell(0, 5, __('Cordialmente'), 0, 1);
         $this->Ln(8);
-        $this->Cell(0, 5, __('OFICINA DE FINANZAS'));
+        $this->Cell(0, 5, __('Oficina de finanzas'));
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 11);
         $this->Cell(0, 5, __('Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificación.'));
@@ -127,7 +127,7 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Ln(3);
     $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
     $pdf->Ln(3);
-    $filePath = "{$directory}/letter_{$id}.pdf";
+    $filePath = "{$directory}/letter1_{$id}.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
