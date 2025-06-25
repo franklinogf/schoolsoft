@@ -10,7 +10,7 @@ $options = [
     [
         'buttons' => [
             [
-                'name' => __('Correo electrónico'),
+                'name' => __('Correo electronico'),
                 'desc' => '',
                 'links' => [
                     [
@@ -63,7 +63,13 @@ $options = [
                         'href' => "#"
                     ]
                 ]
-            ]
+            ],
+            [
+                'name' => __('Mensajes enviados'),
+                'desc' => '',
+                'link' => 'email/sent.php'
+            ],
+
         ]
     ]
 ];
@@ -73,6 +79,7 @@ $options = [
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
