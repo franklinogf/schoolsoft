@@ -22,20 +22,13 @@ $year = $school->year2;
 $chk = $school->chk;
 $reply_to = $school->correo;
 $user = $school->usuario;
-$directory = __DIR__ . "/attachments";
-
-if (!is_dir($directory)) {
-    mkdir($directory, 0777, true);
-}
 
 
 $mes = $_REQUEST['mes'];
 
 [$y3, $y2] = explode("-", $year);
 
-[$ya, $yb, $yc] = explode("-", date('Y-m-d'));
-
-$fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, $ya));
+$fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, date('Y')));
 
 class nPDF extends PDF
 {
@@ -57,9 +50,7 @@ $paymentGroup = Payment::whereDate('fecha_d', '<=', $fecha)->get()->groupBy('id'
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
 
 foreach ($paymentGroup as $id => $payments) {
-    $family = Family::where('id', $id)->first();
-    $pdf = new nPDF('P');
-    $pdf->SetFont('Arial', '', 12);
+
 
     $debt = $payments->sum('deuda');
     $pay = $payments->sum('pago');
@@ -68,6 +59,10 @@ foreach ($paymentGroup as $id => $payments) {
 
 
     if ($total === 0) continue;
+    $family = Family::where('id', $id)->first();
+
+    $pdf = new nPDF('P');
+    $pdf->SetFont('Arial', '', 12);
 
     $pdf->AddPage();
     $pdf->Cell(0, 5, __('Primer aviso de cobro'), 0, 1);
@@ -91,7 +86,7 @@ foreach ($paymentGroup as $id => $payments) {
 
     $paymentsGroupedByDate = $payments->groupBy('fecha_d');
 
-    foreach ($paymentsGroupedByDate as $rd => $payments) {
+    foreach ($paymentsGroupedByDate as $date => $payments) {
 
         $debt = $payments->sum('deuda');
         $pay = $payments->sum('pago');
@@ -100,8 +95,8 @@ foreach ($paymentGroup as $id => $payments) {
 
 
         if ($totalByDate === 0) continue;
-        $month = Carbon::parse($rd)->translatedFormat('F');
-        [$y, $m] = explode("-", $rd);
+        $month = Carbon::parse($date)->translatedFormat('F');
+        [$y, $m] = explode("-", $date);
 
         $y4 = $m < 6 ? "20$y2" : "20$y3";
 
