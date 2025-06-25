@@ -4,9 +4,8 @@ require_once '../../app.php';
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase0\DB;
+use Classes\DataBase\DB;
 use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $lang = new Lang([
@@ -62,18 +61,52 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
 
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-<script language="JavaScript">
-    document.oncontextmenu = function() {
-        return false
-    }
-
-    function confirmar(mensaje) {
-        return confirm(mensaje);
-    }
-</script>
 
 <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $lang->translation('Lista de deudores') ?></title>
+    <style>
+        .report-card {
+            border-left: 4px solid #007bff;
+        }
+
+        .month-checkbox {
+            transform: scale(1.2);
+        }
+
+        .options-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .month-selection-card {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .month-grid {
+            background: #fff;
+        }
+
+        .custom-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    </style>
+    <script language="JavaScript">
+        document.oncontextmenu = function() {
+            return false
+        }
+
+        function confirmar(mensaje) {
+            return confirm(mensaje);
+        }
+
+        function cambiaPalabra() {
+            // Function for handling selection changes
+            return true;
+        }
+    </script>
     <?php
     $title = $lang->translation('Lista de deudores');
     Route::includeFile('/admin/includes/layouts/header.php');
@@ -83,224 +116,252 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
 <body>
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
-    ?>
-    <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Lista de deudores') ?></h1>
-        <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-            <div class="div">
+    ?> <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4 mt-3">
+                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i>
+                    <?= $lang->translation('Lista de deudores') ?>
+                </h1>
             </div>
-            <div class="div">
-                <form name="algunNombre" action="pdf/deudores_inf.php" method="post" target="_blank">
-                    <table align="center" cellpadding="2" cellspacing="0" style="width: 29%">
-                        <tr>
-                            <td class="style3">
-                                <strong><?= $lang->translation('Opciones') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <select name="desc" style="width: 215px" onclick="return cambiaPalabra(); return true">
-                                    <option value="Selección"><?= $lang->translation('Selección') ?></option>
-                                    <option value="Todos"><?= $lang->translation('Todos') ?></option>
-                                    <?php foreach ($tabla12 as $row2): ?>
-                                        <option value="<?= $row2->codigo ?>"><?= $row2->codigo . ', ' . $row2->descripcion ?></option>
-                                    <?php endforeach ?>
-
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style3">
-                                <strong><?= $lang->translation('Papel tamaño') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <select name="pag1" style="width: 119px">
-                                    <option value="Letter"><?= $lang->translation('Hoja Carta') ?></option>
-                                    <option value="Legal"><?= $lang->translation('Hoja Legal') ?></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style3">
-                                <strong><?= $lang->translation('Papel orientación') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <select name="pag" style="width: 106px">
-                                    <option value="P">Portrait</option>
-                                    <option value="L">Landscape</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style3">
-                                <strong><?= $lang->translation('Con Cantidad') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <select name="cct" style="width: 61px">
-                                    <option value="1"><?= $lang->translation('Si') ?></option>
-                                    <option value="2"><?= $lang->translation('No') ?></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <select name="gru" style="width: 136px">
-                                    <option value="A"><?= $lang->translation('Por Grado') ?></option>
-                                    <option value="B"><?= $lang->translation('Por Cuenta') ?></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style6">
-                                <strong><?= $lang->translation('Selección de Meses') ?></strong>
-                            </td>
-                        </tr>
-                    </table>
-                    <table align="center" cellpadding="2" cellspacing="0" style="width: 550px">
-                        <tr>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Agosto') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Septiembre') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Octubre') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Noviembre') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Diciembre') ?></strong></center>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <center>
-                                    <input name="ago" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="sep" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="oct" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="nov" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="dic" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Enero') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Febrero') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Marzo') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Abril') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Mayo') ?></strong></center>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <center>
-                                    <input name="ene" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="feb" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="mar" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="abr" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="may" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Matri/Junio') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong><?= $lang->translation('Julio') ?></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong></strong></center>
-                            </td>
-                            <td class="style1">
-                                <center><strong></strong></center>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style5">
-                                <center>
-                                    <input name="jun" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                                <center>
-                                    <input name="jul" type="checkbox" value="1" style="width: 20px; height: 20px">
-                                </center>
-                            </td>
-                            <td class="style5">
-                            </td>
-                            <td class="style5">
-                            </td>
-                            <td class="style5">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="style3" colspan="5">
-                                <center><strong>
-                                        <input class="btn btn-primary" name="pro" style="width: 140px;" type="submit" value="<?= $lang->translation('Procesar') ?>" /></strong></center>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-
         </div>
-        <?php
-        $jqMask = true;
-        Route::includeFile('/includes/layouts/scripts.php', true);
-        ?>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card report-card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-cog mr-2"></i>
+                            Configuración del Reporte
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form name="algunNombre" action="pdf/deudores_inf.php" method="post" target="_blank">
+                            <div class="row">
+                                <!-- Left Column - Options -->
+                                <div class="col-md-6">
+                                    <div class="card options-card mb-3">
+                                        <div class="card-header bg-info text-white">
+                                            <h6 class="mb-0">
+                                                <i class="fas fa-list mr-1"></i>
+                                                <?= $lang->translation('Opciones') ?>
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="desc" class="form-label font-weight-bold">
+                                                    <i class="fas fa-filter mr-1"></i>
+                                                    Filtro de Cuentas
+                                                </label>
+                                                <select name="desc" id="desc" class="form-control" onclick="return cambiaPalabra(); return true">
+                                                    <option value="Selección"><?= $lang->translation('Selección') ?></option>
+                                                    <option value="Todos"><?= $lang->translation('Todos') ?></option>
+                                                    <?php foreach ($tabla12 as $row2): ?>
+                                                        <option value="<?= $row2->codigo ?>"><?= $row2->codigo . ', ' . $row2->descripcion ?></option>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="gru" class="form-label font-weight-bold">
+                                                    <i class="fas fa-sort mr-1"></i>
+                                                    Agrupación
+                                                </label>
+                                                <select name="gru" id="gru" class="form-control">
+                                                    <option value="A"><?= $lang->translation('Por Grado') ?></option>
+                                                    <option value="B"><?= $lang->translation('Por Cuenta') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <label for="cct" class="form-label font-weight-bold">
+                                                    <i class="fas fa-hashtag mr-1"></i>
+                                                    <?= $lang->translation('Con Cantidad') ?>
+                                                </label>
+                                                <select name="cct" id="cct" class="form-control">
+                                                    <option value="1"><?= $lang->translation('Si') ?></option>
+                                                    <option value="2"><?= $lang->translation('No') ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column - Paper Settings -->
+                                <div class="col-md-6">
+                                    <div class="card mb-3">
+                                        <div class="card-header bg-secondary text-white">
+                                            <h6 class="mb-0">
+                                                <i class="fas fa-file-pdf mr-1"></i>
+                                                Configuración del Papel
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="pag1" class="form-label font-weight-bold">
+                                                    <i class="fas fa-expand-arrows-alt mr-1"></i>
+                                                    <?= $lang->translation('Papel tamaño') ?>
+                                                </label>
+                                                <select name="pag1" id="pag1" class="form-control">
+                                                    <option value="Letter"><?= $lang->translation('Hoja Carta') ?></option>
+                                                    <option value="Legal"><?= $lang->translation('Hoja Legal') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <label for="pag" class="form-label font-weight-bold">
+                                                    <i class="fas fa-rotate-90 mr-1"></i>
+                                                    <?= $lang->translation('Papel orientación') ?>
+                                                </label>
+                                                <select name="pag" id="pag" class="form-control">
+                                                    <option value="P">Portrait</option>
+                                                    <option value="L">Landscape</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Month Selection Section -->
+                            <div class="card month-selection-card">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        <?= $lang->translation('Selección de Meses') ?>
+                                    </h6>
+                                </div>
+                                <div class="card-body month-grid p-3">
+                                    <!-- First Row of Months -->
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="ago" name="ago" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="ago">
+                                                    <?= $lang->translation('Agosto') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="sep" name="sep" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="sep">
+                                                    <?= $lang->translation('Septiembre') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="oct" name="oct" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="oct">
+                                                    <?= $lang->translation('Octubre') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="nov" name="nov" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="nov">
+                                                    <?= $lang->translation('Noviembre') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="dic" name="dic" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="dic">
+                                                    <?= $lang->translation('Diciembre') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Second Row of Months -->
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="ene" name="ene" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="ene">
+                                                    <?= $lang->translation('Enero') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="feb" name="feb" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="feb">
+                                                    <?= $lang->translation('Febrero') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="mar" name="mar" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="mar">
+                                                    <?= $lang->translation('Marzo') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="abr" name="abr" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="abr">
+                                                    <?= $lang->translation('Abril') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="may" name="may" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="may">
+                                                    <?= $lang->translation('Mayo') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Third Row of Months -->
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="jun" name="jun" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="jun">
+                                                    <?= $lang->translation('Matri/Junio') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-control custom-checkbox text-center">
+                                                <input type="checkbox" class="custom-control-input month-checkbox" id="jul" name="jul" value="1">
+                                                <label class="custom-control-label font-weight-bold" for="jul">
+                                                    <?= $lang->translation('Julio') ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col"></div>
+                                        <div class="col"></div>
+                                        <div class="col"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" name="pro" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-play mr-2"></i>
+                                    <?= $lang->translation('Procesar') ?>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    $jqMask = true;
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    ?>
 
 </body>
 

@@ -2,6 +2,7 @@
 
 use App\Enums\LanguageCode;
 use App\Models\Admin;
+use Carbon\Carbon;
 use Classes\Session;
 use Core\Database;
 use Core\TranslatorFactory;
@@ -71,3 +72,6 @@ TranslatorFactory::get()->setLocale($_locale);
 define('__LANG', $_locale);
 
 date_default_timezone_set(school_config('app.timezone', 'America/Puerto_Rico'));
+Carbon::setLocale($_locale);
+
+require_once 'constants.php';

@@ -1,6 +1,9 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Admin;
+use App\Models\Scopes\YearScope;
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -49,8 +52,8 @@ $lang = new Lang([
 
 ]);
 
-$school = new School(Session::id());
-$year = $school->info('year2');
+$user = Admin::user(Session::id())->first();
+$year = $user->year2;
 
 $test = 0;
 
@@ -80,9 +83,7 @@ if (isset($_POST['grabar'])) {
 
 
 
-$r2 = DB::table('colegio')->where([
-    ['usuario', 'administrador']
-])->orderBy('id')->first();
+$r2 = Admin::primaryAdmin()->first();
 
 $est = DB::table('year')->select("DISTINCT year")->where([
     ['pago_e_s', 'OK'],
@@ -152,9 +153,11 @@ $tes9 = count($est);
 <html>
 
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Untitled 1</title>
+    <?php
+    $title = $lang->translation('Pantalla para activación y desactivación de pantallas');
+    Route::includeFile('/admin/includes/layouts/header.php');
+    ?>
+
     <script language="JavaScript">
         function confirmar(mensaje) {
             return confirm(mensaje);
@@ -164,248 +167,257 @@ $tes9 = count($est);
         }
     </script>
     <style type="text/css">
-        .style1 {
-            font-size: large;
-            text-align: center;
+        .card-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
         }
 
-        .style3 {
-            background-color: #FFFFCC;
+        .grade-input {
+            max-width: 60px;
         }
 
-        .style4 {
-            text-align: center;
+        .activation-card {
+            border-left: 4px solid #007bff;
         }
 
-        .style5 {
-            text-align: center;
-            background-color: #CCCCCC;
+        .photo-type-card {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .style6 {
-            background-color: #FFFFCC;
-            text-align: center;
+        .photo-type-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
         }
 
-        .style7 {
-            background-color: #FFFFCC;
-            text-align: right;
-        }
-
-        .photoType {
-            border: 1px solid #000;
-            padding: 10px;
-            margin: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .photoType div {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .photoType div:last-child {
-            align-self: center;
-        }
-
-        .photoTypeHeader {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            align-items: center;
+        .stats-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
         }
     </style>
-    <?php
-    $title = $lang->translation('Pantalla para activación y desactivación de pantallas');
-    Route::includeFile('/admin/includes/layouts/header.php');
-    ?>
-</head>
-<?php
-$title = $lang->translation('Pantalla para activación y desactivación de pantallas');
-Route::includeFile('/admin/includes/layouts/header.php');
-?>
 
-<body>
+</head>
+
+<body class="pb-5">
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Pantalla para activación y desactivación de pantallas') ?></h1>
-        <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
+        <h1 class="text-center mb-4 mt-5"><?= $lang->translation('Pantalla para activación y desactivación de pantallas') ?></h1>
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-cogs mr-2"></i><?= $lang->translation('Opciones') ?> de Activación
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <!-- Enrollment and Supervised Studies Section -->
+                            <div class="row mb-4">
+                                <!-- Left Column - Grade Enrollment -->
+                                <div class="col-lg-7">
+                                    <div class="card mb-3">
+                                        <div class="card-header bg-info text-white">
+                                            <h6 class="mb-0"><?= $lang->translation('Total Matrículados:') ?> por Grado</h6>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-hover mb-0">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th><?= $lang->translation('Grado') ?></th>
+                                                            <th class="text-center"><?= $lang->translation('Mat.') ?></th>
+                                                            <th class="text-center"><?= $lang->translation('Cantidad') ?></th>
+                                                            <th><?= $lang->translation('Grado') ?></th>
+                                                            <th class="text-center"><?= $lang->translation('Mat.') ?></th>
+                                                            <th class="text-center"><?= $lang->translation('Cantidad') ?></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>KG</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes1; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es1" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es1; ?>" style="width: 70px;">
+                                                            </td>
+                                                            <td><strong>05</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes6; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es6" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es6; ?>" style="width: 70px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>01</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes2; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es2" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es2; ?>" style="width: 70px;">
+                                                            </td>
+                                                            <td><strong>06</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes7; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es7" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es7; ?>" style="width: 70px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>02</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes3; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es3" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es3; ?>" style="width: 70px;">
+                                                            </td>
+                                                            <td><strong>07</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes8; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es8" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es8; ?>" style="width: 70px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>03</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes4; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es4" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es4; ?>" style="width: 70px;">
+                                                            </td>
+                                                            <td><strong>08</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes9; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es9" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es9; ?>" style="width: 70px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>04</strong></td>
+                                                            <td class="text-center"><span class="badge badge-secondary"><?= $tes5; ?></span></td>
+                                                            <td class="text-center">
+                                                                <input name="es5" type="number" class="form-control form-control-sm" maxlength="2" value="<?= $r2->es5; ?>" style="width: 70px;">
+                                                            </td>
+                                                            <td colspan="3" class="text-center">
+                                                                <strong class="text-primary"><?= $lang->translation('Total:') ?> <span class="badge badge-primary"><?= $test; ?></span></strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <p>&nbsp;</p>
-            <form method="post">
+                                    <!-- T-Shirt Account Section -->
+                                    <div class="card">
+                                        <div class="card-header bg-secondary text-white">
+                                            <h6 class="mb-0">Configuración de Cuenta</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="ctacamisa" class="form-label font-weight-bold"><?= $lang->translation('Cuenta:') ?></label>
+                                                <input name="ctacamisa" id="ctacamisa" type="text" class="form-control" maxlength="6" value="<?= $r2->cta_camisa; ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <table align="center" cellpadding="2" cellspacing="0" style="width: 70%">
-                    <tr>
-                        <td><strong><?= $lang->translation('Grado') ?></strong></td>
-                        <td><strong><?= $lang->translation('Mat.') ?></strong></td>
-                        <td><strong><?= $lang->translation('Cantidad') ?></strong></td>
-                        <td><strong><?= $lang->translation('Grado') ?></strong></td>
-                        <td><strong><?= $lang->translation('Mat.') ?></strong></td>
-                        <td><strong><?= $lang->translation('Cantidad') ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>KG</strong></td>
-                        <td><?= $tes1; ?></td>
-                        <td>
-                            <input name="es1" type="text" maxlength="2" size="2" value="<?= $r2->es1; ?>" />
-                        </td>
-                        <td><strong>05</strong></td>
-                        <td><?= $tes6; ?></td>
-                        <td>
-                            <input name="es6" type="text" maxlength="2" size="2" value="<?= $r2->es6; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>01</strong></td>
-                        <td><?= $tes2; ?></td>
-                        <td>
-                            <input name="es2" type="text" maxlength="2" size="2" value="<?= $r2->es2; ?>" />
-                        </td>
-                        <td><strong>06</strong></td>
-                        <td><?= $tes7; ?></td>
-                        <td>
-                            <input name="es7" type="text" maxlength="2" size="2" value="<?= $r2->es7; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 31px"><strong>02</strong></td>
-                        <td style="height: 31px"><?= $tes3; ?></td>
-                        <td style="height: 31px">
-                            <input name="es3" type="text" maxlength="2" size="2" value="<?= $r2->es3; ?>" />
-                        </td>
-                        <td style="height: 31px"><strong>07</strong></td>
-                        <td style="height: 31px"><?= $tes8; ?></td>
-                        <td style="height: 31px">
-                            <input name="es8" type="text" maxlength="2" size="2" value="<?= $r2->es8; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>03</strong></td>
-                        <td><?= $tes4; ?></td>
-                        <td>
-                            <input name="es4" type="text" maxlength="2" size="2" value="<?= $r2->es4; ?>" />
-                        </td>
-                        <td><strong>08</strong></td>
-                        <td><?= $tes9; ?></td>
-                        <td>
-                            <input name="es9" type="text" maxlength="2" size="2" value="<?= $r2->es9; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>04</strong></td>
-                        <td><?= $tes5; ?></td>
-                        <td>
-                            <input name="es5" type="text" maxlength="2" size="2" value="<?= $r2->es5; ?>" />
-                        </td>
-                        <td colspan="2"><strong><?= $lang->translation('Activar Estudios Supervisados:') ?></strong></td>
-                        <td>
-                            <select name="esac">
-                                <option value="No" <?= $r2->esac === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->esac === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <th colspan="2"><?= $lang->translation('Total Matrículados:') ?></th>
-                        <td><b><? echo $test; ?></b></td>
-                    </tr>
-                    <tr>
-                        <td><strong><?= $lang->translation('Cuenta:') ?></strong></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activar ordenes de camisetas:') ?></strong></td>
-                        <td>
-                            <select name="camisa">
-                                <option value="No" <?= $r2->camisas === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->camisas === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>
-                                <input name="ctacamisa" type="text" maxlength="6" size="5" value="<?= $r2->cta_camisa; ?>" /></strong></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activar cena de graduación 12:') ?></strong></td>
-                        <td>
-                            <select name="cena">
-                                <option value="No" <?= $r2->cena === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->cena === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activación Inflable') ?></strong></td>
-                        <td>
-                            <select name="actinf">
-                                <option value="No" <?= $r2->actinf === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->actinf === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activación abono matrícula') ?></strong></td>
-                        <td>
-                            <select name="actmat">
-                                <option value="No" <?= $r2->actmat === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->actmat === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activación abono mensualidad') ?></strong></td>
-                        <td>
-                            <select name="actmen">
-                                <option value="No" <?= $r2->actmen === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->actmen === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2"><strong><?= $lang->translation('Activación compras de fotos') ?></strong></td>
-                        <td>
-                            <select name="actfotos">
-                                <option value="No" <?= $r2->actfotos === 'No' ? 'selected' : '' ?>>No</option>
-                                <option value="Si" <?= $r2->actfotos === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <p>&nbsp;</p>
-                <div class="style4">
-                    <input class="btn btn-primary" name="grabar" style="width: 90px" type="submit" value="<?= $lang->translation('Grabar') ?>" />
+                                <!-- Right Column - Activation Toggles -->
+                                <div class="col-lg-5">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h6 class="mb-0">Activaciones del Sistema</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="esac" class="form-label font-weight-bold"><?= $lang->translation('Activar Estudios Supervisados:') ?></label>
+                                                <select name="esac" id="esac" class="form-control">
+                                                    <option value="No" <?= $r2->esac === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->esac === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="camisa" class="form-label font-weight-bold"><?= $lang->translation('Activar ordenes de camisetas:') ?></label>
+                                                <select name="camisa" id="camisa" class="form-control">
+                                                    <option value="No" <?= $r2->camisas === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->camisas === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="cena" class="form-label font-weight-bold"><?= $lang->translation('Activar cena de graduación 12:') ?></label>
+                                                <select name="cena" id="cena" class="form-control">
+                                                    <option value="No" <?= $r2->cena === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->cena === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="actinf" class="form-label font-weight-bold"><?= $lang->translation('Activación Inflable') ?></label>
+                                                <select name="actinf" id="actinf" class="form-control">
+                                                    <option value="No" <?= $r2->actinf === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->actinf === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="actmat" class="form-label font-weight-bold"><?= $lang->translation('Activación abono matrícula') ?></label>
+                                                <select name="actmat" id="actmat" class="form-control">
+                                                    <option value="No" <?= $r2->actmat === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->actmat === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="actmen" class="form-label font-weight-bold"><?= $lang->translation('Activación abono mensualidad') ?></label>
+                                                <select name="actmen" id="actmen" class="form-control">
+                                                    <option value="No" <?= $r2->actmen === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->actmen === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <label for="actfotos" class="form-label font-weight-bold"><?= $lang->translation('Activación compras de fotos') ?></label>
+                                                <select name="actfotos" id="actfotos" class="form-control">
+                                                    <option value="No" <?= $r2->actfotos === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->actfotos === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" name="grabar" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-save mr-2"></i><?= $lang->translation('Grabar') ?>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <?php if ($r2->actfotos === 'Si') : ?>
-        <div>
-            <div class="photoTypeHeader">
-                <h2>Tipos de fotos</h2>
-                <button onclick="addNewPhotoType()" class="btn btn-primary"><?= $lang->translation('Agregar') ?></button>
             </div>
-            <div id="photosList">
-
+        </div>
+    </div> <?php if ($r2->actfotos === 'Si') : ?>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mt-4">
+                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-camera mr-2"></i>
+                                <?= $lang->translation('Tipos de fotos') ?>
+                            </h5>
+                            <button onclick="addNewPhotoType()" class="btn btn-light btn-sm">
+                                <i class="fas fa-plus mr-1"></i>
+                                <?= $lang->translation('Agregar') ?>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="photosList">
+                                <!-- Photo types will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -453,24 +465,55 @@ Route::includeFile('/admin/includes/layouts/header.php');
                 price
             }) {
                 return `
-				<div class="photoType" data-id="${id}">
-					<div>
-						<label for="name${id}"><?= $lang->translation('Nombre') ?></label>
-						<input type="text" id="name${id}" value="${name}">
-					</div>
-					<div>
-						<label for="description${id}"><?= $lang->translation('Descripción') ?></label>
-						<input type="text" id="description${id}" value="${description ?? ''}">
-					</div>
-					<div>
-						<label for="price${id}"><?= $lang->translation('Precio') ?></label>
-						<input type="text" id="price${id}" value="${price}">
-					</div>
-					<div>
-						<button onclick="updatePhotoType(${id})" class="btn btn-primary"><?= $lang->translation('Guardar') ?></button>
-						<button onclick="deletePhotoType(${id})" class="btn btn-danger"><?= $lang->translation('Borrar') ?></button>
-					</div>
-				</div>`;
+                <div class="card photo-type-card mb-3" data-id="${id}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name${id}" class="form-label font-weight-bold">
+                                        <i class="fas fa-tag mr-1"></i>
+                                        <?= $lang->translation('Nombre') ?>
+                                    </label>
+                                    <input type="text" id="name${id}" class="form-control" value="${name}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="description${id}" class="form-label font-weight-bold">
+                                        <i class="fas fa-align-left mr-1"></i>
+                                        <?= $lang->translation('Descripción') ?>
+                                    </label>
+                                    <input type="text" id="description${id}" class="form-control" value="${description ?? ''}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="price${id}" class="form-label font-weight-bold">
+                                        <i class="fas fa-dollar-sign mr-1"></i>
+                                        <?= $lang->translation('Precio') ?>
+                                    </label>
+                                    <input type="text" id="price${id}" class="form-control" value="${price}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label font-weight-bold">
+                                    <i class="fas fa-cogs mr-1"></i>
+                                    <?= $lang->translation('Acciones') ?>
+                                </label>
+                                <div class="btn-group d-flex">
+                                    <button onclick="updatePhotoType(${id})" class="btn btn-success btn-sm">
+                                        <i class="fas fa-save mr-1"></i>
+                                        <?= $lang->translation('Guardar') ?>
+                                    </button>
+                                    <button onclick="deletePhotoType(${id})" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash mr-1"></i>
+                                        <?= $lang->translation('Borrar') ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
             }
 
             function getAllPhotosTypes() {
@@ -487,10 +530,5 @@ Route::includeFile('/admin/includes/layouts/header.php');
         </script>
     <?php endif; ?>
 </body>
-<br />
-<br />
-<br />
-<br />
-<br />
 
 </html>

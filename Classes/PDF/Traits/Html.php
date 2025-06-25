@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes\FPDF\Traits;
+namespace Classes\PDF\Traits;
 
 trait Html
 {

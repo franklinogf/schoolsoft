@@ -2,53 +2,51 @@
 
 namespace Classes;
 
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
+// use Classes\Controllers\School;
+
+use App\Models\Admin;
+use App\Models\School;
+use App\Models\Teacher;
+// use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
 use Classes\Mail\PHPMailer;
 use Classes\Mail\SMTP;
 
 class Mail extends PHPMailer
 {
-    public $replyTo = true;
 
     public function __construct($debug = false, $type = 'School')
     {
         $this->CharSet = 'UTF-8';
+        $school = School::current();
 
-        if ($type === 'School' || $type === 'Teacher') {
-            $school = new School();
-            $isSMTP = $school->info('host') === 'E' ? true : false;
-            $name = $school->info('colegio');
-            $fromEmail = $replayToEmail = $school->info('correo');
-            $replayToName = $name;
-            if ($type === 'Teacher') {
-                $teacher = new Teacher(Session::id());
-                $replayToEmail = $teacher->email1;
-                $replayToName = $teacher->fullName();
-            }
-            if ($isSMTP) {
-                $host = $school->info('host_smtp');
-                $fromEmail = $school->info('email_smtp');
-                $password = $school->info('clave_email');
-                $port = $school->info('port');
-                parent::__construct(true);
-                $this->isSMTP();
-                $this->SMTPDebug = ($debug) ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
-                $this->Host = $host;
-                $this->SMTPAuth = true;
-                $this->Username = $fromEmail;
-                $this->Password = $password;
-                $this->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $this->Port = $port;
-            }
 
-            $this->setFrom($fromEmail, utf8_decode($name));
-            if ($this->replyTo) {
-                $this->addReplyTo($replayToEmail, utf8_decode($replayToName));
-            }
+        $admin = Admin::primaryAdmin()->first();
+        // $isSMTP = $admin->host === 'E' ? true : false;
+        $name = $admin->colegio;
+        $replayToEmail = $admin->correo;
+        $replayToName = $name;
 
+        if ($type === 'Teacher') {
+            $teacher = Teacher::find(Session::id())->first();
+            $replayToEmail = $teacher->email1;
+            $replayToName = $teacher->fullName;
         }
+
+        // if ($isSMTP) {
+        parent::__construct($debug);
+        $this->isSMTP();
+        $this->SMTPDebug = $debug ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
+        $this->Host = $school->data['smtp_host'];
+        $this->SMTPAuth = true;
+        $this->Username = $school->data['smtp_username'];
+        $this->Password = $school->data['smtp_password'];
+        $this->SMTPSecure = $school->data['smtp_encryption'];
+        $this->Port = $school->data['smtp_port'];
+        // }
+
+        $this->setFrom($school->data['default_mail_from'], $name);
+        $this->addReplyTo($replayToEmail, $replayToName);
     }
 
     public static function queue(string $from, string $replyTo, array $to, string $subject, string $message, string | null $text = null, array $attachments = [])
@@ -68,5 +66,4 @@ class Mail extends PHPMailer
             'user' => Session::id() ?? null,
         ]);
     }
-
 }

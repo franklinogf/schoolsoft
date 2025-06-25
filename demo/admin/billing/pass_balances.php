@@ -265,6 +265,7 @@ if (isset($_POST['pasa'])) {
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
     <title>Untitled 1</title>
+
     <script language="JavaScript">
         document.oncontextmenu = function() {
             return false
@@ -276,34 +277,46 @@ if (isset($_POST['pasa'])) {
 
         function cambiaPalabra() {
             var dis = document.algunNombre.pasar.value;
+            var form = document.algunNombre;
+
             if (dis == 'B') {
-                document.algunNombre.ida1.disabled = false;
-                document.algunNombre.ida2.disabled = false;
-                document.algunNombre.ida3.disabled = false;
-                document.algunNombre.ida4.disabled = false;
-                document.algunNombre.idb1.disabled = false;
-                document.algunNombre.idb2.disabled = false;
-                document.algunNombre.idb3.disabled = false;
-                document.algunNombre.idb4.disabled = false;
-                document.algunNombre.pasat.disabled = true;
-                document.algunNombre.fec1.disabled = true;
-                document.algunNombre.fec2.disabled = false;
-                document.getElementById('cal-button-1').disabled = true;
-                document.getElementById('cal-button-2').disabled = false;
+                // Enable selection mode
+                form.ida1.disabled = false;
+                form.ida2.disabled = false;
+                form.ida3.disabled = false;
+                form.ida4.disabled = false;
+                form.idb1.disabled = false;
+                form.idb2.disabled = false;
+                form.idb3.disabled = false;
+                form.idb4.disabled = false;
+                form.fec2.disabled = false;
+
+                // Disable pass all mode
+                form.pasat.disabled = true;
+                form.fec1.disabled = true;
+
+                // Update UI feedback
+                document.getElementById('pass-all-section').style.opacity = '0.5';
+                document.getElementById('by-selection-section').style.opacity = '1';
             } else {
-                document.algunNombre.ida1.disabled = true;
-                document.algunNombre.ida2.disabled = true;
-                document.algunNombre.ida3.disabled = true;
-                document.algunNombre.ida4.disabled = true;
-                document.algunNombre.idb1.disabled = true;
-                document.algunNombre.idb2.disabled = true;
-                document.algunNombre.idb3.disabled = true;
-                document.algunNombre.idb4.disabled = true;
-                document.algunNombre.fec1.disabled = false;
-                document.algunNombre.fec2.disabled = true;
-                document.algunNombre.pasat.disabled = false;
-                document.getElementById('cal-button-2').disabled = true;
-                document.getElementById('cal-button-1').disabled = false;
+                // Enable pass all mode
+                form.pasat.disabled = false;
+                form.fec1.disabled = false;
+
+                // Disable selection mode
+                form.ida1.disabled = true;
+                form.ida2.disabled = true;
+                form.ida3.disabled = true;
+                form.ida4.disabled = true;
+                form.idb1.disabled = true;
+                form.idb2.disabled = true;
+                form.idb3.disabled = true;
+                form.idb4.disabled = true;
+                form.fec2.disabled = true;
+
+                // Update UI feedback
+                document.getElementById('pass-all-section').style.opacity = '1';
+                document.getElementById('by-selection-section').style.opacity = '0.5';
             }
         }
     </script>
@@ -348,6 +361,11 @@ if (isset($_POST['pasa'])) {
             background-color: #CCCCCC;
             text-align: center;
         }
+
+        #by-selection-section {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
     </style>
     <?php
     $title = $lang->translation('Pasar balances');
@@ -358,96 +376,139 @@ if (isset($_POST['pasa'])) {
 <body>
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
-    ?>
-    <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Pantalla para Pasar los Balances') ?></h1>
-        <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-            <div class="div">
-
-
-                <form name="algunNombre" method="post">
-                    <div class="style3">
-                        <p class="style1">&nbsp;</p>
-                        <table align="center" cellpadding="2" cellspacing="0" style="width: 50%">
-                            <tr>
-                                <td class="style7"><strong><?= $lang->translation("Opciones") ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td class="gris">
-                                    <select name="pasar" style="width: 102px" onclick="return cambiaPalabra(); return true">
-                                        <option value="A"><?= $lang->translation("Pasar Todo") ?></option>
-                                        <option value="B"><?= $lang->translation("Por Selección") ?></option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style7">
-                                    <strong><?= $lang->translation("Todos") ?></strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td color="gris">
-                                    <input maxlength="7" name="pasat" size="7" type="text" required />&nbsp;&nbsp;
-                                    <input type='date' id='cal-field-1' name='fec1' size='10' maxlength='10' required />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style7">
-                                    <strong><?= $lang->translation("Por Selección") ?></strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input maxlength="7" name="ida1" size="7" type="text" disabled="" required />&nbsp;
-                                    <?= $lang->translation("a") ?>&nbsp;
-                                    <input maxlength="7" name="idb1" size="7" type="text" disabled="" required />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input maxlength="7" name="ida2" size="7" type="text" disabled="" />&nbsp; <?= $lang->translation("a") ?>&nbsp;
-                                    <input maxlength="7" name="idb2" size="7" type="text" disabled="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input maxlength="7" name="ida3" size="7" type="text" disabled="" />&nbsp; <?= $lang->translation("a") ?>&nbsp;
-                                    <input maxlength="7" name="idb3" size="7" type="text" disabled="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input maxlength="7" name="ida4" size="7" type="text" disabled="" />&nbsp; <?= $lang->translation("a") ?>&nbsp;
-                                    <input maxlength="7" name="idb4" size="7" type="text" disabled="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type='date' id='cal-field-2' name='fec2' size='10' maxlength='10' disabled="" required />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="style5">&nbsp;</td>
-                            </tr>
-                        </table>
-                        <p class="style1">&nbsp;</p>
-                        <strong>
-                            <input class="btn btn-primary" name="pasa" style="width: 130px" type="submit" value="<?= $lang->translation('Transferir') ?>" />
-                        </strong>
+    ?> <div class="container-lg mt-lg-3 mb-5 px-0">
+        <h1 class="text-center mb-4 mt-5"><?= $lang->translation('Pantalla para Pasar los Balances') ?></h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-exchange-alt mr-2"></i><?= $lang->translation("Opciones") ?>
+                        </h5>
                     </div>
+                    <div class="card-body">
+                        <form name="algunNombre" method="post">
+                            <!-- Transfer Mode Selection -->
+                            <div class="form-group mb-4">
+                                <label for="pasar" class="form-label font-weight-bold"><?= $lang->translation("Tipo de Transferencia") ?></label>
+                                <select name="pasar" id="pasar" class="form-control" onchange="cambiaPalabra()">
+                                    <option value="A"><?= $lang->translation("Pasar Todo") ?></option>
+                                    <option value="B"><?= $lang->translation("Por Selección") ?></option>
+                                </select>
+                            </div>
 
-                </form>
+                            <!-- Pass All Section -->
+                            <div id="pass-all-section" class="card mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0"><?= $lang->translation("Todos") ?></h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="pasat" class="form-label font-weight-bold"><?= $lang->translation("Código") ?></label>
+                                                <input type="text" class="form-control" id="pasat" name="pasat" maxlength="7" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="fec1" class="form-label font-weight-bold">Fecha</label>
+                                                <input type="date" class="form-control" id="fec1" name="fec1" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- By Selection Section -->
+                            <div id="by-selection-section" class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><?= $lang->translation("Por Selección") ?></h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-5">
+                                            <label class="form-label font-weight-bold">Desde</label>
+                                            <input type="text" class="form-control" name="ida1" maxlength="7" disabled required>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end justify-content-center">
+                                            <span class="font-weight-bold"><?= $lang->translation("a") ?></span>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label font-weight-bold">Hasta</label>
+                                            <input type="text" class="form-control" name="idb1" maxlength="7" disabled required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="ida2" maxlength="7" disabled>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="font-weight-bold"><?= $lang->translation("a") ?></span>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="idb2" maxlength="7" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="ida3" maxlength="7" disabled>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="font-weight-bold"><?= $lang->translation("a") ?></span>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="idb3" maxlength="7" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="ida4" maxlength="7" disabled>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                            <span class="font-weight-bold"><?= $lang->translation("a") ?></span>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" name="idb4" maxlength="7" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="fec2" class="form-label font-weight-bold">Fecha</label>
+                                                <input type="date" class="form-control" id="fec2" name="fec2" disabled required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" name="pasa" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-arrow-right mr-2"></i><?= $lang->translation('Transferir') ?>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
     <?php
     $jqMask = true;
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            cambiaPalabra(); // Set initial state
+        });
+    </script>
 </body>
 
 </html>

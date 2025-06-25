@@ -1,28 +1,20 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Admin;
 use Classes\Controllers\School;
-use Classes\DataBase\DB;
 use Classes\Email;
-use Classes\Lang;
 use Classes\Session;
 
 Session::is_logged();
-$lang = new Lang([
-    ['es', 'in'],
-    ['', ''],
-]);
 
-$reg = DB::table('colegio')->whereRaw("usuario = 'administrador'")->first();
+$reg = Admin::primaryAdmin()->first();
 $colegio = $reg->colegio;
 
 $school = new School(Session::id());
-$year = $school->info('year2');
 
-$email = new Email();
-
-$title = $lang->translation('Primer aviso de cobro');
-$subject = $lang->translation('Primer aviso de cobro');
+$title = __('Primer aviso de cobro');
+$subject = __('Primer aviso de cobro');
 
 $schoolName = $colegio;
 
@@ -31,8 +23,8 @@ include 'pagos_aut_emailTemplate.php';
 $body = ob_get_contents();
 ob_end_clean();
 
-$email->send(
-    to: ['franklinomarflores@gmail.com'],
-    subject: 'Recibo',
-    message: $body
-);
+
+Email::to('franklinomarflores@gmail.com')
+    ->subject('Recibo')
+    ->body($body)
+    ->send();

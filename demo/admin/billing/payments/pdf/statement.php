@@ -149,16 +149,8 @@ if (empty($emails)) {
 
 $file = $pdf->Output('S');
 
-// Send email with the PDF attachment
-$mail = new Email();
-$result = $mail->send(
-    to: $emails,
-    subject: 'Estado de cuenta',
-    message: "Adjunto el estado de cuenta de la cuenta $accountId",
-    attachments: [
-        [
-            'filename' => "estado_de_cuenta_$accountId.pdf",
-            'content' => $file,
-        ]
-    ]
-);
+Email::to($emails)
+    ->subject('Estado de cuenta')
+    ->body("Adjunto el estado de cuenta de la cuenta $accountId")
+    ->attach($file, "estado_de_cuenta_$accountId.pdf")
+    ->send();
