@@ -79,39 +79,113 @@ $options = [
     $title = $lang->translation("Menú de la cafeteria");
     Route::includeFile('/cafeteria/includes/layouts/header.php');
     ?>
+    <link rel="stylesheet" href="menu.css">
 </head>
 
-<body>
+<body class="bg-light">
+    <!-- Hero Section -->
+    <div class="cafeteria-hero">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-utensils mr-3"></i>
+                    <?= $lang->translation("Menú de la cafeteria") ?>
+                </h1>
+                <p class="lead mb-0">Sistema de gestión integral para cafetería escolar</p>
+            </div>
+        </div>
+    </div>
 
-    <div class="container-md mt-md-3 mb-md-5 px-0">
+    <div class="container">
+        <!-- Menu Cards -->
+        <div class="row justify-content-center">
+            <?php
+            $cardIcons = [
+                'Opciones' => 'fas fa-cogs',
+                'Options' => 'fas fa-cogs',
+                'Informes' => 'fas fa-chart-bar',
+                'Reports' => 'fas fa-chart-bar'
+            ];
 
-        <h1 class="text-center my-5"><?= $lang->translation("Menú de la cafeteria") ?></h1>
+            $buttonClasses = [
+                'Inventario' => 'menu-btn-inventory',
+                'Inventory' => 'menu-btn-inventory',
+                'Botones' => 'menu-btn-buttons',
+                'Buttons' => 'menu-btn-buttons',
+                'Caja' => 'menu-btn-cash',
+                'Cash register' => 'menu-btn-cash',
+                'Ordenes' => 'menu-btn-orders',
+                'Orders' => 'menu-btn-orders',
+                'Informe' => 'menu-btn-report',
+                'Report' => 'menu-btn-report',
+                'Ajuste de cuentas' => 'menu-btn-reckoning',
+                'Reckoning' => 'menu-btn-reckoning',
+                'Cuadre del dia' => 'menu-btn-balance',
+                'Daily account balance' => 'menu-btn-balance',
+                'Compras' => 'menu-btn-purchases',
+                'Purchases' => 'menu-btn-purchases'
+            ];
 
-        <div class="row row-cols-1 row-cols-md-2 mx-2 mx-md-0 justify-content-around">
+            $buttonIcons = [
+                'Inventario' => 'fas fa-boxes',
+                'Inventory' => 'fas fa-boxes',
+                'Botones' => 'fas fa-th-large',
+                'Buttons' => 'fas fa-th-large',
+                'Caja' => 'fas fa-cash-register',
+                'Cash register' => 'fas fa-cash-register',
+                'Ordenes' => 'fas fa-clipboard-list',
+                'Orders' => 'fas fa-clipboard-list',
+                'Informe' => 'fas fa-file-alt',
+                'Report' => 'fas fa-file-alt',
+                'Ajuste de cuentas' => 'fas fa-balance-scale',
+                'Reckoning' => 'fas fa-balance-scale',
+                'Cuadre del dia' => 'fas fa-calculator',
+                'Daily account balance' => 'fas fa-calculator',
+                'Compras' => 'fas fa-shopping-cart',
+                'Purchases' => 'fas fa-shopping-cart'
+            ];
+            ?>
 
             <?php foreach ($options as $option) : ?>
-                <div class="col mb-4">
-                    <fieldset class="border border-secondary rounded-bottom h-100 px-2">
-                        <legend class="w-auto"><?= $option['title'][__LANG] ?></legend>
-                        <div class="pb-3">
-                            <div class="row row-cols-2">
-                                <?php foreach ($option['buttons'] as $button) : ?>
-                                    <div class="col mt-1">
-                                        <a style="font-size: .8em;" title="<?= $button['desc'][__LANG] ?>" <?= isset($button['target']) ? "target='{$button['target']}'" : ''  ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?></a>
-                                    </div>
-                                    <div class="col mt-1">
-                                        <p class="mb-0 align-middle"><?= $button['desc'][__LANG] ?></p>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
+                <div class="col-lg-6 col-xl-5 mb-4">
+                    <div class="card menu-card">
+                        <div class="menu-card-header">
+                            <i class="<?= $cardIcons[$option['title'][__LANG]] ?? 'fas fa-folder' ?> menu-icon"></i>
+                            <?= $option['title'][__LANG] ?>
                         </div>
-                    </fieldset>
+                        <div class="card-body p-4">
+                            <?php foreach ($option['buttons'] as $button) : ?>
+                                <div class="menu-option">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-5 mb-2 mb-md-0">
+                                            <a href="<?= $button['link'] ?>"
+                                                class="btn menu-btn <?= $buttonClasses[$button['name'][__LANG]] ?? 'btn-primary' ?> btn-block"
+                                                title="<?= $button['desc'][__LANG] ?>"
+                                                <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?>>
+                                                <i class="<?= $buttonIcons[$button['name'][__LANG]] ?? 'fas fa-link' ?> mr-2"></i>
+                                                <?= mb_strtoupper($button['name'][__LANG], 'UTF-8') ?>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="menu-description">
+                                                <?= $button['desc'][__LANG] ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
                 </div>
             <?php endforeach ?>
-
         </div>
-        <div class="text-center">
-            <a href="../" class="btn btn-primary"><?= $lang->translation("Salir") ?></a>
+
+        <!-- Exit Button -->
+        <div class="text-center mt-5 mb-4">
+            <a href="../" class="btn exit-btn">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <?= $lang->translation("Salir") ?>
+            </a>
         </div>
     </div>
 </body>

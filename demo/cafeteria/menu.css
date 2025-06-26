@@ -1,0 +1,280 @@
+/* Modern Bootstrap 4.6 Cafeteria Menu Styles */
+.cafeteria-hero {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 3rem 0;
+  margin-bottom: 3rem;
+  border-radius: 0 0 2rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.menu-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 1rem;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.menu-card-header {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  padding: 1.25rem;
+  border-bottom: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.menu-option {
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.menu-option:hover {
+  transform: translateX(5px);
+  background: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.menu-option:last-child {
+  margin-bottom: 0;
+}
+
+.menu-btn {
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  color: white;
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.menu-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.menu-btn-inventory {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.menu-btn-inventory:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+}
+
+.menu-btn-buttons {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.menu-btn-buttons:hover {
+  background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+}
+
+.menu-btn-cash {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+  color: #212529 !important;
+}
+
+.menu-btn-cash:hover {
+  background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+  color: #212529 !important;
+}
+
+.menu-btn-orders {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.menu-btn-orders:hover {
+  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+}
+
+.menu-btn-report {
+  background: linear-gradient(135deg, #6f42c1 0%, #59359a 100%);
+}
+
+.menu-btn-report:hover {
+  background: linear-gradient(135deg, #59359a 0%, #4e2a87 100%);
+}
+
+.menu-btn-reckoning {
+  background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+}
+
+.menu-btn-reckoning:hover {
+  background: linear-gradient(135deg, #e55a00 0%, #dc5200 100%);
+}
+
+.menu-btn-balance {
+  background: linear-gradient(135deg, #6610f2 0%, #520dc2 100%);
+}
+
+.menu-btn-balance:hover {
+  background: linear-gradient(135deg, #520dc2 0%, #4e0ab8 100%);
+}
+
+.menu-btn-purchases {
+  background: linear-gradient(135deg, #e83e8c 0%, #d91a72 100%);
+}
+
+.menu-btn-purchases:hover {
+  background: linear-gradient(135deg, #d91a72 0%, #c21765 100%);
+}
+
+.menu-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.exit-btn {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.exit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+  color: white;
+  background: linear-gradient(135deg, #5a6268 0%, #545b62 100%);
+}
+
+.exit-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.3);
+  color: white;
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cafeteria-hero {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  .cafeteria-hero .display-4 {
+    font-size: 2rem;
+  }
+
+  .menu-option {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .menu-btn {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .menu-card-header {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .menu-option .row {
+    flex-direction: column;
+  }
+
+  .menu-option .col-md-5,
+  .menu-option .col-md-7 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .menu-btn {
+    margin-bottom: 0.5rem;
+  }
+
+  .exit-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.menu-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+/* Focus and Accessibility */
+.menu-btn:focus,
+.exit-btn:focus {
+  outline: none;
+}
+
+.menu-option:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode support (if needed in the future) */
+@media (prefers-color-scheme: dark) {
+  .menu-option {
+    background: #343a40;
+    border-color: #495057;
+    color: #ffffff;
+  }
+
+  .menu-description {
+    color: #adb5bd;
+  }
+
+  .menu-option:hover {
+    background: #495057;
+    border-color: #007bff;
+  }
+}
