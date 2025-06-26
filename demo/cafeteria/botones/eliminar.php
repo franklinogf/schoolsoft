@@ -1,11 +1,11 @@
 <?php
 
-use Classes\DataBase\DB;
+use App\Models\CafeteriaButton;
 
 require_once '../../app.php';
 
 $id = $_POST['id'];
 
-DB::table('T_cafeteria')->where('id', $id)->delete();
+CafeteriaButton::find($id)->delete();
 
 header("Location: index.php");
