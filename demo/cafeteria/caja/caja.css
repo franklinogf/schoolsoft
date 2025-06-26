@@ -1,91 +1,343 @@
-.img-list {
-    margin: 10px;
+/* Bootstrap 4.6 Enhanced Styles */
+.cafeteria-header {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 2rem 0;
+  border-radius: 0 0 1rem 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.food-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  cursor: pointer;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.food-card:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.food-card:active {
+  transform: translateY(0);
+  box-shadow: 0px 0px 14px 8px #666;
+}
+
+.food-card .card-img-top {
+  height: 120px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  max-width: 130px;
+  max-height: 130px;
+  margin: 0 auto;
+  display: block;
+}
+
+.food-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.food-card .card-body {
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.food-card .card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.price {
+  color: #28a745;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.cart-section {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1rem;
+}
+
+.barcode-input {
+  max-width: 350px;
+}
+
+.shopping-cart {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.cart-total {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 0.375rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.payment-method {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin: 0.25rem;
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-method.active {
+  border-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.payment-method img {
+  max-width: 50px;
+  max-height: 35px;
+  object-fit: contain;
+}
+
+.payment-method small {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.payment-method.active small {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link {
+  border-radius: 0.375rem 0.375rem 0 0;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.table-responsive {
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .cafeteria-header {
+    padding: 1.5rem 0;
   }
 
-  .card-body {
-    padding: 8px !important;
-    text-align: center;
+  .barcode-input {
+    max-width: 100%;
   }
 
-  .card-img-top {
-    max-width: 130px;
-    max-height: 130px;
+  .cart-section {
+    margin-top: 2rem;
   }
 
-  .card:hover {
-    opacity: 0.6;
-    box-shadow: 0px 0 5px 1px black;
+  .payment-method {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .sticky-top {
+    position: relative !important;
+    top: auto !important;
   }
 
-  .card {
-    cursor: pointer;
+  .cart-section {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cafeteria-header h1 {
+    font-size: 2rem;
   }
 
-  .card:active {
-    /*box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);*/
-    box-shadow: 0px 0px 14px 8px #666;
-    ;
-    transform: translateY(-4px);
+  .payment-method {
+    margin-bottom: 0.5rem;
+    min-height: 60px;
   }
 
+  .payment-method img {
+    max-width: 40px;
+    max-height: 25px;
+  }
+}
 
-  .price b:before {
-    font-family: "Font Awesome 5 Free";
-    content: "\f155";
-    font-size: 15px;
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.sticky-top {
+  top: 1rem;
+}
+
+/* Enhanced Modal Styling */
+.modal-header.bg-info,
+.modal-header.bg-danger,
+.modal-header.bg-warning {
+  border-bottom: none;
+}
+
+.modal-header .close {
+  text-shadow: none;
+  opacity: 0.8;
+}
+
+.modal-header .close:hover {
+  opacity: 1;
+}
+
+/* Student Profile Card */
+#studentProfile {
+  border: 2px solid #28a745;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+#studentProfile .profile-picture {
+  border: 3px solid #28a745;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Payment Method Cards */
+.payment-method {
+  border: 2px solid #e9ecef !important;
+  transition: all 0.3s ease;
+}
+
+.payment-method:hover {
+  border-color: #007bff !important;
+  background-color: rgba(0, 123, 255, 0.05) !important;
+}
+
+.payment-method.active {
+  border-color: #007bff !important;
+  background-color: rgba(0, 123, 255, 0.1) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Enhanced Form Controls */
+.form-control-lg {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.input-group-text.bg-success,
+.input-group-text.bg-info,
+.input-group-text.bg-warning,
+.input-group-text.bg-primary {
+  border: none;
+  font-weight: 600;
+}
+
+/* Tab Enhancement */
+.nav-tabs.nav-fill .nav-link {
+  border-radius: 0.375rem 0.375rem 0 0;
+  margin-right: 2px;
+  font-weight: 600;
+}
+
+.nav-tabs.nav-fill .nav-link:hover {
+  border-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Table Enhancement */
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Credit Card Enhancement */
+#credito .card {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+}
+
+/* Progress Modal Enhancement */
+#progressModal .modal-content {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#progressModal .progress {
+  height: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+/* Animation for cards */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive enhancements */
+@media (max-width: 575.98px) {
+  .payment-method {
+    margin-bottom: 0.5rem;
+    min-height: 70px;
   }
 
-  li.pric {
-    cursor: pointer;
-
+  .payment-method img {
+    max-width: 35px;
+    max-height: 25px;
   }
 
-  li.pric:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: red;
-    transform: scaleX(0);
-    transform-origin: 50% 50%;
-    transition: transform .3s ease-in;
+  .nav-tabs.nav-fill .nav-link {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.25rem;
   }
-
-  li.pric:hover:before {
-
-    font-family: "Font Awesome 5 Free";
-    font-size: 35px;
-    content: "\f2ed";
-    height: 53px;
-    line-height: 53px;
-    text-align: center;
-    transform: scaleX(1);
-
-  }
-
-  #pagar {
-    margin-bottom: 10px;
-  }
-
-  .lblmetodo {
-    border-color: #007bff !important;
-  }
-
-  .lblmetodo.active {
-    box-shadow: 0px 0px 10px 2px #666 !important;
-  }
-
-  #metodos {
-    margin-bottom: 10px;
-  }
-
-  #metodos img {
-    width: 60px !important;
-  }
-
-  button.ui-corner-right.ui-button-icon.ui-combobox-button:after {
-    content: "▼";
-
-  }
+}

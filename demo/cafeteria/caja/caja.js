@@ -417,12 +417,15 @@ $(document).ready(function () {
                   $('#profilePicture')
                     .prop('src', `../../picture/${$data.tipo}.jpg`)
                     .removeClass('d-none')
+                  $('#studentProfile').removeClass('d-none')
                 })
                 .fail(function () {
                   $('#profilePicture').prop('src', '#').addClass('d-none')
+                  $('#studentProfile').addClass('d-none')
                 })
             } else {
               $('#profilePicture').prop('src', '#').addClass('d-none')
+              $('#studentProfile').addClass('d-none')
             }
 
             $('#cbarra').val($('#estudiante').val())
@@ -448,6 +451,7 @@ $(document).ready(function () {
           } else {
             $('#btnPagar').prop('disabled', true)
             $('#profilePicture').prop('src', '#').addClass('d-none')
+            $('#studentProfile').addClass('d-none')
             $('#cantidadDeposito').val('')
             $('#nombre_estudiante').text('No se ha encontrado un estudiante')
             $('#estudiante').focus()
@@ -474,6 +478,7 @@ $(document).ready(function () {
           }
           $('#cantidadDeposito').val(data.cantidad)
           $('#profilePicture').prop('src', data.tipo).removeClass('d-none')
+          $('#studentProfile').removeClass('d-none')
 
           if (parseFloat($('#cantidadPagar').val()) > parseFloat(data.cantidad)) {
             if (parseFloat(data.cantidad) < 0) {
@@ -559,6 +564,7 @@ $(document).ready(function () {
     $('#estu').val('').trigger('change')
     $('#estudiante').val('')
     $('#profilePicture').addClass('d-none').prop('src', '#')
+    $('#studentProfile').addClass('d-none')
   })
   $('#pagarModal').on('shown.bs.modal', function (event) {
     var modal = $(this)
@@ -575,6 +581,7 @@ $(document).ready(function () {
     $('.deposito').hide(0)
     $('#cantidadDeposito').val('')
     $('#profilePicture').prop('src', '#').addClass('d-none')
+    $('#studentProfile').addClass('d-none')
     $('#cantidadEfectivo').val('')
     $('#cbarra').val('')
     $('#nombre_estudiante').text('')
@@ -642,9 +649,12 @@ $(document).ready(function () {
 
   //pasar a lista del carrito
 
-  $('.card').click(function () {
+  $('.food-card').click(function () {
     var $title = $(this).find('.card-title').text()
-    var $price = $(this).find('.price').text()
+    var $priceElement = $(this).find('.price span')
+    var $price = $priceElement.length
+      ? $priceElement.text().replace('$', '')
+      : $(this).find('.price').text()
     var $id = $(this).find('.id').val()
     $('#cart').prepend(
       '<li class="list-group-item d-flex justify-content-between lh-condensed pric">' +

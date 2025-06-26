@@ -5,7 +5,7 @@ use Classes\Route;
 
 require_once '../../app.php';
 
-$buttons = CafeteriaButton::orderBy('orden')->get();
+$buttons = CafeteriaButton::all();
 
 $cant_buttons = count($buttons);
 
