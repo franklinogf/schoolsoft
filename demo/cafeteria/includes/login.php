@@ -1,13 +1,36 @@
 <?php
-use Classes\Login;
+
+use App\Models\Admin;
 use Classes\Route;
-include '../../app.php';
 
-if($_SERVER["REQUEST_METHOD"] == 'POST'){
-   
-   Login::login($_POST,'cafeteria');
 
-}else{
+require '../../app.php';
+
+
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+
+   $admin =  Admin::where([
+      ['usuario', $_POST['username']],
+      ['clave', $_POST['password']]
+   ])->first();
+
+   if ($admin) {
+
+      $_SESSION['logged'] = [
+         'acronym' => __SCHOOL_ACRONYM,
+         'location' => "cafeteria",
+         "user" => ['id' => $admin->usuario],
+      ];
+      $_SESSION['start'] = time();
+      $_SESSION['id1'] = $admin->id;
+      $_SESSION['usua1'] = $admin->usuario;
+
+      Route::redirect('cafeteria/menu.php', false);
+   } else {
+      $_SESSION['errorLogin'] = __("No coincide con los datos, intentelo otra vez");
+
+      Route::redirect();
+   }
+} else {
    Route::error();
 }
- 
