@@ -4,9 +4,6 @@ require_once '../app.php';
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $lang = new Lang([
@@ -15,11 +12,6 @@ $lang = new Lang([
 	['Selección de fechas', 'Dates selection'],
 	['Regresar', 'Go back']
 ]);
-
-$school = new School(Session::id());
-$year = $school->info('year2');
-
-$resultado3 = DB::table('presupuesto')->where('year', $year)->orderBy('codigo')->get();
 
 ?>
 <!DOCTYPE html>
