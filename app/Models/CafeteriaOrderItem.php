@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class StoreOrderItem extends Model
+class CafeteriaOrderItem extends Model
 {
-    protected $table = "compras_detalle";
+    protected $table = "compra_cafeteria_detalle";
     public $timestamps = false;
     protected $guarded = [];
 
