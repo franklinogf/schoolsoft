@@ -117,11 +117,16 @@ $(document).ready(function () {
         $('#editItems').text('')
         purchaseItems.data.forEach((item) => {
           $('#editItems').append(`<li class="list-group list-group-flush">
-              <div class="form-group row">
-                <label class="col-4 align-middle" for="${item.id}">${item.descripcion}</label>
-                <input type="text" class="form-control form-control-sm col-3" id="${
+              <div class="form-row">
+                <label class="col-6 align-middle" for="${item.id}">${item.descripcion}</label>
+                <div class="input-group input-group-sm col-3">
+                <input type="text" class="form-control" data-removed="false" id="${
                   item.id
-                }" value="${item.precio_final ? item.precio_final : item.precio}">
+                }" value="${item.precio_final ? item.precio_final : item.precio}" />
+                <div class="input-group-append">
+                      <button class="btn btn-outline-danger removeItem" type="button"><i class="fa fa-trash"></i></button>
+                </div>
+              </div>
               </div>
           </li>`)
         })
@@ -131,6 +136,37 @@ $(document).ready(function () {
       }
     })
   })
+
+  $('#editSearchModal').on('click', '.removeItem', function (event) {
+    event.preventDefault()
+    const btn = $(this)
+    const input = btn.parent().prev()
+    let removed = input.data('removed') === undefined ? false : input.data('removed')
+    removed = !removed
+    input.prop('disabled', removed)
+    input.data('removed', removed)
+    updateTotalPrice(input)
+  })
+
+  function updateTotalPrice(input) {
+    let totalPrice = 0
+    input.val(parseFloat(input.val()).toFixed(2))
+    $('#editItems .form-control').each((index) => {
+      if ($($('#editItems .form-control')[index]).data('removed') !== true) {
+        totalPrice += parseFloat($('#editItems .form-control')[index].value)
+      }
+    })
+    $('#editTotal').val(parseFloat(totalPrice).toFixed(2))
+  }
+
+  $('#editSearchModal').on('change', '#editItems .form-control', function (event) {
+    if ($(this).val().length > 0) {
+      updateTotalPrice($(this))
+    } else {
+      $(this).val($(this).data('price'))
+    }
+  })
+
   $('#editSearchModal .btn-secondary').click(function (event) {
     $('#editSearchModal').modal('hide')
   })
@@ -174,13 +210,16 @@ $(document).ready(function () {
     if ($('#editTotal').val().length > 0) {
       $('#editTotal').removeClass('is-invalid')
       let items = []
+
       $('#editItems .form-control').each((index) => {
         const item = $($('#editItems .form-control')[index])
         items.push({
           id: item.prop('id'),
-          price: item.val()
+          price: item.val(),
+          removed: item.data('removed')
         })
       })
+
       $.ajax({
         type: 'POST',
         url: 'editPayment.php',
@@ -192,14 +231,18 @@ $(document).ready(function () {
           items
         },
         dataType: 'json',
-        complete: function (response) {
+        success: function (response) {
           console.log('response:', response)
-          const payment = response.responseJSON
+
           $(`#payments tbody tr#${$('#editId').val()}`)
             .find('td:nth-child(2)')
-            .text(parseFloat(payment.total).toFixed(2))
-          $(`i[data-id=${$('#editId').val()}]`).data('total', parseFloat(payment.total).toFixed(2))
+            .text(parseFloat(response.total).toFixed(2))
+          $(`i[data-id=${$('#editId').val()}]`).data('total', parseFloat(response.total).toFixed(2))
           $('#editSearchModal').modal('hide')
+        },
+        error: function (err) {
+          console.error('error:', err)
+          $('#editTotal').addClass('is-invalid')
         }
       })
     } else {

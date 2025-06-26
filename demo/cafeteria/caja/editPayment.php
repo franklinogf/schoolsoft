@@ -1,43 +1,50 @@
 <?php
 
-use Classes\Controllers\School;
-use Classes\Controllers\Student;
+use App\Models\CafeteriaOrder;
+use App\Models\CafeteriaOrderItem;
+use App\Models\Student;
 use Classes\DataBase\DB;
 
 require_once '../../app.php';
 
-$school = new School();
-$year = $school->year();
 // general variables
-$id = $_POST['id'];
-$ss = $_POST['ss'] ?? '';
-$total = $_POST['total'];
+
+
+
 
 if (isset($_POST['del'])) {
-    $student = new Student($ss);
+    $id = $_POST['id'];
+    $ss = $_POST['ss'] ?? '';
+    $total = $_POST['total'];
+    $student = Student::bySS($ss)->first();
     $newTotal = $student->cantidad + $total;
-    DB::table('year')->where([['year',$year],['ss',$ss]])->update(['cantidad' => $newTotal]);
-     DB::table('compra_cafeteria')->where('id', $id)->delete();
-   
+    $student->update(['cantidad' => $newTotal]);
+    CafeteriaOrder::where('id', $id)->delete();
 } else {
+    $id = $_POST['id'];
+    $ss = $_POST['ss'] ?? '';
+    $total = $_POST['total'];
     $beforeTotal = $_POST['beforeTotal'];
-    DB::table('compra_cafeteria')->where('id', $id)->update(['total' => $total, 'pago1' => $total]);
+    CafeteriaOrder::where('id', $id)->update(['total' => $total, 'pago1' => $total]);
     if ($ss !== "") {
-        $student = new Student($ss);
+        $student = Student::bySS($ss)->first();
         $diference = $beforeTotal - $total;
         $newTotal = $student->cantidad + $diference;
-        $student->cantidad = $newTotal;
-        $student->save();  
+
+        $student->update(['cantidad' => $newTotal]);
     }
 
     if (isset($_POST['items'])) {
         $items = json_decode(json_encode($_POST['items']));
         foreach ($items as $item) {
-            DB::table('compra_cafeteria_detalle')->where('id', $item->id)->update(['precio_final' => $item->price]);
+            if ($item->removed === 'true') {
+                CafeteriaOrderItem::where('id', $item->id)->delete();
+                continue;
+            }
+            CafeteriaOrderItem::where('id', $item->id)->update(['precio_final' => $item->price]);
         }
     }
 
-    $array = ['total' => $total];
     header('Content-Type: application/json');
-    echo json_encode($array);
+    echo json_encode(['total' => $total]);
 }

@@ -239,8 +239,8 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
               <input type="hidden" id="editBefore">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-sm">Close</button>
-              <button class="btn btn-primary btn-sm" type="button" id="editBtn">Cambiar</button>
+              <button type="button" class="btn btn-secondary btn-sm">Cerrar</button>
+              <button class="btn btn-primary btn-sm" type="button" id="editBtn">Actualizar</button>
             </div>
           </div>
         </div>
