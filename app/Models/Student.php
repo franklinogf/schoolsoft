@@ -62,7 +62,7 @@ class Student extends Model
 
 
 
-    public function scopeById(Builder $query, int $id): Builder
+    public function scopeById(Builder $query, int|string $id): Builder
     {
         return $query->where('id', $id);
     }
