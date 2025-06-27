@@ -24,6 +24,10 @@ class Student extends Model
         static::addGlobalScope('lastName', function (Builder $builder) {
             $builder->orderBy('apellidos');
         });
+
+        static::addGlobalScope('unenrolled', function (Builder $builder) {
+            $builder->where('codigobaja','0');
+        });
     }
 
     public function casts(): array
@@ -41,9 +45,9 @@ class Student extends Model
     }
 
 
-    public function scopeUnerolled(Builder $query): Builder
+    public function scopeWithUnerolled(Builder $query): Builder
     {
-        return $query->where('codigobaja', '0');
+        return $query->withoutGlobalScope('unenrolled');
     }
 
     public function scopeByGrade(Builder $query, string $grade): Builder
@@ -72,6 +76,13 @@ class Student extends Model
         return Attribute::make(
             get: fn($value, array $attributes) =>
             $attributes['nombre'] . ' ' . $attributes['apellidos'],
+        );
+    }
+    protected function reversedFullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, array $attributes) =>
+              $attributes['apellidos']. ' ' .$attributes['nombre'],
         );
     }
 
