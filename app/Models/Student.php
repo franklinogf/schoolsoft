@@ -80,6 +80,7 @@ class Student extends Model
     }
     protected function reversedFullName(): Attribute
     {
+        
         return Attribute::make(
             get: fn($value, array $attributes) =>
               $attributes['apellidos']. ' ' .$attributes['nombre'],

@@ -25,6 +25,8 @@ $user = $school->usuario;
 
 
 $mes = $_REQUEST['mes'];
+$student = $_REQUEST['student'] !== 'all' ? $_REQUEST['student'] : null;
+
 
 [$y3, $y2] = explode("-", $year);
 
@@ -45,7 +47,12 @@ class nPDF extends PDF
     }
 }
 
-$paymentGroup = Payment::whereDate('fecha_d', '<=', $fecha)->get()->groupBy('id');
+$paymentGroup = Payment::query()
+->whereDate('fecha_d', '<=', $fecha)
+->when($student !== null, function ($query) use ($student) {
+    $query->where('id', $student);
+})
+->get()->groupBy('id');
 
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
 

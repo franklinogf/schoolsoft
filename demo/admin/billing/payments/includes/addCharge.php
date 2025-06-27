@@ -1,15 +1,18 @@
 <?php
+use App\Models\Admin;
+use App\Models\Student;
 use Classes\Route;
 use Classes\DataBase\DB;
-use Classes\Controllers\Student;
-use Classes\Controllers\School;
+use Classes\Session;
+
+// use Classes\Controllers\School;
 
 require_once '../../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    $school = new School();
-    $year = $school->year();
+    $school = Admin::user(Session::id())->first();
+    $year = $school->year2;
     $year1 = "{$year[0]}{$year[1]}";
     $year2 = "{$year[3]}{$year[4]}";
     $code = $_POST['code'];
@@ -18,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $amount = $_POST['amount'];
     $month = $_POST['month'];
 
-    $student = new Student($chargeTo);
+    $student = Student::find($chargeTo);
 
     if (!isset($_POST['allMonths'])) {
         $date = date("Y-$month-01");

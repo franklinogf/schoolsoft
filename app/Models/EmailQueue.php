@@ -6,6 +6,7 @@ use App\Models\Scopes\YearScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmailQueue extends Model
 {
@@ -58,12 +59,19 @@ class EmailQueue extends Model
         return $query->where('status', self::STATUS_FAILED);
     }
 
+    public function family(): BelongsTo
+    {
+        return $this->belongsTo(Family::class,'id2','id');
+    }
+
     protected function casts(): array
     {
         return [
             'to' => 'array',
             'attachments' => 'array',
+            'social_securities' => 'array',
             'sent_at' => 'datetime',
+            'created_at' => 'datetime'
         ];
     }
 }

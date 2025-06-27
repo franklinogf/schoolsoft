@@ -1,6 +1,9 @@
 <?php
 require_once '../../../app.php';
 
+use App\Models\Admin;
+use App\Models\EmailQueue;
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -34,24 +37,21 @@ $lang = new Lang([
     ['Eliminar', 'Delete'],
     ['Estás seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
 ]);
-$school = new School(Session::id());
-$courses = DB::table('colegio')->orderBy('usuario')->get();
 
-$teachers = new Teacher;
+$users = Admin::all();
 
-if (isset($_REQUEST['search']) or isset($_REQUEST['search2'])) {
-    $thisUser = DB::table('colegio')->where('id', $_POST['course'])->first();
-    $emails = DB::table('email_queue')->select("DISTINCT subject, created_at")->where([
-        ['user', $thisUser->usuario],
-        ['year', $school->info('year2')]
-    ])->get();
+if (isset($_REQUEST['user'])) {      
+
+    $emails = EmailQueue::where('user',$_REQUEST['user'])->latest('created_at')->get()
+    ->groupBy(function($email){
+        return $email->subject.'/'.$email->created_at->format('Y-m-d');
+    });    
 }
-$courses = DB::table('colegio')->orderBy('usuario')->get();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
 <head>
     <?php
     $title = $lang->translation('Mensajes enviados');
@@ -75,22 +75,22 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
             <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 500px;">
                 <form method="POST">
                     <div class="row">
-                        <select class="form-control selectpicker w-100" name="course" data-live-search="true" required>
+                        <select class="form-control selectpicker w-100" name="user" data-live-search="true" required>
                             <option><?= $lang->translation('Selección') ?></option>
-                            <?php foreach ($courses as $course) : ?>
-                                <option <?= isset($_REQUEST['course']) && $_REQUEST['course'] == $course->id ? 'selected=""' : '' ?> value="<?= $course->id ?>"><?= "$course->usuario ($course->id)" ?></option>
+                            <?php foreach ($users as $user) : ?>
+                                <option <?= isset($_REQUEST['user']) && $_REQUEST['user'] == $user->usuario ? 'selected=""' : '' ?> value="<?= $user->usuario ?>"><?= "$user->usuario ($user->id)" ?></option>
                             <?php endforeach ?>
                         </select>
-                        <input name="search" class="btn btn-primary mx-auto d-block mt-1" type="submit" value="<?= $lang->translation("Buscar") ?>">
+                        <input class="btn btn-primary mx-auto d-block mt-1" type="submit" value="<?= $lang->translation("Buscar") ?>">
                     </div>
 
-                    <?php if (isset($_REQUEST['search']) or isset($_REQUEST['search2'])) { ?>
+                    <?php if (isset($_REQUEST['user'])): ?>
 
                         <div class="row">
                             <select class="form-control selectpicker w-100" name="course2" data-live-search="true" required>
                                 <option><?= $lang->translation('Selección') ?></option>
-                                <?php foreach ($emails as $email) : ?>
-                                    <option <?= isset($_REQUEST['course2']) && $_REQUEST['course2'] == $email->subject . ',' . $email->created_at ? 'selected=""' : '' ?> value="<?= $email->subject . ',' . $email->created_at ?>"><?= "$email->subject ($email->created_at)" ?></option>
+                                <?php foreach ($emails as $label => $email) : ?>
+                                    <option <?= isset($_REQUEST['course2']) && $_REQUEST['course2'] == $label ? 'selected=""' : '' ?> value="<?= $label ?>"><?= "$label" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -105,37 +105,13 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
                         <div class="row">
                             <input name="search2" class="btn btn-primary mx-auto d-block mt-1" type="submit" value="<?= $lang->translation("Buscar") ?>">
                         </div>
-                    <?php } ?>
+                    <?php endif ?>
                 </form>
             </div>
         </div>
     </div>
 
     <?php if (isset($_POST['search2'])) : ?>
-
-        <?php
-
-        list($sub, $fec) = explode(",", $_POST['course2']);
-        list($fec1, $fec2) = explode(" ", $fec ?? ' ');
-
-        if ($_POST['env'] == '0') {
-            $emails = DB::table('email_queue')->where([
-                ['subject', $sub],
-                ['created_at', 'LIKE', '%' . $fec1 . '%'],
-                ['user', $thisUser->usuario],
-                ['year', $school->info('year2')]
-            ])->get();
-        } else {
-            $emails = DB::table('email_queue')->where([
-                ['subject', $sub],
-                ['created_at', 'LIKE', '%' . $fec1 . '%'],
-                ['user', $thisUser->usuario],
-                ['status', $_POST['env']],
-                ['year', $school->info('year2')]
-            ])->get();
-        }
-
-        ?>
         <div class="container-lg mt-lg-3 mb-5 px-0">
             <div class="container">
                 <div class="mx-auto bg-white shadow-lg py-5 px-3 rounded" style="max-width: 1700px;">
@@ -150,37 +126,23 @@ $courses = DB::table('colegio')->orderBy('usuario')->get();
                             <td class="style1" style="width: 130px"><strong>FECHA</strong></td>
                             <td class="style1" style="width: 250px"><strong>RAZON</strong></td>
                         </tr>
-                        <?php foreach ($emails as $email) : ?>
-                            <?php $em = json_decode($email->to);
-                            $em1 =  $em[0] ?? '';
-                            $em2 =  $em[1] ?? '';
-                            if (!empty($email->social_securities)) {
-                                $est = DB::table('year')->where([
-                                    ['ss', $email->social_securities],
-                                    ['year', $school->info('year2')]
-                                ])->first();
-                            } else {
-                                $est = DB::table('year')->where([
-                                    ['id', $email->id2],
-                                    ['year', $school->info('year2')]
-                                ])->first();
-                            }
-                            $pad = DB::table('madre')->where([
-                                ['id', $email->id2]
-                            ])->first();
-                            $pa1 = $pad->madre ?? '';
-                            $pa2 = $pad->padre ?? '';
-                            $es1 = $est->apellidos ?? '';
-                            $es2 = $est->nombre ?? '';
-                            ?>
+                        <?php foreach ($emails[$_REQUEST['course2']] as $email) :
+                            $students = Student::whereIn('ss',$email->social_securities ?? [])->get();
+                            
+                            ?>                           
                             <tr>
                                 <td class="style1"><?= $email->id2 ?></td>
-                                <td style="width: 350px"><?= $pa1 . '<br>' . $pa2 ?></td>
-                                <td style="width: 280px"><?= $em1 . '<br>' . $em2 ?></td>
-                                <td style="width: 370px"><?= $es1 . ' ' . $es2 ?></td>
-                                <td class="style1"><?= $email->status == '1' ? 'Si' : 'No' ?></td>
-                                <td style="width: 124px"><?= substr($email->created_at, 0, 10) ?></td>
-                                <td><?= $email->failed_reason ?></td>
+                                <td class="style1"><?= $email->family->madre ?></td>
+                                <td class="style1"><?= implode(', ',$email->to) ?></td>
+                                <td class="style1">
+                                    <?php foreach ($students as $student) : ?>
+                                        <?= $student->full_name,'<br>' ?>
+                                    <?php endforeach ?>
+                                </td>
+                               
+                                <td><?= $email->status === '1' ? 'Si': 'No' ?></td>
+                                <td><?= $email->sent_at?->translatedFormat('d F Y') ?></td>
+                                <td><?= $email->failed_reason ? substr($email->failed_reason,0,10) : '' ?></td>
                             </tr>
                         <?php endforeach ?>
                     </table>
