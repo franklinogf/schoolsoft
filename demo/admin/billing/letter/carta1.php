@@ -1,4 +1,4 @@
-<!-- <?php -->
+<?php
 
 use App\Models\Admin;
 use App\Models\Family;
