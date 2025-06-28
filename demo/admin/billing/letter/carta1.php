@@ -1,4 +1,4 @@
-<?php
+<!-- <?php -->
 
 use App\Models\Admin;
 use App\Models\Family;
@@ -49,10 +49,13 @@ class nPDF extends PDF
 
 $paymentGroup = Payment::query()
 ->whereDate('fecha_d', '<=', $fecha)
-->when($student !== null, function ($query) use ($student) {
+->when($student !== 'All', function ($query) use ($student) {
     $query->where('id', $student);
 })
 ->get()->groupBy('id');
+
+//->when($student !== null, function ($query) use ($student) {
+
 
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
 
