@@ -20,6 +20,7 @@ if (!$user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS)
 
 $lang = new Lang([
     ["Pagos", "Payments"],
+    ["Selección", "Selection"],
     ['estudiante', 'student'],
     ['Buscar información', 'Search information'],
 ]);
@@ -47,6 +48,16 @@ $paymentTypes = [
     '13' => 'Credito a Cuenta',
     '14' => 'Virtual Terminal',
 ];
+
+$deposits = [
+    '1' => 'Compras de Camisas',
+    '2' => 'Abono de Mensualidad',
+    '3' => 'Abono de Matrícula',
+    '4' => 'Compras de Inflables',
+    '0' => 'Depósitos Cafetería',
+];
+
+
 $codes = Manager::table('presupuesto')->where("year", $year)->orderBy('codigo')->get();
 
 $adminUsers = Admin::query()->select('usuario')->get();
@@ -75,6 +86,7 @@ $depositTypes = [
     Route::fontawasome();
     ?>
 </head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
@@ -582,6 +594,24 @@ $depositTypes = [
                                 <label for="depositTime">Hora</label>
                                 <input type="time" class="form-control" name="time" id="depositTime" disabled>
                             </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-6">
+                                <label for="depositDate">Depositas a:</label>
+                            </div>
+
+                            <div class="form-group col-12 col-md-6">
+
+                                <select class="form-control" name="type2" id="deposits" required disabled>
+                                    <option value=""><?= $lang->translation('Selección') ?></option>
+                                    <?php foreach ($deposits as $id => $label): ?>
+                                        <option value="<?= $id ?>"><?= $label ?></option>
+                                    <?php endforeach ?>
+                                </select>
+
+                            </div>
+
+
                         </div>
                         <div class="form-group">
                             <label for="depositOther">Otra descripción</label>
