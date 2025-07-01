@@ -294,9 +294,9 @@ $(document).ready(function () {
     }
 
     if (value === '10' || value === '11' || value === '5') {
-      $('#depositDate,#depositTime').prop('disabled', false)
+      $('#depositDate,#depositTime,#deposits').prop('disabled', false)
     } else {
-      $('#depositDate,#depositTime').prop('disabled', true)
+      $('#depositDate,#depositTime,#deposits').prop('disabled', true)
     }
   })
   $('#depositAmount').keyup(function () {
@@ -326,6 +326,7 @@ $(document).ready(function () {
 
     const date = fd.get('date')
     const time = fd.get('time')
+    const type2 = fd.get('type2')
 
     const amount = parseFloat(fd.get('amount'))
     if (isIncorrectAmount(amount, type)) {
@@ -353,6 +354,7 @@ $(document).ready(function () {
       id,
       amount,
       type,
+      type2,
       other: otherDescription,
       date,
       time
