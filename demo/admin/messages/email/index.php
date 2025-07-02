@@ -30,7 +30,7 @@ if (count($dataList) > 1) {
         $teacher = Teacher::find($dataList[0]);
         $titleHeader .= " $teacher->nombre $teacher->apellidos";
     } else if ($key === 'students') {
-        $student = Student::byId($dataList[0])->first();
+        $student = Student::find($dataList[0])->first();
         $titleHeader .= " $student->nombre $student->apellidos";
     } else {
 

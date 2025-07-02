@@ -7,9 +7,7 @@ use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
 $lang = new Lang([
@@ -40,18 +38,19 @@ $lang = new Lang([
 
 $users = Admin::all();
 
-if (isset($_REQUEST['user'])) {      
+if (isset($_REQUEST['user'])) {
 
-    $emails = EmailQueue::where('user',$_REQUEST['user'])->latest('created_at')->get()
-    ->groupBy(function($email){
-        return $email->subject.'/'.$email->created_at->format('Y-m-d');
-    });    
+    $emails = EmailQueue::where('user', $_REQUEST['user'])->latest('created_at')->get()
+        ->groupBy(function ($email) {
+            return $email->subject . '/' . $email->created_at->format('Y-m-d');
+        });
 }
 
 
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+
 <head>
     <?php
     $title = $lang->translation('Mensajes enviados');
@@ -127,22 +126,22 @@ if (isset($_REQUEST['user'])) {
                             <td class="style1" style="width: 250px"><strong>RAZON</strong></td>
                         </tr>
                         <?php foreach ($emails[$_REQUEST['course2']] as $email) :
-                            $students = Student::whereIn('ss',$email->social_securities ?? [])->get();
-                            
-                            ?>                           
+                            $students = Student::whereIn('ss', $email->social_securities ?? [])->get();
+
+                        ?>
                             <tr>
                                 <td class="style1"><?= $email->id2 ?></td>
                                 <td class="style1"><?= $email->family->madre ?></td>
-                                <td class="style1"><?= implode(', ',$email->to) ?></td>
+                                <td class="style1"><?= implode(', ', $email->to) ?></td>
                                 <td class="style1">
                                     <?php foreach ($students as $student) : ?>
-                                        <?= $student->full_name,'<br>' ?>
+                                        <?= $student->full_name, '<br>' ?>
                                     <?php endforeach ?>
                                 </td>
-                               
-                                <td><?= $email->status === '1' ? 'Si': 'No' ?></td>
+
+                                <td><?= $email->status === '1' ? 'Si' : 'No' ?></td>
                                 <td><?= $email->sent_at?->translatedFormat('d F Y') ?></td>
-                                <td><?= $email->failed_reason ? substr($email->failed_reason,0,10) : '' ?></td>
+                                <td><?= $email->failed_reason ? substr($email->failed_reason, 0, 10) : '' ?></td>
                             </tr>
                         <?php endforeach ?>
                     </table>

@@ -3,6 +3,7 @@ require_once '../../../../app.php';
 
 use App\Models\Admin;
 use App\Models\Family;
+use App\Models\Student;
 use App\Models\Teacher;
 use Classes\Email;
 use Classes\Session;
@@ -38,10 +39,10 @@ foreach ($values as $value) {
         }
     } else if ($key === 'students') {
 
-        $family = Family::find($value);
+        $student = Student::find($value);
         $emails = [
-            ['correo' => $family->email_p, 'nombre' => $family->padre],
-            ['correo' => $family->email_m, 'nombre' => $family->madre]
+            ['correo' => $student->family->email_p, 'nombre' => $student->family->padre],
+            ['correo' => $student->family->email_m, 'nombre' => $student->family->madre]
         ];
         foreach ($emails as $email) {
             if ($email['correo'] !== '') {
