@@ -1,6 +1,7 @@
 <?php
 
 use Core\TranslatorFactory;
+use Illuminate\Support\Str;
 
 if (!function_exists('dd')) {
     function dd($data): never
@@ -147,7 +148,7 @@ if (!function_exists("upload_attachment")) {
 
 
         foreach ($files['tmp_name'] as $index => $file) {
-            $fileName = uniqid() . time();
+            $fileName = Str::uuid()->toString();
             $fileExtension = pathinfo($files['name'][$index], PATHINFO_EXTENSION);
             $filePath = attachments_path("$path/$fileName.$fileExtension");
             if (move_uploaded_file($file, $filePath)) {

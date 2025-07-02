@@ -11,7 +11,9 @@
     "illuminate/filesystem": "^12.19.3",
     "vlucas/phpdotenv": "^5.6.2",
     "setasign/fpdi": "^2.6.3",
-    "setasign/fpdf": "^1.8.6"
+    "setasign/fpdf": "^1.8.6",
+    "illuminate/support": "^12.19",
+    "ramsey/uuid": "^4.9"
   },
   "autoload": {
     "psr-4": {

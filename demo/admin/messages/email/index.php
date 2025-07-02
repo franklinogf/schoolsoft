@@ -1,13 +1,15 @@
 <?php
 require_once '../../../app.php';
 
-use App\Models\EmailQueue;
+
 use App\Models\Teacher;
 use App\Models\Student;
 use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
+
+
 
 Session::is_logged();
 
@@ -38,9 +40,6 @@ if (count($dataList) > 1) {
     }
 }
 $savedMessages = DB::table('T_correos_guardados')->where('colegio', Session::id())->whereRaw("AND id_profesor IS NULL")->orderBy('id', 'desc')->get();
-
-$email = EmailQueue::latest('id')->first();
-
 
 
 ?>
