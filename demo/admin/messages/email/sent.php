@@ -86,19 +86,19 @@ if (isset($_REQUEST['user'])) {
                     <?php if (isset($_REQUEST['user'])): ?>
 
                         <div class="row">
-                            <select class="form-control selectpicker w-100" name="course2" data-live-search="true" required>
+                            <select class="form-control selectpicker w-100" name="email" data-live-search="true" required>
                                 <option><?= $lang->translation('Selección') ?></option>
                                 <?php foreach ($emails as $label => $email) : ?>
-                                    <option <?= isset($_REQUEST['course2']) && $_REQUEST['course2'] == $label ? 'selected=""' : '' ?> value="<?= $label ?>"><?= "$label" ?></option>
+                                    <option <?= isset($_REQUEST['email']) && $_REQUEST['email'] == $label ? 'selected=""' : '' ?> value="<?= $label ?>"><?= "$label" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
                         <div class="row">
                             <label for="ava"><?= $lang->translation("Opciones") ?></label>
                             <select class="form-control" name="env" id="env" required>
-                                <option <?= isset($_REQUEST['course2']) && $_REQUEST['env'] == '0' ? 'selected=""' : '' ?> value="0"><?= $lang->translation("Todos") ?></option>
-                                <option <?= isset($_REQUEST['course2']) && $_REQUEST['env'] == '1' ? 'selected=""' : '' ?> value="1"><?= $lang->translation("Los recividos") ?></option>
-                                <option <?= isset($_REQUEST['course2']) && $_REQUEST['env'] == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("No recividos") ?></option>
+                                <option <?= isset($_REQUEST['env']) && $_REQUEST['env'] == '0' ? 'selected=""' : '' ?> value="0"><?= $lang->translation("Todos") ?></option>
+                                <option <?= isset($_REQUEST['env']) && $_REQUEST['env'] == '1' ? 'selected=""' : '' ?> value="1"><?= $lang->translation("Enviados") ?></option>
+                                <option <?= isset($_REQUEST['env']) && $_REQUEST['env'] == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("No enviados") ?></option>
                             </select>
                         </div>
                         <div class="row">
@@ -125,13 +125,13 @@ if (isset($_REQUEST['user'])) {
                             <td class="style1" style="width: 130px"><strong>FECHA</strong></td>
                             <td class="style1" style="width: 250px"><strong>RAZON</strong></td>
                         </tr>
-                        <?php foreach ($emails[$_REQUEST['course2']] as $email) :
+                        <?php foreach ($emails[$_REQUEST['email']] as $email) :
                             $students = Student::whereIn('ss', $email->social_securities ?? [])->get();
 
                         ?>
                             <tr>
                                 <td class="style1"><?= $email->id2 ?></td>
-                                <td class="style1"><?= $email->family->madre ?></td>
+                                <td class="style1"><?= $email->family?->madre ?></td>
                                 <td class="style1"><?= implode(', ', $email->to) ?></td>
                                 <td class="style1">
                                     <?php foreach ($students as $student) : ?>
