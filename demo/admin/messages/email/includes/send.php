@@ -22,7 +22,7 @@ $emailsError = 0;
 $files = [];
 
 if (isset($_FILES['file'])) {
-    $files = upload_attachment($_FILES['file']);
+    $files = upload_attachment($_FILES['file'], 'messages/email');
 }
 
 $to = [];

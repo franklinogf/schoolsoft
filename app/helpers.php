@@ -141,8 +141,8 @@ if (!function_exists('attachments_url')) {
 if (!function_exists("upload_attachment")) {
     function upload_attachment(array $files, string $path = ''): array
     {
-        if (!is_dir(attachments_path())) {
-            mkdir(attachments_path(), 0777, true);
+        if (!is_dir(attachments_path($path))) {
+            mkdir(attachments_path($path), 0777, true);
         }
         $urls = [];
 
