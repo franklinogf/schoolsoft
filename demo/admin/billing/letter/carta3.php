@@ -1,5 +1,4 @@
 <?php
-require_once '../../../app.php';
 
 use App\Models\Admin;
 use App\Models\Family;

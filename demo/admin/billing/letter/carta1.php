@@ -4,9 +4,6 @@ use App\Models\Admin;
 use App\Models\Family;
 use App\Models\Payment;
 
-require_once '../../../app.php';
-
-
 use Classes\Email;
 use Classes\PDF;
 use Classes\Session;
