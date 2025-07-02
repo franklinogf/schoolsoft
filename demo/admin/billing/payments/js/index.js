@@ -303,13 +303,17 @@ $(document).ready(function () {
     const value = parseFloat($(this).val())
     const available = parseFloat($('#availableDeposit').text())
     const type = parseInt($('#depositType').val())
+    const type2 = parseInt($('#deposits').val())
+
     if (isIncorrectAmount(value, type)) {
       $('#newDeposit').text(available.toFixed(2))
       $('#depositAmount').addClass('is-invalid')
       return
     }
     $('#depositAmount').removeClass('is-invalid')
+
     const newDeposit = value + available
+
     $('#newDeposit').text(newDeposit.toFixed(2))
   })
 
@@ -363,7 +367,7 @@ $(document).ready(function () {
     $('#depositAmount,#depositOther').removeClass('is-invalid')
     $.post($this.prop('action'), data, function (data, textStatus, jqXHR) {
       const available = parseFloat($('#availableDeposit').text())
-      const newDeposit = amount + available
+      const newDeposit = amount + available   
       $(`button[data-id=${id}] span`).text(type === 6 ? '0.00' : newDeposit.toFixed(2))
       form.reset()
       Toast.fire('Cantidad actualizada', '', 'success')
