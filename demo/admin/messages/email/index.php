@@ -1,15 +1,16 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Student;
+use App\Models\EmailQueue;
+use App\Models\Teacher;
+use App\Models\Student;
 use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 
 Session::is_logged();
-$teachers = new Teacher();
+
 $lang = new Lang([
     ['Enviar correo a', 'Send email to'],
     ['estudiantes', 'students'],
@@ -26,10 +27,10 @@ if (count($dataList) > 1) {
     $titleHeader .= ' ' . count($dataList) . ' ' . $lang->translation($key === 'teachers' ? 'profesores' : ($key === 'students' ? 'estudiantes' : 'administradores'));
 } else {
     if ($key === 'teachers') {
-        $teacher = new Teacher($dataList[0]);
+        $teacher = Teacher::find($dataList[0]);
         $titleHeader .= " $teacher->nombre $teacher->apellidos";
     } else if ($key === 'students') {
-        $student = new Student($dataList[0]);
+        $student = Student::byId($dataList[0])->first();
         $titleHeader .= " $student->nombre $student->apellidos";
     } else {
 
@@ -37,6 +38,11 @@ if (count($dataList) > 1) {
     }
 }
 $savedMessages = DB::table('T_correos_guardados')->where('colegio', Session::id())->whereRaw("AND id_profesor IS NULL")->orderBy('id', 'desc')->get();
+
+$email = EmailQueue::latest('id')->first();
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

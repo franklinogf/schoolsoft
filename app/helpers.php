@@ -120,3 +120,41 @@ if (!function_exists('trans_choice')) {
         return TranslatorFactory::get()->choice($key, $choice, $replace, $locale);
     }
 }
+
+if (!function_exists('attachments_path')) {
+    function attachments_path(?string $path = null): string
+    {
+        $path = $path ?  ltrim($path, '/') : '';
+        return __DIR__ . '/../attachments/' . $path;
+    }
+}
+
+if (!function_exists('attachments_url')) {
+    function attachments_url(?string $path = null): string
+    {
+        $path = $path ?  ltrim($path, '/') : '';
+        return asset("attachments/$path");
+    }
+}
+
+if (!function_exists("upload_attachment")) {
+    function upload_attachment(array $files, string $path = ''): array
+    {
+        if (!is_dir(attachments_path())) {
+            mkdir(attachments_path(), 0777, true);
+        }
+        $urls = [];
+
+
+        foreach ($files['tmp_name'] as $index => $file) {
+            $fileName = uniqid() . time();
+            $fileExtension = pathinfo($files['name'][$index], PATHINFO_EXTENSION);
+            $filePath = attachments_path("$path/$fileName.$fileExtension");
+            if (move_uploaded_file($file, $filePath)) {
+                $urls[] = attachments_url("$path/$fileName.$fileExtension");
+            }
+        }
+
+        return $urls;
+    }
+}

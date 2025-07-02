@@ -77,7 +77,7 @@ class Email
     {
         if (is_array($fileOrContent)) {
             foreach ($fileOrContent as $file) {
-                if (isset($file['content']) && isset($file['filename'])) {
+                if ((isset($file['content']) && isset($file['filename'])) || (isset($file['path']) && isset($file['filename']))) {
                     $this->attachments[] = $file;
                     continue;
                 }

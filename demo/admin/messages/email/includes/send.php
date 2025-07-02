@@ -1,76 +1,61 @@
 <?php
 require_once '../../../../app.php';
 
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Student;
-use Classes\Controllers\School;
-use Classes\DataBase\DB;
-use Classes\Mail;
-use Classes\Route;
+use App\Models\Admin;
+use App\Models\Family;
+use App\Models\Teacher;
+use Classes\Email;
 use Classes\Session;
-use Classes\Util;
 
 Session::is_logged();
-$mail = new Mail();
+
 $key = $_POST['key'];
 $values = $_POST['values'];
 $title = $_POST['title'];
 $subject = $_POST['subject'];
 $message = $_POST['message'];
-$mail->Subject = $subject;
+$files = [];
+
 $emailsSent = 0;
 $emailsError = 0;
-$error = null;
+$files = [];
 
 if (isset($_FILES['file'])) {
-    foreach ($_FILES['file']['name'] as $index => $fileName) {
-        if ($fileName != '') {
-            $file = $_FILES['file']['tmp_name'][$index];
-            $mail->addAttachment($file, $fileName);
-        }
-    }
+    $files = upload_attachment($_FILES['file']);
 }
+
+$to = [];
 
 foreach ($values as $value) {
     $count = 0;
     if ($key === 'teachers') {
-        $teacher = new Teacher($value);
+        $teacher = Teacher::find($value);
         if ($teacher->email1 !== '') {
-            $count++;
-            $mail->addAddress($teacher->email1, "$teacher->nombre $teacher->apellidos");
+            $to[] = $teacher->email1;
         }
         if ($teacher->email2 !== '') {
-            $count++;
-            $mail->addAddress($teacher->email2, "$teacher->nombre $teacher->apellidos");
+            $to[] = $teacher->email2;
         }
     } else if ($key === 'students') {
-        $student = new Student($value);
-        $parents = DB::table('madre')->where('id', $student->id)->first();
+
+        $family = Family::find($value);
         $emails = [
-            ['correo' => $parents->email_p, 'nombre' => $parents->padre],
-            ['correo' => $parents->email_m, 'nombre' => $parents->madre]
+            ['correo' => $family->email_p, 'nombre' => $family->padre],
+            ['correo' => $family->email_m, 'nombre' => $family->madre]
         ];
         foreach ($emails as $email) {
             if ($email['correo'] !== '') {
-                $count++;
-                $mail->addAddress($email['correo'], $email['nombre']);
+                $to[] = $email['correo'];
             }
         }
     } else {
-        $school = new School($value);
-        $email = $school->info('correo');
+        $admin = Admin::user($value)->first();
+        $email = $admin->correo;
         if ($email !== '') {
-            $count++;
-            $mail->addAddress($email, $value);
+            $to = [$email];
         }
-
     }
-
-
-
-    $mail->isHTML(true);
-    $mail->Body = "
-   <!DOCTYPE html>
+    $body = "<!DOCTYPE html>
    <html lang='" . __LANG . "'>
    <head>
      <meta charset='UTF-8'>
@@ -82,19 +67,26 @@ foreach ($values as $value) {
    <br>
    <p>{$message}</p>  
    </body>
-   </html>
-   ";
+   </html>";
 
-    if ($count > 0) {
-        if (!$mail->send()) {
-            $emailsError++;
-            $error = $mail->ErrorInfo;
-        } else {
+    if (count($to) > 0) {
+        try {
+            $email =  Email::to($to)
+                ->subject($subject)
+                ->body($body)
+                ->text($message);
+            foreach ($files as $file) {
+                $email->attach($file);
+            }
+            $email->queue();
             $emailsSent++;
+        } catch (\Throwable $th) {
+            $error = $th->getMessage();
+            $emailsError++;
         }
-
+    } else {
+        $emailsError++;
     }
-    $mail->ClearAddresses();
 }
 
-echo json_encode(["sent" => $emailsSent, "notSent" => $emailsError, 'error' => $error]);
+echo json_encode(["sent" => $emailsSent, "notSent" => $emailsError, "error" => $error ?? '']);
