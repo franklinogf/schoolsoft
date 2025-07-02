@@ -294,9 +294,9 @@ $(document).ready(function () {
     }
 
     if (value === '10' || value === '11' || value === '5') {
-      $('#depositDate,#depositTime,#deposits').prop('disabled', false)
+      $('#depositDate,#depositTime').prop('disabled', false)
     } else {
-      $('#depositDate,#depositTime,#deposits').prop('disabled', true)
+      $('#depositDate,#depositTime').prop('disabled', true)
     }
   })
   $('#depositAmount').keyup(function () {
