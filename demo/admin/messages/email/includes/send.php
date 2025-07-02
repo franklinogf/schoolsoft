@@ -2,7 +2,6 @@
 require_once '../../../../app.php';
 
 use App\Models\Admin;
-use App\Models\Family;
 use App\Models\Student;
 use App\Models\Teacher;
 use Classes\Email;
