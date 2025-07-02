@@ -24,8 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $id = $_POST['id'];
     $school = Admin::primaryAdmin()->first();
     $year = $school->year();
-    $date = $_POST['date'] ?: date('Y-m-d');
-    $time = $_POST['time'] ?: date('H:i:s');
+
+    $date = $_POST['date'] ?? date('Y-m-d');
+    $time = $_POST['time'] ?? date('H:i:s');
 
     $student = Student::find($id);
 
@@ -43,10 +44,18 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     } else {
 
         $type = intval($_POST['type']);
+        $type2 = $_POST['type2'];
         $amount = floatval($_POST['amount']);
         $other = $_POST['other'];
         $oldAmount = floatval($student->cantidad);
-        $newAmount = $oldAmount + $amount;
+        if ($type2 === '0') 
+           {
+           $newAmount = $oldAmount + $amount;
+           }
+        else
+           {
+           $newAmount = $oldAmount;
+           }
 
         $selectedType = $depositTypes[$type];
         $data = [
@@ -56,18 +65,46 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'year' => $year,
             'cantidad' => $amount,
             'grado' => $student->grado,
-            'tipoDePago' => $selectedType,
+            'tipoDePago' => utf8_encode($selectedType),
             'hora' => $time,
+            'email' => $type2,
         ];
-        if ($type === 1 || $type === 2 || $type === 4 || $type === 5 || $type === 9) {
+        if ($type === 1 || $type === 2 || $type === 4 || $type === 5 || $type === 9 || $type === 10 || $type === 11) {
             if ($type === 9) {
                 $data['otros'] = $_POST['other'];
             }
-            Manager::table('depositos')->insert($data);
-            $student->update([
-                'cantidad' => $newAmount,
-                'f_deposito' => $date,
-            ]);
+	        if ($type2 === '0') {
+	            Manager::table('depositos')->insert($data);
+	            $student->update([
+	                'cantidad' => $newAmount,
+	                'f_deposito' => $date,
+	            ]);
+	            }
+	         else
+	            {
+		        $data2 = [
+		            'accountID' => $student->id,
+		            'deliveryTo' => $student->ss,
+		            'date' => $date.' '.$time,
+		            'year' => $year,
+		            'total' => $amount,
+		            'payment_type' => utf8_encode($selectedType),
+		            'shopping' => $type2,
+		        ];
+	            Manager::table('compras')->insert($data2);
+
+				$nrec = Manager::table('compras')->
+			        orderBy('id', 'desc')->limit(1)->first();
+
+		        $data2 = [
+		            'id_compra' => $nrec->id ?? '',
+		            'year' => $year,
+		            'price' => $amount,
+		            'item_name' => utf8_encode($selectedType),
+		        ];
+	            Manager::table('compras_detalle')->insert($data2);
+	            }
+
         } else if ($type === 6) {
             $data['cantidad'] = floatval($student->cantidad) * -1;
             Manager::table('depositos')->insert($data);

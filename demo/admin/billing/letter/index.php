@@ -4,17 +4,28 @@ require_once '../../../app.php';
 
 use Classes\Route;
 use Classes\Session;
+use Classes\DataBase\DB;
+use Classes\Controllers\School;
 
 Session::is_logged();
+$school = new School(Session::id());
+
+$estudents = DB::table('year')->where([
+        ['codigobaja', 0],
+        ['year', $school->info('year2')]
+    ])->orderBy('apellidos, nombre')->get();
+
 
 ?>
 <!DOCTYPE html>
 <html>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
     $title = __('Carta de cobro');
     Route::includeFile('/admin/includes/layouts/header.php');
+    Route::selectPicker();
     ?>
 </head>
 
@@ -32,6 +43,16 @@ Session::is_logged();
                     <div class="card-body">
                         <form method="post" action="carta.php" target="_blank">
                             <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="mes" class="form-label font-weight-bold"><?= __('Estudiantes') ?></label>
+				                    <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
+				                        <option value=""><?= __('Selección') ?></option>
+				                        <option value="All"><?= __('Todos') ?></option>
+				                        <?php foreach ($estudents as $estudent) : ?>
+				                            <option value="<?= $estudent->id ?>"><?= "$estudent->apellidos $estudent->nombre ($estudent->id)" ?></option>
+				                        <?php endforeach ?>
+				                    </select>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tipo" class="form-label font-weight-bold"><?= __('Tipo de salida') ?></label>
@@ -97,6 +118,11 @@ Session::is_logged();
             </div>
         </div>
     </div>
+    <?php
+    $jqMask = true;
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::selectPicker('js');
+    ?>
 </body>
 
 </html>
