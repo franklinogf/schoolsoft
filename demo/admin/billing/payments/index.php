@@ -50,11 +50,11 @@ $paymentTypes = [
 ];
 
 $deposits = [
-    '1' => 'Compras de Camisas',
-    '2' => 'Abono de Mensualidad',
-    '3' => 'Abono de Matrícula',
-    '4' => 'Compras de Inflables',
     '0' => 'Depósitos Cafetería',
+    '1' => '-1 Compras de Camisas',
+    '2' => '-2 Abono de Mensualidad',
+    '3' => '-3 Abono de Matrícula',
+    '4' => '-4 Compras de Inflables',
 ];
 
 
@@ -602,8 +602,7 @@ $depositTypes = [
 
                             <div class="form-group col-12 col-md-6">
 
-                                <select class="form-control" name="type2" id="deposits" required disabled>
-                                    <option value=""><?= $lang->translation('Selección') ?></option>
+                                <select class="form-control" name="type2" id="deposits" required >
                                     <?php foreach ($deposits as $id => $label): ?>
                                         <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>
