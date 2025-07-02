@@ -1,6 +1,7 @@
 <?php
+require_once '../../../app.php';
 
-$directory = __DIR__ . "/attachments";
+$directory = attachments_path('letters');
 
 if (!is_dir($directory)) {
     mkdir($directory, 0777, true);

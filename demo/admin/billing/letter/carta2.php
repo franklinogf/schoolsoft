@@ -12,6 +12,7 @@ use Classes\Email;
 use Classes\PDF;
 use Classes\Session;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 Session::is_logged();
 
@@ -49,10 +50,10 @@ class nPDF extends PDF
 //$paymentGroup = Payment::whereDate('fecha_d', '<=', $fecha)->get()->groupBy('id');
 
 $paymentGroup = Payment::query()
-->whereDate('fecha_d', '<=', $fecha)
-->when($student !== 'All', function ($query) use ($student) {
-    $query->where('id', $student);
-})->get()->groupBy('id');
+    ->whereDate('fecha_d', '<=', $fecha)
+    ->when($student !== 'All', function ($query) use ($student) {
+        $query->where('id', $student);
+    })->get()->groupBy('id');
 
 
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
@@ -132,7 +133,8 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Ln(3);
     $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
     $pdf->Ln(3);
-    $filePath = "{$directory}/letter2_{$id}.pdf";
+    $uniqueId = Str::uuid()->toString();
+    $filePath = "{$directory}/$uniqueId.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
@@ -152,11 +154,14 @@ if ($_POST['tipo'] === 'email') {
                 $to[] = $email['correo'];
             }
         }
+        $basename = basename($file);
+        $filePath = attachments_url("letters/{$basename}");
+
 
         Email::to($to)
             ->subject(__('Segundo aviso de cobro'))
             ->body(__('Adjunto el segundo aviso de cobro para la cuenta #') . $familyId)
-            ->attach($file, "letter_{$familyId}.pdf")
+            ->attach($filePath, "letter_{$familyId}.pdf")
             ->queue($familyId);
     }
 }

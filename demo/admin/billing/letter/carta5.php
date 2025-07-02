@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Classes\Email;
 use Classes\PDF;
 use Classes\Session;
+use Illuminate\Support\Str;
 
 Session::is_logged();
 $today = Carbon::now();
@@ -39,11 +40,11 @@ class nPDF extends PDF
 
 //$paymentGroup = Payment::whereDate('fecha_d', '<=', $fecha)->get()->groupBy('id');
 $paymentGroup = Payment::query()
-->whereDate('fecha_d', '<=', $fecha)
-->when($student !== 'All', function ($query) use ($student) {
-    $query->where('id', $student);
-})
-->get()->groupBy('id');
+    ->whereDate('fecha_d', '<=', $fecha)
+    ->when($student !== 'All', function ($query) use ($student) {
+        $query->where('id', $student);
+    })
+    ->get()->groupBy('id');
 
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
 
@@ -81,7 +82,7 @@ foreach ($paymentGroup as $id => $payments) {
 
     $pdf->Cell(0, 5, 'Estimados padres:', 0, 1);
     $pdf->Ln(5);
-    $pdf->Cell(0, 5, utf8_encode('¡La Paz de Cristo Resucitado sea con ustedes!'), 0, 1);
+    $pdf->Cell(0, 5, '¡La Paz de Cristo Resucitado sea con ustedes!', 0, 1);
     $pdf->Ln(5);
     $pdf->Cell(0, 5, 'Son nuestros mejores deseos que ustedes y todos los miembros de su familia se', 0, 1);
     $pdf->Cell(0, 5, 'encuentren bien de salud.', 0, 1);
@@ -92,12 +93,13 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Cell(0, 5, 'por la cantidad de $' . number_format($total, 2) . '.  Favor de realizar el pago en efectivo en o antes del', 0, 1);
     $pdf->Cell(0, 5, $dateFormatted, 0, 1);
     $pdf->Ln(5);
-    $pdf->Cell(0, 5, utf8_encode('Para información específica sobre sus balances adeudados, agradeceremos que se '), 0, 1);
-    $pdf->Cell(0, 5, utf8_encode('comuniquen vía teléfono (787) 842-1331.'), 0, 1);
+    $pdf->Cell(0, 5, 'Para información específica sobre sus balances adeudados, agradeceremos que se ', 0, 1);
+    $pdf->Cell(0, 5, 'comuniquen vía teléfono (787) 842-1331.', 0, 1);
     $pdf->Ln(5);
     $pdf->Cell(0, 5, 'Gracias anticipadas por su cooperación sobre el particular. ', 0, 1);
     $pdf->Ln(10);
-    $filePath = "{$directory}/general_letter_{$id}.pdf";
+    $uniqueId = Str::uuid()->toString();
+    $filePath = "{$directory}/$uniqueId.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
@@ -118,10 +120,14 @@ if ($_POST['tipo'] === 'email') {
             }
         }
 
+        $basename = basename($file);
+        $filePath = attachments_url("letters/{$basename}");
+
+
         Email::to($to)
             ->subject(__('Carta de cobro general'))
             ->body(__('Adjunto la carta de cobro para la cuenta #') . $familyId)
-            ->attach($file, "letter_{$familyId}.pdf")
+            ->attach($filePath, "letter_{$familyId}.pdf")
             ->queue($familyId);
     }
 }

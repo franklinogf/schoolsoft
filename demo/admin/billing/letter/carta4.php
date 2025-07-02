@@ -4,7 +4,6 @@ require_once '../../../app.php';
 use Classes\Controllers\School;
 use Classes\DataBase\DB;
 use Classes\Lang;
-use Classes\Mail;
 use Classes\PDF;
 use Classes\Session;
 

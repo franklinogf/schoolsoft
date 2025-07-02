@@ -6,13 +6,10 @@ use App\Models\Family;
 use App\Models\Payment;
 use App\Models\Student;
 use Carbon\Carbon;
-use Classes\Controllers\School;
-use Classes\DataBase\DB;
 use Classes\Email;
-use Classes\Lang;
-use Classes\Mail;
 use Classes\PDF;
 use Classes\Session;
+use Illuminate\Support\Str;
 
 Session::is_logged();
 
@@ -36,11 +33,11 @@ $fecha = date('Y-m-d', mktime(0, 0, 0, $mes, 1, date('Y')));
 
 //$paymentGroup = Payment::whereDate('fecha_d', '<=', $fecha)->get()->groupBy('id');
 $paymentGroup = Payment::query()
-->whereDate('fecha_d', '<=', $fecha)
-->when($student !== 'All', function ($query) use ($student) {
-    $query->where('id', $student);
-})
-->get()->groupBy('id');
+    ->whereDate('fecha_d', '<=', $fecha)
+    ->when($student !== 'All', function ($query) use ($student) {
+        $query->where('id', $student);
+    })
+    ->get()->groupBy('id');
 
 
 $todayFormatted = __LANG === 'es' ? $today->translatedFormat('j \d\e F \d\e Y') : $today->translatedFormat('F j, Y');
@@ -135,7 +132,8 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Cell(0, 5, 'Sr. Elimer Pabon Nievez');
     $pdf->Ln(10);
     $pdf->Cell(0, 5, 'Si usted ha realizado el pago antes mencionado, favor de hacer caso omiso a esta notificaci&#65533;n.');
-    $filePath = "{$directory}/suspension_letter_{$id}.pdf";
+    $uniqueId = Str::uuid()->toString();
+    $filePath = "{$directory}/$uniqueId.pdf";
     $pdf->Output("F", $filePath);
     $files[$id] = $filePath;
 }
@@ -155,11 +153,13 @@ if ($_POST['tipo'] === 'email') {
                 $to[] = $email['correo'];
             }
         }
+        $basename = basename($file);
+        $filePath = attachments_url("letters/{$basename}");
 
         Email::to($to)
             ->subject(__('Carta de suspensión'))
             ->body(__('Adjunto la carta de suspensión para la cuenta #') . $familyId)
-            ->attach($file, "letter_{$familyId}.pdf")
+            ->attach($filePath, "letter_{$familyId}.pdf")
             ->queue($familyId);
     }
 }
