@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Teacher;
 use Classes\Mail;
 use Exception;
+use Illuminate\Support\Str;
 use Resend;
 
 class Email
@@ -230,7 +231,11 @@ class Email
                         continue;
                     }
                     if (isset($attachment['path'])) {
-                        $mail->addAttachment($attachment['path'], $attachment['filename']);
+                        $path = attachments_path(Str::replace(config('app.url') . '/attachments', '', $attachment['path']));
+                        $handle = fopen($path, "r");
+                        $contents = fread($handle, filesize($path));
+                        fclose($handle);
+                        $mail->addStringAttachment($contents, $attachment['filename']);
                         continue;
                     }
                     $mail->addAttachment($attachment);
