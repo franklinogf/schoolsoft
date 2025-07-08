@@ -32,15 +32,15 @@ $lang = new Lang([
     ['Imprimir memos de este estudiante', 'Print this student memos'],
 ]);
 $year = $students->info('year');
-DB::table("memos")->alter('ADD `mt` INT NOT NULL AUTO_INCREMENT AFTER `falta`, ADD `dpd` VARCHAR(50) NOT NULL AFTER `mt`, ADD PRIMARY KEY (`mt`);');
-DB::table("memos_codes")->create("
-id INT PRIMARY KEY AUTO_INCREMENT,
-codigo varchar(150) not null,
-nombre varchar(150) not null
-");
-DB::table("memos_codes")->alter("
-ADD `valor` INT NULL AFTER `nombre`;
-");
+// DB::table("memos")->alter('ADD `mt` INT NOT NULL AUTO_INCREMENT AFTER `falta`, ADD `dpd` VARCHAR(50) NOT NULL AFTER `mt`, ADD PRIMARY KEY (`mt`);');
+// DB::table("memos_codes")->create("
+// id INT PRIMARY KEY AUTO_INCREMENT,
+// codigo varchar(150) not null,
+// nombre varchar(150) not null
+// ");
+// DB::table("memos_codes")->alter("
+// ADD `valor` INT NULL AFTER `nombre`;
+// ");
 
 ?>
 <!DOCTYPE html>
