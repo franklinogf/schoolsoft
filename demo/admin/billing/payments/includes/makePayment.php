@@ -1,5 +1,10 @@
 <?php
 require_once '../../../../app.php';
+
+use App\Models\Admin;
+use App\Models\Family;
+use App\Models\Payment;
+use App\Models\Scopes\YearScope;
 use Classes\Route;
 use Classes\DataBase\DB;
 use Classes\Controllers\School;
@@ -9,11 +14,11 @@ Session::is_logged();
 
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    $school = new School(Session::get('usuario'));
+    $school = Admin::user(Session::id())->first();
     $year = $school->year();
     $paymentType = $_POST['paymentType'];
     $chkNum = $_POST['chkNum'] ?: '';
-    $receiptNum = $_POST['receiptNum'];
+    $receiptNum = $_POST['receiptNum'] ?? null;
     $sameReceipt = $_POST['receiptType'] === '2' ? true : false;
     $bash = $_POST['bash'];
     $paymentDate = $_POST['paymentDate'];
@@ -22,35 +27,29 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $date = date("Y-m-d");
     $time = date("H:i:s");
 
-    function receiptNumber($receiptNumber, $sameReceipt, $accountId, $year)
+    $family = Family::find($accountId);
+
+    function receiptNumber($receiptNumber, $sameReceipt, $accountId)
     {
         // si no esta activado lo de los recibos manuales, entonces crear uno automaticamente, de lo contrario utilizar el recibo del input
-        if (!isset($receiptNumber)) {
+        if ($receiptNumber === null || $receiptNumber === '') {
             // utilizar el mismo recibo
-            if ($sameReceipt) {
-                $recQuery = DB::table('pagos')->select('MAX(rec) as rec')->where([
-                    ['id', $accountId],
-                    ['year', $year],
-                    ['deuda', '0000-00-00'],
-                ])->first();
-                if ($recQuery->rec) {
-                    return $recQuery->rec;
-                }
-            }
 
-            $recQuery = DB::table('pagos')->select('MAX(rec) as rec')->where([
-                ['year', $year],
-                ['deuda', '0000-00-00'],
-            ])->first();
+            $recNumber = Payment::query()
+                ->withoutGlobalScope(YearScope::class)
+                ->when($sameReceipt, function ($query) use ($accountId) {
+                    return $query->where('id', $accountId);
+                })
+                ->where('deuda', '0000-00-00')
+                ->max('rec');
 
-            return $recQuery->rec + 1;
+            return $sameReceipt ? $recNumber : $recNumber + 1;
         }
 
         return $receiptNumber;
-
     }
 
-    $receipt = receiptNumber($receiptNum, $sameReceipt, $accountId, $year);
+    $receipt = receiptNumber($receiptNum, $sameReceipt, $accountId);
 
     if ($_POST['paymentMode'] === 'completo') {
         // buscar los pagos por el mes seleccionado
@@ -103,8 +102,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 DB::table('pagos')->insert($data);
             }
         }
-
-
     } else {
         $paymentDebtCodes = $_POST['parcialPaymentDebtsCodes'];
         $paymentDebtsAmounts = $_POST['parcialPaymentDebtsAmounts'];
@@ -156,14 +153,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 ];
                 DB::table('pagos')->insert($data);
             }
-
         }
-
     }
 
-    Route::redirect("/billing/payments?accountId={$accountId}&month={$monthToPay}");
+    // Route::redirect("/billing/payments?accountId={$accountId}&month={$monthToPay}");
 
 
-} else {
-    Route::error();
 }

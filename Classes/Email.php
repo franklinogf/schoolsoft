@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Teacher;
 use Classes\Mail;
 use Exception;
+use Illuminate\Support\Str;
 use Resend;
 
 class Email
@@ -209,30 +210,42 @@ class Email
                 throw new Exception('Error sending email via Resend: ' . $e->getMessage());
             }
         } else {
-            $mail = new Mail;
+            try {
+                $mail = new Mail;
 
-            foreach ($this->to as $t) {
-                $mail->addAddress($t);
-            }
-            if ($this->replyTo !== null) {
-                $mail->addReplyTo($this->replyTo);
-            }
-            $mail->Subject = $this->subject;
-            $mail->isHTML(true);
-            $mail->Body = $this->body;
-            if ($this->text !== null) {
-                $mail->AltBody = $this->text;
-            }
-            foreach ($this->attachments as $attachment) {
-                if (isset($attachment['content'])) {
-                    $mail->addStringAttachment($attachment['content'], $attachment['filename']);
-                    continue;
+                foreach ($this->to as $t) {
+                    $mail->addAddress($t);
                 }
-                $mail->addAttachment($attachment);
-            }
+                if ($this->replyTo !== null) {
+                    $mail->addReplyTo($this->replyTo);
+                }
+                $mail->Subject = $this->subject;
+                $mail->isHTML(true);
+                $mail->Body = $this->body;
+                if ($this->text !== null) {
+                    $mail->AltBody = $this->text;
+                }
+                foreach ($this->attachments as $attachment) {
+                    if (isset($attachment['content'])) {
+                        $mail->addStringAttachment($attachment['content'], $attachment['filename']);
+                        continue;
+                    }
+                    if (isset($attachment['path'])) {
+                        $path = attachments_path(Str::replace(config('app.url') . '/attachments', '', $attachment['path']));
+                        $handle = fopen($path, "r");
+                        $contents = fread($handle, filesize($path));
+                        fclose($handle);
+                        $mail->addStringAttachment($contents, $attachment['filename']);
+                        continue;
+                    }
+                    $mail->addAttachment($attachment);
+                }
 
-            if (!$mail->send()) {
-                throw new Exception('Error sending email: ' . $mail->ErrorInfo);
+                if (!$mail->send()) {
+                    throw new Exception('Error sending email via SMTP: ' . $mail->ErrorInfo);
+                }
+            } catch (\Throwable $th) {
+                throw new Exception('Error sending email via SMTP: ' . $th->getMessage() . ' ' . $th->getFile() . ':' . $th->getLine() . '' . $th->getTraceAsString());
             }
         }
     }

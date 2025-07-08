@@ -2,12 +2,10 @@
 
 namespace Classes;
 
-// use Classes\Controllers\School;
 
 use App\Models\Admin;
 use App\Models\School;
 use App\Models\Teacher;
-// use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
 use Classes\Mail\PHPMailer;
 use Classes\Mail\SMTP;
@@ -20,20 +18,17 @@ class Mail extends PHPMailer
         $this->CharSet = 'UTF-8';
         $school = School::current();
 
-
-        $admin = Admin::primaryAdmin()->first();
-        // $isSMTP = $admin->host === 'E' ? true : false;
-        $name = $admin->colegio;
-        $replayToEmail = $admin->correo;
-        $replayToName = $name;
-
         if ($type === 'Teacher') {
             $teacher = Teacher::find(Session::id())->first();
             $replayToEmail = $teacher->email1;
             $replayToName = $teacher->fullName;
+        } else {
+            $admin = Admin::primaryAdmin()->first();
+            $name = $admin->colegio;
+            $replayToEmail = $admin->correo;
+            $replayToName = $name;
         }
 
-        // if ($isSMTP) {
         parent::__construct($debug);
         $this->isSMTP();
         $this->SMTPDebug = $debug ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
@@ -43,7 +38,6 @@ class Mail extends PHPMailer
         $this->Password = $school->data['smtp_password'];
         $this->SMTPSecure = $school->data['smtp_encryption'];
         $this->Port = $school->data['smtp_port'];
-        // }
 
         $this->setFrom($school->data['default_mail_from'], $name);
         $this->addReplyTo($replayToEmail, $replayToName);
