@@ -8,11 +8,17 @@ global $__tableDataName;
 global $__tableDataButton;
 
 $defaultTableDataInfo = [
-    [
+     [
         'title' => ["es" => "Nombre completo", 'en' => "Full name"],
         'values' => [
             'apellidos',
             'nombre',
+        ]
+     ],
+     [
+        'title' => ["es" => "Grado", 'en' => "Grade"],
+        'values' => [
+            'grado',
         ]
     ],
 ];
