@@ -12,7 +12,7 @@ Session::is_logged();
 $students = new Student();
 $teachers = new Teacher();
 $lang = new Lang([
-    ['Memos y demeritos', 'Memos and demerits'],
+    ['Memos y deméritos', 'Memos and demerits'],
     ['estudiante', 'student'],
     ['Buscar', 'Search'],
     ['Eliminar', 'Delete'],
@@ -45,10 +45,11 @@ $year = $students->info('year');
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
-    $title = $lang->translation("Memos y demeritos");
+    $title = $lang->translation("Memos y deméritos");
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::selectPicker();
     ?>
@@ -60,7 +61,7 @@ $year = $students->info('year');
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container mt-5">
-        <h1 class="text-center"><?= $lang->translation("Memos y demeritos") ?></h1>
+        <h1 class="text-center"><?= $lang->translation("Memos y deméritos") ?></h1>
         <div class="row">
             <div class="col-12">
                 <form method="POST">
