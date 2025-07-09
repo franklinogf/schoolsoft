@@ -13,8 +13,8 @@ $students = new Student();
 $year1 = $students->info('year');
 $year2 = (($year1[0] . $year1[1]) + 1) . '-' . (($year1[3] . $year1[4]) + 1);
 $grades = DB::table("year")->select('DISTINCT grado')->where('year', $year1)->orderBy('grado')->get();
-$allGrades = array_values(array_filter($grades, function ($value) {
-    list($g1, $g2) = explode('-', $value->grado);
+$allGrades = array_values(array_filter($grades, function ($grade) {
+    [$g1] = explode('-', $grade->grado);
 
     return $g1 !== '12';
 }));
@@ -34,7 +34,7 @@ $pdf->Fill();
 
 $pdf->addPage();
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 7, $lang->translation("Lista de estudiantes no matriculados en resumen"), 0, 1, 'C');
+$pdf->Cell(0, 7, $lang->translation("Lista de estudiantes no matriculados en resumen")." $year1", 0, 1, 'C');
 $pdf->Ln(2);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(30);
@@ -47,18 +47,22 @@ $pdf->SetFont('Arial', '', 10);
 $_M = 0;
 $_F = 0;
 foreach ($allGrades as $index => $grade) {
-    $allStudents = array_values(array_filter($students->findByGrade($grade->grado), function ($value) use ($year2) {
+        $allStudents = DB::table('year')->where([
+            ['year', $year1],
+            ['grado', $grade->grado],
+        ])->get();
 
-        list($g1, $g2) = explode('-', $value->grado);
-        $data = DB::table('year')->where([
-            ['year', $year2],
-            ['ss', $value->ss]
-        ])->first();
-        return $g1 !== '12' && !$data;
-    }));
     $M = 0;
     $F = 0;
     foreach ($allStudents as $student) {
+        $data = DB::table('year')->where([
+            ['year', $year2],
+            ['ss', $student->ss]
+        ])->first();
+        $si = $data->nombre ?? 'no';
+        if ($si == 'no')
+           {
+
         if ($student->genero === 'M' || $student->genero == '2') {
             $M++;
             $_M++;
@@ -66,6 +70,7 @@ foreach ($allGrades as $index => $grade) {
             $F++;
             $_F++;
         }
+      }
     }
     $pdf->Cell(30);
     $pdf->Cell(15, 7, $index + 1, 1, 0, 'C');
