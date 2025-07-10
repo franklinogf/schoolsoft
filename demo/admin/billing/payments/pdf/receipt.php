@@ -111,7 +111,7 @@ $pdf->Output();
 if (empty($emails)) {
     exit;
 }
-$file = $pdf->Output('S');
+$file = $pdf->saveAsAttachment('receipts');
 
 
 Email::to($emails)

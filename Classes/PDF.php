@@ -11,6 +11,7 @@ use Classes\PDF\Traits\Dash;
 use Classes\PDF\Traits\Html;
 use Classes\PDF\Traits\Rotate;
 use FPDF;
+use Illuminate\Support\Str;
 use setasign\Fpdi\Fpdi;
 
 class PDF extends FPDF
@@ -122,5 +123,24 @@ class PDF extends FPDF
             }
         }
         $mergedPdf->Output();
+    }
+
+    public function saveAsAttachment(?string $path = null): string
+    {
+        $uniqueId = Str::uuid()->toString();
+
+        $directory = attachments_path($path);
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $filePath = "{$directory}/{$uniqueId}.pdf";
+
+        $this->Output("F", $filePath);
+
+        $url = attachments_url("{$path}/{$uniqueId}.pdf");
+
+        return $url;
     }
 }
