@@ -43,9 +43,9 @@ if (isset($_POST['search'])) {
     echo Util::toJson($data);
 } else if (isset($_POST['searchBySurname'])) {
     $surnames = $_POST['searchBySurname'];
-    $grade = $_POST['grade'];
+    $grade = $_POST['grade'] ?? null;
     $whereQuery = "apellidos LIKE '%$surnames%'";
-    if (isset($grade)) {
+    if ($grade !== null) {
         $whereQuery .= " AND grado = '$grade'";
     }
     $data = DB::table('year')->whereRaw($whereQuery)->get();
