@@ -313,6 +313,7 @@ $(document).ready(function () {
     $('#depositAmount').removeClass('is-invalid')
 
     const newDeposit = value + available
+//    const newDeposit = type2
 
     $('#newDeposit').text(newDeposit.toFixed(2))
   })
