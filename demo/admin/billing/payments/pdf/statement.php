@@ -147,7 +147,8 @@ if (empty($emails)) {
     exit;
 }
 
-$file = $pdf->Output('S');
+$file = $pdf->saveAsAttachment('statements');
+
 
 Email::to($emails)
     ->subject('Estado de cuenta')
