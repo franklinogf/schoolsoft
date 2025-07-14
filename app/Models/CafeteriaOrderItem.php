@@ -13,6 +13,6 @@ class CafeteriaOrderItem extends Model
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(StoreOrder::class, "id_compra");
+        return $this->belongsTo(CafeteriaOrder::class, "id_compra");
     }
 }
