@@ -2,7 +2,6 @@
 require_once '../app.php';
 
 use App\Models\Teacher;
-use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
