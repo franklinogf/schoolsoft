@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\YearScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +21,12 @@ class EmailQueue extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope(new YearScope);
+        static::addGlobalScope('twoYears', function (Builder $builder): void {
+            $admin = Admin::primaryAdmin()->first();
+
+            $builder->where("year", $admin->year)
+                ->orWhere('year', $admin->year2);
+        });
     }
 
     public function markAsSent(): void
@@ -61,7 +65,7 @@ class EmailQueue extends Model
 
     public function family(): BelongsTo
     {
-        return $this->belongsTo(Family::class,'id2','id');
+        return $this->belongsTo(Family::class, 'id2', 'id');
     }
 
     protected function casts(): array
