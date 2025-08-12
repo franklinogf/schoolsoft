@@ -3,19 +3,16 @@ require_once '../../app.php';
 
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 use Classes\Lang;
 
 Session::is_logged();
-
-$teacher = new Teacher(Session::id());
 $options = [
     [
         'title' => ["es" => 'Mensajes', "en" => 'Messages'],
         'buttons' => [
-            ['name' => ["es" => 'Correo electrónico', "en" => "Email"], 'link' => 'email/'],
-            ['name' => ["es" => 'Mensaje de texto', "en" => "SMS"], 'link' => 'sms/'],
-            ['name' => ["es" => 'Mensajes', "en" => "Inbox"], 'link' => 'inbox/'],
+            ['name' => ["es" => 'Correo electrónico', "en" => "Email"], 'link' => 'options/email/'],
+            ['name' => ["es" => 'Mensaje de texto', "en" => "SMS"], 'link' => 'options/sms/'],
+            ['name' => ["es" => 'Mensajes', "en" => "Inbox"], 'link' => 'options/inbox/'],
             // ['name' => ["es" => 'Mensajes de padres', "en" => "Parents messages"], 'link' => '#'],
         ]
     ],

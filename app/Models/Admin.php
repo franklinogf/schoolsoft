@@ -30,11 +30,18 @@ class Admin extends Model
         return $this->{$yearToUse};
     }
 
-
-    protected function scopePrimaryAdmin(Builder $query): void
+    public static function primaryAdmin(): self
     {
-        $query->where('usuario', 'administrador');
+        $primaryAdmin = self::query()->where('usuario', 'administrador')->first();
+        if (!$primaryAdmin) {
+            throw new \Exception('No primary admin found');
+        }
+        return $primaryAdmin;
     }
+    // protected function scopePrimaryAdmin(Builder $query): void
+    // {
+    //     $query->where('usuario', 'administrador');
+    // }
     protected function scopeUser(Builder $query, string $user): void
     {
         $query->where('usuario', $user);

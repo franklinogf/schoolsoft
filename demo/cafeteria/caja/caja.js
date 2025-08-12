@@ -8,6 +8,7 @@ $(document).ready(function () {
       type: 'POST',
       url: 'recibo.php',
       data: { date: $('#date').val() },
+      dataType: 'json',
       // contentType: false,
       // cache: false,
       // processData: false,
@@ -29,11 +30,14 @@ $(document).ready(function () {
       beforeSend: function () {
         $('#progressModal').modal('show')
       },
-      complete: function (res) {
+      success: function (res) {
         console.log('completed:', res)
-        setTimeout(function () {
-          $('#progressModal').modal('hide')
-        }, 500)
+      },
+      fail: function (res) {
+        console.log('error:', res)
+      },
+      complete: function () {
+        $('#progressModal').modal('hide')
       }
     })
   })

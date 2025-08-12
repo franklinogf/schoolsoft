@@ -1,26 +1,25 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Controllers\Student;
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
-use Classes\Util;
 
 Session::is_logged();
 Route::includeFile('/simple-php-captcha/simple-php-captcha.php', true);
 Session::set("captcha", simple_php_captcha());
 
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
 if (isset($_POST['students'])) {
     $studentsAmount = sizeof($_POST['students']);
     if ($studentsAmount > 1) {
         $_titleValue = __LANG === 'es' ? "$studentsAmount estudiantes" : "$studentsAmount students";
     } else {
         $_ss = $_POST['students'][0];
-        $student = new Student($_ss);
+        $student = Student::bySs($_ss);
         $_titleValue = $student->fullName();
     }
     Session::set('students', $_POST['students']);
@@ -37,7 +36,6 @@ if (isset($_POST['students'])) {
     $_user = $_POST['admin'];
     $_titleValue =  __LANG === 'es' ? "al administrador $_user" : "to the admin $_user";
 }
-// $admins = DB::table('colegio')->select('usuario')->get();
 $savedMessages = DB::table('T_correos_guardados')->where([
     ['colegio', $teacher->usuario],
     ['id_profesor', $teacher->id]
@@ -126,7 +124,7 @@ $lang = new Lang([
                         <input type="hidden" id="cap" value="<?= $_SESSION['captcha']['code'] ?>">
                     </div>
                     <div class="col-6 col-md-3 d-flex">
-                        <input class="form-control form-control-sm align-self-center" id="code" required type="text">
+                        <input class="form-control form-control-sm align-self-center" id="code" type="text">
                     </div>
                 </div>
                 <div class="text-center">

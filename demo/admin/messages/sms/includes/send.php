@@ -1,10 +1,10 @@
 <?php
 require_once '../../../../app.php';
 
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Student;
-use Classes\Controllers\School;
-use Classes\DataBase\DB;
+use App\Enums\PhoneCompanyEnum;
+use App\Models\Admin;
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\Mail;
 use Classes\Session;
 use Classes\Util;
@@ -21,40 +21,46 @@ $error = null;
 
 
 foreach ($values as $value) {
-    $count = 0;
     if ($key === 'teachers') {
-        $teacher = new Teacher($value);
+        $teacher = Teacher::find($value);
         $number = $teacher->cel;
         $comp = $teacher->comp;
         if ($number !== '' && !$comp !== '') {
-            $cel = Util::phoneAddress($number, $comp);
-            $count++;
-            $mail->addAddress($cel, $value);
+            $company = PhoneCompanyEnum::tryFrom($comp);
+            if ($company) {
+                $cel = $company->createPhoneEmail($number);
+                $mail->addAddress($cel, "$teacher->nombre $teacher->apellidos");
+            }
         }
     } else if ($key === 'students') {
-        $student = new Student($value);
-        $parents = DB::table('madre')->where('id', $student->id)->first();
+        $student = Student::find($value);
+        $parents = $student->family;
         $numbers = [
             ['cel' => $parents->cel_m, 'nombre' => $parents->padre, "recibir" => $parents->re_mc_m, 'comp' => $parents->cel_com_m],
             ['cel' => $parents->cel_p, 'nombre' => $parents->madre, "recibir" => $parents->re_mc_p, 'comp' => $parents->cel_com_p]
         ];
         foreach ($numbers as $number) {
             if ($number['recibir'] === 'SI' && $number['cel'] !== '' && $number['comp'] !== '') {
+                $company = PhoneCompanyEnum::tryFrom($number['comp']);
+                if (!$company) {
+                    continue;
+                }
                 $cel = Util::phoneAddress($number['cel'], $number['comp']);
-                $count++;
                 $mail->addAddress($cel, $number['nombre']);
             }
         }
     } else {
-        $school = new School($value);
-        $number = $school->info('telefono');
-        $comp = $school->info('email4');
+        $school = Admin::user($value)->first();
+        $number = $school->telefono;
+        $comp = $school->email4;
         if ($number !== '' && !$comp !== '') {
-            $cel = Util::phoneAddress($number, $comp);
-            $count++;
-            $mail->addAddress($cel, $value);
-        }
+            $company = PhoneCompanyEnum::tryFrom($comp);
 
+            if ($company) {
+                $cel = $company->createPhoneEmail($number);
+                $mail->addAddress($cel, $value);
+            }
+        }
     }
 
 
@@ -64,15 +70,14 @@ foreach ($values as $value) {
     <br>
     <p>{$message}</p> 
    ");
-
-    if ($count > 0) {
+    $mail->Subject = $title;
+    if (count($mail->getToAddresses()) > 0) {
         if (!$mail->send()) {
             $emailsError++;
             $error = $mail->ErrorInfo;
         } else {
             $emailsSent++;
         }
-
     }
     $mail->ClearAddresses();
 }

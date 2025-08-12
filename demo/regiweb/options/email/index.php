@@ -1,15 +1,15 @@
 <?php
 require_once '../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
-$admins = DB::table('colegio')->select('usuario')->get();
+$teacher = Teacher::find(Session::id());
+$admins = Admin::all();
 
 $lang = new Lang([
     ['Enviar correo electrónico', 'Send e-mail'],
@@ -58,7 +58,7 @@ $lang = new Lang([
 
                 <div id="students" class="mb-3 option hidden">
                     <?php
-                    $__tableData = $teacher->getAllStudents();
+                    $__tableData = $teacher->homeStudents;
                     // echo '<pre>';
                     // var_dump($__tableData);
                     // echo '</pre>';
@@ -66,12 +66,12 @@ $lang = new Lang([
                     $__tableDataName = 'students';
                     $__dataPk = 'ss';
                     Route::includeFile('/includes/layouts/table.php', true)
-                        ?>
+                    ?>
                 </div>
 
                 <div id="classes" class="mb-3 option hidden">
                     <?php
-                    $__tableData = $teacher->classes();
+                    $__tableData = $teacher->subjects;
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'classes';
                     $__tableDataInfo = [
@@ -86,7 +86,7 @@ $lang = new Lang([
                     ];
                     $__dataPk = 'curso';
                     Route::includeFile('/includes/layouts/table.php', true)
-                        ?>
+                    ?>
                 </div>
 
 

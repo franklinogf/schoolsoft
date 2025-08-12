@@ -2,20 +2,21 @@
 
 require_once '../../../../app.php';
 
-use Classes\File;
+use App\Models\Admin;
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Mail;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
+use Classes\Email;
 
 Session::is_logged();
 Server::is_post();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
+$school  = Admin::primaryAdmin();
 $lang = new Lang([
     ["Error al enviar el correo electrónico", "Failed to send email"],
     ["Se ha enviado el correo electrónico", "Email has been sent"],
@@ -26,12 +27,10 @@ $lang = new Lang([
     ["No tiene correo electrónico registrado", "No email registered"],
     ["Ningun estudiante tiene correo electrónico registrado", "None of the students has an email registered"],
 ]);
-$__lang = __LANG;
+
 $messageTitle = $_REQUEST['title'];
 $messageBody = $text = nl2br($_REQUEST['message']);
-$schoolName = $teacher->info('colegio');
-$mail = new Mail(false, "Teacher");
-$mail->isHTML(true);
+$schoolName = $school->colegio;
 $subject = $_REQUEST['subject'];
 $message = "
     <!DOCTYPE html>
@@ -59,39 +58,50 @@ if (isset($_POST['saveMessage'])) {
         'titulo' => $messageTitle,
         'asunto' => $subject,
         'mensaje' => $messageBody,
-        'year' => $teacher->info('year')
+        'year' => $school->year
     ]);
 }
 
 $files = [];
+$to = [];
 
-$fromEmail = __RESEND_KEY_OTHER__;
-$from = "$schoolName <$fromEmail>";
-
-$fileObj = new File();
-foreach ($fileObj->files as $index => $file) {
-    $files[] = File::upload($file, 'regiweb/options/email/attachments', uniqid() . '_' . basename($file->name));
+if (isset($_FILES['file'])) {
+    $files = upload_attachment($_FILES['file'], 'messages/email');
 }
 
 if (isset($_POST['studentsAmount'])) {
     $students = Session::get('students', true);
     foreach ($students as $mt) {
         $to = [];
-        $student = new Student($mt);
-        $mother = DB::table('madre')->select('madre,padre,email_m,email_p,cel_com_m,cel_m,cel_com_p,cel_p')
-            ->where([
-                ['id', $student->id]
-            ])->first();
+        $student = Student::find($mt);
+        $family = $student->family;
 
-        if ($mother->email_m !== "") {
-            $to[] = $mother->email_m;
+        if ($family->email_m !== "") {
+            $to[] = $family->email_m;
         }
-        if ($mother->email_p !== "") {
-            $to[] = $mother->email_p;
+        if ($family->email_p !== "") {
+            $to[] = $family->email_p;
         }
-        Mail::queue($from, $from, $to, $subject, $message, $text, $files);
+        if (count($to) > 0) {
+            try {
+                $mail =  Email::to($to)
+                    ->subject($subject)
+                    ->body($message)
+                    ->text($text);
+                foreach ($files as $file) {
+                    $mail->attach($file);
+                }
+                $mail->queue();
+                // $emailsSent++;
+            } catch (\Throwable $th) {
+                $error = $th->getMessage();
+                // $emailsError++;
+            }
+        }
+        // else {
+        //    $emailsError++;
+        // }
     }
-
 } else if (isset($_POST['classesAmount'])) {
 
     $classes = Session::get('classes', true);
@@ -114,29 +124,65 @@ if (isset($_POST['studentsAmount'])) {
             if ($mother->email_p !== "") {
                 $to[] = $mother->email_p;
             }
-            Mail::queue($from, $from, $to, $subject, $message, $text, $files);
+            if (count($to) > 0) {
+                try {
+                    $mail =  Email::to($to)
+                        ->subject($subject)
+                        ->body($message)
+                        ->text($text);
+                    foreach ($files as $file) {
+                        $mail->attach($file);
+                    }
+                    $mail->queue();
+                    // $emailsSent++;
+                } catch (\Throwable $th) {
+                    $error = $th->getMessage();
+                    // $emailsError++;
+                }
+            }
+            // else {
+            //    $emailsError++;
+            // }
         }
     }
 } else if ($_POST['admin']) {
-    $to = [];
     $schoolUser = $_POST['admin'];
-    $school = new School($schoolUser); //school by user
-    $to[] = $school->info('correo');
-    Mail::queue($from, $from, $to, $subject, $message, $text, $files);
+    $admin = Admin::user($schoolUser)->first();
+    $to[] = $admin->correo;
+    if (count($to) > 0) {
+        try {
+            $mail =  Email::to($to)
+                ->subject($subject)
+                ->body($message)
+                ->text($text);
+            foreach ($files as $file) {
+                $mail->attach($file);
+            }
+            $mail->queue();
+            // $emailsSent++;
+        } catch (\Throwable $th) {
+            $error = $th->getMessage();
+            // $emailsError++;
+        }
+    }
+    // else {
+    //    $emailsError++;
+    // }
 } else if ($_POST['deleteMessage']) {
     $messageId = $_POST['deleteMessage'];
     DB::table('T_correos_guardados')->where('id', $messageId)->delete();
 }
 
 
+
 // send and sms notification when it's marked
-if (isset($_POST['sms'])) {
-    $companie1 = $mother->cel_com_m;
-    $cellPhone1 = $mother->cel_m;
-    $companie2 = $mother->cel_com_p;
-    $cellPhone2 = $mother->cel_p;
-    $mail->ClearAddresses();
-    include_once('sendSms.php');
-}
+// if (isset($_POST['sms'])) {
+//     $companie1 = $mother->cel_com_m;
+//     $cellPhone1 = $mother->cel_m;
+//     $companie2 = $mother->cel_com_p;
+//     $cellPhone2 = $mother->cel_p;
+//     $mail->ClearAddresses();
+//     include_once('sendSms.php');
+// }
 
 Route::redirect("/options/email/");
