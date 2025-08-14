@@ -105,7 +105,7 @@ foreach ($realizedPurchases as $purchase) {
         $to[] = $family->email_p;
     }
 
-    Email::to(['franklinomarflores@gmail.com'])
+    Email::to($to)
         ->subject($subject)
         ->body($mensaje)
         ->attach($pdfdoc, "Recibo {$date}.pdf")
