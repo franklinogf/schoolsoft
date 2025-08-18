@@ -69,6 +69,11 @@ $options = [
                 'desc' => '',
                 'link' => 'email/sent.php'
             ],
+            [
+                'name' => __('Mensaje Grupal'),
+                'desc' => '',
+                'link' => 'mensajes/mensa_grupos.php'
+            ],
 
         ]
     ]
