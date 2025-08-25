@@ -6,13 +6,13 @@
     "php": "^8.2",
     "resend/resend-php": "^v0.16.0",
     "scssphp/scssphp": "2.0.1",
-    "illuminate/database": "^12.19.3",
-    "illuminate/translation": "^12.19.3",
-    "illuminate/filesystem": "^12.19.3",
+    "illuminate/database": "^12.25.0",
+    "illuminate/translation": "^12.25.0",
+    "illuminate/filesystem": "^12.25.0",
     "vlucas/phpdotenv": "^5.6.2",
-    "setasign/fpdi": "^2.6.3",
+    "setasign/fpdi": "^2.6.4",
     "setasign/fpdf": "^1.8.6",
-    "illuminate/support": "^12.19",
+    "illuminate/support": "^12.25",
     "ramsey/uuid": "^4.9"
   },
   "autoload": {
@@ -30,5 +30,8 @@
       "name": "Franklin Gonzalez",
       "email": "franklinomarflores@gmail.com"
     }
-  ]
+  ],
+  "require-dev": {
+    "laradumps/laradumps-core": "3.0"
+  }
 }
