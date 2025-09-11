@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\YearScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -32,5 +32,10 @@ class Family extends Model
     public function debts(): HasMany
     {
         return $this->charges()->whereDate('fecha_d',  '0000-00-00');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->whereHas('kids');
     }
 }
