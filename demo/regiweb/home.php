@@ -3,16 +3,22 @@ require_once '../app.php';
 
 use App\Models\Admin;
 use App\Models\Teacher;
-use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
-$school = Admin::primaryAdmin()->first();
 $teacher = Teacher::find(Session::id());
+$school = Admin::primaryAdmin()->first();
 $year = $school->year;
+
+$date = date("Y-m-d");
+$messages = Manager::table('mensa_tarjeta')
+    ->where(fn($query) => $query
+        ->where('grupo', 'Maestros')
+        ->orWhere('grupo', 'Todos'))
+    ->whereDate('fecha_in', '<=', $date)
+    ->whereDate('fecha_out', '>=', $date)->get();
 
 ?>
 <!DOCTYPE html>
@@ -31,223 +37,134 @@ $year = $school->year;
     Route::includeFile('/regiweb/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 px-0">
-        <center>
+
+        <div class="mx-auto text-center">
             <h1 class="display-4 mt-2"><?= __("Conectate desde cualquier parte del Mundo") ?></h1>
             <img class="img-fluid mx-auto d-block mt-5 mt-lg-4 w-20" src="/images/globe.gif" height="150" width="150" />
-        </center>
+
+        </div>
     </div>
-    <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
 
-    if (isset($_POST['Grabar'])) {
-        for ($a = 1; $a <= $_POST['num_rec']; $a++) {
-            $codi = 'est(' . $a . ',1)';
-            $dijo = 'est(' . $a . ',2)';
-            $nom = 'est(' . $a . ',5)';
-            $ape = 'est(' . $a . ',4)';
-            $com = 'est(' . $a . ',6)';
-            $date = date("Y-m-d");
-            if ($_POST[$dijo] !== '') {
+    <?php if (count($messages) > 0): ?>
+        <div class="container mt-3">
+            <h1 class="display-12 mt-2"><?= __("Mensaje(s)") ?></h1>
 
-                DB::table('respuestas')->insert([
-                    'year' => $year,
-                    'id2' => $teacher->id,
-                    'codigo' => $_POST[$codi],
-                    'dijo' => $_POST[$dijo],
-                    'fecha' => $date,
-                    'apellidos' => $_POST[$ape],
-                    'nombre' => $_POST[$nom],
-                    'comentario' => $_POST[$com],
-                ]);
-            }
-        }
-    }
-
-    $date = date("Y-m-d");
-    $mensages = DB::table('mensa_tarjeta')->where([
-        ['fecha_in', '<=', $date],
-        ['fecha_out', '>=', $date],
-        ['grupo', '!=', 'Padres'],
-    ])->get();
-
-    $can = count($mensages);
-    if ($can > 0) {
-    ?>
-        <div class="container-lg mt-lg-3  px-0">
-            <center>
-                <h1 class="display-12 mt-2">
-                    <font size="6"><b><?= __("Mensaje(s) para los Maestros") ?></b></font>
-                </h1>
-
-                <table border="0" width="64%" cellspacing="0" cellpadding="3">
-                    <?
-                    foreach ($mensages as $mensage) {
-                    ?>
-                        <tr>
-                            <td bgcolor="#C0C0C0">
-                                <p align="center"><b>
-                                        <font size="4"><?= __("Titulo del Mensaje: ") . '</b>' . $mensage->titulo ?></font>
-                            </td>
-                        </tr>
-                    <?
-                        echo '<tr>';
-                        echo '<td>';
-                        echo $mensage->text;
-                        echo '</td>';
-                        echo '</tr>';
-                        echo '<tr>';
-                        echo '<td bgcolor="#C0C0C0">';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                    ?>
-                </table>
-            </center>
+            <?php foreach ($messages as $message): ?>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">
+                            <?= $message->titulo ?></h3>
+                        <p class="card-text"><?= $message->text ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
-    <?
-    }
+    <?php endif; ?>
 
-    //***********************************************
-    $date = date("Y-m-d");
+    <?php if (count($surveys) > 0): ?>
+        <div class="container mt-3 ">
+            <h1 class="display-12 mt-2"><?= __("Encuesta(s)") ?></h1>
 
-    $mensages = DB::table('estadisticas')->where([
-        ['fecha_in', '<=', $date],
-        ['fecha_out', '>=', $date],
-        ['grupo', '!=', 'Padres'],
-    ])->get();
-    $can = count($mensages);
+            <?php foreach ($surveys as $survey):
 
-    if ($can > 0) {
-    ?>
-        <div class="container-lg mt-lg-3  px-0">
-            <center>
-                <h1 class="display-12 mt-2">
-                    <font size="6"><b><?= __("Encuesta para los Maestros") ?></b></font>
-                </h1>
-            </center>
+                $answer = Manager::table('respuestas')
+                    ->where('id2', $teacher->id)
+                    ->where('codigo', $survey->codigo)
+                    ->where('year', $year)
+                    ->first();
+            ?>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">
+                            <?= $survey->titulo ?></h3>
+                        <p class="card-text"><?= $survey->text ?></p>
+                        <?php if (!$answer): ?>
+                            <form action="./includes/answerSurvey.php" method="post">
+                                <div class="form-group col-4">
+                                    <label for="answer">Respuesta:</label>
+                                    <select class="form-control" name="answer" id="answer">
+                                        <option value="" selected disabled><?= __("Seleccione una respuesta") ?></option>
+                                        <option value="SI"><?= __("SI") ?></option>
+                                        <option value="NO"><?= __("NO") ?></option>
+                                        <option value="INDECISO"><?= __("INDECISO") ?></option>
+                                    </select>
+                                </div>
+
+                                <?php if ($survey->comentario == 'SI'): ?>
+                                    <div class="form-group col-4">
+                                        <label for="comment"><?= __("Comentario (opcional)") ?></label>
+                                        <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+                                    </div>
+                                <?php endif; ?>
+
+                                <input type="hidden" name="survey_id" value="<?= $survey->codigo ?>">
+                                <button type="submit" class="btn btn-primary"><?= __("Responder") ?></button>
+                            </form>
+                        <?php else: ?>
+                            <p class="text-muted"> Su respuesta fue: <?= $answer->dijo ?></p>
+                            <?php if ($answer->comentario): ?>
+                                <p class="text-muted"><?= __("Comentario:") ?></p>
+                                <small class="form-text text-muted"><?= $answer->comentario ?></small>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <hr>
+
+                        <?php if ($survey->vicible == 'SI'): ?>
+                            <div>
+                                <h5>Resultado de la encuesta</h5>
+                                <table class="table table-striped table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th><?= __("Respuesta") ?></th>
+                                            <th><?= __("Cantidad") ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $siCount = Manager::table('respuestas')
+                                            ->where('codigo', $survey->codigo)
+                                            ->where('year', $year)
+                                            ->where('dijo', 'SI')
+                                            ->count();
+
+
+                                        $noCount = Manager::table('respuestas')
+                                            ->where('codigo', $survey->codigo)
+                                            ->where('year', $year)
+                                            ->where('dijo', 'NO')
+                                            ->count();
+
+                                        $indecisoCount = Manager::table('respuestas')
+                                            ->where('codigo', $survey->codigo)
+                                            ->where('year', $year)
+                                            ->where('dijo', 'INDECISO')
+                                            ->count();
+                                        ?>
+                                        <tr>
+                                            <td><?= __("SI") ?></td>
+                                            <td><?= $siCount ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><?= __("NO") ?></td>
+                                            <td><?= $noCount ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><?= __("INDECISO") ?></td>
+                                            <td><?= $indecisoCount ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
-
-        <form action="home.php" method="post">
-
-            <div align="center">
-                <table border="0" width="64%" cellspacing="0" cellpadding="3">
-                    <?
-                    $a = 0;
-                    $b = 0;
-                    foreach ($mensages as $mensage) {
-                    ?>
-                        <tr>
-                            <td bgcolor="#C0C0C0">
-                                <p align="center"><b>
-                                        <font size="4"><?= __("Titulo de la Encuesta: ") . '</b>' . $mensage->titulo ?></font>
-                            </td>
-                        </tr>
-                    <?
-                        echo '<tr>';
-                        echo '<td>';
-                        echo $mensage->text;
-                        echo '</td>';
-                        echo '</tr>';
-                        echo '<tr>';
-                        echo '<td bgcolor="">';
-                        $a = $a + 1;
-
-                        $respuesta = DB::table('respuestas')->where([
-                            ['id2', $teacher->id],
-                            ['codigo', $mensage->codigo],
-                            ['year', $year],
-                        ])->first();
-
-                        echo "<input type=hidden name='est($a,1)' value='$mensage->codigo'>";
-                        echo "<input type=hidden name='est($a,3)' value='$year'>";
-                        echo "<input type=hidden name='est($a,4)' value='$teacher->apellidos'>";
-                        echo "<input type=hidden name='est($a,5)' value='$teacher->nombre'>";
-                        echo "<input type=hidden name='est($a,6)' value='$row6[4]'>";
-
-                        $di = '';
-                        if ($respuesta->dijo != '') {
-                            echo 'Su Contestación fue: ' . $respuesta->dijo;
-                            $di = 'disabled="disabled"';
-                        } else {
-                            $b = $b + 1;
-                            echo 'Su Contestación es: ';
-                            echo "<select size='1' name='est($a,2)'>";
-                            echo '<option></option>';
-                            echo '<option>SI</option>';
-                            echo '<option>NO</option>';
-                            echo '<option>INDECISO</option>';
-                            echo '</select>';
-                        }
-                        echo '</td>';
-                        echo '</tr>';
-                        if ($mensage->vicible == 'SI') {
-                            $respuesta1 = DB::table('respuestas')->where([
-                                ['dijo', 'SI'],
-                                ['codigo', $mensage->codigo],
-                                ['year', $year],
-                            ])->get();
-                            $can1 = count($respuesta1);
-
-                            $respuesta1 = DB::table('respuestas')->where([
-                                ['dijo', 'NO'],
-                                ['codigo', $mensage->codigo],
-                                ['year', $year],
-                            ])->get();
-                            $can2 = count($respuesta1);
-
-                            $respuesta1 = DB::table('respuestas')->where([
-                                ['dijo', 'INDECISO'],
-                                ['codigo', $mensage->codigo],
-                                ['year', $year],
-                            ])->get();
-                            $can3 = count($respuesta1);
-
-                            echo '<tr>';
-                            echo '<td><CENTER>';
-                            echo '>>>>&nbsp; TOTAL SI: ' . $can1;
-                            echo '&nbsp;&nbsp; / &nbsp;&nbsp;TOTAL NO: ' . $can2;
-                            echo '&nbsp;&nbsp; / &nbsp;&nbsp;TOTAL INDECISO: ' . $can3 . '&nbsp; <<<<';
-                            echo '</CENTER></td>';
-                            echo '</tr>';
-                        }
-                        if ($mensage->comentario == 'SI') {
-                            echo '<tr>';
-                            echo '<td>';
-                            echo '<p align="center"><font size="4"><b>' . __("Comentario:") . '</b></font>';
-                            echo '</td>';
-                            echo '</tr>';
-
-                            echo '<tr>';
-                            echo '<td>';
-                            echo "<textarea name='est($a,6)' $di rows='4' style='width: 803px'>" . $respuesta->comentario . "</textarea>";
-                            echo '</td>';
-                            echo '</tr>';
-                        }
-
-                        echo '<td bgcolor="#C0C0C0">';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                    echo "<input type=hidden name=num_rec value=$a>";
-
-                    ?>
-                </table>
-                <br>
-                <?
-                if ($respuesta->dijo != '' and $b == 0) {
-                    exit;
-                }
-
-                ?>
-                <input type=submit name='Grabar' class="myButton" value="Contestar" style="font-size: 12pt; font-weight: bold; width: 199px; height: 30px;"></p>
-            </div>
-        </form>
+    <?php endif; ?>
 
 
-    <?php } ?>
-    <br>
-    <br>
-    <br>
+    <?php Route::includeFile('/includes/layouts/scripts.php', true);    ?>
 
 
 </body>

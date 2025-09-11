@@ -12,7 +12,7 @@ Session::is_logged();
 $students = new Student();
 $teachers = new Teacher();
 $lang = new Lang([
-    ['Memos y demeritos', 'Memos and demerits'],
+    ['Memos y deméritos', 'Memos and demerits'],
     ['estudiante', 'student'],
     ['Buscar', 'Search'],
     ['Eliminar', 'Delete'],
@@ -32,23 +32,24 @@ $lang = new Lang([
     ['Imprimir memos de este estudiante', 'Print this student memos'],
 ]);
 $year = $students->info('year');
-DB::table("memos")->alter('ADD `mt` INT NOT NULL AUTO_INCREMENT AFTER `falta`, ADD `dpd` VARCHAR(50) NOT NULL AFTER `mt`, ADD PRIMARY KEY (`mt`);');
-DB::table("memos_codes")->create("
-id INT PRIMARY KEY AUTO_INCREMENT,
-codigo varchar(150) not null,
-nombre varchar(150) not null
-");
-DB::table("memos_codes")->alter("
-ADD `valor` INT NULL AFTER `nombre`;
-");
+// DB::table("memos")->alter('ADD `mt` INT NOT NULL AUTO_INCREMENT AFTER `falta`, ADD `dpd` VARCHAR(50) NOT NULL AFTER `mt`, ADD PRIMARY KEY (`mt`);');
+// DB::table("memos_codes")->create("
+// id INT PRIMARY KEY AUTO_INCREMENT,
+// codigo varchar(150) not null,
+// nombre varchar(150) not null
+// ");
+// DB::table("memos_codes")->alter("
+// ADD `valor` INT NULL AFTER `nombre`;
+// ");
 
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
-    $title = $lang->translation("Memos y demeritos");
+    $title = $lang->translation("Memos y deméritos");
     Route::includeFile('/admin/includes/layouts/header.php');
     Route::selectPicker();
     ?>
@@ -60,7 +61,7 @@ ADD `valor` INT NULL AFTER `nombre`;
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container mt-5">
-        <h1 class="text-center"><?= $lang->translation("Memos y demeritos") ?></h1>
+        <h1 class="text-center"><?= $lang->translation("Memos y deméritos") ?></h1>
         <div class="row">
             <div class="col-12">
                 <form method="POST">

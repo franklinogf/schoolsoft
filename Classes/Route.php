@@ -42,7 +42,7 @@ class Route
    {
       $root = '';
       if (!$serverRoot) {
-         $root = __SCHOOL_URL;
+         $root = '/' . school_config('app.acronym');
       } else {
          if (strpos($path, 'react-components'))
             Route::includeFile('/includes/react.php', true);

@@ -1,15 +1,15 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Student;
-use Classes\DataBase\DB;
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
-$teachers = new Teacher();
+
 $lang = new Lang([
     ['Enviar mensaje de texto a', 'Send sms to'],
     ['estudiantes', 'students'],
@@ -26,17 +26,17 @@ if (count($dataList) > 1) {
     $titleHeader .= ' ' . count($dataList) . ' ' . $lang->translation($key === 'teachers' ? 'profesores' : ($key === 'students' ? 'estudiantes' : 'administradores'));
 } else {
     if ($key === 'teachers') {
-        $teacher = new Teacher($dataList[0]);
+        $teacher =  Teacher::find($dataList[0]);
         $titleHeader .= " $teacher->nombre $teacher->apellidos";
     } else if ($key === 'students') {
-        $student = new Student($dataList[0]);
+        $student =  Student::find($dataList[0]);
         $titleHeader .= " $student->nombre $student->apellidos";
     } else {
 
         $titleHeader .= " $dataList[0]";
     }
 }
-$savedMessages = DB::table('T_sms_guardados')->where('enviado_por', Session::id())->orderBy('id', 'desc')->get();
+$savedMessages = Manager::table('T_sms_guardados')->where('enviado_por', Session::id())->orderBy('id', 'desc')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

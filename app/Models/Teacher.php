@@ -46,6 +46,11 @@ class Teacher extends Model
         return $this->hasMany(Subject::class, 'id', 'id');
     }
 
+    public function classes(): HasMany
+    {
+        return $this->hasMany(Classes::class, 'id', 'id')->orderBy('curso');
+    }
+
     public function homeStudents(): HasMany
     {
         return $this->hasMany(Student::class, 'grado', 'grado')

@@ -6,8 +6,6 @@ use App\Models\Family;
 use App\Models\Payment;
 use App\Models\Scopes\YearScope;
 use Classes\Route;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
 use Classes\Session;
 
 Session::is_logged();
@@ -15,7 +13,7 @@ Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $school = Admin::user(Session::id())->first();
-    $year = $school->year();
+    $year = $school->year2;
     $paymentType = $_POST['paymentType'];
     $chkNum = $_POST['chkNum'] ?: '';
     $receiptNum = $_POST['receiptNum'] ?? null;
@@ -53,11 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     if ($_POST['paymentMode'] === 'completo') {
         // buscar los pagos por el mes seleccionado
-        $paymentsQuery = DB::table('pagos')->where([
+        $payments = Payment::where([
             ['id', $accountId],
-            ['year', $year],
             ['baja', '']
-        ])->whereRaw("AND MONTH(fecha_d) = ?", [$monthToPay])->get();
+        ])->whereMonth('fecha_d', $monthToPay)->get();
         // crear un array con todos los pagos con la informacion que necesito
         $debtData = [];
         foreach ($paymentsQuery as $row) {
@@ -93,13 +90,13 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'rec' => $receipt,
                     'id2' => $debt['id'],
                     'bash' => $bash,
-                    'caja' => $school->info('caja'),
-                    'usuario' => $school->info('usuario'),
+                    'caja' => $school->caja,
+                    'usuario' => $school->usuario,
                     'hora' => $time,
                     'fecha2' => $date
                 ];
 
-                DB::table('pagos')->insert($data);
+                Payment::create($data);
             }
         }
     } else {
@@ -111,14 +108,14 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $totalPayment = $paymentDebtsAmounts[$index];
             $grade = $paymentDebtsGrades[$index];
             $debt = [];
-            //buscar el pago por codigo y el mes
-            $debtData = DB::table('pagos')->where([
+
+            $debtData = Payment::where([
                 ['id', $accountId],
-                ['year', $year],
                 ['baja', ''],
                 ['grado', $grade],
                 ['codigo', $code]
-            ])->whereRaw("AND MONTH(fecha_d) = ?", [$monthToPay])->first();
+            ])->whereMonth('fecha_d', $monthToPay)->first();
+
 
             $debt['id'] = $debtData->id;
             $debt['debt_date'] = $debtData->fecha_d;
@@ -146,17 +143,15 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'rec' => $receipt,
                     'id2' => $debt['id'],
                     'bash' => $bash,
-                    'caja' => $school->info('caja'),
-                    'usuario' => $school->info('usuario'),
+                    'caja' => $school->caja,
+                    'usuario' => $school->usuario,
                     'hora' => $time,
                     'fecha2' => $date
                 ];
-                DB::table('pagos')->insert($data);
+                Payment::create($data);
             }
         }
     }
 
-    // Route::redirect("/billing/payments?accountId={$accountId}&month={$monthToPay}");
-
-
+    Route::redirect("/billing/payments?accountId={$accountId}&month={$monthToPay}");
 }

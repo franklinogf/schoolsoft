@@ -40,7 +40,7 @@ $years = DB::table('year')->select("DISTINCT year")->get();
 
 
 if (isset($_REQUEST['pasar'])) {
-   if ($_POST['Ckb1']=='1')
+   if ($_POST['Ckb1'] ?? '' =='1')
       {
       $courses = DB::table('cursos')->where([
         ['year', $school->info('year2')]
@@ -66,7 +66,7 @@ if (isset($_REQUEST['pasar'])) {
         }
       }
 
-   if ($_POST['Ckb2']=='1')
+   if ($_POST['Ckb2'] ?? '' =='1')
       {
       $courses = DB::table('materias')->where([
         ['year', $school->info('year2')]
@@ -160,7 +160,7 @@ if (isset($_REQUEST['pasar'])) {
         }
       }
 
-   if ($_POST['Ckb3']=='1')
+   if ($_POST['Ckb3'] ?? '' =='1')
       {
       $courses = DB::table('presupuesto')->where([
         ['year', $school->info('year2')]
@@ -177,7 +177,7 @@ if (isset($_REQUEST['pasar'])) {
         }
       }
 
-   if ($_POST['Ckb4']=='1')
+   if ($_POST['Ckb4'] ?? '' =='1')
       {
       $courses = DB::table('costos')->where([
         ['year', $school->info('year2')]
@@ -209,7 +209,7 @@ if (isset($_REQUEST['pasar'])) {
         }
       }
 
-   if ($_POST['Ckb5']=='1')
+   if ($_POST['Ckb5'] ?? '' =='1')
       {
       $courses = DB::table('year')->where([
         ['year', $school->info('year2')]
@@ -225,7 +225,7 @@ if (isset($_REQUEST['pasar'])) {
         }
       }
 
-   if ($_POST['Ckb6']=='1')
+   if ($_POST['Ckb6'] ?? '' =='1')
       {
       $courses = DB::table('year')->where([
         ['year', $school->info('year2')]
@@ -241,9 +241,6 @@ if (isset($_REQUEST['pasar'])) {
         ]);
         }
       }
-
-
-
     
 }
 

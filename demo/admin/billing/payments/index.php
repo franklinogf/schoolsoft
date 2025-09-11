@@ -50,11 +50,11 @@ $paymentTypes = [
 ];
 
 $deposits = [
-    '0' => 'Depósitos Cafetería',
-    '1' => '-1 Compras de Camisas',
-    '2' => '-2 Abono de Mensualidad',
-    '3' => '-3 Abono de Matrícula',
-    '4' => '-4 Compras de Inflables',
+    0 => 'Depósitos Cafetería',
+    1 => '-1 Compras de Camisas',
+    2 => '-2 Abono de Mensualidad',
+    3 => '-3 Abono de Matrícula',
+    4 => '-4 Compras de Inflables',
 ];
 
 
@@ -112,14 +112,16 @@ $depositTypes = [
                 ['id', $accountId],
                 ['year', $year],
                 ['baja', '']
-            ])->get();
+            ])->orderBy('rec', 'desc')->get();
 
             $debtData = $paymentsData = [];
+            $rec = 0;
             foreach ($paymentsQuery as $row) {
                 $month = date('m', strtotime($row->fecha_d));
                 $debtData[$month][] = $row;
-                if ($row->pago > 0) {
+                if ($row->pago > 0 and $row->rec != $rec) {
                     $paymentsData[] = $row;
+                    $rec = $row->rec;
                 }
             }
 
