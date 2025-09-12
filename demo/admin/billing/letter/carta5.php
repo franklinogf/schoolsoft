@@ -54,7 +54,7 @@ foreach ($paymentGroup as $id => $payments) {
     $total = $debt - $pay;
 
 
-    if ($total === 0) continue;
+    if ($total <= 0) continue;
     $student = Student::byId($id)->first();
     $pdf = new nPDF('P');
     $pdf->SetLeftMargin(20);
