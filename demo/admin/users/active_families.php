@@ -15,7 +15,7 @@ Session::is_logged();
 
 <head>
     <?php
-    $title = __("Familias activas");
+    $title = __("Buscar padres");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -25,7 +25,7 @@ Session::is_logged();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-3"><?= __("Familias activas") ?></h1>
+        <h1 class="text-center my-3"><?= __("Buscar padres") ?></h1>
         <?php
         $__tableData = Family::query()
             ->active()

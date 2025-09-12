@@ -129,7 +129,7 @@ $options = [
                 'hidden' => false
             ],
             [
-                'name' => __('Familias activas'),
+                'name' => __('Buscar padres'),
                 'desc' => __('Pantalla para ver las familias activas.'),
                 'link' => 'active_families.php',
                 'hidden' => false
