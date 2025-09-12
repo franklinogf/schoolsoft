@@ -45,7 +45,7 @@ $__tableDataButton = $__tableDataButton !== null ? $__tableDataButton : true;
                     </th>
                 <?php endif ?>
                 <?php foreach ($__tableDataInfo as $dataInfo) : ?>
-                    <th><?= $dataInfo['title'][__LANG] ?></th>
+                    <th><?= $dataInfo['title'][__LANG] ?? $dataInfo['title'] ?></th>
                 <?php endforeach ?>
             </tr>
         </thead>
@@ -84,7 +84,7 @@ $__tableDataButton = $__tableDataButton !== null ? $__tableDataButton : true;
                 <?php endif ?>
                 <?php foreach ($__tableDataInfo as $dataInfo) : ?>
                     <th>
-                        <?= $dataInfo['title'][__LANG] ?>
+                        <?= $dataInfo['title'][__LANG] ?? $dataInfo['title'] ?>
                     </th>
                 <?php endforeach ?>
             </tr>
