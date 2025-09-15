@@ -256,7 +256,8 @@ class nPDF extends PDF
                 ->whereRaw("year='$year'")->orderBy('codigo')->get();
 
             $this->SetFont('Times', '', 12);
-            if ($reg22->qpaga == "" || $reg22->qpaga == "M" || empty($reg22->qpaga)) {
+//            if ($reg22->qpaga == "" || $reg22->qpaga == "M" || empty($reg22->qpaga)) {
+            if (!empty($reg22->qpaga)) {
                 $this->Cell(60, 5, $reg22->encargado, 0, 1, 'L');
                 $this->Cell(60, 5, $reg22->dir_e1, 0, 1, 'L');
                 $this->Cell(60, 5, $reg22->dir_e2, 0, 1, 'L');
