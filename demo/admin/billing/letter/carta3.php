@@ -48,7 +48,7 @@ foreach ($paymentGroup as $id => $payments) {
 
     $total = $debt - $pay;
 
-    if ($total === 0) continue;
+    if ($total <= 0) continue;
 
 
     $students = Student::byId($id)->get();
@@ -97,7 +97,7 @@ foreach ($paymentGroup as $id => $payments) {
         $totalPayByMonth += $pay;
 
 
-        if ($totalByDate === 0) continue;
+        if ($totalByDate <= 0) continue;
 
         $month = Carbon::parse($date)->translatedFormat('F');
 
