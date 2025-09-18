@@ -86,6 +86,9 @@ if ($re == '17') {
 if ($re == '18') {
     $in18 = 'selected';
 }
+if ($re == '22') {
+    $in22 = 'selected';
+}
 
 $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 
@@ -148,6 +151,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             <option value='14' <?= $in14 ?>>Tarjeta 14</option>
                             <option value='17' <?= $in17 ?>>Tarjeta 17</option>
                             <option value='18' <?= $in18 ?>>Tarjeta 18</option>
+                            <option value='22' <?= $in22 ?>>Tarjeta 22</option>
                         </select>
                         <select id="tri" name="tri" class="form-control" disabled="disable">
                             <option value='1'><?= $lang->translation('Trimestre 1') ?></option>
