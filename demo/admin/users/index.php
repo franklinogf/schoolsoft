@@ -181,6 +181,12 @@ $options = [
                 'link' => 'messagecode/codes.php',
                 'hidden' => false
             ],
+            [
+                'name' => __("Alias"),
+                'desc' => __("Entrada de valores para las Alias."),
+                'link' => 'alias/codes.php',
+                'hidden' => false
+            ],
         ]
     ],
 
