@@ -134,6 +134,12 @@ $options = [
                 'link' => 'active_families.php',
                 'hidden' => false
             ],
+            [
+                'name' => __("Cambiar Alias"),
+                'desc' => __("Pantalla para cambiar de Alias."),
+                'link' => 'changeAlias/grado.php',
+                'hidden' => false
+            ],
         ]
     ],
     [
