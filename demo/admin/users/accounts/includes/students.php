@@ -114,8 +114,9 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     $file = new File('picture');
     if ($file->amount > 0) {
         $newName = "$student->mt.jpg";
-        $student->imagen = $newName;
         $file::upload($file->files, __STUDENT_PROFILE_PICTURE_PATH, $newName);
+
+        $student->update(['imagen' => $newName]);
     }
 
     Session::set('accountNumber', $_POST['accountNumber']);
