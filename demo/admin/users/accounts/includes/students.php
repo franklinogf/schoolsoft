@@ -2,33 +2,29 @@
 
 require_once '../../../../app.php';
 
+use App\Models\Admin;
+use App\Models\School;
 use Classes\File;
 use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
+use App\Models\Student;
 
 Session::is_logged();
 Server::is_post();
 
 
 if (isset($_POST['searchSs'])) {
-    $ss = DB::table('year')->select('ss')->where('ss', $_POST['searchSs'])->first();
-    $exist = 0;
-    if ($ss) {
-        $exist = true;
-    } else {
-        $exist = false;
-    }
-    echo Util::toJson(['exist' => $exist]);
+    $studentExist = Student::query()->bySS($_POST['searchSs'])->exists();
+    echo Util::toJson(['exist' => $studentExist]);
 } else if (isset($_POST['edit'])) {
-    $student = new Student($_POST['pk']);
+    $student = Student::find($_POST['pk']);
     Session::set('editedStudent', "{$_POST['name']} {$_POST['surnames']}");
 } else if (isset($_POST['save'])) {
+    $schoolYear = Admin::primaryAdmin()->year();
     $student = new Student();
-    $student->year = $student->info('year');
+    $student->year = $schoolYear;
     $student->id = $_POST['accountNumber'];
     Session::set('addedStudent', "{$_POST['name']} {$_POST['surnames']}");
 }
@@ -106,19 +102,20 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     $student->mat_retenida = $_POST["retainedEnrollment"];
     $student->alias = $_POST["reason"];
 
+
+
+    // echo '<pre>';print_r($student);echo '</pre>';
+    $student->save();
+    if (isset($_POST['save'])) {
+        $student->family()->update(['id2' => '']);
+    }
+    $student->refresh();
     /* ----------------------------- Profile picture ---------------------------- */
     $file = new File('picture');
     if ($file->amount > 0) {
-        $newName = $student->mt . '.jpg';
+        $newName = "$student->mt.jpg";
         $student->imagen = $newName;
         $file::upload($file->files, __STUDENT_PROFILE_PICTURE_PATH, $newName);
-    }
-
-    // echo '<pre>';print_r($student);echo '</pre>';
-    if (isset($_POST['edit'])) {
-        $student->save();
-    } else {
-        $student->save('new');
     }
 
     Session::set('accountNumber', $_POST['accountNumber']);
