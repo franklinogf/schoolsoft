@@ -26,7 +26,7 @@ class Student extends Model
         });
 
         static::addGlobalScope('unenrolled', function (Builder $builder) {
-            $builder->where('codigobaja','0');
+            $builder->where('codigobaja', '0');
         });
     }
 
@@ -80,10 +80,10 @@ class Student extends Model
     }
     protected function reversedFullName(): Attribute
     {
-        
+
         return Attribute::make(
             get: fn($value, array $attributes) =>
-              $attributes['apellidos']. ' ' .$attributes['nombre'],
+            $attributes['apellidos'] . ' ' . $attributes['nombre'],
         );
     }
 
@@ -91,7 +91,7 @@ class Student extends Model
     {
         return Attribute::make(
             get: fn($value, array $attributes) =>
-            $attributes['imagen'] !== '' ? school_asset(__STUDENT_PROFILE_PICTURE_URL . $attributes['imagen'])
+            $attributes['imagen'] !== '' ? school_asset(__STUDENT_PROFILE_PICTURE_PATH . $attributes['imagen'])
                 : ($attributes['genero'] === Gender::FEMALE->value
                     ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
                     : __NO_PROFILE_PICTURE_STUDENT_MALE),
