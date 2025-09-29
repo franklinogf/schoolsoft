@@ -10,6 +10,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property Family $family
+ * @property int $mt
+ * @property string $ss
+ * @property string $nombre
+ * @property string $apellidos
+ * @property string $grado
+ * @property string $genero
+ * @property string $imagen
+ * @property string $codigobaja
+ * @property string $fecha
+ * @property string $fecha_matri
+ * @property string $fullName
+ * @property string $reversedFullName
+ * @property string $profilePicture
+ * @property int $id
+ * 
+ */
 class Student extends Model
 {
     protected $table = 'year';
