@@ -165,6 +165,8 @@ function generateTable(PDF $pdf, Family $family): void
 
     $fec = $yy2 . '-' . $_POST['mes'] . '-' . $dd1;
     $charges = $family->charges()->whereDate('fecha_d', '<=', $fec)->get()->groupBy('codigo');
+
+    $totdeu = 0;
     foreach ($charges as $charge) {
 
 
