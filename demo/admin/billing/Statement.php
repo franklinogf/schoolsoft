@@ -1,12 +1,11 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase0\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
+use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
 $lang = new Lang([
@@ -23,7 +22,6 @@ $lang = new Lang([
     ['Hoja carta', 'Letter Sheet'],
     ['Por Cuenta', 'By Account'],
     ['Por Grado', 'By Grade'],
-    ['', ''],
     ['Opciones', 'Options'],
     ['Agosto', 'August'],
     ['Septiembre', 'September'],
@@ -65,23 +63,20 @@ $lang = new Lang([
 
 ]);
 
-$school = new School(Session::id());
-$year = $school->info('year2');
-
 if (isset($_POST['bor'])) {
-    DB::table('codigos')->where('codigo', $_REQUEST['num1'])->delete();
+    Manager::table('codigos')->where('codigo', $_REQUEST['num1'])->delete();
 }
 
 if (isset($_POST['gra'])) {
 
     if (empty($_POST['num1']) and !empty($_POST['tema']) or empty($_POST['num1']) and !empty($_POST['tema2'])) {
-        DB::table('codigos')->insert([
+        Manager::table('codigos')->insert([
             'tema' => $_POST['tema'],
             'tema2' => $_POST['tema2'],
             'idc' => '2',
         ]);
     } else {
-        $thisCourse2 = DB::table("codigos")->where([
+        Manager::table("codigos")->where([
             ['codigo', $_POST['num1']],
             ['idc', '2']
         ])->update([
@@ -92,55 +87,29 @@ if (isset($_POST['gra'])) {
 }
 
 if (isset($_POST['bus'])) {
-    $row1 = DB::table('codigos')->whereRaw("idc='2' and codigo='" . $_POST['num'] . "'")->orderBy('codigo')->first();
+    $row1 = Manager::table('codigos')
+        ->where([
+            ['idc', '2'],
+            ['codigo', $_POST['num']]
+        ])
+
+        ->orderBy('codigo')->first();
 }
 
-$resultado3 = DB::table('year')->whereRaw("year='$year' and activo=''")->orderBy('apellidos, nombre')->get();
+$students = Student::all();
 
-$result = DB::table('codigos')->whereRaw("idc='2'")->orderBy('codigo')->get();
+$result = Manager::table('codigos')
+    ->where('idc', '2')->orderBy('codigo')->get();
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <?php
     $title = $lang->translation('Estado de cuenta');
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
-
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <title>Untitled 1</title>
-    <style type="text/css">
-        .style1 {
-            text-align: center;
-            font-size: x-large;
-        }
-
-        .style2 {
-            background-color: #CCCCCC;
-        }
-
-        .style3 {
-            text-align: center;
-            background-color: #CCCCCC;
-        }
-
-        .style4 {
-            text-align: center;
-            background-color: #FFFFCC;
-        }
-
-        .style6 {
-            text-align: center;
-        }
-
-        .style8 {
-            font-weight: bold;
-            text-align: center;
-            background-color: #FFFFCC;
-        }
-    </style>
 </head>
 
 <body>
@@ -151,120 +120,118 @@ $result = DB::table('codigos')->whereRaw("idc='2'")->orderBy('codigo')->get();
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Estado de cuenta') ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-            <div class="div">
-            </div>
-            <div class="div">
-                <form name="algunNombre" action="pdf/estados_inf.php" method="post" target="_blank">
+            <form name="algunNombre" action="pdf/estados_inf.php" method="post" target="_blank">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Selection Section -->
+                        <div class="mb-4">
+                            <h5 class="mb-3"><?= $lang->translation('Selección') ?></h5>
 
-                    <div class="style6">
-                        <table align="center" cellpadding="2" cellspacing="0" style="width: 45%">
-                            <tr>
-                                <td><strong><?= $lang->translation('Selección') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input name="ctas" type="text" placeholder="<?= $lang->translation('Número de Cuenta') ?>" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="nombre" style="width: 353px">
-                                        <option value="1"><?= $lang->translation('Todos') ?></option>
-                                        <?php foreach ($resultado3 as $row3): ?>
+                            <div class="mb-3">
+                                <label for="ctas" class="form-label"><?= $lang->translation('Número de Cuenta') ?></label>
+                                <input name="ctas" type="text" class="form-control" id="ctas" placeholder="<?= $lang->translation('Número de Cuenta') ?>" />
+                            </div>
 
-                                            <option value="<?= $row3->id ?>"><?= $row3->apellidos . ', ' . $row3->nombre . ', ' . $row3->id ?></option>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label"><?= $lang->translation('Estudiantes') ?></label>
+                                <select name="nombre" class="form-control" id="nombre">
+                                    <option value="1"><?= $lang->translation('Todos') ?></option>
+                                    <?php foreach ($students as $student): ?>
+                                        <option value="<?= $student->id ?>"><?= "$student->apellidos, $student->nombre, $student->id" ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
 
-                                        <?php endforeach ?>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><select name="deuda" style="width: 121px">
-                                        <option value="1"><?= $lang->translation('Todos') ?></option>
-                                        <option value="2"><?= $lang->translation('Deudores') ?></option>
-                                        <option value="3"><?= $lang->translation('Atrasados') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td><select name="conest" style="width: 193px">
-                                        <option value="1"><?= $lang->translation('Con Estudiantes') ?></option>
-                                        <option value="2"><?= $lang->translation('Sin Estudiantes') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td><strong><?= $lang->translation('Mensaje') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="num2" style="width: 99px">
-                                        <option><?= $lang->translation('Selección') ?></option>
-                                        <?php foreach ($result as $row): ?>
-                                            <option><?= $row->codigo ?></option>
-                                        <?php endforeach ?>
+                            <div class="mb-3">
+                                <label for="deuda" class="form-label"><?= $lang->translation('Tipo de Deuda') ?></label>
+                                <select name="deuda" class="form-control" id="deuda">
+                                    <option value="1"><?= $lang->translation('Todos') ?></option>
+                                    <option value="2"><?= $lang->translation('Deudores') ?></option>
+                                    <option value="3"><?= $lang->translation('Atrasados') ?></option>
+                                </select>
+                            </div>
 
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong><?= $lang->translation('El mes para aplicar') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td><select name="mes" style="width: 97px">
-                                        <option value="0"><?= $lang->translation('Mes') ?></option>
-                                        <option value="01"><?= $lang->translation('Enero') ?></option>
-                                        <option value="02"><?= $lang->translation('Febrero') ?></option>
-                                        <option value="03"><?= $lang->translation('Marzo') ?></option>
-                                        <option value="04"><?= $lang->translation('Abril') ?></option>
-                                        <option value="05"><?= $lang->translation('Mayo') ?></option>
-                                        <option value="06"><?= $lang->translation('Junio') ?></option>
-                                        <option value="07"><?= $lang->translation('Julio') ?></option>
-                                        <option value="08"><?= $lang->translation('Agosto') ?></option>
-                                        <option value="09"><?= $lang->translation('Septiembre') ?></option>
-                                        <option value="10"><?= $lang->translation('Octubre') ?></option>
-                                        <option value="11"><?= $lang->translation('Noviembre') ?></option>
-                                        <option value="12"><?= $lang->translation('Diciembre') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td><strong><?= $lang->translation('Idioma del Estado de Cuenta') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td><select name="idi" style="width: 104px">
-                                        <option><?= $lang->translation('Español') ?></option>
-                                        <option><?= $lang->translation('Inglés') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td><strong><?= $lang->translation('Enviar los estados a las cuentas de los padres?') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td><select name="envia" style="width: 57px">
-                                        <option value="No">No</option>
-                                        <option value="Si"><?= $lang->translation('Si') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td><strong><?= $lang->translation('Enviar los estados por E-Mail?') ?></strong></td>
-                            </tr>
-                            <tr>
-                                <td><select name="enviae" style="width: 57px">
-                                        <option value="No">No</option>
-                                        <option value="Si"><?= $lang->translation('Si') ?></option>
-                                    </select></td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </table>
-                        &nbsp;<br />
-                        <strong>
-                            <input class="btn btn-primary" name="Submit1" style="width: 140px;" type="submit" value="<?= $lang->translation('Procesar') ?>" />
-
-                        </strong>
+                            <div class="mb-3">
+                                <label for="conest" class="form-label"><?= $lang->translation('Estudiantes') ?></label>
+                                <select name="conest" class="form-control" id="conest">
+                                    <option value="1"><?= $lang->translation('Con Estudiantes') ?></option>
+                                    <option value="2"><?= $lang->translation('Sin Estudiantes') ?></option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
+
+                    <div class="col-md-6">
+                        <!-- Message and Settings Section -->
+                        <div class="mb-4">
+                            <h5 class="mb-3"><?= $lang->translation('Configuración') ?></h5>
+
+                            <div class="mb-3">
+                                <label for="num2" class="form-label"><?= $lang->translation('Mensaje') ?></label>
+                                <select name="num2" class="form-control" id="num2">
+                                    <option><?= $lang->translation('Selección') ?></option>
+                                    <?php foreach ($result as $row): ?>
+                                        <option><?= $row->codigo ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mes" class="form-label"><?= $lang->translation('El mes para aplicar') ?></label>
+                                <select name="mes" class="form-control" id="mes">
+                                    <option value="0"><?= $lang->translation('Mes') ?></option>
+                                    <option value="01"><?= $lang->translation('Enero') ?></option>
+                                    <option value="02"><?= $lang->translation('Febrero') ?></option>
+                                    <option value="03"><?= $lang->translation('Marzo') ?></option>
+                                    <option value="04"><?= $lang->translation('Abril') ?></option>
+                                    <option value="05"><?= $lang->translation('Mayo') ?></option>
+                                    <option value="06"><?= $lang->translation('Junio') ?></option>
+                                    <option value="07"><?= $lang->translation('Julio') ?></option>
+                                    <option value="08"><?= $lang->translation('Agosto') ?></option>
+                                    <option value="09"><?= $lang->translation('Septiembre') ?></option>
+                                    <option value="10"><?= $lang->translation('Octubre') ?></option>
+                                    <option value="11"><?= $lang->translation('Noviembre') ?></option>
+                                    <option value="12"><?= $lang->translation('Diciembre') ?></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="idi" class="form-label"><?= $lang->translation('Idioma del Estado de Cuenta') ?></label>
+                                <select name="idi" class="form-control" id="idi">
+                                    <option><?= $lang->translation('Español') ?></option>
+                                    <option><?= $lang->translation('Inglés') ?></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="envia" class="form-label"><?= $lang->translation('Enviar los estados a las cuentas de los padres?') ?></label>
+                                <select name="envia" class="form-control" id="envia">
+                                    <option value="No">No</option>
+                                    <option value="Si"><?= $lang->translation('Si') ?></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="enviae" class="form-label"><?= $lang->translation('Enviar los estados por E-Mail?') ?></label>
+                                <select name="enviae" class="form-control" id="enviae">
+                                    <option value="No">No</option>
+                                    <option value="Si"><?= $lang->translation('Si') ?></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-lg px-4" name="Submit1" type="submit">
+                            <?= $lang->translation('Procesar') ?>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
     </div>
 
 
@@ -272,69 +239,58 @@ $result = DB::table('codigos')->whereRaw("idc='2'")->orderBy('codigo')->get();
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Mensajes para el Estado de Cuenta') ?></h1>
         <div class="container bg-white shadow-lg py-3 rounded mx-auto" style="width: 50rem;">
-            <div class="div">
-            </div>
-            <div class="div">
+            <form method="post" action="Statement.php">
+                <?php
+                $result = Manager::table('codigos')
+                    ->where('idc', '2')
+                    ->orderBy('codigo')->get();
+                ?>
+                <input type="hidden" name="num1" value="<?= $row1->codigo ?? '' ?>" />
 
-                <form method="post" action="Statement.php">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-4">
+                            <label for="tema" class="form-label h5"><?= $lang->translation('Mensajes en español') ?></label>
+                            <textarea name="tema" class="form-control" id="tema" rows="4" placeholder="Escriba el mensaje en español..."><?= $row1->tema ?? ''; ?></textarea>
+                        </div>
 
-                    <?php
-                    $result = DB::table('codigos')->whereRaw("idc='2'")->orderBy('codigo')->get();
-                    ?>
-                    <input type=hidden name=num1 value='<?= $row1->codigo ?? '' ?>' />
-                    <table align="center" cellpadding="2" cellspacing="0" style="width: 50%">
-                        <tr>
-                            <td>
-                                <strong><?= $lang->translation('Mensajes en español') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <textarea name="tema" style="width: 600px; height: 100px"><?= $row1->tema ?? ''; ?></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong><?= $lang->translation('Mensaje en inglés') ?></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="height: 23px">
-                                <textarea name="tema2" style="width: 600px; height: 100px"><?= $row1->tema2 ?? ''; ?></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="height: 23px"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    <input name="gra" id="gra" type="submit" value="<?= $lang->translation('Grabar') ?>" style="width: 100px" class="btn btn-primary form-control" /></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <strong>
-                                    <input name="bor" type="submit" value="<?= $lang->translation('Borrar') ?>" onclick="return confirmar('<?= $lang->translation('Está seguro que desea eliminar el mensaje?') ?>')" style="width: 100px;" class="btn btn-danger" /></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <select name="num" style="width: 87px">
+                        <div class="mb-4">
+                            <label for="tema2" class="form-label h5"><?= $lang->translation('Mensaje en inglés') ?></label>
+                            <textarea name="tema2" class="form-control" id="tema2" rows="4" placeholder="Write the message in English..."><?= $row1->tema2 ?? ''; ?></textarea>
+                        </div>
+
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <button name="gra" id="gra" type="submit" class="btn btn-primary w-100">
+                                    <?= $lang->translation('Grabar') ?>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button name="bor" type="submit" class="btn btn-danger w-100"
+                                    onclick="return confirmar('<?= $lang->translation('Está seguro que desea eliminar el mensaje?') ?>')">
+                                    <?= $lang->translation('Borrar') ?>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="num" class="form-label"><?= $lang->translation('Selección') ?></label>
+                                <select name="num" class="form-control" id="num">
                                     <?php foreach ($result as $row): ?>
                                         <option><?= $row->codigo ?></option>
                                     <?php endforeach ?>
-
-                                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <strong>
-                                    <input name="bus" type="submit" value="<?= $lang->translation('Buscar') ?>" style="width: 100px;" class="btn btn-primary" /></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </table>
-                    <br />
-                </form>
-            </div>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button name="bus" type="submit" class="btn btn-primary w-100">
+                                    <?= $lang->translation('Buscar') ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
+    </div>
 
     <script>
         function confirmar(mensaje) {
