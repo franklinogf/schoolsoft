@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Admin;
 use App\Models\Student;
 use Classes\Route;
@@ -36,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 'ss' => $student->ss,
                 'grado' => $student->grado,
                 'deuda' => $amount,
+                'add1' => $amount < 0 ? 2 : 1,
             ];
             $mt = DB::table('pagos')->insertGetId($dataToInsert);
             $insertedData = array_merge($dataToInsert, ['mt' => $mt, "month" => $month]);
@@ -43,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         } catch (\Throwable $th) {
             echo json_encode(["error" => true, "message" => $th->getMessage()]);
         }
-
     } else {
         $months = [];
         $monthNumber = (int) $month;
@@ -82,7 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         } catch (\Throwable $th) {
             echo json_encode(["error" => true, "message" => $th->getMessage()]);
         }
-
     }
 
 
