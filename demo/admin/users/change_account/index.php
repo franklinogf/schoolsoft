@@ -12,6 +12,7 @@ use Classes\File;
 
 Session::is_logged();
 $school = new School(Session::id());
+$year = $school->info('year2');
 
 $lang = new Lang([
     ['Cambiar cuenta', 'Change account'],
@@ -27,7 +28,9 @@ $lang = new Lang([
     ['Buscar', 'Search'],
     ['Debe de llenar todos los campos', 'You must fill all fields'],
 ]);
-//$year = $students->info('year');
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -62,6 +65,8 @@ $lang = new Lang([
             </div>
         </div>
         <?php if (isset($_REQUEST['cambiar']) and !empty($_REQUEST['oac']) and !empty($_REQUEST['nac'])) :
+    $idn = $_POST['nac'];
+    $ido = $_POST['oac'];
     $acc = DB::table('madre')->where([
         ['id', $ido]
     ])->update([
@@ -69,19 +74,19 @@ $lang = new Lang([
     ]);
     $acc = DB::table('padres')->where([
         ['id', $ido],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->update([
         'id' => $idn,
     ]);
     $acc = DB::table('year')->where([
         ['id', $ido],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->update([
         'id' => $idn,
     ]);
     $acc = DB::table('pagos')->where([
         ['id', $ido],
-        ['year', $school->info('year2')]
+        ['year', $year]
     ])->update([
         'id' => $idn,
     ]);
