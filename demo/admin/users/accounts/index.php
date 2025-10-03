@@ -20,16 +20,31 @@ if (!$user->hasPermissionTo(AdminPermission::USERS_ACCOUNTS_ENROLLMENT)) {
 $school = Admin::user(Session::id())->first();
 $students = Student::all();
 $year = $school->year();
-$female = $male = 0;
-foreach ($students as $student) {
-    if (strtoupper($student->genero) === 'F' || $student->genero === '1') {
-        $female++;
-    } else {
-        $male++;
-    }
-}
 
-$familiesCount = Student::distinct()->select('id')->count();
+/**
+ * @var array<int, array{id: string, name: string}> $accounts
+ */
+$accounts = [];
+$female = $male = 0;
+$students
+    ->each(
+        function (Student $student)  use (&$accounts, &$female, &$male): void {
+            if (strtoupper($student->genero) === 'F' || $student->genero === '1') {
+                $female++;
+            } else {
+                $male++;
+            }
+            $accounts[] = ['id' => $student->id, 'name' => "$student->apellidos $student->nombre ($student->id)"];
+        }
+    );
+
+Family::where('id2', 'new')->get()->each(function (Family $family) use (&$accounts): void {
+    $names = trim(($family->madre ?: '') . (($family->madre && $family->padre) ? ', ' : ' ') . ($family->padre ?: ''));
+    $accounts[] = ['id' => $family->id, 'name' => "$names ($family->id) (" . __("Sin estudiantes") . ")"];
+});
+
+
+$familiesCount = collect($accounts)->unique('id')->count();
 
 if (Session::get('accountNumber')) {
     $_REQUEST['student'] = Session::get('accountNumber', true);
@@ -70,8 +85,8 @@ if (Session::get('accountNumber')) {
                 <form method="POST">
                     <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
                         <option value=""><?= __("Seleccionar estudiante") ?></option>
-                        <?php foreach ($students as $student): ?>
-                            <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
+                        <?php foreach ($accounts as $account): ?>
+                            <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $account['id'] ? 'selected=""' : '' ?> value="<?= $account['id'] ?>"><?= $account['name'] ?></option>
                         <?php endforeach ?>
                     </select>
                     <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= __("Buscar información") ?></button>
@@ -81,9 +96,7 @@ if (Session::get('accountNumber')) {
                         <button class="btn btn-outline-primary btn-sm btn-block mt-2" name="new" type="submit"><?= __("Agregar una familia nueva") ?></button>
                     </form>
                 <?php endif ?>
-                <?php if (Session::get("edited")):
-                    Session::delete('edited');
-                ?>
+                <?php if (Session::get("edited", true)): ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= __("Se ha actualizado con éxito") ?>
@@ -93,12 +106,20 @@ if (Session::get('accountNumber')) {
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (Session::get("added")):
-                    Session::delete('added');
-                ?>
+                <?php if (Session::get("added", true)): ?>
                     <div class="d-flex align-items-center mt-2">
                         <div class="alert alert-info alert-dismissible fade show flex-fill" role="alert">
                             <?= __("Se ha agregado con éxito") ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if (Session::get("error")): ?>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="alert alert-danger alert-dismissible fade show flex-fill" role="alert">
+                            <?= Session::get("error", true) ?>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -144,31 +165,31 @@ if (Session::get('accountNumber')) {
                         <h1 class="text-center mt-3"><?= __("Información de los padres") ?> <i class="far fa-id-card"></i></h1>
                     </div>
 
-                    <?php if (!isset($_POST['new'])): ?>
-                        <div class="card col-12 p-3 rounded-0">
-                            <div class="form-group row">
-                                <label class="col-sm-2" for="accountNumber"><?= __("Número de cuenta") ?></label>
-                                <div class="col-sm-10">
-                                    <input type="text" value='<?= isset($parents) ? $parents->id : '' ?>' class="form-control col" name='accountNumber' id="accountNumber" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4" for="username"><?= __("Usuario y contraseña") ?></label>
-                                <div class="col-sm-4">
-                                    <input type="text" value='<?= isset($parents) ? $parents->usuario : '' ?>' data-lastusername="<?= isset($parents) ? $parents->usuario : '' ?>" class="form-control" name='username' id="username" required>
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="text" value='<?= isset($parents) ? $parents->clave : '' ?>' class="form-control col" name='password' id="password" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4" for="familyAmount"><?= __("Número de familia") ?></label>
-                                <div class="col-sm-2">
-                                    <input type="number" value='<?= isset($parents) ? $parents->nfam : '0' ?>' class="form-control" name='familyAmount' id="familyAmount" min='0' required>
-                                </div>
+
+                    <div class="card col-12 p-3 rounded-0">
+                        <div class="form-group row">
+                            <label class="col-sm-2" for="accountNumber"><?= __("Número de cuenta") ?></label>
+                            <div class="col-sm-10">
+                                <input type="text" value='<?= isset($_REQUEST['student']) ? $parents->id : (isset($_POST['new']) ? $nextId : '') ?>' class="form-control col" name='accountNumber' id="accountNumber" required>
                             </div>
                         </div>
-                    <?php endif ?>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="username"><?= __("Usuario y contraseña") ?></label>
+                            <div class="col-sm-4">
+                                <input type="text" value='<?= isset($_REQUEST['student']) ? $parents->usuario : (isset($_POST['new']) ? $nextId : '') ?>' data-lastusername="<?= isset($_REQUEST['student']) ? $parents->usuario : '' ?>" class="form-control" name='username' id="username" required>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" value='<?= isset($_REQUEST['student']) ? $parents->clave : (isset($_POST['new']) ? $nextId : '') ?>' class="form-control col" name='password' id="password" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="familyAmount"><?= __("Número de familia") ?></label>
+                            <div class="col-sm-2">
+                                <input type="number" value='<?= isset($parents) ? $parents->nfam : '0' ?>' class="form-control" name='familyAmount' id="familyAmount" min='0' required>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row mt-2">
                     <!-- Mother Information -->
@@ -497,9 +518,9 @@ if (Session::get('accountNumber')) {
                                     <div class="col-12 col-md-6">
                                         <select name="personToPay" id="personToPay" class="form-control w-100" required>
                                             <option value=""><?= __("Seleccionar") ?></option>
-                                            <option <?= $parents->qpaga === "M" ? 'selected=""' : '' ?> value="M">Madre</option>
-                                            <option <?= $parents->qpaga === "P" ? 'selected=""' : '' ?> value="P">Padre</option>
-                                            <option <?= $parents->qpaga === "E" ? 'selected=""' : '' ?> value="E">Otro</option>
+                                            <option <?= isset($parents) && $parents->qpaga === "M" ? 'selected=""' : '' ?> value="M">Madre</option>
+                                            <option <?= isset($parents) && $parents->qpaga === "P" ? 'selected=""' : '' ?> value="P">Padre</option>
+                                            <option <?= isset($parents) && $parents->qpaga === "E" ? 'selected=""' : '' ?> value="E">Otro</option>
                                         </select>
                                     </div>
                                 </div>
@@ -589,7 +610,7 @@ if (Session::get('accountNumber')) {
                             <div class="col mt-1">
                                 <div class="card h-100">
                                     <div class="card-body">
-                                        <img src="<?= Util::studentProfilePicture($kid) ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
+                                        <img src="<?= $kid->profile_picture ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
                                         <h6 class="card-title"><?= "$kid->nombre $kid->apellidos" ?></h6>
                                         <p class="card-text"><?= __("Grado:") ?> <?= $kid->grado ?></p>
                                         <p class="card-text"><?= __("Fecha de nacimiento:") ?> <?= $kid->fecha->format('Y-m-d') ?></p>
@@ -606,7 +627,7 @@ if (Session::get('accountNumber')) {
                             <div class="col mt-1" style="height:448px !important">
                                 <div class="card h-100">
                                     <div class="card-body d-flex flex-wrap align-content-center justify-content-center">
-                                        <a href="<?= Route::url("/admin/users/accounts/students.php?id={$kid->id}") ?>" class="btn btn-primary stretched-link"><?= __("Agregar") ?></a>
+                                        <a href="<?= Route::url("/admin/users/accounts/students.php?id={$parents->id}") ?>" class="btn btn-primary stretched-link"><?= __("Agregar") ?></a>
                                     </div>
                                 </div>
                             </div>

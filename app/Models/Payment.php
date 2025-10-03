@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Scopes\YearScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model

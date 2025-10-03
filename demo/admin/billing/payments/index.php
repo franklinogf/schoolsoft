@@ -368,7 +368,7 @@ $depositTypes = [
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="amount">Cantidad a pagar</label>
-                                    <input type="text" class="form-control" data-mask="#,##0.00" data-mask-reverse="true" id="amount" name="amount" required />
+                                    <input type="text" class="form-control" id="amount" name="amount" required />
                                 </div>
                             </div>
 
@@ -606,7 +606,7 @@ $depositTypes = [
 
                             <div class="form-group col-12 col-md-6">
 
-                                <select class="form-control" name="type2" id="deposits" required >
+                                <select class="form-control" name="type2" id="deposits" required>
                                     <?php foreach ($deposits as $id => $label): ?>
                                         <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>

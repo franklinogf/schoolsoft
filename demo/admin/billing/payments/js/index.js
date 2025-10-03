@@ -313,7 +313,7 @@ $(document).ready(function () {
     $('#depositAmount').removeClass('is-invalid')
 
     const newDeposit = value + available
-//    const newDeposit = type2
+    //    const newDeposit = type2
 
     $('#newDeposit').text(newDeposit.toFixed(2))
   })
@@ -368,7 +368,7 @@ $(document).ready(function () {
     $('#depositAmount,#depositOther').removeClass('is-invalid')
     $.post($this.prop('action'), data, function (data, textStatus, jqXHR) {
       const available = parseFloat($('#availableDeposit').text())
-      const newDeposit = amount + available   
+      const newDeposit = amount + available
       $(`button[data-id=${id}] span`).text(type === 6 ? '0.00' : newDeposit.toFixed(2))
       form.reset()
       Toast.fire('Cantidad actualizada', '', 'success')
