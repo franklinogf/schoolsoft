@@ -46,6 +46,7 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     $student->cel = $_POST['cell'];
     $student->comp = $_POST['cellCompany'];
     $student->raza = $_POST['race'];
+    $student->e_s = $_POST['e_s'];
 
     // Discounts
     $student->desc1 = $_POST['discount1'];
