@@ -9,7 +9,6 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
-
 $lang = new Lang([
     ['Informe de calificaciones', 'Report Card'],
     ['Reporte de Notas', 'Grade Report'],
@@ -35,14 +34,42 @@ $lang = new Lang([
 
 ]);
 $school = new School(Session::id());
-//$grades = DB::table('materias')->where('year', $school->info('year2'))->orderBy('grado')->get();
-$grades = $school->allGrades();
-
 $re = $school->info('tar');
+$year = $school->info('year2');
+
+//$grades = $school->allGrades();
+
+$grades = DB::table('year')->select("DISTINCT grado")->where([
+        ['codigobaja', 0],
+        ['year', $year],
+        ['grado', '!=', ''],
+   ])->orderBy('grado')->get();
+$grupo = 'grado';
+
+if ($re == '4')
+   {
+   $grades = $school->allGrades('alias');
+   $grades = DB::table('year')->select("DISTINCT alias, year")->where([
+        ['codigobaja', 0],
+        ['year', $year],
+        ['alias', '!=', ''],
+   ])->orderBy('alias')->get();
+   $grupo = 'alias';
+
+   $students = DB::table('year')->where([
+        ['codigobaja', 0],
+        ['year', $year],
+   ])->orderBy('apellidos')->get();
+
+   }
+
+
+
 $in1 = '';
 $in2 = '';
 $in3 = '';
 $in4 = '';
+$in4b = '';
 $in5 = '';
 $in6 = '';
 $in7 = '';
@@ -59,6 +86,7 @@ $in17 = '';
 $in18 = '';
 $in19 = '';
 $in20 = '';
+$in22 = '';
 if ($re == '1') {
     $in1 = 'selected';
 }
@@ -67,6 +95,9 @@ if ($re == '2') {
 }
 if ($re == '3') {
     $in3 = 'selected';
+}
+if ($re == '4') {
+    $in4 = 'selected';
 }
 if ($re == '5') {
     $in5 = 'selected';
@@ -100,7 +131,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 <script language="JavaScript">
     function activarTrimestre() {
         var dis = document.TarjetaNotas.tarjeta.value;
-        if (dis == '2' || dis == '1b') {
+        if (dis == '2' || dis == '1b' || dis == '4') {
             document.TarjetaNotas.tri.disabled = false;
         } else {
             document.TarjetaNotas.tri.disabled = true;
@@ -142,9 +173,10 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </div>
                         <select id="tarjeta" name="tarjeta" class="form-control" onclick="return activarTrimestre(); return true">
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
+                            <option value='1b' <?= $in4b ?>>Tarjeta 1b</option>
                             <option value='2' <?= $in2 ?>>Tarjeta 2</option>
                             <option value='3' <?= $in3 ?>>Tarjeta 3</option>
-                            <option value='1b' <?= $in4 ?>>Tarjeta 4</option>
+                            <option value='4' <?= $in4 ?>>Tarjeta 4</option>
                             <option value='5' <?= $in5 ?>>Tarjeta 5</option>
                             <option value='7' <?= $in7 ?>>Tarjeta 7</option>
                             <option value='13' <?= $in13 ?>>Tarjeta 13</option>
@@ -190,13 +222,34 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
-                            <?php foreach ($grades as $grade): ?>
-                                <option value='<?= $grade ?>'>
-                                    <?= $grade ?>
+                                <option value='<?= $grupo ?>'><?= $grupo ?></option>
+                            <?php foreach ($grades as $grade){ ?>
+                                <option value='<?= $grade->{"$grupo"} ?>'>
+                                    <?= $grade->{"$grupo"} ?>
                                 </option>
-                            <?php endforeach ?>
+                            <?php } ?>
                         </select>
                     </div>
+                    <?php if ($grupo == 'alias') { ?>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="estu">
+                                <?= $lang->translation('Estudiantes') ?>
+                            </label>
+                        </div>
+                        <select id="estu" name="estu" class="form-control">
+                                <option value=''>Selección</option>
+                            <?php foreach ($students as $student){ ?>
+                                <option value='<?= $student->ss ?>'>
+                                    <?= $student->apellidos.' '.$student->nombre ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <?php } ?>
+
+
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="option">
@@ -287,12 +340,6 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </select>
                     </div>
 
-
-
-
-
-
-
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>
@@ -306,11 +353,12 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 </body>
 <script language="JavaScript">
     var dis = document.TarjetaNotas.tarjeta.value;
-    if (dis == '2') {
-        //   document.TarjetaNotas.tri.disabled=false;
+    if (dis == '2' || dis == '1b' || dis == '4') {
+        document.TarjetaNotas.tri.disabled = false;
     } else {
-        //   document.TarjetaNotas.tri.disabled=true;
+        document.TarjetaNotas.tri.disabled = true;
     }
+
 </script>
 
 </html>
