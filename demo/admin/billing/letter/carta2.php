@@ -64,7 +64,7 @@ foreach ($paymentGroup as $id => $payments) {
     $total = $debt - $pay;
 
 
-    if ($total === 0) continue;
+    if ($total <= 0) continue;
 
     $students = Student::byId($id)->get();
     $pdf = new nPDF('P');
@@ -103,7 +103,7 @@ foreach ($paymentGroup as $id => $payments) {
         $totalByDate = $debt - $pay;
 
 
-        if ($totalByDate === 0) continue;
+        if ($totalByDate <= 0) continue;
         $month = Carbon::parse($date)->translatedFormat('F');
         [$y, $m] = explode("-", $date);
 

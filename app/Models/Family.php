@@ -2,12 +2,26 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\YearScope;
+
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Traits\AlphaAndNumber;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
+/**
+ * @property int $id
+ * @property string $email_p
+ * @property string $padre
+ * @property string $email_m
+ * @property string $madre
+ * @property Collection<int, Student> $kids
+ * @property Collection<int, Payment> $charges
+ * @property Collection<int, Payment> $payments
+ * @property Collection<int, Payment> $debts
+ * 
+ */
 class Family extends Model
 {
     use AlphaAndNumber;
@@ -34,5 +48,10 @@ class Family extends Model
     public function debts(): HasMany
     {
         return $this->charges()->whereDate('fecha_d',  '0000-00-00');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->whereHas('kids');
     }
 }

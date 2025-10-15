@@ -10,6 +10,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property Family $family
+ * @property int $mt
+ * @property string $ss
+ * @property string $nombre
+ * @property string $apellidos
+ * @property string $grado
+ * @property string $genero
+ * @property string $imagen
+ * @property string $codigobaja
+ * @property string $fecha
+ * @property string $fecha_matri
+ * @property string $fullName
+ * @property string $reversedFullName
+ * @property string $profilePicture
+ * @property int $id
+ * 
+ */
 class Student extends Model
 {
     protected $table = 'year';
@@ -26,7 +44,7 @@ class Student extends Model
         });
 
         static::addGlobalScope('unenrolled', function (Builder $builder) {
-            $builder->where('codigobaja','0');
+            $builder->where('codigobaja', '0');
         });
     }
 
@@ -80,10 +98,10 @@ class Student extends Model
     }
     protected function reversedFullName(): Attribute
     {
-        
+
         return Attribute::make(
             get: fn($value, array $attributes) =>
-              $attributes['apellidos']. ' ' .$attributes['nombre'],
+            $attributes['apellidos'] . ' ' . $attributes['nombre'],
         );
     }
 
@@ -91,7 +109,7 @@ class Student extends Model
     {
         return Attribute::make(
             get: fn($value, array $attributes) =>
-            $attributes['imagen'] !== '' ? school_asset(__STUDENT_PROFILE_PICTURE_URL . $attributes['imagen'])
+            $attributes['imagen'] !== '' ? school_asset(__STUDENT_PROFILE_PICTURE_PATH . $attributes['imagen'])
                 : ($attributes['genero'] === Gender::FEMALE->value
                     ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
                     : __NO_PROFILE_PICTURE_STUDENT_MALE),

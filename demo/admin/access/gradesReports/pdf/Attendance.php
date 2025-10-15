@@ -47,21 +47,22 @@ $school = new School();
 $teacherClass = new Teacher();
 $studentClass = new Student();
 $seasis = $_POST['seasis'];
-$grado = $_POST['grado'];
-$lista = $_POST['lista'];
+$grado = $_POST['grado'] ?? '';
+$lista = $_POST['lista'] ?? '';
 $ss = $_POST['teacher'] ?? '';
 $year = $school->info('year2');
 $aus = [];
-$aus[1] = $lang->translation('Ausencia-situaci&#65533;n en el hogar');
-$aus[2] = $lang->translation('Ausencia-determinaci&#65533;n del hogar(viaje)');
+$aus[0] = '';
+$aus[1] = $lang->translation('Ausencia-situación en el hogar');
+$aus[2] = $lang->translation('Ausencia-determinación del hogar(viaje)');
 $aus[3] = $lang->translation('Ausencia-actividad con padres(open house)');
 $aus[4] = $lang->translation('Ausencia-enfermedad');
 $aus[5] = $lang->translation('Ausencia-cita');
 $aus[6] = $lang->translation('Ausencia-actividad educativa del colegio');
 $aus[7] = $lang->translation('Ausencia-sin excusa del hogar');
 $aus[8] = $lang->translation('Tardanza-sin excusa del hogar');
-$aus[9] = $lang->translation('Tardanza-situaci&#65533;n en el hogar');
-$aus[10] = $lang->translation('Tardanza-problema en la transportaci&#65533;n');
+$aus[9] = $lang->translation('Tardanza-situación en el hogar');
+$aus[10] = $lang->translation('Tardanza-problema en la transportación');
 $aus[11] = $lang->translation('Tardanza-enfermedad');
 $aus[12] = $lang->translation('Tardanza-cita');
 
@@ -117,7 +118,8 @@ foreach ($allGrades as $grade) {
            $asistencia = DB::table('asispp')->where([
              ['year', $year],
              ['grado', $grade],
-             ['ss', $student->ss]
+             ['ss', $student->ss],
+             ['codigo', '>', 0]
              ])->orderBy('fecha')->get();
            $tar = [];
            if ($seasis == 1 and $lista == 1)
@@ -165,7 +167,9 @@ if ($seasis == 2)
     $pdf->Cell(0, 5, $lang->translation("Ausencia diaria") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . utf8_encode(" $teacher->nombre $teacher->apellidos"), $lang->translation("Grado:") . " $student->grado");
+    $nom = $teacher->nombre ?? '';
+    $ape = utf8_encode($teacher->apellidos ?? '');
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $student->grado");
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(8, 5, '', 1, 0, 'C', true);
     $pdf->Cell(52, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);

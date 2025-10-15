@@ -526,10 +526,10 @@ $options = [
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Información personal',   "en" => "Información personal"],
-                'name' => __(""),
+                'name' => __("Lista Estudios Supervisados"),
                 'desc' => '',
-                'link' => '#',
+                'link' => 'pdf/inf_est_sup.php',
+                'target' => 'inf_est_sup',
                 'hidden' => false,
             ],
             [

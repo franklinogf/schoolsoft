@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 		            'id_compra' => $nrec->id ?? '',
 		            'year' => $year,
 		            'price' => $amount,
-		            'item_name' => utf8_encode($selectedType),
+		            'item_name' => $student->ss,
 		        ];
 	            Manager::table('compras_detalle')->insert($data2);
 	            }

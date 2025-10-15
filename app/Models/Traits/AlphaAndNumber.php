@@ -25,7 +25,7 @@ trait AlphaAndNumber
     protected function connectionType(): string
     {
         // Example: based on env(), config, tenant, or request
-        return in_array(school_config('app.acronym'), ['almc'])
+        return in_array(school_config('app.acronym'), config('app.madre_table_alpha', []))
             ? 'mysql_alpha'
             : 'mysql_numbers';
     }

@@ -26,6 +26,8 @@ $paymentTypes = [
     '12' => 'ATH Movil',
     '13' => 'Credito a Cuenta',
     '14' => 'Virtual Terminal',
+    '15' => 'Acuden-Contigo',
+    '16' => 'Acuden-Vales',
 ];
 
 $months = __LANG === 'es' ?

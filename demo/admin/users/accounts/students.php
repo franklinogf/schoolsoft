@@ -28,6 +28,7 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
@@ -236,6 +237,17 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="form-group col-12 row">
+                                        <div class="col-3"><label><?= __("Estudios Sup.") ?>:</label></div>
+                                        <div class="col">
+                                            <select name="e_s" class="form-control">
+                                                <option <?= isset($student) && $student->e_s === '' ? 'selected' : '' ?> value=""><?= __("No") ?></option>
+                                                <option <?= isset($student) && $student->e_s === 'Si' ? 'selected' : '' ?> value="Si"><?= __("Si") ?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>

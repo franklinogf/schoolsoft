@@ -128,6 +128,18 @@ $options = [
                 'link' => 'regis_deactivation.php',
                 'hidden' => false
             ],
+            [
+                'name' => __('Buscar padres'),
+                'desc' => __('Pantalla para ver las familias activas.'),
+                'link' => 'active_families.php',
+                'hidden' => false
+            ],
+            [
+                'name' => __("Cambiar Alias"),
+                'desc' => __("Pantalla para cambiar de Alias."),
+                'link' => 'changeAlias/grado.php',
+                'hidden' => false
+            ],
         ]
     ],
     [
@@ -174,7 +186,13 @@ $options = [
                 'desc' => __("Definir los mensajes para la Tarjeta de notas y Hoja de progreso."),
                 'link' => 'messagecode/codes.php',
                 'hidden' => false
-            ]
+            ],
+            [
+                'name' => __("Alias"),
+                'desc' => __("Entrada de valores para las Alias."),
+                'link' => 'alias/codes.php',
+                'hidden' => false
+            ],
         ]
     ],
 
