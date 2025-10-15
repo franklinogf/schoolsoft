@@ -23,6 +23,7 @@ $lang = new Lang([
 $key = array_keys($_GET)[0];
 $dataList = $_GET[$key];
 
+
 $titleHeader = $lang->translation("Enviar correo a");
 if (count($dataList) > 1) {
 
@@ -32,7 +33,7 @@ if (count($dataList) > 1) {
         $teacher = Teacher::find($dataList[0]);
         $titleHeader .= " $teacher->nombre $teacher->apellidos";
     } else if ($key === 'students') {
-        $student = Student::find($dataList[0])->first();
+        $student = Student::query()->byMT($dataList[0])->first();
         $titleHeader .= " $student->nombre $student->apellidos";
     } else {
 

@@ -84,6 +84,10 @@ class Student extends Model
     {
         return $query->where('id', $id);
     }
+    public function scopeByMT(Builder $query, int|string $mt): Builder
+    {
+        return $query->where('mt', $mt);
+    }
     public function scopeBySS(Builder $query, string $ss): Builder
     {
         return $query->where('ss', $ss);
