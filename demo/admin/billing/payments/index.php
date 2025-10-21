@@ -2,6 +2,7 @@
 require_once '../../../app.php';
 
 use App\Enums\AdminPermission;
+use App\Models\Payment;
 use Classes\Route;
 use Classes\Session;
 use Classes\Lang;
@@ -110,11 +111,10 @@ $depositTypes = [
             $accountId = $_REQUEST['accountId'];
             $parent = Family::find($accountId);
             $accountStudents = Student::byId($accountId)->get();
-            $paymentsQuery = Manager::table('pagos')->where([
-                ['id', $accountId],
-                ['year', $year],
-                ['baja', '']
-            ])->orderBy('rec', 'desc')->get();
+            $paymentsQuery = $parent->charges()
+                ->orderByRaw("id,grado desc,ss,codigo,rec")
+
+                ->get();
 
             $debtData = $paymentsData = [];
             $rec = 0;
