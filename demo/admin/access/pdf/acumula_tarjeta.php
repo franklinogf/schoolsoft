@@ -26,12 +26,11 @@ $fdg =  $_COOKIE["variable12"];
 $memsa1 =  $_COOKIE["variable13"];
 $memsa2 =  $_COOKIE["variable14"];
 $nhc     =  $_COOKIE["variable15"];
+$cofi     =  $_COOKIE["variable16"];
 
-//echo $grado.' / '.$grados;
 
 if ($opcion=='2' and $fg=='true')
    {
-//   echo $fg.' 7777';
         $thisCourse2 = DB::table("year")->where([
             ['grado', $grados],
             ['year', $Year]
@@ -52,6 +51,9 @@ if ($grado == 'B' and $tarjeta == '31') {
 }
 if ($grado == 'A' and $tarjeta == '31') {
     $tar = 'Tarjeta' . $tarjeta . 'a.php';
+}
+if ($grado == 'C' and $tarjeta == '33') {
+    $tar = 'Tarjeta' . $tarjeta . 'b.php';
 }
 
 require_once $tar;
