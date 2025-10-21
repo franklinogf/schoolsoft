@@ -106,36 +106,7 @@ if ($opcion == '2') {
     $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")
         ->whereRaw("ss = '$estu'")->orderBy('apellidos')->get();
 }
-foreach ($students as $estu) {
-    $pdf->AddPage();
-    $info1 = DB::table('year')->select("id, ss, dir1, grado, fecha")
-        ->whereRaw("ss = '$estu->ss'")->orderBy('apellidos')->first();
-
-    $info2 = DB::table('madre')->select("encargado")
-        ->whereRaw("id = '$info1->id'")->first();
-
-  $pdf->Ln(10);
-  $pdf->Cell(0, 5, utf8_encode('TRANSCRIPCIÓN DE CREDITOS'), 0, 1, 'C');
-  $pdf->Cell(0, 5, utf8_encode('NIVEL ELEMENTAL'), 0, 1, 'C');
-  $pdf->Ln(10);
-
-  $pdf->Cell(20, 5, 'Nombre:');
-  $pdf->Cell(100, 5, "$estu->apellidos $estu->nombre", 'B');
-
-  $pdf->Cell(0, 5, "Seguro Social: XXX-XX-" . substr($estu->ss, -4), 0, 1, 'L');
-
-  $pdf->Ln(4);
-  $pdf->Cell(40, 5, 'Fecha de nacimiento:');
-  $pdf->Cell(35, 5, $info1->fecha === '0000-00-00' ? 'N/A' : $info1->fecha, 'B', 0, 'C');
-
-  $pdf->Cell(15, 5, 'Edad:', 0, 0, 'R');
-  $pdf->Cell(10, 5, getAge($info1->fecha), 'B', 1, 'C');
-
-  $pdf->Ln(5);
-
-  $conducta = [];
-  $grados = DB::table('acumulativa')->select("DISTINCT grado")
-        ->whereRaw("ss = '$estu->ss' and (grado not like '12%' and grado not like '11%' and grado not like '10%' and grado not like '09%')")->get();
+//******************
 
   function Year($grado, $ss)
   {
@@ -207,7 +178,7 @@ foreach ($students as $estu) {
         if ($c == 0) {
           $c = 1;
         }
-        $valor = ($row->sem1 + $row->sem2) / $c;
+        $valor = (is_numeric($row->sem1) + is_numeric($row->sem2)) / $c;
 
         if ($row->sem1 != '' || $row->sem2 != '') {
           if (!is_numeric($row->sem1) && !is_numeric($row->sem2)) {
@@ -240,6 +211,66 @@ foreach ($students as $estu) {
     'MUSICA' => ['MUS'],
   ];
   #1
+
+
+foreach ($students as $estu) {
+    $pdf->AddPage();
+    $info1 = DB::table('year')->select("id, ss, dir1, grado, fecha")
+        ->whereRaw("ss = '$estu->ss'")->orderBy('apellidos')->first();
+
+    $info2 = DB::table('madre')->select("encargado")
+        ->whereRaw("id = '$info1->id'")->first();
+
+  $pdf->Ln(10);
+  $pdf->Cell(0, 5, utf8_encode('TRANSCRIPCIÓN DE CREDITOS'), 0, 1, 'C');
+  $pdf->Cell(0, 5, utf8_encode('NIVEL ELEMENTAL'), 0, 1, 'C');
+  $pdf->Ln(10);
+
+  $pdf->Cell(20, 5, 'Nombre:');
+  $pdf->Cell(100, 5, "$estu->apellidos $estu->nombre", 'B');
+
+  $pdf->Cell(0, 5, "Seguro Social: XXX-XX-" . substr($estu->ss, -4), 0, 1, 'L');
+
+  $pdf->Ln(4);
+  $pdf->Cell(40, 5, 'Fecha de nacimiento:');
+  $pdf->Cell(35, 5, $info1->fecha === '0000-00-00' ? 'N/A' : $info1->fecha, 'B', 0, 'C');
+
+  $pdf->Cell(15, 5, 'Edad:', 0, 0, 'R');
+  $pdf->Cell(10, 5, getAge($info1->fecha), 'B', 1, 'C');
+
+  $pdf->Ln(5);
+
+
+
+$promedio = [];
+$promedio['01']=0;
+$promedio['02']=0;
+$promedio['03']=0;
+$promedio['04']=0;
+$promedio['05']=0;
+$promedioLetters = [];
+$promedioLetters['01']=0;
+$promedioLetters['02']=0;
+$promedioLetters['03']=0;
+$promedioLetters['04']=0;
+$promedioLetters['05']=0;
+$cant = [];
+$cant['01']=0;
+$cant['02']=0;
+$cant['03']=0;
+$cant['04']=0;
+$cant['05']=0;
+$creditos = [];
+$creditos['01']=0;
+$creditos['02']=0;
+$creditos['03']=0;
+$creditos['04']=0;
+$creditos['05']=0;
+  $conducta = [];
+  $grados = DB::table('acumulativa')->select("DISTINCT grado")
+        ->whereRaw("ss = '$estu->ss' and (grado not like '06%' and grado not like '07%' and grado not like '08%' and grado not like '09%' and grado not like '10%' and grado not like '11%' and grado not like '12%')")->get();
+
+
   $GRADOS = ['01', '02', '03', '04', '05'];
   $WIDTH = 30;
   $pdf->Cell(40, 6, utf8_encode('AÑO ESCOLAR'), 1, 0, 'L', true);
@@ -305,3 +336,4 @@ foreach ($students as $estu) {
   $pdf->Image('../../../logo/firma_acumalativa_31_2.png', 100, $Y - 4, 30);
 }
 $pdf->Output();
+
