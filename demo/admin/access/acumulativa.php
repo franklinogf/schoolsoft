@@ -182,6 +182,9 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
         var dis = document.TarjetaNotas.nhc.value;
         document.cookie = 'variable15=' + nhc.checked + '; expires=' + now.toGMTString() + '; path=/';
 
+        var dis = document.TarjetaNotas.cofi.value;
+        document.cookie = 'variable16=' + cofi.checked + '; expires=' + now.toGMTString() + '; path=/';
+
 
 
     }
@@ -283,6 +286,7 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
                             </label>
                         </div>
                         <select id="estu" name="estu" class="custom-select" required>
+                            <option value=""></option>
                             <?php foreach ($students as $student) : ?>
                                 <option value="<?= $student->ss ?>"><?= $student->apellidos . ' ' . $student->nombre ?></option>
                             <?php endforeach ?>
@@ -331,6 +335,14 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
                             </label>
                         </div>
                         <input id="nhc" name="nhc" type="checkbox" style="height: 30px; width: 30px" value="Si" />
+
+
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="option">
+                                <?= $lang->translation('Con firma') ?>
+                            </label>
+                        </div>
+                        <input id="cofi" name="cofi" type="checkbox" style="height: 30px; width: 30px" value="Si" />
 
 
 
