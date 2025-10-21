@@ -39,7 +39,13 @@ $school = new School(Session::id());
 
 
 $teachers = new Teacher;
-$teachers = $teachers->all();
+//$teachers = $teachers->all();
+
+$teachers = DB::table('profesor')->where([
+    ['activo', 'Activo']
+])->orderBy('apellidos')->get();
+
+
 if (isset($_REQUEST['search'])) {
     $thisCourse = DB::table('cursos')->where('mt', $_REQUEST['course'])->first();
 }
@@ -186,7 +192,7 @@ $courses = DB::table('cursos')->where([
                                 <select class="form-control selectpicker w-100" name="teacherId" id="teacherId" data-live-search="true" required>
                                     <option value=""><?= $lang->translation("Seleccionar") ?></option>
                                     <?php foreach ($teachers as $teacher) : ?>
-                                        <option <?= $thisCourse->id ?? '' == $teacher->id ? 'selected=""' : '' ?> value="<?= $teacher->id ?>"><?= "$teacher->apellidos $teacher->nombre - $teacher->id" ?></option>
+                                        <option <?= $teacher->id == $thisCourse->id ?? '' ? 'selected=""' : '' ?> value="<?= $teacher->id ?>"><?= "$teacher->apellidos $teacher->nombre - $teacher->id" ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
