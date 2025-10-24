@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
            }
 
         $selectedType = $depositTypes[$type];
-        if ($type === 12) {
+        if ($type === 1 || $type === 2 || $type === 3 || $type === 4 || $type === 9 || $type === 12) {
            $date = date('Y-m-d');
            $time = date('H:i:s');
            }
