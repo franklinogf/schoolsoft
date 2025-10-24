@@ -76,6 +76,7 @@ $depositTypes = [
     // 7 => "Borrar",
     8 => "Balance",
     9 => "Otros",
+   12 => "Pago a través de oficina",
 ];
 ?>
 <!DOCTYPE html>
