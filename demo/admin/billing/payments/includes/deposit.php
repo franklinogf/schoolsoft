@@ -18,6 +18,7 @@ $depositTypes = [
     7 => "Borrar",
     8 => "Balance",
     9 => "Otros",
+   12 => "Pago a través de oficina",
 ];
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
@@ -58,6 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
            }
 
         $selectedType = $depositTypes[$type];
+        if ($type === 12) {
+           $date = date('Y-m-d');
+           $time = date('H:i:s');
+           }
+
         $data = [
             'id' => $student->id,
             'ss' => $student->ss,
@@ -68,8 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'tipoDePago' => utf8_encode($selectedType),
             'hora' => $time,
             'email' => $type2,
+            'date' => $date.' '.$time,
         ];
-        if ($type === 1 || $type === 2 || $type === 4 || $type === 5 || $type === 9 || $type === 10 || $type === 11) {
+        if ($type === 1 || $type === 2 || $type === 4 || $type === 5 || $type === 9 || $type === 10 || $type === 11 || $type === 12) {
             if ($type === 9) {
                 $data['otros'] = $_POST['other'];
             }
