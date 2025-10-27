@@ -1,6 +1,5 @@
 <?php
 require_once '../../../app.php';
-//2.76 + 2.54 / 2.65  
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -25,18 +24,15 @@ $lang = new Lang([
 
 $school = new School(Session::id());
 $year = $school->info('year2');
+$usua = $school->info('usuario');
 
 //************************************************************
-// COLEGIO DE LA SALLE
-
 class nPDF extends PDF
 {
-
-    //Cabecera de pagina
     function Header()
     {
-        $idioma =  $_COOKIE["variable15"];
         parent::header();
+        global $idioma;
         //	$this->Ln(2);
         $this->Cell(80);
         $this->SetFont('Arial', 'B', 11);
@@ -49,7 +45,7 @@ class nPDF extends PDF
         $this->Cell(60);
 
         $this->SetFont('Arial', 'B', 10);
-        $this->Ln(15);
+        $this->Ln(10);
     }
 
     function Not($se1, $se2, $cr, $cur)
@@ -148,11 +144,10 @@ class nPDF extends PDF
 }
 
 $pdf = new nPDF();
-//$pdf->SetTitle('INFORME PROMEDIO POR CLASE ACUMULADO');
+$pdf->SetTitle('CUMULATIVE CARD');
 $pdf->Fill();
 
 $pdf->AliasNbPages();
-//$pdf->SetFillColor(240);
 $pdf->SetFont('Times', '', 11);
 
 $row = DB::table('colegio')
@@ -188,12 +183,9 @@ $tc = 0;
 
 
 if ($opcion == '2') {
-    $q7 = "select * from year where grado = '$_POST[grado7]' AND year = '$_POST[ano7]' ORDER BY apellidos ASC";
     $students = DB::table('year')
         ->whereRaw("year = '$Year' and grado = '$grados' and activo = ''")->orderBy('apellidos')->get();
 } else {
-    //  $q7 = "select DISTINCT ss, ss, ss, nombre, apellidos from acumulativa where ss = '$nombre' ORDER BY orden";
-    //   $students = DB::table('year')
     $students = DB::table('year')->select("DISTINCT ss, ss, ss, nombre, apellidos")
         ->whereRaw("ss = '$estu'")->orderBy('apellidos')->get();
 }
@@ -224,13 +216,13 @@ foreach ($students as $student) {
     }
 
     $nm2 = $nm;
-    $pdf->SetFont('Arial', 'B', 11);
+    $pdf->SetFont('Arial', '', 11);
 
     if ($idioma == 'A') {
         $nom1 = 'NOMBRE';
         $fec = 'FECHA';
         $gra = 'GRADO';
-        $ano = 'AÑO';
+        $ano = 'A&#65533;O';
         $des = 'DESCRIPCION';
         $pro = 'PROMEDIO GEN.';
         $proa = 'PROMEDIO ACU.';
@@ -454,10 +446,6 @@ foreach ($students as $student) {
         $nm = $num_resultados2;
     }
 
-    // $nm2=$nm;
-    // $pdf->SetFont('Arial','B',11);
-
-
     if ($num_resultados1 + $num_resultados2 > 0) {
         if ($nm7 == 0) {
             if ($num_resultados1 > $num_resultados2) {
@@ -618,7 +606,6 @@ foreach ($students as $student) {
     $fecg = $student->fechagra ?? '';
     if ($idioma == 'A') {
         setlocale(LC_TIME, 'spanish');
-        //     if (!empty($fecg))
         if ($fecg != '0000-00-00') {
             $fechaComite = date($fecg);
             $inicio = strftime("%B %d, %Y", strtotime($fechaComite));
@@ -633,14 +620,21 @@ foreach ($students as $student) {
         $pdf->Cell(40, 5, '', 0, 1);
         $pdf->Cell(60, $anc, 'FECHA DE GRADUACION', 1, 0, 'L', true);
         $pdf->Cell(35, $anc, $inicio, 1, 1, 'R');
+
+        $Y = $pdf->GetY();
+
         $pdf->Cell(40, 10, '', 0, 1);
         $pdf->Cell(70, 5, 'Firma Autorizada', 'T', 0, 'C');
+        if ($cofi=='true' and $usua=='administrador')
+           {
+           $pdf->Image('../../../logo/firma.gif', 18, $Y - 3, 45);
+           }
+        
         $pdf->Cell(70, 5, '', 0, 0);
         $pdf->Cell(40, 5, 'Sello Oficial', 0, 1);
         $pdf->Cell(70, 5, date('m/d/Y'), 0, 1, 'C');
     } else {
         setlocale(LC_TIME, 'english');
-        //     if (!empty($fecg))
         if ($fecg != '0000-00-00') {
             $fechaComite = date($fecg);
             $inicio = strftime("%B %d, %Y", strtotime($fechaComite));
