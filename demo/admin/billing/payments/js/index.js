@@ -711,8 +711,8 @@ $(document).ready(function () {
     let debts = []
     let payments = []
     $(`#table${month} tr`).each(function (index, tr) {
-      debts.push(parseFloat($(tr).find('.debt').text()))
-      payments.push(parseFloat($(tr).find('.payment').text()))
+      debts.push(parseFloat($(tr).find('.debt').text().replace(/,/g, '')))
+      payments.push(parseFloat($(tr).find('.payment').text().replace(/,/g, '')))
     })
     const totalDebts = debts.reduce((sum, debt) => sum + debt, 0)
     const totalPayments = payments.reduce((sum, payment) => sum + payment, 0)
