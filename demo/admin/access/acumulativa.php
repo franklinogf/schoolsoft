@@ -91,6 +91,12 @@ if ($re == '3') {
 if ($re == '18') {
     $in31 = 'selected';
 }
+if ($re == '10') {
+    $in10 = 'selected';
+}
+if ($re == '26') {
+    $in26 = 'selected';
+}
 
 $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->orderBy('apellidos')->get();
 
@@ -225,7 +231,9 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
                             <option value='2' <?= $in2 ?>>Tarjeta 2</option>
                             <option value='9' <?= $in9 ?>>Tarjeta 9</option>
+                            <option value='10' <?= $in10 ?>>Tarjeta 10</option>
                             <option value='14' <?= $in14 ?>>Tarjeta 14</option>
+                            <option value='26' <?= $in26 ?>>Tarjeta 26</option>
                             <option value='31' <?= $in31 ?>>Tarjeta 31</option>
                             <option value='32' <?= $in32 ?>>Tarjeta 32</option>
                             <option value='33' <?= $in33 ?>>Tarjeta 33</option>
