@@ -212,6 +212,7 @@ $presupuesto = DB::table('presupuesto')->where([
                                     <label class="custom-control-label" for="ban"><?= $lang->translation('Banco') ?></label>
                                 </div>
                             </div>
+
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="telp" name="telp" value="9" checked="checked">
@@ -228,6 +229,36 @@ $presupuesto = DB::table('presupuesto')->where([
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="athm" name="athm" value="12" checked="checked">
                                     <label class="custom-control-label" for="athm"><?= $lang->translation('ATH Movil') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="cac" name="cac" value="13" checked="checked">
+                                    <label class="custom-control-label" for="cac"><?= $lang->translation('C. a Cuenta') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="vt1" name="vt1" value="14" checked="checked">
+                                    <label class="custom-control-label" for="vt1"><?= $lang->translation('V. Term.') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ac" name="ac" value="15" checked="checked">
+                                    <label class="custom-control-label" for="ac"><?= $lang->translation('Acuden-C') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="av" name="av" value="16" checked="checked">
+                                    <label class="custom-control-label" for="av"><?= $lang->translation('Acuden-V') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="va" name="va" value="17" checked="checked">
+                                    <label class="custom-control-label" for="va"><?= $lang->translation('VA Prog') ?></label>
                                 </div>
                             </div>
                         </div>
