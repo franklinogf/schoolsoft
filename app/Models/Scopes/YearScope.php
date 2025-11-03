@@ -14,6 +14,6 @@ class YearScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where("{$model->getTable()}.year", Admin::primaryAdmin()->first()->year());
+        $builder->where("{$model->getTable()}.year", Admin::primaryAdmin()->year());
     }
 }
