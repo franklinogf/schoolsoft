@@ -12,7 +12,7 @@ use Illuminate\Database\Capsule\Manager;
 Session::is_logged();
 $parents = Family::find(Session::id());
 
-$colegio = Admin::primaryAdmin()->first();
+$colegio = Admin::primaryAdmin();
 
 $year = $colegio->year;
 

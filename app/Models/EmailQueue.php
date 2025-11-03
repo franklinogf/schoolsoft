@@ -22,7 +22,7 @@ class EmailQueue extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('twoYears', function (Builder $builder): void {
-            $admin = Admin::primaryAdmin()->first();
+            $admin = Admin::primaryAdmin();
 
             $builder->where("year", $admin->year)
                 ->orWhere('year', $admin->year2);

@@ -9,7 +9,7 @@ use Classes\Email;
 date_default_timezone_set('America/Puerto_Rico');
 
 require_once '../../../../app.php';
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
 $paymentTypes = [
     '1' => 'Efectivo',

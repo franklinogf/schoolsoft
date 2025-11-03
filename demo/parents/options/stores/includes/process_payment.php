@@ -80,7 +80,7 @@ if (isset($response['success']) && $response['success']) {
 
     if (!empty($cart)) {
         try {
-            $school = Admin::primaryAdmin()->first();
+            $school = Admin::primaryAdmin();
             $year = $school->year;
 
             $order = StoreOrder::create([

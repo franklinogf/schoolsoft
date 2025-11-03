@@ -9,7 +9,7 @@ use Classes\Session;
 
 Session::is_logged();
 
-$admin = Admin::primaryAdmin()->first();
+$admin = Admin::primaryAdmin();
 $year = $admin->year;
 
 CafeteriaOrderHistory::whereBeforeToday('fecha')->delete();

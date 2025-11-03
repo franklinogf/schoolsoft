@@ -17,7 +17,7 @@ $mt = $_GET['pk'] ?? null;
 if ($mt) {
     $student = Student::find($mt);
 }
-$discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()->first()->year())->orderBy('codigo')->get();
+$discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()->year())->orderBy('codigo')->get();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">

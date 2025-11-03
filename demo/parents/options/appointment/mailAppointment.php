@@ -10,7 +10,7 @@ use App\Models\Teacher;
 
 Session::is_logged();
 
-$admin = Admin::primaryAdmin()->first();
+$admin = Admin::primaryAdmin();
 
 $parents = Family::where('id', Session::id())->first();
 

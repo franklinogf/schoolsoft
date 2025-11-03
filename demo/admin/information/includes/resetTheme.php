@@ -10,7 +10,7 @@ include '../../../app.php';
 Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    $admin = Admin::primaryAdmin()->first();
+    $admin = Admin::primaryAdmin();
 
     $colors = $theme['colors'];
     $booleans = $theme['booleans'];

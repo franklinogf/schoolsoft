@@ -15,7 +15,7 @@ use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
 $parents = Family::find(Session::id());
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year;
 $studentSS = $_POST['studentSS'];
 $trimester = $_POST['trimester'];

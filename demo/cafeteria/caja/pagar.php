@@ -7,7 +7,7 @@ use Classes\DataBase\DB;
 use Illuminate\Database\Capsule\Manager;
 
 require_once '../../app.php';
-$admin = Admin::primaryAdmin()->first();
+$admin = Admin::primaryAdmin();
 $year = $admin->year;
 
 $metodo = ['1' => 'Efectivo', '2' => 'Tarjeta', '3' => 'ID', '4' => 'Nombre'];

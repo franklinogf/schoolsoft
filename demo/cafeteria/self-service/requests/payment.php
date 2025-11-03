@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager;
 require_once '../../../app.php';
 
 date_default_timezone_set("America/Puerto_Rico");
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 
 $year = $school->year;
 

@@ -19,7 +19,7 @@ Session::is_logged();
 
 
 
-$year = Admin::primaryAdmin()->first()->year();
+$year = Admin::primaryAdmin()->year();
 $allGrades = StudentQuery::getAllGrades();
 $pdf = new PDF();
 $pdf->SetTitle(__("Lista de estudiantes por salón hogar") . " $year", true);

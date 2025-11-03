@@ -10,7 +10,7 @@ use App\Models\Teacher;
 Session::is_logged();
 $teacher = Teacher::find(Session::id());
 
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 
 $lang = new Lang([
     ['Cursos', 'Grades'],

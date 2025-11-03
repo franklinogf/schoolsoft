@@ -23,7 +23,7 @@ class Mail extends PHPMailer
             $replayToEmail = $teacher->email1;
             $replayToName = $teacher->fullName;
         } else {
-            $admin = Admin::primaryAdmin()->first();
+            $admin = Admin::primaryAdmin();
             $name = $admin->colegio;
             $replayToEmail = $admin->correo;
             $replayToName = $name;

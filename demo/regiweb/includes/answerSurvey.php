@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     // Validate and process the survey response
     if (!empty($surveyId) && !empty($answer)) {
         $teacher = Teacher::find(Session::id());
-        $school = Admin::primaryAdmin()->first();
+        $school = Admin::primaryAdmin();
         $year = $school->year;
         $date = date('Y-m-d');
 
