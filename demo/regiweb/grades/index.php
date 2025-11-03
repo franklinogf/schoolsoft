@@ -2,7 +2,6 @@
 require_once '../../app.php';
 
 use App\Models\Admin;
-use App\Models\Subject;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -10,6 +9,7 @@ use App\Models\Teacher;
 
 Session::is_logged();
 $teacher = Teacher::find(Session::id());
+
 $school = Admin::primaryAdmin()->first();
 
 $lang = new Lang([

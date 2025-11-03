@@ -1,6 +1,8 @@
 <?php
 require_once '../../app.php';
 
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
@@ -8,7 +10,7 @@ use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
 Server::is_post();
@@ -16,10 +18,11 @@ $_class = $_POST['class'];
 $_trimester = $_POST['tri'];
 $_report = $_POST['tra'];
 
-$teacher = new Teacher(Session::id());
-$year = $teacher->info('year');
-$optionCppd = $teacher->info('cppd') === 'Si';
-$sumTrimester = $teacher->info('sutri') === 'NO'; //NO === SI
+$teacher = Teacher::find(Session::id());
+$school = Admin::primaryAdmin();
+$year = $school->year();
+$optionCppd = $school->cppd === 'Si';
+$sumTrimester = $school->sutri === 'NO'; //NO === SI
 $_trimesterNumber = (int) substr($_trimester, -1);
 // Diferent option for these schools
 
@@ -567,7 +570,7 @@ $lang = new Lang([
 
 ]);
 
-$canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0]));
+$canEdit = (Util::date() <= $school->{$_dates[1]} && Util::date() >= $school->{$_dates[0]});
 // $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teacher->info($_dates[0])) && $teacher->fechas && ($teacher->tri === $_trimesterNumber || $teacher->tri === 5);
 
 ?>
@@ -605,11 +608,11 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                         <p class="text-monospace"><?= $lang->translation("Entrando notas a:") ?> <span class="badge badge-info"><?= $lang->translation($_thisReport['title']) ?></span></p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Fecha de inicio:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[0]), true) ?></span>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de inicio:") ?> <span class="badge badge-info"><?= Util::formatDate($school->{$_dates[0]}, true) ?></span>
                         </p>
                     </div>
                     <div class="col">
-                        <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span class="badge badge-info"><?= Util::formatDate($teacher->info($_dates[1]), true) ?></span>
+                        <p class="text-monospace"><?= $lang->translation("Fecha de cierre:") ?> <span class="badge badge-info"><?= Util::formatDate($school->{$_dates[1]}, true) ?></span>
                         </p>
                     </div>
                     <div class="col">
@@ -644,7 +647,7 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
                             <small><?= $lang->translation("Está opción es para convertir de numero a letra.") ?></small>
                         </div>
                         <?php if ($_end): ?>
-                            <?php if ($teacher->info('sie') === 'Si' && $teacher->info('sieab') === '4'): ?>
+                            <?php if ($school->sie === 'Si' && $school->sieab === '4'): ?>
                                 <div class="col mt-2">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="<?= $_end ?>" value='X' <?= ($gradeInfo && $gradeInfo->{$_end} === "X") ? 'checked=""' : '' ?> disabled>
@@ -694,11 +697,11 @@ $canEdit = (Util::date() <= $teacher->info($_dates[1]) && Util::date() >= $teach
             <input type="hidden" name="table" id="table" value="<?= $_thisReport['table'] ?>">
             <input type="hidden" name="subject" id="subject" value="<?= $_class ?>">
             <input type="hidden" name="optionCppd" id="optionCppd" value="<?= $optionCppd ?>">
-            <input type="hidden" name="valueA" id="valueA" value="<?= $teacher->info('vala') ?>">
-            <input type="hidden" name="valueB" id="valueB" value="<?= $teacher->info('valb') ?>">
-            <input type="hidden" name="valueC" id="valueC" value="<?= $teacher->info('valc') ?>">
-            <input type="hidden" name="valueD" id="valueD" value="<?= $teacher->info('vald') ?>">
-            <input type="hidden" name="valueF" id="valueF" value="<?= $teacher->info('valf') ?>">
+            <input type="hidden" name="valueA" id="valueA" value="<?= $school->vala ?>">
+            <input type="hidden" name="valueB" id="valueB" value="<?= $school->valb ?>">
+            <input type="hidden" name="valueC" id="valueC" value="<?= $school->valc ?>">
+            <input type="hidden" name="valueD" id="valueD" value="<?= $school->vald ?>">
+            <input type="hidden" name="valueF" id="valueF" value="<?= $school->valf ?>">
             <input type="hidden" name="sumTrimester" id="sumTrimester" value="<?= $sumTrimester ?>">
             <div class="table-responsive my-3 shadow">
                 <?php if ($_report === 'Notas' || $_report === 'V-Nota' || $_report === 'Pruebas-Cortas' || $_report === 'Trab-Diarios' || $_report === 'Trab-Diarios2' || $_report === 'Trab-Libreta' || $_report === 'Trab-Libreta2'): ?>
