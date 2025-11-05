@@ -1,4 +1,4 @@
-<?
+<?php
 require_once '../../app.php';
 
 use Classes\Lang;
@@ -31,11 +31,10 @@ $lang = new Lang([
     
 ]);
 
-
 $school = new School(Session::id());
 $grados = $school->allGrades();
 $years = DB::table('year')->select("DISTINCT year")->get();
-
+$estu = $_REQUEST['estu'] ?? '';
 $estudiantes = DB::table('year')->select("DISTINCT nombre, apellidos, ss")->orderBy('apellidos, nombre')->get();
 
 ?>
@@ -51,27 +50,31 @@ function confirmar ( mensaje ) {
 return confirm( mensaje );
 }
 </script> 
+<style type="text/css">
+.color {
+	text-align: center;
+}
+.gris {
+	background-color: #CCCCCC;
+	text-align: center;
+}
+</style>
     <?php
     $title = $lang->translation('Transcripción de crédito');
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
-
 </head>
-
 <body>
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
-
     <div class="container-lg mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5">
             <?= $lang->translation('Añadir/Editar Nota') ?>
         </h1>
 
 <div class="container bg-white shadow-lg py-3 rounded">
-
 <form method="post">
-
 <table cellpadding="2" cellspacing="0" style="width: 50%" align="center">
 	<tr>
 		<th class="gris"><?= $lang->translation('Nombre del Estudiante') ?></th>
@@ -87,30 +90,27 @@ return confirm( mensaje );
            foreach ($estudiantes as $student) 
                    {
 			?>
-					<option  <?php echo ($student->ss == $_REQUEST['estu'])?'selected=""':'' ?> value="<?php echo $student->ss ?>"><?php echo utf8_decode("$student->apellidos $student->nombre") ?></option>
+					<option  <?= ($student->ss == $estu) ? 'selected=""':'' ?> value="<?= $student->ss ?>"><?= utf8_decode("$student->apellidos $student->nombre") ?></option>
 			<?php } ?>		
 			</select>
 		<input class="btn btn-primary mx-auto" name="buscar" type="submit" value="<?= $lang->translation('Buscar') ?>" />
-                        </div>
-
+       </div>
 	</td>
 	</tr>
-
 	<tr>
 		<td class="gris">
 			<a class="btn btn-primary mx-auto" href="acumulativa.php"><?= $lang->translation('Atrás') ?></a>
 		</td>
 	</tr>
-	
 </table>
 </form>
 
 <form method="POST" action="addedit_guardar.php">
 <?php if (isset($_REQUEST['estu'])): ?>
 	<?php 
-			if (!isset($_POST['new'])) {
-            $est = DB::table('year')->select("DISTINCT nombre, apellidos, ss")->where('ss', $_REQUEST['estu'])->orderBy('apellidos, nombre')->first();
-			}
+		if (!isset($_POST['new'])) {
+           $est = DB::table('year')->select("DISTINCT nombre, apellidos, ss")->where('ss', $_REQUEST['estu'])->orderBy('apellidos, nombre')->first();
+		}
 		
 	?>
 	<table cellpadding="2" cellspacing="0" style="width: 50%; margin-top: 20px;" align="center">
@@ -132,16 +132,16 @@ return confirm( mensaje );
 				<?php if (isset($_POST['new'])): ?>
 					<input type="text" name="apellidos">
 					<?php else: ?>
-						<input type="hidden" name="apellidos" value="<?php echo utf8_decode($est->apellidos) ?>">
-						<?php echo utf8_decode($est->apellidos) ?>
+						<input type="hidden" name="apellidos" value="<?= utf8_decode($est->apellidos) ?>">
+						<?= utf8_decode($est->apellidos) ?>
 				<?php endif ?>
 			</td>
 			<td>
 				<?php if (isset($_POST['new'])): ?>
 					<input required=""  data-mask="000-00-0000" type="text" name="ss" placeholder="000-00-0000" >
 					<?php else: ?>
-						<input type="hidden" name="ss" value="<?php echo $est->ss ?>">
-						<?php echo $est->ss ?>
+						<input type="hidden" name="ss" value="<?= $est->ss ?>">
+						<?= $est->ss ?>
 				<?php endif ?>
 			</td>
 			
@@ -213,8 +213,6 @@ return confirm( mensaje );
 	</form>
 
     </div>
-
-
 <?php 
 
 $cursos = DB::table('cursos')->select("DISTINCT curso, desc1")->orderBy('curso')->get();
@@ -231,6 +229,8 @@ $grados = DB::table('year')->select("DISTINCT grado")->orderBy('grado')->get();
 		 	
 		 });*/
 		$("#add").click(function(event) {
+            window.scrollTo(0,document.body.scrollHeight);
+            window.location.href = '#final';
 			$("#notas").append(
 				'<tr class="color">'+
 					'<td><input data-mask="000" type="text" name="nota1[]" size="5"></td>'+
@@ -251,7 +251,6 @@ $grados = DB::table('year')->select("DISTINCT grado")->orderBy('grado')->get();
 							<?php 
                           foreach ($cursos as $curso) 
                                   {
-
 							?>
 								'<option value="<?php echo $curso->curso ?>"><?php echo "$curso->curso - $curso->desc1" ?></option>	'+
 							<?php } ?>
@@ -279,20 +278,14 @@ $grados = DB::table('year')->select("DISTINCT grado")->orderBy('grado')->get();
 					});
 				}else{
 					$tr.parents('tr').remove();					
-
 				}
-
 			}
 		});
-
-
 	});
 </script>
     </div>
     <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
+  Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
-
 </body>
-
 </html>
