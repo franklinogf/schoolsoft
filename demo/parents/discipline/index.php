@@ -8,7 +8,7 @@ use Classes\Session;
 
 Session::is_logged();
 $parents = Family::find(Session::id());
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 
 ?>
 <!DOCTYPE html>

@@ -4,7 +4,7 @@ require_once 'app.php';
 use Classes\Route;
 use App\Models\Admin;
 
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 
 ?>
 <!DOCTYPE html>

@@ -33,7 +33,7 @@ class PDF extends FPDF
             $this->SetFont('times', 'B', 15);
             $this->SetTextColor(0);
             if (($this->headerFirstPage && $this->PageNo() === 1) || !$this->headerFirstPage) {
-                $admin = Admin::primaryAdmin()->first();
+                $admin = Admin::primaryAdmin();
                 // dafault values
                 $this->SetAuthor($admin->colegio, true);
                 $this->setCreator('School Soft');
@@ -83,7 +83,7 @@ class PDF extends FPDF
 
     public function Fill(?int $red = null, ?int $green = null, ?int $blue =  null)
     {
-        $pdf = Admin::primaryAdmin()->first()->pdf;
+        $pdf = Admin::primaryAdmin()->pdf;
         $pdfColor = $pdf ? json_decode($pdf) : null;
 
         $red = $pdfColor?->red ?? config('pdf.fill_color.red');

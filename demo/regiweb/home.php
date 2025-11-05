@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
 $teacher = Teacher::find(Session::id());
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year;
 
 $date = date("Y-m-d");

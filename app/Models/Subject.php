@@ -28,7 +28,7 @@ class Subject extends Model
         $isCosey = school_config('app.cosey', false);
 
         return Attribute::make(
-            get: fn($value, array $attributes) => __LANG === 'es' ? $attributes[$isCosey ? 'descripcion' : 'desc1'] : $attributes['desc2'],
+            get: fn($value, array $attributes) => __LANG === 'es' ? $attributes[$isCosey ? 'descripcion' : 'desc1'] : ($attributes['desc2'] ?: $attributes[$isCosey ? 'descripcion' : 'desc1']),
         );
     }
 

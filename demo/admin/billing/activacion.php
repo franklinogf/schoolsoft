@@ -83,7 +83,7 @@ if (isset($_POST['grabar'])) {
 
 
 
-$r2 = Admin::primaryAdmin()->first();
+$r2 = Admin::primaryAdmin();
 
 $est = DB::table('year')->select("DISTINCT year")->where([
     ['pago_e_s', 'OK'],

@@ -10,7 +10,7 @@ use Classes\Session;
 Session::is_logged();
 
 
-$colegio = Admin::primaryAdmin()->first();
+$colegio = Admin::primaryAdmin();
 
 $year = $colegio->year;
 $minAmount = $colegio->deposito_minimo;

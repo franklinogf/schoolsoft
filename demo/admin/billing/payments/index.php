@@ -31,7 +31,7 @@ $months = __LANG === 'es' ?
     ['Julio' => '07', 'Agosto' => '08', 'Septiembre' => '09', 'Octubre' => '10', 'Noviembre' => '11', 'Diciembre' => '12', 'Enero' => '01', 'Febrero' => '02', 'Marzo' => '03', 'Abril' => '04', 'Mayo' => '05', 'Junio' => '06']
     : ['July' => '07', 'August' => '08', 'September' => '09', 'October' => '10', 'November' => '11', 'December' => '12', 'January' => '01', 'February' => '02', 'March' => '03', 'April' => '04', 'May' => '05', 'June' => '06'];
 $currentMonth = $_GET['month'] ?? date('m');
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year();
 $paymentTypes = [
     '1' => 'Efectivo',
@@ -76,7 +76,7 @@ $depositTypes = [
     // 7 => "Borrar",
     8 => "Balance",
     9 => "Otros",
-   12 => "Pago a través de oficina",
+    12 => "Pago a través de oficina",
 ];
 ?>
 <!DOCTYPE html>

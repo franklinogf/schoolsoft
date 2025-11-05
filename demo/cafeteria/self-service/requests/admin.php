@@ -4,7 +4,7 @@ use App\Models\Admin;
 
 require_once '../../../app.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $school = Admin::primaryAdmin()->first();
+    $school = Admin::primaryAdmin();
     if (!$school) {
         http_response_code(404);
         echo json_encode(null, JSON_UNESCAPED_UNICODE);

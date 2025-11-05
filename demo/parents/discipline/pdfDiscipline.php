@@ -17,7 +17,7 @@ $studentSS = $_POST['studentSS'];
 $student = Student::bySS($studentSS)->first();
 
 
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year;
 
 

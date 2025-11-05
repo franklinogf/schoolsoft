@@ -7,7 +7,7 @@ use Classes\Route;
 use Classes\Session;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $primaryAdmin = Admin::primaryAdmin()->first();
+    $primaryAdmin = Admin::primaryAdmin();
     Admin::create([
         'director' => $_POST['director'],
         'correo' => $_POST['correo'],

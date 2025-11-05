@@ -2,15 +2,18 @@
 
 require_once '../../../app.php';
 
-use Classes\Controllers\Teacher;
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
 use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager;
 
 Server::is_post();
-$teacher = new Teacher(Session::id());
-$year = $teacher->info('year');
+$teacher = Teacher::find(Session::id());
+$school = Admin::primaryAdmin();
+$year = $school->year();
 $_info = [
     "Notas" => [
         'Trimestre-1' => [
@@ -91,14 +94,14 @@ if (isset($_POST['changeValue'])) {
     $type = $_POST['changeValue'];
     $value = $_POST['value'];
     $id = $_POST['id'];
-    DB::table('valores')
+    Manager::table('valores')
         ->where('id', $id)
         ->update([$type => $value]);
 } elseif (isset($_POST['changeOption'])) {
     $type = $_POST['changeOption'];
     $value = $_POST['value'];
     $subjectCode = $_POST['subjectCode'];
-    DB::table('padres')->where([
+    Manager::table('padres')->where([
         ['curso', $subjectCode],
         ['year', $year],
     ])->update([$type => $value === 'true' ? 'ON' : '']);
@@ -112,14 +115,14 @@ if (isset($_POST['changeValue'])) {
         $_values = $_info[$_report][$data->trimester[0]]['values'];
         // foreach student ss
         foreach ($data->ss as $ss) {
-            echo $ss, ' - ';
+
             $_gradeStart = (int) $data->gradeStart[0];
             $inputsGrades = [];
-            $studentData = DB::table($_table)
+            $studentData = Manager::table($_table)
                 ->where([
                     ['ss', $ss],
                     ['curso', $_subjectCode],
-                    ['year', $teacher->info('year')]
+                    ['year', $year]
                 ])->first();
             // each grade
             foreach ($data->{"grade-$ss"} as $index => $grade) {
@@ -129,7 +132,7 @@ if (isset($_POST['changeValue'])) {
                 $noteIndex = $index + 1;
                 $lastNote = $studentData->{"not$_gradeStart"};
                 if ($newNote !== $lastNote && ($lastNote !== '' && $lastNote !== null)) {
-                    DB::table('tarjeta_cambios')->insert([
+                    Manager::table('tarjeta_cambios')->insert([
                         'id' => $teacher->id,
                         'fecha' => Util::date(),
                         'hora' => Util::time(),
@@ -139,7 +142,7 @@ if (isset($_POST['changeValue'])) {
                         'nt2' => $lastNote,
                         'cual' => $noteIndex,
                         'ss' => $ss,
-                        'year' => $teacher->info('year'),
+                        'year' => $year,
                         'tri' => $data->trimester[0],
                         'pag' => $_report
                     ]);
@@ -172,11 +175,11 @@ if (isset($_POST['changeValue'])) {
                 );
             }
             if (
-                DB::table($_table)
+                Manager::table($_table)
                 ->where([
                     ['ss', $ss],
                     ['curso', $_subjectCode],
-                    ['year', $teacher->info('year')]
+                    ['year', $year]
                 ])
                 ->update($allInputs)
                 &&
@@ -187,20 +190,20 @@ if (isset($_POST['changeValue'])) {
                 // }else{
                 //     $reportUpdate = [$_values[$_reports[$_report]] => $data->{"tpa-$ss"}[0]];
                 // }
-                DB::table('padres')
+                Manager::table('padres')
                     ->where([
                         ['ss', $ss],
                         ['curso', $_subjectCode],
-                        ['year', $teacher->info('year')]
+                        ['year', $year]
                     ])
                     ->update([$_info['Notas'][$data->trimester[0]]['values'][$_reports[$_report]] => $data->{"tpa-$ss"}[0]]);
             } else {
                 if ($_report !== 'Notas2') {
-                    $studentData = DB::table($_table)
+                    $studentData = Manager::table($_table)
                         ->where([
                             ['ss', $ss],
                             ['curso', $_subjectCode],
-                            ['year', $teacher->info('year')]
+                            ['year', $year]
                         ])->first();
                     // Suma de trimestre
                     if (!$_sumTrimester) {
@@ -245,11 +248,11 @@ if (isset($_POST['changeValue'])) {
                         $sem => $semNote,
                         'final' => $semFinalNote
                     ];
-                    DB::table($_table)
+                    Manager::table($_table)
                         ->where([
                             ['ss', $ss],
                             ['curso', $_subjectCode],
-                            ['year', $teacher->info('year')]
+                            ['year', $year]
                         ])->update($updateSem);
                 }
             }
@@ -285,7 +288,7 @@ if (isset($_POST['changeValue'])) {
                             $quater = 35 / 100;
                             $ex = 30 / 100;
                         }
-                        $exStu =  DB::table('padres')
+                        $exStu =  Manager::table('padres')
                             ->where([
                                 ['ss', $ss],
                                 ['curso', $_subjectCode],
@@ -314,11 +317,11 @@ if (isset($_POST['changeValue'])) {
                     } else {
                         $updateArray["qex1"] = '';
                         $updateArray["qex2"] = '';
-                        $studentData = DB::table($_table)
+                        $studentData = Manager::table($_table)
                             ->where([
                                 ['ss', $ss],
                                 ['curso', $_subjectCode],
-                                ['year', $teacher->info('year')]
+                                ['year', $year]
                             ])->first();
                         if ($data->trimester[0] === 'Trimestre-1' || $data->trimester[0] === 'Trimestre-2') {
                             $note1 = 'nota1';
@@ -340,7 +343,7 @@ if (isset($_POST['changeValue'])) {
                     }
                 }
             }
-            DB::table('padres')
+            Manager::table('padres')
                 ->where([
                     ['ss', $ss],
                     ['curso', $_subjectCode],

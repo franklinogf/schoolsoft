@@ -29,7 +29,7 @@ Capsule::schema()->table('colegio', function (Blueprint $table) use ($columns): 
     }
 });
 
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 
 $environmtsKeys = ["whatsapp", "resend", 'evertec'];
 $constantsKeys = ['cafeteria_deposit'];

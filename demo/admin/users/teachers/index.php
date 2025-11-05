@@ -18,7 +18,7 @@ if (!$user->hasPermissionTo(AdminPermission::USERS_TEACHERS)) {
 }
 
 $teachers = new Teacher();
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year();
 
 $grades = DB::table("year")->select('DISTINCT grado')->where(['year', $year])->orderBy('grado')->get();

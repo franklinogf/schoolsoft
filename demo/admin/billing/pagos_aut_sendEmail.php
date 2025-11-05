@@ -8,7 +8,7 @@ use Classes\Session;
 
 Session::is_logged();
 
-$reg = Admin::primaryAdmin()->first();
+$reg = Admin::primaryAdmin();
 $colegio = $reg->colegio;
 
 $school = new School(Session::id());

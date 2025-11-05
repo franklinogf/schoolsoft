@@ -133,13 +133,13 @@ class Email
                 $teacher = Teacher::find(Session::id())->first();
                 $replyTo = $teacher->email1;
             } else {
-                $admin = Admin::primaryAdmin()->first();
+                $admin = Admin::primaryAdmin();
                 $replyTo = $admin->correo;
             }
         }
 
 
-        $admin = Admin::primaryAdmin()->first();
+        $admin = Admin::primaryAdmin();
 
         EmailQueue::create([
             'from' => $from,
@@ -187,7 +187,7 @@ class Email
                     $teacher = Teacher::find(Session::id())->first();
                     $replyTo = $teacher->email1;
                 } else {
-                    $admin = Admin::primaryAdmin()->first();
+                    $admin = Admin::primaryAdmin();
                     $replyTo = $admin->correo;
                 }
             }

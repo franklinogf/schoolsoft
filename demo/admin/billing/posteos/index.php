@@ -8,7 +8,7 @@ use Classes\Route;
 use Classes\Session;
 
 Session::is_logged();
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year();
 $budgets = DB::table('presupuesto')->where('year', $year)->get();
 $posts = DB::table('posteos')->where('year', $year)->get();

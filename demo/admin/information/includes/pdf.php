@@ -11,7 +11,7 @@ include '../../../app.php';
 Session::is_logged();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    $admin = Admin::primaryAdmin()->first();
+    $admin = Admin::primaryAdmin();
     $pdf = $_POST['pdf'] ?? null;
     $red = intval(substr($pdf, 1, 2), 16);
     $green = intval(substr($pdf, 3, 2), 16);

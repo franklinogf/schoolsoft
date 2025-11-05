@@ -4,7 +4,7 @@ use App\Models\Admin;
 use App\Models\Student;
 
 require_once '../../../app.php';
-$school = Admin::primaryAdmin()->first();
+$school = Admin::primaryAdmin();
 $year = $school->year;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
