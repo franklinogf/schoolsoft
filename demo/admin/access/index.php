@@ -193,7 +193,7 @@ $options = [
             [
                 'name' => __("Backup"),
                 'desc' => __(''),
-                'link' => '#',
+                'link' => 'backup/index.php',
             ],
             [
                 'name' => __("Pasar data"),
