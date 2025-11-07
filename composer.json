@@ -6,14 +6,14 @@
     "php": "^8.2",
     "resend/resend-php": "^v0.16.0",
     "scssphp/scssphp": "2.0.1",
-    "illuminate/database": "^12.25.0",
-    "illuminate/translation": "^12.25.0",
-    "illuminate/filesystem": "^12.25.0",
+    "illuminate/database": "^12.37.0",
+    "illuminate/translation": "^12.37.0",
+    "illuminate/filesystem": "^12.37.0",
     "vlucas/phpdotenv": "^5.6.2",
     "setasign/fpdi": "^2.6.4",
     "setasign/fpdf": "^1.8.6",
-    "illuminate/support": "^12.25",
-    "ramsey/uuid": "^4.9"
+    "illuminate/support": "^12.37",
+    "ramsey/uuid": "^4.9.1"
   },
   "autoload": {
     "psr-4": {
