@@ -198,7 +198,7 @@ $options = [
             [
                 'name' => __("Pasar data"),
                 'desc' => __('Transferir información de un año al siguiente.'),
-                'link' => 'PasarData.php',
+                'link' => 'move_data/index.php',
             ],
         ],
     ],
