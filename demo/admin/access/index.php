@@ -173,7 +173,7 @@ $options = [
             [
                 'name' => __("Exportar"),
                 'desc' => __(''),
-                'link' => '#',
+                'link' => 'export/index.php',
             ],
             [
                 'name' => __("Importar"),
@@ -199,11 +199,6 @@ $options = [
                 'name' => __("Pasar data"),
                 'desc' => __('Transferir información de un año al siguiente.'),
                 'link' => 'PasarData.php',
-            ],
-            [
-                'name' => __("Exportar data"),
-                'desc' => __('Exportación de data a Excel.'),
-                'link' => 'ExportarData.php',
             ],
         ],
     ],
