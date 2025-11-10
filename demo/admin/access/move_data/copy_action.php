@@ -46,64 +46,83 @@ try {
 
     // Copiar Catálogo de cursos (tabla: cursos)
     if ($selectedOptions['catalog']) {
-        $count = DB::table('cursos')
+        $count = 0;
+        DB::table('cursos')
             ->where('year', $sourceYear)
             ->get()
-            ->each(function (stdClass $course) use ($destYear): void {
+            ->each(function (stdClass $course) use ($destYear, &$count): void {
                 $courseData = (array) $course;
                 $courseData['year'] = $destYear;
+                $exists = DB::table('cursos')
+                    ->where('year', $destYear)
+                    ->where('curso', $courseData['curso'])
+                    ->exists();
+                if ($exists) {
+                    return;
+                }
                 unset($courseData['mt']); // Remove auto-increment if exists
-                DB::table('cursos')->insertOrIgnore($courseData);
-            })
-            ->count();
+                $inserted = DB::table('cursos')->insertOrIgnore($courseData);
+                if ($inserted) {
+                    $count++;
+                }
+            });
 
         $response['copiedData'][] = __('Catálogo de cursos') . ": $count " . __('registros');
     }
 
     // Copiar Cursos/Materias (tabla: materias)
     if ($selectedOptions['courses']) {
-        $count = DB::table('materias')
+        $count = 0;
+        DB::table('materias')
             ->where('year', $sourceYear)
             ->get()
-            ->each(function ($materia) use ($destYear) {
+            ->each(function ($materia) use ($destYear, &$count) {
                 $materiaData = (array) $materia;
                 $materiaData['year'] = $destYear;
                 unset($materiaData['mt']); // Remove auto-increment if exists
-                DB::table('materias')->insertOrIgnore($materiaData);
-            })
-            ->count();
+                $inserted = DB::table('materias')->insertOrIgnore($materiaData);
+                if ($inserted) {
+                    $count++;
+                }
+            });
 
         $response['copiedData'][] = __('Cursos (Materias)') . ": $count " . __('registros');
     }
 
     // Copiar Presupuesto (tabla: presupuesto)
     if ($selectedOptions['budget']) {
-        $count = DB::table('presupuesto')
+        $count = 0;
+        DB::table('presupuesto')
             ->where('year', $sourceYear)
             ->get()
-            ->each(function ($presupuesto) use ($destYear) {
+            ->each(function ($presupuesto) use ($destYear, &$count) {
                 $presupuestoData = (array) $presupuesto;
                 $presupuestoData['year'] = $destYear;
                 unset($presupuestoData['mt']); // Remove auto-increment if exists
-                DB::table('presupuesto')->insertOrIgnore($presupuestoData);
-            })
-            ->count();
+                $inserted = DB::table('presupuesto')->insertOrIgnore($presupuestoData);
+                if ($inserted) {
+                    $count++;
+                }
+            });
 
         $response['copiedData'][] = __('Presupuesto') . ": $count " . __('registros');
     }
 
     // Copiar Costos (tabla: costos)
     if ($selectedOptions['costs']) {
-        $count = DB::table('costos')
+        $count = 0;
+        DB::table('costos')
             ->where('year', $sourceYear)
             ->get()
-            ->each(function ($costo) use ($destYear) {
+            ->each(function ($costo) use ($destYear, &$count) {
                 $costoData = (array) $costo;
                 $costoData['year'] = $destYear;
                 unset($costoData['mt']); // Remove auto-increment if exists
-                DB::table('costos')->insertOrIgnore($costoData);
-            })
-            ->count();
+                $inserted = DB::table('costos')->insertOrIgnore($costoData);
+                if ($inserted) {
+                    $count++;
+                }
+            });
 
         $response['copiedData'][] = __('Costos') . ": $count " . __('registros');
     }
@@ -113,13 +132,15 @@ try {
         $yearData = DB::table('year')->where('year', $sourceYear)->get();
         $count = 0;
         foreach ($yearData as $yearRecord) {
-            DB::table('year')->where([
+            $updated = DB::table('year')->where([
                 ['ss', $yearRecord->ss],
                 ['year', $destYear],
             ])->update([
                 'tipo' => $yearRecord->tipo ?? '',
             ]);
-            $count++;
+            if ($updated) {
+                $count++;
+            }
         }
         $response['copiedData'][] = __('Fotos') . ": $count " . __('registros');
     }
@@ -129,14 +150,16 @@ try {
         $yearData = DB::table('year')->where('year', $sourceYear)->get();
         $count = 0;
         foreach ($yearData as $yearRecord) {
-            DB::table('year')->where([
+            $updated = DB::table('year')->where([
                 ['ss', $yearRecord->ss],
                 ['year', $destYear],
             ])->update([
                 'balance_a' => $yearRecord->balance_a ?? 0,
                 'cantidad' => $yearRecord->cantidad ?? 0,
             ]);
-            $count++;
+            if ($updated) {
+                $count++;
+            }
         }
         $response['copiedData'][] = __('Balances de cafetería') . ": $count " . __('registros');
     }
