@@ -53,7 +53,7 @@ try {
                 $courseData = (array) $course;
                 $courseData['year'] = $destYear;
                 unset($courseData['mt']); // Remove auto-increment if exists
-                DB::table('cursos')->insert($courseData);
+                DB::table('cursos')->insertOrIgnore($courseData);
             })
             ->count();
 
@@ -69,7 +69,7 @@ try {
                 $materiaData = (array) $materia;
                 $materiaData['year'] = $destYear;
                 unset($materiaData['mt']); // Remove auto-increment if exists
-                DB::table('materias')->insert($materiaData);
+                DB::table('materias')->insertOrIgnore($materiaData);
             })
             ->count();
 
@@ -85,7 +85,7 @@ try {
                 $presupuestoData = (array) $presupuesto;
                 $presupuestoData['year'] = $destYear;
                 unset($presupuestoData['mt']); // Remove auto-increment if exists
-                DB::table('presupuesto')->insert($presupuestoData);
+                DB::table('presupuesto')->insertOrIgnore($presupuestoData);
             })
             ->count();
 
@@ -101,7 +101,7 @@ try {
                 $costoData = (array) $costo;
                 $costoData['year'] = $destYear;
                 unset($costoData['mt']); // Remove auto-increment if exists
-                DB::table('costos')->insert($costoData);
+                DB::table('costos')->insertOrIgnore($costoData);
             })
             ->count();
 
