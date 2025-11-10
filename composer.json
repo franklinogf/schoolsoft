@@ -14,7 +14,8 @@
     "setasign/fpdf": "^1.8.6",
     "illuminate/support": "^12.37",
     "ramsey/uuid": "^4.9.1",
-    "ifsnop/mysqldump-php": "^2.12"
+    "ifsnop/mysqldump-php": "^2.12",
+    "phpoffice/phpspreadsheet": "^5.2"
   },
   "autoload": {
     "psr-4": {
