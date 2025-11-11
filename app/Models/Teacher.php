@@ -61,4 +61,9 @@ class Teacher extends Model
             ->where('fecha_baja', '0000-00-00')
             ->orderBy('apellidos');
     }
+
+    public function workPlans(): HasMany
+    {
+        return $this->hasMany(WorkPlan::class, 'id', 'id');
+    }
 }
