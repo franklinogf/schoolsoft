@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\Gender;
 use App\Models\Scopes\YearScope;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $id
  * @property string $genero
  * @property string $rema
- * @property string $fecha
+ * @property CarbonInterface $fecha
  * @property string $cta
  * @property string $alias
  * @property string $verano
@@ -90,7 +92,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $desc3
  * @property string $desc4
  * @property string $nuevo
- * @property string $fecha_matri
+ * @property CarbonInterface $fecha_matri
  * @property string $codigobaja
  * @property string $edad
  * @property string $gra2
@@ -215,8 +217,8 @@ class Student extends Model
     public function casts(): array
     {
         return [
-            // 'fecha' => 'date:Y-m-d',
-            // 'fecha_matri' => 'date:Y-m-d',
+            'fecha' => 'date:Y-m-d',
+            'fecha_matri' => 'date:Y-m-d',
             // 'genero' => Gender::class,
         ];
     }
