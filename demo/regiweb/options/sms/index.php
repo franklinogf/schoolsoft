@@ -1,15 +1,15 @@
 <?php
 require_once '../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::with(['homeStudents', 'classes'])->find(Session::id());
 $admins = DB::table('colegio')->select('usuario')->get();
 
 /* ------------------------------- Transaltion ------------------------------ */
@@ -62,7 +62,7 @@ $lang = new Lang([
                 <div id="students" class="mb-3 option hidden">
                     <?php
 
-                    $__tableData = $teacher->getAllStudents();
+                    $__tableData = $teacher->homeStudents;
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'students';
                     $__dataPk = 'ss';
@@ -72,7 +72,7 @@ $lang = new Lang([
 
                 <div id="classes" class="mb-3 option hidden">
                     <?php
-                    $__tableData = $teacher->classes();
+                    $__tableData = $teacher->classes;
                     $__tableDataCheckbox = true;
                     $__tableDataName = 'classes';
                     $__tableDataInfo = [

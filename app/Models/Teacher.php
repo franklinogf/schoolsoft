@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $id
+ * @property string $usuario
+ */
 class Teacher extends Model
 {
     protected $table = 'profesor';
@@ -56,5 +60,10 @@ class Teacher extends Model
         return $this->hasMany(Student::class, 'grado', 'grado')
             ->where('fecha_baja', '0000-00-00')
             ->orderBy('apellidos');
+    }
+
+    public function workPlans(): HasMany
+    {
+        return $this->hasMany(WorkPlan::class, 'id', 'id');
     }
 }

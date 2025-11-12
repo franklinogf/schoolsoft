@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasPermissions;
 
+/**
+ * @property string $year
+ * @property string $year2
+ */
 class Admin extends Model
 {
     use HasPermissions;

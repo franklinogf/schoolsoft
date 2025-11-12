@@ -1,15 +1,13 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\Util;
+
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 use Classes\Lang;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
+
 $_info = [
     "Notas" => 'Notas',
     "Pruebas-Cortas" => 'Pruebas cortas',

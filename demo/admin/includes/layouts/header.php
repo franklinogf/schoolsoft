@@ -1,7 +1,6 @@
 <?php
 
 use Classes\Route;
-use Classes\Controllers\School;
 
 global $DataTable;
 global $title;

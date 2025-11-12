@@ -83,6 +83,11 @@ class PDF extends FPDF
 
     public function Fill(?int $red = null, ?int $green = null, ?int $blue =  null)
     {
+        if ($red !== null && $green !== null && $blue !== null) {
+            $this->SetFillColor($red, $green, $blue);
+            return;
+        }
+
         $pdf = Admin::primaryAdmin()->pdf;
         $pdfColor = $pdf ? json_decode($pdf) : null;
 

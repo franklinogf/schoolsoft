@@ -1,18 +1,23 @@
 <?php
 require_once '../../../app.php';
 
-use Classes\File;
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Lang;
-use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
+use Illuminate\Database\Capsule\Manager as DB;
 
 Session::is_logged();
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
+$school = Admin::primaryAdmin();
+$unreadMessages = DB::table('foro_mensajes')->where([
+   ['enviado_por', '<>', 'p'],
+   ['id_p', $teacher->id],
+   ['leido_p', '<>', 'si'],
+   ['year', $school->year2]
+])->get();
 $lang = new Lang([
    ["Mensajes", "Inbox"],
    ["Nuevo mensaje", "New message"],
@@ -63,7 +68,7 @@ $lang = new Lang([
             </button>
             <div class="dropdown-menu">
                <h6 class="dropdown-header"><?= $lang->translation("Mensajes") ?>:</h6>
-               <a data-option="inbound" class="dropdown-item messageOption active" href="#"><?= $lang->translation("Recibidos") ?> <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span></a>
+               <a data-option="inbound" class="dropdown-item messageOption active" href="#"><?= $lang->translation("Recibidos") ?> <span class="badge badge-pill badge-info unreadMessages"><?= $unreadMessages ?></span></a>
                <a data-option="outbound" class="dropdown-item messageOption" href="#"><?= $lang->translation("Enviados") ?></a>
             </div>
          </div>
