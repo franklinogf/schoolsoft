@@ -97,6 +97,15 @@ if ($re == '10') {
 if ($re == '26') {
     $in26 = 'selected';
 }
+if ($re == '31') {
+    $in31 = 'selected';
+}
+if ($re == '32') {
+    $in32 = 'selected';
+}
+if ($re == '33') {
+    $in33 = 'selected';
+}
 
 $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->orderBy('apellidos')->get();
 
@@ -190,8 +199,6 @@ $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")->
 
         var dis = document.TarjetaNotas.cofi.value;
         document.cookie = 'variable16=' + cofi.checked + '; expires=' + now.toGMTString() + '; path=/';
-
-
 
     }
 </script>
