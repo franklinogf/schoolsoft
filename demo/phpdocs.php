@@ -2,17 +2,36 @@
 require_once 'app.php';
 
 use Illuminate\Database\Capsule\Manager;
+//accept 1 argument: the model name to generate phpdoc for (optional) it can be multiple words without spaces separated by commas
+$modelNames = $argv[1] ?? null;
+
+if ($modelNames) {
+    echo "Generando PHPDoc solo para el modelo {$modelNames}..." . PHP_EOL;
+} else {
+    echo "Generando PHPDoc para todos los modelos..." . PHP_EOL;
+}
 
 // get all the models inside the Models directory
 $modelsDir = __DIR__ . '/../app/Models';
 $modelFiles = scandir($modelsDir);
 $models = [];
 
-foreach ($modelFiles as $file) {
-    if (preg_match('/^([A-Za-z0-9_]+)\.php$/', $file, $matches)) {
-        $models[] = $matches[1];
+if ($modelNames) {
+    $models = explode(',', $modelNames);
+    foreach ($models as $model) {
+        if (!in_array("{$model}.php", $modelFiles)) {
+            echo "El modelo {$model} no existe en la carpeta Models." . PHP_EOL;
+            exit(1);
+        }
+    }
+} else {
+    foreach ($modelFiles as $file) {
+        if (preg_match('/^([A-Za-z0-9_]+)\.php$/', $file, $matches)) {
+            $models[] = $matches[1];
+        }
     }
 }
+
 
 foreach ($models as $model) {
     $properties = [];
