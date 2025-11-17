@@ -169,7 +169,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $revisado3
  * @property string $revisado4
  * @property string $revisado5
- * @property Teacher $teacher
+ * @property Teacher|null $teacher
  */
 class WeeklyPlan2 extends Model
 {
