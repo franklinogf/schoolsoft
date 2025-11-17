@@ -55,6 +55,12 @@ if ($grado == 'A' and $tarjeta == '31') {
 if ($grado == 'C' and $tarjeta == '33') {
     $tar = 'Tarjeta' . $tarjeta . 'b.php';
 }
+if ($grado == 'A' and $tarjeta == '33') {
+    $tar = 'Tarjeta' . $tarjeta . 'a.php';
+}
+if ($grado == 'B' and $tarjeta == '33') {
+    $tar = 'Tarjeta' . $tarjeta . 'b.php';
+}
 
 require_once $tar;
 

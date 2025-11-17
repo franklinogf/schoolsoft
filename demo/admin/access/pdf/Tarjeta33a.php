@@ -61,6 +61,7 @@ function Year($grado, $ss)
     $row = DB::table('acumulativa')
         ->whereRaw("ss = '$ss' and grado like '$grado%'")->orderBy('apellidos')->first();
     return $row->year ?? '';
+
 }
 
 function Maestro($grado, $ss)
@@ -107,7 +108,6 @@ function Conducta($valor)
 
 function Curso($grado, $cursos, $ss)
 {
-
   global $promedio;
   global $promedioLetters;
   global $cant;
@@ -139,7 +139,6 @@ function Curso($grado, $cursos, $ss)
   }
 }
 
-  //Cabecera de pagina
 class nPDF extends PDF
 {
   function Header()
@@ -147,7 +146,6 @@ class nPDF extends PDF
     parent::header();
     $this->Ln(-5);
   }
-
 
   function Footer()
   {
@@ -158,13 +156,10 @@ class nPDF extends PDF
     $this->Cell(70);
     $this->Cell(50, 5, 'SELLO', 0, 1);
     $this->Cell(80, 5, 'Registradora', 0, 1, 'C');
-
   }
 }
-
 $pdf = new nPDF();
 $pdf->Fill();
-
 $pdf->AliasNbPages();
 //$pdf->SetFillColor(240);
 $pdf->SetFont('Arial', '', 11);
@@ -177,7 +172,7 @@ if ($opcion == '2') {
 }
 
 foreach ($students as $estu) {
-      $pdf->AddPage();
+        $pdf->AddPage();
 $promedio = [];
 $promedio['01']=0;
 $promedio['02']=0;
@@ -187,7 +182,6 @@ $promedio['05']=0;
 $promedio['06']=0;
 $promedio['07']=0;
 $promedio['08']=0;
-$promedio['09']=0;
 $promedioLetters = [];
 $promedioLetters['01']=0;
 $promedioLetters['02']=0;
@@ -197,7 +191,6 @@ $promedioLetters['05']=0;
 $promedioLetters['06']=0;
 $promedioLetters['07']=0;
 $promedioLetters['08']=0;
-$promedioLetters['09']=0;
 $cant = [];
 $cant['01']=0;
 $cant['02']=0;
@@ -207,7 +200,6 @@ $cant['05']=0;
 $cant['06']=0;
 $cant['07']=0;
 $cant['08']=0;
-$cant['09']=0;
 $creditos = [];
 $creditos['01']=0;
 $creditos['02']=0;
@@ -217,7 +209,6 @@ $creditos['05']=0;
 $creditos['06']=0;
 $creditos['07']=0;
 $creditos['08']=0;
-$creditos['09']=0;
 
   $info1 = DB::table('year')->select("id, ss, dir1, grado, fecha")
         ->whereRaw("ss = '$estu->ss'")->orderBy('apellidos')->first();
@@ -244,67 +235,70 @@ $creditos['09']=0;
         ->whereRaw("ss = '$estu->ss' and (grado not like '12%' and grado not like '11%' and grado not like '10%' and grado not like '09%')")->get();
 
   $cursos = [
-    'INGLÉS' => ['ING061', 'ING071', 'ING081', 'ING091'],
+    'MATEMÁTICAS' => ['MAT'],
+    'INGLÉS' => ['ING'],
     'ESPAÑOL' => ['ESP'],
-    'MATEMÁTICA' => ['PAL', 'ALG', 'MAT'],
-    'CIENCIA' => ['CIE', 'CFI', 'CBI'],
-    'HISTORIA' => ['HIS', 'SOC'],
+    'CIENCIA' => ['CIE'],
+    'ESTUDIOS SOCIALES' => ['SOC'],
     'EDUCACIÓN FÍSICA' => ['EF'],
-    'SALUD' => ['SAL'],
     'EDUC. CRIST.' => ['EC'],
+    'SALUD' => ['SAL'],
     'BELLAS ARTES' => ['BA'],
-    'INGLÉS CONV.' => ['ING072'],
-    'PROYECTO STEM' => ['STE'],
-    'TECNOLOGÍA' => ['COM', 'TEC'],
-    'HUERTO' => ['COA', 'SCM'],
+    'TECNOLOGÍA' => ['TEC'],
+    'STEM' => ['SCM', 'COA', 'STE'],
+
   ];
   #1
-  $GRADOS = ['06', '07', '08','09'];
-  $WIDTH = 38;
+  $GRADOS = ['01', '02', '03','04','05'];
+  $WIDTH = 30;
   $pdf->Cell(40, 6, utf8_encode('AÑO ESCOLAR'), 1, 0, 'L', true);
   foreach ($GRADOS as $i => $GRA ) {
-    $pdf->Cell($WIDTH, 6, Year($GRA, $estu->ss), 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C', true);
-  }
+        $pdf->Cell($WIDTH, 6, Year($GRA, $estu->ss), 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C', true);
+    }
   #2
   $pdf->Cell(40, 6, '', 1, 0, 'L', true);
   $pdf->SetFont('Arial', 'B', 11);
-  $WIDTH = 38;
-  $pdf->Cell($WIDTH, 6, '06', 1, 0, 'C', true);
-  $pdf->Cell($WIDTH, 6, '07', 1, 0, 'C', true);
-  $pdf->Cell($WIDTH, 6, '08', 1, 0, 'C', true);
-  $pdf->Cell($WIDTH, 6, '09', 1, 1, 'C', true);
+  $pdf->Cell(30, 6, 'Primero', 1, 0, 'C', true);
+  $pdf->Cell(30, 6, 'Segundo', 1, 0, 'C', true);
+  $pdf->Cell(30, 6, 'Tercero', 1, 0, 'C', true);
+  $pdf->Cell(30, 6, 'Cuarto', 1, 0, 'C', true);
+  $pdf->Cell(30, 6, 'Quinto', 1, 1, 'C', true);
   $pdf->Cell(40, 6, 'Asignaturas', 1, 0, 'L', true);
   $pdf->SetFont('Arial', '', 10);
-  $pdf->Cell(19, 6, 'Sem 1', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 2', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 1', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 2', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 1', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 2', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 1', 1, 0, 'C', true);
-  $pdf->Cell(19, 6, 'Sem 2', 1, 1, 'C', true);
-
+  $pdf->Cell(15, 6, 'Sem 1', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 2', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 1', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 2', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 1', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 2', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 1', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 2', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 1', 1, 0, 'C', true);
+  $pdf->Cell(15, 6, 'Sem 2', 1, 1, 'C', true);
   $pdf->SetFont('Arial', '', 10);
-
   foreach ($cursos as $nombre => $curso) {
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(40, 6, utf8_encode($nombre), 1, 0, 'L', true);
     $pdf->SetFont('Arial', '', 11);
     foreach ($GRADOS as $i => $GRA ) {
       $grade = Curso($GRA, $curso, $estu->ss);
-      $pdf->Cell(19, 6, $grade[0] ?? '', 1, 0, 'C');
-      $pdf->Cell(19, 6, $grade[1] ?? '', 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C');
+      $pdf->Cell(15, 6, $grade[0] ?? '', 1, 0, 'C');
+      $pdf->Cell(15, 6, $grade[1] ?? '', 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C');
     }
   }
-
   $pdf->SetFont('Arial', '', 10);
   $pdf->Cell(40, 6, 'PROMEDIO', 1, 0, 'L', true);
   $pdf->SetFont('Arial', 'B', 11);
   foreach ($GRADOS as $i => $GRA ) {
     $prom = ($promedio[$GRA] == 0) ? 0 : round(($promedio[$GRA] / $cant[$GRA]));
-    $pdf->Cell(38, 6, $prom == 0 ? '' : round($prom) . ' ' . NumberToLetter(round($prom)), 1, ($i == 4) ? 1 : 0, 'C');
+    $pdf->Cell(30, 6, $prom == 0 ? '' : round($prom) . ' ' . NumberToLetter(round($prom)), 1, ($i == 5) ? 1 : 0, 'C');
   }
 
+  // Segunda parte
+   $pdf->Ln(3);
+  // var_dump($cant);
+  // var_dump($promedio);
+  // echo '</pre>';
   $pdf->SetFont('Arial', '', 10);
   $gpaProm = array_sum($promedio);
   $gpaCant = array_sum($cant);
@@ -316,18 +310,18 @@ $creditos['09']=0;
         ->whereRaw("valor = '$gpa3'")->first();
   $punto = number_format($nota1->punto,2) ?? '';
 
-  $pdf->Ln(8);
+  $pdf->Ln(5);
   $pdf->Cell(0, 5, "GPA: $gpa / $punto", 0, 1);
   $pdf->Cell(27, 5, "Comentarios:", 0, 1);
-  $pdf->Cell(0, 5, $memsa1 , 'B', 1);
-  $pdf->Cell(0, 5, $memsa2 , 'B', 1);
+  $pdf->Cell(0, 5, $memsa1 ?? '', 'B', 1);
+  $pdf->Cell(0, 5, $memsa2 ?? '', 'B', 1);
   $pdf->Ln(5);
   $pdf->Cell(0, 5, "Expedido en Juncos P.R. hoy " . date('Y-m-d'), 0, 1);
   $pdf->Ln(5);
   $pdf->Cell(0, 5, 'MS - Muy Satisfactorio', 0, 1);
   $pdf->Cell(0, 5, 'P - Pendiente', 0, 1);
   $pdf->Ln(5);
-  $pdf->Cell(0, 5, utf8_encode("La información se obtuvo del récord acumulativo de la oficina del director(a). No tiene borrones ni tachaduras."), 0, 1);
+  $pdf->Cell(0, 5, utf8_encode('La información se obtuvo del récord acumulativo de la oficina del director(a). No tiene borrones ni tachaduras.'), 0, 1);
   $pdf->Ln(5);
 }
 $pdf->Output();
