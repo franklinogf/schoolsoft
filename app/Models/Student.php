@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Enums\Gender;
 use App\Models\Scopes\YearScope;
-use Carbon\Carbon;
-use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Carbon\CarbonInterface;
 
 /**
  * @property string $ss
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $id
  * @property string $genero
  * @property string $rema
- * @property mixed $fecha
+ * @property CarbonInterface $fecha
  * @property string $cta
  * @property string $alias
  * @property string $verano
@@ -89,7 +89,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $desc3
  * @property string $desc4
  * @property string $nuevo
- * @property mixed $fecha_matri
+ * @property CarbonInterface $fecha_matri
  * @property int $codigobaja
  * @property int $edad
  * @property string $gra2
@@ -192,6 +192,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $codigopin
  * @property Collection<int, Classes> $classes
  * @property Family|null $family
+ * @property StudentNeed|null $needs
  */
 class Student extends Model
 {
@@ -283,5 +284,10 @@ class Student extends Model
                     ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
                     : __NO_PROFILE_PICTURE_STUDENT_MALE),
         );
+    }
+
+    public function needs(): HasOne
+    {
+        return $this->hasOne(StudentNeed::class, 'ss', 'ss');
     }
 }
