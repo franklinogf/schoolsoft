@@ -121,6 +121,7 @@ use Illuminate\Support\Collection;
  * @property Collection<int, Classes> $classes
  * @property Collection<int, Student> $homeStudents
  * @property Collection<int, WorkPlan> $workPlans
+ * @property Collection<int, WeeklyPlan> $weeklyPlans
  */
 class Teacher extends Model
 {
@@ -172,5 +173,10 @@ class Teacher extends Model
     public function workPlans(): HasMany
     {
         return $this->hasMany(WorkPlan::class, 'id', 'id');
+    }
+
+    public function weeklyPlans(): HasMany
+    {
+        return $this->hasMany(WeeklyPlan::class, 'id', 'id');
     }
 }

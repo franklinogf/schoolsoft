@@ -7,6 +7,7 @@ use Classes\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasPermissions;
+
 /**
  * @property string $colegio
  * @property string $dir1
@@ -265,8 +266,8 @@ class Admin extends Model
         return [
             'environments' => 'array',
             'constants' => 'array',
-            'theme' => 'json',
-            'pdf' => 'json'
+            'theme' => 'array',
+            'pdf' => 'array'
         ];
     }
 }
