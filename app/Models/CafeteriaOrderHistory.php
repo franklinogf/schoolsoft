@@ -8,6 +8,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+
+
+
+/**
+ * @property int $id
+ * @property string $ss
+ * @property int $id_compra
+ * @property string $year
+ * @property int $despachado
+ * @property string $creado_en
+ * @property string $fecha
+ * @property Student|null $student
+ * @property CafeteriaOrder|null $order
+ */
 class CafeteriaOrderHistory extends Model
 {
     protected $table = 'cafeteria_orders';

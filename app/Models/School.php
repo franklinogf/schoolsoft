@@ -3,7 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+/**
+ * @property int $id
+ * @property array $environments
+ * @property array $features
+ * @property array $theme
+ * @property array $pdf
+ * @property array $data
+ */
 class School extends Model
 {
     protected $connection = 'central';

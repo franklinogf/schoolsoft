@@ -7,6 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+
+/**
+ * @property int $id
+ * @property string $user
+ * @property string $from
+ * @property string $from_name
+ * @property array $to
+ * @property string $reply_to
+ * @property string $message
+ * @property string $text
+ * @property string $subject
+ * @property array $attachments
+ * @property mixed $status
+ * @property string $failed_reason
+ * @property mixed $created_at
+ * @property mixed $sent_at
+ * @property string $year
+ * @property string $id2
+ * @property array $social_securities
+ * @property Family|null $family
+ */
 class EmailQueue extends Model
 {
     protected $table = 'email_queue';

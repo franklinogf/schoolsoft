@@ -4,34 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
- * StudentDocument Model
- * 
  * @property int $id
  * @property string $ss
  * @property string $grado
- * @property string $codigo
+ * @property int $codigo
  * @property string $desc1
  * @property string $entrego
  * @property string $year
  * @property string $fecha
  * @property string $nap
  * @property string $fesp
+ * @property Student|null $student
  */
 class StudentDocument extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    
     protected $table = 'docu_estudiantes';
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
+    
     public $timestamps = false;
 
     /**

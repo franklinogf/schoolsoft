@@ -10,10 +10,117 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
+ * @property string $nombre
+ * @property string $apellidos
+ * @property string $ss
+ * @property string $tel_res
+ * @property string $tel_emer
+ * @property string $cel
+ * @property string $posicion
+ * @property string $genero
+ * @property string $fecha_nac
+ * @property string $fecha_ini
+ * @property string $fecha_daja
+ * @property string $nivel
+ * @property string $preparacion1
+ * @property string $preparacion2
+ * @property string $grado
+ * @property string $email1
+ * @property string $email2
+ * @property string $dir1
+ * @property string $dir2
+ * @property string $pueblo1
+ * @property string $esta1
+ * @property string $zip1
+ * @property string $dir3
+ * @property string $dir4
+ * @property string $pueblo2
+ * @property string $esta2
+ * @property string $zip2
+ * @property string $club1
+ * @property string $club2
+ * @property string $club3
+ * @property string $club4
+ * @property string $club5
  * @property string $usuario
+ * @property string $clave
+ * @property string $tipo
+ * @property mixed $foto
+ * @property string $grupo
+ * @property string $activo
+ * @property string $idioma
+ * @property string $ufecha
+ * @property string $re_e
+ * @property string $year
+ * @property string $cel_com
+ * @property string $alias
+ * @property string $baja
+ * @property string $pre1
+ * @property string $pre2
+ * @property string $pre3
+ * @property string $pre4
+ * @property string $pre5
+ * @property string $vi1
+ * @property string $vi2
+ * @property string $vi3
+ * @property string $vi4
+ * @property string $vi5
+ * @property string $se1
+ * @property string $se2
+ * @property string $se3
+ * @property string $se4
+ * @property string $se5
+ * @property string $comp
+ * @property string $lic1
+ * @property string $lic2
+ * @property string $lic3
+ * @property string $lic4
+ * @property string $lp1
+ * @property string $lp2
+ * @property string $lp3
+ * @property string $lp4
+ * @property string $fex1
+ * @property string $fex2
+ * @property string $fex3
+ * @property string $fex4
+ * @property string $pe1
+ * @property string $pe2
+ * @property string $pe3
+ * @property string $pe4
+ * @property string $pe5
+ * @property string $pe6
+ * @property string $pe7
+ * @property string $pe8
+ * @property int $dep
+ * @property string $dep_des
+ * @property string $docente
+ * @property string $foto_name
+ * @property string $email_smtp
+ * @property string $clave_email
+ * @property string $host_smtp
+ * @property int $port
+ * @property string $host
+ * @property int $tipo_foro
+ * @property string $avatar
+ * @property int $fechas
+ * @property int $tri
+ * @property string $pe9
+ * @property string $pe10
+ * @property string $pe11
+ * @property string $pe12
+ * @property string $pe13
+ * @property string $pe14
+ * @property string $pe15
+ * @property string $pe16
+ * @property string $cbarra
+ * @property Collection<int, Subject> $subjects
+ * @property Collection<int, Classes> $classes
+ * @property Collection<int, Student> $homeStudents
+ * @property Collection<int, WorkPlan> $workPlans
  */
 class Teacher extends Model
 {

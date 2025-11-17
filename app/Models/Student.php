@@ -8,15 +8,12 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property Family $family
- * @property string $fullName
- * @property string $reversedFullName
- * @property string $profilePicture
  * @property string $ss
  * @property string $year
  * @property string $grado
@@ -25,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $id
  * @property string $genero
  * @property string $rema
- * @property CarbonInterface $fecha
+ * @property mixed $fecha
  * @property string $cta
  * @property string $alias
  * @property string $verano
@@ -92,17 +89,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $desc3
  * @property string $desc4
  * @property string $nuevo
- * @property CarbonInterface $fecha_matri
- * @property string $codigobaja
- * @property string $edad
+ * @property mixed $fecha_matri
+ * @property int $codigobaja
+ * @property int $edad
  * @property string $gra2
  * @property string $imagen
  * @property string $tipo
  * @property string $act2
  * @property string $usuario
  * @property string $clave
- * @property string $tipo_foro
- * @property string $mt
+ * @property int $tipo_foro
+ * @property int $mt
  * @property string $email
  * @property string $avatar
  * @property string $padre
@@ -121,14 +118,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $emailp
  * @property string $telp
  * @property string $id3
- * @property string $raza
- * @property string $rel
+ * @property int $raza
+ * @property int $rel
  * @property float $cantidad
  * @property float $cantidad_alerta
  * @property string $f_deposito
  * @property string $cbarra
  * @property string $avisar
- * @property string $transporte
+ * @property int $transporte
  * @property string $municipio
  * @property string $acomodo
  * @property string $trajo
@@ -166,7 +163,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $pago_p_c
  * @property string $ent3
  * @property string $p_c
- * @property string $p_c_trxID
+ * @property int $p_c_trxID
  * @property string $p_c_fecha
  * @property string $p_c_hora
  * @property string $re_ma
@@ -189,10 +186,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $pm1_hora
  * @property string $pm2_hora
  * @property string $pm3_hora
+ * @property float $balance_a
  * @property string $pfoto
  * @property string $hde
  * @property string $codigopin
- * 
+ * @property Collection<int, Classes> $classes
+ * @property Family|null $family
  */
 class Student extends Model
 {
