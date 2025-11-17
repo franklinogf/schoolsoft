@@ -3,12 +3,11 @@
 namespace Classes;
 
 use App\Models\Admin;
-use App\Models\School;
 use Classes\PDF\Traits\Codabar;
 use Classes\Util;
-// use Classes\Controllers\School;
 use Classes\PDF\Traits\Dash;
 use Classes\PDF\Traits\Html;
+use Classes\PDF\Traits\MultiCells;
 use Classes\PDF\Traits\Rotate;
 use FPDF;
 use Illuminate\Support\Str;
@@ -16,7 +15,7 @@ use setasign\Fpdi\Fpdi;
 
 class PDF extends FPDF
 {
-    use Codabar, Rotate, Html, Dash;
+    use Codabar, Rotate, Html, Dash, MultiCells;
     public $footer = 15;
     public $header = true;
     public $headerFirstPage = false;
@@ -89,7 +88,7 @@ class PDF extends FPDF
         }
 
         $pdf = Admin::primaryAdmin()->pdf;
-        $pdfColor = $pdf ? json_decode($pdf) : null;
+        $pdfColor = $pdf ? json_decode((string) $pdf) : null;
 
         $red = $pdfColor?->red ?? config('pdf.fill_color.red');
         $green = $pdfColor?->green ?? config('pdf.fill_color.green');
