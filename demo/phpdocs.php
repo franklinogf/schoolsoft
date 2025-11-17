@@ -139,10 +139,14 @@ foreach ($models as $model) {
 
     // Verificar si hay propiedades tipo Collection
     $hasCollectionProperty = false;
+    $hasDateProperty = false;
     foreach ($properties as $property => $phpType) {
         $phpdoc .= " * @property {$phpType} \${$property}\n";
         if (str_contains($phpType, 'Collection<')) {
             $hasCollectionProperty = true;
+        }
+        if (str_contains($phpType, 'CarbonInterface')) {
+            $hasDateProperty = true;
         }
     }
     $phpdoc .= " */\n";
@@ -175,6 +179,20 @@ foreach ($models as $model) {
         // Si ya existe Eloquent\Collection, no hacer nada
     }
 
+    // Agregar import de CarbonInterface si es necesario y no existe
+    if ($hasDateProperty) {
+        $hasCarbonImport = preg_match('/use\s+Carbon\\\\CarbonInterface;/', $contents);
+        if (!$hasCarbonImport) {
+            // Buscar la última línea "use ..." antes de la clase
+            $contents = preg_replace(
+                "/(use\s+[^;]+;)\s*\n\s*\n/",
+                "$1\nuse Carbon\\CarbonInterface;\n\n",
+                $contents,
+                1
+            );
+        }
+    }
+
     // 3. Insertar el nuevo PHPDoc antes de "class ModelName"
     $contents = preg_replace(
         "/class\s+{$model}\s+/",
@@ -199,6 +217,7 @@ function mergePropertiesWithCasts(array &$properties, array $casts): array
             'bool', 'boolean' => 'bool',
             'array', 'json' => 'array',
             'collection' => 'Collection',
+            'date', 'date:Y-m-d' => 'CarbonInterface',
             default => 'mixed',
         };
 
