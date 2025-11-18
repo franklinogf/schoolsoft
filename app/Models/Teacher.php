@@ -179,4 +179,9 @@ class Teacher extends Model
     {
         return $this->hasMany(WeeklyPlan::class, 'id', 'id');
     }
+
+    public function classPlans(): HasMany
+    {
+        return $this->hasMany(ClassPlan::class, 'id_profesor', 'id');
+    }
 }
