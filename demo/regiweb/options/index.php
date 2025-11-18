@@ -29,7 +29,7 @@ $options = [
             // ['name' => __('Plan maestro'), 'link' => '#'],
             ['name' => __('Plan de clase'), 'link' => 'classplan/index.php'],
             ['name' => __('Plan en inglés'), 'link' => 'englishplan/index.php'],
-            ['name' => __('Plan de unidad'), 'link' => '#'],
+            ['name' => __('Plan de unidad'), 'link' => 'unitplan/index.php'],
             ['name' => __('Plan de lección en inglés'), 'link' => '#'],
         ]
     ],
