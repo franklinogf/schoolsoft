@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -46,7 +47,7 @@ class CafeteriaOrder extends Model
         return $this->hasMany(CafeteriaOrderItem::class, 'id_compra');
     }
 
-    public function buyer()
+    public function buyer(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'ss', 'ss');
     }

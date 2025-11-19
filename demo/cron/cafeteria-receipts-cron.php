@@ -21,6 +21,7 @@ $orders = CafeteriaOrder::query()
             ->orWhere('tdp', '7');
     })
     ->where('receipt_sent', '0')
+    ->where('cn', '1')
     ->orderBy('id')
     ->limit(100)
     ->get();
@@ -73,9 +74,10 @@ if ($orders->isNotEmpty()) {
                 ->subject($subject)
                 ->body($message)
                 ->text($text)
-                ->attach("{$target_dir}/recibo_{$id_compra}.pdf", "Recibo {$date}.pdf")
+                ->attach("{$target_dir}/temp-file.pdf", "Recibo {$date}.pdf")
                 ->send();
             $compra->markReceiptSent();
+            echo "Recibo enviado para compra #{$id_compra} a " . json_encode($to) . "\n";
         } catch (\Exception $e) {
             $compra->markReceiptFailed($e->getMessage());
             echo 'Error: ' . $e->getMessage() . 'Emails: ' . json_encode($to);
