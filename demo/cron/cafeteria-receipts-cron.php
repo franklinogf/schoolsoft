@@ -1,38 +1,36 @@
 <?php
-require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
-date_default_timezone_set("America/Puerto_Rico");
-$mysqli = new mysqli("localhost", "u291111878_cbl", "Amc@3151", "u291111878_cbl");
+require_once __DIR__ . '/../app.php';
+
+use App\Models\CafeteriaOrder;
+use Classes\Email;
+
 const LIMIT = 2;
-// Check connection
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-    exit;
-}
 $target_dir = __DIR__ . "/temp-folder";
 
 if (!is_dir($target_dir)) {
     mkdir($target_dir, 0777);
 }
 
-$resend = Resend::client('re_f75hJQZe_9GMN9VcnXKr6dYUb41foEvQG');
-$emails = $mysqli->query("SELECT * FROM colegio WHERE usuario = 'administrador'");
-if ($emails) {
-    $row = $emails->fetch_assoc();
-    $year = $row['year2'];
-    $reply_to = $row['correo'];
-    $from = "{$row['colegio']} <cbl@schoolsoftusa.com>";
-    $emails->free_result();
-}
 $date = date('Y-m-d');
 
-$emails = $mysqli->query("SELECT * FROM compra_cafeteria WHERE DATE(fecha) = '$date' AND `year` = '$year' AND (tdp = '3' OR tdp = '4' OR tdp = '7') and receipt_sent='0' ORDER BY id LIMIT 100");
-if ($emails) {
+$orders = CafeteriaOrder::query()
+    ->whereDate('fecha', $date)
+    ->where(function ($query) {
+        $query->where('tdp', '3')
+            ->orWhere('tdp', '4')
+            ->orWhere('tdp', '7');
+    })
+    ->where('receipt_sent', '0')
+    ->orderBy('id')
+    ->limit(100)
+    ->get();
+
+if ($orders->isNotEmpty()) {
     $count = 0;
-    while ($compra = $emails->fetch_object()) {
+    foreach ($orders as $compra) {
 
         $studentSS = $compra->ss;
-        $studentResult = $mysqli->query("SELECT id, balance_a, mt, cantidad FROM `year` WHERE ss = '$studentSS' AND `year` = '$year'");
-        $student = $studentResult->fetch_object();
+        $student = $compra->buyer;
         $balanceA = $student->balance_a;
         $studentMT = $student->mt;
         $studentID = $student->id;
@@ -48,61 +46,42 @@ if ($emails) {
     </center>\n\n
     <p>$correoMensaje</p>";
 
-        $uploadHost = "https://schoolsoftpr.org/emails/cbl";
         require __DIR__ . "/info_recibo.php";
 
-        $emailsResult = $mysqli->query("SELECT email_m,email_p FROM madre  WHERE id='$studentID'");
-        $emails = $emailsResult->fetch_object();
-        if (!$emailsResult) {
+        $family = $student->family;
+        if (!$family) {
             continue;
         }
 
         $to = [];
-        if ($emails->email_p != "" || $emails->email_m != "") {
+        if ($family->email_p != "" || $family->email_m != "") {
 
-            if (trim(str_replace(['\r', '\n', '\r\n'], '', $emails->email_p)) != "") {
-                $to[] = $emails->email_p;
+            if (trim(str_replace(['\r', '\n', '\r\n'], '', $family->email_p)) != "") {
+                $to[] = $family->email_p;
             }
-            if (trim(str_replace(['\r', '\n', '\r\n'], '', $emails->email_m)) != "") {
-                $to[] = $emails->email_m;
+            if (trim(str_replace(['\r', '\n', '\r\n'], '', $family->email_m)) != "") {
+                $to[] = $family->email_m;
             }
-
         }
-
-        $emailsResult->free_result();
 
         if (sizeof($to) === 0) {
             continue;
         }
 
         try {
-
-            $sentEmail = $resend->emails->send([
-                'from' => $from,
-                'to' => $to,
-                'reply_to' => $reply_to,
-                'subject' => $subject,
-                'html' => $message,
-                'text' => $text,
-                'bcc' => 'recibos@colegiobautista.org',
-                'attachments' => [
-                    [
-                        "path" => "{$uploadHost}/temp-folder/temp-file.pdf",
-                        "filename" => "Recibo {$date}.pdf",
-                    ],
-                ],
-            ]);
-            $dt = new DateTime("now", new DateTimeZone("America/Puerto_Rico"));
-            $timestamp = $dt->format('Y-m-d H:i:s');
-            // $timestamp = date('Y-m-d H:i:s');
-            $mysqli->query("UPDATE `compra_cafeteria` SET `receipt_sent` = '1', `sent_at`='$timestamp', failed_reason=null WHERE id = $compra->id");
+            Email::to($to)
+                ->subject($subject)
+                ->body($message)
+                ->text($text)
+                ->attach("{$target_dir}/recibo_{$id_compra}.pdf", "Recibo {$date}.pdf")
+                ->send();
+            $compra->markReceiptSent();
         } catch (\Exception $e) {
-            $mysqli->query("UPDATE `compra_cafeteria` SET `receipt_sent` = '2', failed_reason = '{$e->getMessage()}' WHERE id = $compra->id");
+            $compra->markReceiptFailed($e->getMessage());
             echo 'Error: ' . $e->getMessage() . 'Emails: ' . json_encode($to);
             continue;
         }
 
-        echo $sentEmail->toJson();
         $count++;
         if ($count >= LIMIT) {
             $count = 0;
@@ -110,6 +89,6 @@ if ($emails) {
         }
     }
 }
-$emails->free_result();
+
 
 // /domains/schoolsoftpr.org/public_html/emails/cbl/cafeteria-receipts-cron.php

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -48,5 +49,23 @@ class CafeteriaOrder extends Model
     public function buyer()
     {
         return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+
+    public function markReceiptSent(): void
+    {
+        $this->update([
+            'receipt_sent' => 1,
+            'sent_at' => Carbon::now('America/Puerto_Rico'),
+            'failed_reason' => null,
+        ]);
+    }
+
+    public function markReceiptFailed(string $reason): void
+    {
+        $this->update([
+            'receipt_sent' => 2,
+            'failed_reason' => $reason,
+            'sent_at' => null,
+        ]);
     }
 }
