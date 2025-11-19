@@ -14,13 +14,13 @@ if (!is_dir($target_dir)) {
 $date = date('Y-m-d');
 
 $orders = CafeteriaOrder::query()
+    ->pendingReceipts()
     ->whereDate('fecha', $date)
     ->where(function ($query) {
         $query->where('tdp', '3')
             ->orWhere('tdp', '4')
             ->orWhere('tdp', '7');
     })
-    ->where('receipt_sent', '0')
     ->where('cn', '1')
     ->orderBy('id')
     ->limit(100)

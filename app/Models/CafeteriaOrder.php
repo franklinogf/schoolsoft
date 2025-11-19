@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\YearScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -54,6 +55,11 @@ class CafeteriaOrder extends Model
     public function buyer(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+
+    public function scopePendingReceipts(Builder $query): Builder
+    {
+        return $query->where('receipt_sent', self::PENDING);
     }
 
     public function markReceiptSent(): void
