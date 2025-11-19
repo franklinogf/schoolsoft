@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 // TARJETA DE NOTAS IMEI
 use Classes\PDF;
 use Classes\Lang;

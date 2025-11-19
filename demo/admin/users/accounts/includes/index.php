@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 use App\Models\Family;
 use App\Models\Admin;

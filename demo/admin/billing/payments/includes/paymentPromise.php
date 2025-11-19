@@ -3,7 +3,7 @@ use Classes\Controllers\Parents;
 use Classes\Route;
 use Classes\DataBase\DB;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {

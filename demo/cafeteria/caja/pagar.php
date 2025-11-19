@@ -6,7 +6,7 @@ use App\Models\Student;
 use Classes\DataBase\DB;
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 $admin = Admin::primaryAdmin();
 $year = $admin->year;
 

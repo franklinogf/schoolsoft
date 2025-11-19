@@ -5,7 +5,7 @@ use Classes\DataBase\DB;
 use Classes\Lang;
 use Classes\Route;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 $lang = new Lang([
   ['Caja', 'Cash register'],

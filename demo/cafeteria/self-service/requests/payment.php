@@ -4,7 +4,7 @@ use App\Models\Admin;
 use App\Models\Student;
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 
 date_default_timezone_set("America/Puerto_Rico");
 $school = Admin::primaryAdmin();

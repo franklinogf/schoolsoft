@@ -5,7 +5,7 @@ session_start();
 $id = $_SESSION['id1'];
 $usua = $_SESSION['usua1'];
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;

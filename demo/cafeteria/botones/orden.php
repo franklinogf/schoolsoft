@@ -2,7 +2,7 @@
 
 use App\Models\CafeteriaButton;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 $ids = $_POST['ids'];
 $count = 1;
 

@@ -10,6 +10,9 @@ use Core\TranslatorFactory;
 session_start();
 require_once 'database.php';
 
+if (defined('__SCHOOL_ACRONYM')) {
+    return;
+}
 
 
 /* -------------------------------------------------------------------------- */

@@ -3,7 +3,7 @@ alert("Hello! I am an alert box1111!!");
 </script>
 
 <?php
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 use Classes\Lang;
 use Classes\Route;

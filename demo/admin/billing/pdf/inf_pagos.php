@@ -4,7 +4,7 @@ if ($_POST['desc'] == 'D') {
     //   exit;
 }
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 
 use Classes\Controllers\School;
 use Classes\DataBase\DB;

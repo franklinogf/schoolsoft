@@ -1,5 +1,5 @@
 <?php
-require_once '../app.php';
+require_once __DIR__ . '/app.php';
 
 use Classes\DataBase\DB;
 
@@ -8,6 +8,7 @@ use Classes\DataBase\DB;
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------ table Padres ------------------------------ */
+
 DB::table("padres")->alter("
 ADD COLUMN IF NOT EXISTS `average1` INT NULL,
 ADD COLUMN IF NOT EXISTS `average2` INT NULL,

@@ -1,6 +1,6 @@
 <?php
 // Colegio Bautista de Gurabo
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;

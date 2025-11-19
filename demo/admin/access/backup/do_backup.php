@@ -1,6 +1,6 @@
 <?php
 // This script performs the actual backup work
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 
 use Ifsnop\Mysqldump\Mysqldump;
 use Illuminate\Database\Capsule\Manager as DB;

@@ -3,7 +3,7 @@
 use App\Models\CafeteriaButton;
 use Classes\Route;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 $buttons = CafeteriaButton::all();
 

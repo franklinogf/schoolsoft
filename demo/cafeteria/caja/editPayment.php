@@ -5,7 +5,7 @@ use App\Models\CafeteriaOrderItem;
 use App\Models\Student;
 use Classes\DataBase\DB;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 // general variables
 

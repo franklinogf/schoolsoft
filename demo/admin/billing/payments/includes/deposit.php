@@ -5,7 +5,7 @@ use App\Models\Student;
 use Classes\Route;
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 $depositTypes = [
     1 => "Cash",
     2 => "Donación",

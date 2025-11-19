@@ -2,7 +2,7 @@
 header("Content-type: application/vnd.ms-excel");
 header("Content-Disposition: attachment; filename=Informacion personal.xls");
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;

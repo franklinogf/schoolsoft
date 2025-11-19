@@ -4,7 +4,7 @@ use App\Models\Student;
 use App\Services\EvertecPayment;
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

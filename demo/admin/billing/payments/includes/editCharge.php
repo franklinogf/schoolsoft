@@ -3,7 +3,7 @@ use Classes\Route;
 use Classes\DataBase\DB;
 use Classes\Controllers\Student;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $id = $_POST['id'];

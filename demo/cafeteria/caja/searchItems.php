@@ -1,7 +1,7 @@
 <?php
 use Classes\DataBase\DB;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 $data = [];
 if (isset($_POST['id'])) {

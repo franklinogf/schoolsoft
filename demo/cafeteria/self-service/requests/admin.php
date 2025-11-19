@@ -2,7 +2,7 @@
 
 use App\Models\Admin;
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $school = Admin::primaryAdmin();
     if (!$school) {

@@ -4,7 +4,7 @@ use App\Models\Family;
 use Classes\Route;
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {

@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 // le falta las fotos
 use Classes\pdf_codabar;
 use Classes\Session;

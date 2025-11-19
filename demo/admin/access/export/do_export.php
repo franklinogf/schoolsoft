@@ -9,7 +9,7 @@ ini_set('error_log', $errorLogPath);
 ini_set('log_errors', '1');
 ini_set('display_errors', '0');
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 
 use App\Models\Admin;
 use App\Models\Scopes\YearScope;

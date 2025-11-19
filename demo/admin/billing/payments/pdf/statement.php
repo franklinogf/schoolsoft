@@ -5,7 +5,7 @@ use Classes\Controllers\Student;
 use Classes\DataBase\DB;
 use Classes\Email;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
 $paymentTypes = [
     '1' => 'Efectivo',

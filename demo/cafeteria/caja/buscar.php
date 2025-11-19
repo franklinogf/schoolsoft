@@ -4,7 +4,7 @@ use Classes\Controllers\School;
 use Classes\DataBase\DB;
 use Classes\Util;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 $colegio = new School();
 $year = $colegio->year();
 

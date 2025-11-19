@@ -3,7 +3,7 @@
 use Classes\DataBase\DB;
 use Classes\Route;
 
-require_once '../../../../../app.php';
+require_once __DIR__ . '/../../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

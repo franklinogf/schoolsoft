@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Capsule\Manager;
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $buttons = Manager::table('T_cafeteria')->orderBy('orden')->get();
   $foods = [];

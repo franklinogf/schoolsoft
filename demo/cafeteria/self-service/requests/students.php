@@ -3,7 +3,7 @@
 use App\Models\Admin;
 use App\Models\Student;
 
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 $school = Admin::primaryAdmin();
 $year = $school->year;
 

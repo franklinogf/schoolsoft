@@ -1,5 +1,5 @@
 <?php
-require_once 'app.php';
+require_once __DIR__ . '/app.php';
 
 use Illuminate\Database\Capsule\Manager;
 //accept 1 argument: the model name to generate phpdoc for (optional) it can be multiple words without spaces separated by commas

@@ -3,7 +3,7 @@
 use Classes\Controllers\School;
 use Classes\DataBase\DB;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 $school = new School();
 $year = $school->year();

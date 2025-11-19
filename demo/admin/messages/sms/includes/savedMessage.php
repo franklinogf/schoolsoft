@@ -4,7 +4,7 @@ use Classes\DataBase\DB;
 use Classes\Controllers\School;
 use Classes\Session;
 
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
 if ($_SERVER["REQUEST_METHOD"] === 'DELETE') {
     parse_str(file_get_contents("php://input"), $_DELETE);

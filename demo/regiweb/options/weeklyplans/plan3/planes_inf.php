@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 require_once '../../../../../vendor/autoload.php';
 
 use App\Models\Admin;

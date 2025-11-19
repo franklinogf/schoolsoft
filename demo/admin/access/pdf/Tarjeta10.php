@@ -1,6 +1,6 @@
 <?php
 // ACADEMIA LA MILAGROSA
-require_once '../../../app.php';
+require_once __DIR__ . '/../../../app.php';
 $anc = 5;
 use Classes\PDF;
 use Classes\Lang;

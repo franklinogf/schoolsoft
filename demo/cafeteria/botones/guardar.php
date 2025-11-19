@@ -3,7 +3,7 @@
 use App\Models\CafeteriaButton;
 use Classes\DataBase\DB;
 
-require_once '../../app.php';
+require_once __DIR__ . '/../../app.php';
 
 $titulo = $_POST['titulo'];
 $precio = $_POST['price'];
