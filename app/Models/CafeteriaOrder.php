@@ -38,6 +38,10 @@ class CafeteriaOrder extends Model
     public $timestamps = false;
     protected $guarded = [];
 
+    public const string SENT = '1';
+    public const string FAILED = '2';
+    public const string PENDING = '0';
+
     protected static function booted(): void
     {
         static::addGlobalScope(new YearScope);
@@ -55,7 +59,7 @@ class CafeteriaOrder extends Model
     public function markReceiptSent(): void
     {
         $this->update([
-            'receipt_sent' => 1,
+            'receipt_sent' => self::SENT,
             'sent_at' => Carbon::now('America/Puerto_Rico'),
             'failed_reason' => null,
         ]);
@@ -64,7 +68,7 @@ class CafeteriaOrder extends Model
     public function markReceiptFailed(string $reason): void
     {
         $this->update([
-            'receipt_sent' => 2,
+            'receipt_sent' => self::FAILED,
             'failed_reason' => $reason,
             'sent_at' => null,
         ]);
