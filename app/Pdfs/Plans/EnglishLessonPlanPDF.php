@@ -1,44 +1,14 @@
 <?php
 
-namespace Classes\PDF;
+namespace App\Pdfs\Plans;
 
 use App\Models\EnglishLessonPlan;
+use App\Pdfs\PdfInterface;
 use Classes\PDF;
 
-class EnglishLessonPlanPDF extends PDF
+class EnglishLessonPlanPDF extends PDF implements PdfInterface
 {
     private EnglishLessonPlan $plan;
-
-    private array $transversalThemes = [
-        ['title' => 'Educate to love each other', 'length' => 5],
-        ['title' => 'Educate for citizenship', 'length' => 5],
-        ['title' => 'Educate for healthy communion', 'newLine' => true],
-        ['title' => 'Educate for conservation of Environment', 'length' => 5],
-        ['title' => 'Educate for Promotion of Life', 'length' => 5],
-        ['title' => 'Educate for Transcendence', 'length' => 5],
-        ['title' => 'Educate for Ethical Leadership', 'newLine' => true],
-    ];
-
-    private array $integrations = [
-        ['title' => 'Spanish', 'length' => 5],
-        ['title' => 'History', 'length' => 5],
-        ['title' => 'Science', 'length' => 5],
-        ['title' => 'Math', 'length' => 5],
-        ['title' => 'Art', 'length' => 5],
-        ['title' => 'Physical Education', 'length' => 5],
-        ['title' => 'Health', 'length' => 5],
-        ['title' => 'Technology', 'length' => 5],
-        ['title' => 'Others', 'newLine' => true],
-    ];
-
-    private array $modifications = [
-        'Seating',
-        'Additional Time',
-        'Individualized help',
-        'Additional time for tests',
-        'Positive reinforcement',
-        'Others',
-    ];
 
     public function __construct(EnglishLessonPlan $plan)
     {
@@ -46,20 +16,41 @@ class EnglishLessonPlanPDF extends PDF
         $this->plan = $plan;
         $this->headerFirstPage = true;
         $this->SetAutoPageBreak(false);
+        $this->SetTitle('English Lesson Plan', true);
     }
 
     public function generate(): void
     {
-        $this->AddPage();
         $this->renderPage1();
-        $this->AddPage();
         $this->renderPage2();
-        $this->AddPage();
         $this->renderPage3();
     }
 
     private function renderPage1(): void
     {
+        $transversalThemes = [
+            ['title' => 'Educate to love each other', 'length' => 5],
+            ['title' => 'Educate for citizenship', 'length' => 5],
+            ['title' => 'Educate for healthy communion', 'newLine' => true],
+            ['title' => 'Educate for conservation of Environment', 'length' => 5],
+            ['title' => 'Educate for Promotion of Life', 'length' => 5],
+            ['title' => 'Educate for Transcendence', 'length' => 5],
+            ['title' => 'Educate for Ethical Leadership', 'newLine' => true],
+        ];
+
+        $integrations = [
+            ['title' => 'Spanish', 'length' => 5],
+            ['title' => 'History', 'length' => 5],
+            ['title' => 'Science', 'length' => 5],
+            ['title' => 'Math', 'length' => 5],
+            ['title' => 'Art', 'length' => 5],
+            ['title' => 'Physical Education', 'length' => 5],
+            ['title' => 'Health', 'length' => 5],
+            ['title' => 'Technology', 'length' => 5],
+            ['title' => 'Others', 'newLine' => true],
+        ];
+
+        $this->AddPage();
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(0, 7, 'ENGLISH LESSON PLAN', 0, 1, 'C');
 
@@ -82,14 +73,15 @@ class EnglishLessonPlanPDF extends PDF
         $this->Cell($this->getWidth('CLASS:'), 5, 'CLASS:');
         $this->Cell(30, 5, $this->plan->materia, 'B', 0, 'C');
         $this->Cell($this->getWidth('GRADE:'), 5, 'GRADE:');
-        $grade = strlen($this->plan->materia) >= 5 ? substr($this->plan->materia, 3, 2) : '';
+        $grade = \strlen($this->plan->materia) >= 5 ? substr($this->plan->materia, 3, 2) : '';
         $this->Cell(30, 5, $grade, 'B', 1, 'C');
 
         $this->Ln(2);
 
+
         // Transversal Themes
         $this->Cell($this->getWidth('TRANSVERSAL THEMES:', 5), 5, 'TRANSVERSAL THEMES:');
-        foreach ($this->transversalThemes as $key => $theme) {
+        foreach ($transversalThemes as $key => $theme) {
             $index = $key + 1;
             $checked = $this->plan->{"transversal{$index}"} === 'si';
             $this->drawCheckbox($checked);
@@ -102,7 +94,7 @@ class EnglishLessonPlanPDF extends PDF
 
         // Integration
         $this->Cell($this->getWidth('INTEGRATION: '), 5, 'INTEGRATION:');
-        foreach ($this->integrations as $key => $integration) {
+        foreach ($integrations as $key => $integration) {
             $index = $key + 1;
             $checked = $this->plan->{"integracion{$index}"} === 'si';
             $this->drawCheckbox($checked);
@@ -151,6 +143,7 @@ class EnglishLessonPlanPDF extends PDF
 
     private function renderPage2(): void
     {
+        $this->AddPage();
         $this->SetMargins(10, 10);
         $this->SetXY(10, 10);
 
@@ -172,6 +165,18 @@ class EnglishLessonPlanPDF extends PDF
 
     private function renderPage3(): void
     {
+        $days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+
+        $modifications = [
+            'Seating',
+            'Additional Time',
+            'Individualized help',
+            'Additional time for tests',
+            'Positive reinforcement',
+            'Others',
+        ];
+
+        $this->AddPage();
         $this->SetMargins(10, 10);
         $this->SetXY(10, 10);
 
@@ -193,7 +198,7 @@ class EnglishLessonPlanPDF extends PDF
 
         // Weekly Schedule Header
         $this->SetFillColor(200);
-        $days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+
         $this->Cell(20, 5, 'Date', 'LTR', 0, 'C', true);
         foreach ($days as $day) {
             $this->Cell(34, 5, $day, 'LTR', 0, 'C', true);
@@ -247,7 +252,7 @@ class EnglishLessonPlanPDF extends PDF
                 $checked = $this->plan->{"acomodo{$i}_{$a}"} === 'si';
                 $this->drawCheckbox($checked, -1.5);
                 $this->Cell(4);
-                $modification = $this->modifications[$a - 1];
+                $modification = $modifications[$a - 1];
                 if ($a === 6 && !empty($this->plan->{"otro{$i}"})) {
                     $modification .= ': ' . $this->plan->{"otro{$i}"};
                 }
