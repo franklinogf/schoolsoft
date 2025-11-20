@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../../app.php';
 
 use App\Models\EnglishLessonPlan;
-use Classes\PDF\EnglishLessonPlanPDF;
+use App\Pdfs\Plans\EnglishLessonPlanPDF;
 use Classes\Session;
 
 Session::is_logged();
