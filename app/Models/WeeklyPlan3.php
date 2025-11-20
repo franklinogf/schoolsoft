@@ -77,7 +77,11 @@ class WeeklyPlan3 extends Model
         return $this->belongsTo(Subject::class, 'curso', 'curso');
     }
 
-    public function students(): Collection
+    /**
+     * Get this plan students
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
     {
         return Student::query()
             ->whereHas('classes', function ($query) {
