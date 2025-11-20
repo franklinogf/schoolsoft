@@ -167,7 +167,7 @@ $months = [
                                 <option value=""><?= __("Seleccione una semana") ?></option>
                                 <?php foreach ($weeklyPlans as $plan): ?>
                                     <?php
-                                    $weekDisplay = $plan->getFormattedWeek() . $plan->getApprovalStatus();
+                                    $weekDisplay = $plan->getFormattedWeek();
                                     ?>
                                     <option value="<?= $plan->week ?>" <?= $selectedWeek == $plan->week ? 'selected' : '' ?>>
                                         <?= $weekDisplay ?>
