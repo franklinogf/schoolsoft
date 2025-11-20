@@ -8,12 +8,10 @@ use Classes\PDF;
 
 class EnglishLessonPlanPDF extends PDF implements PdfInterface
 {
-    private EnglishLessonPlan $plan;
 
-    public function __construct(EnglishLessonPlan $plan)
+    public function __construct(private EnglishLessonPlan $plan)
     {
         parent::__construct();
-        $this->plan = $plan;
         $this->headerFirstPage = true;
         $this->SetAutoPageBreak(false);
         $this->SetTitle('English Lesson Plan', true);
