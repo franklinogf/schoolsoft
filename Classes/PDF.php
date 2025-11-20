@@ -172,9 +172,9 @@ class PDF extends FPDF
     /**
      * Draw a checkbox (filled or empty)
      */
-    public function drawCheckbox(bool $filled = false, float $xOffset = 1.7): void
+    public function drawCheckbox(bool $filled = false, float $xOffset = 1.7, float $y = 1.3): void
     {
         $style = $filled ? 'DF' : 'D';
-        $this->Rect($this->GetX() - $xOffset, $this->GetY() + 1.3, 2, 2, $style);
+        $this->Rect($this->GetX() - $xOffset, $this->GetY() + $y, 2, 2, $style);
     }
 }
