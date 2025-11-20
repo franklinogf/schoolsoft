@@ -23,7 +23,6 @@ class PDF extends FPDF
     public $logo = true;
     private $leftMargin = 10;
 
-
     public function Header()
     {
         if ($this->header) {
