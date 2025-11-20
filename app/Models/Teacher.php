@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property string $nombre
  * @property string $apellidos
+ * @property string $fullName
  * @property string $ss
  * @property string $tel_res
  * @property string $tel_emer
@@ -191,6 +192,11 @@ class Teacher extends Model
     public function englishPlans(): HasMany
     {
         return $this->hasMany(EnglishPlan::class, 'id_profesor', 'id');
+    }
+
+    public function englishLessonPlans(): HasMany
+    {
+        return $this->hasMany(EnglishLessonPlan::class, 'id_profesor', 'id');
     }
 
     public function unitPlans(): HasMany
