@@ -17,7 +17,7 @@ $selectedPlanId = $_GET['plan'] ?? null;
 
 <head>
     <?php
-    $title = __("Planes de trabajo 1");
+    $title = __("Planes de trabajo 2");
     Route::includeFile('/regiweb/includes/layouts/header.php');
     ?>
 </head>
@@ -636,8 +636,8 @@ $selectedPlanId = $_GET['plan'] ?? null;
 
                     $('#workPlanForm').removeClass('d-none');
                     $('#btnGuardar').text('<?= __("Guardar") ?>');
-                    $('#btnPrint').attr('href', 'planes_inf2.php?plan=' + data.id2).removeClass('d-none');
-                    $('#btnPrintTop').removeClass('d-none').attr('href', 'planes_inf2.php?plan=' + data.id2);
+                    $('#btnPrint').attr('href', 'pdf.php?plan=' + data.id2).removeClass('d-none');
+                    $('#btnPrintTop').removeClass('d-none').attr('href', 'pdf.php?plan=' + data.id2);
                     isEditMode = true;
                 },
                 error: function() {

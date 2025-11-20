@@ -532,8 +532,8 @@ $selectedPlanId = $_GET['plan'] ?? null;
                         workPlanForm.removeClass('d-none');
                         btnSaveText.text('<?= __("Guardar") ?>');
                         btnPrint.removeClass('d-none');
-                        btnPrint.attr('href', 'planes_inf.php?plan=' + workPlanId);
-                        $('#btnPrintTop').removeClass('d-none').attr('href', 'planes_inf.php?plan=' + workPlanId);
+                        btnPrint.attr('href', 'pdf.php?plan=' + workPlanId);
+                        $('#btnPrintTop').removeClass('d-none').attr('href', 'pdf.php?plan=' + workPlanId);
                     },
                     error: function() {
                         Swal.fire({

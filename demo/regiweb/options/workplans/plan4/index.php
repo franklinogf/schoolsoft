@@ -620,7 +620,7 @@ $workPlans = WorkPlan4::query()
         // Print plan
         printPlan.addEventListener('click', function() {
             if (planIdInput.value) {
-                window.open('planes_inf4.php?plan=' + planIdInput.value, '_blank');
+                window.open('pdf.php?plan=' + planIdInput.value, '_blank');
             }
         });
 

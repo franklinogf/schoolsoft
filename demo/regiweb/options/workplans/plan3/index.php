@@ -667,8 +667,8 @@ $selectedPlanId = $_GET['plan'] ?? null;
 
                     $('#workPlanForm').removeClass('d-none');
                     $('#btnSaveText').text('<?= __("Guardar") ?>');
-                    $('#btnPrint').attr('href', 'planes_inf3.php?plan=' + data.id2).removeClass('d-none');
-                    $('#btnPrintTop').removeClass('d-none').attr('href', 'planes_inf3.php?plan=' + data.id2);
+                    $('#btnPrint').attr('href', 'pdf.php?plan=' + data.id2).removeClass('d-none');
+                    $('#btnPrintTop').removeClass('d-none').attr('href', 'pdf.php?plan=' + data.id2);
                     isEditMode = true;
                 },
                 error: function() {
