@@ -3,6 +3,7 @@
 namespace Classes;
 
 use App\Models\Admin;
+use Carbon\CarbonInterface;
 use Classes\PDF\Traits\Codabar;
 use Classes\Util;
 use Classes\PDF\Traits\Dash;
@@ -146,5 +147,35 @@ class PDF extends FPDF
         $url = attachments_url("{$path}/{$uniqueId}.pdf");
 
         return $url;
+    }
+
+    /**
+     * Format date for PDF display
+     */
+    public function formatDate(string|null|CarbonInterface $date): string
+    {
+        if ($date === null || $date === '0000-00-00') return '';
+        if (\is_string($date)) return $date;
+        if ($date instanceof CarbonInterface) {
+            return $date->format('Y-m-d');
+        }
+        return '';
+    }
+
+    /**
+     * Get string width with padding
+     */
+    public function getWidth(string $text, float $padding = 3): float
+    {
+        return $this->GetStringWidth($text) + $padding;
+    }
+
+    /**
+     * Draw a checkbox (filled or empty)
+     */
+    public function drawCheckbox(bool $filled = false, float $xOffset = 1.7): void
+    {
+        $style = $filled ? 'DF' : 'D';
+        $this->Rect($this->GetX() - $xOffset, $this->GetY() + 1.3, 2, 2, $style);
     }
 }
