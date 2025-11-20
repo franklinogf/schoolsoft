@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -76,6 +77,14 @@ class WeeklyPlan3 extends Model
         return $this->belongsTo(Subject::class, 'curso', 'curso');
     }
 
+    public function students(): Collection
+    {
+        return Student::query()
+            ->whereHas('classes', function ($query) {
+                $query->where('curso', $this->curso);
+            })->orderBy('apellidos')->get();
+    }
+
     /**
      * Get formatted week range with month name
      */
@@ -108,35 +117,6 @@ class WeeklyPlan3 extends Model
         $month = $months[date("m", strtotime($y . $week . "1"))];
 
         return "{$month} ({$startDate} - {$endDate})";
-    }
-
-    /**
-     * Get approval status
-     */
-    public function getApprovalStatus(): string
-    {
-        if ($this->aprobacion === 'si') {
-            return ' - OK';
-        } elseif ($this->aprobacion === 'no') {
-            return ' - VERIFICAR';
-        }
-        return '';
-    }
-
-    /**
-     * Check if plan is approved
-     */
-    public function isApproved(): bool
-    {
-        return $this->aprobacion === 'si';
-    }
-
-    /**
-     * Check if plan needs verification
-     */
-    public function needsVerification(): bool
-    {
-        return $this->aprobacion === 'no';
     }
 
     /**
