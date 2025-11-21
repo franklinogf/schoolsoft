@@ -30,7 +30,7 @@ $options = [
             ['name' => __('Plan de clase'), 'link' => 'classplan/index.php'],
             ['name' => __('Plan en inglés'), 'link' => 'englishplan/index.php'],
             ['name' => __('Plan de unidad'), 'link' => 'unitplan/index.php'],
-            ['name' => __('Plan de lección en inglés'), 'link' => 'enlgishlessonplan/index.php'],
+            ['name' => __('Plan de lección en inglés'), 'link' => 'englishlessonplan/index.php'],
         ]
     ],
     [
