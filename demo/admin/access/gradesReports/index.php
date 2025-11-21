@@ -187,12 +187,6 @@ $options = [
         'title' => __("Informes"),
         'buttons' => [
             [
-                'name' => __("Planes"),
-                'desc' => '',
-                'link' => '#',
-                'hidden' => false,
-            ],
-            [
                 'name' => __("Asistencia"),
                 'desc' => '',
                 'link' => 'Attendance.php',
