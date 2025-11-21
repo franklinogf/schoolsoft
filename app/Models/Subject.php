@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $orden
  * @property string $verano
  * @property int $mt
+ * @property string $descripcion
+ * @property string $display_label
  * @property Teacher|null $teacher
  */
 class Subject extends Model
@@ -56,5 +58,12 @@ class Subject extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'id', 'id');
+    }
+
+    protected function displayLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, array $attributes) => $attributes['curso'] . ' - ' . $this->descripcion,
+        );
     }
 }
