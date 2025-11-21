@@ -13,12 +13,12 @@ $options = [
             [
                 'name' => __("Registro"),
                 'desc' => __('Registro de notas'),
-                'link' => 'registration',
+                'link' => 'registration/index.php',
             ],
             [
                 'name' => __("Informes"),
                 'desc' => __('Pantalla con todos los informes'),
-                'link' => 'reports',
+                'link' => 'reports/index.php',
             ],
             [
                 'name' => __("Fechas"),
@@ -31,14 +31,9 @@ $options = [
                 'link' => 'activations.php',
             ],
             [
-                'name' => __("Re-matrícula"),
-                'desc' => __(''),
-                'link' => '#',
-            ],
-            [
                 'name' => __("Tiendas"),
                 'desc' => __(''),
-                'link' => 'stores/',
+                'link' => 'stores/index.php',
             ],
             [
                 'name' => __('Planes de trabajo'),
@@ -108,7 +103,7 @@ $options = [
             [
                 'name' => __("Entrada de asistencia"),
                 'desc' => __(''),
-                'link' => 'attendance',
+                'link' => 'attendance/index.php',
             ],
             [
                 'name' => __("Clases diaras"),
@@ -119,11 +114,6 @@ $options = [
                 'name' => __("Mensajes de notas"),
                 'desc' => __('Mensajes por clase para la tarjeta de notas'),
                 'link' => 'MensajesNotas.php',
-            ],
-            [
-                'name' => __("Deporte"),
-                'desc' => __(''),
-                'link' => '#',
             ],
             [
                 'name' => __("Clases de verano"),
