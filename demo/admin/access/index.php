@@ -40,6 +40,11 @@ $options = [
                 'desc' => __(''),
                 'link' => 'stores/',
             ],
+            [
+                'name' => __('Planes de trabajo'),
+                'desc' => __('Gestión de planes de trabajo.'),
+                'link' => 'plans/index.php',
+            ]
         ],
     ],
     [
@@ -107,11 +112,6 @@ $options = [
             ],
             [
                 'name' => __("Clases diaras"),
-                'desc' => __(''),
-                'link' => '#',
-            ],
-            [
-                'name' => __("Plan de trabajo"),
                 'desc' => __(''),
                 'link' => '#',
             ],
