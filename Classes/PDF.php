@@ -88,11 +88,11 @@ class PDF extends FPDF
         }
 
         $pdf = Admin::primaryAdmin()->pdf;
-        $pdfColor = $pdf ? json_decode((string) $pdf) : null;
 
-        $red = $pdfColor?->red ?? config('pdf.fill_color.red');
-        $green = $pdfColor?->green ?? config('pdf.fill_color.green');
-        $blue = $pdfColor?->blue  ?? config('pdf.fill_color.blue');
+
+        $red = $pdf['red'] ?? config('pdf.fill_color.red');
+        $green = $pdf['green'] ?? config('pdf.fill_color.green');
+        $blue = $pdf['blue']  ?? config('pdf.fill_color.blue');
 
         $this->SetFillColor($red, $green, $blue);
     }

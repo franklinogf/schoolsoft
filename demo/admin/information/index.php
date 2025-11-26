@@ -235,9 +235,9 @@ $defaultTheme = require __ROOT . '/config/theme.php';
         </div>
         <div class="container bg-white shadow-lg py-3 mt-4 rounded mx-auto">
             <?php
-            $pdf = $school->pdf ? json_decode($school->pdf) : null;
+            $pdf = $school->pdf;
             $pdfColor =  $pdf !== null
-                ? "#" . dechex($pdf->red) . dechex($pdf->green) . dechex($pdf->blue)
+                ? "#" . dechex($pdf['red']) . dechex($pdf['green']) . dechex($pdf['blue'])
                 : "#" . dechex(config('pdf.fill_color.red')) . dechex(config('pdf.fill_color.green')) . dechex(config('pdf.fill_color.blue'));
 
             ?>
