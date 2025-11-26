@@ -176,7 +176,7 @@ $defaultTheme = require __ROOT . '/config/theme.php';
                             <div class="input-group-prepend col-3 pr-0">
                                 <span class="input-group-text w-100" id="<?= $key ?>"><?= $key ?></span>
                             </div>
-                            <input type="text" class="form-control" value="<?= isset($constants->{$key}) ? $constants->{$key} : '' ?>" name="constants[<?= $key ?>]" placeholder="<?= __("Valor de la constante") ?>" aria-describedby="<?= $key ?>">
+                            <input type="text" class="form-control" value="<?= $constants[$key] ?? '' ?>" name="constants[<?= $key ?>]" placeholder="<?= __("Valor de la constante") ?>" aria-describedby="<?= $key ?>">
                         </div>
                     <?php endforeach ?>
                 </div>
@@ -200,8 +200,8 @@ $defaultTheme = require __ROOT . '/config/theme.php';
                                 <div class="input-group-prepend col-3 pr-0">
                                     <span class="input-group-text w-100" id="<?= $key ?>"><?= $key ?></span>
                                 </div>
-                                <input type="text" class="form-control" value="<?= isset($environments->{$key}) ? $environments->{$key}->value : '' ?>" name="environments[<?= $key ?>][value]" placeholder="Valor de la variable de entorno" aria-describedby="<?= $key ?>">
-                                <input type="text" class="form-control" value="<?= isset($environments->{$key}) ? $environments->{$key}->other : '' ?>" name="environments[<?= $key ?>][other]" placeholder="Otro valor si es necesario" aria-describedby="<?= $key ?>">
+                                <input type="text" class="form-control" value="<?= isset($environments[$key]) ? $environments[$key]->value : '' ?>" name="environments[<?= $key ?>][value]" placeholder="Valor de la variable de entorno" aria-describedby="<?= $key ?>">
+                                <input type="text" class="form-control" value="<?= isset($environments[$key]) ? $environments[$key]->other : '' ?>" name="environments[<?= $key ?>][other]" placeholder="Otro valor si es necesario" aria-describedby="<?= $key ?>">
                             </div>
                         <?php endforeach ?>
                     </div>
