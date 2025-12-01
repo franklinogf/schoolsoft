@@ -14,7 +14,7 @@ $school = Admin::primaryAdmin();
 $year = $school->year;
 
 // Obtener todos los planes semanales del maestro
-$weeklyPlans = $teacher->hasMany(WeeklyPlan2::class, 'id', 'id')->orderBy('fecha', 'desc')->get();
+$weeklyPlans = $teacher->weeklyPlans2()->orderBy('fecha', 'desc')->get();
 
 // Obtener el ID del plan seleccionado de la URL si existe
 $selectedPlanId = $_GET['plan'] ?? null;

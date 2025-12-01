@@ -24,14 +24,14 @@ $weeklyPlans = [];
 
 // If course is selected, get all weekly plans for that course
 if ($selectedCourse) {
-    $weeklyPlans = WeeklyPlan3::byTeacher($teacher->id)
+    $weeklyPlans = $teacher->weeklyPlans3()
         ->byCourse($selectedCourse)
         ->orderBy('week', 'desc')
         ->get();
 
     // If specific week is selected, load that plan
     if ($selectedWeek) {
-        $weeklyPlan = WeeklyPlan3::byTeacher($teacher->id)
+        $weeklyPlan = $teacher->weeklyPlans3()
             ->byCourse($selectedCourse)
             ->byWeek($selectedWeek)
             ->first();
