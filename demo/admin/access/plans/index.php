@@ -38,17 +38,17 @@ $options = [
             [
                 'name' => __("Plan semanal 1"),
                 'desc' => __('Gestión del Plan semanal 1'),
-                'link' => 'weeklyplans/plan1/index.php',
+                'link' => 'weeklyplans/index.php?plan=1',
             ],
             [
                 'name' => __("Plan semanal 2"),
                 'desc' => __('Gestión del Plan semanal 2'),
-                'link' => 'weeklyplans/plan2/index.php',
+                'link' => 'weeklyplans/index.php?plan=2',
             ],
             [
                 'name' => __("Plan semanal 3"),
                 'desc' => __('Gestión del Plan semanal 3'),
-                'link' => 'weeklyplans/plan3/index.php',
+                'link' => 'weeklyplans/index.php?plan=3',
             ]
         ],
     ],
