@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../app.php';
+require_once '../../app.php';
 
 use Classes\Lang;
 use Classes\Route;
@@ -66,8 +66,8 @@ if (isset($_POST['data'])) {
 if (isset($_POST['borra'])) {
 	DB::table('costos')->where('mt', $_POST['mt1'])->delete();
 }
-$add2 = $_GET['add2'] ?? '';
-if (isset($_POST['add']) and $add2 == 0) {
+$add2 = $_POST['add2'] ?? 0;
+if (isset($_POST['add']) and $add2 == 2) {
 	list($r1, $r2) = explode(", ", $_POST['desc']);
 	DB::table('costos')->insert([
 		'codigo' => $r1,
@@ -91,37 +91,44 @@ if (isset($_POST['add']) and $add2 == 0) {
 		'pf' => $_POST['pf'] ?? '',
 		'year' => $year,
 	]);
+$add2=0;
 }
 
 if (isset($_POST['add']) and $add2 == 1) {
 	list($r1, $r2) = explode(", ", $_POST['desc']);
-	$thisCourse = DB::table('costos')->where('mt', $_POST['mt'])->update([
+	$thisCourse = DB::table('costos')->where('mt', $_POST['mt1'])->update([
 		'codigo' => $r1,
 		'grado' => $_POST['grado'],
 		'descripcion' => $r2,
 		'costo' => $_POST['costo'],
 		'activo' => $_POST['activo'],
-		'm8' => $_POST['m8'],
-		'm9' => $_POST['m9'],
-		'm10' => $_POST['m10'],
-		'm11' => $_POST['m11'],
-		'm12' => $_POST['m12'],
-		'm1' => $_POST['m1'],
-		'm2' => $_POST['m2'],
-		'm3' => $_POST['m3'],
-		'm4' => $_POST['m4'],
-		'm5' => $_POST['m5'],
-		'm6' => $_POST['m6'],
-		'm7' => $_POST['m7'],
-		'esn' => $_POST['esn'],
-		'pf' => $_POST['pf'],
+		'm8' => $_POST['m8'] ?? '',
+		'm9' => $_POST['m9'] ?? '',
+		'm10' => $_POST['m10'] ?? '',
+		'm11' => $_POST['m11'] ?? '',
+		'm12' => $_POST['m12'] ?? '',
+		'm1' => $_POST['m1'] ?? '',
+		'm2' => $_POST['m2'] ?? '',
+		'm3' => $_POST['m3'] ?? '',
+		'm4' => $_POST['m4'] ?? '',
+		'm5' => $_POST['m5'] ?? '',
+		'm6' => $_POST['m6'] ?? '',
+		'm7' => $_POST['m7'] ?? '',
+		'esn' => $_POST['esn'] ?? '',
+		'pf' => $_POST['pf'] ?? '',
 	]);
+$add2=0;
+
 }
 
 //$add2=0;
 if (isset($_POST['cambiar'])) {
 	$reg4 = DB::table('costos')->where('mt', $_POST['mt1'])->first();
 	$add2 = 1;
+}
+if (isset($_POST['new'])) {
+//	$reg4 = DB::table('costos')->where('mt', $_POST['mt1'])->first();
+	$add2 = 2;
 }
 
 $resultado3 = DB::table('presupuesto')->where('year', $year)->orderBy('codigo')->get();
@@ -183,6 +190,11 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 					<input type=hidden name='data' id='data' value='88 '>
 				</form>
 
+				<form id="new" name="new" method="post">
+   				    <button class="btn btn-primary" style="width:200px" name="new" type="submit"><?= $lang->translation('Nuevo') ?></button>
+				</form>
+
+
 			</div>
 
 
@@ -242,9 +254,9 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 										</center>
 									</td>
 								</tr>
-								<input type=hidden name=nn value='<?= $row2->codigo ?>'>
-								<input type=hidden name=nn1 value='<?= $row2->grado ?>'>
-								<input type=hidden name=mt1 value='<?= $row2->mt ?>'>
+								<input type=hidden name=nn value='<?= $row2->codigo ?? '' ?>'>
+								<input type=hidden name=nn1 value='<?= $row2->grado ?? '' ?>'>
+								<input type=hidden name=mt1 value='<?= $row2->mt ?? 0 ?>'>
 								<input type=hidden name=add2 value='<?= $add2 ?> '>
 							</form>
 
@@ -260,19 +272,18 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 							<td><strong><?= $lang->translation('Costos') ?></strong></td>
 							<td><strong><?= $lang->translation('Opciones') ?></strong></td>
 						</tr>
-						<input <?= ($reg4->m8 ?? '') ? 'checked="checked"' : 'checked="checked"' ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px">
-						<?php if ($add2 == 1): ?>
+						<?php if ($add2 > 0): ?>
 							<tr>
 								<td class="style4">
-									<input id="ex-2" maxlength="5" name="grado" size="5" type="text" placeholder="  -  " required value="<? echo $reg4->grado ?>" />
+									<input id="ex-2" maxlength="5" name="grado" size="5" type="text" placeholder="  -  " required value="<?= $reg4->grado ?? '' ?>" />
 								</td>
 								<td class="style4">
-									<?= $reg4->codigo ?>
+									<?= $reg4->codigo ?? '' ?>
 								</td>
 								<td class="style9">
 									<select name="desc" required style="width: 190px">
 										<option value="Selección"><?= $lang->translation('Selección') ?></option>
-										<?
+										<?php
 										if ($add2 == 1) {
 											echo '<option selected="">' . $reg4->codigo . ', ' . $reg4->descripcion . '</option>';
 										}
@@ -283,37 +294,22 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 									</select>
 								</td>
 								<td class="style4">
-									<?
-									$ac1 = '';
-									$ac2 = '';
-									if ($reg4->activo == 'Si') {
-										$ac1 = 'selected=""';
-									}
-									if ($reg4->activo == '') {
-										$ac1 = 'selected=""';
-									}
-									if ($reg4->activo == 'No') {
-										$ac2 = 'selected=""';
-									}
-									?>
 
 									<select name="activo" style="width: 46px">
-										<option <?= $reg4->activo === 'Si' ? 'selected=""' : '' ?> value="Si"><?= $lang->translation('Si') ?></option>
-										<option <?= $reg4->activo === 'No' ? 'selected=""' : '' ?> value="No">No</option>
+										<option <?= $reg4->activo ?? 'No' === 'No' ? 'selected=""' : '' ?> value="No">No</option>
+										<option <?= $reg4->activo ?? 'Si' === 'Si' ? 'selected=""' : '' ?> value="Si"><?= $lang->translation('Si') ?></option>
 									</select>
 								</td>
 								<td class="style4">
-									<input id="ex-99" name="costo" class="text" size="7" type="text" maxlength="7" placeholder="$999.99" required value="<? echo $reg4->costo ?>" />
+									<input id="ex-99" name="costo" class="text" size="7" type="text" maxlength="7" placeholder="$999.99" required value="<?= $reg4->costo ?? '' ?>" />
 								</td>
 								<td class="style4">
 									<strong>
 
 										<input type=hidden name=nn0 value=''>
 										<input type=hidden name=nn11 value=''>
-										<input type=hidden name=mt value='<?= $reg4->mt ?>'>
+										<input type=hidden name=mt value='<?= $reg4->mt ?? 0 ?>'>
 										<input type=hidden name=add2 value='<?= $add2 ?>'>
-
-
 									</strong>
 								</td>
 							</tr>
@@ -347,43 +343,27 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 						<tr>
 							<td class="style4">
 								<center>
-									<input <?= ($reg4->m8 === 'Si') ? 'checked="checked"' : '' ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m8 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m8" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m9 = '';
-									if ($reg4->m9 == 'Si') {
-										$m9 = 'checked="checked"';
-									} ?>
-									<input <? echo $m9 ?> name="m9" type="checkbox" value="Si" style="height: 25px; width: 25px">
+     							<input <?= ($reg4->m9 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m9" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m10 = '';
-									if ($reg4->m10 == 'Si') {
-										$m10 = 'checked="checked"';
-									} ?>
-									<input <? echo $m10 ?> name="m10" type="checkbox" value="Si" style="height: 25px; width: 25px">
+     							<input <?= ($reg4->m10 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m10" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m11 = '';
-									if ($reg4->m11 == 'Si') {
-										$m11 = 'checked="checked"';
-									} ?>
-									<input <? echo $m11 ?> name="m11" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m11 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m11" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m12 = '';
-									if ($reg4->m12 == 'Si') {
-										$m12 = 'checked="checked"';
-									} ?>
-									<input <? echo $m12 ?> name="m12" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m12 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m12" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 						</tr>
@@ -407,47 +387,27 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 						<tr>
 							<td class="style4">
 								<center>
-									<? $m13 = '';
-									if ($reg4->m1 == 'Si') {
-										$m13 = 'checked="checked"';
-									} ?>
-									<input <? echo $m13 ?> name="m1" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m1 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m1" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m14 = '';
-									if ($reg4->m2 == 'Si') {
-										$m14 = 'checked="checked"';
-									} ?>
-									<input <? echo $m14 ?> name="m2" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m2 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m2" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m15 = '';
-									if ($reg4->m3 == 'Si') {
-										$m15 = 'checked="checked"';
-									} ?>
-									<input <? echo $m15 ?> name="m3" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m3 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m3" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m16 = '';
-									if ($reg4->m4 == 'Si') {
-										$m16 = 'checked="checked"';
-									} ?>
-									<input <? echo $m16 ?> name="m4" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m4 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m4" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m17 = '';
-									if ($reg4->m5 == 'Si') {
-										$m17 = 'checked="checked"';
-									} ?>
-									<input <? echo $m17 ?> name="m5" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m5 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m5" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 						</tr>
@@ -471,39 +431,23 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 						<tr>
 							<td class="style4">
 								<center>
-									<? $m18 = '';
-									if ($reg4->m6 == 'Si') {
-										$m18 = 'checked="checked"';
-									} ?>
-									<input <? echo $m18 ?> name="m6" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m6 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m6" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $m19 = '';
-									if ($reg4->m7 == 'Si') {
-										$m19 = 'checked="checked"';
-									} ?>
-									<input <? echo $m19 ?> name="m7" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->m7 ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="m7" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">
 								<center>
-									<? $pf = '';
-									if ($reg4->pf == 'Si') {
-										$pf = 'checked="checked"';
-									} ?>
-									<input <? echo $pf ?> name="pf" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->pf ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="pf" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 							<td class="style4">&nbsp;</td>
 							<td class="style4">
 								<center>
-									<? $esn = '';
-									if ($reg4->esn == 'Si') {
-										$esn = 'checked="checked"';
-									} ?>
-									<input <? echo $esn ?> name="esn" type="checkbox" value="Si" style="height: 25px; width: 25px">
+									<input <?= ($reg4->esn ?? '' === 'Si') ? 'checked="checked"' : '' ?> name="esn" type="checkbox" value="Si" style="height: 25px; width: 25px">
 								</center>
 							</td>
 						</tr>
@@ -528,10 +472,6 @@ $resultado2 = DB::table('costos')->where('year', $year)->orderBy('grado, codigo'
 					</strong><br />
 				</div>
 			</form>
-
-
-
-
 
 		</div>
 
