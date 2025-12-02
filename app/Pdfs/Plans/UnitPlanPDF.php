@@ -56,7 +56,7 @@ class UnitPlanPDF extends PDF implements PdfInterface
 
         $this->SetFont('Arial', 'B', 10);
         $duracionLabel = __('DURACIÓN:');
-        $this->Cell($this->GetStringWidth($duracionLabel . ' ') + 3, 6, $duracionLabel, 0, 0);
+        $this->Cell($this->GetStringWidth($duracionLabel . ' '), 6, $duracionLabel, 0, 0);
         $this->SetFont('Arial', '', 10);
         $this->Cell(15, 6, $this->plan->duracion . ' ' . __('semanas'), 'B', 1, 'C');
 
