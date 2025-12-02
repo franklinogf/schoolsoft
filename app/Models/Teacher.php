@@ -179,6 +179,7 @@ class Teacher extends Model
     {
         return $this->hasMany(WorkPlan::class, 'id', 'id');
     }
+
     public function workPlans4(): HasMany
     {
         return $this->hasMany(WorkPlan4::class, 'id_profesor', 'id');
@@ -187,6 +188,14 @@ class Teacher extends Model
     public function weeklyPlans(): HasMany
     {
         return $this->hasMany(WeeklyPlan::class, 'id', 'id');
+    }
+    public function weeklyPlans2(): HasMany
+    {
+        return $this->hasMany(WeeklyPlan2::class, 'id', 'id');
+    }
+    public function weeklyPlans3(): HasMany
+    {
+        return $this->hasMany(WeeklyPlan3::class, 'id_profesor', 'id');
     }
 
     public function classPlans(): HasMany

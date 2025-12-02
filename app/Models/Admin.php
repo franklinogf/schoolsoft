@@ -218,7 +218,7 @@ use App\Models\Traits\HasPermissions;
  * @property string $cta_camisa
  * @property string $es_ac
  * @property array $theme
- * @property array $pdf
+ * @property array|null $pdf
  */
 class Admin extends Model
 {
@@ -264,10 +264,10 @@ class Admin extends Model
     public function casts(): array
     {
         return [
-            'environments' => 'array',
-            'constants' => 'array',
-            'theme' => 'array',
-            'pdf' => 'array'
+            'environments' => 'json',
+            'constants' => 'json',
+            'theme' => 'json',
+            'pdf' => 'json'
         ];
     }
 }
