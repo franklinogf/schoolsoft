@@ -62,6 +62,10 @@ $school = Admin::user(Session::id())->first();
 $year = $school->year2;
 $reply_to = $school->correo;
 $user = $school->usuario;
+$n1 = $_POST['nombre'];
+$ctas = $_POST['ctas'];
+$debtType = (int) $_POST['deuda'];
+
 
 $id = '';
 $usua = '';
@@ -86,6 +90,7 @@ function generateTable(PDF $pdf, Family $family): void
     global $est1;
     global $est2;
     global $est3;
+    global $debtType;
 
     $gr1 = '';
     $gr2 = '';
@@ -172,17 +177,20 @@ function generateTable(PDF $pdf, Family $family): void
 
     $totdeu = 0;
     $latePayment = 0;
+
     foreach ($charges as $charge) {
 
 
-        $debt = $charge->sum('deuda');
-        $pay = $charge->sum('pago');
+        $debt = (float) $charge->sum('deuda');
+        $pay = (float) $charge->sum('pago');
 
-        $latePayment = $charge->where('fecha_d', '<=', $fec)
+        $latePayment = (float) $charge->where('fecha_d', '<=', $fec)
             ->sum(fn($payment) => $payment->deuda - $payment->pago);
 
         $total = $debt - $pay;
+
         if ($total > 0) {
+
             $est1[$i] = $charge->first()->desc1;
             $est2[$i] = $debt;
             $est3[$i] = $pay;
@@ -197,11 +205,12 @@ function generateTable(PDF $pdf, Family $family): void
         }
     }
 
+
     $pdf->Cell(152, 5, $lang->translation('BALANCE DEL ESTADO DE CUENTA:') . ' ', 1, 0, 'R', true);
     $pdf->Cell(38, 5, number_format($totdeu, 2), 1, 1, 'R', true);
     $pdf->Cell(160, 5, '', 0, 1, 'R');
     $pdf->Cell(152, 5, $lang->translation('PAGO REQUERIDO:') . ' ', 0, 0, 'R');
-    $pdf->Cell(38, 5, number_format($latePayment, 2), 0, 1, 'R');
+    $pdf->Cell(38, 5, number_format($debtType === 2 ? $totdeu : $latePayment, 2), 0, 1, 'R');
     $pdf->Cell(160, 10, '', 0, 1, 'R');
 
     if ($_POST['num2'] > 0) {
@@ -261,9 +270,7 @@ function generateTable(PDF $pdf, Family $family): void
 
 
 
-$n1 = $_POST['nombre'];
-$ctas = $_POST['ctas'];
-$debtType = $_POST['deuda'];
+
 
 $students = Student::query()
     ->select("id")
@@ -278,18 +285,20 @@ $students = Student::query()
     ->get();
 
 
-[$Y, $M, $D] = explode("-", date('Y-m-d'));
-$fec = $year . '-' . $_POST['mes'] . '-' . $D;
+list($yy2, $mm1, $dd1) = explode("-", date('Y-m-d'));
+
+$fec = $yy2 . '-' . $_POST['mes'] . '-' . $dd1;
 foreach ($students as $student) {
     if (!$student->family) {
         continue;
     }
     $payments = $student->family->charges()
+        ->whereDate('fecha_d', '<=', $fec)
         ->orderBy('codigo')
         ->get();
-    $totalDebt = $payments->sum('deuda');
-    $totalPayments = $payments->sum('pago');
-    $totalLatePayments = $payments->where('fecha_d', '<=', $fec)
+    $totalDebt = (float) $payments->sum('deuda');
+    $totalPayments = (float) $payments->sum('pago');
+    $totalLatePayments = (float) $payments->where('fecha_d', '<=', $fec)
         ->sum(fn($payment) => $payment->deuda - $payment->pago);
 
 
@@ -309,6 +318,7 @@ foreach ($students as $student) {
     $pdf->Cell(0, 4, $lang->translation('ESTADO DE CUENTAS'), 0, 0, 'C');
     $pdf->SetFont('Arial', 'B', 11);
     $pdf->Ln(5);
+    $pdf->Cell(0, 5, 'total ' . $total, 0, 1, 'C');
     $pdf->Cell(0, 5, date('m-d-Y'), 0, 0, 'C');
     $pdf->Ln(10);
     $pdf->Cell(0, 5, ucfirst(Carbon::parse(Month::fromNumber($_POST['mes']))->translatedFormat('F')), 0, 0, 'C');
@@ -320,13 +330,13 @@ foreach ($students as $student) {
     $pdf->SetFont('Arial', '', 12);
 
 
-    if ($totalDebt > 0 && $debtType == 1) {
-        generateTable($pdf, $student->family);
-    } elseif ($total > 0 && $debtType == 2) {
-        generateTable($pdf, $student->family);
-    } elseif ($totalLatePayments > 0 && $debtType == 3) {
-        generateTable($pdf, $student->family);
-    }
+    generateTable($pdf, $student->family);
+    // if ($totalDebt > 0 && $debtType == 1) {
+    // } elseif ($total > 0 && $debtType == 2) {
+    //     generateTable($pdf, $student->family);
+    // } elseif ($totalLatePayments > 0 && $debtType == 3) {
+    //     generateTable($pdf, $student->family);
+    // }
 
 
     $uniqueId = Str::uuid()->toString();
