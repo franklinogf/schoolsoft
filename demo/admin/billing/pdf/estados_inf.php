@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
 use App\Models\Family;
 use App\Models\Student;
 use Carbon\Carbon;
 use Carbon\Month;
-use Classes\Controllers\School;
+// use Classes\Controllers\School;
 use Classes\Email;
 use Classes\Lang;
 use Classes\PDF;
@@ -57,10 +58,10 @@ $lang = new Lang([
 ]);
 
 
-$school = new School(Session::id());
-$year = $school->info('year2');
-$reply_to = $school->info('correo');
-$user = $school->info('usuario');
+$school = Admin::user(Session::id())->first();
+$year = $school->year2;
+$reply_to = $school->correo;
+$user = $school->usuario;
 
 $id = '';
 $usua = '';
@@ -94,17 +95,20 @@ function generateTable(PDF $pdf, Family $family): void
     $no2 = '';
     $no3 = '';
     $no4 = '';
-    $row11 = Manager::table('codigos')->whereRaw("idc='2' and codigo='" . $_POST['num2'] . "'")->first();
+    $text1 = '';
     for ($x = 0; $x <= 20; $x++) {
         $est1[$x] = '';
         $est2[$x] = '';
         $est3[$x] = '';
     }
+    $row11 = Manager::table('codigos')->where(['codigo' => $_POST['num2']])->first();
+    if ($row11 !== null) {
 
-    if ($_POST['idi'] == 'Ingles') {
-        $text1 = $row11->tema2 ?? '';
-    } else {
-        $text1 = $row11->tema ?? '';
+        if ($_POST['idi'] == 'Ingles') {
+            $text1 = $row11->tema2 ?? '';
+        } else {
+            $text1 = $row11->tema ?? '';
+        }
     }
 
 
@@ -167,6 +171,7 @@ function generateTable(PDF $pdf, Family $family): void
     $charges = $family->charges()->whereDate('fecha_d', '<=', $fec)->get()->groupBy('codigo');
 
     $totdeu = 0;
+    $latePayment = 0;
     foreach ($charges as $charge) {
 
 
@@ -252,11 +257,7 @@ function generateTable(PDF $pdf, Family $family): void
 }
 
 
-$pdf = new PDF;
-$pdf->SetTitle($lang->translation('ESTADO DE CUENTAS') . ' ' . $year);
-$pdf->Fill();
-$pdf->AliasNbPages();
-$pdf->SetFont('Times', '', 11);
+
 
 
 
@@ -292,13 +293,16 @@ foreach ($students as $student) {
         ->sum(fn($payment) => $payment->deuda - $payment->pago);
 
 
-    // dd([$totalDebt, $totalPayments, $totalLatePayments]);
-
     $total = $totalDebt - $totalPayments;
 
     if ($total <= 0) {
         continue;
     }
+    $pdf = new PDF;
+    $pdf->SetTitle($lang->translation('ESTADO DE CUENTAS') . ' ' . $year);
+    $pdf->Fill();
+    $pdf->AliasNbPages();
+    $pdf->SetFont('Times', '', 11);
 
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
@@ -327,99 +331,11 @@ foreach ($students as $student) {
 
     $uniqueId = Str::uuid()->toString();
     $filePath = "{$directory}/$uniqueId.pdf";
-    $pdf->Output("F", $filePath);
     $files[$student->id] = $filePath;
-    //******************************************
-
-    // $row4 = Manager::table('madre')->whereRaw("id='$student->id'")->orderBy('id')->first();
-
-    // if ($deu > 0 and $_POST['enviae'] == 'Si' or $atra > 0 and $_POST['enviae'] == 'Si') {
-    //     $file_name = "Statement_" . $student->id . ".pdf";
-    //     $co_re = __RESEND_KEY_OTHER__;
-    //     $from = "{$colegio} <" . $co_re . ">";
-
-    //     $dir = '../../';
-    //     //********************************************
-    //     $uploadHost = dirname($_SERVER['SCRIPT_URI']);
-    //     $target_dir = "attachments/";
-    //     if (!is_dir($target_dir)) {
-    //         mkdir($target_dir);
-    //     }
-    //     $files = [];
-    //     $target_file = $file_name;
-    //     $files[] = $uploadHost . '/' . $target_dir . $target_file;
-    //     if (__RESEND__ == '1') {
-    //         $file2 = $pdf->Output("attachments/" . $file_name, 'F');
-    //     }
-
-    //     //*********************************************
-    //     $mail = new Mail();
-    //     $title = $lang->translation('Estado de cuenta') . ' ' . $mes;
-    //     $subject = $lang->translation('Estado de cuenta') . ' ' . $mes;
-    //     $message = '';
-    //     $mail->Subject = $subject;
-    //     $emailsSent = 0;
-    //     $emailsError = 0;
-    //     $error = null;
-
-    //     if (__PHPMAIL__ == '1') {
-    //         $file = $pdf->Output("", "S");
-    //         $mail->addStringAttachment($file, $file_name);
-    //     }
-
-    //     $parents = Manager::table('madre')->where('id', $student->id)->first();
-    //     $emails = [
-    //         ['correo' => $parents->email_p, 'nombre' => $parents->padre],
-    //         ['correo' => $parents->email_m, 'nombre' => $parents->madre]
-    //     ];
-    //     $to = [];
-    //     foreach ($emails as $email) {
-    //         if ($email['correo'] !== '') {
-    //             $mail->addAddress($email['correo'], $email['nombre']);
-    //             $to[] = $email['correo'];
-    //         }
-    //     }
-    //     //        $mail->addAddress("alf_med@hotmail.com", 'Alfredo Medina');
-    //     $message = "<center><h1>$title</h1></center><br/><br/><p>" . nl2br($title) . "</p>";
-
-    //     $mail->isHTML(true);
-    //     $mail->Body = "
-    //         <!DOCTYPE html>
-    //         <html lang='" . __LANG . "'>
-    //         <head>
-    //             <meta charset='UTF-8'>
-    //             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    //             <title>{$title}</title>
-    //         </head>
-    //         <body>
-    //         <center><h2>{$title}</h2></center>
-    //         <br>
-    //         <p>{$message}</p>  
-    //         </body>
-    //         </html>
-    //         ";
-
-    //     if (__PHPMAIL__ == '1') {
-    //         $mail->send();
-    //     }
-    //     $mail->ClearAddresses();
-    //     $mail->ClearAttachments();
-    //     if (__RESEND__ == '1') {
-    //         Manager::table('email_queue')->insert([
-    //             'from' => $from,
-    //             'reply_to' => $reply_to,
-    //             'to' => json_encode($to),
-    //             'message' => $message,
-    //             'text' => '',
-    //             'subject' => $subject,
-    //             'attachments' => json_encode($files),
-    //             'user' => $user,
-    //             'year' => $year,
-    //         ]);
-    //     }
-    // }
+    $pdf->Output("F", $filePath);
 }
 
+// $pdf->Output();
 PDF::OutputFiles($files);
 
 if ($_POST['envia'] === 'Si' || $_POST['enviae'] === 'Si') {
@@ -441,7 +357,7 @@ if ($_POST['envia'] === 'Si' || $_POST['enviae'] === 'Si') {
         $basename = basename($file);
         $filePath = attachments_url("statements/{$basename}");
 
-        Email::to(['franklinomarflores@gmail.com'])
+        Email::to($to)
             ->subject(__('Estado de cuenta'))
             ->body(__('Adjunto el estado de cuenta para la cuenta #') . $familyId)
             ->attach($filePath, "statement_{$familyId}.pdf")
