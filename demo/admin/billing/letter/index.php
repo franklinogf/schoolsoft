@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../app.php';
+require_once '../../../app.php';
 
 
 use Classes\Route;
@@ -96,9 +96,13 @@ $estudents = DB::table('year')->where([
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="carta" class="form-label font-weight-bold"><?= __('Carta') ?></label>
-                                        <select id="carta" name="carta" class="form-control">
+                                        <select id="carta" name="carta" class="form-control" required >
+                                            <option value=""><?= __('Selección') ?></option>
+                                            <option value="1c"><?= __('Aviso de cobro') ?></option>
                                             <option value="1"><?= __('Primer aviso de cobro') ?></option>
+                                            <option value="1b"><?= __('Primer aviso de cobro CBG') ?></option>
                                             <option value="2"><?= __('Segundo aviso de cobro') ?></option>
+                                            <option value="2b"><?= __('Segundo aviso de cobro CBG') ?></option>
                                             <option value="3"><?= __('Carta de suspensión') ?></option>
                                             <option value="4"><?= __('Carta general') ?></option>
                                             <option value="5"><?= __('Carta de cobro general A') ?></option>
