@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../app.php';
+require_once '../../app.php';
 
 use App\Models\Admin;
 use App\Models\Scopes\YearScope;
@@ -46,14 +46,12 @@ $lang = new Lang([
     ['Activación abono mensualidad', 'Activation of monthly payment'],
     ['Activación compras de fotos', 'Activation of photo purchases'],
     ['Cantidad', 'Amount'],
-    ['', ''],
+    ['Activar Re-Matrícula:', 'Activate Re-registration:'],
 
 
 
 ]);
 
-$user = Admin::user(Session::id())->first();
-$year = $user->year2;
 
 $test = 0;
 
@@ -78,12 +76,18 @@ if (isset($_POST['grabar'])) {
         'camisas' => $_POST['camisa'],
         'cena' => $_POST['cena'],
         'esac' => $_POST['esac'],
+        'rem_ac' => $_POST['rem_ac'],
     ]);
 }
 
+$user = Admin::user(Session::id())->first();
+$year = $user->year2;
 
+//$r2 = Admin::primaryAdmin();
 
-$r2 = Admin::primaryAdmin();
+$r2 = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
 
 $est = DB::table('year')->select("DISTINCT year")->where([
     ['pago_e_s', 'OK'],
@@ -151,6 +155,7 @@ $tes9 = count($est);
 ?>
 <!DOCTYPE html>
 <html>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -325,6 +330,13 @@ $tes9 = count($est);
                                             <h6 class="mb-0">Activaciones del Sistema</h6>
                                         </div>
                                         <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="rem_ac" class="form-label font-weight-bold"><?= $lang->translation('Activar Re-Matrícula:') ?></label>
+                                                <select name="rem_ac" id="rem_ac" class="form-control">
+                                                    <option value="No" <?= $r2->rem_ac === 'No' ? 'selected' : '' ?>>No</option>
+                                                    <option value="Si" <?= $r2->rem_ac === 'Si' ? 'selected' : '' ?>><?= $lang->translation('Si') ?></option>
+                                                </select>
+                                            </div>
                                             <div class="form-group">
                                                 <label for="esac" class="form-label font-weight-bold"><?= $lang->translation('Activar Estudios Supervisados:') ?></label>
                                                 <select name="esac" id="esac" class="form-control">
