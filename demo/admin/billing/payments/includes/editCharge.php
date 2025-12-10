@@ -1,7 +1,10 @@
 <?php
+
+use App\Models\Payment;
+use App\Models\Student;
 use Classes\Route;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 require_once __DIR__ . '/../../../../app.php';
 
@@ -13,12 +16,13 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $amount = $_POST['amount'];
     $chargeId = $_POST['chargeId'];
 
-    $student = new Student($chargeTo);
+    $student = Student::find($chargeTo);
 
     $month = date('m', strtotime($date));
 
 
-    DB::table('pagos')->where('mt', $id)->update([
+    $charge = Payment::find($id);
+    $charge->update([
         'nombre' => "$student->nombre $student->apellidos",
         'desc1' => $description,
         'fecha_d' => $date,
@@ -28,15 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     ]);
 
 
-    Route::redirect("/billing/payments?accountId={$student->id}&month={$month}");
-
-
+    Route::redirect("/billing/payments/index.php?accountId={$student->id}&month={$month}");
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json; charset=utf-8');
 
     $id = $_GET['id'];
-    $charge = DB::table('pagos')->where('mt', $id)->first();
-    $student = new Student($charge->ss);
+    $charge = Payment::find($id);
+    $student = $charge->student;
 
     if ($charge) {
         $data = [
@@ -45,15 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             "amount" => floatval($charge->deuda),
             "date" => $charge->fecha_d,
             "description" => $charge->desc1,
-
-
         ];
         echo json_encode($data);
     } else {
         echo json_encode(['error' => true]);
     }
-
 } else {
     Route::error();
-
 }

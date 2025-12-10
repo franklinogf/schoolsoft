@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     if ($_POST['paymentMode'] === 'completo') {
         // buscar los pagos por el mes seleccionado
-        $payments = Payment::where([
+        $payments = Payment::query()->where([
             ['id', $accountId],
             ['baja', '']
         ])->whereMonth('fecha_d', $monthToPay)->get();
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'fecha2' => $date
                 ];
 
-                Payment::create($data);
+                Payment::query()->create($data);
             }
         }
     } else {
@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $grade = $paymentDebtsGrades[$index];
             $debt = [];
 
-            $debtData = Payment::where([
+            $debtData = Payment::query()->where([
                 ['id', $accountId],
                 ['baja', ''],
                 ['grado', $grade],
@@ -148,10 +148,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'hora' => $time,
                     'fecha2' => $date
                 ];
-                Payment::create($data);
+                Payment::query()->create($data);
             }
         }
     }
 
-    Route::redirect("/billing/payments?accountId={$accountId}&month={$monthToPay}");
+    Route::redirect("/billing/payments/index.php?accountId={$accountId}&month={$monthToPay}");
 }

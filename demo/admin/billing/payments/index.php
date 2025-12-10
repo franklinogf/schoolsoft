@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../../app.php';
 
 use App\Enums\AdminPermission;
-use App\Models\Payment;
 use Classes\Route;
 use Classes\Session;
 use Classes\Lang;
@@ -110,8 +109,8 @@ $depositTypes = [
 
         <?php if (isset($_REQUEST['accountId'])):
             $accountId = $_REQUEST['accountId'];
-            $parent = Family::find($accountId);
-            $accountStudents = Student::byId($accountId)->get();
+            $parent = Family::with('kids')->find($accountId);
+            $accountStudents = $parent->kids;
             $paymentsQuery = $parent->charges()
                 ->orderByRaw("id,grado desc,ss,codigo,rec")
 

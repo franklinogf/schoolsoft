@@ -1,15 +1,16 @@
 <?php
-use Classes\Controllers\Parents;
+
+use App\Models\Family;
 use Classes\Route;
-use Classes\DataBase\DB;
 
 require_once __DIR__ . '/../../../../app.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $accountId = $_POST['accountId'];
+    $family = Family::find($accountId);
     if (isset($_POST['deletePromise'])) {
-        DB::table('madre')->where('id', $accountId)->update([
+        $family->update([
             'fecha_p' => '',
             'fecha_e' => '',
             'promesa' => '',
@@ -19,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'total_pagar' => '',
         ]);
     } else {
-        DB::table('madre')->where('id', $accountId)->update([
+        $family->update([
             'fecha_p' => $_POST['date'],
             'fecha_e' => $_POST['expirationDate'],
             'promesa' => $_POST['description'],
@@ -29,13 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'total_pagar' => $_POST['total'],
         ]);
     }
-
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json; charset=utf-8');
 
     $accountId = $_GET['accountId'];
 
-    $parent = new Parents($accountId);
+    $parent = Family::find($accountId);
     $data = [
         'date' => $parent->fecha_p,
         'expirationDate' => $parent->fecha_e,
@@ -46,8 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         'total' => $parent->total_pagar ? floatval($parent->total_pagar) : null,
     ];
     echo json_encode($data);
-
 } else {
     Route::error();
-
 }

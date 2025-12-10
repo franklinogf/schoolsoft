@@ -578,7 +578,8 @@ $(document).ready(function () {
         }
       })
       Object.entries(debts).forEach(([_, debt], index) => {
-        const sum = debt.debt - debt.paid
+        const sum = parseFloat((debt.debt - debt.paid).toFixed(2))
+
         if (sum > 0) {
           $('#parcialPaymentDebts')
             .removeClass('hidden')
@@ -698,7 +699,7 @@ $(document).ready(function () {
             </div>
         </div>
         <div class="input-group input-group-sm  mb-1 col-4">                    
-           <input type="number" max="${amount}" name="parcialPaymentDebtsAmounts[${idNumber}]" class="font-weight-bold form-control text-right" disabled value="${amount}"/>
+           <input type="number" step="0.01" max="${amount}" name="parcialPaymentDebtsAmounts[${idNumber}]" class="font-weight-bold form-control text-right" disabled value="${amount}"/>
            <div class="input-group-append">
             <small class="input-group-text text-muted">/${amount}</small>
           </div>

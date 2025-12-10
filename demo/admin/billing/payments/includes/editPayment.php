@@ -1,15 +1,16 @@
 <?php
-use Classes\Route;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
-use Classes\Controllers\School;
-
-
 require_once __DIR__ . '/../../../../app.php';
+
+use App\Models\Admin;
+use App\Models\Payment;
+use App\Models\Student;
+use Classes\Route;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    $school = new School();
+    $school = Admin::primaryAdmin();
     $year = $school->year();
     $id = $_POST["id"];
     $bash = $_POST["bash"];
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $chkNum = $_POST["chkNum"];
     $comment = $_POST["comment"];
 
-    $student = new Student($chargeTo);
+    $student = Student::find($chargeTo);
 
     $month = date('m', strtotime($chargeDate));
     $data = [
@@ -50,14 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $data['pago'] = 0.00;
         $data['deuda'] = $amount * -1;
         $data['chkd'] = 5;
-        $feeCode = $school->info('codc1');
-        $feeAmount = $school->info('codc2');
+        $feeCode = $school->codc1;
+        $feeAmount = $school->codc2;
         $feeCodeInfo = DB::table('presupuesto')->where([
             ['codigo', $feeCode],
             ["year", $year]
         ])->first();
 
-        DB::table('pagos')->insert([
+        Payment::create([
             'id' => $student->id,
             'nombre' => "$student->nombre $student->apellidos",
             'desc1' => $feeCodeInfo->descripcion,
@@ -68,7 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'grado' => $student->grado,
             'deuda' => $feeAmount,
         ]);
-        DB::table('pagos')->insert([
+
+        Payment::create([
             'id' => $student->id,
             'nombre' => "$student->nombre $student->apellidos",
             'desc1' => $codeInfo->descripcion,
@@ -82,18 +84,16 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     }
 
 
-    DB::table('pagos')->where('mt', $id)->update($data);
+    Payment::find($id)->update($data);
 
 
-    Route::redirect("/billing/payments?accountId={$student->id}&month={$month}");
-
-
+    Route::redirect("/billing/payments/index.php?accountId={$student->id}&month={$month}");
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json; charset=utf-8');
 
     $id = $_GET['id'];
-    $charge = DB::table('pagos')->where('mt', $id)->first();
-    $student = new Student($charge->ss);
+    $charge = Payment::find($id);
+    $student =  $charge->student;
 
     if ($charge) {
         $data = [
@@ -120,8 +120,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     } else {
         echo json_encode(['error' => true]);
     }
-
 } else {
     Route::error();
-
 }
