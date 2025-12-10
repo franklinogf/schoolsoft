@@ -1,11 +1,12 @@
 <?php
-require_once __DIR__ . '/../../../app.php';
+require_once '../../../app.php';
 
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
 use Classes\Controllers\Parents;
+use Classes\DataBase\DB;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
@@ -14,8 +15,16 @@ $lang = new Lang([
     ["Seleccionar los estudiantes marcando la casilla","Select students by marking the box"],
     ["Grado:","Grade:"],
     ["Fecha de nacimiento:","Date of Birth:"],
-    ["Re-Matricular estudiantes seleccionados","Re-Enroll selected students"]
+    ["Re-Matricular estudiantes seleccionados","Re-Enroll selected students"],
+    ["La Re-Matricula no esta activa.","Re-registration is not active."],
 ]);
+
+
+$r2 = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -33,7 +42,21 @@ $lang = new Lang([
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
         <h1 class="text-center my-4"><?= $lang->translation("Re-Matricula") ?></h1>
-        <small class="text-muted"><?= $lang->translation("Seleccionar los estudiantes marcando la casilla") ?></small>
+        <?php 
+            if ($r2->rem_ac=='Si')
+               {
+               ?> 
+               <small class="text-muted"><?= $lang->translation("Seleccionar los estudiantes marcando la casilla") ?></small>
+               <?php 
+               }
+            else
+               {
+               ?> 
+               <h1 class="text-center my-4"><?= $lang->translation("La Re-Matricula no esta activa.") ?></h1>
+               <?php 
+               exit;
+               }
+        ?>
         <form method="post" id="reEnrollmentForm">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                 <?php foreach ($parents->kids() as $kid) : ?>
