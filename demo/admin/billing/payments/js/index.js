@@ -51,6 +51,9 @@ $(document).ready(function () {
           $('#addChargeModal').modal('hide')
           Toast.fire('Cargo añadido!', '', 'success')
         }
+      },
+      error: function (error) {
+        console.log({ error })
       }
     })
   })
@@ -457,6 +460,7 @@ $(document).ready(function () {
           $('#editPaymentComment').val(response.comment)
           $('#editPaymentChangeDate').val(response.change_date || 'N\\A')
           $('#editPaymentCode').val(response.code)
+          $('#editPaymentReceiptNumber').val(response.receiptNumber)
 
           $('#editPaymentAmount').val(response.amount.toFixed(2))
           $('#editPaymentReturnedCheck').change()

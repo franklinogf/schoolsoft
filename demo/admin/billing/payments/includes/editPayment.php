@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $paymentType = $_POST["paymentType"];
     $chkNum = $_POST["chkNum"];
     $comment = $_POST["comment"];
+    $receiptNum = $_POST["receipt_number"];
 
     $student = Student::find($chargeTo);
 
@@ -39,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         'nuchk' => $chkNum,
         'razon' => $comment,
         'fecha_r' => date('Y-m-d'),
+        'rec' => $receiptNum
     ];
 
     if (isset($_POST['returnedCheck'])) {
@@ -112,9 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             'comment' => $charge->razon,
             'change_date' => $charge->fecha_r,
             'code' => $charge->codigo,
-            'returnedCheck' => $charge->chkd
-
-
+            'returnedCheck' => $charge->chkd,
+            'receiptNumber' => $charge->rec,
         ];
         echo json_encode($data);
     } else {

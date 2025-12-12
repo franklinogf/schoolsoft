@@ -282,7 +282,7 @@ $depositTypes = [
                         <div class="form-row">
                             <div class="form-group col-6">
                                 <label for="receiptType">No. de recibo</label>
-                                <?php if ($school->info('rec') === '1'): ?>
+                                <?php if ($school->rec == '1'): ?>
                                     <select class="form-control" id="receiptType" name="receiptType">
                                         <option value="1">Recibo nuevo</option>
                                         <option value="2">El mismo recibo</option>
@@ -294,13 +294,13 @@ $depositTypes = [
                             </div>
                             <div class="form-group col-6">
                                 <label for="bash">Bash</label>
-                                <select class="form-control" <?= $school->info('caja') != 0 ? 'disabled' : '' ?> id="bash" name="bash">
+                                <select class="form-control" <?= $school->caja != 0 ? 'disabled' : '' ?> id="bash" name="bash">
                                     <?php for ($i = 0; $i <= 10; $i++): ?>
-                                        <option <?= $school->info('rec') === $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
+                                        <option <?= $school->rec == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
                                     <?php endfor ?>
                                 </select>
-                                <?php if ($school->info('caja') != 0): ?>
-                                    <input type="hidden" class="form-control" name="bash" value="<?= $school->info('caja') ?>" />
+                                <?php if ($school->caja != 0): ?>
+                                    <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
                                 <?php endif ?>
                             </div>
                         </div>
@@ -446,13 +446,13 @@ $depositTypes = [
                                 <div class="form-row">
                                     <div class="form-group col-6">
                                         <label for="editPaymentBash">Bash</label>
-                                        <select class="form-control" <?= $school->info('caja') != 0 ? 'disabled' : '' ?> id="editPaymentBash" name="bash">
+                                        <select class="form-control" <?= $school->caja != 0 ? 'disabled' : '' ?> id="editPaymentBash" name="bash">
                                             <?php for ($i = 0; $i <= 10; $i++): ?>
-                                                <option <?= $school->info('rec') === $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
+                                                <option <?= $school->rec == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
                                             <?php endfor ?>
                                         </select>
-                                        <?php if ($school->info('caja') != 0): ?>
-                                            <input type="hidden" class="form-control" name="bash" value="<?= $school->info('caja') ?>" />
+                                        <?php if ($school->caja != 0): ?>
+                                            <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
                                         <?php endif ?>
                                     </div>
                                     <div class="form-group col-6">
@@ -467,6 +467,10 @@ $depositTypes = [
                                             <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
                                         <?php endforeach ?>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="receiptNumber">Recibo</label>
+                                    <input class="form-control" id="editPaymentReceiptNumber" name="receipt_number" />
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-6">

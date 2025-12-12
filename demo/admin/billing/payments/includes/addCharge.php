@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     }
 
 
-    Route::redirect("/billing/payments/index.php?accountId={$student->id}&month={$month}");
+    // Route::redirect("/billing/payments/index.php?accountId={$student->id}&month={$month}");
 } else {
     Route::error();
 }
