@@ -17,11 +17,12 @@ class Email
 
     protected ?string $from = null;
     protected ?string $fromName = null;
-    protected ?array $to = null;
+    protected array $to;
     protected string $subject = 'No Subject';
     protected string $body = '';
     protected array $attachments = [];
     protected ?string $replyTo = null;
+    protected ?array $cc = null;
     protected ?string $text = null;
 
     public static function from(string $email, ?string $name = null): self
@@ -44,6 +45,11 @@ class Email
         return $this;
     }
 
+    /**
+     * 
+     * @param array<int,string> $email
+     * @return Email
+     */
     public function setTo(array $email): self
     {
         $this->to = $email;
@@ -67,8 +73,17 @@ class Email
         $this->replyTo = $email;
         return $this;
     }
+    /**
+     * 
+     * @param array<int,string> $email
+     */
+    public function cc(array $email): self
+    {
+        $this->cc = $email;
+        return $this;
+    }
 
-    public function text(?string $text): self
+    public function text(string $text): self
     {
         $this->text = $text;
         return $this;
@@ -107,7 +122,7 @@ class Email
 
     public function queue(string|int|null $accountId = null, ?array $socialSecurities = null): void
     {
-        if (!$this->to  || count($this->to) === 0) {
+        if (count($this->to) === 0) {
             throw new Exception('No recipients specified');
         }
 
@@ -146,6 +161,7 @@ class Email
             'from_name' => $fromName,
             'to' => $this->to,
             'reply_to' => $replyTo,
+            'cc' => $this->cc,
             'message' => $this->body,
             'text' => $this->text,
             'subject' => $this->subject,
@@ -159,7 +175,7 @@ class Email
 
     public function send(): void
     {
-        if (!$this->to  || count($this->to) === 0) {
+        if (\count($this->to) === 0) {
             throw new Exception('No recipients specified');
         }
 
@@ -201,6 +217,7 @@ class Email
                     'from' => $from,
                     'to' => $this->to,
                     'reply_to' => $replyTo,
+                    'cc' => $this->cc,
                     'subject' => $this->subject,
                     'html' => $this->body,
                     'text' => $this->text,
@@ -213,11 +230,16 @@ class Email
             try {
                 $mail = new Mail;
 
-                foreach ($this->to as $t) {
-                    $mail->addAddress($t);
+                foreach ($this->to as $to) {
+                    $mail->addAddress($to);
                 }
                 if ($this->replyTo !== null) {
                     $mail->addReplyTo($this->replyTo);
+                }
+                if ($this->cc !== null) {
+                    foreach ($this->cc as $ccEmail) {
+                        $mail->addCC($ccEmail);
+                    }
                 }
                 $mail->Subject = $this->subject;
                 $mail->isHTML(true);
@@ -225,6 +247,9 @@ class Email
                 if ($this->text !== null) {
                     $mail->AltBody = $this->text;
                 }
+                /**
+                 * @var array{content?:string,path?:string,filename:string} $attachment
+                 */
                 foreach ($this->attachments as $attachment) {
                     if (isset($attachment['content'])) {
                         $mail->addStringAttachment($attachment['content'], $attachment['filename']);
@@ -253,14 +278,27 @@ class Email
     public static function sendQueued(EmailQueue $queuedEmail): void
     {
         try {
-            self::from($queuedEmail->from, $queuedEmail->from_name)
+            $email = self::from($queuedEmail->from, $queuedEmail->from_name)
                 ->to($queuedEmail->to)
-                ->subject($queuedEmail->subject)
                 ->body($queuedEmail->message)
-                ->replyTo($queuedEmail->reply_to)
-                ->text($queuedEmail->text)
+                ->subject($queuedEmail->subject);
+
+            if ($queuedEmail->cc) {
+                $email->cc($queuedEmail->cc);
+            }
+
+            if ($queuedEmail->reply_to) {
+                $email->replyTo($queuedEmail->reply_to);
+            }
+
+            if ($queuedEmail->text) {
+                $email->text($queuedEmail->text);
+            }
+
+            $email
                 ->attach($queuedEmail->attachments)
                 ->send();
+
             $queuedEmail->markAsSent();
         } catch (Exception $e) {
             $queuedEmail->markAsFailed($e->getMessage());
