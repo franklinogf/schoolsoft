@@ -77,7 +77,7 @@ $gt = 0;
 foreach ($students2 as $student2) {
     $m = $m + 1;
     $pdf->AddPage();
-    $students = DB::table('year')->select("DISTINCT fecha_pago_e_s")->where([
+    $students = DB::table('year')->where([
         ['fecha_pago_e_s', $student2->fecha_pago_e_s],
         ['pago_e_s', 'OK']
     ])->orderBy('apellidos, horam DESC')->get();
