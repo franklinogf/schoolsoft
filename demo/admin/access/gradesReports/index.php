@@ -145,7 +145,7 @@ $options = [
             [
                 'name' => __("Inf. Aprove. Académico"),
                 'desc' => __("Información sobre el rendimiento académico"),
-                'link' => 'InfAproveAcademico.php',
+                'link' => 'inf_academ_menu.php',
                 'hidden' => false,
             ],
             [
@@ -214,7 +214,7 @@ $options = [
             [
                 'name' => __("Aprove. Académico"),
                 'desc' => '',
-                'link' => '#',
+                'link' => 'inf_academ_menu.php',
                 'hidden' => false,
             ],
             [
