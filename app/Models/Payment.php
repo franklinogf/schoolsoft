@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * @property string $id
  * @property string $nombre
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $chkd
  * @property string $cdc
  * @property string $codigo2
+ * @property Student $student
  */
 class Payment extends Model
 {
@@ -52,9 +55,14 @@ class Payment extends Model
     public static function nextReceiptNumber(): int
     {
         // Get the maximum receipt number from the payments table, ignoring the year scope
-        $maxReceipt = self::withoutGlobalScope(YearScope::class)->max('rec');
+        $maxReceipt = (int) self::withoutGlobalScope(YearScope::class)->query()->max('rec');
 
         // If no receipts exist, start from 1, otherwise increment the max by 1
         return $maxReceipt ? $maxReceipt + 1 : 1;
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class, 'ss', 'ss');
     }
 }

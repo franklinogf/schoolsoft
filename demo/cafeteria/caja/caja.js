@@ -367,8 +367,12 @@ $(document).ready(function () {
         disabled: true,
         checked: false
       })
-      $('#cantidadEfectivo').val((parseFloat($('#cantidadEfectivo').val()) + 1).toFixed(2))
+      const total = parseFloat($('#cantidadEfectivo').val())
+      const additional = total >= 100 ? 2 : 1
+      $('#cantidadEfectivo').val((total + additional).toFixed(2))
       $('#creditoAdicional').removeClass('d-none')
+      $('#creditoAdicionalText').text(`$${additional.toFixed(2)} adicional por pagar con crédito`)
+      $('#creditoAdicionalValue').val(additional.toFixed(2))
     }
   })
   $('#checkCredit2').change(function (event) {
@@ -380,6 +384,8 @@ $(document).ready(function () {
       })
       $('#cantidadEfectivo').val((parseFloat($('#cantidadEfectivo').val()) - 1).toFixed(2))
       $('#creditoAdicional').addClass('d-none')
+      $('#creditoAdicionalText').text('')
+      $('#creditoAdicionalValue').val('0')
     }
   })
   //buscar el deposito en el metodo 3

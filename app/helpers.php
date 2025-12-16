@@ -159,3 +159,10 @@ if (!function_exists("upload_attachment")) {
         return $urls;
     }
 }
+
+if (!function_exists('school_has_active')) {
+    function school_has_active(string $schoolConfig): bool
+    {
+        return in_array(school_config('app.acronym'), config($schoolConfig, []));
+    }
+}

@@ -70,12 +70,17 @@ if ($orders->isNotEmpty()) {
         }
 
         try {
-            Email::to($to)
+            $email = Email::to($to)
                 ->subject($subject)
                 ->body($message)
                 ->text($text)
-                ->attach("{$target_dir}/temp-file.pdf", "Recibo {$date}.pdf")
-                ->send();
+                ->attach("{$target_dir}/temp-file.pdf", "Recibo {$date}.pdf");
+
+            if (school_config('app.acronym') === 'cbl') {
+                $email->cc(['recibos@colegiobautista.org']);
+            }
+
+            $email->send();
             $compra->markReceiptSent();
             echo "Recibo enviado para compra #{$id_compra} a " . json_encode($to) . "\n";
         } catch (\Exception $e) {

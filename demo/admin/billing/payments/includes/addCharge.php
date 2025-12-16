@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Admin;
+use App\Models\Payment;
 use App\Models\Student;
 use Classes\Route;
-use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager as DB;
 use Classes\Session;
 
 // use Classes\Controllers\School;
@@ -39,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 'deuda' => $amount,
                 'add1' => $amount < 0 ? 2 : 1,
             ];
-            $mt = DB::table('pagos')->insertGetId($dataToInsert);
+            $mt = Payment::create($dataToInsert)->mt;
             $insertedData = array_merge($dataToInsert, ['mt' => $mt, "month" => $month]);
             echo json_encode(["message" => "Pago insertado con exito", "rows" => [$insertedData]]);
         } catch (\Throwable $th) {
@@ -86,9 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     }
 
 
-    // Route::redirect("/billing/payments?accountId={$student->id}&month={$month}");
-
-
+    // Route::redirect("/billing/payments/index.php?accountId={$student->id}&month={$month}");
 } else {
     Route::error();
 }

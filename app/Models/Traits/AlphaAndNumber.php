@@ -21,11 +21,12 @@ trait AlphaAndNumber
     }
     /**
      * Logic to pick the right connection
+     * @return 'mysql_alpha'|'mysql_numbers'
      */
     protected function connectionType(): string
     {
         // Example: based on env(), config, tenant, or request
-        return in_array(school_config('app.acronym'), config('app.madre_table_alpha', []))
+        return school_has_active('app.madre_table_alpha')
             ? 'mysql_alpha'
             : 'mysql_numbers';
     }

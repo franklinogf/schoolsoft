@@ -19,7 +19,7 @@ $purchases = DB::table('compra_cafeteria')->where([
 //Creaci&#65533;n del objeto de la clase heredada
 $pdf = new PDF();
 $pdf->Fill();
-$pdf->SetAutoPageBreak(true, 5);
+$pdf->SetAutoPageBreak(true, 10);
 $pdf->AddPage('L');
 $pdf->SetFont('Times', 'B', 12);
 $pdf->Cell(0, 10, 'CUADRE DEL DIA DETALLADO', 0, 1, 'C');
@@ -50,12 +50,15 @@ foreach ($purchases as $purchase) {
 		$pdf->Cell(15, 5, $purchase->id, 0, 0, 'C');
 		$pdf->Cell(70, 5, $purchaseItem->descripcion, 0);
 		$pdf->Cell(25, 5, $purchase->fecha, 0, 0, 'C');
-		$pdf->Cell(30, 5, $metodo[$purchase->tdp], 0, 0, 'C');
-		$pdf->Cell(25, 5, $price, 0, 0, 'C');
+		$pdf->Cell(30, 5, $metodo[$purchase->tdp] ?? '', 0, 0, 'C');
+		$pdf->Cell(25, 5, number_format($price, 2), 0, 0, 'C');
 		$pdf->Cell(25, 5, $purchase->ss, 0, 0, 'C');
 		$pdf->Cell(70, 5, "$purchase->apellido $purchase->nombre", 0, 1, 'L');
 
-		$precio[$purchase->tdp] += $price;
+		if (isset($precio[$purchase->tdp])) {
+
+			$precio[$purchase->tdp] += number_format($price, 2);
+		}
 		$TOTAL += number_format($price, 2);
 	}
 }

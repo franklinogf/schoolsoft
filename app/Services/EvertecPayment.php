@@ -10,11 +10,9 @@ class EvertecPayment
     private $achEndpoint;
     private $username;
     private $password;
-    private $prefix;
 
-    public function __construct(?string $prefix = null, bool $isDevelopment = false)
+    public function __construct(private ?string $prefix = null, bool $isDevelopment = false)
     {
-        $this->prefix = $prefix;
         $demoUsername = 'CERT4549444000033';
         $demoPassword = '5B034VrA';
 
@@ -22,7 +20,7 @@ class EvertecPayment
         $this->password = school_config('services.evertec.password', $demoPassword);
 
         // Check if we are in a development environment
-        $isDevelopment = ($this->username === $demoUsername && $this->password === $demoPassword) || $isDevelopment ? true : false;
+        $isDevelopment = $this->username === $demoUsername && $this->password === $demoPassword || $isDevelopment ? true : false;
 
         // Set endpoints based on environment
         if ($isDevelopment) {
@@ -212,12 +210,15 @@ class EvertecPayment
         $error = curl_error($ch);
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        curl_close($ch);
+        // curl_close($ch);
+        unset($ch);
+
 
         if ($error) {
             return [
                 'success' => false,
-                'error' => $error
+                'error' => $error,
+                'statusCode' => $statusCode
             ];
         }
 
@@ -230,6 +231,7 @@ class EvertecPayment
         } else {
             $responseData['success'] = false;
         }
+        $responseData['statusCode'] = $statusCode;
 
         return $responseData;
     }

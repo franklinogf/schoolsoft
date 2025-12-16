@@ -1,15 +1,15 @@
 <?php
-use Classes\Controllers\Parents;
-use Classes\Controllers\School;
+
+use App\Models\Admin;
 use Classes\Route;
-use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager as DB;
 
 require_once __DIR__ . '/../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json; charset=utf-8');
-    $school = new School();
+    $school = Admin::primaryAdmin();
     $year = $school->year();
 
     $accountId = $_GET['accountId'];
@@ -50,8 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     echo json_encode($data);
-
 } else {
     Route::error();
-
 }

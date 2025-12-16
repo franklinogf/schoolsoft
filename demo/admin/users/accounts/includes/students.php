@@ -54,10 +54,10 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     $student->cdb1 = $_POST['cdb1'];
     $student->desc2 = $_POST['discount2'];
     $student->desc_mat = $_POST['mat'];
-    $student->cdb1 = $_POST['cdb2'];
+    $student->cdb2 = $_POST['cdb2'];
     $student->desc3 = $_POST['discount3'];
     $student->desc_otro1 = $_POST['otro1'];
-    $student->cdb1 = $_POST['cdb3'];
+    $student->cdb3 = $_POST['cdb3'];
 
     $student->pop = $_POST['school'];
     $student->colpro = $_POST['colpro'];

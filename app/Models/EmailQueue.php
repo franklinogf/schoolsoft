@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,18 +15,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $from
  * @property string $from_name
  * @property array $to
- * @property string $reply_to
+ * @property string|null $reply_to
+ * @property array<int,string>|null $cc
  * @property string $message
- * @property string $text
+ * @property string|null $text
  * @property string $subject
  * @property array $attachments
  * @property mixed $status
- * @property string $failed_reason
- * @property mixed $created_at
- * @property mixed $sent_at
+ * @property string|null $failed_reason
+ * @property CarbonInterface $created_at
+ * @property CarbonInterface|null $sent_at
  * @property string $year
- * @property string $id2
- * @property array $social_securities
+ * @property string|null $id2
+ * @property array<int,string>|null $social_securities
  * @property Family|null $family
  */
 class EmailQueue extends Model
@@ -93,6 +95,7 @@ class EmailQueue extends Model
     {
         return [
             'to' => 'array',
+            'cc' => 'array',
             'attachments' => 'array',
             'social_securities' => 'array',
             'sent_at' => 'datetime',

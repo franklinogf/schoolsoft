@@ -609,7 +609,8 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
                         <input type="text" class="form-control form-control-lg" name="cantidadEfectivo" readonly id="cantidadEfectivo" placeholder="0.00">
                       </div>
                       <small id="creditoAdicional" class="form-text text-warning d-none">
-                        <i class="fas fa-exclamation-triangle mr-1"></i>$1.00 adicional por pagar con crédito
+                        <i class="fas fa-exclamation-triangle mr-1"></i><span id="creditoAdicionalText">$1.00 adicional por pagar con crédito</span>
+                        <input type="hidden" name="creditoAdicionalValue" id="creditoAdicionalValue" value="0">
                       </small>
                     </div>
                   </div>
