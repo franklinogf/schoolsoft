@@ -134,11 +134,12 @@ if ($_POST['metodo'] === '3' || $_POST['metodo'] === '4') {
 
 
 if (isset($_POST['credito']) && $_POST['credito'] === 'si') {
-
+	$additionalCredit = isset($_POST['creditoAdicionalValue']) ? floatval($_POST['creditoAdicionalValue']) : 1.00;
+	$description = $additionalCredit > 1.00 ? "Dos dolares por credito" : "Un dolar por credito";
 	$order->items()->create(
 		[
-			'descripcion' => 'Un dolar por credito',
-			'precio' => '1.00'
+			'descripcion' => $description,
+			'precio' => number_format($additionalCredit, 2, '.', '')
 		]
 	);
 }
