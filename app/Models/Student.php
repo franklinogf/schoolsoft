@@ -229,14 +229,14 @@ class Student extends Model
     }
 
 
-    public function scopeWithUnerolled(Builder $query): Builder
+    protected function scopeWithUnerolled(Builder $query): void
     {
-        return $query->withoutGlobalScope('unenrolled');
+        $query->withoutGlobalScope('unenrolled');
     }
 
-    public function scopeByGrade(Builder $query, string $grade): Builder
+    protected function scopeByGrade(Builder $query, string $grade): void
     {
-        return $query->where('grado', $grade)->orderBy('grado');
+        $query->where('grado', $grade)->orderBy('grado');
     }
 
     public function family(): BelongsTo
@@ -244,19 +244,30 @@ class Student extends Model
         return $this->belongsTo(Family::class, 'id', 'id');
     }
 
-
-
-    public function scopeById(Builder $query, int|string $id): Builder
+    protected function scopeById(Builder $query, int|string $id): void
     {
-        return $query->where('id', $id);
+        $query->where('id', $id);
     }
-    public function scopeByMT(Builder $query, int|string $mt): Builder
+
+    protected function scopeByMT(Builder $query, int|string $mt): void
     {
-        return $query->where('mt', $mt);
+        $query->where('mt', $mt);
     }
-    public function scopeBySS(Builder $query, string $ss): Builder
+
+    protected function scopeBySS(Builder $query, string $ss): void
     {
-        return $query->where('ss', $ss);
+        $query->where('ss', $ss);
+    }
+
+    protected function scopeByClass(Builder $query, string $class, string $table, bool $isSummer = false):void
+    {
+        $query->whereHas('classes', function (Builder $q) use ($class, $table, $isSummer) {
+            $q->from($table)
+                ->where('curso', $class);
+            if ($isSummer) {
+                $q->where('verano', 'Si');
+            }
+        });
     }
 
     protected function fullName(): Attribute

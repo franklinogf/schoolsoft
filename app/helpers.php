@@ -66,7 +66,12 @@ if (!function_exists('school_config')) {
         return $config[$keys[1]] ?? $default;
     }
 }
-
+if( !function_exists('school_is')){
+    function school_is(string ...$acronym): bool
+    {
+        return in_array(school_config('app.acronym'), $acronym);
+    }
+}
 if (!function_exists('asset')) {
     function asset(string $path): string
     {

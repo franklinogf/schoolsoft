@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * @property string $id
  * @property string $padre
@@ -168,10 +170,23 @@ class Classes extends Model
     protected static function booted(): void
     {
         static::addGlobalScope(new YearScope);
+        static::addGlobalScope('lastName', function (Builder $builder) {
+            $builder->orderBy('apellidos');
+        });
     }
 
-    public function scopeTable(Builder $query, string $table): Builder
+    public function student(): BelongsTo
     {
-        return $query->from($table);
+        return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+
+    protected function scopeTable(Builder $query, string $table): void
+    {
+        $query->from($table);
+    }
+    
+    protected function scopeOfClass(Builder $query, string $class): void
+    {
+        $query->where('curso', $class);
     }
 }
