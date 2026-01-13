@@ -14,20 +14,39 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $chargeTo = $_POST['chargeTo'];
     $description = $_POST['description'];
     $amount = $_POST['amount'];
-    $chargeId = $_POST['chargeId'];
+    $code = $_POST['code'];
 
     $student = Student::find($chargeTo);
 
     $month = date('m', strtotime($date));
-
+    $grade = $student->grado;
 
     $charge = Payment::find($id);
+
+
+    Payment::query()->where([
+        ['id', $charge->id],
+        ['baja', ''],
+        ['grado', $charge->grado],
+        ['codigo', $charge->codigo]
+    ])
+        ->whereMonth('fecha_d', $month)
+        ->update([
+            'nombre' => "$student->nombre $student->apellidos",
+            'desc1' => $description,
+            'codigo' => $code,
+            'fecha_d' => $date,
+            'ss' => $student->ss,
+            'grado' => $grade,            
+        ]);
+
     $charge->update([
         'nombre' => "$student->nombre $student->apellidos",
         'desc1' => $description,
+        'codigo' => $code,
         'fecha_d' => $date,
         'ss' => $student->ss,
-        'grado' => $student->grado,
+        'grado' => $grade,
         'deuda' => $amount,
     ]);
 
@@ -46,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             "chargeTo" => intval($student->mt),
             "amount" => floatval($charge->deuda),
             "date" => $charge->fecha_d,
+            'code' => $charge->codigo,
             "description" => $charge->desc1,
         ];
         echo json_encode($data);

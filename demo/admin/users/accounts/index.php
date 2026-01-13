@@ -83,7 +83,7 @@ if (Session::get('accountNumber')) {
             </div>
             <div class="col-lg-8 col-sm-12">
                 <form method="POST">
-                    <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
+                    <select class="form-control selectpicker" style="width: 100%;" name="student" data-live-search="true" required>
                         <option value=""><?= __("Seleccionar estudiante") ?></option>
                         <?php foreach ($accounts as $account): ?>
                             <option <?= isset($_REQUEST['student']) && $_REQUEST['student'] == $account['id'] ? 'selected=""' : '' ?> value="<?= $account['id'] ?>"><?= $account['name'] ?></option>

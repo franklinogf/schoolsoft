@@ -56,20 +56,25 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             ['baja', '']
         ])->whereMonth('fecha_d', $monthToPay)->get();
         // crear un array con todos los pagos con la informacion que necesito
-        $debtData = [];
-        foreach ($paymentsQuery as $row) {
-            if ($row->fecha_d !== '0000-00-00' && $row->deuda > 0) {
-                $debtData["{$row->codigo}-{$row->grado}"]['id'] = $row->id;
-                $debtData["{$row->codigo}-{$row->grado}"]['debt_date'] = $row->fecha_d;
-                $debtData["{$row->codigo}-{$row->grado}"]['code'] = $row->codigo;
-                $debtData["{$row->codigo}-{$row->grado}"]['grade'] = $row->grado;
-                $debtData["{$row->codigo}-{$row->grado}"]['ss'] = $row->ss;
-                $debtData["{$row->codigo}-{$row->grado}"]['full_name'] = $row->nombre;
-                $debtData["{$row->codigo}-{$row->grado}"]['desc'] = $row->desc1;
-            }
-            $debtData["{$row->codigo}-{$row->grado}"]['debts'] += floatval($row->deuda);
-            $debtData["{$row->codigo}-{$row->grado}"]['payments'] += floatval($row->pago);
-        }
+        
+        $debtData = $payments->groupBy(fn($item) => "{$item->codigo}-{$item->grado}")->map(function ($group) {
+            $charge = $group->where('deuda', '>', 0)->first();
+
+            return [
+                'id' => $group->first()->id,
+                'mt' => $charge->mt,
+                'debt_date' => $group->first()->fecha_d,
+                'code' => $group->first()->codigo,
+                'grade' => $group->first()->grado,
+                'ss' => $group->first()->ss,
+                'full_name' => $group->first()->nombre,
+                'desc' => $group->first()->desc1,
+                'debts' => $group->sum(fn($item) => floatval($item->deuda)),
+                'payments' => $group->sum(fn($item) => floatval($item->pago)),
+            ];
+        })->toArray();
+             
+
 
         foreach ($debtData as $debt) {
             $totalPayment = $debt['debts'] - $debt['payments'];
@@ -88,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'tdp' => $paymentType,
                     'nuchk' => $chkNum,
                     'rec' => $receipt,
-                    'id2' => $debt['id'],
+                    'id2' => $debt['mt'],
                     'bash' => $bash,
                     'caja' => $school->caja,
                     'usuario' => $school->usuario,
@@ -141,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'tdp' => $paymentType,
                     'nuchk' => $chkNum,
                     'rec' => $receipt,
-                    'id2' => $debt['id'],
+                    'id2' =>$debtData->mt,
                     'bash' => $bash,
                     'caja' => $school->caja,
                     'usuario' => $school->usuario,

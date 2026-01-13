@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Enums\DecimalTrimesterEnum;
+use App\Enums\QuincenalTrimesterEnum;
+use App\Enums\TrimesterEnum;
 use App\Models\Admin;
 use Classes\Lang;
 use Classes\Route;
@@ -22,6 +25,51 @@ $lang = new Lang([
     ["Pagina", "Page"],
     ["Verano", "Summer"],
 ]);
+
+$pages = [
+    'Notas' => 'Grades',
+    'Pruebas-Cortas' => 'Short Tests',
+    'Trab-Diarios' => 'Daily Works',
+    'Trab-Libreta' => 'Notebook Works',
+    'Cond-Asis' => 'Conduct and Attendance',
+    'Ex-Final' => 'Final Exam',
+    'V-Nota' => 'Summer Grades',
+];
+
+if ($school->cppd === 'Si') {
+    $pages = [
+        'Notas' => 'Grades',
+        'V-Nota' => 'Summer Grades',
+    ];
+} elseif ($school->etd === 'SI' && __ONLY_CBTM__) {
+    $pages = [
+        ...$pages,
+        'Notas2' => 'Grades 2',
+        'Trab-Diarios2' => 'Daily Works 2',
+        'Trab-Libreta2' => 'Notebook Works 2',
+    ];
+} elseif (__ONLY_CBTM__) {
+    $pages = [
+        ...$pages,
+        'Notas2' => 'Grades 2',
+    ];
+} elseif ($school->etd === 'SI') {
+    $pages = [
+        ...$pages,
+        'Trab-Diarios2' => 'Daily Works 2',
+        'Trab-Libreta2' => 'Notebook Works 2',
+    ];
+}else if(school_is('cdls')){
+    unset($pages['Pruebas-Cortas']);
+    unset($pages['Ex-Final']);
+}
+
+$trimesters = match(true){    
+    school_is('bs') => QuincenalTrimesterEnum::cases(),
+    school_is('cdls') => collect(QuincenalTrimesterEnum::cases())->filter(fn($trimester) => $trimester !== QuincenalTrimesterEnum::FOURTH_S1  && $trimester !== QuincenalTrimesterEnum::FOURTH_S2)->toArray(),
+    $school->cppd === 'Si' => DecimalTrimesterEnum::cases(),
+    default => TrimesterEnum::cases(),
+};
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -56,14 +104,13 @@ $lang = new Lang([
             </div>
         </div>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= school_has_active('app.enter_grade_second_way') ? Route::url('/regiweb/grades/enterGrades2.php') : Route::url('/regiweb/grades/enterGrades.php') ?>" method="post">
+            <form action="<?= school_is('cdls', 'demo','bs') ? Route::url('/regiweb/grades/enterGrades2.php') : Route::url('/regiweb/grades/enterGrades.php') ?>" method="post">
                 <div class="mx-auto" style="width: 20rem;">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="class"><?= $lang->translation('Grado') ?></label>
                         </div>
                         <select name="class" class="custom-select" id="class" required>
-                            <option value="" selected><?= __("Seleccionar") ?></option>
                             <?php foreach ($teacher->subjects as $subject): ?>
                                 <option data-verano="<?= $subject->verano === '2' ? 'true' : 'false' ?>" value="<?= $subject->curso ?>"><?= "$subject->curso - $subject->descripcion" ?></option>
                             <?php endforeach ?>
@@ -73,54 +120,25 @@ $lang = new Lang([
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="tri"><?= __('Trimestre') ?></label>
                         </div>
-                        <select class="custom-select" id="tri" required>
-                            <option value="" selected><?= __("Seleccionar") ?></option>
-                            <!-- if decimals are active -->
-                            <?php if ($school->cppd === 'Si'): ?>
-                                <option value="Trimestre-1"><?= $lang->translation("Trimestre") ?> 1</option>
-                                <option value="Trimestre-3"><?= $lang->translation("Trimestre") ?> 3</option>
-                                <option value="Verano" disabled><?= $lang->translation("Verano") ?></option>
-                            <?php else: ?>
-                                <option value="Trimestre-1"><?= $lang->translation("Trimestre") ?> 1</option>
-                                <option value="Trimestre-2"><?= $lang->translation("Trimestre") ?> 2</option>
-                                <option value="Trimestre-3"><?= $lang->translation("Trimestre") ?> 3</option>
-                                <option value="Trimestre-4"><?= $lang->translation("Trimestre") ?> 4</option>
-                                <option value="Verano" disabled><?= $lang->translation("Verano") ?></option>
-                            <?php endif ?>
+                        <select class="custom-select" id="tri" name="tri" required>
+                            <?php foreach ($trimesters as $trimester): ?>
+                                <option value="<?= $trimester->value ?>"><?= $trimester->getLabel() ?></option>
+                            <?php endforeach ?>
                         </select>
-                        <input type="hidden" name="tri" id="hiddenTri">
+                        <!-- <input type="hidden" name="tri" id="hiddenTri"> -->
 
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="tra"><?= $lang->translation("Pagina") ?></label>
                         </div>
-                        <select class="custom-select" id="tra" required>
-                            <option value="" selected><?= $lang->translation("Seleccionar") ?></option>
+                        <select class="custom-select" id="tra" name='tra' required>
                             <!-- if decimals are active -->
-                            <?php if ($school->cppd === 'Si'): ?>
-                                <option value="Notas"><?= $lang->translation("Notas") ?></option>
-                                <option value="V-Nota" disabled><?= $lang->translation("Notas de verano") ?></option>
-                            <?php else: ?>
-                                <option value="Notas"><?= $lang->translation("Notas") ?></option>
-                                <?php if (__ONLY_CBTM__): ?>
-                                    <option value="Notas2"><?= $lang->translation("Notas") ?> 2</option>
-                                <?php endif ?>
-                                <option value="Pruebas-Cortas"><?= $lang->translation("Pruebas cortas") ?></option>
-                                <option value="Trab-Diarios"><?= $lang->translation("Trabajos diarios") ?></option>
-                                <?php if ($school->etd === 'SI'): ?>
-                                    <option value="Trab-Diarios2"><?= $lang->translation("Trabajos diarios") ?> 2</option>
-                                <?php endif ?>
-                                <option value="Trab-Libreta"><?= $lang->translation("Trabajos de libreta") ?></option>
-                                <?php if ($school->etd === 'SI'): ?>
-                                    <option value="Trab-Libreta2"><?= $lang->translation("Trabajos de libreta") ?> 2</option>
-                                <?php endif ?>
-                                <option value="Cond-Asis"><?= $lang->translation("Conducta y asistencia") ?></option>
-                                <option value="Ex-Final"><?= $lang->translation("Examen final") ?></option>
-                                <option value="V-Nota" disabled><?= $lang->translation("Notas de verano") ?></option>
-                            <?php endif ?>
+                            <?php foreach ($pages as $pageKey => $pageValue): ?>
+                                <option value="<?= $pageKey ?>"><?= $lang->translation($pageKey) ?></option>
+                            <?php endforeach ?>
                         </select>
-                        <input type="hidden" name="tra" id="hiddenTra">
+                        <!-- <input type="hidden" name="tra" id="hiddenTra"> -->
                     </div>
                     <input class="btn btn-primary mx-auto d-block" type="submit" value="<?= __("Continuar") ?>">
                 </div>

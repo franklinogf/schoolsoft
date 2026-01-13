@@ -11,7 +11,7 @@ $(function () {
   if ($("#save")[0]) $("input:disabled").prop("disabled", false);
   init();
 
-  $(".grade").change(function (event) {
+  $(".grade,.bonus").change(function (event) {
     const parentTr = $(this).parents("tr");
     calculate(parentTr, _cppd);
   });
@@ -105,9 +105,11 @@ $(function () {
       },
     });
   });
+
   $(document).ajaxStart(function () {
     $(this).html("<img src='demo_wait.gif'>");
   });
+
   $("#form").submit(function (event) {
     event.preventDefault();
     loadingBtn($("#form .btn"), "", "Guardando...");
@@ -172,6 +174,7 @@ $(function () {
     });
     console.info("Cálculos finalizados.");
   }
+
   // option convert number to letters
   function NumberToLetter(value) {
     if (!isNaN(value) && value !== "") {
@@ -189,15 +192,7 @@ $(function () {
     }
     return value;
   }
-  function NumberToLetterCBTM($value) {
-    if ($value >= 90 && $value <= 100) {
-      return "E";
-    } else if ($value >= 80 && $value <= 89) {
-      return "S";
-    } else {
-      return "N";
-    }
-  }
+
   function isString(value) {
     return /[a-zA-Z]/.test(value);
   }
@@ -259,8 +254,6 @@ $(function () {
       const gradeTotal = +(tpaTotal / tdpTotal);
       totalGrade.val(gradeTotal ? gradeTotal.toFixed(2) : "");
     } else {
-      const _peso = parentTr.find("._peso").val();
-
       const tdia = parentTr.find(".tdia");
       const tlib = parentTr.find(".tlib");
       const pcor = parentTr.find(".pcor");
@@ -268,6 +261,8 @@ $(function () {
       const _tdia = parentTr.find("._tdia");
       const _tlib = parentTr.find("._tlib");
       const _pcor = parentTr.find("._pcor");
+
+      const bonusGrade = parseInt(parentTr.find(".bonus").val()) || 0;
 
       $.each(parentAllGrades, function (index, grade) {
         if ($(grade).val() !== "" && +$(grade).val() > -1) {
@@ -356,44 +351,21 @@ $(function () {
       // Grade total
 
       let gradeTotal = averageTotal;
-      if (__ONLY_CBTM__) {
-        // Only school cbtm
-        if (_report === "Notas") {
-          gradeTotal = (tpaTotal / tdpTotal) * 100;
-          // gradeTotal += +tdia.val() + +tlib.val() + +pcor.val()
-        } else if (_report === "Pruebas-Cortas") {
-          gradeTotal = (tpaTotal / tdpTotal) * 100 * 0.2;
-        } else {
-          gradeTotal = (tpaTotal / tdpTotal) * 100 * 0.1;
-        }
+      if (_report === "Notas") {
+        gradeTotal = (tpaTotal / tdpTotal) * 100;
       } else {
-        // All schools
-        if (_report === "Notas") {
-          gradeTotal = (tpaTotal / tdpTotal) * 100;
-        } else {
-          gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100;
-        }
+        gradeTotal = _noteType === 2 ? tpaTotal : (tpaTotal / tdpTotal) * 100;
       }
-      // console.log("gradeTotal2:", `${tpaTotal} / ${tdpTotal} = ${gradeTotal}`);
-      if (__SCHOOL_ACRONYM === "cbtm" && _peso == 1 && _report === "Notas") {
-        totalGrade.val(
-          typeof gradeTotal === "number" &&
-            !isNaN(gradeTotal) &&
-            gradeTotal !== null &&
-            gradeTotal !== 0
-            ? NumberToLetterCBTM(Math.round(gradeTotal))
-            : ""
-        );
-      } else {
-        totalGrade.val(
-          typeof gradeTotal === "number" &&
-            !isNaN(gradeTotal) &&
-            gradeTotal !== null &&
-            gradeTotal !== 0
-            ? Math.round(gradeTotal)
-            : ""
-        );
-      }
+
+      const total =
+        typeof gradeTotal === "number" &&
+        !isNaN(gradeTotal) &&
+        gradeTotal !== null &&
+        gradeTotal !== 0
+          ? Math.round(gradeTotal)
+          : "";
+
+      totalGrade.val(parseInt(total) + bonusGrade);
 
       // console.log(isNaN(gradeTotal))
       // totalGrade.val(!isNaN(gradeTotal) ? Math.round(gradeTotal) : '')
@@ -414,6 +386,7 @@ $(function () {
         _allGrades.find(".grade").prop("readonly", false);
       }
     }
+
     if ($("#pal").prop("checked")) {
       $.each($(".totalGrade"), function (index, totalInput) {
         $(totalInput).val(NumberToLetter($(totalInput).val()));
