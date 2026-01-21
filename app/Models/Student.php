@@ -193,6 +193,7 @@ use Carbon\CarbonInterface;
  * @property Collection<int, Classes> $classes
  * @property Family|null $family
  * @property StudentNeed|null $needs
+ * @property Infirmary|null $infirmary
  */
 class Student extends Model
 {
@@ -300,5 +301,10 @@ class Student extends Model
     public function needs(): HasOne
     {
         return $this->hasOne(StudentNeed::class, 'ss', 'ss');
+    }
+
+    public function infirmary(): HasOne
+    {
+        return $this->hasOne(Infirmary::class, 'ss', 'ss');
     }
 }

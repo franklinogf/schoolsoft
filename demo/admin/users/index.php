@@ -71,7 +71,7 @@ $options = [
             [
                 'name' => __("Enfermeria"),
                 'desc' => __("Ingrese o vea información médica de los estudiantes."),
-                'link' => '#',
+                'link' => 'infirmary/index.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_NURSE_OFFICE)
             ],
             [
