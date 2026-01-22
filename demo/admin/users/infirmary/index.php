@@ -11,14 +11,14 @@ $options = [
         'title' => __('Opciones'),
         'buttons' => [
             ['name' => __('Informacion basica'), 'link' => 'basic_information/index.php'],
-            ['name' => __('Visitas Enfermeria'), 'link' => '#'],
-            ['name' => __('Certificacion medica'), 'link' => '#'],
-            ['name' => __('Excenciones de vacunas'), 'link' => '#'],
+            ['name' => __('Visitas Enfermeria'), 'link' => 'visits/index.php'],
+            ['name' => __('Certificacion medica'), 'link' => 'certification/index.php'],
+            ['name' => __('Excenciones de vacunas'), 'link' => 'vaccine_exemptions/index.php'],
             ['name' => __('Vitales'), 'link' => 'vitals/index.php'],
-            ['name' => __('Diabetes'), 'link' => '#'],
-            ['name' => __('Vacunas incompletas'), 'link' => '#'],
+            ['name' => __('Diabetes'), 'link' => 'diabetes/index.php'],
+            ['name' => __('Vacunas incompletas'), 'link' => 'incomplete_vaccines/index.php'],
         ]
-    ],    
+    ],
 
 ];
 
