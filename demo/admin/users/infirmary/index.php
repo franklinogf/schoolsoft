@@ -14,7 +14,7 @@ $options = [
             ['name' => __('Visitas Enfermeria'), 'link' => '#'],
             ['name' => __('Certificacion medica'), 'link' => '#'],
             ['name' => __('Excenciones de vacunas'), 'link' => '#'],
-            ['name' => __('Vitales'), 'link' => '#'],
+            ['name' => __('Vitales'), 'link' => 'vitals/index.php'],
             ['name' => __('Diabetes'), 'link' => '#'],
             ['name' => __('Vacunas incompletas'), 'link' => '#'],
         ]

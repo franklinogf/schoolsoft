@@ -307,4 +307,9 @@ class Student extends Model
     {
         return $this->hasOne(Infirmary::class, 'ss', 'ss');
     }
+
+    public function vitals(): HasMany
+    {
+        return $this->hasMany(Vital::class, 'ss', 'ss');
+    }
 }
