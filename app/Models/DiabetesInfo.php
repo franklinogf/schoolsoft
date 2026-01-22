@@ -29,7 +29,7 @@ use Carbon\Carbon;
 class DiabetesInfo extends Model
 {
     protected $table = 'diabetes';
-    
+
     protected $primaryKey = null;
     public $incrementing = false;
     public $timestamps = false;

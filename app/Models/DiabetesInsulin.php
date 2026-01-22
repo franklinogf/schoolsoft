@@ -42,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DiabetesInsulin extends Model
 {
     protected $table = 'diabetes_insulina';
-    
+
     protected $primaryKey = null;
     public $incrementing = false;
     public $timestamps = false;

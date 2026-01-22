@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DiabetesExercise extends Model
 {
     protected $table = 'diabetes_ejercicios';
-    
+
     protected $primaryKey = null;
     public $incrementing = false;
     public $timestamps = false;
