@@ -167,17 +167,19 @@ $activeTab = $_GET['tab'] ?? 'info';
                                             <?php if ($family): ?>
                                                 <p><strong>Madre:</strong> <?= $family->madre ?? '' ?></p>
                                                 <p><strong>Dirección:</strong> <?= $family->dir_madre ?? '' ?> <?= $family->urb1 ?? '' ?><br>
-                                                   <?= $family->pueblo_madre ?? '' ?> P.R. <?= $family->zip1 ?? '' ?></p>
-                                                <p><strong>Tel. Casa:</strong> <?= $family->tel_casa1 ?? '' ?> 
-                                                   <strong>Tel. Trabajo:</strong> <?= $family->tel_trabajo1 ?? '' ?> 
-                                                   <strong>Cel.:</strong> <?= $family->cel_madre ?? '' ?></p>
-                                                
+                                                    <?= $family->pueblo_madre ?? '' ?> P.R. <?= $family->zip1 ?? '' ?></p>
+                                                <p><strong>Tel. Casa:</strong> <?= $family->tel_casa1 ?? '' ?>
+                                                    <strong>Tel. Trabajo:</strong> <?= $family->tel_trabajo1 ?? '' ?>
+                                                    <strong>Cel.:</strong> <?= $family->cel_madre ?? '' ?>
+                                                </p>
+
                                                 <p><strong>Padre:</strong> <?= $family->padre ?? '' ?></p>
                                                 <p><strong>Dirección:</strong> <?= $family->dir_padre ?? '' ?> <?= $family->urb2 ?? '' ?><br>
-                                                   <?= $family->pueblo2 ?? '' ?> P.R. <?= $family->zip3 ?? '' ?></p>
-                                                <p><strong>Tel. Casa:</strong> <?= $family->tel_casa2 ?? '' ?> 
-                                                   <strong>Tel. Trabajo:</strong> <?= $family->tel_trabajo2 ?? '' ?> 
-                                                   <strong>Cel.:</strong> <?= $family->cel_padre ?? '' ?></p>
+                                                    <?= $family->pueblo2 ?? '' ?> P.R. <?= $family->zip3 ?? '' ?></p>
+                                                <p><strong>Tel. Casa:</strong> <?= $family->tel_casa2 ?? '' ?>
+                                                    <strong>Tel. Trabajo:</strong> <?= $family->tel_trabajo2 ?? '' ?>
+                                                    <strong>Cel.:</strong> <?= $family->cel_padre ?? '' ?>
+                                                </p>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -297,9 +299,10 @@ $activeTab = $_GET['tab'] ?? 'info';
                                     <div class="card-body">
                                         <p><strong>Nombre:</strong> <?= $family->emergencia ?? '' ?></p>
                                         <p><strong>Relación:</strong> <?= $family->emer_contacto ?? '' ?></p>
-                                        <p><strong>Tel. Casa:</strong> <?= $family->emer_tel_casa ?? '' ?> 
-                                           <strong>Tel.Trabajo:</strong> <?= $family->emer_trabajo ?? '' ?> 
-                                           <strong>Cel.:</strong> <?= $family->emer_cel ?? '' ?></p>
+                                        <p><strong>Tel. Casa:</strong> <?= $family->emer_tel_casa ?? '' ?>
+                                            <strong>Tel.Trabajo:</strong> <?= $family->emer_trabajo ?? '' ?>
+                                            <strong>Cel.:</strong> <?= $family->emer_cel ?? '' ?>
+                                        </p>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -327,8 +330,8 @@ $activeTab = $_GET['tab'] ?? 'info';
                             <input type="hidden" name="ss" value="<?= $student->ss ?>">
 
                             <div class="form-group">
-                                <label>Un carbohidrato de acción rápida como <input type="text" name="carb" style="width: 150px; display: inline;" 
-                                    class="form-control d-inline" value="<?= $diabetesExercise->carb ?? '' ?>"> debe estar disponible en el lugar que se haga ejercicio o deportes.</label>
+                                <label>Un carbohidrato de acción rápida como <input type="text" name="carb" style="width: 150px; display: inline;"
+                                        class="form-control d-inline" value="<?= $diabetesExercise->carb ?? '' ?>"> debe estar disponible en el lugar que se haga ejercicio o deportes.</label>
                             </div>
 
                             <div class="form-group">
@@ -338,11 +341,11 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <div class="form-group">
                                 <label>
-                                    El estudiante no debe ejercitarse si el nivel de glucosa está debajo de 
-                                    <input type="text" name="glucosa_min" style="width: 100px;" class="form-control d-inline" 
-                                        value="<?= $diabetesExercise->glucosa_min ?? '' ?>"> mg/dl 
-                                    o arriba de 
-                                    <input type="text" name="glucosa_max" style="width: 100px;" class="form-control d-inline" 
+                                    El estudiante no debe ejercitarse si el nivel de glucosa está debajo de
+                                    <input type="text" name="glucosa_min" style="width: 100px;" class="form-control d-inline"
+                                        value="<?= $diabetesExercise->glucosa_min ?? '' ?>"> mg/dl
+                                    o arriba de
+                                    <input type="text" name="glucosa_max" style="width: 100px;" class="form-control d-inline"
                                         value="<?= $diabetesExercise->glucosa_max ?? '' ?>"> mg/dl
                                 </label>
                             </div>
@@ -362,12 +365,12 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <div class="form-group">
                                 <label>
-                                    <input type="text" name="dosis" style="width: 120px;" class="form-control d-inline" 
-                                        value="<?= $diabetesExercise->dosis ?? '' ?>"> (Dosis) 
-                                    Se debe aplicar Glucagón intramuscularmente (IM) si el estudiante está inconsciente, 
-                                    tiene una convulsión o no puede tragar. El lugar para una inyección de Glucagón puede ser el brazo, 
-                                    el muslo o el glúteo. <strong>Si se requiere glucagón, adminístrelo simultáneamente mientras llama al 911 
-                                    y a los padres/guardianes.</strong>
+                                    <input type="text" name="dosis" style="width: 120px;" class="form-control d-inline"
+                                        value="<?= $diabetesExercise->dosis ?? '' ?>"> (Dosis)
+                                    Se debe aplicar Glucagón intramuscularmente (IM) si el estudiante está inconsciente,
+                                    tiene una convulsión o no puede tragar. El lugar para una inyección de Glucagón puede ser el brazo,
+                                    el muslo o el glúteo. <strong>Si se requiere glucagón, adminístrelo simultáneamente mientras llama al 911
+                                        y a los padres/guardianes.</strong>
                                 </label>
                             </div>
 
@@ -385,9 +388,9 @@ $activeTab = $_GET['tab'] ?? 'info';
                             </div>
 
                             <div class="form-group">
-                                <p class="text-center"><strong>*** Llame a los padres si el nivel de azucar es más alto que 
-                                <input type="text" name="azucar" style="width: 100px;" class="form-control d-inline" 
-                                    value="<?= $diabetesExercise->azucar ?? '' ?>"> mg/dl</strong></p>
+                                <p class="text-center"><strong>*** Llame a los padres si el nivel de azucar es más alto que
+                                        <input type="text" name="azucar" style="width: 100px;" class="form-control d-inline"
+                                            value="<?= $diabetesExercise->azucar ?? '' ?>"> mg/dl</strong></p>
                             </div>
 
                             <div class="text-center mt-4">
@@ -408,54 +411,54 @@ $activeTab = $_GET['tab'] ?? 'info';
                             <input type="hidden" name="ss" value="<?= $student->ss ?>">
 
                             <div class="form-group">
-                                <label>El rango meta para la glucosa en la sangre es: 
-                                <input type="text" name="rango" class="form-control d-inline" style="width: 200px;"
-                                    value="<?= $diabetesInsulin->rango ?? '' ?>"></label>
+                                <label>El rango meta para la glucosa en la sangre es:
+                                    <input type="text" name="rango" class="form-control d-inline" style="width: 200px;"
+                                        value="<?= $diabetesInsulin->rango ?? '' ?>"></label>
                             </div>
 
                             <div class="form-group">
-                                <label>Las horas de rutina para revisar la glucosa en la sangre en la escuela son: 
-                                <select name="horas" class="form-control d-inline" style="width: 80px;">
-                                    <option value=""><?= $diabetesInsulin->horas ?? '' ?></option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                </select></label>
+                                <label>Las horas de rutina para revisar la glucosa en la sangre en la escuela son:
+                                    <select name="horas" class="form-control d-inline" style="width: 80px;">
+                                        <option value=""><?= $diabetesInsulin->horas ?? '' ?></option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                    </select></label>
                             </div>
 
                             <hr class="my-4">
                             <p><strong>Las horas extra para revisar la glucosa en la sangre son: (marque todas las que aplican)</strong></p>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="ejer1" name="ejer1" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->ejer1) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="ejer1">antes de hacer ejercicio</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="ejer2" name="ejer2" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->ejer2) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="ejer2">después de hacer ejercicio</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="hiper" name="hiper" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->hiper) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="hiper">cuando el estudiante muestra síntomas de hiperglucemia</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="hipo" name="hipo" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->hipo) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="hipo">cuando el estudiante muestra sintomas de hipoglucemia</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="otro" name="otro" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->otro) ? 'checked' : '' ?>>
@@ -471,26 +474,26 @@ $activeTab = $_GET['tab'] ?? 'info';
                                     <?= ($diabetesInsulin && $diabetesInsulin->gluc1) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="gluc1">El estudinate puede llevar a cabo su revisión de glucosa en la sangre con supervisión</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="gluc2" name="gluc2" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->gluc2) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="gluc2">El estudinate puede llevar a cabo su revisión de glucosa en la sangre sin supervisión</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="gluc3" name="gluc3" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->gluc3) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="gluc3">El personal de la escuela debe llevar a cabo las revisiones de sangre</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exc1" name="exc1" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->exc1) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="exc1">Excepciones:</label>
                             </div>
                             <div class="form-group ml-4">
-                                <input type="text" class="form-control" id="exc2" name="exc2" 
+                                <input type="text" class="form-control" id="exc2" name="exc2"
                                     value="<?= $diabetesInsulin->exc2 ?? '' ?>">
                             </div>
 
@@ -502,9 +505,9 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <hr class="my-4">
                             <h6 class="bg-secondary text-white p-2 text-center"><strong>PARA LOS QUE UTILIZAN INJECCIONES DE INSULINA</strong></h6>
-                            
+
                             <p><strong>Dosis para la hora del Almuerzo</strong></p>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="ins1" name="ins1" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->ins1) ? 'checked' : '' ?>>
@@ -562,7 +565,7 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <hr class="my-4">
                             <p><strong>Corrección de Insulina</strong> (Escala Variable)</p>
-                            
+
                             <div class="form-group">
                                 <label for="insulina">El nombre de la insulina a ser dada es:</label>
                                 <input type="text" class="form-control" id="insulina" name="insulina"
@@ -570,32 +573,32 @@ $activeTab = $_GET['tab'] ?? 'info';
                             </div>
 
                             <div class="form-group">
-                                <input type="text" name="insuni1" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni1 ?? '' ?>"> unidades si la glucosa en la sangre es 
-                                <input type="text" name="insuni2" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni2 ?? '' ?>"> hasta 
+                                <input type="text" name="insuni1" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni1 ?? '' ?>"> unidades si la glucosa en la sangre es
+                                <input type="text" name="insuni2" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni2 ?? '' ?>"> hasta
                                 <input type="text" name="insuni3" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni3 ?? '' ?>"> mg./dl
                             </div>
 
                             <div class="form-group">
-                                <input type="text" name="insuni4" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni4 ?? '' ?>"> unidades si la glucosa en la sangre es 
-                                <input type="text" name="insuni5" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni5 ?? '' ?>"> hasta 
+                                <input type="text" name="insuni4" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni4 ?? '' ?>"> unidades si la glucosa en la sangre es
+                                <input type="text" name="insuni5" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni5 ?? '' ?>"> hasta
                                 <input type="text" name="insuni6" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni6 ?? '' ?>"> mg./dl
                             </div>
 
                             <div class="form-group">
-                                <input type="text" name="insuni7" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni7 ?? '' ?>"> unidades si la glucosa en la sangre es 
-                                <input type="text" name="insuni8" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni8 ?? '' ?>"> hasta 
+                                <input type="text" name="insuni7" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni7 ?? '' ?>"> unidades si la glucosa en la sangre es
+                                <input type="text" name="insuni8" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni8 ?? '' ?>"> hasta
                                 <input type="text" name="insuni9" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni9 ?? '' ?>"> mg./dl
                             </div>
 
                             <div class="form-group">
-                                <input type="text" name="insuni10" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni10 ?? '' ?>"> unidades si la glucosa en la sangre es 
-                                <input type="text" name="insuni11" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni11 ?? '' ?>"> hasta 
+                                <input type="text" name="insuni10" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni10 ?? '' ?>"> unidades si la glucosa en la sangre es
+                                <input type="text" name="insuni11" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni11 ?? '' ?>"> hasta
                                 <input type="text" name="insuni12" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni12 ?? '' ?>"> mg./dl
                             </div>
 
                             <div class="form-group">
-                                <input type="text" name="insuni13" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni13 ?? '' ?>"> unidades si la glucosa en la sangre es 
-                                <input type="text" name="insuni14" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni14 ?? '' ?>"> hasta 
+                                <input type="text" name="insuni13" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni13 ?? '' ?>"> unidades si la glucosa en la sangre es
+                                <input type="text" name="insuni14" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni14 ?? '' ?>"> hasta
                                 <input type="text" name="insuni15" class="form-control d-inline" style="width: 100px;" value="<?= $diabetesInsulin->insuni15 ?? '' ?>"> mg./dl
                             </div>
 
@@ -605,13 +608,13 @@ $activeTab = $_GET['tab'] ?? 'info';
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu1) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu1">El estudiante puede ponerse sus propias injecciones.</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="insu2" name="insu2" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu2) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu2">El estudiante puede ponerse su propia inyección con supervisión.</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="insu3" name="insu3" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu3) ? 'checked' : '' ?>>
@@ -625,13 +628,13 @@ $activeTab = $_GET['tab'] ?? 'info';
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu4) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu4">El estudiante puede determinar la cantidad correcta de insulina.</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="insu5" name="insu5" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu5) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu5">El estudiante puede determinar la cantidad correcta de insulina con supervisión.</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="insu6" name="insu6" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu6) ? 'checked' : '' ?>>
@@ -645,13 +648,13 @@ $activeTab = $_GET['tab'] ?? 'info';
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu7) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu7">El estudiante puede extraer la dosis correcta de insulina.</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="insu8" name="insu8" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu8) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="insu8">El estudiante puede extraer la dosis correcta de insulina con supervisión.</label>
                             </div>
-                            
+
                             <div class="form-check mb-4">
                                 <input type="checkbox" class="form-check-input" id="insu9" name="insu9" value="1"
                                     <?= ($diabetesInsulin && $diabetesInsulin->insu9) ? 'checked' : '' ?>>
@@ -699,33 +702,33 @@ $activeTab = $_GET['tab'] ?? 'info';
                                 <div class="col-md-6">
                                     <label><strong>Tasa basal:</strong></label>
                                     <div class="form-group">
-                                        <input type="text" name="basal1" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal1 ?? '' ?>"> unidades/hora 12 am a 
-                                        <input type="text" name="basal2" class="form-control d-inline" style="width: 80px;" 
+                                        <input type="text" name="basal1" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal1 ?? '' ?>"> unidades/hora 12 am a
+                                        <input type="text" name="basal2" class="form-control d-inline" style="width: 80px;"
                                             value="<?= $diabetesInsulinPump->basal2 ?? '' ?>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="basal3" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal3 ?? '' ?>"> unidades/hora 
-                                        <input type="text" name="basal4" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal4 ?? '' ?>"> a 
-                                        <input type="text" name="basal5" class="form-control d-inline" style="width: 80px;" 
+                                        <input type="text" name="basal3" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal3 ?? '' ?>"> unidades/hora
+                                        <input type="text" name="basal4" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal4 ?? '' ?>"> a
+                                        <input type="text" name="basal5" class="form-control d-inline" style="width: 80px;"
                                             value="<?= $diabetesInsulinPump->basal5 ?? '' ?>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="basal6" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal6 ?? '' ?>"> unidades/hora 
-                                        <input type="text" name="basal7" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal7 ?? '' ?>"> a 
-                                        <input type="text" name="basal8" class="form-control d-inline" style="width: 80px;" 
+                                        <input type="text" name="basal6" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal6 ?? '' ?>"> unidades/hora
+                                        <input type="text" name="basal7" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal7 ?? '' ?>"> a
+                                        <input type="text" name="basal8" class="form-control d-inline" style="width: 80px;"
                                             value="<?= $diabetesInsulinPump->basal8 ?? '' ?>">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="basal9" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal9 ?? '' ?>"> unidades/hora 
-                                        <input type="text" name="basal10" class="form-control d-inline" style="width: 80px;" 
-                                            value="<?= $diabetesInsulinPump->basal10 ?? '' ?>"> a 
-                                        <input type="text" name="basal11" class="form-control d-inline" style="width: 80px;" 
+                                        <input type="text" name="basal9" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal9 ?? '' ?>"> unidades/hora
+                                        <input type="text" name="basal10" class="form-control d-inline" style="width: 80px;"
+                                            value="<?= $diabetesInsulinPump->basal10 ?? '' ?>"> a
+                                        <input type="text" name="basal11" class="form-control d-inline" style="width: 80px;"
                                             value="<?= $diabetesInsulinPump->basal11 ?? '' ?>">
                                     </div>
                                 </div>
@@ -763,7 +766,7 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <hr class="my-4">
                             <h6 class="bg-secondary text-white p-2">Habilidades/Destrezas del Estudiante para usar la bomba</h6>
-                            
+
                             <table class="table table-bordered">
                                 <thead class="bg-secondary text-white">
                                     <tr>
@@ -927,7 +930,7 @@ $activeTab = $_GET['tab'] ?? 'info';
 
                             <hr class="my-4">
                             <h6 class="bg-secondary text-white p-2"><strong>PARA ESTUDIANTES TOMANDO MEDICINA ORAL PARA LA DIABETES</strong></h6>
-                            
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -982,7 +985,7 @@ $activeTab = $_GET['tab'] ?? 'info';
     </div>
 
     <?php Route::includeFile('/includes/layouts/scripts.php', true); ?>
-    
+
     <script>
         $(document).ready(function() {
             // Handle diabetes type checkboxes (only one can be selected)
