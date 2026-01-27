@@ -44,7 +44,7 @@ $grades = SchoolService::getAllGrades();
 
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-body">
-                <form method="post">
+                <form method="post" target="_blank">
                     <div class="form-group mb-3">
                         <label for="grade" class="form-label"><?= __('Grado') ?></label>
                         <select name="grade" id="grade" class="form-control">

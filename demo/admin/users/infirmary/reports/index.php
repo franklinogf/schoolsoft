@@ -51,7 +51,7 @@
                             <div class="row row-cols-2">
                                 <?php foreach ($option['buttons'] as $button) : ?>
                                     <div class="col mt-1">
-                                        <a style="font-size: .8em;" target="_blank" class="btn btn-primary btn-block" href="<?= Route::url('/admin/users/infirmary/reports/' . $button['link']) ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
+                                        <a style="font-size: .8em;" class="btn btn-primary btn-block" href="<?= Route::url('/admin/users/infirmary/reports/' . $button['link']) ?>"><?= mb_strtoupper($button['name'], 'UTF-8') ?></a>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

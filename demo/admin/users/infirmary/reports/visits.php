@@ -62,7 +62,7 @@ $today = date('Y-m-d');
 
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-body">
-                <form method="post">
+                <form method="post" target="_blank">
                     <div class="form-group mb-3">
                         <label for="selection_type" class="form-label"><?= __('Tipo de Selección') ?></label>
                         <select name="selection_type" id="selection_type" class="form-control" required onchange="toggleSelection()">

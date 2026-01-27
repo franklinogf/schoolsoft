@@ -48,7 +48,7 @@ $students = Student::query()->orderBy('apellidos')->orderBy('nombre')->get();
 
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-body">
-                <form method="post">
+                <form method="post" target="_blank">
                     <div class="form-group mb-3">
                         <label for="student_id" class="form-label"><?= __('Estudiante') ?></label>
                         <select name="student_id" id="student_id" class="form-control" required>
