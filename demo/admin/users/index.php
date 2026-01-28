@@ -53,7 +53,7 @@ $options = [
             [
                 'name' => __("Modificar nombres"),
                 'desc' => __("Pantalla para cambiar los nombre y apellidos de los estudiantes."),
-                'link' => '#',
+                'link' => 'ModifyNames.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_RENAME_STUDENTS)
             ],
             [
