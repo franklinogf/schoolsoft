@@ -77,7 +77,7 @@ $options = [
             [
                 'name' => __("Informe de enfermeria"),
                 'desc' => __("Informes de Enfermeria."),
-                'link' => '#',
+                'link' => 'infirmary/reports/index.php',
                 'hidden' => !$user->hasPermissionTo(AdminPermission::USERS_NURSE_REPORTS)
             ],
             [

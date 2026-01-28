@@ -260,7 +260,7 @@ class Student extends Model
         $query->where('ss', $ss);
     }
 
-    protected function scopeByClass(Builder $query, string $class, string $table, bool $isSummer = false):void
+    protected function scopeByClass(Builder $query, string $class, string $table = 'padres', bool $isSummer = false): void
     {
         $query->whereHas('classes', function (Builder $q) use ($class, $table, $isSummer) {
             $q->from($table)
@@ -306,5 +306,50 @@ class Student extends Model
     public function infirmary(): HasOne
     {
         return $this->hasOne(Infirmary::class, 'ss', 'ss');
+    }
+
+    public function vitals(): HasMany
+    {
+        return $this->hasMany(Vital::class, 'ss', 'ss');
+    }
+
+    public function infirmaryVisits(): HasMany
+    {
+        return $this->hasMany(InfirmaryVisit::class, 'ss', 'ss');
+    }
+
+    public function vaccineExemptions(): HasMany
+    {
+        return $this->hasMany(VaccineExemption::class, 'ss', 'ss');
+    }
+
+    public function infirmaryCertifications(): HasMany
+    {
+        return $this->hasMany(InfirmaryCertification::class, 'ss', 'ss');
+    }
+
+    public function incompleteVaccines(): HasMany
+    {
+        return $this->hasMany(IncompleteVaccine::class, 'ss', 'ss');
+    }
+
+    public function diabetesInfo(): HasOne
+    {
+        return $this->hasOne(DiabetesInfo::class, 'ss', 'ss');
+    }
+
+    public function diabetesExercise(): HasOne
+    {
+        return $this->hasOne(DiabetesExercise::class, 'ss', 'ss');
+    }
+
+    public function diabetesInsulin(): HasOne
+    {
+        return $this->hasOne(DiabetesInsulin::class, 'ss', 'ss');
+    }
+
+    public function diabetesInsulinPump(): HasOne
+    {
+        return $this->hasOne(DiabetesInsulinPump::class, 'ss', 'ss');
     }
 }
