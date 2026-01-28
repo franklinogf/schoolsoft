@@ -1,7 +1,5 @@
-`<?php
-
+<?php
     require_once __DIR__ . '/../../../../app.php';
-
     use Classes\Route;
     use Classes\Session;
 
@@ -26,6 +24,7 @@
     ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
