@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Family;
 use Classes\Controllers\School;
 use Classes\Lang;
 use Classes\Route;
@@ -41,5 +42,5 @@ if (isset($_POST['save'])) {
     ]);
 } else if (isset($_POST['check'])) {
 
-    DB::table('madre')->where('id', $_POST['check'])->update(['activo' => $_POST['value']]);
+    Family::query()->find($_POST['check'])->update(['activo' => $_POST['value']]);
 }
