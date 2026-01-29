@@ -1,20 +1,12 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
 use App\Models\Family;
-use Classes\Controllers\School;
-use Classes\Lang;
-use Classes\Route;
 use Classes\Server;
-use Classes\Session;
-use Classes\DataBase\DB;
 use Classes\Util;
 
 Server::is_post();
-
-$lang = new Lang([
-    ['Fechas actualizadas', 'Dates updated']
-]);
 
 if (isset($_POST['save'])) {
     $updates = [
@@ -27,18 +19,18 @@ if (isset($_POST['save'])) {
         'des3' => $_POST['code3'],
     ];
 
-    DB::table('colegio')->where('usuario', 'administrador')->update($updates);
+    Admin::primaryAdmin()->update($updates);
 } else if (isset($_POST['search'])) {
 
-    $school = new School();
+    $school = Admin::primaryAdmin();
     echo Util::toJson([
-        'message' => $school->info('men_inac'),
-        'lock' => $school->info('inactivo'),
-        'expireDay' => $school->info('dia_vence'),
-        'automaticLock' => $school->info('bloqueoauto'),
-        'code1' => $school->info('des1'),
-        'code2' => $school->info('des2'),
-        'code3' => $school->info('des3'),
+        'message' => $school->men_inac,
+        'lock' => $school->inactivo,
+        'expireDay' => $school->dia_vence,
+        'automaticLock' => $school->bloqueoauto,
+        'code1' => $school->des1,
+        'code2' => $school->des2,
+        'code3' => $school->des3,
     ]);
 } else if (isset($_POST['check'])) {
 
