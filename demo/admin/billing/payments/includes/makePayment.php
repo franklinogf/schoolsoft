@@ -56,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             ['baja', '']
         ])->whereMonth('fecha_d', $monthToPay)->get();
         // crear un array con todos los pagos con la informacion que necesito
-        
-        $debtData = $payments->groupBy(fn($item) => "{$item->codigo}-{$item->grado}")->map(function ($group) {
+
+        $debtData = $payments->groupBy(fn($item) => "{$item->codigo}-{$item->ss}")->map(function ($group) {
             $charge = $group->where('deuda', '>', 0)->first();
 
             return [
@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 'payments' => $group->sum(fn($item) => floatval($item->pago)),
             ];
         })->toArray();
-             
+
 
 
         foreach ($debtData as $debt) {
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'tdp' => $paymentType,
                     'nuchk' => $chkNum,
                     'rec' => $receipt,
-                    'id2' =>$debtData->mt,
+                    'id2' => $debtData->mt,
                     'bash' => $bash,
                     'caja' => $school->caja,
                     'usuario' => $school->usuario,

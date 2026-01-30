@@ -24,21 +24,21 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $charge = Payment::find($id);
 
 
-    Payment::query()->where([
-        ['id', $charge->id],
-        ['baja', ''],
-        ['grado', $charge->grado],
-        ['codigo', $charge->codigo]
-    ])
-        ->whereMonth('fecha_d', $month)
-        ->update([
-            'nombre' => "$student->nombre $student->apellidos",
-            'desc1' => $description,
-            'codigo' => $code,
-            'fecha_d' => $date,
-            'ss' => $student->ss,
-            'grado' => $grade,            
-        ]);
+    // Payment::query()->where([
+    //     ['id', $charge->id],
+    //     ['baja', ''],
+    //     ['grado', $charge->grado],
+    //     ['codigo', $charge->codigo]
+    // ])
+    //     ->whereMonth('fecha_d', $month)
+    //     ->update([
+    //         'nombre' => "$student->nombre $student->apellidos",
+    //         'desc1' => $description,
+    //         'codigo' => $code,
+    //         'fecha_d' => $date,
+    //         'ss' => $student->ss,
+    //         'grado' => $grade,            
+    //     ]);
 
     $charge->update([
         'nombre' => "$student->nombre $student->apellidos",

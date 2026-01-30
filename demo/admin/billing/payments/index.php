@@ -205,7 +205,13 @@ $depositTypes = [
                         <tbody id="table<?= $number ?>" class="<?= $currentMonth !== $number ? 'hidden' : '' ?> monthTable">
                             <?php if (isset($debtData[$number])): ?>
                                 <?php foreach ($debtData[$number] as $charge): ?>
-                                    <tr data-id="<?= $charge->codigo ?>">
+                                    <tr
+                                        data-id="<?= $charge->codigo ?>"
+                                        data-ss="<?= $charge->ss ?>"
+                                        data-grade="<?= $charge->grado ?>"
+                                        data-description="<?= $charge->desc1 ?>"
+                                        data-debt="<?= $charge->deuda ?>"
+                                        data-payment="<?= $charge->pago ?>">
                                         <th scope="row"><?= $charge->codigo ?></th>
                                         <td><?= $charge->grado ?></td>
                                         <td><?= $charge->desc1 ?></td>
