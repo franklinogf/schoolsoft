@@ -1,6 +1,6 @@
 <?php
 
-use Classes\DataBase\DB;
+use App\Models\Store;
 use Classes\Route;
 
 require_once __DIR__ . '/../../../../app.php';
@@ -9,9 +9,7 @@ require_once __DIR__ . '/../../../../app.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'] ?? null;
 
-    $dateTime = date('Y-m-d H:i:s');
-    DB::table('stores')->where('id', $id)->delete();
-
+    Store::destroy($id);
 
     Route::redirect("/access/stores/");
 }

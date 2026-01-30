@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
-use Classes\DataBase\DB;
+use App\Models\StoreItem;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -18,7 +18,7 @@ if (!$storeId) Route::redirect('/access/stores/index.php');
 
 if (!$id) Route::redirect("/access/stores/index.php?store_id={$storeId}");
 
-$item = DB::table('store_items')->where('id', $id)->first();
+$item = StoreItem::find($id);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -63,26 +63,21 @@ $item = DB::table('store_items')->where('id', $id)->first();
                     </div>
                     <div id="optionsContainer" class="mt-3">
                         <?php
-                        $options = json_decode($item->options) ?? [];
-                        //order by order
-                        usort($options, function ($a, $b) {
-                            return $a->order - $b->order;
-                        });
+                        $options = $item->options;
+                        // Sort by order
+                        usort($options, fn($a, $b) => $a->order - $b->order);
                         // Loop through the options and display them
-                        foreach ($options as $index => $option) {
+                        foreach ($options as $index => $option):
                         ?>
                             <div class="d-flex align-items-center mb-3">
                                 <span class="handle mr-2" style="cursor:move;"><i class="fa fa-arrows" aria-hidden="true"></i></span>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="options[<?= $option->order ?>][name]" value="<?= $option->name ?>" placeholder="Nombre de la opcion" required>
-                                    <input type="number" min="0" step="0.01" class="form-control" name="options[<?= $option->order ?>][price]" value="<?= $option->price ?? null ?>" placeholder="Precio de la opcion">
+                                    <input type="number" min="0" step="0.01" class="form-control" name="options[<?= $option->order ?>][price]" value="<?= $option->price ?>" placeholder="Precio de la opcion">
                                     <button type="button" class="btn btn-danger removeOptionButton">Eliminar</button>
                                 </div>
                             </div>
-
-                        <?php
-                        }
-                        ?>
+                        <?php endforeach; ?>
                     </div>
                     <div class="form-group">
                         <label for="picture_url">Imagen</label>
