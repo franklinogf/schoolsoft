@@ -141,14 +141,18 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                                     placeholder="correo@ejemplo.com">
                             </div>
 
-                            <!-- Delivery Instructions -->
-                            <div class="form-group">
-                                <label for="deliveryTo"><?= __('Instrucciones de Entrega') ?></label>
-                                <textarea class="form-control"
+                            <!-- Delivery To (Student Selector) -->
+                            <div class="form-group" id="deliverySection" style="display:none;">
+                                <label for="deliveryTo"><?= __('Entregar a') ?></label>
+                                <select class="form-control selectpicker w-100"
                                     id="deliveryTo"
                                     name="deliveryTo"
-                                    rows="2"
-                                    placeholder="<?= __('Ej: Entregar en salón 101') ?>"></textarea>
+                                    data-live-search="true">
+                                    <option value=""><?= __('Seleccionar estudiante (opcional)') ?></option>
+                                </select>
+                                <small class="form-text text-muted">
+                                    <?= __('Opcional - Seleccione el estudiante a quien se le entregará el pedido') ?>
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -364,6 +368,19 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
 
                             // Update final email
                             updateFinalEmail();
+
+                            // Populate delivery students (siblings)
+                            if (data.siblings && data.siblings.length > 0) {
+                                let deliveryHTML = '<option value=""><?= __("Seleccionar estudiante (opcional)") ?></option>';
+                                data.siblings.forEach(sibling => {
+                                    deliveryHTML += `<option value="${sibling.ss}">${sibling.apellidos} ${sibling.nombre} (${sibling.grado})</option>`;
+                                });
+                                $('#deliveryTo').html(deliveryHTML);
+                                $('#deliveryTo').selectpicker('refresh');
+                                $('#deliverySection').show();
+                            } else {
+                                $('#deliverySection').hide();
+                            }
                         },
                         error: function() {
                             alert('<?= __("Error al cargar información del estudiante") ?>');
@@ -372,6 +389,7 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                 } else {
                     $('#nameSection').hide();
                     $('#emailSection').hide();
+                    $('#deliverySection').hide();
                 }
             });
 

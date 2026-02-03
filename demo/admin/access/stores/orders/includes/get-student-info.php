@@ -22,6 +22,21 @@ if (!$student) {
     exit;
 }
 
+// Get siblings (students with same family id)
+$siblings = Student::where('id', $student->id)
+    ->orderBy('apellidos')
+    ->orderBy('nombre')
+    ->get()
+    ->map(function ($s) {
+        return [
+            'id' => $s->id,
+            'ss' => $s->ss,
+            'nombre' => $s->nombre,
+            'apellidos' => $s->apellidos,
+            'grado' => $s->grado,
+        ];
+    });
+
 $response = [
     'id' => $student->id,
     'ss' => $student->ss,
@@ -32,7 +47,8 @@ $response = [
         'email_p' => $student->family->email_p ?? '',
         'madre' => $student->family->madre ?? '',
         'padre' => $student->family->padre ?? '',
-    ]
+    ],
+    'siblings' => $siblings
 ];
 
 echo json_encode($response);

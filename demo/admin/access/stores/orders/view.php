@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../../app.php';
 use App\Models\Store;
 use App\Models\StoreOrder;
 use App\Models\StoreItem;
+use App\Models\Student;
 use Classes\Route;
 use Classes\Session;
 
@@ -24,6 +25,21 @@ if (!$order || $order->shopping != $store->prefix_code) {
 
 // Get store items for size options dropdown
 $storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
+
+// Get students from the same family (same id field which is the family ID)
+$students = Student::where('id', $order->accountID)
+    ->orderBy('apellidos')
+    ->orderBy('nombre')
+    ->get();
+
+// Get delivery student if deliveryTo contains a SS
+$deliveryStudent = null;
+if ($order->deliveryTo) {
+    $deliveryStudent = Student::where('ss', $order->deliveryTo)->first();
+}
+$deliveryDisplay = $deliveryStudent
+    ? "{$deliveryStudent->apellidos} {$deliveryStudent->nombre} ({$deliveryStudent->grado})"
+    : ($order->deliveryTo ?: '-');
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -32,6 +48,7 @@ $storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
     <?php
     $title = __('Orden') . ' #' . $order->refNumber;
     Route::includeFile('/admin/includes/layouts/header.php');
+    Route::selectPicker();
     ?>
     <style>
         .order-info {
@@ -101,7 +118,30 @@ $storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
                             <dd class="col-sm-8"><?= htmlspecialchars($order->customerEmail) ?></dd>
 
                             <dt class="col-sm-4"><?= __('Entregar a') ?>:</dt>
-                            <dd class="col-sm-8"><?= htmlspecialchars($order->deliveryTo ?: '-') ?></dd>
+                            <dd class="col-sm-8">
+                                <span id="deliveryDisplay"><?= htmlspecialchars($deliveryDisplay) ?></span>
+                                <button type="button" class="btn btn-sm btn-outline-primary ml-2" id="editDeliveryBtn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <div id="deliveryEditForm" style="display:none;" class="mt-2">
+                                    <select class="form-control selectpicker" id="deliveryToSelect" data-live-search="true">
+                                        <option value=""><?= __('Sin entregar (opcional)') ?></option>
+                                        <?php foreach ($students as $student): ?>
+                                            <option value="<?= $student->ss ?>" <?= $order->deliveryTo === $student->ss ? 'selected' : '' ?>>
+                                                <?= "{$student->apellidos} {$student->nombre} ({$student->grado})" ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-success" id="saveDeliveryBtn">
+                                            <i class="fas fa-check"></i> <?= __('Guardar') ?>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary" id="cancelDeliveryBtn">
+                                            <i class="fas fa-times"></i> <?= __('Cancelar') ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </dd>
                         </dl>
                     </div>
                     <div class="col-md-6">
@@ -222,10 +262,52 @@ $storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
     </div>
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::selectPicker('js');
     Route::sweetAlert();
     ?>
     <script>
         $(function() {
+            // Initialize selectpicker
+            $('.selectpicker').selectpicker();
+
+            // Edit Delivery To functionality
+            $('#editDeliveryBtn').on('click', function() {
+                $('#deliveryDisplay').hide();
+                $(this).hide();
+                $('#deliveryEditForm').show();
+                $('.selectpicker').selectpicker('refresh');
+            });
+
+            $('#cancelDeliveryBtn').on('click', function() {
+                $('#deliveryEditForm').hide();
+                $('#deliveryDisplay').show();
+                $('#editDeliveryBtn').show();
+            });
+
+            $('#saveDeliveryBtn').on('click', function() {
+                const deliveryTo = $('#deliveryToSelect').val();
+
+                $.ajax({
+                    url: './includes/update-delivery.php',
+                    method: 'POST',
+                    data: {
+                        order_id: <?= $order->id ?>,
+                        deliveryTo: deliveryTo
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert(response.error || '<?= __("Error al actualizar") ?>');
+                        }
+                    },
+                    error: function() {
+                        alert('<?= __("Error al actualizar") ?>');
+                    }
+                });
+            });
+
             // Edit Size functionality
             $('.edit-size-btn').on('click', function() {
                 const itemId = $(this).data('item-id');
