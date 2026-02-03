@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/../../../../app.php';
 // TARJETA DE NOTAS IMEI
+require_once '../../../../app.php';
+
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Session;
@@ -34,6 +35,7 @@ class nPDF extends PDF
   function Header()
   {
     parent::header();
+	//Salto de lnea
 	$this->Ln(15);
 	$this->Cell(80);
 	$this->SetFont('Arial','B',14);
@@ -43,6 +45,7 @@ class nPDF extends PDF
    if ($_POST['tri']=='4'){$this->Cell(30,3,'INFORME DE NOTAS SEGUNDO SEMESTRE',0,0,'C');}
    $this->Ln(20);
 }
+//Pie de pgina
 function Footer()
 {
     $this->SetY(-60);
@@ -72,8 +75,12 @@ function Footer()
 	$this->Cell(1,3,'',0,0,'C');
 	$this->Cell(60,3,'',0,0,'C');
 	$this->Cell(60,3,'FIRMA DEL PADRE O TUTOR',0,0,'C');
+
+
 }
 }
+
+//Creacin del objeto de la clase heredada
 
 $school = new School(Session::id());
 $teacherClass = new Teacher();
@@ -150,7 +157,7 @@ $teacher = DB::table('profesor')->where([
 if ($grade=='alias')
    {
    $ss =$_POST['estu'];
-   $result = DB::table('year')->where([
+$result = DB::table('year')->where([
     ['ss', $ss],
     ['year', $year],
 ])->orderBy('apellidos')->get();
@@ -158,17 +165,20 @@ if ($grade=='alias')
    }
  else
    {
-
 $result = DB::table('year')->where([
     ['alias', $grade],
     ['year', $year],
 ])->orderBy('apellidos')->get();
+
+
    }
+
 $a=0;
+
 foreach ($result as $estu) {
-     $pdf->AddPage();
-     $a=$a+1;
-     $gra='';
+   $pdf->AddPage();
+$a=$a+1;
+$gra='';
      $pdf->SetFont('Times','',11);
      $pdf->Cell(104,5,'Nombre:',1,0,'C', true);
      $pdf->Cell(20,5,'Grado:',1,0,'C', true);
@@ -178,6 +188,7 @@ foreach ($result as $estu) {
      $pdf->Cell(20,5,$estu->grado,1,0,'C');
      $pdf->Cell(40,5,$estu->alias,1,0,'C');
      $pdf->Cell(25,5,date("m-d-Y"),1,1,'C');
+     
      $pdf->Cell(1,5,' ',0,0,'C');
      $pdf->SetFont('Times','B',12);
      $pdf->Cell(28,5,'',0,0,'L');
@@ -186,7 +197,7 @@ foreach ($result as $estu) {
      list($ss1, $ss2, $ss3) = explode("-",$estu->ss);
      $pdf->Cell(37,5,'',0,0,'C');
      $pdf->Cell(30,5,'',0,1,'C');
-    
+     
      $pdf->Cell(1,5,' ',0,0,'C');
      $pdf->Cell(56,5,'Asignatura',1,0,'C', true);
      $pdf->Cell(76,5,'Profesor(a)',1,0,'C', true);
@@ -266,35 +277,35 @@ foreach ($result2 as $row) {
   IF (empty($rel) AND $_POST['tri']=='4'){$rel=$row->rel4;}
   IF (empty($rel) AND $_POST['tri']=='15'){$rel=$row->rel2;}
 
-  IF ($row->nota1 > 0 AND $_POST['tri']=='1' AND $row->credito > 0 OR $row->nota1 == '0' AND $_POST['tri']=='1' AND $row->credito > 0 OR !empty($row->nota1) AND $_POST['tri']=='1' AND $row->credito > 0)
+  IF (is_numeric($row->nota1) AND $_POST['tri']=='1' AND $row->credito > 0 OR $row->nota1 == '0' AND $_POST['tri']=='1' AND $row->credito > 0 OR !empty($row->nota1) AND $_POST['tri']=='1' AND $row->credito > 0)
      {
      $cr=$cr+1;
      $notas=$notas+$row->nota1;
-     $au=$au+$row->aus1;
-     $ta=$ta+$row->tar1;
+     if(is_numeric($row->aus1)){$au=$au+$row->aus1;}
+     if(is_numeric($row->tar1)){$ta=$ta+$row->tar1;}
      }
 
-  IF ($row->nota1 > 0 AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->nota1 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
+  IF (is_numeric($row->nota1) AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->nota1 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
      {
      $cr=$cr+1;
      $notas=$notas+$row->nota1;
-     $au=$au+$row->aus1;
-     $ta=$ta+$row->tar1;
+     if(is_numeric($row->aus1)){$au=$au+$row->aus1;}
+     if(is_numeric($row->tar1)){$ta=$ta+$row->tar1;}
      }
-  IF ($row->nota2 > 0 AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->nota2 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
+  IF (is_numeric($row->nota2) AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->nota2 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
      {
      $cr2=$cr2+1;
      $notas2=$notas2+$row->nota2;
-     $au=$au+$row->aus2;
-     $ta=$ta+$row->tar2;
+     if(is_numeric($row->aus2)){$au=$au+$row->aus2;}
+     if(is_numeric($row->tar2)){$ta=$ta+$row->tar2;}
      }
-  IF ($row->sem1 > 0 AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
+  IF (is_numeric($row->sem1) AND $_POST['tri']=='15' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='15' AND $row->credito > 0)
      {
      $cr3=$cr3+1;
      $notas3=$notas3+$row->sem1;
      }
 
-  IF ($row->sem1 > 0 AND $_POST['tri']=='2' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='2' AND $row->credito > 0)
+  IF (is_numeric($row->sem1) AND $_POST['tri']=='2' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='2' AND $row->credito > 0)
      {
      $cr=$cr+1;
      $notas=$notas+$row->sem1;
@@ -302,11 +313,11 @@ foreach ($result2 as $row) {
 
   IF ($_POST['tri']=='2')
      {
-     $au=$au+$row->aus2; 
-     $ta=$ta+$row->tar2;
+     if(is_numeric($row->aus2)){$au=$au+$row->aus2;}
+     if(is_numeric($row->tar2)){$ta=$ta+$row->tar2;}
      }
      
-  IF ($row->nota3 > 0 AND $_POST['tri']=='3' AND $row->credito > 0 OR $row->nota3 == '0' AND $_POST['tri']=='3' AND $row->credito > 0)
+  IF (is_numeric($row->nota3) AND $_POST['tri']=='3' AND $row->credito > 0 OR $row->nota3 == '0' AND $_POST['tri']=='3' AND $row->credito > 0)
      {
      $cr=$cr+1;
      $notas=$notas+$row->nota3;
@@ -314,32 +325,32 @@ foreach ($result2 as $row) {
 
   IF ($_POST['tri']=='3')
      {
-     $au=$au+$row->aus3; 
-     $ta=$ta+$row->tar3;
+     if(is_numeric($row->aus3)){$au=$au+$row->aus3;}
+     if(is_numeric($row->tar3)){$ta=$ta+$row->tar3;}
      }
 
-  IF ($row->sem1 > 0 AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
+  IF (is_numeric($row->sem1) AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->sem1 == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
      {
      $cr=$cr+1;
      $notas=$notas+$row->sem1;
      }
-  IF ($row->sem2 > 0 AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->sem2 == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
+  IF (is_numeric($row->sem2) AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->sem2 == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
      {
      $cr1=$cr1+1;
      $notas1=$notas1+$row->sem2;
      }
-  IF ($row->final > 0 AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->final == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
+  IF (is_numeric($row->final) AND $_POST['tri']=='4' AND $row->credito > 0 OR $row->final == '0' AND $_POST['tri']=='4' AND $row->credito > 0)
      {
      $cr3=$cr3+1;
      $notas3=$notas3+$row->final;
-     $au=$au+$row->aus1; 
-     $ta=$ta+$row->tar1;
-     $au=$au+$row->aus2; 
-     $ta=$ta+$row->tar2;
-     $au=$au+$row->aus3; 
-     $ta=$ta+$row->tar3;
-     $au=$au+$row->aus4; 
-     $ta=$ta+$row->tar4;
+     if(is_numeric($row->aus1)){$au=$au+$row->aus1;}
+     if(is_numeric($row->aus2)){$au=$au+$row->aus2;}
+     if(is_numeric($row->aus3)){$au=$au+$row->aus3;}
+     if(is_numeric($row->aus4)){$au=$au+$row->aus4;}
+     if(is_numeric($row->tar1)){$ta=$ta+$row->tar1;}
+     if(is_numeric($row->tar2)){$ta=$ta+$row->tar2;}
+     if(is_numeric($row->tar3)){$ta=$ta+$row->tar3;}
+     if(is_numeric($row->tar4)){$ta=$ta+$row->tar4;}
      }
 
      $pdf->SetFont('Times','',9);
@@ -389,10 +400,10 @@ foreach ($result2 as $row) {
         }
         ELSE{$pdf->Cell(56,5,$nn1,1,1,'C');}
         }
-
-     IF ($_POST['tri']=='1'){$de1=utf8_encode('Promedio del Periódo 1');}
+     $de1='';
+     IF ($_POST['tri']=='1'){$de1=utf8_encode('Promedio del Peri&#65533;do 1');}
      IF ($_POST['tri']=='2'){$de1='Promedio de Primer Semestre';}
-     IF ($_POST['tri']=='3'){$de1=utf8_encode('Promedio del Periódo 3');}
+     IF ($_POST['tri']=='3'){$de1=utf8_encode('Promedio del Peri&#65533;do 3');}
      IF ($_POST['tri']=='4'){$de1='Promedio Final';}
      IF ($_POST['tri']=='15'){$de1='Promedio de Primer Semestre';}
      $pdf->Cell(1,5,'  ',0,0,'R');
@@ -404,8 +415,12 @@ foreach ($result2 as $row) {
               {
               IF ($_POST['tri']=='15'){
                   $pdf->Cell(19,5,round($notas/$cr,0),1,0,'C');
-                  $pdf->Cell(18,5,round($notas2/$cr2,0),1,0,'C');
-                  $pdf->Cell(19,5,round($notas3/$cr3,0),1,1,'C');
+                  $cr22 = '';$cr33 = '';
+                  if ($cr2 > 0){$cr22 = round($notas2/$cr2,0);}
+                  if ($cr3 > 0){$cr33 = round($notas3/$cr3,0);}
+
+                  $pdf->Cell(18,5,$cr22,1,0,'C');
+                  $pdf->Cell(19,5,$cr33,1,1,'C');
                  }
               ELSE
                   {
@@ -414,6 +429,8 @@ foreach ($result2 as $row) {
                }
             }
      ELSE{$pdf->Cell(56,5,'',1,1,'C');}
+
+
      $pdf->Cell(1,5,'  ',0,0,'R');
      $pdf->Cell(56,5,'',0,0,'R');
      $pdf->Cell(76,5,'',0,0,'R');
@@ -437,12 +454,13 @@ foreach ($result2 as $row) {
      $pdf->Cell(1,5,'',0,0,'R');
      $pdf->Cell(132,5,'Relaciones Interpersonales',1,0,'C');
      $pdf->Cell(56,5,$rel,1,1,'C');
-     $pdf->Cell(1,10,'',0,0,'R');
-     $pdf->Cell(188,10,'',1,1,'L');
-     $pdf->Cell(1,-15,'',0,0,'R');
-     $pdf->Cell(188,-15,$text1,0,1,'C');
-     $pdf->Cell(1,23,'',0,0,'R');
-     $pdf->Cell(188,23,$text2,0,1,'C');
-     }
+
+  $pdf->Cell(1,10,'',0,0,'R');
+  $pdf->Cell(188,10,'',1,1,'L');
+  $pdf->Cell(1,-15,'',0,0,'R');
+  $pdf->Cell(188,-15,$text1,0,1,'C');
+  $pdf->Cell(1,23,'',0,0,'R');
+  $pdf->Cell(188,23,$text2,0,1,'C');
+}
 $pdf->Output();
 ?>
