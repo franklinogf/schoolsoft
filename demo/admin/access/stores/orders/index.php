@@ -41,6 +41,9 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
         <div class="mx-auto w-100">
             <a class="btn btn-outline-primary mb-3" href="../index.php"><?= __('Volver a Tiendas') ?></a>
             <a class="btn btn-outline-secondary mb-3" href="../edit.php?id=<?= $store->id ?>"><?= __('Editar Tienda') ?></a>
+            <a class="btn btn-success mb-3" href="./create.php?store_id=<?= $store->id ?>">
+                <i class="fa fa-plus"></i> <?= __('Nueva Orden') ?>
+            </a>
 
             <table class="table table-striped mt-3" id="ordersTable">
                 <caption><?= __('Lista de órdenes') ?></caption>

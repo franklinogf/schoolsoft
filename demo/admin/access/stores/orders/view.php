@@ -110,7 +110,7 @@ $storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
                             <dd class="col-sm-8"><?= $order->date->format('d/m/Y H:i') ?></dd>
 
                             <dt class="col-sm-4"><?= __('Tipo de Pago') ?>:</dt>
-                            <dd class="col-sm-8"><?= htmlspecialchars($order->payment_type ?: '-') ?></dd>
+                            <dd class="col-sm-8"><?= $order->payment_type->label() ?></dd>
 
                             <dt class="col-sm-4"><?= __('Estado') ?>:</dt>
                             <dd class="col-sm-8">
