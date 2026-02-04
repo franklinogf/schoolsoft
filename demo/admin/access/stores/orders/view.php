@@ -18,13 +18,15 @@ if (!$storeId || !$orderId) Route::redirect('/access/stores/index.php');
 $store = Store::find($storeId);
 if (!$store) Route::redirect('/access/stores/index.php');
 
-$order = StoreOrder::with('items')->find($orderId);
+$order = StoreOrder::with('items.storeItem')->find($orderId);
 if (!$order || $order->shopping != $store->prefix_code) {
     Route::redirect("/access/stores/orders/index.php?store_id={$storeId}");
 }
 
 // Get store items for size options dropdown
-$storeItems = StoreItem::where('store_id', $storeId)->get()->keyBy('name');
+$storeItemsCollection = StoreItem::where('store_id', $storeId)->get();
+$storeItemsById = $storeItemsCollection->keyBy('id');
+$storeItemsByName = $storeItemsCollection->keyBy('name');
 
 // Get students from the same family (same id field which is the family ID)
 $students = Student::where('id', $order->accountID)
@@ -180,7 +182,13 @@ $deliveryDisplay = $deliveryStudent
                 </thead>
                 <tbody>
                     <?php foreach ($order->items as $item):
-                        $storeItem = $storeItems->get($item->item_name);
+                        $storeItem = $item->storeItem;
+                        if (!$storeItem && $item->store_item_id) {
+                            $storeItem = $storeItemsById->get($item->store_item_id);
+                        }
+                        if (!$storeItem) {
+                            $storeItem = $storeItemsByName->get($item->item_name);
+                        }
                         $options = $storeItem?->options ?? [];
                         $availableOptions = !empty($options)
                             ? $options
@@ -197,7 +205,10 @@ $deliveryDisplay = $deliveryStudent
                                 <span class="size-display" data-item-id="<?= $item->id ?>">
                                     <?= htmlspecialchars($item->size ?: '-') ?>
                                 </span>
-                                <div class="size-edit-form" data-item-id="<?= $item->id ?>" data-item-name="<?= htmlspecialchars($item->item_name) ?>">
+                                <div class="size-edit-form"
+                                    data-item-id="<?= $item->id ?>"
+                                    data-item-name="<?= htmlspecialchars($item->item_name) ?>"
+                                    data-store-item-id="<?= $item->store_item_id ?? '' ?>">
                                     <select class="form-control form-control-sm size-select" style="width: auto;">
                                         <?php foreach ($availableOptions as $option):
                                             $optionPrice = $option->price ?? $storeItem->price ?? $item->price;
@@ -331,13 +342,15 @@ $deliveryDisplay = $deliveryStudent
                 const form = $(this).closest('.size-edit-form');
                 const itemId = form.data('item-id');
                 const itemName = form.data('item-name');
+                const storeItemId = form.data('store-item-id');
                 const newSize = form.find('.size-select').val();
 
                 $.post('./includes/update-item.php', {
                     item_id: itemId,
                     field: 'size',
                     value: newSize,
-                    item_name: itemName
+                    item_name: itemName,
+                    store_item_id: storeItemId
                 }, function(response) {
                     if (response.success) {
                         $(`.size-display[data-item-id="${itemId}"]`).text(newSize || '-').removeClass('editing');

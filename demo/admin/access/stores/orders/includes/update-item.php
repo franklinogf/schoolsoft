@@ -51,10 +51,23 @@ if ($field === 'amount') {
 // Get new price if size/option is being changed
 $newPrice = null;
 if ($field === 'size') {
+    $storeItemId = $_POST['store_item_id'] ?? $item->store_item_id;
     $itemName = $_POST['item_name'] ?? $item->item_name;
-    $storeItem = StoreItem::where('name', $itemName)->first();
+    $storeItem = $item->storeItem;
+
+    if (!$storeItem && $storeItemId) {
+        $storeItem = StoreItem::find($storeItemId);
+    }
+
+    if (!$storeItem && $itemName) {
+        $storeItem = StoreItem::where('name', $itemName)->first();
+    }
+
     if ($storeItem) {
         $newPrice = $storeItem->getPriceForOption($value);
+        if (!$item->store_item_id) {
+            $item->store_item_id = $storeItem->id;
+        }
     }
 }
 

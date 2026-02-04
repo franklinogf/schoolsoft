@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $id_compra
  * @property string $item_name
+ * @property int|null $store_item_id
  * @property int $amount
  * @property string $size
  * @property float $price
  * @property int $orden
  * @property string $year
  * @property StoreOrder|null $order
+ * @property StoreItem|null $storeItem
  */
 class StoreOrderItem extends Model
 {
@@ -25,5 +27,10 @@ class StoreOrderItem extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(StoreOrder::class, "id_compra");
+    }
+
+    public function storeItem(): BelongsTo
+    {
+        return $this->belongsTo(StoreItem::class, 'store_item_id');
     }
 }

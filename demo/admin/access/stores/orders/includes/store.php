@@ -94,6 +94,7 @@ try {
         $subtotal += $price * $quantity;
 
         $orderItems[] = [
+            'store_item_id' => $storeItem->id,
             'item_name' => $storeItem->name,
             'amount' => $quantity,
             'size' => $optionName,
