@@ -182,6 +182,14 @@ $deliveryDisplay = $deliveryStudent
                     <?php foreach ($order->items as $item):
                         $storeItem = $storeItems->get($item->item_name);
                         $options = $storeItem?->options ?? [];
+                        $availableOptions = !empty($options)
+                            ? $options
+                            : [
+                                (object) [
+                                    'name' => $item->size ?: __('Opción registrada'),
+                                    'price' => $item->price,
+                                ],
+                            ];
                     ?>
                         <tr data-item-id="<?= $item->id ?>">
                             <td><?= htmlspecialchars($item->item_name) ?></td>
@@ -190,21 +198,18 @@ $deliveryDisplay = $deliveryStudent
                                     <?= htmlspecialchars($item->size ?: '-') ?>
                                 </span>
                                 <div class="size-edit-form" data-item-id="<?= $item->id ?>" data-item-name="<?= htmlspecialchars($item->item_name) ?>">
-                                    <?php if (!empty($options)): ?>
-                                        <select class="form-control form-control-sm size-select" style="width: auto;">
-                                            <?php foreach ($options as $option):
-                                                $optionPrice = $option->price ?? $storeItem->price ?? $item->price;
-                                            ?>
-                                                <option value="<?= htmlspecialchars($option->name) ?>"
-                                                    data-price="<?= $optionPrice ?>"
-                                                    <?= $item->size === $option->name ? 'selected' : '' ?>>
-                                                    <?= htmlspecialchars($option->name) ?> ($<?= number_format($optionPrice, 2) ?>)
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    <?php else: ?>
-                                        <input type="text" class="form-control form-control-sm size-input" value="<?= htmlspecialchars($item->size) ?>" style="width: 100px;">
-                                    <?php endif; ?>
+                                    <select class="form-control form-control-sm size-select" style="width: auto;">
+                                        <?php foreach ($availableOptions as $option):
+                                            $optionPrice = $option->price ?? $storeItem->price ?? $item->price;
+                                            $optionName = $option->name ?? '';
+                                        ?>
+                                            <option value="<?= htmlspecialchars($optionName) ?>"
+                                                data-price="<?= $optionPrice ?>"
+                                                <?= $item->size === $optionName ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($optionName) ?> ($<?= number_format($optionPrice, 2) ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                     <button type="button" class="btn btn-sm btn-success save-size-btn" title="<?= __('Guardar') ?>">
                                         <i class="fas fa-check"></i>
                                     </button>
@@ -326,7 +331,7 @@ $deliveryDisplay = $deliveryStudent
                 const form = $(this).closest('.size-edit-form');
                 const itemId = form.data('item-id');
                 const itemName = form.data('item-name');
-                const newSize = form.find('.size-select, .size-input').val();
+                const newSize = form.find('.size-select').val();
 
                 $.post('./includes/update-item.php', {
                     item_id: itemId,

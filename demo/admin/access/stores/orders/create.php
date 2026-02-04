@@ -179,6 +179,21 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                             <h5 class="mb-0"><?= __('Pago y Totales') ?></h5>
                         </div>
                         <div class="card-body">
+                            <div class="form-group">
+                                <label for="order_datetime">
+                                    <?= __('Fecha y hora de la orden') ?>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="datetime-local"
+                                    class="form-control"
+                                    id="order_datetime"
+                                    name="order_datetime"
+                                    required
+                                    value="<?= date('Y-m-d\TH:i') ?>">
+                                <small class="form-text text-muted">
+                                    <?= __('Se guardará utilizando la zona horaria configurada para la escuela') ?>
+                                </small>
+                            </div>
                             <!-- Payment Type -->
                             <div class="form-group">
                                 <label for="payment_type">
@@ -198,16 +213,23 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                             <!-- IVU (Optional) -->
                             <div class="form-group">
                                 <label for="ivu"><?= __('IVU (Impuesto)') ?></label>
-                                <input type="number"
-                                    class="form-control"
-                                    id="ivu"
-                                    name="ivu"
-                                    step="0.01"
-                                    min="0"
-                                    value="0.00"
-                                    placeholder="0.00">
+                                <div class="input-group">
+                                    <input type="number"
+                                        class="form-control"
+                                        id="ivu"
+                                        name="ivu"
+                                        step="0.01"
+                                        min="0"
+                                        value="0.00"
+                                        placeholder="0.00">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary" id="resetIvuBtn">
+                                            <?= __('Auto 11.5%') ?>
+                                        </button>
+                                    </div>
+                                </div>
                                 <small class="form-text text-muted">
-                                    <?= __('Opcional - dejar en 0 si no aplica') ?>
+                                    <?= __('Se calcula automáticamente al 11.5% del subtotal, pero puede editarse si es necesario') ?>
                                 </small>
                             </div>
 
@@ -252,7 +274,9 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
 
     <script>
         const storeItems = <?= json_encode($store->items) ?>;
+        const IVU_RATE = 0.115;
         let itemCounter = 0;
+        let ivuManualOverride = false;
 
         $(document).ready(function() {
             // Initialize Bootstrap-Select
@@ -472,7 +496,7 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                 itemCounter++;
                 const rowId = `item-${itemCounter}`;
 
-                let optionsHTML = '<option value=""><?= __("Seleccionar artículo") ?></option>';
+                let optionsHTML = '<option value=""><?= __('Seleccionar artículo') ?></option>';
                 storeItems.forEach(item => {
                     optionsHTML += `<option value="${item.id}" 
                     data-price="${item.price}" 
@@ -535,7 +559,7 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                 const itemId = $(this).val();
 
                 if (!itemId) {
-                    $row.find('.option-select').prop('disabled', true).html('<option value=""><?= __("Sin opciones") ?></option>');
+                    $row.find('.option-select').prop('disabled', true).html('<option value=""><?= __('Sin opciones') ?></option>');
                     $row.find('.quantity-input').val(1).prop('max', '');
                     $row.find('.item-price').val('0.00');
                     return;
@@ -547,13 +571,17 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
 
                 // Handle options
                 if (options.length > 0) {
-                    let optHTML = '<option value=""><?= __("Seleccionar opción") ?></option>';
-                    options.forEach(opt => {
+                    let optHTML = '';
+                    options.forEach((opt, index) => {
                         const optPrice = opt.price !== null ? opt.price : price;
-                        optHTML += `<option value="${opt.name}" data-price="${optPrice}">${opt.name} - $${parseFloat(optPrice).toFixed(2)}</option>`;
+                        const selectedAttr = index === 0 ? 'selected' : '';
+                        optHTML += `<option value="${opt.name}" data-price="${optPrice}" ${selectedAttr}>${opt.name} - $${parseFloat(optPrice).toFixed(2)}</option>`;
                     });
-                    $row.find('.option-select').prop('disabled', false).html(optHTML).prop('required', true);
-                    $row.find('.item-price').val('0.00');
+                    const $optionSelect = $row.find('.option-select');
+                    $optionSelect.prop('disabled', false).html(optHTML).prop('required', true);
+                    const selectedPrice = parseFloat($optionSelect.find('option:selected').data('price')) || 0;
+                    $row.find('.item-price').val(selectedPrice.toFixed(2));
+                    updateTotals();
                 } else {
                     $row.find('.option-select').prop('disabled', true).html('<option value=""><?= __("Sin opciones") ?></option>').prop('required', false);
                     $row.find('.item-price').val(price.toFixed(2));
@@ -585,6 +613,12 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
 
             // IVU change
             $('#ivu').on('input', function() {
+                ivuManualOverride = true;
+                updateTotals();
+            });
+
+            $('#resetIvuBtn').on('click', function() {
+                ivuManualOverride = false;
                 updateTotals();
             });
 
@@ -604,7 +638,13 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                     subtotal += price * quantity;
                 });
 
-                const ivu = parseFloat($('#ivu').val()) || 0;
+                let ivu = parseFloat($('#ivu').val()) || 0;
+
+                if (!ivuManualOverride) {
+                    ivu = subtotal * IVU_RATE;
+                    $('#ivu').val(ivu.toFixed(2));
+                }
+
                 const total = subtotal + ivu;
 
                 $('#displaySubtotal').text('$' + subtotal.toFixed(2));
@@ -637,6 +677,28 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                 if (!email || email.trim() === '') {
                     e.preventDefault();
                     alert('<?= __("Debe seleccionar o ingresar un correo electrónico") ?>');
+                    return false;
+                }
+
+                const orderDatetime = $('#order_datetime').val();
+                if (!orderDatetime) {
+                    e.preventDefault();
+                    alert('<?= __('Debe indicar la fecha y hora de la orden') ?>');
+                    return false;
+                }
+
+                let missingOption = false;
+                $('.item-row').each(function() {
+                    const $optionSelect = $(this).find('.option-select');
+                    if (!$optionSelect.prop('disabled') && !$optionSelect.val()) {
+                        missingOption = true;
+                        return false;
+                    }
+                });
+
+                if (missingOption) {
+                    e.preventDefault();
+                    alert('<?= __('Cada artículo debe tener una opción seleccionada') ?>');
                     return false;
                 }
 

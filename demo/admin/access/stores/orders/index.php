@@ -51,6 +51,7 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
                     <tr>
                         <th><?= __('Ref #') ?></th>
                         <th><?= __('Cliente') ?></th>
+                        <th><?= __('Cuenta') ?></th>
                         <th><?= __('Email') ?></th>
                         <th><?= __('Fecha') ?></th>
                         <th class="text-right"><?= __('Total') ?></th>
@@ -64,6 +65,7 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
                         <tr>
                             <td><?= $order->refNumber ?></td>
                             <td><?= htmlspecialchars($order->customerName) ?></td>
+                            <td><?= htmlspecialchars($order->accountID) ?></td>
                             <td><?= htmlspecialchars($order->customerEmail) ?></td>
                             <td><?= date('d/m/Y H:i', strtotime($order->date)) ?></td>
                             <td class="text-right">$<?= number_format($order->total, 2) ?></td>
@@ -94,7 +96,7 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
         $(function() {
             $('#ordersTable').DataTable({
                 order: [
-                    [3, 'desc']
+                    [4, 'desc']
                 ],
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/<?= __LANG === 'es' ? 'es-ES' : 'en-GB' ?>.json'

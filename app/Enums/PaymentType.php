@@ -6,7 +6,7 @@ enum PaymentType: string
 {
     case CREDIT_CARD = 'credit';
     case ACH = 'ach';
-    case CASH = 'Cash';
+    case CASH = 'cash';
 
     public function label(): string
     {

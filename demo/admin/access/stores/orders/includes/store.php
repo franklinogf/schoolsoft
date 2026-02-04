@@ -29,9 +29,11 @@ $deliveryTo = $_POST['deliveryTo'] ?? '';
 $paymentType = $_POST['payment_type'] ?? '';
 $ivu = floatval($_POST['ivu'] ?? 0);
 $items = $_POST['items'] ?? [];
+$orderDatetimeInput = $_POST['order_datetime'] ?? '';
+$timezone = config('app.timezone', 'America/Puerto_Rico');
 
 // Validation
-if (!$storeId || !$storePrefix || !$accountID || !$customerEmail || !$paymentType) {
+if (!$storeId || !$storePrefix || !$accountID || !$customerEmail || !$paymentType || !$orderDatetimeInput) {
     $_SESSION['error'] = __('Faltan campos requeridos');
     Route::redirect("/access/stores/orders/create.php?store_id={$storeId}");
 }
@@ -46,6 +48,13 @@ $student = Student::where('id', $accountID)->first();
 
 if (!$student) {
     $_SESSION['error'] = __('Estudiante no encontrado');
+    Route::redirect("/access/stores/orders/create.php?store_id={$storeId}");
+}
+
+try {
+    $orderDate = Carbon::createFromFormat('Y-m-d\TH:i', $orderDatetimeInput, $timezone);
+} catch (Exception $e) {
+    $_SESSION['error'] = __('La fecha y hora indicada no es válida');
     Route::redirect("/access/stores/orders/create.php?store_id={$storeId}");
 }
 
@@ -69,12 +78,17 @@ try {
             continue;
         }
 
+        if (!$optionName) {
+            $_SESSION['error'] = __('Cada artículo debe incluir una opción válida');
+            Route::redirect("/access/stores/orders/create.php?store_id={$storeId}");
+        }
+
         // Determine price based on option
-        if ($optionName && $optionName !== '') {
-            $price = $storeItem->getPriceForOption($optionName);
-        } else {
-            $price = $storeItem->price;
-            $optionName = '';
+        $price = $storeItem->getPriceForOption($optionName);
+
+        if ($price === null) {
+            $_SESSION['error'] = __('La opción seleccionada no es válida para uno de los artículos');
+            Route::redirect("/access/stores/orders/create.php?store_id={$storeId}");
         }
 
         $subtotal += $price * $quantity;
@@ -106,7 +120,7 @@ try {
         'customerName' => $customerName,
         'customerEmail' => $customerEmail,
         'refNumber' => $refNumber,
-        'date' => Carbon::now(),
+        'date' => $orderDate,
         'subtotal' => round($subtotal, 2),
         'ivu' => round($ivu, 2),
         'total' => round($total, 2),
