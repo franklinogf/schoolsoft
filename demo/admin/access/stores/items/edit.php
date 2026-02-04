@@ -39,7 +39,7 @@ $item = StoreItem::find($id);
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Editar articulo') ?></h1>
         <div class="mx-auto" style="max-width: 40rem;">
             <a class="btn btn-outline-primary my-2" href="../edit.php?id=<?= $storeId ?>">Volver</a>
-            <form method="POST" action="./includes/update.php">
+            <form method="POST" action="./includes/update.php" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $item->id ?>">
                 <div class="form-group">
                     <label for="name">Nombre</label>
@@ -79,23 +79,44 @@ $item = StoreItem::find($id);
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <div class="form-group">
-                        <label for="picture_url">Imagen</label>
-                        <input type="text" class="form-control" id="picture_url" name="picture_url" value="<?= $item->picture_url ?>">
-                        <small class="form-text text-muted">URL de la imagen</small>
-                    </div>
-                    <?php if ($item->picture_url): ?>
-                        <div class="text-center mt-2">
-                            <img class="img-thumbnail" src="<?= $item->picture_url ?>" alt="<?= $item->name ?>" width="100" height="100">
-                        </div>
-                    <?php endif; ?>
+                </div>
 
-                    <div class="d-flex justify-content-between mt-2">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                        <button type="button" data-item-id="<?= $id ?>" data-store-id="<?= $storeId ?>" class="btn btn-danger" id="deleteItemButton">
-                            Eliminar articulo
-                        </button>
+                <div class="form-group">
+                    <label class="d-block">Imagen</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="picture_source" id="picture_source_none" value="none" <?= $item->picture_url ? '' : 'checked' ?>>
+                        <label class="form-check-label" for="picture_source_none">Sin imagen</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="picture_source" id="picture_source_url" value="url" <?= $item->picture_url ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="picture_source_url">Enlace</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="picture_source" id="picture_source_upload" value="upload">
+                        <label class="form-check-label" for="picture_source_upload">Subir archivo</label>
+                    </div>
+
+                    <div id="pictureUploadGroup" class="mt-3 d-none">
+                        <input type="file" class="form-control-file" id="picture_upload" name="picture_upload" accept="image/*">
+                        <small class="form-text text-muted">JPG, PNG, GIF o WEBP. Tamaño recomendado: 500x500px.</small>
+                    </div>
+
+                    <div id="pictureUrlGroup" class="mt-3 <?= $item->picture_url ? '' : 'd-none' ?>">
+                        <input type="text" class="form-control" id="picture_url" name="picture_url" value="<?= $item->picture_url ?>" placeholder="https://ejemplo.com/imagen.jpg">
+                        <small class="form-text text-muted">Ingresa la URL completa de la imagen.</small>
+                    </div>
+
+                    <div id="picturePreview" class="mt-3 text-center <?= $item->picture_url ? '' : 'd-none' ?>">
+                        <img id="picturePreviewImage" class="img-thumbnail" src="<?= $item->picture_url ?>" alt="<?= $item->name ?>" width="140" height="140" data-initial="<?= htmlspecialchars($item->picture_url ?? '', ENT_QUOTES) ?>">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-2">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="button" data-item-id="<?= $id ?>" data-store-id="<?= $storeId ?>" class="btn btn-danger" id="deleteItemButton">
+                        Eliminar articulo
+                    </button>
+                </div>
             </form>
 
         </div>
@@ -110,6 +131,14 @@ $item = StoreItem::find($id);
     <script>
         $(function() {
             const $optionsContainer = $("#optionsContainer");
+            const $pictureSourceInputs = $("input[name='picture_source']");
+            const $pictureUploadGroup = $("#pictureUploadGroup");
+            const $pictureUrlGroup = $("#pictureUrlGroup");
+            const $pictureFileInput = $("#picture_upload");
+            const $pictureUrlInput = $("#picture_url");
+            const $picturePreview = $("#picturePreview");
+            const $picturePreviewImage = $("#picturePreviewImage");
+            let objectUrl = null;
 
             $optionsContainer.sortable({
                 handle: '.handle',
@@ -151,6 +180,75 @@ $item = StoreItem::find($id);
                     <button type="button" class="btn btn-danger removeOptionButton">Eliminar</button>
                 </div>`;
             }
+
+            function revokeObjectUrl() {
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                    objectUrl = null;
+                }
+            }
+
+            function setPreview(url) {
+                if (url) {
+                    $picturePreview.removeClass("d-none");
+                    $picturePreviewImage.attr("src", url);
+                } else {
+                    $picturePreview.addClass("d-none");
+                    $picturePreviewImage.attr("src", "");
+                }
+            }
+
+            function updateUploadPreview() {
+                const input = $pictureFileInput.get(0);
+                const file = input && input.files && input.files[0];
+
+                if (file) {
+                    revokeObjectUrl();
+                    objectUrl = URL.createObjectURL(file);
+                    setPreview(objectUrl);
+                    return;
+                }
+
+                setPreview(null);
+            }
+
+            function updateUrlPreview() {
+                const url = ($pictureUrlInput.val() || '').trim();
+                setPreview(url || null);
+            }
+
+            function handleSourceChange() {
+                const source = $pictureSourceInputs.filter(":checked").val();
+
+                $pictureUploadGroup.toggleClass("d-none", source !== 'upload');
+                $pictureUrlGroup.toggleClass("d-none", source !== 'url');
+
+                if (source === 'upload') {
+                    updateUploadPreview();
+                } else if (source === 'url') {
+                    $pictureFileInput.val('');
+                    revokeObjectUrl();
+                    updateUrlPreview();
+                } else {
+                    $pictureFileInput.val('');
+                    revokeObjectUrl();
+                    setPreview(null);
+                }
+            }
+
+            $pictureSourceInputs.on('change', handleSourceChange);
+            $pictureFileInput.on('change', updateUploadPreview);
+            $pictureUrlInput.on('input', updateUrlPreview);
+
+            const initialPreview = $picturePreviewImage.data('initial');
+
+            if (initialPreview) {
+                setPreview(initialPreview);
+            } else {
+                setPreview(null);
+            }
+
+            handleSourceChange();
 
             $("#deleteItemButton").on("click", function() {
                 const itemId = $(this).data("item-id");

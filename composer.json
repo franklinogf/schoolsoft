@@ -6,16 +6,16 @@
     "php": "^8.2",
     "resend/resend-php": "^v0.16.0",
     "scssphp/scssphp": "2.0.1",
-    "illuminate/database": "^12.41.1",
-    "illuminate/translation": "^12.41.1",
-    "illuminate/filesystem": "^12.41.1",
-    "vlucas/phpdotenv": "^5.6.2",
+    "illuminate/database": "^12.50.0",
+    "illuminate/translation": "^12.50.0",
+    "illuminate/filesystem": "^12.50.0",
+    "vlucas/phpdotenv": "^5.6.3",
     "setasign/fpdi": "^2.6.4",
     "setasign/fpdf": "^1.8.6",
-    "illuminate/support": "^12.41.1",
-    "ramsey/uuid": "^4.9.1",
+    "illuminate/support": "^12.50.0",
+    "ramsey/uuid": "^4.9.2",
     "ifsnop/mysqldump-php": "^2.12",
-    "phpoffice/phpspreadsheet": "^5.3"
+    "phpoffice/phpspreadsheet": "^5.4"
   },
   "autoload": {
     "psr-4": {

@@ -2,6 +2,7 @@
 
 use App\Dtos\StoreItemOption;
 use App\Models\StoreItem;
+use App\Services\FileService;
 use Classes\Route;
 use Illuminate\Support\Carbon;
 
@@ -9,11 +10,14 @@ require_once __DIR__ . '/../../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $fileService = new FileService();
     $storeId = $_POST['store_id'] ?? null;
     $name = $_POST['name'];
-    $buyMultiple = $_POST['buy_multiple'] ? true : false;
+    $buyMultiple = !empty($_POST['buy_multiple']);
     $price = $_POST['price'] ?: null;
-    $picture_url = $_POST['picture_url'] ?: null;
+    $pictureSource = $_POST['picture_source'] ?? 'url';
+    $pictureFile = $_FILES['picture_upload'] ?? null;
+    $pictureUrlInput = $_POST['picture_url'] ?? null;
     $options = [];
     foreach ($_POST['options'] ?? [] as $index => $option) {
         $options[] = new StoreItemOption(
@@ -26,6 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($name) || empty($storeId) || $price === null) {
         Route::redirect("/access/stores/items/create.php?store_id={$storeId}");
     }
+
+    $picture_url = $fileService->resolveStoreItemPictureUrl(
+        $pictureSource,
+        $pictureFile,
+        $pictureUrlInput,
+        null
+    );
 
     StoreItem::create([
         'name' => $name,
