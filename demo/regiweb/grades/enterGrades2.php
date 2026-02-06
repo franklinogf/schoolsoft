@@ -186,7 +186,7 @@ $_info = school_is('cdls') ? [
         QuincenalTrimesterEnum::FINAL_S1->value => [
             'table' => 'padres',
             'columns' => [
-               generateColumn(__('Nota'),'examen')
+                generateColumn(__('Nota'), 'examen')
             ]
 
         ],
@@ -209,7 +209,7 @@ $_info = school_is('cdls') ? [
         QuincenalTrimesterEnum::FINAL_S2->value => [
             'table' => 'padres4',
             'columns' => [
-                generateColumn(__('Nota'),'examen')
+                generateColumn(__('Nota'), 'examen')
             ]
         ]
     ],
