@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/../../../../app.php';
+require_once '../../../../app.php';
 
 use App\Models\Admin;
+use App\Models\Family;
 use App\Models\Student;
 use App\Models\Teacher;
 use Classes\Email;
@@ -25,9 +26,13 @@ if (isset($_FILES['file'])) {
 }
 
 $to = [];
-
+$id ='';
+$ss ='';
 foreach ($values as $value) {
     $count = 0;
+    $to = [];
+    $id ='';
+    $ss ='';
     if ($key === 'teachers') {
         $teacher = Teacher::find($value);
         if ($teacher->email1 !== '') {
@@ -37,8 +42,9 @@ foreach ($values as $value) {
             $to[] = $teacher->email2;
         }
     } else if ($key === 'students') {
-
         $student = Student::find($value);
+        $ss = $student->ss;
+        $id = $student->family->id;
         $emails = [
             ['correo' => $student->family->email_p, 'nombre' => $student->family->padre],
             ['correo' => $student->family->email_m, 'nombre' => $student->family->madre]
@@ -74,7 +80,9 @@ foreach ($values as $value) {
             $email =  Email::to($to)
                 ->subject($subject)
                 ->body($body)
-                ->text($message);
+                ->text($message)
+                ->id2($id)
+                ->ss($ss);
             foreach ($files as $file) {
                 $email->attach($file);
             }
