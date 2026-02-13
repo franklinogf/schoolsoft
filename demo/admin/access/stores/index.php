@@ -1,24 +1,19 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Lang;
+use App\Models\Store;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
 
 Session::is_logged();
-$lang = new Lang([
-    ['Tiendas', 'Stores'],
-]);
-$stores = DB::table('stores')->get();
+$stores = Store::all();
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = $lang->translation('Tiendas');
+    $title = __('Tiendas');
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
 </head>
@@ -28,7 +23,7 @@ $stores = DB::table('stores')->get();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Tiendas') ?></h1>
+        <h1 class="text-center mb-3 mt-5"><?= __('Tiendas') ?></h1>
         <div class="mx-auto w-100">
             <a class="btn btn-outline-primary" href="./create.php">Crear tienda</a>
 
@@ -54,8 +49,11 @@ $stores = DB::table('stores')->get();
                             <td><?= $store->active ? 'Sí' : 'No' ?></td>
                             <td><?= $store->prefix_code ?></td>
                             <td>
-                                <a class="btn btn-outline-primary" href="./edit.php?id=<?= $store->id ?>">Editar</a>
-                                <button data-store-id="<?= $store->id ?>" class="btn btn-outline-danger deleteStoreButton">Eliminar</b>
+                                <a class="btn btn-outline-info btn-sm" href="./orders/index.php?store_id=<?= $store->id ?>" title="<?= __('Ver Órdenes') ?>">
+                                    <i class="fas fa-shopping-cart"></i> <?= __('Órdenes') ?>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm" href="./edit.php?id=<?= $store->id ?>"><?= __('Editar') ?></a>
+                                <button data-store-id="<?= $store->id ?>" class="btn btn-outline-danger btn-sm deleteStoreButton"><?= __('Eliminar') ?></button>
                             </td>
                         </tr>
                     <?php

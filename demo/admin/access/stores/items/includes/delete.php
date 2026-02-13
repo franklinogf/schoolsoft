@@ -1,19 +1,22 @@
 <?php
 
-use Classes\DataBase\DB;
+use App\Models\StoreItem;
+use App\Services\FileService;
 use Classes\Route;
 
 require_once __DIR__ . '/../../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $fileService = new FileService();
     $id = $_POST['id'] ?? null;
-    $item = DB::table('store_items')->where('id', $id)->first();
+    $item = StoreItem::find($id);
 
-    $dateTime = date('Y-m-d H:i:s');
-    DB::table('store_items')->where('id', $id)->delete();
-
-
-    Route::redirect("/access/stores/edit.php?store_id={$item->store_id}");
+    if ($item) {
+        $fileService->deleteStoreItemPicture($item->picture_url);
+        $storeId = $item->store_id;
+        $item->delete();
+        Route::redirect("/access/stores/edit.php?id={$storeId}");
+    }
 }
 Route::redirect('/access/stores/');

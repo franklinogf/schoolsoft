@@ -22,7 +22,7 @@ if (isset($_POST['changeValue'])) {
     DB::table('valores')
         ->where('mt', $id)
         ->update([$type => $value]);
-        echo json_encode(['status' => 'success', 'message' => "$type updated successfully."]);
+    echo json_encode(['status' => 'success', 'message' => "$type updated successfully."]);
 } elseif (isset($_POST['changeOption'])) {
     $type = $_POST['changeOption'];
     $value = $_POST['value'];
@@ -50,41 +50,6 @@ if (isset($_POST['changeValue'])) {
                 ['curso', $subjectCode],
                 ['year', $year]
             ])->update($data);
-
-        // $studentData = Manager::table($table)
-        //     ->where([
-        //         ['ss', $ss],
-        //         ['curso', $subjectCode],
-        //         ['year', $year]
-        //     ])->first();
-        // // each grade
-        // foreach ($data->{"grade-$ss"} as $index => $grade) {
-        //     $inputsGrades["not$_gradeStart"] = $grade;
-        //     // Para el Informe cambio de notas
-        //     $newNote = $grade;
-        //     $noteIndex = $index + 1;
-        //     $lastNote = $studentData->{"not$_gradeStart"};
-        //     if ($newNote !== $lastNote && ($lastNote !== '' && $lastNote !== null)) {
-        //         Manager::table('tarjeta_cambios')->insert([
-        //             'id' => $teacher->id,
-        //             'fecha' => Util::date(),
-        //             'hora' => Util::time(),
-        //             'ip' => Util::getIp(),
-        //             'curso' => $_subjectCode,
-        //             'nt1' => $newNote,
-        //             'nt2' => $lastNote,
-        //             'cual' => $noteIndex,
-        //             'ss' => $ss,
-        //             'year' => $year,
-        //             'tri' => $data->trimester[0],
-        //             'pag' => $_report
-        //         ]);
-        //     }
-        //     $_gradeStart++;
-        // }
-        // $allInputs = $inputsGrades;
-        
-        
     }
 
     echo json_encode(['status' => 'success', 'message' => 'Grades updated successfully.']);

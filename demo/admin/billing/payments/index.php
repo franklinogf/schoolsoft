@@ -2,12 +2,12 @@
 require_once __DIR__ . '/../../../app.php';
 
 use App\Enums\AdminPermission;
+use App\Models\Admin;
+use App\Models\Family;
+use App\Models\Student;
+use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Lang;
-use App\Models\Student;
-use App\Models\Family;
-use App\Models\Admin;
 use Illuminate\Database\Capsule\Manager;
 
 Session::is_logged();
@@ -84,24 +84,25 @@ $depositTypes = [
 <head>
     <?php
     $title = $lang->translation("Pagos");
-    Route::includeFile('/admin/includes/layouts/header.php');
-    Route::selectPicker();
-    Route::fontawasome();
-    ?>
+Route::includeFile('/admin/includes/layouts/header.php');
+Route::selectPicker();
+Route::fontawasome();
+?>
 </head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <body>
     <?php
-    Route::includeFile('/admin/includes/layouts/menu.php');
-    ?>
+Route::includeFile('/admin/includes/layouts/menu.php');
+?>
     <div class="container-md mt-md-3 mb-md-5 px-2">
         <h1 class="text-center my-3"><?= $lang->translation("Pagos") ?></h1>
         <form method="GET">
             <select class="form-control selectpicker" style="width: 100%;" name="accountId" data-live-search="true" required>
                 <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
                 <?php foreach ($students as $student): ?>
-                    <option <?= isset($_REQUEST['accountId']) && $_REQUEST['accountId'] == $student->id ? 'selected=""' : '' ?> value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
+                <option <?= isset($_REQUEST['accountId']) && $_REQUEST['accountId'] == $student->id ? 'selected=""' : '' ?>
+                    value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
                 <?php endforeach ?>
             </select>
             <button class="btn btn-primary btn-sm btn-block mt-2" type="submit"><?= $lang->translation("Buscar información") ?></button>
@@ -113,7 +114,6 @@ $depositTypes = [
             $accountStudents = $parent->kids;
             $paymentsQuery = $parent->charges()
                 ->orderByRaw("id,grado desc,ss,codigo,rec")
-
                 ->get();
 
             $debtData = $paymentsData = [];
@@ -127,117 +127,122 @@ $depositTypes = [
                 }
             }
 
+            $paymentsData = collect($paymentsData)->sortByDesc('fecha_p')->sortByDesc('hora_p')->values()->all();
 
-        ?>
-            <input type="hidden" id="accountId" value="<?= $accountId ?>">
-            <!-- students -->
 
-            <div class="my-4">
-                <div class="d-inline-flex align-items-center mb-2">
-                    <h2>Estudiantes en esta cuenta</h2>
-                    <button id="paymentPromiseButton" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#paymentPromiseModal">
-                        Promesa de pago <span class="badge badge-light"><?= $parent->total_pagar !== '' && floatval($parent->total_pagar) > 0 ? 'Si' : 'No' ?></span>
-                    </button>
-                </div>
-                <div class="card-deck">
-                    <?php foreach ($accountStudents as $student): ?>
+            ?>
+        <input type="hidden" id="accountId" value="<?= $accountId ?>">
+        <!-- students -->
 
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= "$student->apellidos $student->nombre ($student->grado)" ?></h5>
-                                <button data-id="<?= $student->mt ?>" class="btn btn-sm btn-primary depositBtn">Deposito <span><?= number_format($student->cantidad, 2) ?></span></button>
-                            </div>
-                        </div>
-                    <?php endforeach ?>
-                </div>
+        <div class="my-4">
+            <div class="d-inline-flex align-items-center mb-2">
+                <h2>Estudiantes en esta cuenta</h2>
+                <button id="paymentPromiseButton" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#paymentPromiseModal">
+                    Promesa de pago <span class="badge badge-light"><?= $parent->total_pagar !== '' && floatval($parent->total_pagar) > 0 ? 'Si' : 'No' ?></span>
+                </button>
             </div>
+            <div class="card-deck">
+                <?php foreach ($accountStudents as $student): ?>
 
-            <div id="monthsButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
-                <?php foreach ($months as $fileName => $number): ?>
-                    <div class="col mb-1">
-                        <button data-month="<?= $number ?>" class="btn w-100 <?= $currentMonth === $number ? 'active' : '' ?>"><?= $fileName ?></button>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= "$student->apellidos $student->nombre ($student->grado)" ?></h5>
+                        <button data-id="<?= $student->mt ?>" class="btn btn-sm btn-primary depositBtn">Deposito <span><?= number_format($student->cantidad, 2) ?></span></button>
                     </div>
+                </div>
                 <?php endforeach ?>
             </div>
+        </div>
 
-            <div id="paymentButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
+        <div id="monthsButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
+            <?php foreach ($months as $fileName => $number): ?>
+            <div class="col mb-1">
+                <button data-month="<?= $number ?>"
+                    class="btn w-100 <?= $currentMonth === $number ? 'active' : '' ?>"><?= $fileName ?></button>
+            </div>
+            <?php endforeach ?>
+        </div>
 
-                <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentModal">Hacer un pago</button>
-                </div>
-                <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_ADD)): ?>
-                    <div class="col mb-1">
-                        <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#addChargeModal">Añadir cargo</button>
-                    </div>
-                <?php endif ?>
-                <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#statementModal">Estado de cuenta</button>
-                </div>
-                <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentReceiptModal">Recibo de pago</button>
-                </div>
-                <div class="col mb-1">
-                    <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#expiredModal">Vencido</button>
-                </div>
-                <div class="col mb-1">
-                    <button id="latePaymentButton" class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#latePaymentModal">Pago moroso</button>
-                </div>
+        <div id="paymentButtons" class="row row-cols-3 row-cols-lg-6 justify-content-around mb-2">
 
+            <div class="col mb-1">
+                <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentModal">Hacer un pago</button>
+            </div>
+            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_ADD)): ?>
+            <div class="col mb-1">
+                <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#addChargeModal">Añadir cargo</button>
+            </div>
+            <?php endif ?>
+            <div class="col mb-1">
+                <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#statementModal">Estado de cuenta</button>
+            </div>
+            <div class="col mb-1">
+                <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#paymentReceiptModal">Recibo de pago</button>
+            </div>
+            <div class="col mb-1">
+                <button class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#expiredModal">Vencido</button>
+            </div>
+            <div class="col mb-1">
+                <button id="latePaymentButton" class="btn btn-secondary w-100 h-100" data-toggle="modal" data-target="#latePaymentModal">Pago moroso</button>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead class="table-primary">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Grado</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Deudas</th>
-                            <th scope="col">Pagos</th>
-                            <th scope="col">Fecha Pago</th>
-                            <th scope="col">TDP</th>
-                            <th scope="col">Rec.</th>
-                            <td></td>
-                        </tr>
-                    </thead>
-                    <?php foreach ($months as $fileName => $number): ?>
-                        <tbody id="table<?= $number ?>" class="<?= $currentMonth !== $number ? 'hidden' : '' ?> monthTable">
-                            <?php if (isset($debtData[$number])): ?>
-                                <?php foreach ($debtData[$number] as $charge): ?>
-                                    <tr data-id="<?= $charge->codigo ?>">
-                                        <th scope="row"><?= $charge->codigo ?></th>
-                                        <td><?= $charge->grado ?></td>
-                                        <td><?= $charge->desc1 ?></td>
-                                        <td><?= $charge->fecha_d ?></td>
-                                        <td class="text-right debt"><?= number_format($charge->deuda, 2) ?></td>
-                                        <td class="text-right payment"><?= number_format($charge->pago, 2) ?></td>
-                                        <td><?= $charge->fecha_p === '0000-00-00' ? '' : $charge->fecha_p ?></td>
-                                        <td><?= $charge->tdp !== '' ? $paymentTypes[$charge->tdp] : '' ?></td>
-                                        <td><?= $charge->rec !== 0 ? $charge->rec : '' ?></td>
-                                        <td class="text-right">
-                                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_DELETE)): ?>
-                                                <i data-id="<?= $charge->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
-                                            <?php endif ?>
-                                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_CHANGE)): ?>
-                                                <i data-id="<?= $charge->mt ?>" role="button" class="<?= $charge->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
-                                            <?php endif ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach ?>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Grado</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Deudas</th>
+                        <th scope="col">Pagos</th>
+                        <th scope="col">Fecha Pago</th>
+                        <th scope="col">TDP</th>
+                        <th scope="col">Rec.</th>
+                        <td></td>
+                    </tr>
+                </thead>
+                <?php foreach ($months as $fileName => $number): ?>
+                <tbody id="table<?= $number ?>" class="<?= $currentMonth !== $number ? 'hidden' : '' ?> monthTable">
+                    <?php if (isset($debtData[$number])): ?>
+                    <?php foreach ($debtData[$number] as $charge): ?>
+                    <tr data-id="<?= $charge->codigo ?>" data-ss="<?= $charge->ss ?>" data-grade="<?= $charge->grado ?>"
+                        data-description="<?= $charge->desc1 ?>" data-debt="<?= $charge->deuda ?>" data-payment="<?= $charge->pago ?>">
+                        <th scope="row"><?= $charge->codigo ?></th>
+                        <td><?= $charge->grado ?></td>
+                        <td><?= $charge->desc1 ?></td>
+                        <td><?= $charge->fecha_d ?></td>
+                        <td class="text-right debt"><?= number_format($charge->deuda, 2) ?></td>
+                        <td class="text-right payment"><?= number_format($charge->pago, 2) ?></td>
+                        <td><?= $charge->fecha_p === '0000-00-00' ? '' : $charge->fecha_p ?></td>
+                        <td><?= $charge->tdp !== '' ? $paymentTypes[$charge->tdp] : '' ?></td>
+                        <td><?= $charge->rec !== 0 ? $charge->rec : '' ?></td>
+                        <td class="text-right">
+                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_DELETE)): ?>
+                            <i data-id="<?= $charge->mt ?>" role="button" class="delete fa-solid fa-trash text-danger pointer-cursor"></i>
                             <?php endif ?>
-
-                        </tbody>
+                            <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_CHANGE)): ?>
+                            <i data-id="<?= $charge->mt ?>" role="button"
+                                class="<?= $charge->fecha_p !== '0000-00-00' ? 'editPayment' : 'editCharge' ?> fa-solid fa-pen-to-square text-info pointer-cursor"></i>
+                            <?php endif ?>
+                        </td>
+                    </tr>
                     <?php endforeach ?>
-                    <tfoot class="table-primary">
-                        <td colspan="4" class="text-right">Total:</td>
-                        <th id="totalDebts" class="text-right"></th>
-                        <th id="totalPayments" class="text-right"></th>
-                        <td colspan="4">Balance: <span class="font-weight-bold" id="totalBalance"></span></td>
+                    <?php endif ?>
 
-                    </tfoot>
-                </table>
-            </div>
+                </tbody>
+                <?php endforeach ?>
+                <tfoot class="table-primary">
+                    <td colspan="4" class="text-right">Total:</td>
+                    <th id="totalDebts" class="text-right"></th>
+                    <th id="totalPayments" class="text-right"></th>
+                    <td colspan="4">Balance: <span class="font-weight-bold" id="totalBalance"></span></td>
+
+                </tfoot>
+            </table>
+        </div>
         <?php endif ?>
 
     </div>
@@ -270,7 +275,7 @@ $depositTypes = [
                                 <label for="paymentType">Tipo de pago</label>
                                 <select class="form-control" id="paymentType" name="paymentType">
                                     <?php foreach ($paymentTypes as $id => $label): ?>
-                                        <option value="<?= $id ?>"><?= $label ?></option>
+                                    <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -283,12 +288,12 @@ $depositTypes = [
                             <div class="form-group col-6">
                                 <label for="receiptType">No. de recibo</label>
                                 <?php if ($school->rec == '1'): ?>
-                                    <select class="form-control" id="receiptType" name="receiptType">
-                                        <option value="1">Recibo nuevo</option>
-                                        <option value="2">El mismo recibo</option>
-                                    </select>
+                                <select class="form-control" id="receiptType" name="receiptType">
+                                    <option value="1">Recibo nuevo</option>
+                                    <option value="2">El mismo recibo</option>
+                                </select>
                                 <?php else: ?>
-                                    <input type="text" class="form-control" id="receiptNum" name="receiptNum" />
+                                <input type="text" class="form-control" id="receiptNum" name="receiptNum" />
                                 <?php endif ?>
 
                             </div>
@@ -296,11 +301,12 @@ $depositTypes = [
                                 <label for="bash">Bash</label>
                                 <select class="form-control" <?= $school->caja != 0 ? 'disabled' : '' ?> id="bash" name="bash">
                                     <?php for ($i = 0; $i <= 10; $i++): ?>
-                                        <option <?= $school->rec == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
+                                    <option <?= $school->rec == $i ? 'selected' : '' ?>
+                                        value="<?= $i ?>"><?= $i ?></option>
                                     <?php endfor ?>
                                 </select>
                                 <?php if ($school->caja != 0): ?>
-                                    <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
+                                <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
                                 <?php endif ?>
                             </div>
                         </div>
@@ -322,65 +328,65 @@ $depositTypes = [
         </div>
     </div>
     <?php if ($user->hasPermissionTo(AdminPermission::ACCOUNTS_RECEIVABLE_ENTER_PAYMENTS_ADD)): ?>
-        <!-- Add Charge Modal -->
-        <div class="modal fade" id="addChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addChargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addChargeModalLabel">Añadir cargo</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="addChargeForm" method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="code">Codigo</label>
-                                <select class="form-control" id="code" name="code">
-                                    <?php foreach ($codes as $code): ?>
-                                        <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
-                                    <?php endforeach ?>
-                                </select>
-                                <input type="text" class="form-control" id="codeDescription" name="codeDescription" />
-                            </div>
-                            <div class="form-group">
-                                <label for="chargeTo">Aplicar a</label>
-                                <select class="form-control" id="chargeTo" name="chargeTo">
-                                    <?php foreach ($accountStudents as $student): ?>
-                                        <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
-                                    <?php endforeach ?>
-                                </select>
-                            </div>
-
-
-                            <div class="form-row">
-                                <div class="form-group col-6">
-                                    <label for="month">Mes para aplicar</label>
-                                    <select class="form-control" id="month" name="month">
-                                        <?php foreach ($months as $fileName => $monthNumber): ?>
-                                            <option value="<?= $monthNumber ?>"><?= $fileName ?></option>
-                                        <?php endforeach ?>
-                                    </select>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="allMonths" name="allMonths">
-                                        <label class="custom-control-label w-100" for="allMonths">T.L.M</label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label for="amount">Cantidad a pagar</label>
-                                    <input type="text" class="form-control" id="amount" name="amount" required />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Agregar</button>
-                        </div>
-                    </form>
+    <!-- Add Charge Modal -->
+    <div class="modal fade" id="addChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addChargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addChargeModalLabel">Añadir cargo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <form id="addChargeForm" method="POST" action="<?= Route::url('/admin/billing/payments/includes/addCharge.php') ?>">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="code">Codigo</label>
+                            <select class="form-control" id="code" name="code">
+                                <?php foreach ($codes as $code): ?>
+                                <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
+                                <?php endforeach ?>
+                            </select>
+                            <input type="text" class="form-control" id="codeDescription" name="codeDescription" />
+                        </div>
+                        <div class="form-group">
+                            <label for="chargeTo">Aplicar a</label>
+                            <select class="form-control" id="chargeTo" name="chargeTo">
+                                <?php foreach ($accountStudents as $student): ?>
+                                <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="month">Mes para aplicar</label>
+                                <select class="form-control" id="month" name="month">
+                                    <?php foreach ($months as $fileName => $monthNumber): ?>
+                                    <option value="<?= $monthNumber ?>"><?= $fileName ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="allMonths" name="allMonths">
+                                    <label class="custom-control-label w-100" for="allMonths">T.L.M</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="amount">Cantidad a pagar</label>
+                                <input type="text" class="form-control" id="amount" name="amount" required />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     <?php endif ?>
     <!-- Edit Charge Modal -->
     <div class="modal fade" id="editChargeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="editChargeModalLabel" aria-hidden="true">
@@ -405,7 +411,7 @@ $depositTypes = [
                             <label for="editChargeTo">Aplicar a</label>
                             <select class="form-control" id="editChargeTo" name="chargeTo">
                                 <?php foreach ($accountStudents as $student): ?>
-                                    <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
+                                <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -413,7 +419,7 @@ $depositTypes = [
                             <label for="editChargeCode">Codigo</label>
                             <select class="form-control" id="editChargeCode" name="code">
                                 <?php foreach ($codes as $code): ?>
-                                    <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
+                                <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -457,11 +463,12 @@ $depositTypes = [
                                         <label for="editPaymentBash">Bash</label>
                                         <select class="form-control" <?= $school->caja != 0 ? 'disabled' : '' ?> id="editPaymentBash" name="bash">
                                             <?php for ($i = 0; $i <= 10; $i++): ?>
-                                                <option <?= $school->rec == $i ? 'selected' : '' ?> value="<?= $i ?>"><?= $i ?></option>
+                                            <option <?= $school->rec == $i ? 'selected' : '' ?>
+                                                value="<?= $i ?>"><?= $i ?></option>
                                             <?php endfor ?>
                                         </select>
                                         <?php if ($school->caja != 0): ?>
-                                            <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
+                                        <input type="hidden" class="form-control" name="bash" value="<?= $school->caja ?>" />
                                         <?php endif ?>
                                     </div>
                                     <div class="form-group col-6">
@@ -473,7 +480,7 @@ $depositTypes = [
                                     <label for="editPaymentTo">Aplicar a</label>
                                     <select class="form-control" id="editPaymentTo" name="chargeTo">
                                         <?php foreach ($accountStudents as $student): ?>
-                                            <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
+                                        <option value="<?= $student->mt ?>"><?= "$student->apellidos $student->nombre ($student->grado)" ?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
@@ -500,7 +507,7 @@ $depositTypes = [
                                         <label for="editPaymentPaymentType">Tipo de pago</label>
                                         <select class="form-control" id="editPaymentPaymentType" name="paymentType">
                                             <?php foreach ($paymentTypes as $id => $label): ?>
-                                                <option value="<?= $id ?>"><?= $label ?></option>
+                                            <option value="<?= $id ?>"><?= $label ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -530,7 +537,7 @@ $depositTypes = [
                                     <label for="editPaymentCode">Codigo</label>
                                     <select class="form-control" id="editPaymentCode" name="code">
                                         <?php foreach ($codes as $code): ?>
-                                            <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
+                                        <option value="<?= $code->codigo ?>"><?= $code->descripcion ?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
@@ -593,7 +600,7 @@ $depositTypes = [
                                 <label for="depositType">Tipo de deposito</label>
                                 <select class="form-control" name="type" id="depositType">
                                     <?php foreach ($depositTypes as $id => $label): ?>
-                                        <option value="<?= $id ?>"><?= $label ?></option>
+                                    <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -621,7 +628,7 @@ $depositTypes = [
 
                                 <select class="form-control" name="type2" id="deposits" required>
                                     <?php foreach ($deposits as $id => $label): ?>
-                                        <option value="<?= $id ?>"><?= $label ?></option>
+                                    <option value="<?= $id ?>"><?= $label ?></option>
                                     <?php endforeach ?>
                                 </select>
 
@@ -811,13 +818,13 @@ $depositTypes = [
                             <select class="form-control" name="email" id="statementEmail">
                                 <option value="">Selección</option>
                                 <?php if ($parent->email_m && $parent->email_p): ?>
-                                    <option value="<?= "$parent->email_m,$parent->email_p" ?>">Ambos</option>
+                                <option value="<?= "$parent->email_m,$parent->email_p" ?>">Ambos</option>
                                 <?php endif ?>
                                 <?php if ($parent->email_m): ?>
-                                    <option><?= $parent->email_m ?></option>
+                                <option><?= $parent->email_m ?></option>
                                 <?php endif ?>
                                 <?php if ($parent->email_p): ?>
-                                    <option><?= $parent->email_p ?></option>
+                                <option><?= $parent->email_p ?></option>
                                 <?php endif ?>
                             </select>
                         </div>
@@ -859,7 +866,7 @@ $depositTypes = [
                             <label for="paymentReceiptTransaction">Transacción</label>
                             <select class="form-control" name="transaction" id="paymentReceiptTransaction" required>
                                 <?php foreach ($paymentsData as $payment): ?>
-                                    <option value="<?= $payment->mt ?>"><?= "$payment->fecha_p, $payment->rec" ?></option>
+                                <option value="<?= $payment->mt ?>"><?= "$payment->fecha_p, $payment->rec" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -868,13 +875,13 @@ $depositTypes = [
                             <select class="form-control" name="email" id="paymentReceiptEmail">
                                 <option value="">Selección</option>
                                 <?php if ($parent->email_m && $parent->email_p): ?>
-                                    <option value="ambos">Ambos</option>
+                                <option value="ambos">Ambos</option>
                                 <?php endif ?>
                                 <?php if ($parent->email_m): ?>
-                                    <option><?= $parent->email_m ?></option>
+                                <option><?= $parent->email_m ?></option>
                                 <?php endif ?>
                                 <?php if ($parent->email_p): ?>
-                                    <option><?= $parent->email_p ?></option>
+                                <option><?= $parent->email_p ?></option>
                                 <?php endif ?>
                             </select>
                         </div>
@@ -895,10 +902,10 @@ $depositTypes = [
 
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
-    Route::sweetAlert();
-    Route::selectPicker('js');
-    Route::js('/js/jquery.mask.min.js', true);
-    ?>
+Route::sweetAlert();
+Route::selectPicker('js');
+Route::js('/js/jquery.mask.min.js', true);
+?>
 </body>
 
 </html>

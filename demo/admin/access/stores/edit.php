@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\DataBase\DB;
+use App\Models\Store;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
@@ -15,7 +15,9 @@ $id = $_GET['id'] ?? null;
 
 if (!$id) Route::redirect('/access/stores/index.php');
 
-$store = DB::table('stores')->where('id', $id)->first();
+$store = Store::with('items')->find($id);
+
+if (!$store) Route::redirect('/access/stores/index.php');
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -35,7 +37,12 @@ $store = DB::table('stores')->where('id', $id)->first();
     <div class="container mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Editar tienda') ?></h1>
         <div class="mx-auto" style="max-width: 40rem;">
-            <a class="btn btn-outline-primary my-2" href="./index.php">Volver</a>
+            <div class="mb-2">
+                <a class="btn btn-outline-primary" href="./index.php"><?= __('Volver') ?></a>
+                <a class="btn btn-outline-info" href="./orders/index.php?store_id=<?= $store->id ?>">
+                    <i class="fas fa-shopping-cart"></i> <?= __('Ver Órdenes') ?>
+                </a>
+            </div>
             <form method="POST" action="./includes/update.php">
                 <input type="hidden" name="id" value="<?= $store->id ?>">
                 <div class="form-group">
@@ -95,10 +102,7 @@ $store = DB::table('stores')->where('id', $id)->first();
                     </tr>
                 </thead>
                 <tbody id="itemsTableBody">
-                    <?php
-                    $items = DB::table('store_items')->where('store_id', $store->id)->get();
-                    foreach ($items as $item):
-                    ?>
+                    <?php foreach ($store->items as $item): ?>
                         <tr>
                             <td>
                                 <?php if ($item->picture_url): ?>
@@ -107,7 +111,7 @@ $store = DB::table('stores')->where('id', $id)->first();
                             </td>
                             <td><?= $item->name ?></td>
                             <td class="text-right"><?= $item->price ?></td>
-                            <td class="text-center"><?= count(json_decode($item->options) ?? []) ?></td>
+                            <td class="text-center"><?= count($item->options) ?></td>
                             <td class="d-flex justify-content-center">
                                 <a class="btn btn-outline-primary mr-2" href="./items/edit.php?store_id=<?= $item->store_id ?>&id=<?= $item->id ?>">Editar</a>
                                 <button data-store-id="<?= $store->id ?>" data-item-id="<?= $item->id ?>" class="btn btn-outline-danger deleteItemButton">Eliminar</b>

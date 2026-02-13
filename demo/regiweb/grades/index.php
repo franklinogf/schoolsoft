@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../app.php';
 
 use App\Enums\DecimalTrimesterEnum;
+use App\Enums\GradePageEnum;
 use App\Enums\QuincenalTrimesterEnum;
 use App\Enums\TrimesterEnum;
 use App\Models\Admin;
@@ -26,45 +27,9 @@ $lang = new Lang([
     ["Verano", "Summer"],
 ]);
 
-$pages = [
-    'Notas' => 'Grades',
-    'Pruebas-Cortas' => 'Short Tests',
-    'Trab-Diarios' => 'Daily Works',
-    'Trab-Libreta' => 'Notebook Works',
-    'Cond-Asis' => 'Conduct and Attendance',
-    'Ex-Final' => 'Final Exam',
-    'V-Nota' => 'Summer Grades',
-];
+$pages = GradePageEnum::getPages();
 
-if ($school->cppd === 'Si') {
-    $pages = [
-        'Notas' => 'Grades',
-        'V-Nota' => 'Summer Grades',
-    ];
-} elseif ($school->etd === 'SI' && __ONLY_CBTM__) {
-    $pages = [
-        ...$pages,
-        'Notas2' => 'Grades 2',
-        'Trab-Diarios2' => 'Daily Works 2',
-        'Trab-Libreta2' => 'Notebook Works 2',
-    ];
-} elseif (__ONLY_CBTM__) {
-    $pages = [
-        ...$pages,
-        'Notas2' => 'Grades 2',
-    ];
-} elseif ($school->etd === 'SI') {
-    $pages = [
-        ...$pages,
-        'Trab-Diarios2' => 'Daily Works 2',
-        'Trab-Libreta2' => 'Notebook Works 2',
-    ];
-}else if(school_is('cdls')){
-    unset($pages['Pruebas-Cortas']);
-    unset($pages['Ex-Final']);
-}
-
-$trimesters = match(true){    
+$trimesters = match (true) {
     school_is('bs') => QuincenalTrimesterEnum::cases(),
     school_is('cdls') => collect(QuincenalTrimesterEnum::cases())->filter(fn($trimester) => $trimester !== QuincenalTrimesterEnum::FOURTH_S1  && $trimester !== QuincenalTrimesterEnum::FOURTH_S2)->toArray(),
     $school->cppd === 'Si' => DecimalTrimesterEnum::cases(),
@@ -104,7 +69,7 @@ $trimesters = match(true){
             </div>
         </div>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= school_is('cdls', 'demo','bs') ? Route::url('/regiweb/grades/enterGrades2.php') : Route::url('/regiweb/grades/enterGrades.php') ?>" method="post">
+            <form action="<?= school_is('cdls', 'bs') ? Route::url('/regiweb/grades/enterGrades2.php') : Route::url('/regiweb/grades/enterGrades.php') ?>" method="post">
                 <div class="mx-auto" style="width: 20rem;">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -133,9 +98,8 @@ $trimesters = match(true){
                             <label class="input-group-text" for="tra"><?= $lang->translation("Pagina") ?></label>
                         </div>
                         <select class="custom-select" id="tra" name='tra' required>
-                            <!-- if decimals are active -->
-                            <?php foreach ($pages as $pageKey => $pageValue): ?>
-                                <option value="<?= $pageKey ?>"><?= $lang->translation($pageKey) ?></option>
+                            <?php foreach ($pages as $page): ?>
+                                <option value="<?= $page->value ?>"><?= $page->getLabel() ?></option>
                             <?php endforeach ?>
                         </select>
                         <!-- <input type="hidden" name="tra" id="hiddenTra"> -->

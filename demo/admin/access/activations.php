@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
-use Classes\Controllers\Parents;
+// use Classes\Controllers\Parents;
+
+use App\Models\Student;
+use App\Services\SchoolService;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Student;
+// use Classes\Controllers\Student;
 
 Session::is_logged();
 $lang = new Lang([
@@ -33,10 +35,10 @@ $lang = new Lang([
 
 
 ]);
-$school = new School();
-$students = new Student();
-$students = $students->all();
-$budgets = DB::table('presupuesto')->where('year', $school->year())->get();
+$year = SchoolService::getCurrentYear();
+$students = Student::query()->with(['family'])->get();
+$budgets = DB::table('presupuesto')->where('year', $year)->get();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -54,7 +56,7 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o inactivar las cuentas de los padres del año') . ' ' . $school->year() ?> </h1>
+        <h1 class="text-center mb-3 mt-5"><?= $lang->translation('Activar o inactivar las cuentas de los padres del año') . ' ' . $year ?> </h1>
         <div class="container mt-5">
             <button class="btn btn-primary mb-1" data-toggle="modal" data-target="#optionsModal"><?= $lang->translation("Opciones") ?></button>
             <div class="table_wrap">
@@ -76,12 +78,12 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
                     </thead>
                     <tbody>
                         <?php foreach ($students as $student) :
-                            $parent = new Parents($student->id);
+                            $parent = $student->family;
                         ?>
                             <tr>
                                 <td>
                                     <div class="custom-control custom-checkbox">
-                                        <input id="student_<?= $student->mt ?>" class="custom-control-input check" type="checkbox" data-id="<?= $student->id ?>" <?= ($parent->activo !== 'Activo') ? 'checked=""' : '' ?>>
+                                        <input id="student_<?= $student->mt ?>" class="custom-control-input check" type="checkbox" data-id="<?= $student->id ?>" <?= ($parent?->activo !== 'Activo') ? 'checked=""' : '' ?>>
                                         <label class="custom-control-label" for="student_<?= $student->mt ?>"></label>
                                     </div>
                                 </td>
@@ -222,10 +224,10 @@ $budgets = DB::table('presupuesto')->where('year', $school->year())->get();
                 $("#code1,#code2,#code3").prop('disabled', $(this).val() === 'Si' ? false : true);
             });
 
-            $(".custom-control-input.check").on('change', function(e) {
+            $('.dataTable tbody').on('change', '[type=checkbox].check', function(e) {
+                e.stopImmediatePropagation();
                 const id = $(this).data('id')
                 const value = !$(this).prop('checked') ? 'Activo' : 'Inactivo'
-
                 $.post(includeThisFile(), {
                     check: id,
                     value,

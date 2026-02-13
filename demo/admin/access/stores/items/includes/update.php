@@ -1,40 +1,58 @@
 <?php
 
-use Classes\DataBase\DB;
+use App\Dtos\StoreItemOption;
+use App\Models\StoreItem;
+use App\Services\FileService;
 use Classes\Route;
+use Illuminate\Support\Carbon;
 
 require_once __DIR__ . '/../../../../../app.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $fileService = new FileService();
     $id = $_POST['id'] ?? null;
     $name = $_POST['name'];
-    $buyMultiple = $_POST['buy_multiple'] ? true : false;
+    $buyMultiple = !empty($_POST['buy_multiple']);
     $price = $_POST['price'] ?: null;
-    $picture_url = $_POST['picture_url'] ?: null;
-    $dateTime = date('Y-m-d H:i:s');
+    $pictureSource = $_POST['picture_source'] ?? 'url';
+    $pictureFile = $_FILES['picture_upload'] ?? null;
+    $pictureUrlInput = $_POST['picture_url'] ?? null;
     $options = [];
     foreach ($_POST['options'] ?? [] as $index => $option) {
-        $options[] = [
-            'name' => $option['name'],
-            'price' => $option['price'] ?: null,
-            'order' => $index,
-        ];
+        $options[] = new StoreItemOption(
+            $option['name'],
+            $option['price'] ?: null,
+            $index
+        );
     }
-    $options = count($options) > 0 ? json_encode($options) : null;
-    $item = DB::table('store_items')->where('id', $id)->first();
+
+    $item = StoreItem::find($id);
+
+    if (!$item) {
+        Route::redirect("/access/stores/");
+    }
+
     $storeId = $item->store_id;
+
     if (empty($name) || $price === null) {
         Route::redirect("/access/stores/items/edit.php?store_id={$storeId}&id={$id}");
     }
 
-    DB::table('store_items')->where('id', $id)->update([
+    $picture_url = $fileService->resolveStoreItemPictureUrl(
+        $pictureSource,
+        $pictureFile,
+        $pictureUrlInput,
+        $item->picture_url
+    );
+
+    $item->update([
         'name' => $name,
         'buy_multiple' => $buyMultiple,
         'options' => $options,
         'price' => $price,
         'picture_url' => $picture_url,
-        'updated_at' => $dateTime,
+        'updated_at' => Carbon::now(),
     ]);
 
     Route::redirect("/access/stores/items/edit.php?store_id={$storeId}&id={$id}");
