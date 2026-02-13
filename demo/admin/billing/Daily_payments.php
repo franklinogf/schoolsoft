@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../app.php';
+require_once '../../app.php';
 
 use Classes\Lang;
 use Classes\Route;
@@ -261,6 +261,21 @@ $presupuesto = DB::table('presupuesto')->where([
                                     <label class="custom-control-label" for="va"><?= $lang->translation('VA Prog') ?></label>
                                 </div>
                             </div>
+
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="col" name="col" value="18" checked="checked">
+                                    <label class="custom-control-label" for="col"><?= $lang->translation('Colegio') ?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="app" name="app" value="19" checked="checked">
+                                    <label class="custom-control-label" for="app"><?= $lang->translation('Bd! Pago APP') ?></label>
+                                </div>
+                            </div>
+
+                            
                         </div>
                     </div> <!-- Options Section -->
                     <div class="row mb-4">
