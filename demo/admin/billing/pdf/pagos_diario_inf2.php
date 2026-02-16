@@ -57,23 +57,14 @@ function Header()
 	$this->SetFont('Arial','',11);
 }
 
-//Pie de pgina
 function Footer()
 {
     $this->SetY(-15);
-
-    //Arial italic 8
     $this->SetFont('Arial','I',8);
-    //N&uacute;mero de p&aacute;gina
     $this->Cell(0,10,'Pagina '.$this->PageNo().'/{nb}'.' / '.date('m-d-Y'),0,0,'C');
 }
 }
 
-//session_start();
-$id=$_SESSION['id1'];
-$usua=$_SESSION['usua1'];
-
-//Creacin del objeto de la clase heredada
 $pdf = new nPDF();
 $pdf->SetTitle($lang->translation('RESUMEN DE PAGOS DIARIOS').' '.$year);
 $pdf->Fill();
@@ -132,6 +123,12 @@ $tot12 = 0;
 $tot13 = 0;
 $tot19=0;
 $tot20 = 0;
+$tot21 = 0;
+$tot22 = 0;
+$tot23 = 0;
+$tot24 = 0;
+$tot25 = 0;
+
 foreach ($result as $row)
         {
       if ($caja=='0')
@@ -226,8 +223,7 @@ foreach ($result21 as $row1)
   $est=0;
 foreach ($result2 as $row2)
         {
-
-         if ($_POST['efe'] ?? '' == $row2->tdp or $_POST['che'] ?? '' == $row2->tdp or $_POST['ath'] ?? '' == $row2->tdp or $_POST['tar'] ?? '' == $row2->tdp or $_POST['gir'] ?? '' == $row2->tdp or $_POST['nom'] ?? '' == $row2->tdp or $_POST['ban'] ?? '' == $row2->tdp or $_POST['pay'] ?? '' == $row2->tdp or $_POST['telp'] ?? '' == $row2->tdp or $_POST['pdir'] ?? '' == $row2->tdp or $_POST['bec'] ?? '' == $row2->tdp or $_POST['athm'] ?? '' == $row2->tdp or $_POST['cac'] ?? '' == $row2->tdp or $_POST['vt1'] ?? '' == $row2->tdp)
+       if ($_POST['efe'] ?? '' == $row2->tdp or $_POST['che'] ?? '' == $row2->tdp or $_POST['ath'] ?? '' == $row2->tdp or $_POST['tar'] ?? '' == $row2->tdp or $_POST['gir'] ?? '' == $row2->tdp or $_POST['nom'] ?? '' == $row2->tdp or $_POST['ban'] ?? '' == $row2->tdp or $_POST['pay'] ?? '' == $row2->tdp or $_POST['telp'] ?? '' == $row2->tdp or $_POST['pdir'] ?? '' == $row2->tdp or $_POST['bec'] ?? '' == $row2->tdp or $_POST['athm'] ?? '' == $row2->tdp or $_POST['cac'] ?? '' == $row2->tdp or $_POST['vt1'] ?? '' == $row2->tdp or $_POST['ac'] ?? '' == $row2->tdp or $_POST['av'] ?? '' == $row2->tdp or $_POST['va'] ?? '' == $row2->tdp or $_POST['col'] ?? '' == $row2->tdp or $_POST['app'] ?? '' == $row2->tdp)
        {
        if ($est==0)
           {
@@ -236,47 +232,63 @@ foreach ($result2 as $row2)
 
           $est=1;
           }
-            if ($_POST['efe'] ?? '' == $row2->tdp) {
+            if (isset($_POST['efe']) && $_POST['efe'] === $row2->tdp) {
                $tot1 = $tot1 + $row2->pago;
             }
-            if ($_POST['che'] ?? '' == $row2->tdp) {
+            if (isset($_POST['che']) && $_POST['che'] === $row2->tdp) {
                $tot2 = $tot2 + $row2->pago;
             }
-            if ($_POST['ath'] ?? '' == $row2->tdp) {
+            if (isset($_POST['ath']) && $_POST['ath'] === $row2->tdp) {
                $tot3 = $tot3 + $row2->pago;
             }
-            if ($_POST['tar'] ?? '' == $row2->tdp) {
+            if (isset($_POST['tar']) && $_POST['tar'] === $row2->tdp) {
                $tot4 = $tot4 + $row2->pago;
             }
-            if ($_POST['gir'] ?? '' == $row2->tdp) {
+            if (isset($_POST['gir']) && $_POST['gir'] === $row2->tdp) {
                $tot5 = $tot5 + $row2->pago;
             }
-            if ($_POST['nom'] ?? '' == $row2->tdp) {
+            if (isset($_POST['nom']) && $_POST['nom'] === $row2->tdp) {
                $tot6 = $tot6 + $row2->pago;
             }
-            if ($_POST['ban'] ?? '' == $row2->tdp) {
+            if (isset($_POST['ban']) && $_POST['ban'] === $row2->tdp) {
                $tot7 = $tot7 + $row2->pago;
             }
-            if ($_POST['pdir'] ?? '' == $row2->tdp) {
+            if (isset($_POST['pdir']) && $_POST['pdir'] === $row2->tdp) {
                $tot8 = $tot8 + $row2->pago;
             }
-            if ($_POST['telp'] ?? '' == $row2->tdp) {
+            if (isset($_POST['telp']) && $_POST['telp'] === $row2->tdp) {
                $tot9 = $tot9 + $row2->pago;
             }
-            if ($_POST['pay'] ?? '' == $row2->tdp) {
+            if (isset($_POST['pay']) && $_POST['pay'] === $row2->tdp) {
                $tot10 = $tot10 + $row2->pago;
             }
-            if ($_POST['bec'] ?? '' == $row2->tdp) {
+            if (isset($_POST['bec']) && $_POST['bec'] === $row2->tdp) {
                $tot12 = $tot12 + $row2->pago;
             }
-            if ($_POST['athm'] ?? '' == $row2->tdp) {
+            if (isset($_POST['athm']) && $_POST['athm'] === $row2->tdp) {
                $tot13 = $tot13 + $row2->pago;
             }
-            if ($_POST['cac'] ?? '' == $row2->tdp) {
+            if (isset($_POST['cac']) && $_POST['cac'] === $row2->tdp) {
                $tot19 = $tot19 + $row2->pago;
             }
-            if ($_POST['vt1'] ?? '' == $row2->tdp) {
+            if (isset($_POST['vt1']) && $_POST['vt1'] === $row2->tdp) {
                $tot20 = $tot20 + $row2->pago;
+            }
+
+            if (isset($_POST['ac']) && $_POST['ac'] === $row2->tdp) {
+               $tot21 = $tot21 + $row2->pago;
+            }
+            if (isset($_POST['av']) && $_POST['av'] === $row2->tdp) {
+               $tot22 = $tot22 + $row2->pago;
+            }
+            if (isset($_POST['va']) && $_POST['va'] === $row2->tdp) {
+               $tot23 = $tot23 + $row2->pago;
+            }
+            if (isset($_POST['col']) && $_POST['col'] === $row2->tdp) {
+               $tot24 = $tot24 + $row2->pago;
+            }
+            if (isset($_POST['app']) && $_POST['app'] === $row2->tdp) {
+               $tot25 = $tot25 + $row2->pago;
             }
        $tot11=$tot11+$row2->pago;
        $tot0=$tot0+$row2->pago;
@@ -412,6 +424,31 @@ foreach ($result2 as $row2)
      $pdf->Cell(27,5,'Virtual Terminal: ',0,0,'L');
      $pdf->Cell(18,5,number_format($tot20, 2),0,1,'R');
      }
+if ($tot21 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Acuden-C: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot21, 2), 0, 1, 'R');
+}
+if ($tot22 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Acuden-V: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot22, 2), 0, 1, 'R');
+}
+if ($tot23 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'VA Prog: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot23, 2), 0, 1, 'R');
+}
+if ($tot24 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Colegio: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot24, 2), 0, 1, 'R');
+}
+if ($tot25 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Bd! Pago APP: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot25, 2), 0, 1, 'R');
+}
   $pdf->Cell(25,5,'',0,0,'R');
   $pdf->Cell(28,5,'=====================',0,1,'L');
   $pdf->Cell(25,5,'',0,0,'R');

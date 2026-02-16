@@ -49,6 +49,9 @@ $paymentTypes = [
     '14' => 'Virtual Terminal',
     '15' => 'Acuden-Contigo',
     '16' => 'Acuden-Vales',
+    '17' => 'VA Prog',
+    '18' => 'Colegio',
+    '19' => 'Bd! Pago APP',
 ];
 
 $deposits = [
@@ -128,7 +131,6 @@ Route::includeFile('/admin/includes/layouts/menu.php');
             }
 
             $paymentsData = collect($paymentsData)->sortByDesc('fecha_p')->sortByDesc('hora_p')->values()->all();
-
 
             ?>
         <input type="hidden" id="accountId" value="<?= $accountId ?>">

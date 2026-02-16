@@ -28,6 +28,9 @@ $paymentTypes = [
     '14' => 'Virtual Terminal',
     '15' => 'Acuden-Contigo',
     '16' => 'Acuden-Vales',
+    '17' => 'VA Prog',
+    '18' => 'Colegio',
+    '19' => 'Bd! Pago APP',
 ];
 
 $months = __LANG === 'es' ?

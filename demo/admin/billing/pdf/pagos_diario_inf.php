@@ -40,10 +40,6 @@ $lang = new Lang([
 $school = new School(Session::id());
 $year = $school->info('year2');
 
-
-//session_start();
-//$grados =  $_COOKIE["variable1"];
-
 class nPDF extends PDF
 {
    function Header()
@@ -62,46 +58,32 @@ class nPDF extends PDF
       $this->Cell(12, 5, $lang->translation('CTA'), 1, 0, 'C', true);
       $this->Cell(70, 5, $lang->translation('NOMBRE'), 1, 0, 'C', true);
       $this->Cell(20, 5, $lang->translation('FECHA P.'), 1, 0, 'C', true);
-      $this->Cell(20, 5, $lang->translation('PAGOS'), 1, 0, 'C', true);
-      $this->Cell(20, 5, $lang->translation('T. PAGO'), 1, 0, 'C', true);
+      $this->Cell(17, 5, $lang->translation('PAGOS'), 1, 0, 'C', true);
+      $this->Cell(23, 5, $lang->translation('T. PAGO'), 1, 0, 'C', true);
       $this->Cell(15, 5, 'CHK.', 1, 0, 'C', true);
       $this->Cell(20, 5, 'TRANS. F.', 1, 0, 'C', true);
       $this->Cell(17, 5, 'RECV.', 1, 1, 'C', true);
       $this->SetFont('Arial', '', 11);
    }
 
-   //Pie de pgina
    function Footer()
    {
       $this->SetY(-15);
-
-      //Arial italic 8
       $this->SetFont('Arial', 'I', 8);
-      //N&uacute;mero de p&aacute;gina
       $this->Cell(0, 10, 'Pagina ' . $this->PageNo() . '/{nb}' . ' / ' . date('m-d-Y'), 0, 0, 'C');
    }
 }
 
-//session_start();
-$id = $_SESSION['id1'];
-$usua = $_SESSION['usua1'];
-
-//Creacin del objeto de la clase heredada
 $pdf = new nPDF();
 $pdf->SetTitle($lang->translation('INFORME DE PAGOS DIARIOS RESUMEN') . ' ' . $year);
 $pdf->Fill();
 
-
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times', '', 11);
-//include('../../control.php');
 
 $caja = $_POST['caja'];
-
 $codigo = $_POST['codigo'];
-
-$consult1 = "select * from colegio where usuario = '$usua'";
 
 if ($caja == '') {
    $caja = $school->info('caja');
@@ -139,6 +121,11 @@ $tot12 = 0;
 $tot13 = 0;
 $tot19 = 0;
 $tot20 = 0;
+$tot21 = 0;
+$tot22 = 0;
+$tot23 = 0;
+$tot24 = 0;
+$tot25 = 0;
 foreach ($result as $row) {
    if ($caja == '0') {
       if ($codigo == 'Todos') {
@@ -201,7 +188,7 @@ foreach ($result as $row) {
       $est = 0;
       foreach ($result2 as $row2) {
 
-         if ($_POST['efe'] ?? '' == $row2->tdp or $_POST['che'] ?? '' == $row2->tdp or $_POST['ath'] ?? '' == $row2->tdp or $_POST['tar'] ?? '' == $row2->tdp or $_POST['gir'] ?? '' == $row2->tdp or $_POST['nom'] ?? '' == $row2->tdp or $_POST['ban'] ?? '' == $row2->tdp or $_POST['pay'] ?? '' == $row2->tdp or $_POST['telp'] ?? '' == $row2->tdp or $_POST['pdir'] ?? '' == $row2->tdp or $_POST['bec'] ?? '' == $row2->tdp or $_POST['athm'] ?? '' == $row2->tdp or $_POST['cac'] ?? '' == $row2->tdp or $_POST['vt1'] ?? '' == $row2->tdp) {
+         if ($_POST['efe'] ?? '' == $row2->tdp or $_POST['che'] ?? '' == $row2->tdp or $_POST['ath'] ?? '' == $row2->tdp or $_POST['tar'] ?? '' == $row2->tdp or $_POST['gir'] ?? '' == $row2->tdp or $_POST['nom'] ?? '' == $row2->tdp or $_POST['ban'] ?? '' == $row2->tdp or $_POST['pay'] ?? '' == $row2->tdp or $_POST['telp'] ?? '' == $row2->tdp or $_POST['pdir'] ?? '' == $row2->tdp or $_POST['bec'] ?? '' == $row2->tdp or $_POST['athm'] ?? '' == $row2->tdp or $_POST['cac'] ?? '' == $row2->tdp or $_POST['vt1'] ?? '' == $row2->tdp or $_POST['ac'] ?? '' == $row2->tdp or $_POST['av'] ?? '' == $row2->tdp or $_POST['va'] ?? '' == $row2->tdp or $_POST['col'] ?? '' == $row2->tdp or $_POST['app'] ?? '' == $row2->tdp) {
             if ($est == 0) {
                $row22 = DB::table('year')->where([
                   ['ss', $row1->ss]
@@ -253,14 +240,30 @@ foreach ($result as $row) {
             if (isset($_POST['vt1']) && $_POST['vt1'] === $row2->tdp) {
                $tot20 = $tot20 + $row2->pago;
             }
+
+            if (isset($_POST['ac']) && $_POST['ac'] === $row2->tdp) {
+               $tot21 = $tot21 + $row2->pago;
+            }
+            if (isset($_POST['av']) && $_POST['av'] === $row2->tdp) {
+               $tot22 = $tot22 + $row2->pago;
+            }
+            if (isset($_POST['va']) && $_POST['va'] === $row2->tdp) {
+               $tot23 = $tot23 + $row2->pago;
+            }
+            if (isset($_POST['col']) && $_POST['col'] === $row2->tdp) {
+               $tot24 = $tot24 + $row2->pago;
+            }
+            if (isset($_POST['app']) && $_POST['app'] === $row2->tdp) {
+               $tot25 = $tot25 + $row2->pago;
+            }
             $tot11 = $tot11 + $row2->pago;
             $tot0 = $tot0 + $row2->pago;
-            $pdf->SetFont('Times', '', 10);
+            $pdf->SetFont('Times', '', 9);
             $pdf->Cell(12, 5, '', 0, 0, 'R');
             $pdf->Cell(10, 5, $row2->codigo, 0, 0, 'R');
             $pdf->Cell(60, 5, $row2->desc1, 0, 0, 'L');
             $pdf->Cell(20, 5, $row2->fecha_p, 0, 0, 'R');
-            $pdf->Cell(20, 5, number_format($row2->pago, 2), 0, 0, 'R');
+            $pdf->Cell(17, 5, number_format($row2->pago, 2), 0, 0, 'R');
             if ($row2->tdp == 1) {
                $tdp = 'Efectivo';
             }
@@ -303,7 +306,24 @@ foreach ($result as $row) {
             if ($row2->tdp == 14) {
                $tdp = 'V. Terminal';
             }
-            $pdf->Cell(20, 5, $tdp, 0, 0, 'R');
+
+            if ($row2->tdp == 15) {
+               $tdp = 'Acuden-Contigo';
+            }
+            if ($row2->tdp == 16) {
+               $tdp = 'Acuden-Vales';
+            }
+            if ($row2->tdp == 17) {
+               $tdp = 'VA Prog';
+            }
+            if ($row2->tdp == 18) {
+               $tdp = 'Colegio';
+            }
+            if ($row2->tdp == 19) {
+               $tdp = 'Bd! Pago APP';
+            }
+
+            $pdf->Cell(23, 5, $tdp, 0, 0, 'R');
             $pdf->Cell(15, 5, $row2->nuchk, 0, 0, 'R');
             $pdf->Cell(20, 5, $row2->fecha_d, 0, 0, 'R');
             $pdf->Cell(17, 5, $row2->rec, 0, 1, 'R');
@@ -317,7 +337,6 @@ foreach ($result as $row) {
       $tot0 = 0;
    }
 }
-
 
 $pdf->Cell(25, 5, '', 0, 1, 'R');
 $pdf->Cell(25, 5, '', 0, 1, 'R');
@@ -393,6 +412,33 @@ if ($tot20 > 0) {
    $pdf->Cell(27, 5, 'Virtual Terminal: ', 0, 0, 'L');
    $pdf->Cell(18, 5, number_format($tot20, 2), 0, 1, 'R');
 }
+
+if ($tot21 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Acuden-C: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot21, 2), 0, 1, 'R');
+}
+if ($tot22 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Acuden-V: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot22, 2), 0, 1, 'R');
+}
+if ($tot23 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'VA Prog: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot23, 2), 0, 1, 'R');
+}
+if ($tot24 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Colegio: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot24, 2), 0, 1, 'R');
+}
+if ($tot25 > 0) {
+   $pdf->Cell(25, 5, '', 0, 0, 'R');
+   $pdf->Cell(27, 5, 'Bd! Pago APP: ', 0, 0, 'L');
+   $pdf->Cell(18, 5, number_format($tot25, 2), 0, 1, 'R');
+}
+
 $pdf->Cell(25, 5, '', 0, 0, 'R');
 $pdf->Cell(28, 5, '=====================', 0, 1, 'L');
 $pdf->Cell(25, 5, '', 0, 0, 'R');
