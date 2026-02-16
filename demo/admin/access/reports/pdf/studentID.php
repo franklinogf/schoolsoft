@@ -1,26 +1,24 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 // le faltan las fotos a los estudiantes
-use Classes\pdf_codabar;
+
+use App\Models\Admin;
+use App\Models\Student;
+use Classes\PDF as BasePDF;
 use Classes\Session;
 use Classes\Server;
-use Classes\Controllers\School;
-use Classes\DataBase\DB;
-use Classes\Util;
 
 Server::is_post();
 Session::is_logged();
 
-$school = new School(Session::id());
-$year = $school->info('year2');
+$school = Admin::user(Session::id())->first();
+$year = $school->year2;
 
-$cole = DB::table('colegio')->where([
-    ['usuario', 'administrador'],
-])->orderBy('usuario')->first();
+$cole = Admin::primaryAdmin();
 
-class PDF extends PDF_Codabar
+class PDF extends BasePDF
 {
-    function RoundedRect($x, $y, $w, $h, $r, $corners = '1234', $style = '')
+    public function RoundedRect($x, $y, $w, $h, $r, $corners = '1234', $style = ''): void
     {
         $k = $this->k;
         $hp = $this->h;
@@ -68,7 +66,7 @@ class PDF extends PDF_Codabar
         $this->_out($op);
     }
 
-    function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
+    private function _Arc($x1, $y1, $x2, $y2, $x3, $y3): void
     {
         $h = $this->h;
         $this->_out(sprintf(
@@ -82,21 +80,23 @@ class PDF extends PDF_Codabar
         ));
     }
 }
+
 $pdf = new PDF();
+$pdf->useHeader(false);
 $pdf->SetAutoPageBreak(false);
 $pdf->AddPage();
 $estudiantesSS = $_REQUEST['students'];
-function StudentId()
+function StudentId(): void
 {
     global $ss;
     global $year;
     global $pdf;
     global $cole;
 
-    $estu = DB::table('year')->where([
+    $estu = Student::query()->where([
         ['ss', $ss],
         ['year', $year],
-    ])->orderBy('grado, apellidos')->first();
+    ])->orderBy('grado')->first();
     $pdf->SetLineWidth(1);
     $pdf->RoundedRect($pdf->GetX(), $pdf->GetY(), 80, 40, 2, '1234');
     $pdf->SetFont('Times', '', 10);
@@ -111,14 +111,16 @@ function StudentId()
         $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
         $pdf->Image("../picture/{$estu->tipo}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
     }
+
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, utf8_decode($estu->nombre), 0, 1, 'R');
+    $pdf->Cell(79, 5, $estu->nombre, 0, 1, 'R');
     $pdf->Cell(.5);
-    $pdf->Cell(79, 5, utf8_decode($estu->apellidos), 0, 1, 'R');
+    $pdf->Cell(79, 5, $estu->apellidos, 0, 1, 'R');
     $pdf->Cell(35);
     $pdf->Cell(40, 5, "Grado $estu->grado ID #$estu->id", 0, 1, 'C', true);
-    if ($estu->cbarra !== '') $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $estu->cbarra, '*', '*', 0.29, 5);
+    if ($estu->cbarra) $pdf->Codabar($pdf->GetX() + 30, $pdf->GetY() + 3, $estu->cbarra, '*', '*', 0.29, 5);
+    // $pdf->Cell(0, 5, $estu->cbarra);
     $pdf->Ln(30);
 }
 $count = 1;
@@ -127,16 +129,13 @@ foreach ($estudiantesSS as $ss) {
     if ($count === 6) {
         $pdf->SetMargins(120, 10);
         $pdf->SetXY(120, 10);
-        StudentId();
     } else if ($count === 11) {
         $pdf->SetMargins(10, 10);
         $pdf->SetXY(10, 10);
         $pdf->addPage();
         $count = 1;
-        StudentId();
-    } else {
-        StudentId();
     }
+    StudentId();
 
     $count++;
 }

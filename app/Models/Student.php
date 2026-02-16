@@ -123,7 +123,7 @@ use Carbon\CarbonInterface;
  * @property float $cantidad
  * @property float $cantidad_alerta
  * @property string $f_deposito
- * @property string $cbarra
+ * @property string|null $cbarra
  * @property string $avisar
  * @property int $transporte
  * @property string $municipio
@@ -287,6 +287,13 @@ class Student extends Model
         );
     }
 
+    protected function cbarra(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, array $attributes) =>
+            $attributes['cbarra'] !== '' && is_numeric($attributes['cbarra']) ? $attributes['cbarra'] : null,
+        );
+    }
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
