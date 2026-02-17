@@ -16,10 +16,11 @@ $store = Store::find($storeId);
 
 if (!$store) Route::redirect('/access/stores/index.php');
 
-$orders = StoreOrder::where('shopping', $store->prefix_code)
-    ->with('items')
+$orders = StoreOrder::query()->where('shopping', $store->prefix_code)
+    ->with(['items', 'receiver'])
     ->orderBy('date', 'desc')
     ->get();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -36,7 +37,7 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
     <?php
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
-    <div class="container-lg mt-lg-3 mb-5 px-0">
+    <div class="container mt-lg-3 mb-5 px-0">
         <h1 class="text-center mb-3 mt-5"><?= __('Órdenes') ?> - <?= $store->name ?></h1>
         <div class="mx-auto w-100">
             <a class="btn btn-outline-primary mb-3" href="../index.php"><?= __('Volver a Tiendas') ?></a>
@@ -45,47 +46,51 @@ $orders = StoreOrder::where('shopping', $store->prefix_code)
                 <i class="fa fa-plus"></i> <?= __('Nueva Orden') ?>
             </a>
 
-            <table class="table table-striped mt-3" id="ordersTable">
-                <caption><?= __('Lista de órdenes') ?></caption>
-                <thead>
-                    <tr>
-                        <th><?= __('Ref #') ?></th>
-                        <th><?= __('Cliente') ?></th>
-                        <th><?= __('Cuenta') ?></th>
-                        <th><?= __('Email') ?></th>
-                        <th><?= __('Fecha') ?></th>
-                        <th class="text-right"><?= __('Total') ?></th>
-                        <th class="text-center"><?= __('Artículos') ?></th>
-                        <th class="text-center"><?= __('Estado') ?></th>
-                        <th><?= __('Acciones') ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($orders as $order): ?>
+            <div class="table-responsive">
+                <table class="table table-striped mt-3" id="ordersTable">
+                    <caption><?= __('Lista de órdenes') ?></caption>
+                    <thead>
                         <tr>
-                            <td><?= $order->refNumber ?></td>
-                            <td><?= htmlspecialchars($order->customerName) ?></td>
-                            <td><?= htmlspecialchars($order->accountID) ?></td>
-                            <td><?= htmlspecialchars($order->customerEmail) ?></td>
-                            <td><?= date('d/m/Y H:i', strtotime($order->date)) ?></td>
-                            <td class="text-right">$<?= number_format($order->total, 2) ?></td>
-                            <td class="text-center"><?= $order->items->count() ?></td>
-                            <td class="text-center">
-                                <?php if ($order->paid): ?>
-                                    <span class="badge badge-success"><?= __('Pagado') ?></span>
-                                <?php else: ?>
-                                    <span class="badge badge-warning"><?= __('Pendiente') ?></span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-outline-primary" href="./view.php?store_id=<?= $store->id ?>&order_id=<?= $order->id ?>">
-                                    <i class="fas fa-eye"></i> <?= __('Ver') ?>
-                                </a>
-                            </td>
+                            <th><?= __('Ref #') ?></th>
+                            <th><?= __('Cliente') ?></th>
+                            <th><?= __('Cuenta') ?></th>
+                            <th><?= __('Email') ?></th>
+                            <th><?= __('Fecha') ?></th>
+                            <th><?= __('Entregar a') ?></th>
+                            <th class="text-right"><?= __('Total') ?></th>
+                            <th class="text-center"><?= __('Artículos') ?></th>
+                            <th class="text-center"><?= __('Estado') ?></th>
+                            <th><?= __('Acciones') ?></th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orders as $order): ?>
+                            <tr>
+                                <td><?= $order->refNumber ?></td>
+                                <td><?= htmlspecialchars($order->customerName) ?></td>
+                                <td><?= htmlspecialchars($order->accountID) ?></td>
+                                <td><?= htmlspecialchars($order->customerEmail) ?></td>
+                                <td><?= date('d/m/Y H:i', strtotime($order->date)) ?></td>
+                                <td><?= htmlspecialchars($order->receiver?->fullName ?? '') ?></td>
+                                <td class="text-right">$<?= number_format($order->total, 2) ?></td>
+                                <td class="text-center"><?= $order->items->count() ?></td>
+                                <td class="text-center">
+                                    <?php if ($order->paid): ?>
+                                        <span class="badge badge-success"><?= __('Pagado') ?></span>
+                                    <?php else: ?>
+                                        <span class="badge badge-warning"><?= __('Pendiente') ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" href="./view.php?store_id=<?= $store->id ?>&order_id=<?= $order->id ?>">
+                                        <i class="fas fa-eye"></i> <?= __('Ver') ?>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <?php

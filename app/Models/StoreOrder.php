@@ -6,7 +6,9 @@ use App\Enums\PaymentType;
 use App\Models\Scopes\YearScope;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -26,6 +28,7 @@ use Illuminate\Support\Collection;
  * @property int $paid
  * @property PaymentType $payment_type
  * @property Collection<int, StoreOrderItem> $items
+ * @property Student|null $receiver
  */
 class StoreOrder extends Model
 {
@@ -41,6 +44,11 @@ class StoreOrder extends Model
     public function items(): HasMany
     {
         return $this->hasMany(StoreOrderItem::class, 'id_compra');
+    }
+
+    public function receiver(): BelongsTo
+    {
+        return $this->belongsTo(Student::class, 'deliveryTo', 'ss')->withoutGlobalScopes();
     }
 
     public function casts()
