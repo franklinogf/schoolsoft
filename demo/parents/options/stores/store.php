@@ -57,10 +57,8 @@ require_once 'includes/cart_actions.php';
                             <?php else: ?>
                                 <?php foreach ($products as $product):
                                     // Decode options JSON
-                                    $options = [];
-                                    if (!empty($product->options)) {
-                                        $options = json_decode($product->options, true);
-                                    }
+                                    $options = $product->options;;
+
                                 ?>
                                     <div class="col-md-6 col-lg-4 mb-4">
                                         <div class="card h-100">
@@ -77,14 +75,15 @@ require_once 'includes/cart_actions.php';
                                                     <?php if (!empty($options)): ?>
                                                         <div class="form-group mb-3">
                                                             <label for="option_<?= $product->id ?>"><?= __("Opciones") ?>:</label>
-                                                            <select class="form-control" id="option_<?= $product->id ?>" name="option_index">
+                                                            <select required class="form-control" id="option_<?= $product->id ?>" name="option_index">
+                                                                <option value=""><?= __("Seleccionar opción") ?></option>
                                                                 <?php foreach ($options as $index => $option):
                                                                     // Determine the price to display
-                                                                    $option_price = !is_null($option['price']) ? $option['price'] : $product->price;
+                                                                    $option_price = !is_null($option->price) ? $option->price : $product->price;
                                                                     $display_price = "$" . number_format($option_price, 2);
                                                                 ?>
                                                                     <option value="<?= $index ?>">
-                                                                        <?= htmlspecialchars($option['name']) ?>
+                                                                        <?= htmlspecialchars($option->name) ?>
                                                                         (<?= $display_price ?>)
                                                                     </option>
                                                                 <?php endforeach; ?>
