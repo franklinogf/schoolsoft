@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\DefaultPictureEnum;
 use App\Enums\Gender;
+use App\Enums\PicturePathEnum;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -127,6 +129,7 @@ use Illuminate\Support\Collection;
  * @property Collection<int, ClassPlan> $classPlans
  * @property Collection<int, EnglishPlan> $englishPlans
  * @property Collection<int, UnitPlan> $unitPlans
+ * @property string $profilePicture
  */
 class Teacher extends Model
 {
@@ -144,10 +147,10 @@ class Teacher extends Model
     {
         return Attribute::make(
             get: fn($value, array $attributes) =>
-            $attributes['foto_name'] !== '' ? school_asset(__STUDENT_PROFILE_PICTURE_URL . $attributes['foto_name'])
+            $attributes['foto_name'] !== '' ? school_asset(PicturePathEnum::TEACHER_PROFILE_PICTURE_PATH->value . '/' . $attributes['foto_name'])
                 : ($attributes['genero'] === Gender::FEMALE->value
-                    ? __NO_PROFILE_PICTURE_STUDENT_FEMALE
-                    : __NO_PROFILE_PICTURE_STUDENT_MALE),
+                    ? DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER_FEMALE->value
+                    : DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER_MALE->value),
         );
     }
 

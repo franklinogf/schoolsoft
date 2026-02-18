@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DefaultPictureEnum;
 use App\Enums\Gender;
 use App\Enums\PicturePathEnum;
 use App\Models\Scopes\YearScope;
@@ -300,10 +301,10 @@ class Student extends Model
     {
         return Attribute::make(
             get: fn($value, array $attributes) =>
-            $attributes['imagen'] !== '' ? school_asset(PicturePathEnum::STUDENT_PROFILE_PICTURE_PATH->value . '/' . $attributes['imagen'])
+            $attributes['imagen'] !== '' ? school_asset(PicturePathEnum::STUDENT_PROFILE_PICTURE->value . '/' . $attributes['imagen'])
                 : ($attributes['genero'] === Gender::FEMALE->value
-                    ? asset(PicturePathEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
-                    : asset(PicturePathEnum::NO_PROFILE_PICTURE_STUDENT_MALE->value)),
+                    ? asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
+                    : asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_MALE->value)),
         );
     }
 
