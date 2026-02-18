@@ -22,6 +22,11 @@ $paymentTypes = [
     '12' => 'ATH Movil',
     '13' => 'Credito a Cuenta',
     '14' => 'Virtual Terminal',
+    '15' => 'Acuden-Contigo',
+    '16' => 'Acuden-Vales',
+    '17' => 'VA Prog',
+    '18' => 'Colegio',
+    '19' => 'Pago APP',
 ];
 $type = $_GET['type'] ?? null;
 $accountId = $_GET['accountId'] ?? null;
