@@ -149,8 +149,8 @@ class Teacher extends Model
             get: fn($value, array $attributes) =>
             $attributes['foto_name'] !== '' ? school_asset(PicturePathEnum::TEACHER_PROFILE_PICTURE_PATH->value . '/' . $attributes['foto_name'])
                 : ($attributes['genero'] === Gender::FEMALE->value
-                    ? DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER_FEMALE->value
-                    : DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER_MALE->value),
+                    ? asset(DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER->value)
+                    : asset(DefaultPictureEnum::NO_PROFILE_PICTURE_TEACHER->value)),
         );
     }
 
