@@ -54,7 +54,7 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                     <div class="container-fluid p-3">
                         <div class="row">
                             <div class="col-12">
-                                <img src="<?= isset($student) ? $student->profile_picture : __NO_PROFILE_PICTURE_STUDENT_MALE ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
+                                <img src="<?= $student->profilePicture ?>?v=<?= time() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
                                 <div class="form-group text-center mt-2">
                                     <button id="pictureBtn" type='button' class="btn btn-secondary"><?= __("Cambiar foto de perfil") ?></button>
                                     <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
@@ -80,7 +80,7 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="name"><?= __("Nombre") ?></label>
-                                        <input type="text" class="form-control" name="name" id="name" required value="<?= isset($student) ? $student->nombre : '' ?>">
+                                        <input type="text" class="form-control" name="name" id="name" autocomplete="off" required value="<?= isset($student) ? $student->nombre : '' ?>">
                                     </div>
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="surnames"><?= __("Apellidos") ?></label>
@@ -153,7 +153,7 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="race"><?= __("Raza") ?></label>
-                                        <select name="race" class="form-control">
+                                        <select id="race" name="race" class="form-control">
                                             <option <?= isset($student) && $student->raza === '1' ? 'selected' : '' ?> value="1"><?= __("Blanco") ?></option>
                                             <option <?= isset($student) && $student->raza === '2' ? 'selected' : '' ?> value="2"><?= __("Negro") ?></option>
                                             <option <?= isset($student) && $student->raza === '3' ? 'selected' : '' ?> value="3"><?= __("Mestizo") ?></option>
@@ -209,9 +209,9 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                         <input type="text" class="form-control" name="cdb3" value="<?= isset($student) ? $student->cdb3 : '' ?>">
                                     </div>
                                     <div class="form-group col-12 row">
-                                        <div class="col-3"><label><?= __("Escuela") ?>:</label></div>
+                                        <div class="col-3"><label for="school"><?= __("Escuela") ?>:</label></div>
                                         <div class="col">
-                                            <select name="school" class="form-control">
+                                            <select id="school" name="school" class="form-control">
                                                 <option value=""><?= __("Seleccionar") ?></option>
                                                 <option <?= isset($student) && $student->pop === '1' ? 'selected' : '' ?> value="1"><?= __("Privada") ?></option>
                                                 <option <?= isset($student) && $student->pop === '2' ? 'selected' : '' ?> value="2"><?= __("Publica") ?></option>
@@ -222,15 +222,15 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                         <input type="text" class="form-control" name="colpro" value="<?= isset($student) ? $student->colpro : '' ?>">
                                     </div>
                                     <div class="form-group col-12 row">
-                                        <div class="col-3"><label><?= __("Municipio") ?>:</label></div>
+                                        <div class="col-3"><label for="municipio"><?= __("Municipio") ?>:</label></div>
                                         <div class="col">
-                                            <input type="text" class="form-control" name="municipio" value="<?= isset($student) ? $student->municipio : '' ?>">
+                                            <input type="text" class="form-control" name="municipio" id="municipio" value="<?= isset($student) ? $student->municipio : '' ?>">
                                         </div>
                                     </div>
                                     <div class="form-group col-12 row">
-                                        <div class="col-3"><label><?= __("Transporte") ?>:</label></div>
+                                        <div class="col-3"><label for="transporte"><?= __("Transporte") ?>:</label></div>
                                         <div class="col">
-                                            <select name="transporte" class="form-control">
+                                            <select id="transporte" name="transporte" class="form-control">
                                                 <option value=""><?= __("Ninguno") ?></option>
                                                 <option <?= isset($student) && $student->transporte === 1 ? 'selected' : '' ?> value="1"><?= __("Interno") ?></option>
                                                 <option <?= isset($student) && $student->transporte === 2 ? 'selected' : '' ?> value="2"><?= __("Externo") ?></option>
@@ -239,9 +239,9 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                     </div>
 
                                     <div class="form-group col-12 row">
-                                        <div class="col-3"><label><?= __("Estudios Sup.") ?>:</label></div>
+                                        <div class="col-3"><label for="e_s"><?= __("Estudios Sup.") ?>:</label></div>
                                         <div class="col">
-                                            <select name="e_s" class="form-control">
+                                            <select id="e_s" name="e_s" class="form-control">
                                                 <option <?= isset($student) && $student->e_s === '' ? 'selected' : '' ?> value=""><?= __("No") ?></option>
                                                 <option <?= isset($student) && $student->e_s === 'Si' ? 'selected' : '' ?> value="Si"><?= __("Si") ?></option>
                                             </select>
@@ -273,13 +273,13 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label><?= __("Impedimentos/Condiciones") ?></label>
+                                        <p><?= __("Impedimentos/Condiciones") ?></p>
                                         <?php for ($i = 1; $i <= 4; $i++): ?>
                                             <input type="text" class="form-control" name="<?= "imp$i" ?>" value="<?= isset($student) ? $student->{"imp$i"} : '' ?>">
                                         <?php endfor ?>
                                     </div>
                                     <div class="form-group">
-                                        <label><?= __("Medicamentos") ?></label>
+                                        <p><?= __("Medicamentos") ?></p>
                                         <?php for ($i = 1; $i <= 4; $i++): ?>
                                             <input type="text" class="form-control" name="<?= "med$i" ?>" value="<?= isset($student) ? $student->{"med$i"} : '' ?>">
                                         <?php endfor ?>
