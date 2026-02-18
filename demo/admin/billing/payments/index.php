@@ -51,7 +51,7 @@ $paymentTypes = [
     '16' => 'Acuden-Vales',
     '17' => 'VA Prog',
     '18' => 'Colegio',
-    '19' => 'Bd! Pago APP',
+    '19' => 'Pago APP',
 ];
 
 $deposits = [
