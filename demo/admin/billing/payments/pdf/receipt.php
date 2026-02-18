@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentTypeEnum;
 use App\Models\Admin;
 use Classes\PDF;
 use Classes\Controllers\Student;
@@ -11,27 +12,6 @@ date_default_timezone_set('America/Puerto_Rico');
 require_once __DIR__ . '/../../../../app.php';
 $school = Admin::primaryAdmin();
 $fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
-$paymentTypes = [
-    '1' => 'Efectivo',
-    '2' => 'Cheque',
-    '3' => 'ATH',
-    '4' => 'Tarjeta Crédito',
-    '5' => 'Giro',
-    '6' => 'Nomina',
-    '7' => 'Banco',
-    '8' => 'Pago Directo',
-    '9' => 'Tele Pago',
-    '10' => 'Paypal',
-    '11' => 'Beca',
-    '12' => 'ATH Movil',
-    '13' => 'Credito a Cuenta',
-    '14' => 'Virtual Terminal',
-    '15' => 'Acuden-Contigo',
-    '16' => 'Acuden-Vales',
-    '17' => 'VA Prog',
-    '18' => 'Colegio',
-    '19' => 'Pago APP',
-];
 
 $months = __LANG === 'es' ?
     ['07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre', '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio']
@@ -118,7 +98,7 @@ for ($x = 1; $x <= $a; $x++) {
         $pdf->Cell($type > '2' ? 12 : 18, 5, $charge->pago === 0 ? '' : $fmt->formatCurrency($charge->pago, 'USD'), 1, 0, 'R');
         $pdf->Cell($type > '2' ? 9 : 20, 5, $charge->fecha_p === '0000-00-00' ? '' : $charge->fecha_p, 1, 0, 'C');
         $pdf->Cell($type > '2' ? 11 : 25, 5, $months[date("m", strtotime($charge->fecha_d))], 1, 0, 'C');
-        $pdf->Cell($type > '2' ? 10 : 29, 5, $charge->tdp !== '' ? utf8_encode($paymentTypes[$charge->tdp]) : '', 1, 1, 'C');
+        $pdf->Cell($type > '2' ? 10 : 29, 5, PaymentTypeEnum::tryFrom($charge->tdp)?->getLabel() ?? '', 1, 1, 'C');
     }
 
     if ($type > '2') {
