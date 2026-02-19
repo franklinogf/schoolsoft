@@ -300,7 +300,7 @@ class Student extends Model
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
-            get: fn($value, array $attributes) =>
+            get: fn($value, array $attributes): string =>
             $attributes['imagen'] !== '' ? school_asset(PicturePathEnum::STUDENT_PROFILE_PICTURE->value . '/' . $attributes['imagen'])
                 : ($attributes['genero'] === Gender::FEMALE->value
                     ? asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
