@@ -4,7 +4,7 @@ require_once __DIR__ . '/../app.php';
 use App\Models\EmailQueue;
 use Classes\Email;
 
-$emails = EmailQueue::pending()->limit(100)->get();
+$emails = EmailQueue::query()->pending()->limit(100)->get();
 
 
 $count = 0;
