@@ -8,6 +8,10 @@ $emails = EmailQueue::query()->pending()->limit(100)->get();
 
 
 $count = 0;
+if ($emails->isEmpty()) {
+    echo "No pending emails to send.\n";
+    exit;
+}
 foreach ($emails as $email) {
     $result = Email::sendQueued($email);
 
