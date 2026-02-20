@@ -274,7 +274,7 @@ class Email
         }
     }
 
-    public static function sendQueued(EmailQueue $queuedEmail): void
+    public static function sendQueued(EmailQueue $queuedEmail): bool
     {
         try {
             $email = self::from($queuedEmail->from, $queuedEmail->from_name)
@@ -299,9 +299,10 @@ class Email
                 ->send();
 
             $queuedEmail->markAsSent();
+            return true;
         } catch (Exception $e) {
             $queuedEmail->markAsFailed('Error sending queued email: ' . $e->getMessage() . ' ' . $e->getFile() . ':' . $e->getLine() . '' . $e->getTraceAsString());
-            throw new Exception('Error sending queued email: ' . $e->getMessage() . ' ' . $e->getFile() . ':' . $e->getLine() . '' . $e->getTraceAsString());
+            return false;
         }
     }
 }
