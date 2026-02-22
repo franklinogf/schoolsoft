@@ -10,7 +10,7 @@ Session::is_logged();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     Session::set('error', __('Método no permitido'));
-    Route::redirect('/Susers/infirmary/diabetes/index.php');
+    Route::redirect('/users/infirmary/diabetes/index.php');
     exit;
 }
 
@@ -19,7 +19,7 @@ $ss = $_POST['ss'] ?? '';
 
 if (empty($id) || empty($ss)) {
     Session::set('error', __('Falta información del estudiante'));
-    Route::redirect('/Susers/infirmary/diabetes/index.php');
+    Route::redirect('/users/infirmary/diabetes/index.php');
     exit;
 }
 
@@ -57,8 +57,8 @@ try {
     DiabetesInsulinPump::updateOrCreateRecord($id, $ss, $data);
 
     Session::set('success', __('Registro guardado exitosamente'));
-    Route::redirect('/Susers/infirmary/diabetes/index.php?ss=' . urlencode($ss) . '&tab=pump');
+    Route::redirect('/users/infirmary/diabetes/index.php?ss=' . urlencode($ss) . '&tab=pump');
 } catch (\Exception $e) {
     Session::set('error', __('Error al guardar el registro') . ': ' . $e->getMessage());
-    Route::redirect('/Susers/infirmary/diabetes/index.php?ss=' . urlencode($ss) . '&tab=pump');
+    Route::redirect('/users/infirmary/diabetes/index.php?ss=' . urlencode($ss) . '&tab=pump');
 }
