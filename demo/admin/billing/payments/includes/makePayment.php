@@ -141,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'codigo' => $debt['code'],
                     'ss' => $debt['ss'],
                     'grado' => $debt['grade'],
-                    'fecha_p' => $date,
+                    'fecha_p' => $paymentDate,
                     'pago' => $totalPayment,
                     'tdp' => $paymentType,
                     'nuchk' => $chkNum,
