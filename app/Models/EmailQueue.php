@@ -42,15 +42,15 @@ class EmailQueue extends Model
     private const string STATUS_SENT = '1';
     private const string STATUS_FAILED = '2';
 
-    protected static function booted(): void
-    {
-        static::addGlobalScope('twoYears', function (Builder $builder): void {
-            $admin = Admin::primaryAdmin();
+    // protected static function booted(): void
+    // {
+    //     static::addGlobalScope('twoYears', function (Builder $builder): void {
+    //         $admin = Admin::primaryAdmin();
 
-            $builder->where("year", $admin->year)
-                ->orWhere('year', $admin->year2);
-        });
-    }
+    //         $builder->where("year", $admin->year)
+    //             ->orWhere('year', $admin->year2);
+    //     });
+    // }
 
     public function markAsSent(): void
     {
