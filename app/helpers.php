@@ -80,6 +80,18 @@ if (!function_exists('asset')) {
     }
 }
 
+if (!function_exists('asset_path')) {
+    function asset_path(string $path): string
+    {
+        $path = str($path)->ltrim('/')
+            ->replace('//', '/')
+            ->replace('/', DIRECTORY_SEPARATOR)
+            ->value();
+
+        return dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . $path;
+    }
+}
+
 if (!function_exists('school_asset')) {
     function school_asset(string $path): string
     {
@@ -97,7 +109,7 @@ if (!function_exists('school_asset_path')) {
 
         $acronym = school_config('app.acronym');
 
-        return  __ROOT . "/$acronym/$path";
+        return  asset_path("/$acronym/$path");
     }
 }
 
