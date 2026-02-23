@@ -103,10 +103,10 @@ function TeacherId(): void
     $pdf->SetFont('Times', '', 8);
     $pdf->Cell(.5);
     $pdf->Cell(79, 5, "$cole->dir1 $cole->dir3, $cole->pueblo1, $cole->esta1 $cole->zip1", 0, 1, 'L', true);
-    if (file_exists("../picture/{$profe->foto_name}.jpg")) {
-        $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
-        $pdf->Image("../picture/{$profe->foto_name}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
-    }
+
+    $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
+    $pdf->Image($profe->profilePicture, $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
+
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(.5);
     $pdf->Cell(79, 5, !mb_detect_encoding($profe->nombre, 'UTF-8', true) ? $profe->nombre : $profe->nombre, 0, 1, 'R');

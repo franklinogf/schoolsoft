@@ -610,7 +610,7 @@ if (Session::get('accountNumber')) {
                             <div class="col mt-1">
                                 <div class="card h-100">
                                     <div class="card-body">
-                                        <img src="<?= $kid->profile_picture ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
+                                        <img src="<?= $kid->profilePicture ?>?v=<?= time() ?>" class="rounded-circle img-thumbnail d-block mx-auto mb-3 img-fluid" alt="Profile Picture" style="width:150px;height:150px" />
                                         <h6 class="card-title"><?= "$kid->nombre $kid->apellidos" ?></h6>
                                         <p class="card-text"><?= __("Grado:") ?> <?= $kid->grado ?></p>
                                         <p class="card-text"><?= __("Fecha de nacimiento:") ?> <?= $kid->fecha->format('Y-m-d') ?></p>

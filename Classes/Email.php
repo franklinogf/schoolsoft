@@ -101,8 +101,7 @@ class Email
             }
             return $this;
         }
-
-        if (filter_var($fileOrContent, FILTER_VALIDATE_URL)) {
+        if (str_starts_with($fileOrContent, 'http')) {
             $this->attachments[] = [
                 'path' => $fileOrContent,
                 'filename' => $filename ?? basename($fileOrContent),
@@ -275,7 +274,7 @@ class Email
         }
     }
 
-    public static function sendQueued(EmailQueue $queuedEmail): void
+    public static function sendQueued(EmailQueue $queuedEmail): bool
     {
         try {
             $email = self::from($queuedEmail->from, $queuedEmail->from_name)
@@ -300,8 +299,10 @@ class Email
                 ->send();
 
             $queuedEmail->markAsSent();
+            return true;
         } catch (Exception $e) {
-            $queuedEmail->markAsFailed($e->getMessage());
+            $queuedEmail->markAsFailed('Error sending queued email: ' . $e->getMessage() . ' ' . $e->getFile() . ':' . $e->getLine() . '' . $e->getTraceAsString());
+            return false;
         }
     }
 }

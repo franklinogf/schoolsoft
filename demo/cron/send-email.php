@@ -4,12 +4,22 @@ require_once __DIR__ . '/../app.php';
 use App\Models\EmailQueue;
 use Classes\Email;
 
-$emails = EmailQueue::pending()->limit(100)->get();
+$emails = EmailQueue::query()->pending()->limit(100)->get();
 
 
 $count = 0;
+if ($emails->isEmpty()) {
+    echo "No pending emails to send.\n";
+    exit;
+}
 foreach ($emails as $email) {
-    Email::sendQueued($email);
+    $result = Email::sendQueued($email);
+
+    if ($result) {
+        echo "Email sent to: " . implode(', ', $email->to) . "\n";
+    } else {
+        echo "Failed to send email to: " . implode(', ', $email->to) . "\n";
+    }
 
     $count++;
     if ($count >= 2) {

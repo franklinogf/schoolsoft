@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentTypeEnum;
 use Classes\PDF;
 use Classes\Controllers\Student;
 use Classes\DataBase\DB;
@@ -133,7 +134,7 @@ if ($type === '5') {
         $pdf->Cell(18, 5, $charge->fecha_p === '0000-00-00' ? '' : $charge->fecha_p, 1, 0, 'C');
         $pdf->Cell(18, 5, $charge->pago === 0 ? '' : $fmt->formatCurrency($charge->pago, 'USD'), 1, 0, 'R');
         $pdf->Cell(15, 5, $charge->rec === 0 ? '' : $charge->rec, 1, 0, 'C');
-        $pdf->Cell(29, 5, $charge->tdp !== '' ? $paymentTypes[$charge->tdp] : '', 1, 1, 'C');
+        $pdf->Cell(29, 5, PaymentTypeEnum::tryFrom($charge->tdp)?->getLabel() ?? '', 1, 1, 'C');
     }
     $pdf->SetFont('Arial', 'B', 9);
     $pdf->Cell(91, 5, 'Gran total', 1, 0, 'R', true);

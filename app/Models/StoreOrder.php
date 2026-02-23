@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\PaymentType;
+use App\Enums\OrderPaymentTypeEnum;
 use App\Models\Scopes\YearScope;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
  * @property int $shopping
  * @property string $year
  * @property int $paid
- * @property PaymentType $payment_type
+ * @property OrderPaymentTypeEnum $payment_type
  * @property Collection<int, StoreOrderItem> $items
  * @property Student|null $receiver
  */
@@ -55,7 +55,7 @@ class StoreOrder extends Model
     {
         return [
             'date' => 'datetime',
-            'payment_type' => PaymentType::class,
+            'payment_type' => OrderPaymentTypeEnum::class,
         ];
     }
 }

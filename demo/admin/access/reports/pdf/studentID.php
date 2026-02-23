@@ -107,10 +107,10 @@ function StudentId(): void
     $pdf->Cell(79, 5, "$cole->dir1 $cole->dir3, $cole->pueblo1, $cole->esta1 $cole->zip1", 0, 1, 'L', true);
     //$pdf->Image('../logo/logo.gif', $pdf->GetX() + 53, $pdf->GetY() - 7.5, 25);
 
-    if (file_exists("../picture/{$estu->tipo}.jpg")) {
-        $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
-        $pdf->Image("../picture/{$estu->tipo}.jpg", $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
-    }
+    // if (file_exists($estu->profilePicture)) {
+    $pdf->Rect($pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
+    $pdf->Image($estu->profilePicture, $pdf->GetX() + 2, $pdf->GetY() + 2, 20, 25);
+    // }
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(.5);

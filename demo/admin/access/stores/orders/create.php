@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
-use App\Enums\PaymentType;
+use App\Enums\OrderPaymentTypeEnum;
 use App\Models\Store;
 use App\Models\Student;
 use Classes\Route;
@@ -202,7 +202,7 @@ $students = Student::orderBy('apellidos')->orderBy('nombre')->get();
                                 </label>
                                 <select class="form-control" name="payment_type" id="payment_type" required>
                                     <option value=""><?= __('Seleccionar método') ?></option>
-                                    <?php foreach (PaymentType::cases() as $paymentType): ?>
+                                    <?php foreach (OrderPaymentTypeEnum::cases() as $paymentType): ?>
                                         <option value="<?= $paymentType->value ?>">
                                             <?= $paymentType->label() ?>
                                         </option>
