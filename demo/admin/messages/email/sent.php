@@ -126,6 +126,9 @@ if (isset($_REQUEST['user'])) {
                             <td class="style1" style="width: 250px"><strong>RAZON</strong></td>
                         </tr>
                         <?php foreach ($emails[$_REQUEST['email']] as $email) :
+
+                  if ($email->status === $_REQUEST['env'] or $_REQUEST['env'] === '0') {
+
                             $students = Student::whereIn('ss', $email->social_securities ?? [])->get();
 
                         ?>
@@ -143,7 +146,9 @@ if (isset($_REQUEST['user'])) {
                                 <td><?= $email->sent_at?->translatedFormat('d F Y') ?></td>
                                 <td><?= $email->failed_reason ? substr($email->failed_reason, 0, 10) : '' ?></td>
                             </tr>
-                        <?php endforeach ?>
+                        <?php
+                          }
+                         endforeach ?>
                     </table>
 
                 </div>
