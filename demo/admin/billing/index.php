@@ -287,6 +287,12 @@ $options = [
                 'desc' => __('Asignar código de barra para la cafetería automaticamente a los estudiantes.'),
                 'link' => 'codigo_barra.php',
             ],
+            [
+                'name' => __("Presupuesto por grado"),
+                'desc' => __('Informe presupuesto por grado.'),
+                'link' => 'pdf/inf_presu3.php',
+                'target' => 'inf_presu',
+            ],
         ],
     ],
 ];
