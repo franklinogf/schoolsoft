@@ -301,8 +301,8 @@ $options = [
             [
                 'name' => __("Lista con fotos"),
                 'desc' => '',
-                'link' => 'pdf/ListPhotos.php',
-                'target' => 'ListPhotos',
+                'link' => 'pdf/listPhotos.php',
+                'target' => 'listPhotos',
                 'hidden' => false,
             ],
             [

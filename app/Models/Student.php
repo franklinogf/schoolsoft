@@ -197,6 +197,7 @@ use Carbon\CarbonInterface;
  * @property StudentNeed|null $needs
  * @property Infirmary|null $infirmary
  * @property string $profilePicture
+ * @property string $profilePicturePath
  */
 class Student extends Model
 {
@@ -300,11 +301,27 @@ class Student extends Model
     protected function profilePicture(): Attribute
     {
         return Attribute::make(
-            get: fn($value, array $attributes): string =>
-            $attributes['imagen'] !== '' ? school_asset(PicturePathEnum::STUDENT_PROFILE_PICTURE->value . '/' . $attributes['imagen'])
-                : ($attributes['genero'] === Gender::FEMALE->value
-                    ? asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
-                    : asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_MALE->value)),
+            get: function ($value, array $attributes): string {
+                $imagePath = PicturePathEnum::STUDENT_PROFILE_PICTURE->value . '/' . $attributes['imagen'];
+                return $attributes['imagen'] !== '' && file_exists(school_asset_path($imagePath))
+                    ? school_asset($imagePath)
+                    : ($attributes['genero'] === Gender::FEMALE->value
+                        ? asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
+                        : asset(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_MALE->value));
+            }
+        );
+    }
+    protected function profilePicturePath(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes): string {
+                $imagePath = PicturePathEnum::STUDENT_PROFILE_PICTURE->value . '/' . $attributes['imagen'];
+                return !empty($attributes['imagen'])  && file_exists(school_asset_path($imagePath))
+                    ? school_asset_path($imagePath)
+                    : ($attributes['genero'] === Gender::FEMALE->value
+                        ? asset_path(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_FEMALE->value)
+                        : asset_path(DefaultPictureEnum::NO_PROFILE_PICTURE_STUDENT_MALE->value));
+            }
         );
     }
 
