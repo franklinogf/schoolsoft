@@ -39,6 +39,11 @@ $options = [
                 'name' => __('Planes de trabajo'),
                 'desc' => __('Gestión de planes de trabajo.'),
                 'link' => 'plans/index.php',
+            ],
+            [
+                'name' => __('Eventos'),
+                'desc' => __('Gestión de eventos.'),
+                'link' => 'events/index.php',
             ]
         ],
     ],
