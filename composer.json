@@ -3,7 +3,7 @@
   "description": "Web app for schools",
   "type": "project",
   "require": {
-    "php": "^8.2",
+    "php": "^8.4",
     "resend/resend-php": "^v0.16.0",
     "scssphp/scssphp": "2.0.1",
     "illuminate/database": "^12.53.0",
