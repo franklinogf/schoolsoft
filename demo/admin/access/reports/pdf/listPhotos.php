@@ -6,30 +6,14 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Services\SchoolService;
 use Classes\PDF;
-use Classes\Lang;
 use Classes\Session;
 
 Session::is_logged();
 
-$lang = new Lang([
-    ["Lista de estudiantes por salón hogar y fotos", "List of students by homeroom and photos"],
-    ["Maestro(a):", "Teacher:"],
-    ["Grado:", "Grade:"],
-    ["Fotos", "Photos"],
-    ['Apellidos', 'Surnames'],
-    ['Nombre', 'Name'],
-    ['Total de estudiantes', 'Total students'],
-    ['Masculinos', 'Males'],
-    ['Femeninas', 'Females'],
-    ['Codigo de barra', 'Barcode']
-
-]);
-
-
 $year = SchoolService::getCurrentYear();
 $allGrades = SchoolService::getAllGrades()->toArray();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Lista de estudiantes por salón hogar y fotos") . " $year", true);
+$pdf->SetTitle(__("Lista de estudiantes por salón hogar y fotos") . " $year", true);
 
 
 foreach ($allGrades as $grade) {
@@ -38,21 +22,21 @@ foreach ($allGrades as $grade) {
     $teacher = Teacher::query()->byGrade($grade)->first();
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Lista de estudiantes por salón hogar y fotos") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, __("Lista de estudiantes por salón hogar y fotos") . " $year", 0, 1, 'C');
 
     $pdf->Ln(5);
 
     $pdf->SetFont('Arial', 'B', 12);
     $nom = $teacher->nombre ?? '';
     $ape = $teacher->apellidos ?? '';
-    $pdf->splitCells($lang->translation("Maestro(a):") . " {$nom} {$ape}", $lang->translation("Grado:") . " $grade");
+    $pdf->splitCells(__("Maestro(a):") . " {$nom} {$ape}", __("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(10, 5, '', 1, 0, 'C', true);
-    $pdf->Cell(25, 5, $lang->translation("Fotos"), 1, 0, 'C', true);
-    $pdf->Cell(55, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
-    $pdf->Cell(45, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
-    $pdf->Cell(55, 5, $lang->translation("Codigo de barra"), 1, 1, 'C', true);
+    $pdf->Cell(25, 5, __("Fotos"), 1, 0, 'C', true);
+    $pdf->Cell(55, 5, __("Apellidos"), 1, 0, 'C', true);
+    $pdf->Cell(45, 5, __("Nombre"), 1, 0, 'C', true);
+    $pdf->Cell(55, 5, __("Codigo de barra"), 1, 1, 'C', true);
     $pdf->ln(2);
     foreach ($students as $count => $student) {
         $pdf->SetFont('Arial', '', 8);
