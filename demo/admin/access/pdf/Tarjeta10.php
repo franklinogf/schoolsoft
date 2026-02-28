@@ -195,7 +195,7 @@ if ($idioma == 'A') {
     $nom1 = 'NOMBRE';
     $fec = 'FECHA';
     $gra = 'GRADO';
-    $ano = 'AÑO';
+    $ano = utf8_encode('AÑO');
     $des = 'DESCRIPCION';
     $pro = 'PROMEDIO GEN.';
     $proa = 'PROMEDIO ACU.';
@@ -330,13 +330,23 @@ foreach ($students as $estu) {
             $pf = '';
             $pf1 = '';
             $pf2 = '';
+            $pdf->SetFont('Arial', '', 9);
             if ($idioma == 'A') {
                 $pdf->Cell(53, $anc, $cursosS1[$i]->desc1 ?? '', $ll, 0, 'L');
             } else {
                 $pdf->Cell(53, $anc, $cursosS1[$i]->desc2 ?? '', $ll, 0, 'L');
             }
-            $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem1 ?? ''), $ll, 0, 'C');
-            $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem2 ?? ''), $ll, 0, 'C');
+            $pdf->SetFont('Arial', '', 10);
+            if ($tnot=='A')
+               {
+               $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem1 ?? ''), $ll, 0, 'C');
+               $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem2 ?? ''), $ll, 0, 'C');
+               }
+            if ($tnot=='B')
+               {
+               $pdf->Cell(14, $anc, $cursosS1[$i]->sem1 ?? '', $ll, 0, 'C');
+               $pdf->Cell(14, $anc, $cursosS1[$i]->sem2 ?? '', $ll, 0, 'C');
+               }
 
             $pdf->Cell(14, $anc, $cursosS1[$i]->credito ?? '', $ll, 0, 'R');
             if ($pf > 0 and $row1[13] > 0) {
@@ -354,27 +364,54 @@ foreach ($students as $estu) {
             $pf = '';
             $pf1 = '';
             $pf2 = '';
-
-            $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem1 ?? ''), $ll, 0, 'C');
-            $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem2 ?? ''), $ll, 0, 'C');
+            if ($tnot=='A')
+               {
+               $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem1 ?? ''), $ll, 0, 'C');
+               $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem2 ?? ''), $ll, 0, 'C');
+               }
+            if ($tnot=='B')
+               {
+               $pdf->Cell(14, $anc, $cursosS2[$i]->sem1 ?? '', $ll, 0, 'C');
+               $pdf->Cell(14, $anc, $cursosS2[$i]->sem2 ?? '', $ll, 0, 'C');
+               }
 
             $pdf->Cell(14, $anc, $cursosS2[$i]->credito ?? '', $ll, 1, 'R');
 
-            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0) {
+            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre1 = $cre1 + $cursosS1[$i]->credito;
                 $not1 = $not1 + (Con(Grado($cursosS1[$i]->sem1)) * $cursosS1[$i]->credito);
             }
-            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0) {
+            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre1 = $cre1 + $cursosS1[$i]->credito;
                 $not1 = $not1 + (Con(Grado($cursosS1[$i]->sem2)) * $cursosS1[$i]->credito);
             }
-            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0) {
+
+
+            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre1 = $cre1 + $cursosS1[$i]->credito;
+                $not1 = $not1 + $cursosS1[$i]->sem1 * $cursosS1[$i]->credito;
+            }
+            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre1 = $cre1 + $cursosS1[$i]->credito;
+                $not1 = $not1 + $cursosS1[$i]->sem2 * $cursosS1[$i]->credito;
+            }
+
+
+            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre2 = $cre2 + $cursosS2[$i]->credito;
                 $not2 = $not2 + (Con(Grado($cursosS2[$i]->sem1)) * $cursosS2[$i]->credito);
             }
-            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0) {
+            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre2 = $cre2 + $cursosS2[$i]->credito;
                 $not2 = $not2 + (Con(Grado($cursosS2[$i]->sem2)) * $cursosS2[$i]->credito);
+            }
+            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre2 = $cre2 + $cursosS2[$i]->credito;
+                $not2 = $not2 + $cursosS2[$i]->sem1 * $cursosS2[$i]->credito;
+            }
+            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre2 = $cre2 + $cursosS2[$i]->credito;
+                $not2 = $not2 + $cursosS2[$i]->sem2 * $cursosS2[$i]->credito;
             }
 
             if ($cursosS1[$i]->credito ?? 0 > 0) {
@@ -384,6 +421,7 @@ foreach ($students as $estu) {
                 $cre6 = $cre6 + $cursosS2[$i]->credito;
             }
         }
+
 
         $pdf->Cell(53, $anc, $pr, $ll, 0, 'R', true);
         if ($cre1 > 0) {
@@ -396,6 +434,8 @@ foreach ($students as $estu) {
                 $pdf->Cell(28, $anc, number_format($not1 / $cre1, 2) . ' / ' . number_format($let1 / $cnt1, 2), $ll, 0, 'C', true);
             } else {
                 $pdf->Cell(28, $anc, number_format($not1 / $cre1, 2), $ll, 0, 'C', true);
+                $let6 = $let6 + round($not1 / $cre1, 2);
+                $cnt6 = $cnt6 + 1;
             }
         } else {
             $pdf->Cell(28, $anc, 'XXXX', $ll, 0, 'C', true);
@@ -416,6 +456,8 @@ foreach ($students as $estu) {
                 $pdf->Cell(28, $anc, number_format($not2 / $cre2, 2) . ' / ' . number_format($let2 / $cnt2, 2), $ll, 0, 'C', true);
             } else {
                 $pdf->Cell(28, $anc, number_format($not2 / $cre2, 2), $ll, 0, 'C', true);
+                $let6 = $let6 + round($not2 / $cre2, 2);
+                $cnt6 = $cnt6 + 1;
             }
         } else {
             $pdf->Cell(28, $anc, 'XXXX', $ll, 0, 'C', true);
@@ -513,7 +555,7 @@ foreach ($students as $estu) {
         $pdf->Cell(14, 5, 'SEM-1', 1, 0, 'C', true);
         $pdf->Cell(14, 5, 'SEM-2', 1, 0, 'C', true);
         $pdf->Cell(14, 5, 'CRE.', 1, 1, 'C', true);
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFont('Arial', '', 9);
 
         for ($i = 1; $i <= $nm; $i++) {
             $s1 = '';
@@ -521,13 +563,23 @@ foreach ($students as $estu) {
             $pf = '';
             $pf1 = '';
             $pf2 = '';
+            $pdf->SetFont('Arial', '', 9);
             if ($idioma == 'A') {
                 $pdf->Cell(53, $anc, $cursosS1[$i]->desc1 ?? '', $ll, 0, 'L');
             } else {
                 $pdf->Cell(53, $anc, $cursosS1[$i]->desc2 ?? '', $ll, 0, 'L');
             }
-            $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem1 ?? ''), $ll, 0, 'C');
-            $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem2 ?? ''), $ll, 0, 'C');
+            $pdf->SetFont('Arial', '', 10);
+            if ($tnot=='A')
+               {
+               $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem1 ?? ''), $ll, 0, 'C');
+               $pdf->Cell(14, $anc, Grado($cursosS1[$i]->sem2 ?? ''), $ll, 0, 'C');
+               }
+            if ($tnot=='B')
+               {
+               $pdf->Cell(14, $anc, $cursosS1[$i]->sem1 ?? '', $ll, 0, 'C');
+               $pdf->Cell(14, $anc, $cursosS1[$i]->sem2 ?? '', $ll, 0, 'C');
+               }
 
             $pdf->Cell(14, $anc, $cursosS1[$i]->credito ?? '', $ll, 0, 'R');
             if ($pf > 0 and $row1[13] > 0) {
@@ -546,26 +598,54 @@ foreach ($students as $estu) {
             $pf1 = '';
             $pf2 = '';
 
-            $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem1 ?? ''), $ll, 0, 'C');
-            $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem2 ?? ''), $ll, 0, 'C');
+            if ($tnot=='A')
+               {
+               $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem1 ?? ''), $ll, 0, 'C');
+               $pdf->Cell(14, $anc, Grado($cursosS2[$i]->sem2 ?? ''), $ll, 0, 'C');
+               }
+            if ($tnot=='B')
+               {
+               $pdf->Cell(14, $anc, $cursosS2[$i]->sem1 ?? '', $ll, 0, 'C');
+               $pdf->Cell(14, $anc, $cursosS2[$i]->sem2 ?? '', $ll, 0, 'C');
+               }
 
             $pdf->Cell(14, $anc, $cursosS2[$i]->credito ?? '', $ll, 1, 'R');
 
-            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0) {
+            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre1 = $cre1 + $cursosS1[$i]->credito;
                 $not1 = $not1 + (Con(Grado($cursosS1[$i]->sem1)) * $cursosS1[$i]->credito);
             }
-            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0) {
+            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre1 = $cre1 + $cursosS1[$i]->credito;
                 $not1 = $not1 + (Con(Grado($cursosS1[$i]->sem2)) * $cursosS1[$i]->credito);
             }
-            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0) {
+
+
+            if ($cursosS1[$i]->sem1 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre1 = $cre1 + $cursosS1[$i]->credito;
+                $not1 = $not1 + $cursosS1[$i]->sem1 * $cursosS1[$i]->credito;
+            }
+            if ($cursosS1[$i]->sem2 ?? 0 > 0 and $cursosS1[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre1 = $cre1 + $cursosS1[$i]->credito;
+                $not1 = $not1 + $cursosS1[$i]->sem2 * $cursosS1[$i]->credito;
+            }
+
+
+            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre2 = $cre2 + $cursosS2[$i]->credito;
                 $not2 = $not2 + (Con(Grado($cursosS2[$i]->sem1)) * $cursosS2[$i]->credito);
             }
-            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0) {
+            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='A') {
                 $cre2 = $cre2 + $cursosS2[$i]->credito;
                 $not2 = $not2 + (Con(Grado($cursosS2[$i]->sem2)) * $cursosS2[$i]->credito);
+            }
+            if ($cursosS2[$i]->sem1 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre2 = $cre2 + $cursosS2[$i]->credito;
+                $not2 = $not2 + $cursosS2[$i]->sem1 * $cursosS2[$i]->credito;
+            }
+            if ($cursosS2[$i]->sem2 ?? 0 > 0 and $cursosS2[$i]->credito ?? 0 > 0 and $tnot=='B') {
+                $cre2 = $cre2 + $cursosS2[$i]->credito;
+                $not2 = $not2 + $cursosS2[$i]->sem2 * $cursosS2[$i]->credito;
             }
 
             if ($cursosS1[$i]->credito ?? 0 > 0) {
@@ -587,6 +667,8 @@ foreach ($students as $estu) {
                 $pdf->Cell(28, $anc, number_format($not1 / $cre1, 2) . ' / ' . number_format($let1 / $cnt1, 2), $ll, 0, 'C', true);
             } else {
                 $pdf->Cell(28, $anc, number_format($not1 / $cre1, 2), $ll, 0, 'C', true);
+                $let6 = $let6 + round($not1 / $cre1, 2);
+                $cnt6 = $cnt6 + 1;
             }
         } else {
             $pdf->Cell(28, $anc, 'XXXX', $ll, 0, 'C', true);
@@ -607,6 +689,8 @@ foreach ($students as $estu) {
                 $pdf->Cell(28, $anc, number_format($not2 / $cre2, 2) . ' / ' . number_format($let2 / $cnt2, 2), $ll, 0, 'C', true);
             } else {
                 $pdf->Cell(28, $anc, number_format($not2 / $cre2, 2), $ll, 0, 'C', true);
+                $let6 = $let6 + round($not2 / $cre2, 2);
+                $cnt6 = $cnt6 + 1;
             }
         } else {
             $pdf->Cell(28, $anc, 'XXXX', $ll, 0, 'C', true);
