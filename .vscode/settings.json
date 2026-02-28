@@ -1,5 +1,5 @@
 {
-  "php.version": "8.3",
+  "php.version": "8.4",
   "php.problems.exclude": {
     "/": [406, 416, 415]
   }
