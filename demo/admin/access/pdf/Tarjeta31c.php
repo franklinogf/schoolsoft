@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../app.php';
+require_once '../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;
@@ -99,11 +99,30 @@ if ($opcion == '2') {
     $students = DB::table('year')
         ->whereRaw("year = '$Year' and grado = '$grados' and activo = ''")->orderBy('apellidos')->get();
 } else {
-    $students = DB::table('acumulativa')->select("DISTINCT ss, nombre, apellidos")
+    $students = DB::table('year')->select("DISTINCT ss, nombre, apellidos, id")
         ->whereRaw("ss = '$estu'")->orderBy('apellidos')->get();
 }
 
 //**************
+
+  function PorcAdecimal($valor)
+  {
+    $row = DB::table('tablas')
+        ->whereRaw("valor = $valor")->first();
+
+    $valor1 = $row->punto ?? '';
+    if (is_numeric($valor1))
+       {
+       return number_format($valor1,2);
+       }
+    else
+       {
+       return $valor1;
+       }
+  }
+
+
+
   function Year($grado, $ss)
   {
     $row = DB::table('acumulativa')->select("DISTINCT grado, year")
@@ -211,7 +230,8 @@ if ($opcion == '2') {
     '*PATERNIDAD RESP.' => ['PTR'],
     '*ARTE' => ['ART'],
     '*TEATRO' => ['TEA'],
-    '*VIDA EN FAMILIA' => ['VFM'],
+    '*GÁSTRONOMIA' => ['GAS'],
+    '*SOCIAL NETWORK' => ['RED'],
   ];
   #1
 foreach ($students as $estu) {
@@ -251,7 +271,7 @@ $creditos['12']=0;
         ->whereRaw("id = '$estu->id'")->first();
 
   $pdf->Ln(-3);
-  $pdf->Cell(0, 5, utf8_encode('TRANSCRIPCIÓN DE CREDITOS'), 0, 1, 'C');
+  $pdf->Cell(0, 5, utf8_encode('TRANSCRIPCIÓN DE CRÉDITOS'), 0, 1, 'C');
   $pdf->Cell(0, 5, utf8_encode('NIVEL SUPERIOR'), 0, 1, 'C');
   $pdf->Ln(5);
 
@@ -305,8 +325,10 @@ $creditos['12']=0;
       $grade = Curso($GRA, $curso, $estu->ss);
       if($grade !== NULL && $grade !== ''){
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell($WIDTH / 3, 5, $grade[0], 1, 0, 'C');
-        $pdf->Cell($WIDTH / 3, 5, $grade[1], 1, 0, 'C');
+//        $pdf->Cell($WIDTH / 3, 5, $grade[0].' - '. PorcAdecimal(round($grade[0],2)), 1, 0, 'C');
+//        $pdf->Cell($WIDTH / 3, 5, $grade[1].' - '. PorcAdecimal(round($grade[1] ?? '',2)), 1, 0, 'C');
+        $pdf->Cell($WIDTH / 3, 5, is_numeric($grade[0]) ? $grade[0].' - '. PorcAdecimal(round($grade[0],2)) : '-', 1, 0, 'C');
+        $pdf->Cell($WIDTH / 3, 5, is_numeric($grade[1]) ? $grade[1].' - '. PorcAdecimal(round($grade[1],2)) : '-', 1, 0, 'C');
         $pdf->Cell($WIDTH / 3, 5, $grade[2], 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C');
       }else{
         $pdf->SetFont('Arial', '', 20);
@@ -333,8 +355,7 @@ $creditos['12']=0;
        $gpaCant = $gpaCant + 1;
        }
 
-   
-    $pdf->Cell(($WIDTH / 3) * 2 , 6, $prom == 0 ? '' : number_format($prom,2) , 1, 0, 'C');
+    $pdf->Cell(($WIDTH / 3) * 2 , 6, $prom == 0 ? '' : number_format($prom,2).' - '.PorcAdecimal(number_format($prom,2)) , 1, 0, 'C');
     $pdf->Cell($WIDTH / 3, 6, $creditos[$GRA], 1, ($i == count($GRADOS) - 1) ? 1 : 0, 'C');
   }
 
@@ -343,12 +364,15 @@ $creditos['12']=0;
   // var_dump($promedio);
   // echo '</pre>';
 
+//        $pdf->Cell($WIDTH / 3, 5, is_numeric($grade[0]) ? $grade[0].' - '. PorcAdecimal(round($grade[0],2)) : '-', 1, 0, 'C');
+
+
   $gpa = $gpaCant > 0 ? number_format($gpaProm / $gpaCant, 2) : '';
 
   $pdf->Cell(0,5,utf8_encode("*Electiva"),0,1);
   $pdf->Ln(3);
   $Y2 = $pdf->GetY();
-  $pdf->Cell(30, 5, "GPA: $gpa", 0, 0);
+  $pdf->Cell(40, 5, "GPA: $gpa - ".PorcAdecimal($gpa), 0, 0);
   $pdf->Cell(50, 5, utf8_encode("Fecha de Graduación: $fgra"), 0, 1);
  
   if ($CEP) {
@@ -369,13 +393,13 @@ $creditos['12']=0;
   $pdf->Cell(50, 5, '', 'B');
   $pdf->Cell(30);
   $pdf->Cell(50, 5, 'Sello', 0, 1);
-  $pdf->Cell(50, 5, 'Firma Directora Interina', 0, 0, 'C');
+  $pdf->Cell(50, 5, 'Firma Director', 0, 0, 'C');
   $pdf->Cell(30);
   $pdf->Cell(50, 5, 'Oficial de registro', 0, 0, 'C');
 
-  if ($cofi=='Si')
+  if ($cofi=='true')
      {
-     $pdf->Image('../../../logo/firma_acumalativa_31_1.png', 15, $Y - 6, 45);
+     $pdf->Image('../../../logo/firma_acumalativa_31_1.png', 15, $Y - 8, 45);
      $pdf->Image('../../../logo/firma_acumalativa_31_2.png', 100, $Y - 4, 30);
      }
 
