@@ -11,7 +11,7 @@ Session::is_logged();
 
 $lang = new Lang([
     ['Lista No docentes', 'Not teachers list'],
-    ['Profesor', 'Teacher'],
+    ['Posición', 'Position'],
     ['Nombre', 'Name'],
     ['Teléfonos', 'Phone'],
     ['Departamento', 'Deparment'],
@@ -32,7 +32,7 @@ $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
-$pdf->Cell(70, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
+$pdf->Cell(70, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
 $pdf->Cell(50, 5, utf8_encode($lang->translation("Teléfonos")), 1, 0, 'C', true);
 $pdf->Cell(40, 5, $lang->translation("Departamento"), 1, 1, 'C', true);
 $pdf->ln(2);
