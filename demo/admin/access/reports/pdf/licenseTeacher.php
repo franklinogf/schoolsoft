@@ -16,7 +16,7 @@ $lang = new Lang([
     ['Todas las Licencias', 'All licenses'],
     ['Licencias Permanentes', 'Permanent licenses'],
     ['Licencias Expiradas', 'Expired licenses'],
-   ['Fecha de Expiración', 'Expiration date'],
+   ['Fecha Expiración', 'Expiration date'],
 ]);
 $prof = $_POST['prof'];
 $school = new School();
@@ -39,7 +39,7 @@ $pdf->Cell(10, 5, '', 1, 0, 'C', true);
 $pdf->Cell(15, 5, 'ID', 1, 0, 'C', true);
 $pdf->Cell(60, 5, $lang->translation("Profesor"), 1, 0, 'C', true);
 $pdf->Cell(80, 5, $lang->translation("Licencias"), 1, 0, 'C', true);
-$pdf->Cell(30, 5, utf8_encode($lang->translation("Fecha de Expiración")), 1, 1, 'C', true);
+$pdf->Cell(30, 5, utf8_encode($lang->translation("Fecha Expiración")), 1, 1, 'C', true);
 $pdf->ln(2);
 $pdf->SetFont('Arial', '', 10);
 
@@ -60,8 +60,8 @@ foreach ($teachers as $teacher) {
              {
              $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
              $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
-            $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
-            $pdf->Cell(80, 5, $teacher->lic1, 0, 0, 'L');
+             $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
+             $pdf->Cell(80, 5, $teacher->lic1, 0, 0, 'L');
              $pdf->Cell(30,5,($teacher->fex1 == '0000-00-00')?'':$teacher->fex1,0,1,'C');
              $count++;
              }
@@ -69,8 +69,8 @@ foreach ($teachers as $teacher) {
              {
              $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
              $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
-            $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
-            $pdf->Cell(80, 5, $teacher->lic2, 0, 0, 'L');
+             $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
+             $pdf->Cell(80, 5, $teacher->lic2, 0, 0, 'L');
              $pdf->Cell(30,5,($teacher->fex2 == '0000-00-00')?'':$teacher->fex2,0,1,'C');
              $count++;
              }
@@ -78,8 +78,8 @@ foreach ($teachers as $teacher) {
              {
              $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
              $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
-            $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
-            $pdf->Cell(80, 5, $teacher->lic3, 0, 0, 'L');
+             $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
+             $pdf->Cell(80, 5, $teacher->lic3, 0, 0, 'L');
              $pdf->Cell(30,5,($teacher->fex3 == '0000-00-00')?'':$teacher->fex3,0,1,'C');
              $count++;
              }
@@ -87,8 +87,8 @@ foreach ($teachers as $teacher) {
              {
              $pdf->Cell(10, 5, $count + 1, 0, 0, 'C');
              $pdf->Cell(15, 5, $teacher->id, 0, 0, 'C');
-            $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
-            $pdf->Cell(80, 5, $teacher->lic4, 0, 0, 'L');
+             $pdf->Cell(60, 5, $teacher->apellidos . ' ' . $teacher->nombre);
+             $pdf->Cell(80, 5, $teacher->lic4, 0, 0, 'L');
              $pdf->Cell(30,5,($teacher->fex4 == '0000-00-00')?'':$teacher->fex4,0,1,'C');
              $count++;
              }
