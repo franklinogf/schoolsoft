@@ -60,7 +60,6 @@ $students = DB::table('year')->where([
 
 $count = 1;
 foreach ($students as $student) {
-
     $parent = DB::table('madre')->where([
         ['id', $student->id],
     ])->orderBy('id')->first();
@@ -74,16 +73,16 @@ foreach ($students as $student) {
     $pdf->Cell(70, 5, $student->apellidos . ' ' . $student->nombre, 0, 0, 'L');
     $pdf->Cell(55, 5, $parent->madre, 0, 0, 'L');
     $pdf->Cell(15, 5, $student->grado, 0, 0, 'C');
-    $pdf->Cell(65, 5, utf8_decode($parent->email_m), 0, 0, 'L');
-    $pdf->Cell(25, 5, utf8_decode($parent->tel_m), 0, 0, 'L');
-    $pdf->Cell(25, 5, utf8_decode($parent->cel_m), 0, 1, 'C');
+    $pdf->Cell(65, 5, $parent->email_m, 0, 0, 'L');
+    $pdf->Cell(25, 5, $parent->tel_m, 0, 0, 'L');
+    $pdf->Cell(25, 5, $parent->cel_m, 0, 1, 'C');
     if ($parent->padre != '') {
         $pdf->Cell(92, 5, '', 0, 0, 'C');
         $pdf->Cell(55, 5, $parent->padre, 0, 0, 'L');
         $pdf->Cell(15, 5, '', 0, 0, 'C');
-        $pdf->Cell(65, 5, utf8_decode($parent->email_p), 0, 0, 'L');
-        $pdf->Cell(25, 5, utf8_decode($parent->tel_p), 0, 0, 'L');
-        $pdf->Cell(25, 5, utf8_decode($parent->cel_p), 0, 1, 'C');
+        $pdf->Cell(65, 5, $parent->email_p, 0, 0, 'L');
+        $pdf->Cell(25, 5, $parent->tel_p, 0, 0, 'L');
+        $pdf->Cell(25, 5, $parent->cel_p, 0, 1, 'C');
     }
     $count++;
 }
