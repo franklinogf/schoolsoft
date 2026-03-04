@@ -41,6 +41,18 @@ $pdf = new PDF();
 $pdf->SetTitle($lang->translation("Informe de procedencia") . " $year", true);
 $pdf->Fill();
 
+$pueblos = DB::table('madre')->select("DISTINCT pueblo1")->where([
+        ['pueblo1', '!=', '']
+    ])->orderBy('pueblo1')->get();
+    
+    $lugarCount = [];
+    $lugarTotal = [];
+
+foreach ($pueblos as $lugar) {
+        $lugarCount[$lugar->pueblo1] = 0;
+        $lugarTotal[$lugar->pueblo1] = 0;
+        }
+
 foreach ($allGrades as $grade) {
     $teacher = $teacherClass->findByGrade($grade);
     $students = $studentClass->findByGrade($grade);
@@ -51,10 +63,10 @@ foreach ($allGrades as $grade) {
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
     $nom = $teacher->nombre ?? '';
-    $nom2 = utf8_encode($teacher->apellidos ?? '');
+    $nom2 = $teacher->apellidos ?? '';
     $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $nom2", $lang->translation("Grado:") . " $grade");
 
-    $lugares = ['Ponce', 'Juncos', 'Las Piedras', 'Humacao', 'Gurabo', 'Naguabo', 'Yabucoa', 'Caguas', 'Canóvanas', 'Carolina', 'Trujillo Alto'];
+//    $lugares = ['Ponce', 'Juncos', 'Las Piedras', 'Humacao', 'Gurabo', 'Naguabo', 'Yabucoa', 'Caguas', 'Canóvanas', 'Carolina', 'Trujillo Alto'];
 
     $pdf->Ln(5);
     $pdf->Cell(50, 15, 'Lugar de Procedencia', 1, 0, 'C', true);
@@ -73,11 +85,9 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(30, 5, 'Masculino', 'LBR', 1, 'C', true);
 
     $pdf->SetFont('Arial', '', 10);
-    $lugarCount = [];
-    $lugarTotal = [];
-    foreach ($lugares as $lugar) {
+    foreach ($pueblos as $lugar1) {
+        $lugar = $lugar1->pueblo1;
         $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
-        $lugarCount[$lugar] = 0;
         foreach ($students as $count => $student) {
             $parent = new Parents($student->id);
             if ($lugar == $parent->pueblo1 || $lugar == $parent->pueblo2) {
@@ -88,7 +98,6 @@ foreach ($allGrades as $grade) {
                 $genderCount['T']++;
             }
         }
-        // $porciento = $lugarTotal[$lugar] > 0  && $lugarCount[$lugar] / $lugarTotal[$lugar];
         $pdf->Cell(50, 5, utf8_encode($lugar), 1);
         $pdf->Cell(40, 5, $lugarCount[$lugar], 1, 0, 'C');
         $pdf->Cell(30, 5, $lugarTotal[$lugar] ?? 0 > 0  ? ($lugarCount[$lugar] / $lugarTotal[$lugar]) * 100 . '%' : '', 1, 0, 'C');
