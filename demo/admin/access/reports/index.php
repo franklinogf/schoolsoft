@@ -405,6 +405,7 @@ $options = [
                 'name' => __("Documentos no entregados"),
                 'desc' => '',
                 'link' => 'pdf/DocumentsNotDelivered.php',
+                'target' => 'DocumentsNotDelivered',
                 'hidden' => false,
             ],
             [
