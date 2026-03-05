@@ -73,7 +73,9 @@ foreach ($allGrades as $grade) {
     $estudiantes = [];
     $promedios = [];
     $promedios[] = '';
-    $pdf->SetFillColor(89, 171, 227);
+//    $pdf->SetFillColor(89, 171, 227);
+//    $pdf->SetFillColor(230);
+    $pdf->Fill();
     $cursos = DB::table('padres')->select('distinct curso, descripcion')->where([
         ['year', $year],
         ['grado', $grade],
@@ -100,8 +102,8 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(0, 5, $lang->translation("Informe acumulativo de notas") . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', '', 12);
-    $nom = utf8_encode($teacher->nombre ?? '');
-    $ape = utf8_encode($teacher->apellidos ?? '');
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
     $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
     $f = 0;
     $m = 0;
@@ -267,7 +269,7 @@ foreach ($allGrades as $grade) {
     $pdf->SetXY(10, -5);
     $pdf->SetMargins(10, -10);
     $pdf->SetFont('Arial', 'B', 9);
-    $pdf->Cell(0, 4, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la línea correspondiente.'), 0, 0, 'C');
+    $pdf->Cell(0, 4, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la l&#65533;nea correspondiente.'), 0, 0, 'C');
 }
 
 $pdf->Output();
