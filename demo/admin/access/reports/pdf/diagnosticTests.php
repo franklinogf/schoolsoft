@@ -37,7 +37,7 @@ $studentClass = new Student();
 $year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Pruebas diagnósticas") . " $year", true);
+$pdf->SetTitle(utf8_encode($lang->translation("Pruebas diagnósticas")) . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -51,10 +51,13 @@ foreach ($allGrades as $grade) {
     $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Pruebas diagnósticas") . " $year", 0, 1, 'C');
+    $pdf->Cell(0, 5, utf8_encode($lang->translation("Pruebas diagnósticas")) . " $year", 0, 1, 'C');
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->splitCells($lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos", $lang->translation("Grado:") . " $grade");
+    $nom = $teacher->nombre ?? '';
+    $ape = $teacher->apellidos ?? '';
+
+    $pdf->splitCells($lang->translation("Maestro(a):") . " $nom $ape", $lang->translation("Grado:") . " $grade");
 
     $pdf->SetFont('Arial', 'B', 10);
     //    $pdf->Cell(10, 10, '', 1, 0, 'C', true);
@@ -107,18 +110,18 @@ foreach ($allGrades as $grade) {
             $ing = $ing + 1;
         }
     }
-    $pdf->Cell(50, 5, $lang->translation("Español"), 1, 0, 'C');
+    $pdf->Cell(50, 5, utf8_encode($lang->translation("Español")), 1, 0, 'C');
     $pdf->Cell(65, 5, $esp, 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 1, 'C');
 
 
-    $pdf->Cell(50, 5, $lang->translation("Inglés"), 1, 0, 'C');
+    $pdf->Cell(50, 5, utf8_encode($lang->translation("Inglés")), 1, 0, 'C');
     $pdf->Cell(65, 5, $ing, 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 1, 'C');
 
-    $pdf->Cell(50, 5, $lang->translation("Matemáticas"), 1, 0, 'C');
+    $pdf->Cell(50, 5, utf8_encode($lang->translation("Matemáticas")), 1, 0, 'C');
     $pdf->Cell(65, 5, $mat, 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 0, 'C');
     $pdf->Cell(38, 5, '', 1, 1, 'C');
