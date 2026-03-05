@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/../../../app.php';
+require_once __DIR__ . '/../../../../app.php';
 
+use Classes\PDF;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
@@ -12,102 +13,126 @@ use Classes\DataBase\DB;
 
 Session::is_logged();
 $teacher = new Teacher();
+
 $lang = new Lang([
     ['Informe de acceso de los administradores', 'Administrator Access Report'],
     ['Desde', 'From'],
     ['Hasta', 'To'],
+    ['Nombre', 'Name'],
+    ['Apellidos', 'Surnames'],
     ['Grado', 'Grade'],
-    ['Grados separados', 'Separted grades'],
-    ['estudiante', 'student'],
-    ['Atrás', 'Go back'],
-    ['Opción', 'Option'],
-    ['Por estudiante', 'By student'],
-    ['Por grado', 'By grade'],
-    ['Administradores', 'Administrator'],
-    ['Selección', 'Selection'],
-    ['Lista', 'List'],
-    ['Todos', 'All'],
+    ['Fecha', 'Date'],
+    ['Hora', 'Hour'],
+    ['IP', 'IP'],
+    ['Nombre', 'Name'],
 ]);
 $students = new Student();
 $allStudents = $students->all();
-$school = new School();
-$grades = $school->allGrades();
+$school = new School(Session::id());
+$year = $school->info('year2');
+//$grades = $school->allGrades();
 
-$admins = DB::table('colegio')->orderBy('usuario')->get();
+$from = $_POST['from'];
+$to = $_POST['to'];
+$ida = $_POST['student'];
 
-?>
-<!DOCTYPE html>
-<html lang="<?= __LANG ?>">
+$pdf = new PDF();
+$pdf->SetTitle($lang->translation("Informe de acceso de los administradores") . " $year", true);
+$pdf->Fill();
+if ($ida != 'all') {
 
-<head>
-    <?php
-    $title = $lang->translation('Informe de acceso de los administradores');
-    Route::includeFile('/admin/includes/layouts/header.php');
-    Route::selectPicker();
-    ?>
-</head>
+    $admin1 = DB::table('colegio')->where([
+        ['id', $ida]
+    ])->orderBy('usuario')->first();
 
-<body>
-    <?php
-    Route::includeFile('/admin/includes/layouts/menu.php');
-    ?>
-    <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation('Informe de acceso de los administradores') ?></h1>
-        <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atr&#65533;s") ?></a>
-        <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= Route::url('/admin/access/reports/pdf/AdminAccessReport.php') ?>" target="ParentsAccessReport" method="POST">
-                <div class="mx-auto" style="width: 25rem;">
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class='input-group-text' for="from"><?= $lang->translation("Desde") ?>:</label>
-                        </div>
-                        <input id="from" class="form-control" type="date" name="from" required>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class='input-group-text' for="to"><?= $lang->translation("Hasta") ?>:</label>
-                        </div>
-                        <input id="to" class="form-control" type="date" name="to" value="<?= Util::date() ?>" required>
-                    </div>
 
-                    <div id="student">
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class='input-group-text' for="student"><?= $lang->translation("Estudiante") ?></label>
-                            </div>
-                            <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
-                                <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('Administradores') ?></option>
-                                <option value="all"><?= $lang->translation("Todos") ?></option>
-                                <?php foreach ($admins as $student) : ?>
-                                    <option value="<?= $student->id ?>"><?= "$student->usuario ($student->id)" ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="grade" class="hidden">
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class='input-group-text' for="option"><?= $lang->translation("Grado") ?></label>
-                            </div>
-                            <select name="grade" class="form-control">
-                                <option value="7"><?= $lang->translation("Selección") ?></option>
-                                <?php foreach ($grades as $grade) : ?>
-                                    <option value="<?= $grade ?>"><?= $grade ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary mt-4" type="submit"><?= $lang->translation("Continuar") ?></button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <?php
-    Route::includeFile('/includes/layouts/scripts.php', true);
-    Route::selectPicker('js');
-    ?>
-</body>
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 15);
+    $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los administradores") . " $year", 0, 1, 'C');
+    $pdf->Ln(2);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
 
-</html>
+    $pdf->Ln(5);
+    $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'L', true);
+    $pdf->Cell(132, 5, $admin1->usuario, 0, 0, 'L');
+    $pdf->Cell(15, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
+    $pdf->Cell(20, 5, date('m-d-Y'), 0, 1, 'L');
+    $pdf->SetFont('Arial', 'B', 10);
+
+    $pdf->Cell(20, 5, '', 1, 0, 'C', true);
+//    $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
+    $pdf->Cell(30, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
+    $pdf->Cell(30, 5, $lang->translation("Hora"), 1, 0, 'C', true);
+    $pdf->Cell(110, 5, $lang->translation("IP"), 1, 1, 'C', true);
+    $pdf->SetFont('Arial', '', 10);
+
+        $attendances = DB::table('entradas')->where([
+            ['id', $ida],
+            ['fecha', '>=', $from],
+            ['fecha', '<=', $to]
+        ])->orderBy('fecha')->get();
+    $count=0;
+    foreach ($attendances as $attendance) {
+        $count = $count + 1;
+        $pdf->Cell(20, 5, $count, 1, 0, 'C');
+//        $pdf->Cell(20, 5, $attendance->id, 1, 0, 'C');
+        $pdf->Cell(30, 5, $attendance->fecha, 1, 0, 'C');
+        $pdf->Cell(30, 5, $attendance->hora, 1, 0, 'C');
+        $pdf->Cell(110, 5, $attendance->ip, 1, 1, 'C');
+    }
+} else {
+    $grade = $_POST['grade'];
+    $admins1 = DB::table('colegio')->orderBy('usuario')->get();
+
+    $type = $_POST['type'] ?? '';
+
+    $count = 1;
+    $type = 'list';
+    foreach ($admins1 as $admin2) {
+        $attendances = DB::table('entradas')->where([
+            ['id', $admin2->id],
+            ['fecha', '>=', $from],
+            ['fecha', '<=', $to]
+        ])->orderBy('fecha')->get();
+        $tiene = count($attendances);
+        if ($tiene > 0)
+           {
+        $pdf->addPage();
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los administradores") . " $year", 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
+        $pdf->Ln(5);
+
+        $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'L', true);
+        $pdf->Cell(132, 5, $admin2->usuario, 0, 0, 'L');
+        $pdf->Cell(15, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
+        $pdf->Cell(20, 5, date('m-d-Y'), 0, 1, 'L');
+
+        $pdf->Cell(20, 5, '', 1, 0, 'C', true);
+//        $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
+        $pdf->Cell(30, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
+        $pdf->Cell(30, 5, $lang->translation("Hora"), 1, 0, 'C', true);
+        $pdf->Cell(110, 5, $lang->translation("IP"), 1, 1, 'C', true);
+        $pdf->SetFont('Arial', '', 10);
+        $attendances = DB::table('entradas')->where([
+            ['id', $admin2->id],
+            ['fecha', '>=', $from],
+            ['fecha', '<=', $to]
+        ])->orderBy('fecha')->get();
+        foreach ($attendances as $attendance) {
+            $pdf->Cell(20, 5, $count, 1, 0, 'C');
+//            $pdf->Cell(20, 5, $attendance->id, 1);
+            $pdf->Cell(30, 5, $attendance->fecha, 1, 0, 'C');
+            $pdf->Cell(30, 5, $attendance->hora, 1, 0, 'C');
+            $pdf->Cell(110, 5, $attendance->ip, 1, 1, 'C');
+            $count++;
+        }
+       }
+    }
+}
+
+$pdf->Output();
