@@ -39,7 +39,8 @@ $teacherClass = new Teacher();
 $year = $school->year();
 $allGrades = $school->allGrades();
 $pdf = new PDF();
-$pdf->SetTitle($lang->translation("Movimiento de matrícula") . " $year", true);
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->SetTitle(utf8_encode($lang->translation("Movimiento de matrícula")) . " $year", true);
 $pdf->Fill();
 
 foreach ($allGrades as $grade) {
@@ -107,7 +108,8 @@ foreach ($allGrades as $grade) {
         $genderCount['T']++;
         $pdf->Cell(5, 6, $n, 1, 0, 'L');
         $pdf->Cell(95, 6, $student->apellidos . ' ' . $student->nombre, 1);
-        $pdf->Cell(50, 6, $code->id, 1, 0);
+        $pdf->Cell(50, 6, '', 1, 0);
+//        $pdf->Cell(50, 6, $code->id, 1, 0);
         $pdf->Cell(40, 6, $student->fecha_baja, 1, 1, 'C');
     }
 
