@@ -12,12 +12,12 @@ use Classes\Controllers\Teacher;
 Session::is_logged();
 $teacher = new Teacher();
 $lang = new Lang([
-    ['Informe de acceso de los profesores', 'Teacher Access Report'],
+    ['Informe de acceso de los padres', 'Parents Access Report'],
     ['Desde', 'From'],
     ['Hasta', 'To'],
     ['Grado', 'Grade'],
     ['Grados separados', 'Separted grades'],
-    ['maestro', 'Teacher'],
+    ['estudiante', 'student'],
     ['Atrás', 'Go back'],
     ['Opción', 'Option'],
     ['Por estudiante', 'By student'],
@@ -28,11 +28,8 @@ $lang = new Lang([
     ['Resumen', 'Summary'],
 ]);
 $school = new School(Session::id());
-
-$teachers = DB::table('profesor')->where([
-    ['baja', ''],
-    ['docente', 'Docente']
-])->orderBy('apellidos')->get();
+$year = $school->info('year2');
+$grades = $school->allGrades();
 
 ?>
 <!DOCTYPE html>
@@ -52,10 +49,10 @@ $teachers = DB::table('profesor')->where([
     Route::includeFile('/admin/includes/layouts/menu.php');
     ?>
     <div class="container-lg mt-lg-3 mb-5 px-0">
-        <h1 class="text-center my-3"><?= $lang->translation('Informe de acceso de los maestros') ?></h1>
+        <h1 class="text-center my-3"><?= $lang->translation('Informe de acceso de los padres') ?></h1>
         <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atrás") ?></a>
         <div class="container bg-white shadow-lg py-3 rounded">
-            <form action="<?= Route::url('/admin/access/reports/pdf/TeacherAccessReport.php') ?>" target="ParentsAccessReport" target="_blank" method="POST">
+            <form action="<?= Route::url('/admin/access/reports/pdf/ParentsAccessReport.php') ?>" target="ParentsAccessReport" target="_blank" method="POST">
                 <div class="mx-auto" style="width: 25rem;">
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
@@ -72,13 +69,13 @@ $teachers = DB::table('profesor')->where([
                     <div id="student">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                                <label class='input-group-text' for="student"><?= $lang->translation("Maestros") ?></label>
+                                <label class='input-group-text' for="student"><?= $lang->translation("grado") ?></label>
                             </div>
                             <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
-                                <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('maestro') ?></option>
+                                <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('grado') ?></option>
                                 <option value="Todos"><?= $lang->translation("Todos") ?></option>
-                                <?php foreach ($teachers as $student) : ?>
-                                    <option value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
+                                <?php foreach ($grades as $student) : ?>
+                                    <option value="<?= $student ?>"><?= "$student" ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
