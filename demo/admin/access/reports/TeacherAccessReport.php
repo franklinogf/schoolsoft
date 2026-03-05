@@ -1,119 +1,99 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Controllers\School;
-use Classes\PDF;
 use Classes\Lang;
-use Classes\Session;
-//use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
-use Classes\DataBase\DB;
 use Classes\Util;
+use Classes\Route;
+use Classes\Session;
+use Classes\Controllers\School;
+use Classes\DataBase\DB;
+use Classes\Controllers\Teacher;
 
 Session::is_logged();
-
+$teacher = new Teacher();
 $lang = new Lang([
     ['Informe de acceso de los profesores', 'Teacher Access Report'],
     ['Desde', 'From'],
     ['Hasta', 'To'],
-    ['Nombre', 'Name'],
-    ['Apellidos', 'Surnames'],
     ['Grado', 'Grade'],
-    ['Fecha', 'Date'],
-    ['Hora', 'Hour'],
-    ['IP', 'IP'],
-    ['Nombre', 'Name'],
+    ['Grados separados', 'Separted grades'],
+    ['Maestro', 'Teacher'],
+    ['Atrás', 'Go back'],
+    ['Opción', 'Option'],
+    ['Por estudiante', 'By student'],
+    ['Por grado', 'By grade'],
+    ['Estudiante', 'Student'],
+    ['Selección', 'Selection'],
+    ['Lista', 'List'],
+    ['Resumen', 'Summary'],
 ]);
-
-$from = $_POST['from'];
-$to = $_POST['to'];
 $school = new School(Session::id());
-$year = $school->info('year2');
 
-$pdf = new PDF();
-$pdf->SetTitle($lang->translation("Informe de acceso de los profesores") . " $year", true);
-$pdf->Fill();
-$studentMt = $_POST['student'];
-if ($studentMt != 'Todos') {
-    $studentMt = $_POST['student'];
-    $student = new Teacher($studentMt);
-    $pdf->AddPage();
-    $pdf->SetFont('Arial', 'B', 15);
-    $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los profesores") . " $year", 0, 1, 'C');
-    $pdf->Ln(2);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
+$teachers = DB::table('profesor')->where([
+    ['baja', ''],
+    ['docente', 'Docente']
+])->orderBy('apellidos')->get();
 
-    $pdf->Ln(5);
-    $pdf->splitCells($lang->translation("Nombre") . ": " . utf8_encode($student->nombre . ' ' . $student->apellidos), $lang->translation("Grado") . ": $student->grado");
-    $pdf->SetFont('Arial', 'B', 10);
+?>
+<!DOCTYPE html>
+<html lang="<?= __LANG ?>">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-    $pdf->Cell(20, 5, '', 1, 0, 'C', true);
-    $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("Hora"), 1, 0, 'C', true);
-    $pdf->Cell(50, 5, $lang->translation("IP"), 1, 1, 'C', true);
-    $pdf->SetFont('Arial', '', 10);
+<head>
+    <?php
+    $title = $lang->translation('Informe de acceso de los profesores');
+    Route::includeFile('/admin/includes/layouts/header.php');
+    Route::selectPicker();
+    ?>
+</head>
 
-    $attendances = DB::table('entradas')->where([
-        ['id', $student->id],
-        ['fecha', '>=', $from],
-        ['fecha', '<=', $to]
-    ])->orderBy('fecha')->get();
+<body>
+    <?php
+    Route::includeFile('/admin/includes/layouts/menu.php');
+    ?>
+    <div class="container-lg mt-lg-3 mb-5 px-0">
+        <h1 class="text-center my-3"><?= $lang->translation('Informe de acceso de los profesores') ?></h1>
+        <a href="<?= Route::url('/admin/access/reports/') ?>" class="btn btn-secondary mb-2"><?= $lang->translation("Atrás") ?></a>
+        <div class="container bg-white shadow-lg py-3 rounded">
+            <form action="<?= Route::url('/admin/access/reports/pdf/TeacherAccessReport.php') ?>" target="TeacherAccessReport" target="_blank" method="POST">
+                <div class="mx-auto" style="width: 25rem;">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class='input-group-text' for="from"><?= $lang->translation("Desde") ?>:</label>
+                        </div>
+                        <input id="from" class="form-control" type="date" name="from" required>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class='input-group-text' for="to"><?= $lang->translation("Hasta") ?>:</label>
+                        </div>
+                        <input id="to" class="form-control" type="date" name="to" value="<?= Util::date() ?>" required>
+                    </div>
+                    <div id="student">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <label class='input-group-text' for="student"><?= $lang->translation("Maestros") ?></label>
+                            </div>
+                            <select class="form-control selectpicker w-100" name="student" data-live-search="true" required>
+                                <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('maestro') ?></option>
+                                <option value="Todos"><?= $lang->translation("Todos") ?></option>
+                                <?php foreach ($teachers as $student) : ?>
+                                    <option value="<?= $student->id ?>"><?= "$student->apellidos $student->nombre ($student->id)" ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary mt-4" type="submit"><?= $lang->translation("Continuar") ?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <?php
+    Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::selectPicker('js');
+    ?>
+</body>
 
-    foreach ($attendances as $count => $attendance) {
-        $pdf->Cell(20, 5, $count + 1, 1, 0, 'C');
-        $pdf->Cell(20, 5, $attendance->id, 1, 0, 'C');
-        $pdf->Cell(50, 5, $attendance->fecha, 1, 0, 'C');
-        $pdf->Cell(50, 5, $attendance->hora, 1, 0, 'C');
-        $pdf->Cell(50, 5, $attendance->ip, 1, 1, 'C');
-    }
-} else {
-    $teachers = DB::table('profesor')->where([
-        ['baja', ''],
-        ['docente', 'Docente']
-    ])->orderBy('apellidos')->get();
-        
-            $count = 1;
-            $type = 'list';
-                foreach ($teachers as $stud) {
-        $attendances = DB::table('entradas')->where([
-            ['id', $stud->id],
-            ['fecha', '>=', $from],
-            ['fecha', '<=', $to]
-        ])->orderBy('fecha')->get();
-        if (count($attendances) > 0) {
-                $pdf->addPage();
-                $pdf->SetFont('Arial', 'B', 15);
-                $pdf->Cell(0, 5, $lang->translation("Informe de acceso de los profesores") . " $year", 0, 1, 'C');
-                $pdf->SetFont('Arial', '', 12);
-            $pdf->Ln(5);
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(0, 5, $lang->translation("Desde") . ": $from / " . $lang->translation("Hasta") . ": $to", 0, 1, 'C');
-                $pdf->Ln(5);
-
-                $pdf->Cell(20, 5, $lang->translation("Nombre"), 1, 0, 'L', true);
-                $pdf->Cell(135, 5, $stud->apellidos.' '.$stud->nombre, 0, 0, 'L');
-                $pdf->Cell(20, 5, $lang->translation("Grado"), 1, 0, 'C', true);
-            $pdf->Cell(20, 5, $stud->grado, 0, 1, 'L');
-
-                $pdf->Cell(20, 5, '', 1, 0, 'C', true);
-                $pdf->Cell(20, 5, 'ID', 1, 0, 'C', true);
-                $pdf->Cell(50, 5, $lang->translation("Fecha"), 1, 0, 'C', true);
-                $pdf->Cell(50, 5, $lang->translation("Hora"), 1, 0, 'C', true);
-                $pdf->Cell(50, 5, $lang->translation("IP"), 1, 1, 'C', true);
-            $pdf->SetFont('Arial', '', 12);
-               foreach ($attendances as $attendance) 
-                       {
-                       $pdf->Cell(20, 5, $count, 1, 0, 'C');
-                       $pdf->Cell(20, 5, $attendance->id, 1);
-                       $pdf->Cell(50, 5, $attendance->fecha, 1);
-                       $pdf->Cell(50, 5, $attendance->hora, 1, 0, 'C');
-                       $pdf->Cell(50, 5, $attendance->ip, 1, 1, 'C');
-                       $count++;
-                       }
-               }
-    }
-  }
-
-$pdf->Output();
+</html>
