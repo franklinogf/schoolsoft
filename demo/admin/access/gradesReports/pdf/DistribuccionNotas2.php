@@ -59,11 +59,10 @@ class nPDF extends PDF
         if ($ct=='nota2'){$tt=$lang->translation("T-2");}
         if ($ct=='nota3'){$tt=$lang->translation("T-3");}
         if ($ct=='nota4'){$tt=$lang->translation("T-4");}
-        $this->SetFont('Arial', 'B', 12);
-
-      $this->Cell(0, 5, $lang->translation("Informe de distribución de promedio por grado") . ' / ' . $tt . " / $year", 0, 1, 'C');
-        $this->Ln(5);
-        $this->SetFont('Arial', '', 12);
+    $this->SetFont('Arial', 'B', 12);
+    $this->Cell(0, 5, $lang->translation("Informe de distribución de promedio por grado") . ' / ' . $tt . " / $year", 0, 1, 'C');
+    $this->Ln(5);
+    $this->SetFont('Arial', '', 12);
     $this->Fill();
     $this->Cell(10, 5, '', 1, 0, 'C', true);
     $this->Cell(20, 5, $lang->translation("Grado"), 1, 0, 'C', true);
@@ -90,12 +89,7 @@ class nPDF extends PDF
     $this->Cell(10, 5, "F", 1, 0, 'C', true);
     $this->Cell(10, 5, "M", 1, 0, 'C', true);
     $this->Cell(10, 5, "F", 1, 1, 'C', true);
-
-
-
     $this->SetFont('Arial', '', 11);
-
-
     }
 }
 
@@ -125,11 +119,11 @@ foreach ($allGrades as $grade) {
                $a=0;$t=0;
                foreach ($cursos as $curso) 
                        {
-                       if ($suma == 'N' and $curso->$ct > 0)
+                       if ($suma == 'N' and is_numeric($curso->$ct))
                           {
                           $a=$a+$curso->$ct;$t=$t+1;
                           }
-                       if ($suma == 'C' and $curso->$ct > 0 and $curso->credito > 0)
+                       if ($suma == 'C' and is_numeric($curso->$ct) and $curso->credito > 0)
                           {
                           $a=$a+round($curso->$ct*$curso->credito,0);$t=$t+$curso->credito;
                           }
