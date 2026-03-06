@@ -14,7 +14,7 @@ $lang = new Lang([
     ['Lista de promedios', 'List of averages'],
     ["Profesor", "Teacher:"],
     ["Grado:", "Grade:"],
-    ["Descripción", "Description"],
+    ["DescripciÃ³n", "Description"],
     ['Apellidos', 'Lasname'],
     ['Nombre', 'Name'],
     ['Grado', 'Grade'],
@@ -96,7 +96,6 @@ else
         ])->orderBy('grado')->first();
    }
 
-
 foreach ($allGrades as $grade) {
         $studens = DB::table('year')->where([
           ['year', $year],
@@ -116,27 +115,27 @@ foreach ($allGrades as $grade) {
                $a3=0;$t3=0;
                foreach ($cursos as $curso) 
                        {
-                       if ($suma == 'N' and $curso->final > 0)
+                       if ($suma == 'N' and is_numeric($curso->final))
                           {
                           $a=$a+$curso->final;$t=$t+1;
                           }
-                       if ($suma == 'N' and $curso->sem1 > 0)
+                       if ($suma == 'N' and is_numeric($curso->sem1))
                           {
                           $a2=$a2+$curso->sem1;$t2=$t2+1;
                           }
-                       if ($suma == 'N' and $curso->sem2 > 0)
+                       if ($suma == 'N' and is_numeric($curso->sem2))
                           {
                           $a3=$a3+$curso->sem2;$t3=$t3+1;
                           }
-                       if ($suma == 'C' and $curso->final > 0 and $curso->credito > 0)
+                       if ($suma == 'C' and is_numeric($curso->final) and $curso->credito > 0)
                           {
                           $a=$a+round($curso->final*$curso->credito,0);$t=$t+$curso->credito;
                           }
-                       if ($suma == 'C' and $curso->sem1 > 0 and $curso->credito > 0)
+                       if ($suma == 'C' and is_numeric($curso->sem1) and $curso->credito > 0)
                           {
                           $a2=$a2+round($curso->sem1*$curso->credito,0);$t2=$t2+$curso->credito;
                           }
-                       if ($suma == 'C' and $curso->sem2 > 0 and $curso->credito > 0)
+                       if ($suma == 'C' and is_numeric($curso->sem2) and $curso->credito > 0)
                           {
                           $a3=$a3+round($curso->sem2*$curso->credito,0);$t3=$t3+$curso->credito;
                           }
@@ -157,11 +156,9 @@ foreach ($allGrades as $grade) {
                
         }
 
-
-//$pdf = new nPDF();
 $pdf = new PDF();
-$cur = $_POST['curso'];
-$cl = $_POST['cl'];
+$cur = $_POST['curso'] ?? '';
+$cl = $_POST['cl'] ?? '';
 $x = 0;
 if ($grado == 'all')
    {
@@ -211,6 +208,5 @@ foreach ($allGrades as $grade)
               $pdf->Cell(25, 5, number_format($estu->fin,$r), $cl, 1, 'R');
               }
       }
-
 
 $pdf->Output();
