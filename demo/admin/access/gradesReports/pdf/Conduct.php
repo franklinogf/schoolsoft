@@ -50,22 +50,8 @@ $pdf = new PDF();
 
 $school = new School(Session::id());
 $grado = $_POST['grade'];
-$nota = $_POST['nota'];
-$divicion= $_POST['divicion'];
-list($nota,$tt) = explode("-",$_POST['nota']);
-
-$cl = $_POST['cl'];
-$notar = $_POST['notar'];
-
-
-//$year = $school->year();
 $year = $school->info('year2');
-//$pdf = new nPDF();
 $pdf = new PDF();
-
-
-
-
 
 if ($grado == 'all')
    {
@@ -82,7 +68,7 @@ else
 foreach ($allGrades as $grade) 
         {
         $pdf->AddPage('');
-        $pdf->Cell(0, 5, $lang->translation("Conducta por grado").' / '.$grade." / $tt / $year", 0, 1, 'C');
+        $pdf->Cell(0, 5, $lang->translation("Conducta por grado").' / '.$grado." / $year", 0, 1, 'C');
         $pdf->Ln(5);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Fill();
@@ -120,10 +106,6 @@ foreach ($allGrades as $grade)
                 $pdf->Cell(15, 5, '', 1, 0, 'R');
                 $pdf->Cell(15, 5, '', 1, 1, 'R');
                 }
-
-
-
-//**********************
          }
 
 
