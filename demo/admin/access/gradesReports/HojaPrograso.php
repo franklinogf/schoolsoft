@@ -108,7 +108,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </div>
                         <select id="tarjeta" name="tarjeta" class="form-control" onclick="return activarTrimestre(); return true">
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
-                            <option value='2' <?= $in2 ?>>Tarjeta 2</option>
+                            <option value='2' disabled <?= $in2 ?>>Tarjeta 2</option>
                             <option value='3' <?= $in3 ?>>Tarjeta 3</option>
                         </select>
                         <select id="tri" name="tri" class="form-control">
@@ -161,16 +161,16 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="hoja" name="hoja" class="form-control" onclick="return activarTrimestre(); return true">
-                            <option value='1'>
+                            <option value='Notas'>
                                 <?= $lang->translation('Notas') ?>
                             </option>
-                            <option value='2'>
+                            <option value='Trab-Diarios'>
                                 <?= $lang->translation('Trabajos diarios') ?>
                             </option>
-                            <option value='3'>
+                            <option value='Pruebas-Cortas'>
                                 <?= $lang->translation('Prueba cortas') ?>
                             </option>
-                            <option value='4'>
+                            <option value='Trab-Libreta'>
                                 <?= $lang->translation('Trabajo libreta') ?>
                             </option>
                         </select>
