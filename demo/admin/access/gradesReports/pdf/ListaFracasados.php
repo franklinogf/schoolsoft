@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;
@@ -16,7 +16,7 @@ $lang = new Lang([
     ['Lista de fracasados por curso', 'List of failures by course'],
     ["Nombre", "Name"],
     ["Apellidos", "Surnames"],
-  ["Año escolar:", "School year:"],
+  ["A&#65533;o escolar:", "School year:"],
     ["T-1", "Q-1"],
     ["T-2", "Q-2"],
     ["T-3", "Q-3"],
@@ -49,30 +49,25 @@ function NLetra($valor){
   }
 }
 
-
 $pdf = new PDF();
 $pdf->useFooter(false);
-$school = new School();
+$school = new School(Session::id());
+$year = $school->info('year2');
 $teacherClass = new Teacher();
 $studentClass = new Student();
 
-$year = $school->year();
-$allGrades = $school->allGrades();
-$pdf = new PDF();
-//$pdf->useFooter(false);
-
-$pdf->SetTitle($lang->translation("Lista de fracasados por ".$_POST['cursos']) . " $year", true);
+$pdf->SetTitle($lang->translation("Lista de fracasados por ".$_POST['nota']) . " $year", true);
 $pdf->Fill();
 
 $grade = $_POST['grade'] ?? '';
 $men = $_POST['mensaje'] ?? '';
 $cl = $_POST['conlinia'] ?? '';
-    $materias = [];
-    $cursos = [];
+$materias = [];
+$cursos = [];
 $estudiantes = [];
-    $pdf->SetFillColor(89, 171, 227);
+$pdf->SetFillColor(89, 171, 227);
 $valor = $_POST['valor'] ?? '';
-    $nota = $_POST['nota'];
+$nota = $_POST['nota'];
 $orden = $_POST['cursos'] ?? '';
 $gs = $_POST['gradossep'] ?? '';
 $curso = $_POST['curso'] ?? '';
@@ -81,26 +76,26 @@ if (empty($curso))
    $cursos = DB::table('padres')->where([
           ['baja', ''],
           ['year', $year],
-          [$nota, '>', ''],
+          [$nota, '!=', ''],
           ['curso', '!=', ''],
           ['curso', 'NOT LIKE', '%AA-%']
-        ])->orderBy($orden)->get();
+        ])->orderBy($nota)->get();
    }
 else
    {
    $cursos = DB::table('padres')->where([
           ['baja', ''],
           ['year', $year],
-          [$nota, '>', ''],
+          [$nota, '!=', ''],
           ['curso', '!=', ''],
           ['curso', 'LIKE', '%'.$curso.'%'],
           ['curso', 'NOT LIKE', '%AA-%']
-        ])->orderBy($orden)->get();
+        ])->orderBy($nota)->get();
    }
     $c = 0;
     $g = '';
     foreach ($cursos as $curso) {
-  if ($curso->{"$nota"} < $valor)
+    if ($curso->{"$nota"} < $valor)
        {
        if ($c == 24 or $c == 0 or $g != $curso->grado and $gs == '2')
           {
@@ -108,7 +103,7 @@ else
           $g = $curso->grado;
           $pdf->AddPage('L');
           $pdf->SetFont('Arial', 'B', 15);
-          $pdf->Cell(0, 5, $lang->translation("Lista de fracasados por ".$_POST['cursos']). " $year", 0, 1, 'C');
+          $pdf->Cell(0, 5, $lang->translation("Lista de fracasados por ".$_POST['nota']). " $year", 0, 1, 'C');
           $pdf->Ln(5);
           $pdf->SetFont('Arial', '', 12);
           $da = date("m-d-Y");
@@ -140,8 +135,7 @@ else
     $pdf->Cell(15, 5, $_POST['sem2b'] ?? '' == 'Si' ? $curso->sem2 : '', $cl, 0, 'R');
     $pdf->Cell(15, 5, $_POST['profb'] ?? '' == 'Si' ? $curso->final : '', $cl, 0, 'R');
     $pdf->Cell(1, 5, '', 0, 1, 'R');
-  }
+    }
 }
 $pdf->SetFont('Arial', '', 10);
-
 $pdf->Output();
