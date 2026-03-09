@@ -1,12 +1,10 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Admin;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $lang = new Lang([
@@ -34,15 +32,10 @@ $lang = new Lang([
     ['Eliminar', 'Delete'],
     ['Estás seguro que quieres borrar el curso?', 'Are you sure you want to delete the course?'],
 ]);
-//$years = DB::table('year')->select("DISTINCT year")->get();
-$school = new School(Session::id());
 
-
-//$teachers = new Teacher;
-//$teachers = $teachers->all();
+$thisCourse = Admin::primaryAdmin();
 if (isset($_REQUEST['save'])) {
-//    $teacher = new Teacher($_POST['teacherId']);
-    $thisCourse = DB::table('colegio')->where('usuario', 'administrador')->update([
+    $thisCourse->update([
         'can_min' => $_POST['can_min'],
         'codc1' => $_POST['cdc1'],
         'codc2' => $_POST['cdc2'],
@@ -53,9 +46,10 @@ if (isset($_REQUEST['save'])) {
         'rec' => $_POST['rec'],
         'chk' => $_POST['chk'],
     ]);
+    $thisCourse->refresh();
 }
 
-$thisCourse = DB::table('colegio')->where('usuario', 'administrador')->first();
+
 
 ?>
 <!DOCTYPE html>
@@ -111,11 +105,11 @@ $thisCourse = DB::table('colegio')->where('usuario', 'administrador')->first();
 
                     <div class="row">
                         <div class="col-4">
-                                <label for="ava"><?= $lang->translation("Recibo") ?></label>
-                                <select class="form-control" name="rec" id="rec" required>
-                                    <option <?= $thisCourse->rec == '1' ? 'selected=""' : '' ?> value="1"><?= $lang->translation("Automático") ?></option>
-                                    <option <?= $thisCourse->rec == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Manual") ?></option>
-                                </select>
+                            <label for="ava"><?= $lang->translation("Recibo") ?></label>
+                            <select class="form-control" name="rec" id="rec" required>
+                                <option <?= $thisCourse->rec == '1' ? 'selected=""' : '' ?> value="1"><?= $lang->translation("Automático") ?></option>
+                                <option <?= $thisCourse->rec == '2' ? 'selected=""' : '' ?> value="2"><?= $lang->translation("Manual") ?></option>
+                            </select>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
