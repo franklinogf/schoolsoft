@@ -43,11 +43,9 @@ $lang = new Lang([
     ['Sem-1', 'Sem-1'],
     ['Sem-2', 'Sem-2'],
     ['Final', 'Final'],
-
 ]);
 
 $pdf = new PDF();
-
 $school = new School(Session::id());
 $grado = $_POST['grade'];
 $nota = $_POST['nota'];
@@ -57,14 +55,8 @@ list($nota,$tt) = explode("-",$_POST['nota']);
 $cl = $_POST['cl'];
 $notar = $_POST['notar'];
 
-
-//$year = $school->year();
 $year = $school->info('year2');
-//$pdf = new nPDF();
 $pdf = new PDF();
-
-
-
 
 
 if ($grado == 'all')
@@ -84,11 +76,11 @@ foreach ($allGrades as $grade)
         $pdf->AddPage('L');
         $pdf->Cell(0, 5, $lang->translation("Lista de rango").' / '.$grade." / $tt / $year", 0, 1, 'C');
         $pdf->Ln(5);
-        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetFont('Arial', '', 11);
         $pdf->Fill();
-        $pdf->Cell(10, 5, '', 1, 0, 'C', true);
-        $pdf->Cell(55, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
-        $pdf->Cell(45, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
+        $pdf->Cell(7, 5, '', 1, 0, 'C', true);
+        $pdf->Cell(40, 5, $lang->translation("Apellidos"), 1, 0, 'C', true);
+        $pdf->Cell(35, 5, $lang->translation("Nombre"), 1, 0, 'C', true);
         $cursos = DB::table('padres')->select("distinct curso, descripcion, credito")->where([
             ['year', $year],
             ['grado', $grade],
@@ -100,7 +92,7 @@ foreach ($allGrades as $grade)
         $c = 0;
         foreach ($cursos as $curso) 
                 {
-                $pdf->Cell(12, 5, substr($curso->curso, 0, 3), 1, 0, 'C', true);
+                $pdf->Cell(10, 5, substr($curso->curso, 0, 3), 1, 0, 'C', true);
                 $curs[] = $curso->curso;
                 $c = $c + 1;
                 }
@@ -121,11 +113,11 @@ foreach ($allGrades as $grade)
                        ['grado', $grade],
                        ['curso', $curs[$i]],
                        ])->orderBy('curso')->first();
-                    if ($divicion == 'N' and $stu->$nota > 0)
+                    if ($divicion == 'N' and is_numeric($stu->{"$nota"} ?? ''))
                        {
                        $a=$a+$stu->$nota;$b=$b+1;
                        }
-                    if ($divicion == 'C' and $stu->$nota > 0 and $stu->credito > 0)
+                    if ($divicion == 'C' and is_numeric($stu->{"$nota"} ?? '') and $stu->credito > 0)
                        {
                        $a=$a+round($stu->$nota*$stu->credito,0);$b=$b+$stu->credito;
                        }
@@ -136,10 +128,7 @@ foreach ($allGrades as $grade)
                      $updates = ['fin' => $n,];
                      DB::table('year')->where('mt', $student->mt)->update($updates);
                      }
-
             }
-//**********************
-
 
          $students = DB::table('year')->where([
                   ['year', $year],
@@ -149,10 +138,10 @@ foreach ($allGrades as $grade)
         foreach ($students as $student) 
                 {
                 $t=$t+1;
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->Cell(10, 4, $t, $cl, 0, 'R');
-                $pdf->Cell(55, 4, $student->apellidos, $cl, 0, 'L');
-                $pdf->Cell(45, 4, $student->nombre, $cl, 0, 'L');
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->Cell(7, 4, $t, $cl, 0, 'R');
+                $pdf->Cell(40, 4, $student->apellidos, $cl, 0, 'L');
+                $pdf->Cell(35, 4, $student->nombre, $cl, 0, 'L');
                 $pdf->SetFont('Arial', '', 9);
                 $a=0;$b=0;
                 for ($i = 0; $i < $c; $i++) 
@@ -163,15 +152,10 @@ foreach ($allGrades as $grade)
                        ['grado', $grade],
                        ['curso', $curs[$i]],
                        ])->orderBy('curso')->first();
-                    $pdf->Cell(12, 4, $stu->$nota, $cl, 0, 'C');
+                    $pdf->Cell(10, 4, $stu->{"$nota"} ?? '', $cl, 0, 'C');
                     }
                     $pdf->Cell(12, 4, number_format($student->fin,$notar), $cl, 1, 'R');
                 }
-
-
-
-//**********************
          }
-
 
 $pdf->Output();
