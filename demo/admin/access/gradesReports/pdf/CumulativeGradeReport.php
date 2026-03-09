@@ -1,121 +1,159 @@
 <?php
-require_once __DIR__ . '/../../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\Controllers\School;
+use Classes\PDF;
+use Classes\Lang;
+use Classes\Session;
 use Classes\Controllers\Student;
 use Classes\Controllers\Teacher;
 use Classes\DataBase\DB;
-use Classes\Lang;
-use Classes\PDF;
-use Classes\Session;
 use Classes\Util;
 
 Session::is_logged();
 
-$lang = new Lang([['Informe acumulativo de notas', 'Cumulative grade report'],
-  ["Maestro(a):", "Teacher:"],
-  ["Grado:", "Grade:"],
-  ["Matricula:", "Tuition"],
-  ["ENTREGADO", "DELIVERED"],
-  ['Cuenta', 'Account'],
-  ['Ningún documento entregado', 'No document delivered'],
-  ['Apellidos', 'Surnames'],
-  ['Nombre', 'Name'],
-  ['Total de estudiantes', 'Total students'],
-  ['Fecha', 'Date'],
-  ['Documentos sin entregar', 'Undelivered documents'],
-  ['Masculinos', 'Males'],
-  ['Femeninas', 'Females'],
+$lang = new Lang([
+    ['Informe acumulativo de notas', 'Cumulative grade report'],
+    ["Maestro(a):", "Teacher:"],
+    ["Grado:", "Grade:"],
+    ["Matricula:", "Tuition"],
+    ["ENTREGADO", "DELIVERED"],
+    ['Cuenta', 'Account'],
+    ['Ning&#65533;n documento entregado', 'No document delivered'],
+    ['Apellidos', 'Surnames'],
+    ['Nombre', 'Name'],
+    ['Total de estudiantes', 'Total students'],
+    ['Fecha', 'Date'],
+    ['Documentos sin entregar', 'Undelivered documents'],
+    ['Masculinos', 'Males'],
+    ['Femeninas', 'Females'],
 ]);
+
+class nPDF extends PDF
+{
+    function header()
+    {
+        global $lang;
+        global $year;
+        parent::header();
+    $this->SetFont('Arial', 'B', 13);
+    $this->Cell(0, 5, utf8_decode('INFORME ACUMULATIVO DE NOTAS'), 0, 1, 'C');
+    $this->SetFont('Arial', 'B', 11);
+
+    $this->Ln(3);
+  }
+
+  public function footer()
+  {
+    $this->SetXY(10, -5);
+    $this->SetMargins(10, -5);
+    $this->SetFont('Arial', 'B', 10);
+    $this->Cell(0, 5, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la línea correspondiente.'), 0, 0, 'C');
+  }
+}
+function LN($valor)
+{
+  if ($valor == 'A') {
+    return 4.00;
+  } elseif ($valor == 'B') {
+    return 3.00;
+  } elseif ($valor == 'C') {
+    return 2.00;
+  } elseif ($valor == 'D') {
+    return 1.00;
+  } elseif ($valor == 'F') {
+    return 0.00;
+  }
+}
 
 function NL($valor)
 {
-
+  global $colegio;
   if ($valor === '') {
     return '';
-  } else if ($valor >= 90 && $valor <= 100) {
+  } else if ($valor >= 90 && $valor < 101) {
     return 'A';
-  } else if ($valor >= 80 && $valor <= 89) {
+  } else if ($valor >= 80 && $valor < 90) {
     return 'B';
-  } else if ($valor >= 70 && $valor <= 79) {
+  } else if ($valor >= 70 && $valor < 80) {
     return 'C';
-  } else if ($valor >= 60 && $valor <= 69) {
+  } else if ($valor >= 60 && $valor < 70) {
     return 'D';
-  } elseif ($valor > 0 and $valor <= 59) {
+  } elseif ($valor > 0 and $valor < 60) {
     return 'F';
   }
 }
 
 $school = new School(Session::id());
+$year = $school->info('year2');
 $teacherClass = new Teacher();
 $studentClass = new Student();
-
-$year = $school->info('year2');
 $allGrades = $school->allGrades();
-$pdf = new PDF();
-$pdf->useFooter(false);
 
-//$pdf->Footer = true;
-//$pdf->useFooter(false);
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
 
-$pdf->SetTitle($lang->translation("Informe acumulativo de notas") . " $year", true);
+
+$pdf = new nPDF();
+$pdf->SetTitle($lang->translation("INFORME ACUMULATIVO DE NOTAS") . " $year", true);
 $pdf->Fill();
 
-$docs = $_POST['option'] ?? '';
-$doc1 = DB::table('docu_entregados')->where([['codigo', $docs],
-])->orderBy('codigo')->first();
-
+$pdf->SetAutoPageBreak(false);
+$pdf->SetDrawColor(0);
+$aa = 0;
 foreach ($allGrades as $grade) {
   $materias = [];
   $cursos = [];
-  $cursos2 = [];
   $estudiantes = [];
-  $promedios = [];
-  $pdf->SetFillColor(89, 171, 227);
-  $cursos = DB::table('padres')->select('distinct curso, descripcion')->where([
-    ['year', $year],
-    ['grado', $grade],
-    ['curso', '!=', ''],
-    ['curso', 'NOT LIKE', '%AA-%'],
-  ])->orderBy('orden')->get();
+    $mat = DB::table('padres')->select('distinct curso, descripcion')->where([
+        ['year', $year],
+        ['grado', $grade],
+        ['curso', '!=', ''],
+        ['curso', 'NOT LIKE', '%AA-%']
+    ])->orderBy('orden')->get();
+    foreach ($mat as $mate) {
 
-  foreach ($cursos as $curso) {
-    if ($curso->descripcion == 'Espanol') {
+    if ($mate->descripcion == 'Espanol') {
       $materias[] = 'ESPAÑOL';
     } else {
-      $materias[] = $curso->descripcion;
+      $materias[] = $mate->descripcion;
     }
-    $cursos2[] = $curso->curso;
+    $cursos[] = $mate->curso;
   }
 
-  $teacher = $teacherClass->findByGrade($grade);
-  $estus = $studentClass->findByGrade($grade);
-  $genderCount = ['M' => 0, 'F' => 0, 'T' => 0];
-  $pdf->useFooter(false);
-  $pdf->AddPage('L', 'Legal');
-  $pdf->useFooter(false);
-  $pdf->SetFont('Arial', 'B', 15);
-  $pdf->Cell(0, 5, $lang->translation("Informe acumulativo de notas") . " $year", 0, 1, 'C');
-  $pdf->Ln(5);
-  $pdf->SetFont('Arial', '', 12);
-  $pdf->splitCells($teacher ? $lang->translation("Maestro(a):") . " $teacher->nombre $teacher->apellidos" : '', $lang->translation("Grado:") . " $grade");
+  $promedios = array();
+  $result2 = DB::table('year')->select('distinct nombre,apellidos,ss,genero')->where([
+        ['year', $year],
+        ['grado', $grade],
+        ['codigobaja', 0]
+    ])->orderBy('apellidos')->get();
+
   $f = 0;
   $m = 0;
-  foreach ($estus as $estu) {
-    $estudiantes[] = $estu;
-    $promedios[$estu->ss] = [
-      'sem1' => ['total' => 0, 'cantidad' => 0],
-      'sem2' => ['total' => 0, 'cantidad' => 0],
-    ];
-    if ($estu->genero == 1 or $estu->genero == 'F') {
+  foreach ($result2 as $row) {
+    $estudiantes[] = $row;
+    if ($row->genero == 1) {
       $f = $f + 1;
     } else {
       $m = $m + 1;
     }
   }
-  $students = $studentClass->findByGrade($grade);
+  $profe = $teacherClass->findByGrade($grade);
+  $estus = $studentClass->findByGrade($grade);
 
-  $pdf->Cell(20, 5, $lang->translation("Matricula:"));
+  $pdf->SetFont('Times', '', 10);
+  $pdf->Fill();
+  $pdf->AddPage('L', 'Legal');
+  $pdf->Cell(27, 5, 'Maestro/a:');
+  $nom = $profe->nombre ?? '';
+  $ape = $profe->apellidos ?? '';
+  $pdf->Cell(100, 5, "$nom $ape", 'B');
+  $pdf->Cell(0, 5, 'Grado: ' . $grade, 0, 0, 'C');
+  $pdf->Cell(0, 5, utf8_encode("Año 20{$year[0]}{$year[1]} - 20{$year[3]}{$year[4]}"), 0, 1, 'R');
+  $pdf->Ln(2);
+
+  $pdf->Cell(20, 5, 'Matricula:');
   $pdf->Cell(37, 5, $f + $m, 'B', 1, 'C');
   $pdf->Ln(3);
   $pdf->Cell(12, 5, 'Fem.');
@@ -123,20 +161,24 @@ foreach ($allGrades as $grade) {
   $pdf->Cell(10);
   $pdf->Cell(12, 5, 'Masc.');
   $pdf->Cell(10, 5, $m, 'B', 1, 'C');
-  $pdf->Ln(-13);
-  $y = $pdf->GetY();
-  $pdf->SetFont('Arial', '', 8);
-  $pdf->Ln(15);
-  $pdf->Cell(60, 5, 'NOMBRE DE ESTUDIANTE', 1, 1, 'C', true);
+  $pdf->Ln(-14);
 
+  $pdf->SetFont('Times', '', 10);
+  $y = $pdf->GetY();
+  $pdf->Cell(60, 5, '', 0, 1);
+  $pdf->Cell(60, 10, '', 0, 1);
+  $pdf->Cell(60, 5, 'NOMBRE DE ESTUDIANTE', 1, 1, 'C', true);
+  $pdf->SetFont('Times', '', 8);
   for ($i = 0; $i < sizeof($estudiantes); $i++) {
     $pdf->Cell(6, 5, $i + 1, 1, 0, 'R');
-    $pdf->Cell(54, 5, "{$estudiantes[$i]->nombre} {$estudiantes[$i]->apellidos}", 1, 1);
+    $pdf->Cell(54, 5, "{$estudiantes[$i]->apellidos} {$estudiantes[$i]->nombre}", 1, 1);
+        $promedios[$estudiantes[$i]->ss]['sem1']['total'] = 0;
+        $promedios[$estudiantes[$i]->ss]['sem2']['total'] = 0;
+        $promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] = 0;
+        $promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] = 0;
   }
   $largo = 28;
-
-  $pdf->SetFont('Arial', 'B', 8);
-  $pdf->SetFont('Arial', '', 10);
+  $pdf->SetFont('Times', '', 9);
 
   for ($a = 0; $a < sizeof($materias); $a++) {
     $pdf->SetXY(70 + ($largo * $a), $y);
@@ -154,70 +196,72 @@ foreach ($allGrades as $grade) {
     $pdf->Cell(($largo / 2) / 2, 5, 'N', 1, 1, 'C', true);
 
     for ($i = 0; $i < sizeof($estudiantes); $i++) {
-      $curso = $cursos2[$a];
+      $curso = $cursos[$a];
       if (substr($grade, 0, 2) >= 7 && $cursos[$a] == 'SOC') {
-        //                $curso = 'HIS';
+        $curso = 'HIS';
       }
       if (substr($grade, 0, 2) >= 8 && $cursos[$a] == 'MAT') {
-        //                $curso = 'ALG';
+        $curso = 'ALG';
       }
       if (substr($grade, 0, 2) == 7 && $cursos[$a] == 'MAT') {
-        //                $curso = 'PAL';
+        $curso = 'PAL';
       }
-
-      $ss = $estudiantes[$i]->ss;
-      $padres = DB::table('padres')->where([['curso', $curso],
-        ['ss', $ss],
-        ['grado', $grade],
-      ])->orderBy('orden')->first();
-
+      $padres = DB::table('padres')->where([
+          ['curso', 'like', "$curso%"],
+          ['ss', $estudiantes[$i]->ss],
+          ['grado', $grade]
+       ])->orderBy('orden')->first();
       $div1 = 0;
       $div2 = 0;
-      $div11 = 0;
-      $div22 = 0;
-      if (substr($grade, 0, 2) <= 3 && substr($padres->curso, 0, 2) ?? '' == 'EF') {
+      $s1 = 0;
+      $s2 = 0;
+      if (substr($padres->grado ?? '', 0, 2) <= 3 && substr($padres->curso ?? '', 0, 2) == 'EF') {
         $pdf->Cell(($largo / 2) / 2, 5, $padres->nota2, 1, 0, 'C');
         $pdf->Cell(($largo / 2) / 2, 5, '', 1, 0, 'C');
         $pdf->Cell(($largo / 2) / 2, 5, $padres->nota4, 1, 0, 'C');
         $pdf->Cell(($largo / 2) / 2, 5, '', 1, 1, 'C');
       } else {
-        if ($padres->nota1 ?? '' != '') {
+        if ($padres->nota1 ?? '' > 0 and $padres->nota1 ?? '' < 150 and is_numeric($padres->nota1 ?? '')) {
           $div1++;
-          $div11 = $div11 + $padres->nota1;
+          $s1 = $s1 + $padres->nota1;
         }
-        if ($padres->nota2 ?? '' != '') {
+        if ($padres->nota2 ?? '' > 0 and $padres->nota2 ?? '' < 150 and is_numeric($padres->nota2 ?? '')) {
           $div1++;
-          $div11 = $div11 + $padres->nota2;
+          $s1 = $s1 + $padres->nota2;
         }
-        if ($padres->nota3 ?? '' != '') {
+        if ($padres->nota3 ?? '' > 0 and $padres->nota3 ?? '' < 150 and is_numeric($padres->nota3 ?? '')) {
           $div2++;
-          $div22 = $div22 + $padres->nota3;
+          $s2 = $s2 + $padres->nota3;
         }
-        if ($padres->nota4 ?? '' != '') {
+        if ($padres->nota4 ?? '' > 0 and $padres->nota4 ?? '' < 150 and is_numeric($padres->nota4 ?? '')) {
           $div2++;
-          $div22 = $div22 + $padres->nota4;
+          $s2 = $s2 + $padres->nota4;
         }
-        //                $sem1 = ($div1 > 0) ? ($padres->nota1 + $padres->nota2) / $div1 : '';
-        $sem1 = ($div1 > 0) ? $div11 / $div1 : '';
-        //                $sem2 = ($div2 > 0) ? ($padres->nota3 + $padres->nota4) / $div2 : '';
-        $sem2 = ($div2 > 0) ? $div22 / $div2 : '';
+        $sem1 = ($div1 > 0) ? $s1 / $div1 : '';
+        $sem2 = ($div2 > 0) ? $s2 / $div2 : '';
 
         $pdf->Cell(($largo / 2) / 2, 5, ($sem1 !== '') ? number_format((float) $sem1, 0) : '', 1, 0, 'C');
-        $pdf->Cell(($largo / 2) / 2, 5, ($sem1 !== '') ? NL(round($sem1, 0)) : '', 1, 0, 'C');
+        $pdf->Cell(($largo / 2) / 2, 5, ($sem1 > 0) ? NL(round($sem1, 0)) : '', 1, 0, 'C');
         $pdf->Cell(($largo / 2) / 2, 5, ($sem2 !== '') ? number_format((float) $sem2, 0) : '', 1, 0, 'C');
-        $pdf->Cell(($largo / 2) / 2, 5, ($sem2 !== '') ? NL(round($sem2, 0)) : '', 1, 1, 'C');
+        $pdf->Cell(($largo / 2) / 2, 5, ($sem2 > 0) ? NL(round($sem2, 0)) : '', 1, 1, 'C');
 
-        $promedios[$estudiantes[$i]->ss]['sem1']['total'] += intval($sem1);
-        if ($sem1 !== '') {
+//        if ($sem1 !== '' and is_numeric($sem1)) {
+        if ($sem1 > 0 and is_numeric($sem1)) {
+          $promedios[$estudiantes[$i]->ss]['sem1']['total'] += $sem1;
+//          $promedios[$estudiantes[$i]->ss]['sem1']['total'] += number_format((float) $sem1, 0);
           $promedios[$estudiantes[$i]->ss]['sem1']['cantidad']++;
         }
-        $promedios[$estudiantes[$i]->ss]['sem2']['total'] += intval($sem2);
-        if ($sem2 !== '') {
+        if ($sem2 > 0 and is_numeric($sem2)) {
+//          $promedios[$estudiantes[$i]->ss]['sem2']['total'] += number_format((float) $sem2, 0);
+          $promedios[$estudiantes[$i]->ss]['sem2']['total'] += $sem2;
           $promedios[$estudiantes[$i]->ss]['sem2']['cantidad']++;
         }
       }
+
     }
   }
+  // echo "<pre>";
+  // var_dump($promedios);
 
   $pdf->SetFillColor(237, 125, 49);
   $pdf->SetXY(70 + ($largo * sizeof($materias)), $y);
@@ -228,28 +272,26 @@ foreach ($allGrades as $grade) {
   $pdf->Cell(10, 5, 'PGF', 1, 0, 'C', true);
   $pdf->Cell(10, 5, 'NGF', 1, 1, 'C', true);
 
+
   for ($i = 0; $i < sizeof($estudiantes); $i++) {
-    $prom1 = ($promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] ?? 0 > 0) ? $promedios[$estudiantes[$i]->ss]['sem1']['total'] / $promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] : '';
-    $prom2 = ($promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] ?? 0 > 0) ? $promedios[$estudiantes[$i]->ss]['sem2']['total'] / $promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] : '';
+//    $prom1 = ($promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] > 0) ? $promedios[$estudiantes[$i]->ss]['sem1']['total'] / $promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] : '';
+    $prom1 = 0;
+    $prom2 = 0;
     $div = 0;
-    $div2 = 0;
 
-    if ($prom1 > 0) {
+    if ($promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] > 0) {
+      $prom1 = ($promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] > 0) ? $promedios[$estudiantes[$i]->ss]['sem1']['total'] / $promedios[$estudiantes[$i]->ss]['sem1']['cantidad'] : '';
       $div++;
-      $div2 = $div2 + $prom1;
     }
-    if ($prom2 > 0) {
+    if ($promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] > 0) {
+      $prom2 = ($promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] > 0) ? $promedios[$estudiantes[$i]->ss]['sem2']['total'] / $promedios[$estudiantes[$i]->ss]['sem2']['cantidad'] : '';
       $div++;
-      $div2 = $div2 + $prom2;
     }
 
-    //        $final = ($div > 0) ? number_format((float) ($prom1 + $prom2) / $div, 0) : '';
-    $final = ($div > 0) ? number_format((float) $div2 / $div, 0) : '';
-    //        $pdf->Cell(10, 5, number_format((float) $final, 0), 1, 0, 'C');
-    $pdf->Cell(10, 5, ($final > 0) ?  number_format((float) $final, 0) : '', 1, 0, 'C');
-    $pdf->Cell(10, 5, NL($final), 1, 1, 'C');
+    $final = ($div > 0) ? (float) ($prom1 + $prom2) / $div : '';
+    $pdf->Cell(10, 5, ($div > 0) ? round($final) : '', 1, 0, 'C');
+    $pdf->Cell(10, 5, ($div > 0) ? NL(round($final)) : '', 1, 1, 'C');
   }
-
   $pdf->Ln(3);
   $pdf->SetX(10);
   $pdf->SetLeftMargin(10);
@@ -262,19 +304,8 @@ foreach ($allGrades as $grade) {
   $pdf->Cell(45);
   $pdf->Cell(50, 5, '', 'B', 1);
   $pdf->Cell(80);
-  list($y1, $y2) = explode("-", $year);
-
-  $pdf->Cell(50, 5, "Diciembre 20{$y1}", 0, 0, 'C');
-  //  $pdf->Cell(50, 5, "Diciembre 20{$cole->year[0]}{$cole->year[1]}", 0, 0, 'C');
+  $pdf->Cell(50, 5, "Diciembre 20{$year[0]}{$year[1]}", 0, 0, 'C');
   $pdf->Cell(45);
-  $pdf->Cell(50, 5, "Mayo 20{$y2}", 0, 1, 'C');
-  //  $pdf->Cell(50, 5, "Mayo 20{$cole->year[3]}{$cole->year[4]}", 0, 1, 'C');
-
-  $pdf->SetXY(10, -5);
-  $pdf->SetMargins(10, -10);
-  $pdf->SetFont('Arial', 'B', 9);
-  $pdf->Cell(0, 4, utf8_encode('**La Persona que coteje el documento, escribe y firma su nombre sobre la línea correspondiente.'), 0, 0, 'C');
-
+  $pdf->Cell(50, 5, "Mayo 20{$year[3]}{$year[4]}", 0, 1, 'C');
 }
-
 $pdf->Output();
