@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\Scopes\YearScope;
 use Classes\Route;
 use Classes\Session;
+use Classes\DataBase\DB;
 
 Session::is_logged();
 
@@ -74,11 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             ];
         })->toArray();
 
-
-
         foreach ($debtData as $debt) {
             $totalPayment = $debt['debts'] - $debt['payments'];
             if ($totalPayment > 0) {
+               $ok='';
+               if ($debt['code']=='705'){$ok='OK';}
+
                 $data = [
                     'id' => $debt['id'],
                     'nombre' => $debt['full_name'],
@@ -87,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'year' => $year,
                     'codigo' => $debt['code'],
                     'ss' => $debt['ss'],
+                    'pago_t' => $ok,
                     'grado' => $debt['grade'],
                     'fecha_p' => $paymentDate,
                     'pago' => $totalPayment,
@@ -100,7 +103,17 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'hora' => $time,
                     'fecha2' => $date
                 ];
-
+                if ($debt['code']=='705')
+                   {
+                   $thisCourse2 = DB::table('pagos')->where([
+                      ['ss', $debt['ss']],
+                      ['fecha_d', $debt['debt_date']],
+                      ['codigo', $debt['code']],
+                      ['year', $year]
+                   ])->update([
+                      'pago_t' => 'OK'
+                   ]);
+                   }
                 Payment::query()->create($data);
             }
         }
@@ -132,6 +145,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
             if ($totalPayment > 0) {
 
+               $ok='';
+               if ($debt['code']=='705'){$ok='OK';}
                 $data = [
                     'id' => $debt['id'],
                     'nombre' => $debt['full_name'],
@@ -139,6 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'fecha_d' => $debt['debt_date'],
                     'year' => $year,
                     'codigo' => $debt['code'],
+                    'pago_t' => $ok,
                     'ss' => $debt['ss'],
                     'grado' => $debt['grade'],
                     'fecha_p' => $paymentDate,
@@ -153,6 +169,18 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                     'hora' => $time,
                     'fecha2' => $date
                 ];
+                if ($debt['code']=='705')
+                   {
+                   $thisCourse2 = DB::table('pagos')->where([
+                      ['ss', $debt['ss']],
+                      ['fecha_d', $debt['debt_date']],
+                      ['codigo', $debt['code']],
+                      ['year', $year]
+                   ])->update([
+                      'pago_t' => 'OK'
+                   ]);
+                   }
+
                 Payment::query()->create($data);
             }
         }
