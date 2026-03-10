@@ -173,7 +173,7 @@ $options = [
             [
                 'name' => __("Importar"),
                 'desc' => __(''),
-                'link' => '#',
+                'link' => 'import/index.php',
             ],
             [
                 'name' => __("Documentos"),
