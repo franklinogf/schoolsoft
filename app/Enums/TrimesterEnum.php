@@ -138,4 +138,32 @@ enum TrimesterEnum: string
             $this->generateColumn(__('Nota'), 'nota' . $colNumber, true, 'totalGrade'),
         ];
     }
+
+    public function prev()
+    {
+        return match ($this) {
+            self::FIRST => null,
+            self::SECOND => self::FIRST,
+            self::THIRD => self::SECOND,
+            self::FOURTH => self::THIRD,
+            self::SUMMER => self::FOURTH,
+        };
+    }
+    /**
+     * @return array{total: string, bonus: string|null, tpa: string, tdp: string, tdia: string, tlib: string, pcor: string}
+     */
+    public function getTableColumns(): array
+    {
+        $number = $this->getNumber();
+
+        return [
+            'total' => "nota{$number}",
+            'bonus' => $number === 5 ? null : "not{$number}0",
+            'tpa' => "tpa{$number}",
+            'tdp' => "por{$number}",
+            'tdia' => "td{$number}",
+            'tlib' => "tl{$number}",
+            'pcor' => "pc{$number}",
+        ];
+    }
 }

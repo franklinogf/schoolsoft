@@ -132,15 +132,13 @@ function findValueFor($table, $student)
         ['year', $year]
     ])->first();
 }
-function findTotal(string $type, Classes $grade)
+function findTotal(TrimesterEnum $trimester, string $type, Classes $grade)
 {
-    global $_info;
-    global $_report;
     $tpaTotal = 0;
-    global $_trimesterNumber;
-    if ($_trimesterNumber === 2 || $_trimesterNumber === 4) {
-        $lastTrimester = $_trimesterNumber - 1;
-        $t = $_info[$_report]["Trimestre-$lastTrimester"]['values'][$type];
+    $trimesterNumber = $trimester->getNumber();
+    if ($trimesterNumber === 2 || $trimesterNumber === 4) {
+        $t = $trimester->prev()->getTableColumns()[$type];
+        if ($t === null) return 0;
         $tpaTotal += (int) $grade->{$t};
     }
     return $tpaTotal;
@@ -359,8 +357,8 @@ $canEdit = true; //Carbon::now()->betweenIncluded($school->{$_dates[0]}, $school
                                         }
                                     ?>
                                         <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)): ?>
-                                            <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal('tpa', $grade) ?>">
-                                            <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal('tdp', $grade) ?>">
+                                            <input type="hidden" class="_tpaTotal" name="tpaTotal" id="tpaTotal" value="<?= findTotal($_trimester, 'tpa', $grade) ?>">
+                                            <input type="hidden" class="_tdpTotal" name="tdpTotal" id="tdpTotal" value="<?= findTotal($_trimester, 'tdp', $grade) ?>">
                                         <?php endif ?>
                                         <input type="hidden" class="_tdia" value="<?= $tdia ?>">
                                         <input type="hidden" class="_tlib" value="<?= $tlib ?>">
