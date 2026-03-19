@@ -35,7 +35,7 @@ $lang = new Lang([
     ['Mensaje', 'Message'],
     ['Comentario', 'Comment'],
     ['Selección', 'Selection'],
-    ['Año', 'Year'],
+    ['Todo', 'All'],
 
 ]);
 $school = new School(Session::id());
@@ -58,7 +58,15 @@ if (isset($_POST['Submit1'])) {
             'sem2' => '',
         ]);
     }
+
+    if ($sem == 'C') {
+    DB::table('acumulativa')->where('year', $year)->delete();
+    }
+
 }
+
+
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -127,6 +135,7 @@ if (isset($_POST['Submit1'])) {
                             <option selected=""><?= $lang->translation('Selección') ?></option>
                             <option value="A">Sem-1</option>
                             <option value="B">Sem-2</option>
+                            <option value="C"><?= $lang->translation('Todo') ?></option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
