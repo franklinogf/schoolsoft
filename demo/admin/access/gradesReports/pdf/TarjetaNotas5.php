@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../../app.php';
+require_once '../../../../app.php';
 
 use Classes\PDF;
 use Classes\Lang;
@@ -66,6 +66,7 @@ $sem1 = $_POST['sem1'] ?? '';
 $sem2 = $_POST['sem2'] ?? '';
 $prof = $_POST['prof'] ?? '';
 $ccr = $_POST['cr'] ?? '';
+$asis = $_POST['asis'] ?? '';
 
 $mensaj = DB::table('codigos')->where([
     ['codigo', $men],
@@ -148,9 +149,10 @@ foreach ($students as $estu) {
     ])->orderBy('id')->first();
 
     $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Ln(-5);
     $pdf->Cell(80);
     $pdf->Cell(30, 3, 'TARJETA DE NOTAS', 0, 0, 'C');
-    $pdf->Ln(8);
+    $pdf->Ln(5);
     $pdf->SetFont('Arial', '', 11);
 
     //     $pdf->SetFillColor(240);
@@ -165,7 +167,8 @@ foreach ($students as $estu) {
     $pdf->Cell(24, 5, date("m-d-Y"), 0, 0, 'R');
     $pdf->Cell(10, 5, '', 0, 0, 'L');
     $nom = $teacher->nombre ?? '';
-    $ape = utf8_encode($teacher->apellidos ?? '');
+//    $ape = utf8_encode($teacher->apellidos ?? '');
+    $ape = $teacher->apellidos ?? '';
 
     $pdf->Cell(22, 5, '', 0, 0, '');
     $pdf->Cell(52, 5, $msh, 0, 0, '');
@@ -374,17 +377,17 @@ foreach ($students as $estu) {
 
         $pdf->Cell(42, 5, $comen->comentario ?? '', 1, 1, 'L');
 
-        $pdf->Cell(50, 5, '     ' . $curso->profesor, 1, 0);
-        $pdf->Cell(16, 5, '', 1, 0, 'C');
-        $pdf->Cell(16, 5, '', 1, 0, 'C');
-        $pdf->Cell(10, 5, '', 1, 0, 'C');
+        $pdf->Cell(50, 4, '     ' . $curso->profesor, 1, 0);
+        $pdf->Cell(16, 4, '', 1, 0, 'C');
+        $pdf->Cell(16, 4, '', 1, 0, 'C');
+        $pdf->Cell(10, 4, '', 1, 0, 'C');
 
-        $pdf->Cell(16, 5, '', 1, 0, 'C');
-        $pdf->Cell(16, 5, '', 1, 0, 'C');
-        $pdf->Cell(10, 5, '', 1, 0, 'R');
-        $pdf->Cell(9, 5, '', 1, 0, 'R');
-        $pdf->Cell(8, 5, '', 1, 0, 'R');
-        $pdf->Cell(42, 5, '', 1, 1, 'L');
+        $pdf->Cell(16, 4, '', 1, 0, 'C');
+        $pdf->Cell(16, 4, '', 1, 0, 'C');
+        $pdf->Cell(10, 4, '', 1, 0, 'R');
+        $pdf->Cell(9, 4, '', 1, 0, 'R');
+        $pdf->Cell(8, 4, '', 1, 0, 'R');
+        $pdf->Cell(42, 4, '', 1, 1, 'L');
     }
 
     $pdf->Cell(50, 5, $pq, 1, 0, 'R');
@@ -640,13 +643,17 @@ foreach ($students as $estu) {
         $pdf->SetY(-47);
         $pdf->Cell(10, 3, '', 0, 0, 'L');
         if (empty($padres->madre)) {
-            $pdf->Cell(50, 3, $padres->padre, 0, 1, 'L');
+            $pdf->Cell(50, 3, $padres->padre ?? '', 0, 1, 'L');
             $pdf->Cell(10, 3, '', 0, 0, 'L');
-            $pdf->Cell(50, 3, $padres->dir2, 0, 1, 'L');
+            $pdf->Cell(50, 3, $padres->dir2 ?? '', 0, 1, 'L');
             $pdf->Cell(10, 3, '', 0, 0, 'L');
-            $pdf->Cell(50, 3, $padres->dir4, 0, 1, 'L');
+            $pdf->Cell(50, 3, $padres->dir4 ?? '', 0, 1, 'L');
             $pdf->Cell(10, 3, '', 0, 0, 'L');
-            $pdf->Cell(50, 3, $padres->pueblo2 . ' ' . $padres->est2 . ', ' . $padres->zip2, 0, 0, 'L');
+//            $pdf->Cell(50, 3, $padres->pueblo2 ?? '' . ' ' . $padres->est2 ?? '' . ', ' . $padres->zip2 ?? '', 0, 0, 'L');
+            $pueblo2 = $padres->pueblo2 ?? '';
+            $est2 = $padres->est2 ?? ''; 
+            $zip2 = $padres->zip2 ?? '';
+            $pdf->Cell(50, 3, $pueblo2 . ' ' . $est2 . ', ' . $zip2, 0, 0, 'L');
         } else {
             $pdf->Cell(50, 3, $padres->madre, 0, 1, 'L');
             $pdf->Cell(10, 3, '', 0, 0, 'L');
@@ -664,9 +671,9 @@ foreach ($students as $estu) {
     }
 
 
+if ($asis=='Si'){
 
-
-
+    
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(80);
@@ -680,10 +687,7 @@ foreach ($students as $estu) {
     $pdf->Cell(35, 5, 'FECHA', 1, 0, 'C', true);
     $pdf->Cell(35, 5, 'CURSO', 1, 0, 'C', true);
     $pdf->Cell(100, 5, 'DESCRIPCION', 1, 1, 'C', true);
-    $pdf->SetFont('Arial', '', 9);
-    //    $dat2 = "select * from asispp where ss = '$row1[0]' AND year='$row0[116]'";
-    //    $tab2 = mysql_query($dat2, $con) or die ("problema con query 7") ;
-    //    $result7=mysql_query($dat2);
+    $pdf->SetFont('Arial', '', 8);
 
     $result7 = DB::table('asispp')->where([
         ['ss', $curso->ss],
@@ -692,8 +696,8 @@ foreach ($students as $estu) {
 
 
     $a = 0;
-    //while ($row8=mysql_fetch_array($result7))
-    //      {
+    $li2=0;
+    $li2 = 0;
     foreach ($result7 as $row8) {
         $a = $a + 1;
         if ($row8->codigo == 1) {
@@ -729,7 +733,7 @@ foreach ($students as $estu) {
             $li2 = $li2 + 1;
         }
         if ($row8->codigo == 16) {
-            $cod = 'Ausencia-problema de transportación';
+            $cod = 'Ausencia-problema de transportaci&#65533;n';
             $li2 = $li2 + 1;
         }
         if ($row8->codigo == 17) {
@@ -740,10 +744,10 @@ foreach ($students as $estu) {
             $cod = 'Tardanza-sin excusa del hogar';
         }
         if ($row8->codigo == 9) {
-            $cod = 'Tardanza-situación en el hogar';
+            $cod = 'Tardanza-situaci&#65533;n en el hogar';
         }
         if ($row8->codigo == 10) {
-            $cod = 'Tardanza-problema en la transportación';
+            $cod = 'Tardanza-problema en la transportaci&#65533;n';
         }
         if ($row8->codigo == 11) {
             $cod = 'Tardanza-enfermedad';
@@ -770,14 +774,15 @@ foreach ($students as $estu) {
             $cod = 'Fue recogido antes de la salida - cita';
         }
         if ($row8->codigo == 22) {
-            $cod = 'Suspensión';
+            $cod = 'Suspensi&#65533;n';
         }
 
-        $pdf->Cell(10, 4, $a, 1, 0, 'R');
-        $pdf->Cell(35, 4, $row8->fecha, 1, 0, 'C');
-        $pdf->Cell(35, 4, $row8->curso, 1, 0, 'C');
-        $pdf->Cell(100, 4, utf8_encode($cod), 1, 1, 'L');
+        $pdf->Cell(10, 3.5, $a, 1, 0, 'R');
+        $pdf->Cell(35, 3.5, $row8->fecha, 1, 0, 'C');
+        $pdf->Cell(35, 3.5, $row8->curso, 1, 0, 'C');
+        $pdf->Cell(100, 3.5, utf8_encode($cod), 1, 1, 'L');
     }
+  }
 }
 
 $pdf->Output();
