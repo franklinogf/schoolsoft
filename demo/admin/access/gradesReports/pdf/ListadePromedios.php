@@ -16,10 +16,10 @@ $lang = new Lang([
     ["Maestro(a)", "Teacher"],
     ["Grado:", "Grade:"],
     ["Curso", "Course"],
-   ["Descripción", "Description"],
+    ["Descripción", "Description"],
     ['Primer Semestre', 'First semester'],
     ['Segundo Semestre', 'Second semester'],
-    ['D&#65533;as', 'Days'],
+    ['Días', 'Days'],
     ['PROMEDIO:', 'AVERAGE:'],
     ['Nombre', 'Name'],
     ['Total de estudiantes', 'Total students'],
@@ -110,8 +110,10 @@ foreach ($students as $estu) {
     $pdf->Cell(15, 5, $lang->translation("T-4"), 1, 0, 'C');
     $pdf->Cell(15, 5, $lang->translation("S-2"), 1, 0, 'C');
     $pdf->Cell(15, 5, $lang->translation("N-F"), 1, 1, 'C');
-
+    $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(70, 5, $estu->nombre.' '.$estu->apellidos, 'LR', 0, 'L');
+    $pdf->SetFont('Arial', '', 12);
+
     $pdf->Cell(17, 5, '', 'LR', 0, 'C');
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
     $pdf->Cell(15, 5, '', 'LR', 0, 'C');
@@ -149,37 +151,37 @@ foreach ($students as $estu) {
     foreach ($cursos as $curso) {
     if ($pro==1 and $curso->credito > 0)
        {
-       if ($curso->nota1 > 0)
+       if (is_numeric($curso->nota1))
           {
           $cr[1] += $curso->credito;
           $nf[1] += round($curso->nota1 * $curso->credito);
           }
-       if ($curso->nota2 > 0)
+       if (is_numeric($curso->nota2))
           {
           $cr[2] += $curso->credito;
           $nf[2] += round($curso->nota2 * $curso->credito);
           }
-       if ($curso->sem1 > 0)
+       if (is_numeric($curso->sem1))
           {
           $cr[3] += $curso->credito;
           $nf[3] += round($curso->sem1 * $curso->credito);
           }
-       if ($curso->nota3 > 0)
+       if (is_numeric($curso->nota3))
           {
           $cr[4] += $curso->credito;
           $nf[4] += round($curso->nota3 * $curso->credito);
           }
-       if ($curso->nota4 > 0)
+       if (is_numeric($curso->nota4))
           {
           $cr[5] += $curso->credito;
           $nf[5] += round($curso->nota4 * $curso->credito);
           }
-       if ($curso->sem2 > 0)
+       if (is_numeric($curso->sem2))
           {
           $cr[6] += $curso->credito;
           $nf[6] += round($curso->sem2 * $curso->credito);
           }
-       if ($curso->final > 0)
+       if (is_numeric($curso->final))
           {
           $cr[7] += $curso->credito;
           $nf[7] += round($curso->final * $curso->credito);
@@ -187,37 +189,37 @@ foreach ($students as $estu) {
        }
     if ($pro==2)
        {
-       if ($curso->nota1 > 0)
+       if (is_numeric($curso->nota1))
           {
           $cr[1] += 1;
           $nf[1] += $curso->nota1;
           }
-       if ($curso->nota2 > 0)
+       if (is_numeric($curso->nota2))
           {
           $cr[2] += 1;
           $nf[2] += $curso->nota2;
           }
-       if ($curso->sem1 > 0)
+       if (is_numeric($curso->sem1))
           {
           $cr[3] += 1;
           $nf[3] += $curso->sem1;
           }
-       if ($curso->nota3 > 0)
+       if (is_numeric($curso->nota3))
           {
           $cr[4] += 1;
           $nf[4] += $curso->nota3;
           }
-       if ($curso->nota4 > 0)
+       if (is_numeric($curso->nota4))
           {
           $cr[5] += 1;
           $nf[5] += $curso->nota4;
           }
-       if ($curso->sem2 > 0)
+       if (is_numeric($curso->sem2))
           {
           $cr[6] += 1;
           $nf[6] += $curso->sem2;
           }
-       if ($curso->final > 0)
+       if (is_numeric($curso->final))
           {
           $cr[7] += 1;
           $nf[7] += $curso->final;
@@ -225,37 +227,37 @@ foreach ($students as $estu) {
        }
     if ($pro==3 and $curso->peso > 0)
        {
-       if ($curso->nota1 > 0)
+       if (is_numeric($curso->nota1))
           {
           $cr[1] += $curso->peso ;
           $nf[1] += round($curso->nota1 * $curso->peso);
           }
-       if ($curso->nota2 > 0)
+       if (is_numeric($curso->nota2))
           {
           $cr[2] += $curso->peso;
           $nf[2] += round($curso->nota2 * $curso->peso);
           }
-       if ($curso->sem1 > 0)
+       if (is_numeric($curso->sem1))
           {
           $cr[3] += $curso->peso;
           $nf[3] += round($curso->sem1 * $curso->peso);
           }
-       if ($curso->nota3 > 0)
+       if (is_numeric($curso->nota3))
           {
           $cr[4] += $curso->peso;
           $nf[4] += round($curso->nota3 * $curso->peso);
           }
-       if ($curso->nota4 > 0)
+       if (is_numeric($curso->nota4))
           {
           $cr[5] += $curso->peso;
           $nf[5] += round($curso->nota4 * $curso->peso);
           }
-       if ($curso->sem2 > 0)
+       if (is_numeric($curso->sem2))
           {
           $cr[6] += $curso->peso;
           $nf[6] += round($curso->sem2 * $curso->peso);
           }
-       if ($curso->final > 0)
+       if (is_numeric($curso->final))
           {
           $cr[7] += $curso->peso;
           $nf[7] += round($curso->final * $curso->peso);
