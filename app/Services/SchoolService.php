@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Admin;
 use App\Models\Student;
+use Classes\Session;
 use Illuminate\Support\Collection;
 
 class SchoolService
@@ -15,6 +16,13 @@ class SchoolService
 
     public static function getCurrentYear(): string
     {
-        return Admin::primaryAdmin()->year();
+        if (Session::location() !== 'admin') {
+            return Admin::primaryAdmin()->year;
+        }
+
+        $user = Admin::user(Session::id())->first();
+
+
+        return $user->year2;
     }
 }
