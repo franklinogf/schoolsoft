@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Controllers\Teacher;
+use App\Models\Teacher;
 use Classes\PDF;
-use Classes\DataBase\DB;
-use Classes\Controllers\School;
 
 $pdf = new PDF;
 
@@ -13,9 +11,7 @@ $pdf->Fill();
 $pdf->addPage();
 
 
-$school = new School();
-$teachers = new Teacher;
-$teachers = $teachers->all();
+$teachers = Teacher::with(['subjects'])->get();
 
 
 $pdf->Cell(0, 10, 'LISTA DE CURSOS', 0, 1, 'C');
@@ -33,10 +29,7 @@ $pdf->SetFont('Times', '', 10);
 $count = 1;
 foreach ($teachers as $teacher) {
 
-	$courses = DB::table('cursos')->where([
-		['year', $school->year()],
-		['id', $teacher->id]
-	])->orderBy('curso')->get();
+	$courses = $teacher->subjects;
 
 	foreach ($courses as $course) {
 		$pdf->Cell(7, 5, $count, 1);
@@ -45,7 +38,7 @@ foreach ($teachers as $teacher) {
 		$pdf->Cell(50, 5, $course->desc1, 1);
 		$pdf->Cell(10, 5, number_format($course->credito, 2), 1, 0, 'R');
 		$pdf->Cell(10, 5, number_format($course->peso, 2), 1, 0, 'R');
-		$pdf->Cell(34, 5, $course->horario, 1, 1);
+		$pdf->Cell(34, 5, "$course->entrada - $course->salida", 1, 1);
 		$count++;
 	}
 }
