@@ -9,6 +9,7 @@ use Classes\Controllers\School;
 
 Session::is_logged();
 
+
 $lang = new Lang([
     ['Informe de calificaciones', 'Report Card'],
     ['Reporte de Notas', 'Grade Report'],
@@ -29,45 +30,18 @@ $lang = new Lang([
     ['Mensaje', 'Message'],
     ['Comentario', 'Comment'],
     ['Selección', 'Selection'],
-
-
+    ['Mensajes para las tarjeta', 'Messages for the cards'],
 
 ]);
 $school = new School(Session::id());
+//$grades = DB::table('materias')->where('year', $school->info('year2'))->orderBy('grado')->get();
+$grades = $school->allGrades();
+
 $re = $school->info('tar');
-$year = $school->info('year2');
-
-$grades = DB::table('year')->select("DISTINCT grado")->where([
-        ['codigobaja', 0],
-        ['year', $year],
-        ['grado', '!=', ''],
-   ])->orderBy('grado')->get();
-$grupo = 'grado';
-
-if ($re == '4')
-   {
-   $grades = $school->allGrades('alias');
-   $grades = DB::table('year')->select("DISTINCT alias, year")->where([
-        ['codigobaja', 0],
-        ['year', $year],
-        ['alias', '!=', ''],
-   ])->orderBy('alias')->get();
-   $grupo = 'alias';
-
-   $students = DB::table('year')->where([
-        ['codigobaja', 0],
-        ['year', $year],
-   ])->orderBy('apellidos')->get();
-
-   }
-
-
-
 $in1 = '';
 $in2 = '';
 $in3 = '';
 $in4 = '';
-$in4b = '';
 $in5 = '';
 $in6 = '';
 $in7 = '';
@@ -84,10 +58,7 @@ $in17 = '';
 $in18 = '';
 $in19 = '';
 $in20 = '';
-$in22 = '';
-$in26 = '';
 $in31 = '';
-$in43 = '';
 if ($re == '1') {
     $in1 = 'selected';
 }
@@ -97,17 +68,14 @@ if ($re == '2') {
 if ($re == '3') {
     $in3 = 'selected';
 }
-if ($re == '4') {
-    $in4 = 'selected';
-}
 if ($re == '5') {
     $in5 = 'selected';
 }
 if ($re == '7') {
     $in7 = 'selected';
 }
-if ($re == '8') {
-    $in8 = 'selected';
+if ($re == '10') {
+    $in10 = 'selected';
 }
 if ($re == '13') {
     $in13 = 'selected';
@@ -121,21 +89,47 @@ if ($re == '17') {
 if ($re == '18') {
     $in18 = 'selected';
 }
-if ($re == '22') {
-    $in22 = 'selected';
-}
-if ($re == '26') {
-    $in26 = 'selected';
-}
 if ($re == '31') {
     $in31 = 'selected';
 }
-if ($re == '43') {
-    $in43 = 'selected';
+
+if (isset($_POST['bus'])) {
+   $mensaj = DB::table('codigos')->where([
+      ['idc', ''],
+      ['codigo', $_POST['num']],
+   ])->orderBy('codigo')->first();
 }
 
-$mensaj = DB::table('codigos')->orderBy('codigo')->get();
+if (isset($_POST['bor'])) {
+    DB::table('codigos')->where('codigo', $_POST['num1'])->delete();
+   }
 
+if (isset($_POST['gra'])) {
+    if (empty($_POST['num1'])) {
+       DB::table('codigos')->insert([
+          't1e' => $_POST['t1e'],
+          't2e' => $_POST['t2e'],
+          't1i' => $_POST['t1i'],
+          't2i' => $_POST['t2i'],
+        ]);
+       }
+    else
+       {
+       DB::table('codigos')->where([
+          ['codigo', $_POST['num1']],
+       ])->update([
+          't1e' => $_POST['t1e'],
+          't2e' => $_POST['t2e'],
+          't1i' => $_POST['t1i'],
+          't2i' => $_POST['t2i'],
+       ]);
+       }
+   }
+
+
+$result = DB::table('codigos')->where([
+    ['idc', ''],
+])->orderBy('codigo')->get();
 
 ?>
 <!DOCTYPE html>
@@ -144,7 +138,7 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
 <script language="JavaScript">
     function activarTrimestre() {
         var dis = document.TarjetaNotas.tarjeta.value;
-        if (dis == '2' || dis == '1b' || dis == '4' || dis == '1c') {
+        if (dis == '2' || dis == '1b') {
             document.TarjetaNotas.tri.disabled = false;
         } else {
             document.TarjetaNotas.tri.disabled = true;
@@ -185,23 +179,18 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="tarjeta" name="tarjeta" class="form-control" onclick="return activarTrimestre(); return true">
-                            <option value='1c' <?= $in1 ?>>Tarjeta cdls</option>
                             <option value='1' <?= $in1 ?>>Tarjeta 1</option>
-                            <option value='1b' <?= $in4b ?>>Tarjeta 1b</option>
                             <option value='2' <?= $in2 ?>>Tarjeta 2</option>
                             <option value='3' <?= $in3 ?>>Tarjeta 3</option>
-                            <option value='4' <?= $in4 ?>>Tarjeta 4</option>
+                            <option value='1b' <?= $in4 ?>>Tarjeta 4</option>
                             <option value='5' <?= $in5 ?>>Tarjeta 5</option>
                             <option value='7' <?= $in7 ?>>Tarjeta 7</option>
-                            <option value='8' <?= $in8 ?>>Tarjeta 8</option>
+                            <option value='10' <?= $in10 ?>>Tarjeta 10</option>
                             <option value='13' <?= $in13 ?>>Tarjeta 13</option>
                             <option value='14' <?= $in14 ?>>Tarjeta 14</option>
                             <option value='17' <?= $in17 ?>>Tarjeta 17</option>
                             <option value='18' <?= $in18 ?>>Tarjeta 18</option>
-                            <option value='22' <?= $in22 ?>>Tarjeta 22</option>
-                            <option value='26' <?= $in26 ?>>Tarjeta 26</option>
                             <option value='31' <?= $in31 ?>>Tarjeta 31</option>
-                            <option value='43' <?= $in43 ?>>Tarjeta 43</option>
                         </select>
                         <select id="tri" name="tri" class="form-control" disabled="disable">
                             <option value='1'><?= $lang->translation('Trimestre 1') ?></option>
@@ -240,34 +229,22 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                             </label>
                         </div>
                         <select id="grade" name="grade" class="form-control" required>
-                                <option value='<?= $grupo ?>'><?= $grupo ?></option>
-                            <?php foreach ($grades as $grade){ ?>
-                                <option value='<?= $grade->{"$grupo"} ?>'>
-                                    <?= $grade->{"$grupo"} ?>
+                            <?php foreach ($grades as $grade): ?>
+                                <option value='<?= $grade ?>'>
+                                    <?= $grade ?>
                                 </option>
-                            <?php } ?>
+                            <?php endforeach ?>
                         </select>
-                    </div>
-                    <?php if ($grupo == 'alias') { ?>
 
-                    <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="estu">
-                                <?= $lang->translation('Estudiantes') ?>
+                            <label class="input-group-text" for="option">
+                                <?= $lang->translation('Pag. asistencia') ?>
                             </label>
                         </div>
-                        <select id="estu" name="estu" class="form-control">
-                                <option value=''>Selección</option>
-                            <?php foreach ($students as $student){ ?>
-                                <option value='<?= $student->ss ?>'>
-                                    <?= $student->apellidos.' '.$student->nombre ?>
-                                </option>
-                            <?php } ?>
-                        </select>
+                        <input id="asis" name="asis" type="checkbox" style="height: 30px; width: 30px" value="Si" />
+
+
                     </div>
-                    <?php } ?>
-
-
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="option">
@@ -358,12 +335,6 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
                         </select>
                     </div>
 
-
-
-
-
-
-
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>
@@ -371,18 +342,93 @@ $mensaj = DB::table('codigos')->orderBy('codigo')->get();
             </form>
         </div>
     </div>
+
+
+    <div class="container-lg mt-lg-3 mb-5 px-0">
+        <h1 class="text-center mb-3 mt-5">
+            <?= $lang->translation('Mensajes para las tarjeta') ?>
+        </h1>
+        <div class="container bg-white shadow-lg py-3 rounded">
+            <form id="TarjetaNotas2" name="TarjetaNotas2" method="POST" action="">
+                <div class="mx-auto" style="max-width: 500px;">
+   		        <input type=hidden name=num1 value='<?= $mensaj->codigo ?? '' ?>'>
+		&nbsp;
+		<table align="center" cellpadding="2" cellspacing="0" style="width: 70%">
+			<tr>
+				<td class="style2">
+					<strong>Mensajes en español</strong>
+				</td>
+			</tr>
+			<tr>
+				<td class="style5">
+					<input maxlength='100' name='t1e' size='100' style='width: 662px' type='text' value='<?= $mensaj->t1e ?? '' ?> ' >
+				</td>
+			</tr>
+			<tr>
+				<td class="style5">
+					<input maxlength='100' name='t2e' size='100' style='width: 662px' type='text' value='<?= $mensaj->t2e ?? '' ?> ' >
+				</td>
+			</tr>
+			<tr>
+				<td class="style2">
+					<strong>En ingles</strong>
+				</td>
+			</tr>
+			<tr>
+				<td class="style5" style="height: 23px">
+					<input maxlength='100' name='t1i' size='100' style='width: 662px' type='text' value='<?= $mensaj->t1i ?? '' ?>'>
+				</td>
+			</tr>
+			<tr>
+				<td class="style5">
+					<input maxlength='100' name='t2i' size='100' style='width: 662px' type='text' value='<?= $mensaj->t2i ?? '' ?>'>
+				</td>
+			</tr>
+			<tr>
+				<td class="style2" style="height: 23px"></td>
+			</tr>
+			<tr>
+				<td class="style5">
+					<input name="gra" type="submit" value="Grabar" class="btn btn-primary" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input name="bor" type="submit" value="Borrar" onclick="return confirmar('&iquest;Está seguro que desea eliminar el mensaje?')" class="btn btn-danger" />&nbsp;&nbsp;&nbsp;
+					<select name="num" style="width: 87px">
+                      <?php foreach ($result as $row ): ?>
+							<?=  '<option>' . $row->codigo . '</option>'; ?>
+                      <?php endforeach ?>
+					</select>&nbsp;&nbsp;&nbsp;&nbsp;
+					<input name="bus" type="submit" value="Buscar" class="btn btn-primary" />
+				</td>
+			</tr>
+			<tr>
+				<td class="style2">&nbsp;</td>
+			</tr>
+		</table>
+
+
+		<br />
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
     ?>
 </body>
 <script language="JavaScript">
-    var dis = document.TarjetaNotas.tarjeta.value;
-    if (dis == '2' || dis == '1b' || dis == '4') {
-        document.TarjetaNotas.tri.disabled = false;
-    } else {
-        document.TarjetaNotas.tri.disabled = true;
-    }
+        function confirmar(mensaje) {
+            return confirm(mensaje);
+        }
 
+
+    var dis = document.TarjetaNotas.tarjeta.value;
+    if (dis == '2') {
+        //   document.TarjetaNotas.tri.disabled=false;
+    } else {
+        //   document.TarjetaNotas.tri.disabled=true;
+    }
 </script>
 
 </html>
