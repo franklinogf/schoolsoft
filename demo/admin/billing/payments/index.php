@@ -32,7 +32,7 @@ $months = __LANG === 'es' ?
     : ['July' => '07', 'August' => '08', 'September' => '09', 'October' => '10', 'November' => '11', 'December' => '12', 'January' => '01', 'February' => '02', 'March' => '03', 'April' => '04', 'May' => '05', 'June' => '06'];
 $currentMonth = $_GET['month'] ?? date('m');
 $school = Admin::primaryAdmin();
-$year = $school->year();
+$year = $user->year();
 
 $deposits = [
     0 => 'Depósitos Cafetería',
@@ -80,6 +80,7 @@ $depositTypes = [
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-2">
         <h1 class="text-center my-3"><?= $lang->translation("Pagos") ?></h1>
+        <h3 class="text-center"><?= $year ?></h3>
         <form method="GET">
             <select class="form-control selectpicker" style="width: 100%;" name="accountId" data-live-search="true" required>
                 <option value=""><?= $lang->translation("Seleccionar") . ' ' . $lang->translation('estudiante') ?></option>
