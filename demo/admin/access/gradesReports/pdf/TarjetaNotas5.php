@@ -33,15 +33,15 @@ function NLetra($valor)
 {
     if ($valor == '') {
         return '';
-    } else if ($valor <= '100' && $valor >= '90') {
+    } else if ($valor <= '100' && $valor >= '89') {
         return 'A';
-    } else if ($valor <= '89' && $valor >= '80') {
+    } else if ($valor <= '88' && $valor >= '79') {
         return 'B';
-    } else if ($valor <= '79' && $valor >= '70') {
+    } else if ($valor <= '78' && $valor >= '69') {
         return 'C';
-    } else if ($valor <= '69' && $valor >= '60') {
+    } else if ($valor <= '68' && $valor >= '59') {
         return 'D';
-    } else  if ($valor <= '59') {
+    } else  if ($valor <= '58') {
         return 'F';
     }
 }
@@ -237,37 +237,37 @@ foreach ($students as $estu) {
         $v8 = 0;
         $tot1t1 = "";
         $c = '1';
-        if ($curso->credito > 0 and $curso->nota1 > 0 or $curso->credito > 0 and $curso->nota1 == '0') {
+        if ($curso->credito > 0 and is_numeric($curso->nota1) or $curso->credito > 0 and $curso->nota1 == '0') {
             $cr = $cr + 1;
             $notas = $notas + $curso->nota1;
         }
 
-        if ($curso->credito > 0 and $curso->nota2 > 0 or $curso->credito > 0 and $curso->nota2 == '0') {
+        if ($curso->credito > 0 and is_numeric($curso->nota2) or $curso->credito > 0 and $curso->nota2 == '0') {
             $c = '2';
             $cr2 = $cr2 + 1;
             $notas2 = $notas2 + $curso->nota2;
         }
 
-        if ($curso->credito > 0 and $curso->nota3 > 0 or $curso->credito > 0 and $curso->nota3 == '0') {
+        if ($curso->credito > 0 and is_numeric($curso->nota3) or $curso->credito > 0 and $curso->nota3 == '0') {
             $c = '3';
             $cr3 = $cr3 + 1;
             $notas3 = $notas3 + $curso->nota3;
         }
 
-        if ($curso->credito > 0 and $curso->nota4 > 0 or $curso->credito > 0 and $curso->nota4 == '0') {
+        if ($curso->credito > 0 and is_numeric($curso->nota4) or $curso->credito > 0 and $curso->nota4 == '0') {
             $c = '4';
             $cr4 = $cr4 + 1;
             $notas4 = $notas4 + $curso->nota4;
         }
-        if ($curso->credito > 0 and $curso->sem1 > 0) {
+        if ($curso->credito > 0 and is_numeric($curso->sem1)) {
             $cr5 = $cr5 + 1;
             $notas5 = $notas5 + $curso->sem1;
         }
-        if ($curso->credito > 0 and $curso->sem2 > 0) {
+        if ($curso->credito > 0 and is_numeric($curso->sem2)) {
             $cr6 = $cr6 + 1;
             $notas6 = $notas6 + $curso->sem2;
         }
-        if ($curso->credito > 0 and $curso->final > 0) {
+        if ($curso->credito > 0 and is_numeric($curso->final)) {
             $cr7 = $cr7 + 1;
             $notas7 = $notas7 + $curso->final;
         }
@@ -733,7 +733,7 @@ if ($asis=='Si'){
             $li2 = $li2 + 1;
         }
         if ($row8->codigo == 16) {
-            $cod = 'Ausencia-problema de transportaci&#65533;n';
+            $cod = 'Ausencia-problema de transportación';
             $li2 = $li2 + 1;
         }
         if ($row8->codigo == 17) {
@@ -744,10 +744,10 @@ if ($asis=='Si'){
             $cod = 'Tardanza-sin excusa del hogar';
         }
         if ($row8->codigo == 9) {
-            $cod = 'Tardanza-situaci&#65533;n en el hogar';
+            $cod = 'Tardanza-situación en el hogar';
         }
         if ($row8->codigo == 10) {
-            $cod = 'Tardanza-problema en la transportaci&#65533;n';
+            $cod = 'Tardanza-problema en la transportación';
         }
         if ($row8->codigo == 11) {
             $cod = 'Tardanza-enfermedad';
@@ -774,7 +774,7 @@ if ($asis=='Si'){
             $cod = 'Fue recogido antes de la salida - cita';
         }
         if ($row8->codigo == 22) {
-            $cod = 'Suspensi&#65533;n';
+            $cod = 'Suspensión';
         }
 
         $pdf->Cell(10, 3.5, $a, 1, 0, 'R');
