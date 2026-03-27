@@ -153,8 +153,8 @@ $tabla12 = DB::table('presupuesto')->whereRaw("year='$year'")->orderBy('codigo')
                                                     <i class="fas fa-filter mr-1"></i>
                                                     Filtro de Cuentas
                                                 </label>
-                                                <select name="desc" id="desc" class="form-control" onclick="return cambiaPalabra(); return true">
-                                                    <option value="Selección"><?= $lang->translation('Selección') ?></option>
+                                                <select name="desc" id="desc" class="form-control" required onclick="return cambiaPalabra(); return true">
+                                                    <option value=""><?= $lang->translation('Selección') ?></option>
                                                     <option value="Todos"><?= $lang->translation('Todos') ?></option>
                                                     <?php foreach ($tabla12 as $row2): ?>
                                                         <option value="<?= $row2->codigo ?>"><?= $row2->codigo . ', ' . $row2->descripcion ?></option>
