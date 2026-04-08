@@ -60,69 +60,73 @@ if (isset($_POST['changeValue'])) {
         ])
         ->whereIn('ss', array_keys($students))
         ->get();
+    try {
 
-    DB::connection()->transaction(function () use ($students, $oldStudentData, $table, $subjectCode, $year, $teacher, $trimester, $report) {
-        foreach ($students as $ss => $data) {
-            $studentData = $oldStudentData->firstWhere('ss', $ss);
-            $newGrades = collect($data)
-                ->mapWithKeys(function ($grade, $key) use ($studentData, $trimester) {
+        DB::connection()->transaction(function () use ($students, $oldStudentData, $table, $subjectCode, $year, $teacher, $trimester, $report) {
+            foreach ($students as $ss => $data) {
+                $studentData = $oldStudentData->firstWhere('ss', $ss);
+                $newGrades = collect($data)
+                    ->mapWithKeys(function ($grade, $key) use ($studentData) {
 
-                    if (
-                        preg_match('/^not\d+$/', $key)
-                        && $studentData->{$key} !== $grade
-                        && ($studentData->{$key} !== '' && $studentData->{$key} !== null)
-                    ) {
-                        $gradeNumber = (int) filter_var($key, FILTER_SANITIZE_NUMBER_INT);
-                        return [
-                            $gradeNumber => [
-                                'new' => $grade,
-                                'old' => $studentData->{$key},
-                            ]
-                        ];
-                    }
-                    return [];
-                })->toArray();
+                        if (
+                            preg_match('/^not\d+$/', $key)
+                            && $studentData->{$key} !== $grade
+                            && ($studentData->{$key} !== '' && $studentData->{$key} !== null)
+                        ) {
+                            $gradeNumber = (int) filter_var($key, FILTER_SANITIZE_NUMBER_INT);
+                            return [
+                                $gradeNumber => [
+                                    'new' => $grade,
+                                    'old' => $studentData->{$key},
+                                ]
+                            ];
+                        }
+                        return [];
+                    })->toArray();
 
-            DB::table($table)
-                ->where([
-                    ['ss', $ss],
-                    ['curso', $subjectCode],
-                    ['year', $year],
-                ])->update($data);
-
-            foreach ($newGrades as $gradeNumber => $grades) {
-                DB::table('tarjeta_cambios')->insert([
-                    'id' => $teacher->id,
-                    'fecha' => date('Y-m-d'),
-                    'hora' => date('H:i:s'),
-                    'ip' => Util::getIp(),
-                    'curso' => $subjectCode,
-                    'nt1' => $grades['new'],
-                    'nt2' => $grades['old'],
-                    'cual' => $gradeNumber,
-                    'ss' => $ss,
-                    'year' => $year,
-                    'tri' => $trimester->value,
-                    'pag' => $report->value
-                ]);
-            }
-
-
-            if ($report === GradePageEnum::SHORT_TESTS || $report === GradePageEnum::DAILY_WORKS || $report === GradePageEnum::NOTEBOOK_WORKS) {
-
-                DB::table('padres')
+                DB::table($table)
                     ->where([
                         ['ss', $ss],
                         ['curso', $subjectCode],
                         ['year', $year],
-                    ])->update([
-                        $report->getShortColumn($trimester) => $data['nota' . $trimester->getNumber()]
-                    ]);
-            }
-        }
-    });
+                    ])->update($data);
 
-    echo json_encode(['status' => 'success', 'message' => 'Grades updated successfully.']);
+                foreach ($newGrades as $gradeNumber => $grades) {
+                    DB::table('tarjeta_cambios')->insert([
+                        'id' => $teacher->id,
+                        'fecha' => date('Y-m-d'),
+                        'hora' => date('H:i:s'),
+                        'ip' => Util::getIp(),
+                        'curso' => $subjectCode,
+                        'nt1' => $grades['new'],
+                        'nt2' => $grades['old'],
+                        'cual' => $gradeNumber,
+                        'ss' => $ss,
+                        'year' => $year,
+                        'tri' => $trimester->value,
+                        'pag' => $report->value
+                    ]);
+                }
+
+
+                if ($report === GradePageEnum::SHORT_TESTS || $report === GradePageEnum::DAILY_WORKS || $report === GradePageEnum::NOTEBOOK_WORKS) {
+
+                    DB::table('padres')
+                        ->where([
+                            ['ss', $ss],
+                            ['curso', $subjectCode],
+                            ['year', $year],
+                        ])->update([
+                            $report->getShortColumn($trimester) => $data['nota' . $trimester->getNumber()]
+                        ]);
+                }
+            }
+        });
+
+        echo json_encode(['status' => 'success', 'message' => 'Grades updated successfully.']);
+    } catch (\Throwable $th) {
+        echo json_encode(['status' => 'error', 'message' => 'There was an error.']);
+    }
 
     // $data = Util::toObject($_POST);
     // $_subjectCode = $data->subject[0];

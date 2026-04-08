@@ -351,9 +351,9 @@ $canEdit = true; //Carbon::now()->betweenIncluded($school->{$_dates[0]}, $school
                                             $_student = findValue(GradePageEnum::SHORT_TESTS->getTableName(), $grade);
                                             $pcor = $_student?->{'por' . $_trimester->getNumber()};
                                         } else {
-                                            $tdia = $grade?->{'tl1'} ? '100' : '';
-                                            $tlib = $grade?->{'td1'} ? '100' : '';
-                                            $pcor = $grade?->{'pc1'} ? '100' : '';
+                                            $tdia = $grade?->{GradePageEnum::DAILY_WORKS->getShortColumn(1)} ? '100' : '';
+                                            $tlib = $grade?->{GradePageEnum::NOTEBOOK_WORKS->getShortColumn(1)} ? '100' : '';
+                                            $pcor = $grade?->{GradePageEnum::SHORT_TESTS->getShortColumn(1)} ? '100' : '';
                                         }
                                     ?>
                                         <?php if ($sumTrimester && ($_trimesterNumber === 2 || $_trimesterNumber === 4)): ?>
