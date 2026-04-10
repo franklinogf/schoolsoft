@@ -64,6 +64,7 @@ $updates = [
     'logo' => $_POST['logo'],
     'tri' => $_POST['tri'],
     'fec_t' => $_POST['fec_t'],
+    'ver' => $_POST['ver'],
 ];
 
 DB::table('colegio')->where('usuario', 'administrador')->update($updates);
