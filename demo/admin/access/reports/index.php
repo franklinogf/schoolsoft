@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../app.php';
+require_once '../../../app.php';
 
 use App\Enums\AdminPermission;
 use Classes\Route;
@@ -10,6 +10,11 @@ use App\Models\Admin;
 Session::is_logged();
 
 $user  = Admin::user(Session::id())->first();
+
+list($y1,$y2) = explode("-",$user->year2);
+
+$year2=$y2.'-'.$y2+1;
+$year2=$user->year2;
 
 $options = [
     [
@@ -301,8 +306,8 @@ $options = [
             [
                 'name' => __("Lista con fotos"),
                 'desc' => '',
-                'link' => 'pdf/listPhotos.php',
-                'target' => 'listPhotos',
+                'link' => 'pdf/ListPhotos.php',
+                'target' => 'ListPhotos',
                 'hidden' => false,
             ],
             [
@@ -534,28 +539,39 @@ $options = [
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Totales información personal',   "en" => "Totales información personal"],
+                'name' => __("Proyecciones ".$year2),
+                'desc' => '',
+                'link' => 'pdf/totalsByGrade2.php',
+                'target' => 'totalsByGrade2',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Re-Matrícula 60%/40%"),
+                'desc' => '',
+                'link' => 'pdf/inf_rematricula.php',
+                'target' => 'Re-Matrícula',
+                'hidden' => false,
+            ],
+            [
+                'name' => __("Matricula por años por grado."),
+                'desc' => '',
+                'link' => 'MatriculaYear.php',
+                'target' => 'Matrículas por grados',
+                'hidden' => false,
+            ],
+            [
                 'name' => __(""),
                 'desc' => '',
                 'link' => '#',
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Información básica',   "en" => "Información básica"],
                 'name' => __(""),
                 'desc' => '',
                 'link' => '#',
                 'hidden' => false,
             ],
             [
-                //                'name' => ["es" => 'Totales de información básica',   "en" => "Totales de información básica"],
-                'name' => __(""),
-                'desc' => '',
-                'link' => '#',
-                'hidden' => false,
-            ],
-            [
-                //                'name' => ["es" => 'Progreso de educación fisica pasar a notas',   "en" => "Progreso de educación fisica"],
                 'name' => __(""),
                 'desc' => '',
                 'link' => '#',
@@ -581,7 +597,7 @@ $lang = new Lang([
 
 <head>
     <?php
-    //    $title = $lang->translation("Informes");
+//    $title = $lang->translation("Informes");
     $title = __("Informes");
     Route::includeFile('/admin/includes/layouts/header.php');
     ?>
