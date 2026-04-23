@@ -104,6 +104,7 @@ $result = Manager::table('codigos')
 
 <!DOCTYPE html>
 <html lang="en">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 <head>
     <?php
@@ -178,8 +179,8 @@ $result = Manager::table('codigos')
 
                             <div class="mb-3">
                                 <label for="mes" class="form-label"><?= $lang->translation('El mes para aplicar') ?></label>
-                                <select name="mes" class="form-control" id="mes">
-                                    <option value="0"><?= $lang->translation('Mes') ?></option>
+                                <select name="mes" class="form-control" id="mes" required >
+                                    <option value=""><?= $lang->translation('Mes') ?></option>
                                     <option value="01"><?= $lang->translation('Enero') ?></option>
                                     <option value="02"><?= $lang->translation('Febrero') ?></option>
                                     <option value="03"><?= $lang->translation('Marzo') ?></option>

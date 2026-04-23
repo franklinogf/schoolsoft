@@ -11,6 +11,7 @@ use Classes\Email;
 use Classes\Lang;
 use Classes\PDF;
 use Classes\Session;
+use Classes\DataBase\DB;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -65,6 +66,15 @@ $user = $school->usuario;
 $n1 = $_POST['nombre'];
 $ctas = $_POST['ctas'];
 $debtType = (int) $_POST['deuda'];
+
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+$reply_cc = $colegio->email4;
+$cc = [];
+//$cc[] = $colegio->email4;
+if (!empty($reply_cc)){$to[] = $reply_cc;}
 
 
 $id = '';
@@ -173,23 +183,23 @@ function generateTable(PDF $pdf, Family $family): void
     list($yy2, $mm1, $dd1) = explode("-", date('Y-m-d'));
 
     $fec = $yy2 . '-' . $_POST['mes'] . '-' . $dd1;
-    $charges = $family->charges()->whereDate('fecha_d', '<=', $fec)->get()->groupBy('codigo');
+    $charges = $family->charges()->whereDate('fecha_d', '<=', $fec)->orderBy('codigo')->get()->groupBy('codigo');
 
     $totdeu = 0;
     $latePayment = 0;
 
     foreach ($charges as $charge) {
 
-
-        $debt = (float) $charge->sum('deuda');
-        $pay = (float) $charge->sum('pago');
+//        $debt = (float) $charge->sum('deuda');
+        $debt = (float) $charge->where('baja', '')->sum('deuda');
+        $pay = (float) $charge->where('baja', '')->sum('pago');
 
         $latePayment = (float) $charge->where('fecha_d', '<=', $fec)
             ->sum(fn($payment) => $payment->deuda - $payment->pago);
 
         $total = $debt - $pay;
 
-        if ($total > 0) {
+//        if ($total > 0) {
 
             $est1[$i] = $charge->first()->desc1;
             $est2[$i] = $debt;
@@ -202,7 +212,7 @@ function generateTable(PDF $pdf, Family $family): void
             $pdf->Cell(38, 5, number_format($total, 2), 0, 1, 'R');
 
             $i++;
-        }
+//        }
     }
 
 
@@ -266,12 +276,6 @@ function generateTable(PDF $pdf, Family $family): void
 }
 
 
-
-
-
-
-
-
 $students = Student::query()
     ->select("id")
     ->with('family.payments')
@@ -290,14 +294,16 @@ list($yy2, $mm1, $dd1) = explode("-", date('Y-m-d'));
 $fec = $yy2 . '-' . $_POST['mes'] . '-' . $dd1;
 foreach ($students as $student) {
     if (!$student->family) {
-        continue;
+//       if ($_POST['deuda'] != '1'){
+          continue;
+//          }
     }
     $payments = $student->family->charges()
         ->whereDate('fecha_d', '<=', $fec)
         ->orderBy('codigo')
         ->get();
-    $totalDebt = (float) $payments->sum('deuda');
-    $totalPayments = (float) $payments->sum('pago');
+    $totalDebt = (float) $payments->where('baja', '')->sum('deuda');
+    $totalPayments = (float) $payments->where('baja', '')->sum('pago');
     $totalLatePayments = (float) $payments->where('fecha_d', '<=', $fec)
         ->sum(fn($payment) => $payment->deuda - $payment->pago);
 
@@ -305,7 +311,9 @@ foreach ($students as $student) {
     $total = $totalDebt - $totalPayments;
 
     if ($total <= 0) {
-        continue;
+       if ($_POST['deuda'] != '1'){
+          continue;
+          }
     }
     $pdf = new PDF;
     $pdf->SetTitle($lang->translation('ESTADO DE CUENTAS') . ' ' . $year);
@@ -371,6 +379,7 @@ if ($_POST['envia'] === 'Si' || $_POST['enviae'] === 'Si') {
             ->subject(__('Estado de cuenta'))
             ->body(__('Adjunto el estado de cuenta para la cuenta #') . $familyId)
             ->attach($filePath, "statement_{$familyId}.pdf")
+            ->cc($cc)
             ->queue($familyId);
     }
 }
