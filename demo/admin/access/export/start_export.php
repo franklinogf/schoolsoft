@@ -6,6 +6,7 @@ ini_set("memory_limit", "512M");
 
 $table = $_POST['tabla'] ?? null;
 $year = $_POST['year'] ?? null;
+$gradesRaw = $_POST['grades'] ?? [];
 $timestamp = time();
 $exportId = "export_{$timestamp}";
 
@@ -13,6 +14,13 @@ if (!$table || !$year) {
     echo json_encode(['error' => 'Missing parameters']);
     exit;
 }
+if ($table === 'pickups' && empty($gradesRaw)) {
+    echo json_encode(['error' => 'Debe seleccionar al menos un grado']);
+    exit;
+}
+$gradesSafe = array_map(fn($g) => str_replace(',', '', trim($g)), $gradesRaw);
+$gradesStr  = implode(',', $gradesSafe);
+$gradesArg  = escapeshellarg($gradesStr);
 
 $dir = __DIR__ . '/exports';
 $statusFile = "{$dir}/progress_{$exportId}.json";
@@ -26,6 +34,7 @@ file_put_contents($statusFile, json_encode([
     'complete' => false,
     'table' => $table,
     'year' => $year,
+    'grades' => $gradesSafe,
     'created_at' => date('Y-m-d H:i:s'),
     'export_id' => $exportId
 ]));
@@ -40,10 +49,10 @@ $exportIdArg = escapeshellarg($exportId);
 
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     // Windows: use START command to run in background
-    pclose(popen("start /B \"\" \"$phpPath\" \"$scriptPath\" $exportIdArg $tableArg $yearArg 2>&1", "r"));
+    pclose(popen("start /B \"\" \"$phpPath\" \"$scriptPath\" $exportIdArg $tableArg $yearArg $gradesArg 2>&1", "r"));
 } else {
     // Linux/Unix: use & to run in background
-    exec("$phpPath \"$scriptPath\" $exportIdArg $tableArg $yearArg > /dev/null 2>&1 &");
+    exec("$phpPath \"$scriptPath\" $exportIdArg $tableArg $yearArg $gradesArg > /dev/null 2>&1 &");
 }
 
 // Return immediately

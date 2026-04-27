@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../../app.php';
 
+use App\Services\SchoolService;
 use Classes\Route;
 use Classes\Session;
 use Illuminate\Database\Capsule\Manager;
@@ -9,6 +10,14 @@ use Illuminate\Database\Capsule\Manager;
 Session::is_logged();
 
 $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()->pluck('year')->toArray();
+$currentYear = SchoolService::getCurrentYear();
+$grades = Manager::table('year')
+    ->select('grado')
+    ->where('year', $currentYear)
+    ->distinct()
+    ->orderBy('grado')
+    ->pluck('grado')
+    ->toArray();
 ?>
 
 <?php Route::includeFile('/admin/includes/layouts/head.php'); ?>
@@ -186,6 +195,7 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
                                     <option value="student_documents">📄 Documentos de Estudiantes</option>
                                     <option value="food_assistance">🍽️ Asistencia Alimentaria</option>
                                     <option value="cafeteria">☕ Cafetería</option>
+                                    <option value="pickups">🚗 Pickups</option>
                                 </select>
                             </div>
 
@@ -196,9 +206,31 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
                                 <select class="form-control" id="year" name="year" required>
                                     <option value="">-- Seleccione un año --</option>
                                     <?php foreach ($years as $year): ?>
-                                        <option value="<?= $year ?>"><?= $year ?></option>
+                                        <option <?php echo $currentYear === $year ? 'selected' : '' ?> value="<?= $year ?>"><?= $year ?></option>
                                     <?php endforeach; ?>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row" id="gradesContainer" style="display:none;">
+                            <div class="col-12 mb-4">
+                                <label class="form-label font-weight-bold">
+                                    <i class="fas fa-graduation-cap mr-2"></i>Seleccionar Grados
+                                </label>
+                                <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input grade-checkbox"
+                                                   type="checkbox" name="grades[]"
+                                                   id="grade_<?= htmlspecialchars($grade) ?>"
+                                                   value="<?= htmlspecialchars($grade) ?>">
+                                            <label class="form-check-label" for="grade_<?= htmlspecialchars($grade) ?>">
+                                                <?= htmlspecialchars($grade) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <small class="text-muted">Debe seleccionar al menos un grado.</small>
                             </div>
                         </div>
 
@@ -261,6 +293,16 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
     document.addEventListener('DOMContentLoaded', function() {
         loadExportHistory();
 
+        document.getElementById('tabla').addEventListener('change', function () {
+            const gradesContainer = document.getElementById('gradesContainer');
+            if (this.value === 'pickups') {
+                gradesContainer.style.display = 'block';
+            } else {
+                gradesContainer.style.display = 'none';
+                document.querySelectorAll('.grade-checkbox').forEach(cb => cb.checked = false);
+            }
+        });
+
         // Check if there's an active export in localStorage
         const activeExport = localStorage.getItem('activeExport');
         if (activeExport) {
@@ -301,9 +343,12 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
         let html = '<div class="list-group">';
 
         exports.forEach(exp => {
+
             const statusBadge = exp.complete ?
                 '<span class="badge badge-success">Completado</span>' :
+                exp.error ? '<span class="badge badge-danger">Error</span>' :
                 '<span class="badge badge-warning">En progreso</span>';
+
 
             const tableNames = {
                 'students': 'Estudiantes',
@@ -323,10 +368,11 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
                             <h6 class="mb-1">
-                                <i class="fas fa-file-excel text-success"></i> 
+                                <i class="fas fa-file-excel text-success"></i>
                                 ${tableName} - Año ${exp.year}
                                 ${statusBadge}
                             </h6>
+                            ${exp.grades && exp.grades.length > 0 ? `<div class="mb-1">${exp.grades.map(g => `<span class="badge badge-info mr-1">${g}</span>`).join('')}</div>` : ''}
                             <p class="mb-1 small text-muted">
                                 <i class="fas fa-clock"></i> ${exp.created_at}
                                 ${exp.complete ? ` | <i class="fas fa-hdd"></i> ${fileSize}` : ''}
@@ -436,6 +482,14 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
             return;
         }
 
+        if (tabla === 'pickups') {
+            const checkedGrades = document.querySelectorAll('.grade-checkbox:checked');
+            if (checkedGrades.length === 0) {
+                alert('Por favor seleccione al menos un grado para exportar pickups.');
+                return;
+            }
+        }
+
         // Prevent double submission
         const startBtn = document.getElementById('start');
         if (startBtn.disabled) {
@@ -454,7 +508,15 @@ $years = Manager::table('year')->select('year')->orderByDesc('year')->distinct()
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `tabla=${encodeURIComponent(tabla)}&year=${encodeURIComponent(year)}`
+                body: (() => {
+                    let params = `tabla=${encodeURIComponent(tabla)}&year=${encodeURIComponent(year)}`;
+                    if (tabla === 'pickups') {
+                        document.querySelectorAll('.grade-checkbox:checked').forEach(cb => {
+                            params += `&grades[]=${encodeURIComponent(cb.value)}`;
+                        });
+                    }
+                    return params;
+                })()
             })
             .then(response => response.json())
             .then(data => {

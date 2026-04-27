@@ -18,8 +18,10 @@ use App\Models\Family;
 use App\Models\StudentDocument;
 use App\Models\Classes;
 use App\Models\Payment;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -31,6 +33,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 $exportId = $argv[1] ?? '';
 $table = $argv[2] ?? '';
 $year = $argv[3] ?? '';
+$grades = array_filter(
+    array_map('trim', explode(',', $argv[4] ?? '')),
+    fn($g) => $g !== ''
+);
 
 if (empty($exportId) || empty($table) || empty($year)) {
     die('Error: Missing parameters');
@@ -38,7 +44,21 @@ if (empty($exportId) || empty($table) || empty($year)) {
 
 $progressFile = __DIR__ . '/exports/progress_' . basename($exportId) . '.json';
 
+function normalizePhone(string $phone): ?string
+{
+    $digits = preg_replace('/\D/', '', $phone);
 
+    // 11 digits starting with 1 → strip country code                                                                                                         
+    if (strlen($digits) === 11 && str_starts_with($digits, '1')) {
+        $digits = substr($digits, 1);
+    }
+
+    if (strlen($digits) !== 10) {
+        return null;
+    }
+
+    return $digits;
+}
 
 
 // Helper function to update progress
@@ -81,6 +101,9 @@ try {
 
     // Configure based on selected table
     switch ($table) {
+        case 'pickups':
+            exportPickups($sheet, $year, $progressFile, $grades);
+            break;
         case 'food_assistance':
             exportFoodAssistance($sheet, $year, $progressFile);
             break;
@@ -139,7 +162,8 @@ try {
     updateProgress($progressFile, 90, 'Guardando archivo...');
 
     // Save file
-    $filename = $table . '_' . $year . '_' . date('Ymd_His') . '.xlsx';
+    $gradesSuffix = !empty($grades) ? '_' . implode('-', $grades) : '';
+    $filename = $table . '_' . $year . $gradesSuffix . '_' . date('Ymd_His') . '.xlsx';
     $filepath = __DIR__ . '/exports/' . $filename;
 
     $writer = new Xlsx($spreadsheet);
@@ -233,7 +257,7 @@ function generalExport(string $table, Worksheet $sheet, string $year, ?string $p
     $col = 'A';
     foreach ($headers as $header) {
         $sheet->setCellValue($col . '1', $header);
-        $col++;
+        $col = str_increment($col);
     }
 
     if ($progressFile) updateProgress($progressFile, 30, "Exportando datos de $title...");
@@ -245,7 +269,7 @@ function generalExport(string $table, Worksheet $sheet, string $year, ?string $p
         foreach ($headers as $field) {
             $value = $item->{$field} ?? '';
             $sheet->setCellValue($col . $row, $value);
-            $col++;
+            $col = str_increment($col);
         }
         $row++;
         if ($progressFile && $index % 100 === 0) {
@@ -257,6 +281,90 @@ function generalExport(string $table, Worksheet $sheet, string $year, ?string $p
     if ($progressFile) updateProgress($progressFile, 70, "$title exportados");
 }
 
+function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = null, array $grades = []): void
+{
+    $sheet->setTitle('Pickups');
+
+    if ($progressFile) updateProgress($progressFile, 15, 'Obteniendo informacion para los pickups...');
+
+    $headers =
+        [
+            'parent_name',
+            'parent_email',
+            'parent_phone',
+            'guardian_type',
+            'student_first_name',
+            'student_last_name',
+            'student_grade',
+        ];
+    $col = 'A';
+    foreach ($headers as $header) {
+        $sheet->setCellValue($col . '1', $header);
+        $col = str_increment($col);
+    }
+
+    $families = Family::query()->with('kids', function (HasMany $query) use ($year, $grades) {
+        $query->withoutGlobalScope(YearScope::class)
+            ->where('year', $year)
+            ->when(!empty($grades), function ($query) use ($grades) {
+                $query->whereIn('grado', $grades);
+            });
+    })->get();
+
+    if ($progressFile) updateProgress($progressFile, 30, 'Exportando pickups...');
+
+    $row = 2;
+    $total = $families->count();
+    foreach ($families as $index => $record) {
+        $students = $record->kids;
+
+        if ($students->isEmpty()) {
+            continue;
+        }
+
+        $hasFather = filled($record->email_p);
+        $hasMother = filled($record->email_m);
+
+        if (!$hasFather && !$hasMother) {
+            continue;
+        }
+
+        if ($hasFather) {
+            $sheet->setCellValue('A' . $row, $record->padre ?? '');
+            $sheet->setCellValue('B' . $row, $record->email_p ?? '');
+            $sheet->setCellValue('C' . $row, normalizePhone($record->cel_p) ?? '');
+            $sheet->setCellValue('D' . $row, 'father');
+
+            foreach ($students as $student) {
+                $sheet->setCellValue('E' . $row, $student->nombre);
+                $sheet->setCellValue('F' . $row, $student->apellidos);
+                $sheet->setCellValue('G' . $row, $student->grado);
+            }
+            $row++;
+        }
+        if ($hasMother) {
+            $sheet->setCellValue('A' . $row, $record->madre ?? '');
+            $sheet->setCellValue('B' . $row, $record->email_m ?? '');
+            $sheet->setCellValue('C' . $row, normalizePhone($record->cel_m) ?? '');
+            $sheet->setCellValue('D' . $row, 'mother');
+
+            foreach ($students as $student) {
+                $sheet->setCellValue('E' . $row, $student->nombre);
+                $sheet->setCellValue('F' . $row, $student->apellidos);
+                $sheet->setCellValue('G' . $row, $student->grado);
+            }
+            $row++;
+        }
+
+
+        if ($progressFile && $index % 100 === 0) {
+            $progress = 30 + (($index / $total) * 40);
+            updateProgress($progressFile, $progress, "Exportando padres con sus estudiantes: $index de $total");
+        }
+    }
+
+    if ($progressFile) updateProgress($progressFile, 70, 'Pickups exportados');
+}
 function exportFoodAssistance(Worksheet $sheet, string $year, ?string $progressFile = null): void
 {
     $sheet->setTitle('Food Assistance');
@@ -297,7 +405,7 @@ function exportFoodAssistance(Worksheet $sheet, string $year, ?string $progressF
     $col = 'A';
     foreach ($headers as $header) {
         $sheet->setCellValue($col . '1', $header);
-        $col++;
+        $col = str_increment($col);
     }
 
     $students = Student::query()
@@ -396,7 +504,7 @@ function exportCafeteria(Worksheet $sheet, string $year, ?string $progressFile =
     $col = 'A';
     foreach ($headers as $header) {
         $sheet->setCellValue($col . '1', $header);
-        $col++;
+        $col = str_increment($col);
     }
 
     $students = Student::query()

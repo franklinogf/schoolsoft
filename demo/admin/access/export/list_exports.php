@@ -51,7 +51,9 @@ foreach ($files as $file) {
             'created_at' => $data['created_at'] ?? date('Y-m-d H:i:s'),
             'filesize' => $data['filesize'] ?? 0,
             'file_exists' => $fileExists,
-            'filepath' => $data['filepath'] ?? null
+            'filepath' => $data['filepath'] ?? null,
+            'error' => $data['error'] ?? false,
+            'grades' => $data['grades'] ?? []
         ];
     }
 }
