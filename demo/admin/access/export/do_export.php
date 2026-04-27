@@ -303,13 +303,16 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
         $col = str_increment($col);
     }
 
-    $families = Family::query()->with('kids', function (HasMany $query) use ($year, $grades) {
+    $kidsConstraint = function ($query) use ($year, $grades) {
         $query->withoutGlobalScope(YearScope::class)
             ->where('year', $year)
-            ->when(!empty($grades), function ($query) use ($grades) {
-                $query->whereIn('grado', $grades);
-            });
-    })->get();
+            ->when(!empty($grades), fn($q) => $q->whereIn('grado', $grades));
+    };
+
+    $families = Family::query()
+        ->whereHas('kids', $kidsConstraint)
+        ->with(['kids' => $kidsConstraint])
+        ->get();
 
     if ($progressFile) updateProgress($progressFile, 30, 'Exportando pickups...');
 
@@ -318,10 +321,6 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
     foreach ($families as $index => $record) {
         $students = $record->kids;
 
-        if ($students->isEmpty()) {
-            continue;
-        }
-
         $hasFather = filled($record->email_p);
         $hasMother = filled($record->email_m);
 
@@ -329,31 +328,27 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
             continue;
         }
 
-        if ($hasFather) {
-            $sheet->setCellValue('A' . $row, $record->padre ?? '');
-            $sheet->setCellValue('B' . $row, $record->email_p ?? '');
-            $sheet->setCellValue('C' . $row, normalizePhone($record->cel_p) ?? '');
-            $sheet->setCellValue('D' . $row, 'father');
-
-            foreach ($students as $student) {
+        foreach ($students as $student) {
+            if ($hasFather) {
+                $sheet->setCellValue('A' . $row, $record->padre ?? '');
+                $sheet->setCellValue('B' . $row, $record->email_p ?? '');
+                $sheet->setCellValue('C' . $row, normalizePhone($record->cel_p) ?? '');
+                $sheet->setCellValue('D' . $row, 'father');
                 $sheet->setCellValue('E' . $row, $student->nombre);
                 $sheet->setCellValue('F' . $row, $student->apellidos);
                 $sheet->setCellValue('G' . $row, $student->grado);
+                $row++;
             }
-            $row++;
-        }
-        if ($hasMother) {
-            $sheet->setCellValue('A' . $row, $record->madre ?? '');
-            $sheet->setCellValue('B' . $row, $record->email_m ?? '');
-            $sheet->setCellValue('C' . $row, normalizePhone($record->cel_m) ?? '');
-            $sheet->setCellValue('D' . $row, 'mother');
-
-            foreach ($students as $student) {
+            if ($hasMother) {
+                $sheet->setCellValue('A' . $row, $record->madre ?? '');
+                $sheet->setCellValue('B' . $row, $record->email_m ?? '');
+                $sheet->setCellValue('C' . $row, normalizePhone($record->cel_m) ?? '');
+                $sheet->setCellValue('D' . $row, 'mother');
                 $sheet->setCellValue('E' . $row, $student->nombre);
                 $sheet->setCellValue('F' . $row, $student->apellidos);
                 $sheet->setCellValue('G' . $row, $student->grado);
+                $row++;
             }
-            $row++;
         }
 
 
