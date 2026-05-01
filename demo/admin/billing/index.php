@@ -66,6 +66,11 @@ $options = [
                 'desc' => __('Pantalla para activación y desactivación de pantallas.'),
                 'link' => 'activacion.php',
             ],
+            [
+                'name' => __("Depositos"),
+                'desc' => __('Pantalla para borrar depositos.'),
+                'link' => 'deposit/',
+            ],
         ],
     ],
     [
@@ -292,6 +297,12 @@ $options = [
                 'desc' => __('Informe presupuesto por grado.'),
                 'link' => 'pdf/inf_presu3.php',
                 'target' => 'inf_presu',
+            ],
+            [
+                'name' => __("Deuda Salón"),
+                'desc' => __('Informe deudas por grado.'),
+                'link' => 'pdf/de.php',
+                'target' => 'inf_deuda_salon',
             ],
         ],
     ],
