@@ -142,6 +142,9 @@ $lang = new Lang([
                 <a href="<?= Route::url('/admin/users/reenrollment/pdf/pdfResume.php') ?>" class="list-group-item list-group-item-action list-group-item-secondary" target="resume">
                     <?= $lang->translation("En resumen") ?>
                 </a>
+                <a href="<?= Route::url('/admin/users/reenrollment/pdf/cuentas.php') ?>" class="list-group-item list-group-item-action list-group-item-secondary" target="resume">
+                    <?= $lang->translation("Por cuentas") ?>
+                </a>
             </div>
         </div>
     </div>
