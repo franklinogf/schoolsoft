@@ -133,6 +133,8 @@ Route::includeFile('/admin/includes/layouts/header.php');
                                     <option value="1">Por Cuentas</option>
                                     <option value="2">Por Apellidos</option>
                                     <option value="3">Por Grado</option>
+				                    <option value="4">Por Superior</option>
+                    				<option value="5">Por Elemental</option>
                                 </select></td>
                         </tr>
                         <tr>
