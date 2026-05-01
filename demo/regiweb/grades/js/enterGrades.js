@@ -172,6 +172,7 @@ $(function () {
           icon: 'success',
           title: response.message || 'Tipo de nota actualizado'
         })
+        init()
       },
       error: function (xhr, status, error) {
         console.error('Error en la solicitud AJAX:', status, error)

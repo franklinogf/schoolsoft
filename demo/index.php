@@ -308,7 +308,7 @@ $school = Admin::primaryAdmin();
                 <div class="col mb-4">
                     <div class="card portal-card shadow">
                         <div class="card-body text-center p-4">
-                            <a href="<?= Route::url('/calendarix/calendar.php') ?>" class="btn btn-primary btn-block">
+                            <a href="<?= Route::url('/calendar/') ?>" class="btn btn-primary btn-block">
                                 <i class="fas fa-calendar-alt"></i>
                                 <?= __("Calendario") ?>
                             </a>
@@ -319,8 +319,8 @@ $school = Admin::primaryAdmin();
                     <div class="card portal-card shadow">
                         <div class="card-body text-center p-4">
                             <a href="#" class="btn btn-primary btn-block">
-                                <i class="fas fa-file-alt"></i>
-                                <?= __("Solicitudes") ?>
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <?= __("Recogidas") ?>
                             </a>
                         </div>
                     </div>
