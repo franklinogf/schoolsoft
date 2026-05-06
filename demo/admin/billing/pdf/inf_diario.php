@@ -96,6 +96,8 @@ $tpo6 = 0;
 $tef7 = 0;
 $tpo7 = 0;
 
+$tot0 = 0;
+
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->Cell(80);
@@ -148,7 +150,7 @@ foreach ($result as $row2) {
     $est = $est + 1;
     $tdp = '';
     $pdf->Cell(8, 5, $est, 0, 0, 'R');
-    $pdf->Cell(20, 5, $row2[1], 0, 0, 'R');
+    $pdf->Cell(20, 5, $row2->accountID, 0, 0, 'R');
     if ($row2->payment_type == 'credit') {
         $tdp = 'Tarj. Credito';
         $tot1 = $tot1 + $row2->total;
@@ -224,8 +226,10 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=2 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=2 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
+        ->whereRaw("shopping=2 and year='$year' and date >= '{$_POST['ft1']} $t1' and date <= '{$_POST['ft2']} $t2'")->orderBy('date')->get();
+//        ->whereRaw("shopping=2 and year='$year' and date >= '".$_POST['ft1']." $t1' and date <= '".$_POST['ft2']." $t2'")->orderBy('date')->get();
 }
+
 
 $est = 0;
 $tot1 = 0;
@@ -242,13 +246,13 @@ $tot11 = 0;
 $tot19 = 0;
 $aa = '';
 $est = 0;
-foreach ($result as $row2) {
+foreach ($infoData as $row2) {
     list($fecha, $hora) = explode(" ", $row2->date);
     $detail = DB::table('compras_detalle')
         ->whereRaw("id_compra = '{$row2->id}'")->orderBy('id_compra')->get();
     foreach ($detail as $estu) {
         $estu2 = DB::table('year')
-            ->whereRaw(" ss = '" . $estu->item_name . "' limit 1")->orderBy('ss')->get();
+            ->whereRaw("ss = '$estu->item_name'")->orderBy('ss')->first();
 
         $aa = '';
         $est = $est + 1;
@@ -256,14 +260,23 @@ foreach ($result as $row2) {
         $pdf->Cell(8, 5, $est, 0, 0, 'R');
         $pdf->Cell(20, 5, $row2->accountID, 0, 0, 'R');
         if ($row2->payment_type == 'credit') {
-            $tdp = 'Cheque';
-            $tot2 = $tot2 + $estu->price;
-        }
-        if ($row2->payment_type == 'ach') {
             $tdp = 'Tarj. Credito';
             $tot1 = $tot1 + $estu->price;
         }
-        if ($row2->tipoDePago == 'Cash') {
+        if ($row2->payment_type == 'Correccion Tarj') {
+           $tdp = 'Corr. Tarj.';
+           $tot1 = $tot1 + $estu->price;
+        }
+        if ($row2->payment_type == 'ach') {
+            $tdp = 'Cheque';
+            $tot2 = $tot2 + $estu->price;
+        }
+        if ($row2->payment_type == 'Correccion ACH') {
+            $tdp = 'Corre. ACH';
+            $tot2 = $tot2 + $estu->price;
+        }
+
+        if ($row2->payment_type == 'Cash') {
             $tot3 = $tot3 + $estu->price;
         }
         $tot11 = $tot11 + $estu->price;
@@ -323,7 +336,8 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=3 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=3 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
+        ->whereRaw("shopping=3 and year='$year' and date >= '{$_POST['ft1']} $t1' and date <= '{$_POST['ft2']} $t2'")->orderBy('date')->get();
+//        ->whereRaw("shopping=3 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -341,7 +355,7 @@ $tot11 = 0;
 $tot19 = 0;
 $aa = '';
 $est = 0;
-foreach ($result as $row2) {
+foreach ($infoData as $row2) {
     list($fecha, $hora) = explode(" ", $row2->date);
 
     $aa = '';
@@ -349,26 +363,30 @@ foreach ($result as $row2) {
         ->whereRaw("id_compra = '$row2->id'")->orderBy('id_compra')->get();
     foreach ($result33 as $row3) {
         $row22 = DB::table('year')
-            ->whereRaw("ss = '" . $row2->deliveryTo . "' limit 1")->orderBy('ss')->get();
+            ->whereRaw("ss = '$row2->deliveryTo'")->orderBy('ss')->first();
         $est = $est + 1;
         $tdp = '';
         $pdf->Cell(8, 5, $est, 0, 0, 'R');
-        $pdf->Cell(20, 5, $row2[1], 0, 0, 'R');
+        $pdf->Cell(20, 5, $row2->accountID, 0, 0, 'R');
         $pdf->Cell(70, 5, $row22->apellidos . ' ' . $row22->nombre, 0, 0, 'L');
 
         if ($row2->payment_type == 'credit') {
             $tdp = 'Tarj. Credito';
-            $tot1 = $tot1 + $row2->total;
+            $tot1 = $tot1 + $row2->price;
+        }
+        if ($row2->payment_type == 'Correccion Tarj') {
+           $tdp = 'Corr. Tarj.';
+           $tot1 = $tot1 + $row2->price;
         }
         if ($row2->payment_type == 'ach') {
             $tdp = 'Cheque';
-            $tot2 = $tot2 + $row2->total;
+            $tot2 = $tot2 + $row2->price;
         }
-        $tot11 = $tot11 + $row2->total;
-        $tot0 = $tot0 + $row2->total;
+        $tot11 = $tot11 + $row2->price;
+        $tot0 = $tot0 + $row2->price;
         $pdf->Cell(25, 5, $fecha, 0, 0, 'R');
         $pdf->Cell(20, 5, $hora, 0, 0, 'R');
-        $pdf->Cell(25, 5, $row2->total, 0, 0, 'R');
+        $pdf->Cell(25, 5, $row2->price, 0, 0, 'R');
         $pdf->Cell(25, 5, $row2->payment_type . ' ' . $aa, 0, 1, 'R');
     }
 }
@@ -420,7 +438,8 @@ if ($_POST['ho'] == '1') {
         ->whereRaw("shopping=4 AND year='$year' and DATE(`date`) >= '{$_POST['ft1']}' AND DATE(`date`) <= '{$_POST['ft2']}'")->orderBy('date')->get();
 } else {
     $infoData = DB::table('compras')
-        ->whereRaw("shopping=4 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
+        ->whereRaw("shopping=4 and year='$year' and date >= '{$_POST['ft1']} $t1' and date <= '{$_POST['ft2']} $t2'")->orderBy('date')->get();
+//        ->whereRaw("shopping=4 and year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -438,26 +457,52 @@ $tot11 = 0;
 $tot19 = 0;
 $aa = '';
 $est = 0;
-foreach ($result as $row2) {
+foreach ($infoData as $row2) {
     list($fecha, $hora) = explode(" ", $row2->date);
+
+//        $q33 = "select DISTINCT * from compras_detalle where id_compra='$row2[0]' ";
+//        $result33=mysql_query($q33);
+//        $row3=mysql_fetch_array($result33);
+
+    $row3 = DB::table('compras_detalle')
+        ->whereRaw("id_compra = $row2->id")->first();
+
+
     $estu = DB::table('year')
-        ->whereRaw("ss = '" . $estu->deliveryTo . "' limit 1")->orderBy('ss')->get();
+        ->whereRaw("ss = '$row3->item_name'")->orderBy('ss')->first();
     $aa = '';
     $est = $est + 1;
     $tdp = '';
     $pdf->Cell(8, 5, $est, 0, 0, 'R');
-    $pdf->Cell(20, 5, $row2[1], 0, 0, 'R');
+    $pdf->Cell(20, 5, $row2->accountID, 0, 0, 'R');
     if ($row2->payment_type == 'credit') {
         $tdp = 'Tarj. Credito';
         $tot1 = $tot1 + $row2->total;
     }
+   if ($row2->payment_type == 'Correccion Tarj') {
+      $tdp = 'Corr. Tarj';
+      $tot1 = $tot1 + $row2->total;
+   }
     if ($row2->payment_type == 'ach') {
         $tdp = 'Cheque';
         $tot2 = $tot2 + $row2->total;
     }
-    if ($row2->tipoDePago == 'Cash') {
+    if ($row2->payment_type == 'Cash') {
         $tot3 = $tot3 + $row2->total;
     }
+
+
+   if ($row2->payment_type == 'oficina') {
+      $tdp = 'Oficina';
+      $tot3 = $tot3 + $row2->total;
+   }
+   if ($row2->payment_type == 'correcion') {
+      $tdp = 'Corrección';
+      $tot4 = $tot4 + $row2->total;
+   }
+
+
+
     $tot11 = $tot11 + $row2->total;
     $tot0 = $tot0 + $row2->total;
     $pdf->Cell(25, 5, $fecha, 0, 0, 'R');
@@ -487,6 +532,11 @@ if ($tot3 > 0) {
     $pdf->Cell(27, 4, 'Efectivo: ', 0, 0, 'L');
     $pdf->Cell(18, 4, number_format($tot3, 2), 0, 1, 'R');
 }
+if ($tot4 > 0) {
+   $pdf->Cell(25, 4, '', 0, 0, 'R');
+   $pdf->Cell(27, 4, utf8_encode('Correcién: '), 0, 0, 'L');
+   $pdf->Cell(18, 4, number_format($tot4, 2), 0, 1, 'R');
+}
 
 $pdf->Cell(25, 4, '', 0, 0, 'R');
 $pdf->Cell(28, 4, '=====================', 0, 1, 'L');
@@ -513,21 +563,24 @@ $pdf->Cell(25, 5, 'TRANS', 1, 1, 'C', true);
 $pdf->SetFont('Arial', '', 11);
 
 $result = DB::table('depositos')
-    ->whereRaw("year='$year' and fecha >= '" . $_POST['ft1'] . "' and fecha <= '" . $_POST['ft2'] . "'")->orderBy('fecha, hora')->get();
-foreach ($result as $row2) {
+    ->whereRaw("year='$year' and fecha >= '{$_POST['ft1']}' and fecha <= '{$_POST['ft2']}'")->orderBy('fecha, hora')->get();
+//    ->whereRaw("year='$year' and fecha >= '{$_POST['ft1']} $t1' and fecha <= '{$_POST['ft2']} $t2'")->orderBy('fecha, hora')->get();
+//    ->whereRaw("year='$year' and fecha >= '" . $_POST['ft1'] . "' and fecha <= '" . $_POST['ft2'] . "'")->orderBy('fecha, hora')->get();
+foreach ($result as $row21) {
     $thisCourse2 = DB::table('depositos')->where([
-        ['id2', $row2->id2]
+        ['id2', $row21->id2],
     ])->update([
-        'date' => "$row2[2].' '.$row2[3]",
+        'date' => $row21->fecha.' '.$row21->hora,
     ]);
 }
 
 if ($_POST['ho'] == '1') {
-    $result = DB::table('depositos')
+    $deposits = DB::table('depositos')
         ->whereRaw("year='$year' and fecha >= '" . $_POST['ft1'] . "' AND fecha <= '" . $_POST['ft2'] . "'")->orderBy('fecha, hora')->get();
 } else {
-    $result = DB::table('depositos')
-        ->whereRaw("year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
+    $deposits = DB::table('depositos')
+        ->whereRaw("year='$year' and date >= '{$_POST['ft1']} $t1' and date <= '{$_POST['ft2']} $t2'")->orderBy('date')->get();
+//        ->whereRaw("year='$year' and date >= '" . $_POST['ft1'] . " $t1' and date <= '" . $_POST['ft2'] . " $t2'")->orderBy('date')->get();
 }
 
 $est = 0;
@@ -545,14 +598,14 @@ $tot11 = 0;
 $tot19 = 0;
 $aa = '';
 $est = 0;
-foreach ($result as $row2) {
+foreach ($deposits as $row2) {
     $aa = '';
     $row22 = DB::table('year')
-        ->whereRaw("ss = '" . $row2->ss . "' limit 1")->orderBy('ss')->get();
+        ->whereRaw("ss = '$row2->ss'")->orderBy('ss')->first();
     $est = $est + 1;
     $tdp = $row2->tipoDePago;
     $pdf->Cell(8, 5, $est, 0, 0, 'R');
-    $pdf->Cell(20, 5, $row2[0], 0, 0, 'R');
+    $pdf->Cell(20, 5, $row2->id, 0, 0, 'R');
     $pdf->Cell(70, 5, $row22->apellidos . ' ' . $row22->nombre, 0, 0, 'L');
     if ($row2->tipoDePago == 'Tarjeta') {
         $tot1 = $tot1 + $row2->cantidad;
