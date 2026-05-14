@@ -333,27 +333,23 @@ $(function () {
 
       $.each(parentAllGrades, function (index, grade) {
         if ($(grade).val() !== '' && +$(grade).val() > -1) {
-          if (index !== parentAllGrades.length - 1) {
-            const tdpInput = $('#values').find(`#val${index + 1}`)
-            if (tdpInput.val() && !isString($(grade).val())) {
-              tpaTotal += +$(grade).val()
-              if (__ONLY_CBTM__) {
-                averageTdp += tdpInput.val() ? +tdpInput.val() : 0
-                if (_report === 'Notas') {
-                  if (_subjectCode.includes('HW')) {
-                    tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
-                  } else {
-                    tdpTotal = 60
-                  }
-                } else {
+          const tdpInput = $('#values').find(`#val${index + 1}`)
+          if (tdpInput.val() && !isString($(grade).val())) {
+            tpaTotal += +$(grade).val()
+            if (__ONLY_CBTM__) {
+              averageTdp += tdpInput.val() ? +tdpInput.val() : 0
+              if (_report === 'Notas') {
+                if (_subjectCode.includes('HW')) {
                   tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
+                } else {
+                  tdpTotal = 60
                 }
               } else {
                 tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
               }
+            } else {
+              tdpTotal += tdpInput.val() ? +tdpInput.val() : 0
             }
-          } else {
-            tpaTotal += +$(grade).val()
           }
         }
       })
