@@ -171,7 +171,7 @@ if (dis == '2')
                         <input id="tri2" name="tri2b" type="checkbox" style="height: 30px; width: 30px" value="Si" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="option">
-                                <?= $lang->translation('Trabajo libreta') ?>
+                                <?= $lang->translation('Trabajo diarios') ?>
                             </label>
                         </div>
                         <input id="sem1" name="tri3b" type="checkbox" style="height: 30px; width: 30px" value="Si" />
@@ -179,7 +179,7 @@ if (dis == '2')
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="option">
-                                <?= $lang->translation('Trabajos diarios') ?>
+                                <?= $lang->translation('Trabajos libreta') ?>
                             </label>
                         </div>
                         <input id="tri3" name="tri4b" type="checkbox" style="height: 30px; width: 30px" value="Si" />
@@ -196,8 +196,6 @@ if (dis == '2')
                         </div>
                         <input id="sem2" name="tri6b" type="checkbox" style="height: 30px; width: 30px" value="Si" />
                     </div>
-
-
 
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
