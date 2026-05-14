@@ -69,7 +69,11 @@ function NLetra($valor){
 //$pdf->useFooter(false);
 $school = new School(Session::id());
 
-$year = $school->year();
+//$school = new School(Session::id());
+//$grades = DB::table('materias')->where('year', $school->info('year2'))->orderBy('grado')->get();
+
+
+$year = $school->info('year2');
 $pdf = new PDF();
 $pdf->useFooter(false);
 
@@ -167,12 +171,20 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(48, 5, $curso->apellidos, 1, 0, 'L');
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
-    for ( $n = 1; $n < 10; $n += 1)
+    for ( $n = 1; $n < 11; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
-//        $pdf->Cell(7, 5, $curso[$n], 1, 0, 'R');
+        $n2 = $n + $a;
+        if ($n < 10)
+           {
+           $pdf->Cell(7, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
+        else
+           {
+           $pdf->Cell(6, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
+
         }
-      $pdf->Cell(6, 5, $curso->not10, 1, 0, 'R');
+//      $pdf->Cell(6, 5, $curso->not10, 1, 0, 'R');
 
       $pdf->Cell(7, 5, $curso->{"$t4"}, 1, 0, 'R');
       $pdf->Cell(7, 5, $curso->{"$t5"}, 1, 0, 'R');
@@ -307,11 +319,19 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(48, 5, $curso->apellidos, 1, 0, 'L');
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
-    for ( $n = 1; $n < 10; $n += 1)
+    for ( $n = 1; $n < 11; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
+        $n2 = $n + $a;
+        if ($n < 10)
+           {
+           $pdf->Cell(7, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
+        else
+           {
+           $pdf->Cell(9, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
         }
-      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
+//      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
       $pdf->Cell(9, 5, $curso->{"$t1"}, 1, 0, 'R');
       $pdf->Cell(9, 5, $curso->{"$t2"}, 1, 0, 'R');
       $pdf->Cell(9, 5, $curso->{"$t3"}, 1, 1, 'R');
@@ -445,11 +465,19 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(48, 5, $curso->apellidos, 1, 0, 'L');
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
-    for ( $n = 1; $n < 10; $n += 1)
+    for ( $n = 1; $n < 11; $n += 1)
         {
-        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
+        $n2 = $n + $a;
+        if ($n < 10)
+           {
+           $pdf->Cell(7, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
+        else
+           {
+           $pdf->Cell(9, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
         }
-      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
+//      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t1, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t2, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t3, 1, 1, 'R');
@@ -581,12 +609,19 @@ $stu = DB::table('padres')->where([
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(48, 5, $curso->apellidos, 1, 0, 'L');
     $pdf->Cell(37, 5, $curso->nombre, 1, 0, 'L');
-    for ( $n = 1; $n < 10; $n += 1)
+    for ( $n = 1; $n < 11; $n += 1)
         {
-        //        $pdf->Cell(7, 5, $curso->$not[$n], 1, 0, 'R');
-        $pdf->Cell(7, 5, $curso->{"not$n"}, 1, 0, 'R');
+        $n2 = $n + $a;
+        if ($n < 10)
+           {
+           $pdf->Cell(7, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
+        else
+           {
+           $pdf->Cell(9, 5, $curso->{"not$n2"}, 1, 0, 'R');
+           }
         }
-      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
+//      $pdf->Cell(9, 5, $curso->not10, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t1, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t2, 1, 0, 'R');
     $pdf->Cell(9, 5, $curso->$t3, 1, 1, 'R');
