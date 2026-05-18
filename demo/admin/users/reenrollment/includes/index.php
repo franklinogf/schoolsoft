@@ -13,7 +13,7 @@ Server::is_post();
 
 
 $students = new Student();
-$year = $students->info('year');
+$year = $students->info('year2');
 $year2 = (($year[0] . $year[1]) + 1) . '-' . (($year[3] . $year[4]) + 1);
 
 if (isset($_POST['search'])) {
