@@ -293,6 +293,7 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
             'parent_email',
             'parent_phone',
             'guardian_type',
+            'student_external_id',
             'student_first_name',
             'student_last_name',
             'student_grade',
@@ -334,9 +335,10 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
                 $sheet->setCellValue('B' . $row, $record->email_p ?? '');
                 $sheet->setCellValue('C' . $row, normalizePhone($record->cel_p) ?? '');
                 $sheet->setCellValue('D' . $row, 'father');
-                $sheet->setCellValue('E' . $row, $student->nombre);
-                $sheet->setCellValue('F' . $row, $student->apellidos);
-                $sheet->setCellValue('G' . $row, $student->grado);
+                $sheet->setCellValue('E' . $row, $student->ss);
+                $sheet->setCellValue('F' . $row, $student->nombre);
+                $sheet->setCellValue('G' . $row, $student->apellidos);
+                $sheet->setCellValue('H' . $row, $student->grado);
                 $row++;
             }
             if ($hasMother) {
@@ -344,9 +346,10 @@ function exportPickups(Worksheet $sheet, string $year, ?string $progressFile = n
                 $sheet->setCellValue('B' . $row, $record->email_m ?? '');
                 $sheet->setCellValue('C' . $row, normalizePhone($record->cel_m) ?? '');
                 $sheet->setCellValue('D' . $row, 'mother');
-                $sheet->setCellValue('E' . $row, $student->nombre);
-                $sheet->setCellValue('F' . $row, $student->apellidos);
-                $sheet->setCellValue('G' . $row, $student->grado);
+                $sheet->setCellValue('E' . $row, $student->ss);
+                $sheet->setCellValue('F' . $row, $student->nombre);
+                $sheet->setCellValue('G' . $row, $student->apellidos);
+                $sheet->setCellValue('H' . $row, $student->grado);
                 $row++;
             }
         }
