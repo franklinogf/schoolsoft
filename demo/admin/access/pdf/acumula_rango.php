@@ -27,675 +27,341 @@ $lang = new Lang([
 $school = new School(Session::id());
 $year = $school->info('year2');
 
-$grados =  $_COOKIE["variable1"];
-$pdf = new PDF;
+//class PDF extends FPDF
+class nPDF extends PDF
+{
+
+//Cabecera de p&#65533;gina
+function Header()
+{
+      $nombre = $_POST['nombre'] ?? ', ';
+      $estudiantes = $_POST['estudiantes'] ?? ', , ';
+      list($ape, $nom) = explode(", ", $nombre);
+      list($ape, $nom, $cta) = explode(", ", $estudiantes);
+      $g1 = '';
+	//Logo
+	$sp=80;
+	//Movernos a la derecha
+	$this->Cell($sp);
+	//Ttulo
+	$this->Ln(10);
+	$this->Cell($sp);
+	$this->SetFont('Arial','B',11);
+      $this->Cell(30, 5, 'LISTA DE PROMEDIOS ' . $_POST['Year'], 0, 1, 'C');
+	$this->Ln(5);
+	$this->Cell($sp);
+      if ($_POST['gr1'] ?? 0 == 1) {
+         $g1 = $g1 . ' 01';
+      }
+      if ($_POST['gr2'] ?? 0 == 1) {
+         $g1 = $g1 . ' 02';
+      }
+      if ($_POST['gr3'] ?? 0 == 1) {
+         $g1 = $g1 . ' 03';
+      }
+      if ($_POST['gr4'] ?? 0 == 1) {
+         $g1 = $g1 . ' 04';
+      }
+      if ($_POST['gr5'] ?? 0 == 1) {
+         $g1 = $g1 . ' 05';
+      }
+      if ($_POST['gr6'] ?? 0 == 1) {
+         $g1 = $g1 . ' 06';
+      }
+      if ($_POST['gr7'] ?? 0 == 1) {
+         $g1 = $g1 . ' 07';
+      }
+      if ($_POST['gr8'] ?? 0 == 1) {
+         $g1 = $g1 . ' 08';
+      }
+      if ($_POST['gr9'] ?? 0 == 1) {
+         $g1 = $g1 . ' 09';
+      }
+      if ($_POST['gr10'] ?? 0 == 1) {
+         $g1 = $g1 . ' 10';
+      }
+      if ($_POST['gr11'] ?? 0 == 1) {
+         $g1 = $g1 . ' 11';
+      }
+      if ($_POST['gr12'] ?? 0 == 1) {
+         $g1 = $g1 . ' 12';
+      }
+    $this->Cell(30,5,'GRADOS '.$g1,0,1,'C');
+    if (!empty($_POST['mat1']) or !empty($_POST['mat2']) or !empty($_POST['mat3']) or !empty($_POST['mat4']))
+       {
+	   $this->Cell($sp);
+       $this->Cell(30,5,'CURSOS '.$_POST['mat1'].' '.$_POST['mat2'].' '.$_POST['mat3'].' '.$_POST['mat4'],0,1,'C');
+//       $this->Ln(5);
+       }
+	$this->Ln(5);
+	$this->SetFont('Arial','B',11);
+//	$this->SetFillColor(230);
+	$this->Cell(75,5,'NOMBRE DEL ESTUDIANTE',1,0,'C',true);
+	$this->Cell(10,5,'T-A',1,0,'C',true);
+	$this->Cell(10,5,'T-B',1,0,'C',true);
+	$this->Cell(10,5,'T-C',1,0,'C',true);
+	$this->Cell(10,5,'T-D',1,0,'C',true);
+	$this->Cell(10,5,'T-F',1,0,'C',true);
+	$this->Cell(10,5,'T-N',1,0,'C',true);
+	$this->Cell(15,5,'PROM',1,0,'C',true);
+	$this->Cell(13,5,'%',1,0,'C',true);
+	$this->Cell(28,5,'N.Est.',1,1,'C',true);
+//    $this->Ln(10);
+
+}
+
+//Pie de p&#65533;gina
+function Footer()
+{
+
+    //Posici&oacute;n: a 1,5 cm del final
+    $this->SetY(-15);
+
+    //Arial italic 8
+    $this->SetFont('Arial','I',8);
+    //N&uacute;mero de p&aacute;gina
+   $this->Cell(0,10,'Pagina '.$this->PageNo().'/{nb}'.' / '.date('m-d-Y'),0,0,'C');
+
+}
+
+}
+
+//Creaci&#65533;n del objeto de la clase heredada
+//$pdf=new PDF();
+$pdf = new nPDF();
 $pdf->SetTitle('INFORME PROMEDIO POR CLASE ACUMULADO');
 $pdf->Fill();
 
 $pdf->AliasNbPages();
-if ($grados=='B')
-   {
-   $pdf->AddPage();
-   }
-else
-   {
-   $pdf->AddPage('L');
-   }
+$pdf->AddPage();
 
-$pdf->Cell(0,5,'RANGO / '.$year,0,1,'C');
-$pdf->Cell(0,5,'',0,1,'L');
-
-$pdf->SetFont('Times','B',11);
-//$pdf->SetFillColor(240);
-
-$pdf->Cell(15,5,'',1,0,'L',true);
-$pdf->Cell(25,5,'RANGO',1,0,'C',true);
-$pdf->Cell(90,5,'NOMBRE DEL ESTUDIANTE',1,0,'C',true);
-if ($grados == 'A')
-   {
-   $pdf->Cell(12,5,'01',1,0,'C',true);
-   $pdf->Cell(12,5,'02',1,0,'C',true);
-   $pdf->Cell(12,5,'03',1,0,'C',true);
-   $pdf->Cell(12,5,'04',1,0,'C',true);
-   $pdf->Cell(12,5,'05',1,0,'C',true);
-   $pdf->Cell(12,5,'06',1,0,'C',true);
-   $pdf->Cell(12,5,'07',1,0,'C',true);
-   $pdf->Cell(12,5,'08',1,0,'C',true);
-   } else {
-   $pdf->Cell(12, 5, '09', 1, 0, 'C', true);
-   $pdf->Cell(12, 5, '10', 1, 0, 'C', true);
-   $pdf->Cell(12, 5, '11', 1, 0, 'C', true);
-   $pdf->Cell(12, 5, '12', 1, 0, 'C', true);
-}
-
-$pdf->Cell(12,5,'PRO',1,1,'C',true);
 $pdf->SetFont('Times','',12);
 
-$db = new DB();
-$db->query('Truncate acumula_totales');
-
-IF ($grados=='A')
-   {
-   $gra8 = '08';
-   $gra7 = '07';
-   $gra6 = '06';
-   $gra5 = '05';
-   $gra4 = '04';
-   $gra3 = '03-';
-   $gra2 = '02-';
-   $gra1 = '01-';
-   $gra0 = '08';
-   }
-IF ($grados=='B')
-   {
-   $gra4='09';
-   $gra3='10';
-   $gra2='11';
-   $gra1='12';
-   $gra0 = '12';
-   }
-
-if ($grados == 'C') {
-   $gra4 = '09';
-   $gra3 = '10';
-   $gra2 = '11';
-   $gra1 = '22';
-   $gra0 = '11';
+//session_start();
+$id=$_SESSION['id1'];
+$usua=$_SESSION['usua1'];
+$year=$_POST['Year'];
+//NEW---->
+$g1='aa-';$g2='aa-';$g3='aa-';$g4='aa-';$g5='aa-';$g6='aa-';$g7='aa-';$g8='aa-';$g9='aa-';$g10='aa-';$g11='aa-';$g12='aa-';
+if ($_POST['gr1'] ?? 0 == 1) {
+   $g1 = '01-';
 }
-
-if ($grados == 'D') {
-   $gra4 = '09';
-   $gra3 = '10';
-   $gra2 = '22';
-   $gra1 = '22';
-   $gra0 = '10';
+if ($_POST['gr2'] ?? 0 == 1) {
+   $g2 = '02-';
 }
-
-
-
-$a=0;
-$nt1=0;
-$nt2=0;
-$nt3=0;
-$nt4=0;
-$nt5=0;
-$nt6=0;
-$cr1=0;
-$cr2=0;
-$cr3=0;
-$cep1=0;
-$cep2=0;
-$cep3=0;
-$nta1=0;
-$nta2=0;
-$nta3=0;
-$ng=0;
-$notF=0;
-$notF1=0;
-
-$students = DB::table('year')
-->whereRaw("grado like '%" . $gra0 . "%' and year = '$year' and activo = ''")->orderBy('apellidos')->get();
-
-//$q7 = "select * from year where activo='' and grado like '%".$gra1."%' AND year = '$_POST[year2]' ORDER BY apellidos ASC";
-//$result7=mysql_query($q7);
-foreach ($students as $student)
+if ($_POST['gr3'] ?? 0 == 1) {
+   $g3 = '03-';
+}
+if ($_POST['gr4'] ?? 0 == 1) {
+   $g4 = '04-';
+}
+if ($_POST['gr5'] ?? 0 == 1) {
+   $g5 = '05-';
+}
+if ($_POST['gr6'] ?? 0 == 1) {
+   $g6 = '06-';
+}
+if ($_POST['gr7'] ?? 0 == 1) {
+   $g7 = '07-';
+}
+if ($_POST['gr8'] ?? 0 == 1) {
+   $g8 = '08-';
+}
+if ($_POST['gr9'] ?? 0 == 1) {
+   $g9 = '09-';
+}
+if ($_POST['gr10'] ?? 0 == 1) {
+   $g10 = '10-';
+}
+if ($_POST['gr11'] ?? 0 == 1) {
+   $g11 = '11-';
+}
+if ($_POST['gr12'] ?? 0 == 1) {
+   $g12 = '12-';
+}
+$grado = $_POST['grade'];
+if ($_POST['gra'] ?? 0 == 1)
+   {
+   list($g, $s) = explode("-", $grado);
+   $students = DB::table('year')
+   ->whereRaw("year = '$year' and grado like '%".$g."%' and activo = ''" )->orderBy('apellidos')->get();
+   }
+else {
+   $students = DB::table('year')
+   ->whereRaw("year = '$year' and grado like '$grado' and activo = ''" )->orderBy('apellidos')->get();
+   }
+foreach ($students as $student) 
         {
-        $ng=0;
-        $cr2=0;
-        $cra1=0;
-        $cra2=0;
-        $cra3=0;
-        $cra4=0;
-        $cra5=0;
-        $cep1=0;
-        $nta1=0;
-        $nta2=0;
-        $nta3=0;
-        $cr2=0;
-        $ng=0;
-        $notF =0;
-        $let2=0;
-        $cnt2=0;
-
-        $studa = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra1."%'")->orderBy('orden')->get();
-
-        $studb = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra2."%'")->orderBy('orden')->get();
-
-        $studc = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra3."%'")->orderBy('orden')->get();
-
-        $studd = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra4."%'")->orderBy('orden')->get();
-   if ($grados == 'A') {
-
-        $stude = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra5."%'")->orderBy('orden')->get();
-        $studf = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra6."%'")->orderBy('orden')->get();
-        $studg = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra7."%'")->orderBy('orden')->get();
-        $studh = DB::table('acumulativa')
-        ->whereRaw("ss = '$student->ss' and grado like '%".$gra8."%'")->orderBy('orden')->get();
-   }
-
-
-      $let1=0;
-      $let3=0;
-      $cnt1=0;
-      $cnt3=0;
-    foreach ($studa as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-            }
-    $acumula = DB::table('acumula_totales')->insert([
-        'ss' => $student->ss,
-        'nombre' => $student->nombre,
-        'apellidos' => $student->apellidos,
-    ]);
-
-
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-    $thisCourse2 = DB::table('acumula_totales')->where([
-        ['ss', $student->ss]
-    ])->update([
-        'not1' => number_format($lets1/$lets2,2),
-    ]);
-
+      $cc1=0;
+      if (empty($_POST['mat1']) and empty($_POST['mat2']) and empty($_POST['mat3']) and empty($_POST['mat4']) and empty($_POST['mat5'])) {
+   $cursos = DB::table('acumulativa')
+   ->whereRaw("ss = '$student->ss' and grado LIKE '%$g1%' or ss = '$student->ss' and grado LIKE '%$g2%' or ss = '$student->ss' and grado LIKE '%$g3%' or ss = '$student->ss' and grado LIKE '%$g4%' or ss = '$student->ss' and grado LIKE '%$g5%' or ss = '$student->ss' and grado LIKE '%$g6%' or ss = '$student->ss' and grado LIKE '%$g7%' or ss = '$student->ss' and grado LIKE '%$g8%' or ss = '$student->ss' and grado LIKE '%$g9%' or ss = '$student->ss' and grado LIKE '%$g10%' or ss = '$student->ss' and grado LIKE '%$g11%' or ss = '$student->ss' and grado LIKE '%$g12%'")->orderBy('apellidos')->get();
+         $cc1=1;
          }
-      $let1=0;
-      $let3=0;
-      $cnt1=0;
-      $cnt3=0;
-    foreach ($studb as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-            }
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-       $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-       ])->update([
-           'not2' => number_format($lets1/$lets2,2),
-       ]);
-
+      else {
+   $cursos = DB::table('acumulativa')
+   ->whereRaw("ss = '$student->ss' and grado LIKE '%$g1%' or ss = '$student->ss' and grado LIKE '%$g2%' or ss = '$student->ss' and grado LIKE '%$g3%' or ss = '$student->ss' and grado LIKE '%$g4%' or ss = '$student->ss' and grado LIKE '%$g5%' or ss = '$student->ss' and grado LIKE '%$g6%' or ss = '$student->ss' and grado LIKE '%$g7%' or ss = '$student->ss' and grado LIKE '%$g8%' or ss = '$student->ss' and grado LIKE '%$g9%' or ss = '$student->ss' and grado LIKE '%$g10%' or ss = '$student->ss' and grado LIKE '%$g11%' or ss = '$student->ss' and grado LIKE '%$g12%'")->orderBy('apellidos')->get();
+         $cc1=2;
          }
-
-      $let1=0;
-      $let3=0;
-      $cnt1=0;
-      $cnt3=0;
-    foreach ($studc as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-            }
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not3' => number_format($lets1/$lets2,2),
-        ]);
-         }
-
-      $let1=0;
-      $let3=0;
-      $cnt1=0;
-      $cnt3=0;
-    foreach ($studd as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-            }
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not4' => number_format($lets1/$lets2,2),
-        ]);
-         }
-   ////**********************
-   if ($grados == 'A') {
-
-      $let1=0;
-      $cnt1=0;
-    foreach ($stude as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-      }
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not5' => number_format($lets1/$lets2,2),
-        ]);
-         }
-      $let1=0;
-      $cnt1=0;
-    foreach ($studf as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-      }
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not6' => number_format($lets1/$lets2,2),
-        ]);
-         }
-      $let1=0;
-      $cnt1=0;
-    foreach ($studg as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-      }
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not7' => number_format($lets1/$lets2,2),
-        ]);
-         }
-
-
-
-      $let1=0;
-      $cnt1=0;
-    foreach ($studh as $stu)
-            {
-            if ($stu->sem1 > 0){
-               $cnt1=$cnt1+$stu->credito;
-               IF($stu->sem1 > 89){$let1=$let1+(4*$stu->credito);}
-               IF($stu->sem1 > 79 and $stu->sem1 < 90){$let1=$let1+(3*$stu->credito);}
-               IF($stu->sem1 > 69 and $stu->sem1 < 80){$let1=$let1+(2*$stu->credito);}
-               IF($stu->sem1 > 64 and $stu->sem1 < 70){$let1=$let1+(1*$stu->credito);}
-               }
-            if ($stu->sem2 > 0){
-               $cnt3=$cnt3+$stu->credito;
-               IF($stu->sem2 > 89){$let3=$let3+(4*$stu->credito);}
-               IF($stu->sem2 > 79 and $stu->sem2 < 90){$let3=$let3+(3*$stu->credito);}
-               IF($stu->sem2 > 69 and $stu->sem2 < 80){$let3=$let3+(2*$stu->credito);}
-               IF($stu->sem2 > 64 and $stu->sem2 < 70){$let3=$let3+(1*$stu->credito);}
-               }
-      }
-      if ($cnt1 > 0 or $cnt3 > 0)
-         {
-//    $acumula = DB::table('acumula_totales')->insert([
-//        'ss' => $student->ss,
-//        'nombre' => $student->nombre,
-//        'apellidos' => $student->apellidos,
-//    ]);
-         $lets1=0;
-         $lets2=0;
-         if ($cnt1 > 0)
-            {
-            $lets1=$lets1+number_format($let1/$cnt1,2);
-            $lets2=$lets2+1;
-            }
-         if ($cnt3 > 0)
-            {
-            $lets1=$lets1+number_format($let3/$cnt3,2);
-            $lets2=$lets2+1;
-            }
-         if ($lets2 > 0)
-            {
-            $let2=$let2+number_format($lets1/$lets2,2);
-            $cnt2=$cnt2+1;
-            }
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'not8' => number_format($lets1/$lets2,2),
-        ]);
-         }
-   }
-   if ($cnt2 > 0)
-         {
-         $thisCourse2 = DB::table('acumula_totales')->where([
-           ['ss', $student->ss]
-        ])->update([
-           'final' => number_format($let2/$cnt2,2),
-        ]);
-         }
-
-      }
       
-
-$studz = DB::table('acumula_totales')->orderBy('final DESC')->get();
-foreach ($studz as $stu)
-        {
-   $notas = 0;
-   $cantidad = 0;
-   if ($grados=='A')
-      {
-         if($stu->not5 > 0){
-            $notas += $stu->not5;
-            $cantidad++;
-         }
-         if($stu->not6 > 0){
-            $notas += $stu->not6;
-            $cantidad++;
-         }
-         if($stu->not7 > 0){
-            $notas += $stu->not7;
-            $cantidad++;
-         }
-         if($stu->not8 > 0){
-            $notas += $stu->not8;
-            $cantidad++;
+      $n1=0;$n2=0;$n3=0;$n4=0;$n5=0;$not=0;$tns=0;
+      $cr1=0;$cr2=0;$cr3=0;
+    foreach ($cursos as $curso) 
+            {
+            $cc=0;
+      if (substr($curso->curso, 0, 3) == $_POST['mat1'] and $cc1 == 2) {
+                $cc=3;
+               }
+      if (substr($curso->curso, 0, 3) == $_POST['mat2'] and $cc1 == 2) {
+                $cc=3;
+               }
+      if (substr($curso->curso, 0, 3) == $_POST['mat3'] and $cc1 == 2) {
+                $cc=3;
+               }
+      if (substr($curso->curso, 0, 3) == $_POST['mat4'] and $cc1 == 2) {
+                $cc=3;
+               }
+      if (substr($curso->curso, 0, 3) == $_POST['mat5'] and $cc1 == 2) {
+                $cc=3;
+               }
+            if ($curso->sem1 > 0 and $cc1==1)
+               {
+               $not=$not+$curso->sem1;$tns=$tns+1;
+         $ct = $curso->credito / 2;
+               if ($curso->sem1 > 89){$n1=$n1+1;$cr1=$cr1+(4*$ct);$cr2=$cr2+$ct;}
+               else
+                  if ($curso->sem1 > 79){$n2=$n2+1;$cr1=$cr1+(3*$ct);$cr2=$cr2+$ct;}
+                  else
+                     if ($curso->sem1 > 69){$n3=$n3+1;$cr1=$cr1+(2*$ct);$cr2=$cr2+$ct;}
+                     else
+                        if ($curso->sem1 > 59){$n4=$n4+1;$cr1=$cr1+(1*$ct);$cr2=$cr2+$ct;}
+                        else
+                           if ($curso->sem1 > 0){$n5=$n5+1;$cr2=$cr2+$ct;}
+               }
+            if ($curso->sem2 > 0 and $cc1==1)
+               {
+               $ct=$curso->credito/2;
+         $not = $not + $curso->sem2;
+         $tns = $tns + 1;
+               if ($curso->sem2 > 89){$n1=$n1+1;$cr1=$cr1+(4*$ct);$cr2=$cr2+$ct;}
+               else
+                  if ($curso->sem2 > 79){$n2=$n2+1;$cr1=$cr1+(3*$ct);$cr2=$cr2+$ct;}
+                  else
+                     if ($curso->sem2 > 69){$n3=$n3+1;$cr1=$cr1+(2*$ct);$cr2=$cr2+$ct;}
+                     else
+                        if ($curso->sem2 > 59){$n4=$n4+1;$cr1=$cr1+(1*$ct);$cr2=$cr2+$ct;}
+                        else
+                           if ($curso->sem2 > 0){$n5=$n5+1;$cr2=$cr2+$ct;}
+               }
+            if ($curso->sem1 > 0 and $cc==3)
+               {
+               $ct=$curso->credito/2;
+               $not=$not+$curso->sem1;$tns=$tns+1;
+//               $not=$not+($row2[8]*$ct);$tns=$tns+$ct;
+               if ($curso->sem1 > 89){$n1=$n1+1;$cr1=$cr1+(4*$ct);$cr2=$cr2+$ct;}
+               else
+                  if ($curso->sem1 > 79){$n2=$n2+1;$cr1=$cr1+(3*$ct);$cr2=$cr2+$ct;}
+                  else
+                     if ($curso->sem1 > 69){$n3=$n3+1;$cr1=$cr1+(2*$ct);$cr2=$cr2+$ct;}
+                     else
+                        if ($curso->sem1 > 59){$n4=$n4+1;$cr1=$cr1+(1*$ct);$cr2=$cr2+$ct;}
+                        else
+                           if ($curso->sem1 > 0){$n5=$n5+1;$cr2=$cr2+$ct;}
+               }
+            if ($curso->sem2 > 0 and $cc==3)
+               {
+               $ct=$curso->credito/2;
+         $not = $not + $curso->sem2;
+         $tns = $tns + 1;
+               if ($curso->sem2 > 89){$n1=$n1+1;$cr1=$cr1+(4*$ct);$cr2=$cr2+$ct;}
+               else
+                  if ($curso->sem2 > 79){$n2=$n2+1;$cr1=$cr1+(3*$ct);$cr2=$cr2+$ct;}
+                  else
+                     if ($curso->sem2 > 69){$n3=$n3+1;$cr1=$cr1+(2*$ct);$cr2=$cr2+$ct;}
+                     else
+                        if ($curso->sem2 > 59){$n4=$n4+1;$cr1=$cr1+(1*$ct);$cr2=$cr2+$ct;}
+                        else
+                           if ($curso->sem2 > 0){$n5=$n5+1;$cr2=$cr2+$ct;}
+               }
+            }
+      $notas=0;
+      $notas=$notas+$n1*4;
+      $notas=$notas+$n2*3;
+      $notas=$notas+$n3*2;
+      $notas=$notas+$n4*1;
+      if ($cr2 > 0) {
+        $thisCourse2 = DB::table("year")->where([
+            ['ss', $student->ss],
+            ['year', $year]
+        ])->update([
+            'cn1' => $n1,
+            'cn2' => $n2,
+            'cns1' => $n3,
+            'cn3' => $n4,
+            'cn4' => $n5,
+            'fin' => $not/$tns,
+            'cnf' => $tns,
+            'cns2' => round($cr1/$cr2,2),
+      ]);
          }
       }
-      
-         if($stu->not1 > 0){
-            $notas += $stu->not1;
-            $cantidad++;
-         }
-         if($stu->not2 > 0){
-            $notas += $stu->not2;
-            $cantidad++;
-         }
-         if($stu->not3 > 0){
-            $notas += $stu->not3;
-            $cantidad++;
-         }
-         if($stu->not4 > 0){
-            $notas += $stu->not4;
-            $cantidad++;
-         }
 
-if ($cantidad > 0)
-   {
-$thisCourse7 = DB::table('acumula_totales')->where([
-           ['ss', $stu->ss]
-        ])->update([
-           'final' => number_format($notas/$cantidad,2),
-        ]);
+if ($_POST['gra'] ?? 0 == 1) {
+   list($g, $s) = explode("-", $grado);
+   $students = DB::table('year')
+   ->whereRaw("year = '$year' and grado like '%".$g."%' and activo = ''" )->orderBy('cns2 DESC, fin DESC')->get();
+
    }
-
+else {
+   $students = DB::table('year')
+   ->whereRaw("year = '$year' and grado like '$grado' and activo = ''" )->orderBy('cns2 DESC, fin DESC')->get();
 }
-$q7 = "select * from acumula_totales ORDER BY final DESC";
-$studz = DB::table('acumula_totales')->orderBy('final DESC')->get();
-$num_resultados = count($studz);
-$a=0;
-$p=0;
-$p2=0;
-$not='';
-foreach ($studz as $stu)
+		
+$x=1;
+$l = $_POST['lineas'] ?? 5;
+$ad = $_POST['liad'] ?? '';
+foreach ($students as $student) 
         {
-      $a=$a+1;
-      if ($stu->final != $not)
-         {
-         $p=$p+1+$p2;
-         $not = $stu->final;
-         $p2=0;
+      $notas=0;
+   if ($student->cn1 ?? 0 > 0) {
+      $notas = $notas + $student->cn1 * 4;
+   }
+   if ($student->cn2 ?? 0 > 0) {
+      $notas = $notas + $student->cn2 * 3;
+   }
+   if ($student->cn3 ?? 0 > 0) {
+      $notas = $notas + $student->cn3 * 2;
+   }
+//      $notas=$notas+$student->cn2*3;
+//      $notas=$notas+$student->cn3*2;
+//      $notas=$notas+$student->cns1*1;
+	  $pdf->Cell(7,5,$x,$l,0,'R');
+	  $pdf->Cell(68,5,$student->apellidos.' '.$student->nombre,$l,0,'L');
+	  $pdf->Cell(10,5,$student->cn1,$l,0,'R');
+	  $pdf->Cell(10,5,$student->cn2,$l,0,'R');
+	  $pdf->Cell(10,5,$student->cns1,$l,0,'R');
+	  $pdf->Cell(10,5,$student->cn3,$l,0,'R');
+	  $pdf->Cell(10,5,$student->cn4,$l,0,'R');  	
+	  $pdf->Cell(10,5,$student->cnf,$l,0,'R');
+   //	  $pdf->Cell(14,5,$student->cns2,$l,0,'R'); 
+   //      $st = $student->cns2 ?? 0;
+   $pdf->Cell(14, 5, number_format($student->cns2,2), $l, 0, 'R');  	
+//	  $pdf->Cell(14,5,number_format($st, 2),$l,0,'R');  	
+//	  $pdf->Cell(14,5,number_format($notas/$row5[37], 2),$l,0,'R');
+	  $pdf->Cell(15,5,number_format($student->fin,2),$l,0,'R');
+   if ($_POST['ss'] ?? 0 == 1)
+	     {
+         $pdf->Cell(28,5,$student->ss,$l,1,'R');
          }
       else
-         {
-         $p2=$p2+1;
+	     {
+         $pdf->Cell(28,5,'',$l,1,'R');
          }
-      $pdf->Cell(15,5,$a,0,0,'R');
-      $pdf->Cell(25,5,$p.'/'.$num_resultados,0,0,'C');
-      $pdf->Cell(90,5,$stu->apellidos.' '.$stu->nombre,0,0,'L');
-     
-      IF ($grados=='A')
-         {
-         $pdf->Cell(12,5,number_format($stu->not8,2),0,0,'C');
-         $pdf->Cell(12,5,number_format($stu->not7,2),0,0,'C');
-         $pdf->Cell(12,5,number_format($stu->not6,2),0,0,'C');
-         $pdf->Cell(12,5,number_format($stu->not5,2),0,0,'C');
-         }
-        
-      $pdf->Cell(12,5,number_format($stu->not4,2),0,0,'C');
-      $pdf->Cell(12,5,number_format($stu->not3,2),0,0,'C');
-      $pdf->Cell(12,5,number_format($stu->not2,2),0,0,'C');
-      $pdf->Cell(12,5,number_format($stu->not1,2),0,0,'C');
-      $pdf->Cell(12,5,number_format($stu->final,2),0,1,'C');
-      }
-
-
+	  $x=$x+1;
+ 	  }
 $pdf->Output();
+?>
+
+
+
+
