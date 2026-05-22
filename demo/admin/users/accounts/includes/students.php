@@ -22,7 +22,8 @@ if (isset($_POST['searchSs'])) {
     $student = Student::find($_POST['pk']);
     Session::set('editedStudent', "{$_POST['name']} {$_POST['surnames']}");
 } else if (isset($_POST['save'])) {
-    $schoolYear = Admin::primaryAdmin()->year();
+    $user = Admin::user(Session::id())->first();
+    $schoolYear = $user->year2;
     $student = new Student();
     $student->year = $schoolYear;
     $student->id = $_POST['accountNumber'];

@@ -54,7 +54,7 @@ $discounts = Manager::table("presupuesto")->where('year', Admin::primaryAdmin()-
                     <div class="container-fluid p-3">
                         <div class="row">
                             <div class="col-12">
-                                <img src="<?= $student->profilePicture ?>?v=<?= time() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
+                                <img src="<?= $student?->profilePicture ?>?v=<?= time() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
                                 <div class="form-group text-center mt-2">
                                     <button id="pictureBtn" type='button' class="btn btn-secondary"><?= __("Cambiar foto de perfil") ?></button>
                                     <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
