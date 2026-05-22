@@ -224,44 +224,37 @@ if (dis == '2')
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
-                        <input maxlength="4" name="mat1" size="3" type="text" />
+                        <input maxlength="3" name="mat1" size="3" type="text" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="Comentario">
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
-                        <input maxlength="4" name="mat1" size="3" type="text" />
+                        <input maxlength="3" name="mat2" size="3" type="text" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="Comentario">
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
-                        <input maxlength="4" name="mat2" size="3" type="text" />
+                        <input maxlength="3" name="mat3" size="3" type="text" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="Comentario">
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
-                        <input maxlength="4" name="mat3" size="3" type="text" />
+                        <input maxlength="3" name="mat4" size="3" type="text" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="Comentario">
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
-                        <input maxlength="4" name="mat4" size="3" type="text" />
+                        <input maxlength="3" name="mat5" size="3" type="text" />
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="Comentario">
                                 <?= $lang->translation('') ?>
                             </label>
                         </div>
                     </div>
-
-
-
-
-
-
-
                     <button name='create' type="submit" class="btn btn-primary d-block mx-auto">
                         <?= $lang->translation('Continuar') ?>
                     </button>
