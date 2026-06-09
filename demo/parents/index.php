@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../app.php';
+require_once '../app.php';
 
 use App\Models\Family;
 use Classes\Lang;
@@ -12,7 +12,7 @@ use Illuminate\Database\Capsule\Manager;
 Session::is_logged();
 $parents = Family::find(Session::id());
 $lang = new Lang([
-    ["Información", "Information"],
+    ["Informaci&#65533;n", "Information"],
     ["Bienvenido", "Welcome"],
     ["Nombre:", "Name:"],
     ["ID:", "ID:"],
@@ -33,13 +33,20 @@ Manager::table("entradas")->insert([
     'nombre' => $parents->madre,
     'apellidos' => $parents->padre
 ]);
+
+$colegio = DB::table('colegio')->where([
+    ['usuario', 'administrador']
+])->orderBy('id')->first();
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = $lang->translation("Información");
+    $title = $lang->translation("Informaci&#65533;n");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -79,13 +86,16 @@ Manager::table("entradas")->insert([
                 <div class="col-6"><?= Util::time(true) ?></div>
             </div>
             <hr class="my-4" />
-            <?php if ($parents->activo != 'Activo' && $parents->info('inactivo') == '1') : ?>
+            <?php if ($parents->activo == 'Inactivo') { ?>
                 <div class="alert alert-danger" role="alert">
-                    <?= nl2br($parents->info('men_inac')) ?>
+                    <?php echo utf8_decode($colegio->men_inac);
+                    session_destroy();
+                    exit;
+                    ?>
                 </div>
-            <?php else : ?>
+            <?php } else { ?>
                 <a class="btn btn-primary btn-block mt-5 mx-auto" href="<?= Route::url('/parents/home.php') ?>"><?= $lang->translation("Continuar") ?></a>
-            <?php endif ?>
+            <?php } ?>
         </div>
     </div>
     <?php
