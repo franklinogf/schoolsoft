@@ -1,15 +1,16 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
-$lastTopic = $teacher->lastTopic();
+$teacher = Teacher::find(Session::id());
+
+$lastTopic = $teacher->latestTopicWithComments();
 $lang = new Lang([
   ['Inicio', 'Home'],
   ['Mensajes', 'Inbox'],
@@ -17,8 +18,8 @@ $lang = new Lang([
   ['El ultimo comentario se ha hecho en el curso', 'The last comment was made on the class'],
   ['Ir al tema', 'Go to the topic'],
   ['No tiene comentarios nuevos en los temas de conversación', 'You have no new comments on the topics'],
-  ['Bienvenido','Welcome back'],
-  ['Bienvenida','Welcome back'],
+  ['Bienvenido', 'Welcome back'],
+  ['Bienvenida', 'Welcome back'],
 
 ]);
 ?>
@@ -42,7 +43,7 @@ $lang = new Lang([
       <div class="d-flex justify-content-between mb-3">
         <div>
           <a class="btn btn-secondary" href="<?= Route::url('/foro/profesor/inbox.php') ?>">
-            <i class="far fa-envelope text-primary"></i> <?= $lang->translation("Mensajes") ?> <span class="badge badge-pill badge-info unreadMessages"><?= $teacher->unreadMessages() ?></span>
+            <i class="far fa-envelope text-primary"></i> <?= $lang->translation("Mensajes") ?> <span class="badge badge-pill badge-info unreadMessages"><?= '' ?></span>
           </a>
         </div>
         <div>
@@ -51,7 +52,7 @@ $lang = new Lang([
         </div>
       </div>
 
-      <h2><?= $teacher->genero === 'Femenino' ? $lang->translation("Bienvenida") : $lang->translation("Bienvenido") ?> <?= $teacher->fullName(); ?></h2>
+      <h2><?= $teacher->genero === 'Femenino' ? $lang->translation("Bienvenida") : $lang->translation("Bienvenido") ?> <?= $teacher->fullName; ?></h2>
       <?php if ($lastTopic) : ?>
         <div class="card mx-auto mt-5">
           <h4 class="card-header bg-gradient-info bg-info">
@@ -59,7 +60,7 @@ $lang = new Lang([
           </h4>
           <div class="card-body border-info">
             <h5 class="card-title"><?= $lastTopic->titulo ?></h5>
-            <p class="card-text text-monospace"><?= $lang->translation("El ultimo comentario se ha hecho en el curso") ?> <?= "{$lastTopic->curso} ({$lastTopic->desc1})" ?> </p>
+            <p class="card-text text-monospace"><?= $lang->translation("El ultimo comentario se ha hecho en el curso") ?> <?= "{$lastTopic->curso} ({$lastTopic->descripcion})" ?> </p>
             <a class="btn btn-primary" href="viewTopic.php?id=<?= $lastTopic->id ?>"><?= $lang->translation("Ir al tema") ?></a>
           </div>
           <div class="card-footer text-muted d-flex justify-content-between">

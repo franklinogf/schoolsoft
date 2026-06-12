@@ -1,14 +1,16 @@
 <?php
 
+use App\Models\Admin;
 use Classes\Lang;
 use Classes\DataBase\DB;
 
 global $teacher;
 global $tableClassesCheckbox;
 global $virtual;
+$year = Admin::primaryAdmin()->year();
 $lang = new Lang([
-['Curso','Class'],
-['Descripción','Description'],
+   ['Curso', 'Class'],
+   ['Descripción', 'Description'],
 ]);
 ?>
 <!-- classes table -->
@@ -29,12 +31,12 @@ $lang = new Lang([
          </tr>
       </thead>
       <tbody>
-         <?php foreach ($teacher->classes() as $class) : ?>
+         <?php foreach ($teacher->subjects as $class) : ?>
             <?php
             if ($virtual) :
                $virtualClass = DB::table('virtual')->where([
                   ['curso', $class->curso],
-                  ['year', $teacher->info('year')],
+                  ['year', $year],
                   ['id_profesor', $teacher->id],
                ])->first();
 

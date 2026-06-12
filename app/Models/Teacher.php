@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\DefaultPictureEnum;
 use App\Enums\Gender;
 use App\Enums\PicturePathEnum;
+use App\Models\Foro\Topic;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -120,16 +121,19 @@ use Illuminate\Support\Collection;
  * @property string $pe15
  * @property string $pe16
  * @property string $cbarra
- * @property Collection<int, Subject> $subjects
- * @property Collection<int, Classes> $classes
- * @property Collection<int, Student> $homeStudents
- * @property Collection<int, WorkPlan> $workPlans
- * @property Collection<int, WorkPlan4> $workPlans4
- * @property Collection<int, WeeklyPlan> $weeklyPlans
- * @property Collection<int, ClassPlan> $classPlans
- * @property Collection<int, EnglishPlan> $englishPlans
- * @property Collection<int, UnitPlan> $unitPlans
+ * @property-read Collection<int, Subject> $subjects
+ * @property-read Collection<int, Classes> $classes
+ * @property-read Collection<int, Student> $homeStudents
+ * @property-read Collection<int, WorkPlan> $workPlans
+ * @property-read Collection<int, WorkPlan4> $workPlans4
+ * @property-read Collection<int, WeeklyPlan> $weeklyPlans
+ * @property-read Collection<int, ClassPlan> $classPlans
+ * @property-read Collection<int, EnglishPlan> $englishPlans
+ * @property-read Collection<int, UnitPlan> $unitPlans
  * @property string $profilePicture
+ * @property-read Collection<int, Topic> $topics
+ * @property-read Topic|null $latestTopic
+ * @property-read Topic|null $latestTopicWithComments
  */
 class Teacher extends Model
 {
@@ -164,6 +168,32 @@ class Teacher extends Model
     public function subjects(): HasMany
     {
         return $this->hasMany(Subject::class, 'id', 'id');
+    }
+
+    /**
+     * 
+     * @return HasMany<Topic, $this>
+     */
+    public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class, 'creador_id', 'id')->withAttributes(['tipo' => Topic::TEACHER_TYPE]);
+    }
+
+    /**
+     * @return HasOne<Topic, $this>
+     */
+    public function latestTopic(): HasOne
+    {
+        return $this->topics()->one()->latestOfMany('fecha');
+    }
+
+
+    public function latestTopicWithComments(): ?Topic
+    {
+        return $this->topics()
+            ->withMax('comments', 'fecha')
+            ->orderByDesc('comments_max_fecha')
+            ->first();
     }
 
     public function classes(): HasMany

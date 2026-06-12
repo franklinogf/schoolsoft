@@ -219,7 +219,7 @@ class Student extends Model
         });
     }
 
-    public function casts(): array
+    protected function casts(): array
     {
         return [
             'fecha' => 'date:Y-m-d',

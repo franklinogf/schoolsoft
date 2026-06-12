@@ -1,20 +1,21 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Foro\Topic;
+use App\Models\Foro\TopicComment;
+use App\Models\Teacher;
 use Classes\Util;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Topic;
-use Classes\Controllers\Teacher;
 
 
 Server::is_post();
 
 if (isset($_POST['topicById'])) {
    $topic_id = $_POST['topicById'];
-   $data = new Topic($topic_id);
+   $data = Topic::find($topic_id);
    if ($data) {
       $array = [
          'response' => true,
@@ -27,12 +28,15 @@ if (isset($_POST['topicById'])) {
 } elseif (isset($_POST['editTopic'])) {
    $id_topic = $_POST['id_topic'];
 
-   $topic = new Topic($id_topic);
-   $topic->titulo = $_POST['title'];
-   $topic->descripcion = $_POST['description'];
-   $topic->estado = $_POST['state'];
-   $topic->desde = $_POST['untilDate'];
-   $topic->save();
+   $topic = Topic::findOrFail($id_topic);
+
+   $topic->update([
+      'titulo' => $_POST['title'],
+      'descripcion' => $_POST['description'],
+      'estado' => $_POST['state'],
+      'desde' => $_POST['untilDate'],
+   ]);
+
 
    Route::redirect('/profesor/viewTopic.php?id=' . $id_topic);
 } else if (isset($_POST['newComment'])) {
@@ -40,22 +44,34 @@ if (isset($_POST['topicById'])) {
    $id_topic = $_POST['newComment'];
    $comment = $_POST['comment'];
 
-   $topic = new Topic($id_topic);
+   $topic = Topic::findOrFail($id_topic);
 
-   $topic->newComment(Session::id(), $comment, 'p');
-   $teacher = new Teacher(Session::id());
+   $teacher = Teacher::findOrFail(Session::id());
+
+   $topic->comments()->create([
+      'creador_id' => $teacher->id,
+      'tipo' => TopicComment::TEACHER_TYPE,
+      'descripcion' => $comment,
+      'fecha' => date('Y-m-d'),
+      'hora' => date('H:i:s'),
+      'year' => Admin::primaryAdmin()->year()
+   ]);
+
    $array = [
-      'fullName' => $teacher->fullName(),
-      'profilePicture' => $teacher->profilePicture(),
-      'date' => Util::formatDate(Util::date(), true, true),
-      'time' => Util::formatTime(Util::time())
+      'fullName' => $teacher->fullName,
+      'profilePicture' => $teacher->profilePicture,
+      'date' => Util::formatDate(date('Y-m-d'), true, true),
+      'time' => Util::formatTime(date('H:i:s'))
    ];
    echo Util::toJson($array);
 } else if (isset($_POST['delTopic'])) {
    $id_topic = $_POST['delTopic'];
-   $topic = new Topic($id_topic);
+   $topic = Topic::findOrFail($id_topic);
    $topic->delete();
 } else if (isset($_POST['delComment'])) {
    $id_comment = $_POST['delComment'];
-   DB::table('detalle_foro_entradas')->where('id', $id_comment)->delete();
+
+   $comment = TopicComment::findOrFail($id_comment);
+
+   $comment->delete();
 }

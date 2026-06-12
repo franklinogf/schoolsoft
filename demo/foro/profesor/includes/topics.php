@@ -1,19 +1,20 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Foro\Topic;
+use App\Models\Teacher;
 use Classes\Util;
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Topic;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
 
 Server::is_post();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
 
 if (isset($_POST['topicsByClass'])) {
-   $class = $_POST['topicsByClass'];  
-   $data = $teacher->topicsByClass($class);
+   $class = $_POST['topicsByClass'];
+   $data = $teacher->topics()->byClass($class)->get();
 
    if ($data) {
       $array = [
@@ -24,20 +25,18 @@ if (isset($_POST['topicsByClass'])) {
       $array = ['response' => false];
    }
    echo Util::toJson($array);
-}elseif(isset($_POST['insertTopic'])){  
-  
-   $topic = new Topic(); 
-   $topic->creador_id = $teacher->id;
-   $topic->titulo = $_POST['title'];
-   $topic->descripcion = $_POST['description'];
-   $topic->curso = $_POST['class'];
-   $topic->tipo = 'p';
-   $topic->estado = $_POST['state'];
-   $topic->desde = $_POST['untilDate'];
-   $topic->year = $topic->info('year');
-   $topic->fecha = Util::date('Y-m-d');
-   $topic->hora = Util::time();
-   $topic->save();
+} elseif (isset($_POST['insertTopic'])) {
+
+   $teacher->topics()->create([
+      'titulo' => $_POST['title'],
+      'descripcion' => $_POST['description'],
+      'curso' => $_POST['class'],
+      'estado' => $_POST['state'],
+      'desde' => $_POST['untilDate'],
+      'fecha' => date('Y-m-d'),
+      'hora' => date('H:i:s'),
+      'year' => Admin::primaryAdmin()->year()
+   ]);
 
    Route::redirect('/profesor/topics.php');
 }
