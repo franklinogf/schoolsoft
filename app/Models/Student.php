@@ -198,6 +198,7 @@ use Carbon\CarbonInterface;
  * @property Infirmary|null $infirmary
  * @property string $profilePicture
  * @property string $profilePicturePath
+ * @property-read string $fullName
  */
 class Student extends Model
 {
@@ -224,7 +225,6 @@ class Student extends Model
         return [
             'fecha' => 'date:Y-m-d',
             'fecha_matri' => 'date:Y-m-d',
-            // 'genero' => Gender::class,
         ];
     }
 
