@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $year
  * @property Teacher $teacher
  * @property Collection<int, DoneHomework> $doneHomeworks
+ * @property Subject $subject
  */
 class Homework extends Model
 {
@@ -51,6 +52,14 @@ class Homework extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'id2', 'id');
+    }
+
+    /**
+     * @return BelongsTo<Subject, $this>
+     */
+    public function subject(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class, 'curso', 'curso');
     }
 
     /**

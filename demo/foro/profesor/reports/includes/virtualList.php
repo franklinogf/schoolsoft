@@ -1,20 +1,18 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 
 Server::is_post();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->findOrFail(Session::id());
 
 if (isset($_POST['virtualByClass'])) {
-   $data = DB::table('virtual')->where([
-      ['id_profesor',$teacher->id],
-      ['curso',$_POST['virtualByClass']],
-      ['year',$teacher->info('year')],
+   $data = $teacher->virtualClasses()->where([
+      'curso' => $_POST['virtualByClass'],
    ])->get();
 
    if ($data) {

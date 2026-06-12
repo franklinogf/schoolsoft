@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $year
  * @property bool $activo
  * @property Teacher $teacher
+ * @property Subject $subject
  */
 class VirtualClass extends Model
 {
@@ -36,6 +37,14 @@ class VirtualClass extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'id_profesor', 'id');
+    }
+
+    /**
+     * @return BelongsTo<Subject, $this>
+     */
+    public function subject(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class, 'curso', 'curso');
     }
 
     /**

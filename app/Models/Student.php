@@ -298,6 +298,17 @@ class Student extends Model
             $attributes['cbarra'] !== '' && is_numeric($attributes['cbarra']) ? $attributes['cbarra'] : null,
         );
     }
+
+    protected function id(): Attribute
+    {
+        $isCosey = school_config('app.cosey', false);
+
+        return Attribute::make(
+            get: fn($value, array $attributes) => $isCosey ? (string) $attributes['mt'] : $attributes['id']
+
+        );
+    }
+
     protected function profilePicture(): Attribute
     {
         return Attribute::make(

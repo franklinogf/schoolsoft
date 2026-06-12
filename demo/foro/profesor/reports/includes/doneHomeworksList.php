@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 
 Server::is_post();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->findOrFail(Session::id());
 
 if (isset($_POST['homeworksByClass'])) {
    $class = $_POST['homeworksByClass'];
 
-   $data = $teacher->homeworks($class,false);
+   $data = $teacher->homeworks()->ofClass($class)->get();
 
    if ($data) {
       $array = [

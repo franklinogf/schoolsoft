@@ -1,45 +1,33 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
-use Classes\Controllers\Homework;
-use Classes\Controllers\Student;
+use App\Models\Admin;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Classes\PDF;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 use Classes\Util;
+
 
 Session::is_logged();
 
-$teacher = new Teacher(Session::id());
-// $hw = new Homework();
+$teacher = Teacher::query()->findOrFail(Session::id());
+
 $class = $_GET['class'];
-// $homeworks = $hw->findByTeacher(Session::id(),$class);
-// Homework info
-$homeworks = $teacher->homeworks($class,false);
-// Class info
-if(__COSEY){
-   $class = DB::table('padres')->select('curso,descripcion as desc1')
-   ->where([
-      ['year', $teacher->info('year')],
-      ['curso', $class]
-   ])->cosey(false)->first();
-}else{
-   $class = DB::table('cursos')
-   ->where([
-      ['year', $teacher->info('year')],
-      ['curso', $class]
-   ])->cosey(false)->first();
-}
+$homeworks = $teacher->homeworks()->ofClass($class)->get();
+
+$year = Admin::primaryAdmin()->year();
+
+$subject = Subject::find($class);
 
 
 $pdf = new PDF();
 $pdf->AddPage();
-$pdf->SetTitle("Tareas de $class->desc1",true);
+$pdf->SetTitle("Tareas de $subject?->descripcion", true);
 $pdf->Fill();
 
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(0, 5, utf8_decode("$class->curso - $class->desc1"), 0, 1, 'C');
+$pdf->Cell(0, 5, $subject?->display_label, 0, 1, 'C');
 $pdf->Ln(3);
 
 // table header
@@ -56,7 +44,7 @@ $num = 1;
 foreach ($homeworks as $homework) {
 
    $pdf->Cell(10, 5, $num, 1, 0, "R");
-   $pdf->Cell(80, 5, utf8_decode($homework->titulo), 1);
+   $pdf->Cell(80, 5, $homework->titulo, 1);
    $pdf->Cell(35, 5, Util::formatDate($homework->fec_in), 1, 0, 'C');
    $pdf->Cell(25, 5, Util::formatTime($homework->hora), 1, 0, "C");
    $pdf->Cell(35, 5, Util::formatDate($homework->fec_out), 1, 0, "C");

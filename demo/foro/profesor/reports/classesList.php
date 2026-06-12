@@ -1,13 +1,14 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->with('subjects')->findOrFail(Session::id());
 $lang = new Lang([
   ['Debe de seleccionar al menos uno', 'You must select at least one'],
   ['Lista de estudiantes por curso', 'Student list per course'],
@@ -35,7 +36,7 @@ $lang = new Lang([
     <!-- classes table -->
     <form action="<?= Route::url('/foro/profesor/pdf/pdfClasses.php') ?>" method="POST" target="pdfClasses">
       <?php
-      $__tableData = $teacher->classes();
+      $__tableData = $teacher->subjects;
       $__tableDataCheckbox = true;
       $__tableDataCheckBoxName = 'class';
       $__tableDataInfo = [

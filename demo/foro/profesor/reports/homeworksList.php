@@ -1,23 +1,23 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->with('subjects')->findOrFail(Session::id());
 $lang = new Lang([
-['Informe de tareas','Homeworks report'],
-['Lista de tareas','Homework list'],
+  ['Informe de tareas', 'Homeworks report'],
+  ['Lista de tareas', 'Homework list'],
 ]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = $lang->translation("Informe de tareas");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');

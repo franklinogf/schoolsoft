@@ -1,24 +1,25 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
 $jqUI = true;
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->with('subjects')->findOrFail(Session::id());
 $lang = new Lang([
-  ['Informe de tareas realizadas','Done homeworks report'],
-  ['Lista de tareas realizadas','Done homework list'],
-  ]);
+  ['Informe de tareas realizadas', 'Done homeworks report'],
+  ['Lista de tareas realizadas', 'Done homework list'],
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = $lang->translation("Informe de tareas realizadas");
   Route::includeFile('/foro/profesor/includes/layouts/header.php');
@@ -38,10 +39,10 @@ $lang = new Lang([
     Route::includeFile('/foro/profesor/includes/tables/tableHomeworks.php');
     ?>
 
-    
 
-   
-    
+
+
+
   </div>
   <?php
   Route::includeFile('/includes/layouts/scripts.php', true);

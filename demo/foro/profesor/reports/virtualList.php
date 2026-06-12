@@ -1,22 +1,22 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $jqUI = true;
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->with('subjects')->findOrFail(Session::id());
 $lang = new Lang([
-["Informe de clases virtuales",'Virtual classes report'],
-['Lista de clases virtuales','Virtual classes list'],
-['Titulo', 'Title'],
-['Fecha','Date'],
-['Hora','Time'],
-['Atrás','Go back']
+  ["Informe de clases virtuales", 'Virtual classes report'],
+  ['Lista de clases virtuales', 'Virtual classes list'],
+  ['Titulo', 'Title'],
+  ['Fecha', 'Date'],
+  ['Hora', 'Time'],
+  ['Atrás', 'Go back']
 ]);
 ?>
 <!DOCTYPE html>
