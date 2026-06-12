@@ -1,20 +1,20 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Homework;
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\File;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
-use Classes\Controllers\Homework;
 
 Server::is_post();
 
 if (isset($_POST['homeworksByClass'])) {
    $class = $_POST['homeworksByClass'];
-   $teacher = new Teacher(Session::id());
-   if ($data = $teacher->homeworks($class, false)) {
+   $teacher = Teacher::findOrFail(Session::id());
+   if ($data = $teacher->homeworks()->ofClass($class)->get()) {
       $array = [
          'response' => true,
          'data' => $data
@@ -25,15 +25,15 @@ if (isset($_POST['homeworksByClass'])) {
    echo Util::toJson($array);
 } else if (isset($_POST['doneHomeworksByHomeworkId'])) {
    $id_homework = $_POST['doneHomeworksByHomeworkId'];
-   $hw = new Homework($id_homework);
+   $hw = Homework::query()->with('doneHomeworks.student')->findOrFail($id_homework);
    $data = [];
-   $doneHws = $hw->doneHomeworks();
+   $doneHws = $hw->doneHomeworks;
    foreach ($doneHws as $key => $doneHw) {
-      $student = new Student($doneHw->id_estudiante);
+      $student = $doneHw->student;
       $data[$key]['id'] = $doneHw->id;
-      $data[$key]['nombre'] = $student->fullName();
+      $data[$key]['nombre'] = $student->fullName;
       $data[$key]['nota'] = $doneHw->nota;
-      $data[$key]['fecha'] = Util::formatDate($doneHw->fecha, true);
+      $data[$key]['fecha'] = $doneHw->fecha->format('d F Y');
       $data[$key]['hora'] = Util::formatTime($doneHw->hora);
       if (property_exists($doneHw, 'archivos')) {
          foreach ($doneHw->archivos as $i => $file) {

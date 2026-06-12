@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\Traits\HasYear;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id_documento
@@ -28,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $hora
  * @property string $year
  * @property Teacher $teacher
+ * @property Collection<int, DoneHomework> $doneHomeworks
  */
 class Homework extends Model
 {
@@ -48,6 +51,14 @@ class Homework extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'id2', 'id');
+    }
+
+    /**
+     * @return HasMany<DoneHomework, $this>
+     */
+    public function doneHomeworks(): HasMany
+    {
+        return $this->hasMany(DoneHomework::class, 'id_tarea', 'id');
     }
 
     /**
