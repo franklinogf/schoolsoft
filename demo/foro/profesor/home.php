@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::findOrFail(Session::id());
 $lang = new Lang([
   ['Salón Hogar', 'Home classroom'],
   ['Crear usuarios automaticamente', 'Create users automatically'],
@@ -21,8 +21,8 @@ $lang = new Lang([
   ['Las contraseñas no coinciden', 'The passwords do not match'],
   ['Cerrar', 'Close'],
   ['Guardar', 'Save'],
-  ['Debes de tener un correo para poder enviar los usuarios','You must have an email to be able to send users'],
-  ['ir a mi perfil','go to my profile']
+  ['Debes de tener un correo para poder enviar los usuarios', 'You must have an email to be able to send users'],
+  ['ir a mi perfil', 'go to my profile']
 ]);
 
 ?>
@@ -45,7 +45,7 @@ $lang = new Lang([
     <h1 class="text-center"><?= $lang->translation("Salón Hogar") ?></h1>
 
     <?php
-    $students = $teacher->homeStudents();
+    $students = $teacher->homeStudents;
     Route::includeFile('/foro/profesor/includes/tables/tableStudents.php');
     ?>
 
