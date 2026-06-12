@@ -2,27 +2,30 @@
 
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Teacher;
 use Classes\File;
 use Classes\Route;
-use Classes\Controllers\Teacher;
+
 use Classes\Server;
 use Classes\Session;
 
 Session::is_logged();
 Server::is_post();
 
-$id_teacher = $_POST['id_teacher'];
+$teacher = Teacher::query()->withCount('homeStudents')->findOrFail(Session::id());
 
-$teacher = new Teacher($id_teacher);
-$teacher->nombre = $_POST['name'];
-$teacher->apellidos = $_POST['lastName'];
-$teacher->email1 = $_POST['email1'];
-$teacher->email2 = $_POST['email2'];
-$teacher->cel = $_POST['cellPhone'];
-$teacher->comp = $_POST['cellCompany'];
+$teacher->fill([
+   'nombre' => $_POST['name'],
+   'apellidos' => $_POST['lastName'],
+   'email1' => $_POST['email1'],
+   'email2' => $_POST['email2'],
+   'cel' => $_POST['cellPhone'],
+   'comp' => $_POST['cellCompany'],
+]);
+
 
 if ($_POST['password'] !== '') {
-   $teacher->clave = $_POST['password'];
+   $teacher->fill(['clave' => $_POST['password']]);
 }
 
 
@@ -31,7 +34,7 @@ $file = new File('picture');
 if ($file->amount > 0) {
    $newName = $teacher->id . '.jpg';
    $teacher->foto_name = $newName;
-   $file::upload($file->files, __TEACHER_PROFILE_PICTURE_PATH,$newName);
+   $file::upload($file->files, __TEACHER_PROFILE_PICTURE_PATH, $newName);
 }
 
 $teacher->save();

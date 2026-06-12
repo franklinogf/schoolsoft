@@ -1,15 +1,16 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::query()->withCount('homeStudents')->findOrFail(Session::id());
+
 $lang = new Lang([
   ['Mi perfil', 'My profile'],
   ["Cambiar foto de perfil", "Change profile picture"],
@@ -49,7 +50,7 @@ $lang = new Lang([
       <div class="row mt-5">
         <div class="col-lg-6 col-sm-12">
           <input type="hidden" name="id_teacher" value="<?= $teacher->id ?>">
-          <img src="<?= $teacher->profilePicture() ?>" alt="Profile picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
+          <img src="<?= $teacher->profilePicture ?>" alt="Profile picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
           <div class="form-group text-center mt-2">
             <button id="pictureBtn" type='button' class="btn btn-secondary"><?= $lang->translation("Cambiar foto de perfil") ?></button>
             <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
@@ -68,7 +69,7 @@ $lang = new Lang([
               <?php if (!__COSEY) : ?>
                 <p class="text-monospace"><?= $lang->translation("Salon hogar") ?>: <span class="badge badge-info"><?= $teacher->grado ?></span></p>
               <?php endif ?>
-              <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge badge-info"><?= sizeof($teacher->homeStudents()) ?></span></p>
+              <p class="text-monospace"><?= $lang->translation("Total de estudiantes") ?>: <span class="badge badge-info"><?= $teacher->home_students_count ?></span></p>
             </div>
           </div>
         </div>
