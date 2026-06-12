@@ -17,6 +17,7 @@ class Mail extends PHPMailer
     {
         $this->CharSet = 'UTF-8';
         $school = School::current();
+        $name = null;
 
         if ($type === 'Teacher') {
             $teacher = Teacher::find(Session::id())->first();

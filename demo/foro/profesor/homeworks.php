@@ -1,12 +1,13 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
+use Carbon\Carbon;
 use Classes\File;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $lang = new Lang([
@@ -32,13 +33,13 @@ $lang = new Lang([
    ["Editar", "Edit"],
    ["Eliminar", "Delete"],
    ["Archivo", "File"],
-   ["Sin fecha de finalización","No final date"],
+   ["Sin fecha de finalización", "No final date"],
 ]);
 
-$teacher = new Teacher(Session::id());
-$homeworks = $teacher->homeworks();
+$teacher = Teacher::with(['homeworks', 'subjects'])->findOrFail(Session::id());
+$homeworks = $teacher->homeworks;
 // Util::dump($homeworks);
-$classes = $teacher->classes();
+$classes = $teacher->subjects;
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -142,16 +143,16 @@ $classes = $teacher->classes();
 
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
          <?php foreach ($homeworks as $homework) : ?>
-            <?php $expired = ($homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? 'success' : 'warning'); ?>
+            <?php $expired = ($homework->fec_out->isAfter(Carbon::yesterday()) ? 'success' : 'warning'); ?>
             <div class="col mb-4 homework <?= $homework->id_documento ?>">
                <div class="card border-<?= $expired ?>">
-                  <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= "$homework->curso - $homework->desc" ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
+                  <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between"><?= "$homework->curso - $homework->titulo" ?> <i class="fas fa-circle text-<?= $expired ?>"></i></h6>
                   <div class="card-body ">
                      <h5 class="card-title"><?= $homework->titulo ?></h5>
                      <p class="card-text"><?= $homework->descripcion ?></p>
                   </div>
                   <div class="card-footer bg-white">
-                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? $lang->translation("Fecha final") . ": " . Util::formatDate($homework->fec_out, true) : $lang->translation("Sin fecha de finalización"); ?></small>
+                     <small class="card-text text-warning d-block"><?= $homework->fec_out !== '0000-00-00' ? $lang->translation("Fecha final") . ": " . $homework->fec_out->format('d F Y') : $lang->translation("Sin fecha de finalización"); ?></small>
                      <?php if (!empty($homework->lin1) || !empty($homework->lin2) || !empty($homework->lin3)) : ?>
                         <div class="btn-group btn-group-sm w-100 mt-2">
                            <?php for ($i = 1; $i <= 3; $i++) : ?>
@@ -182,7 +183,7 @@ $classes = $teacher->classes();
                      </div>
                   </div>
                   <div class="card-footer bg-gradient-secondary bg-secondary d-flex justify-content-between">
-                     <small class="text-primary blend-screen"><?= Util::formatDate($homework->fec_in, true) ?></small>
+                     <small class="text-primary blend-screen"><?= $homework->fec_in->format('d F Y') ?></small>
                      <small class="text-primary blend-screen"><?= Util::formatTime($homework->hora) ?></small>
                   </div>
                </div>
