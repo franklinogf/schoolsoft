@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $DataTable = true;
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
 $lang = new Lang([
   ['Salón virtual', 'Virtual classroom'],
   ['Titulo', 'Title'],

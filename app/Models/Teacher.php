@@ -134,6 +134,7 @@ use Illuminate\Support\Collection;
  * @property-read Collection<int, Topic> $topics
  * @property-read Topic|null $latestTopic
  * @property-read Topic|null $latestTopicWithComments
+ * @property-read Collection<int,VirtualClass> $virtualClasses
  */
 class Teacher extends Model
 {
@@ -168,6 +169,15 @@ class Teacher extends Model
     public function subjects(): HasMany
     {
         return $this->hasMany(Subject::class, 'id', 'id');
+    }
+
+    /**
+     * 
+     * @return HasMany<VirtualClass, $this>
+     */
+    public function virtualClasses(): HasMany
+    {
+        return $this->hasMany(VirtualClass::class, 'id_profesor', 'id');
     }
 
     /**

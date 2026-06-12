@@ -1,24 +1,22 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
+use App\Models\Teacher;
+use App\Models\VirtualClass;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 
 
 Server::is_post();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::find(Session::id());
 
 if (isset($_POST['find'])) {
+   $year = Admin::primaryAdmin()->year();
 
-   $virtualClass = DB::table('virtual')->where([
-      ['curso', $_POST['find']],
-      ['year', $teacher->info('year')],
-      ['id_profesor', $teacher->id],
-      ['activo', true],
-   ])->first();
+   $virtualClass = $teacher->virtualClasses()->active()->ofClass($_POST['find'])->first();
 
    if ($virtualClass) {
       $array = [
@@ -27,7 +25,7 @@ if (isset($_POST['find'])) {
             "id" => $virtualClass->id,
             'link' => $virtualClass->link,
             'title' => $virtualClass->titulo,
-            'date' => $virtualClass->fecha,
+            'date' => $virtualClass->fecha->format('Y-m-d'),
             'time' => $virtualClass->hora,
             'password' => $virtualClass->clave,
             'information' => $virtualClass->informacion,
@@ -38,15 +36,18 @@ if (isset($_POST['find'])) {
    }
    echo Util::toJson($array);
 } else if (isset($_POST['add'])) {
-   $id =  DB::table('virtual')->insertGetId([
+   $year = Admin::primaryAdmin()->year();
+
+   $id =  VirtualClass::insertGetId([
       'link' => $_POST['link'],
       'titulo' => $_POST['title'],
       'fecha' => $_POST['date'],
       'hora' => $_POST['time'],
-      'year' => $teacher->info('year'),
-      'id_profesor' => $teacher->id,
+      'year' => $year,
       'curso' => $_POST['add'],
       'clave' => $_POST['password'],
+      'activo' => true,
+      'id_profesor' => $teacher->id,
       'informacion' => $_POST['information'],
    ]);
    $array = [
@@ -55,7 +56,7 @@ if (isset($_POST['find'])) {
    ];
    echo Util::toJson($array);
 } else if (isset($_POST['update'])) {
-   DB::table('virtual')->where('id', $_POST['update'])
+   VirtualClass::find($_POST['update'])
       ->update([
          'link' => $_POST['link'],
          'titulo' => $_POST['title'],
@@ -65,6 +66,6 @@ if (isset($_POST['find'])) {
          'informacion' => $_POST['information'],
       ]);
 } else if (isset($_POST['delete'])) {
-   DB::table('virtual')->where('id', $_POST['delete'])
+   VirtualClass::where('id', $_POST['delete'])
       ->update(['activo' => false]);
 }
