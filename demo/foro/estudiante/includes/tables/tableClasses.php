@@ -1,11 +1,12 @@
 <?php
 
+use App\Models\VirtualClass;
 use Classes\Lang;
-use Classes\DataBase\DB;
 
 global $student;
 global $tableClassesCheckbox;
 global $virtual;
+
 $lang = new Lang([
    ['Curso', 'Class'],
    ['Descripción', 'Description'],
@@ -29,14 +30,13 @@ $lang = new Lang([
          </tr>
       </thead>
       <tbody>
-         <?php foreach ($student->classes() as $class) : ?>
+         <?php foreach ($student->classes as $class) : ?>
 
             <?php
             if ($virtual) :
-               $virtualClass = DB::table('virtual')->where([
-                  ['curso', $class->curso],
-                  ['year', $student->info('year')],
-                  ['id_profesor', $class->id],
+               $virtualClass = VirtualClass::query()->where([
+                  'curso' => $class->curso,
+                  'id_profesor' => $class->id,
                ])->first();
 
             ?>

@@ -1,28 +1,29 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Student;
+
 
 Session::is_logged();
-$jqUI = true;
+
 $DataTable = true;
-$student = new Student(Session::id());
+$student = Student::findOrFail(Session::id());
 $lang = new Lang([
-['Mis cursos','My classes'],
-['Nombre','Name'],
-['Salón Hogar','Home classroom'],
-['Correo electrónico','Email'],
-['Genero','Gender'],
-['Cerrar','Close'],
+  ['Mis cursos', 'My classes'],
+  ['Nombre', 'Name'],
+  ['Salón Hogar', 'Home classroom'],
+  ['Correo electrónico', 'Email'],
+  ['Genero', 'Gender'],
+  ['Cerrar', 'Close'],
 ]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = $lang->translation('Mis cursos');
   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
@@ -37,11 +38,11 @@ $lang = new Lang([
   <div class="container mt-5 pb-5">
     <h1 id="header" class="text-center"><?= $lang->translation("Mis Cursos") ?></h1>
 
-    <?php    
+    <?php
     Route::includeFile('/foro/estudiante/includes/tables/tableClasses.php');
     ?>
 
-    
+
 
     <!-- modal -->
     <div id="myModal" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
@@ -62,7 +63,7 @@ $lang = new Lang([
                 <hr>
               </div>
             </div>
-            <div class="row">              
+            <div class="row">
               <div class="col-6">
                 <div class="badge badge-secondary text-wrap"><?= $lang->translation("Nombre") ?></div>
                 <p id="name" class="mt-3"></p>
@@ -93,7 +94,7 @@ $lang = new Lang([
 
   </div>
   <?php
-   Route::includeFile('/includes/layouts/scripts.php', true);
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>
