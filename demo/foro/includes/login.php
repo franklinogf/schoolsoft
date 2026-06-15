@@ -10,6 +10,7 @@ include '../../app.php';
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
    $location = null;
+   $id = null;
 
    $teacherUser =  Teacher::where([
       ['usuario', $_POST['username']],
@@ -20,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
    if ($teacherUser) {
       $location = 'foro/profesor/';
       $user = $teacherUser;
+      $id = $teacherUser->id;
    } else {
 
       $studentUser =  Student::where([
@@ -30,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
       if ($studentUser) {
          $location = 'foro/estudiante/';
          $user = $studentUser;
+         $id = $studentUser->mt;
       }
    }
 
@@ -39,10 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
       $_SESSION['logged'] = [
          'acronym' => __SCHOOL_ACRONYM,
          'location' => 'foro',
-         "user" => ['id' => $user->id],
+         "user" => ['id' => $id],
       ];
       $_SESSION['start'] = time();
-      $_SESSION['id1'] = $user->id;
+      $_SESSION['id1'] = $id;
       $_SESSION['usua1'] = $user->usuario;
 
       Route::redirect($location, false);

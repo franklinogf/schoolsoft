@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\DefaultPictureEnum;
 use App\Enums\Gender;
 use App\Enums\PicturePathEnum;
+use App\Models\Foro\Topic;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * @property string $ss
@@ -233,6 +235,29 @@ class Student extends Model
         return $this->hasMany(Classes::class, 'ss', 'ss')->orderBy('curso');
     }
 
+
+    /**
+     * @return Builder<Topic>
+     */
+    public function topics(): Builder
+    {
+        $classes = $this->classes()->pluck('curso');
+
+        return Topic::query()->active()->whereIn('curso', $classes);
+    }
+
+    public function latestTopic(): ?Topic
+    {
+        return $this->topics()->latest('fecha')->first();
+    }
+
+    public function latestTopicWithComments(): ?Topic
+    {
+        return $this->topics()
+            ->withMax('comments', 'fecha')
+            ->orderByDesc('comments_max_fecha')
+            ->first();
+    }
 
     protected function scopeWithUnerolled(Builder $query): void
     {

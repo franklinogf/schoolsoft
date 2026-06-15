@@ -39,6 +39,12 @@ class Topic extends Model
     public const string INACTIVE = 'c';
     public const string TEACHER_TYPE = 'p';
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('orderByDate', function (Builder $builder): void {
+            $builder->orderBy('fecha');
+        });
+    }
     /**
      * @return BelongsTo<Teacher, $this>
      */
