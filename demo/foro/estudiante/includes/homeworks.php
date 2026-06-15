@@ -1,23 +1,26 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Admin;
+use App\Models\DoneHomework;
+use App\Models\Homework;
 use Classes\File;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Homework;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 Server::is_post();
 if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['getDoneHomeworkById'];
    if (
-      $doneHw = DB::table('tareas_enviadas', !__COSEY)->where([
-         ['id_tarea', $id_doneHomework],
-         ['id_estudiante', Session::id()],
+      $doneHw = DoneHomework::query()->where([
+         'id_tarea' => $id_doneHomework,
+         'id_estudiante' =>  Session::id(),
       ])->first()
    ) {
-      $files = DB::table('t_tareas_archivos', !__COSEY)->where('id_tarea', $doneHw->id)->get();
+      $files = DB::table('t_tareas_archivos')->where('id_tarea', $doneHw->id)->get();
       $array = [
          'response' => true,
          'data' => $doneHw,
@@ -33,20 +36,20 @@ if (isset($_POST['getDoneHomeworkById'])) {
 } else if (isset($_POST['doneHomework'])) {
 
    $id_homework = $_POST['doneHomework'];
-   $hw = new Homework($id_homework);
+   $hw = Homework::findOrFail($id_homework);
    $id_teacher = $hw->id2;
    $class = $hw->curso;
    $note = $_POST['note'];
 
-   $id_doneHomework = DB::table('tareas_enviadas')->insertGetId([
+   $doneHomework = DoneHomework::query()->create([
       "id_tarea" => $id_homework,
       "id_estudiante" => Session::id(),
       "id_profesor" => $id_teacher,
       "curso" => $class,
       "nota" => $note,
-      "fecha" => Util::date(),
-      "hora" => Util::time(),
-      "year" => $hw->info('year')
+      "fecha" => date('Y-m-d'),
+      "hora" => date('H:i:s'),
+      "year" => Admin::primaryAdmin()->year()
    ]);
 
    $uniqueId = uniqid();
@@ -56,7 +59,7 @@ if (isset($_POST['getDoneHomeworkById'])) {
       if (File::upload($file, __STUDENT_HOMEWORKS_DIRECTORY, $newName)) {
          DB::table('t_tareas_archivos')->insert([
             'nombre' => $newName,
-            'id_tarea' => $id_doneHomework
+            'id_tarea' => $doneHomework->id
          ]);
       }
    }
@@ -65,9 +68,11 @@ if (isset($_POST['getDoneHomeworkById'])) {
    $id_doneHomework = $_POST['editDoneHomework'];
    $note = $_POST['note'];
 
-   DB::table('tareas_enviadas', !__COSEY)->where('id', $id_doneHomework)->update([
-      "nota" => $note
-   ]);
+   DoneHomework::query()
+      ->where('id', $id_doneHomework)
+      ->update([
+         "nota" => $note
+      ]);
 
    $uniqueId = uniqid();
    $file = new File('file');
@@ -84,10 +89,9 @@ if (isset($_POST['getDoneHomeworkById'])) {
 
    $file_id = $_POST['delExistingFile'];
 
-   $file = DB::table('t_tareas_archivos', !__COSEY)->where('id', $file_id)->first();
+   $file = DB::table('t_tareas_archivos')->where('id', $file_id)->first();
 
    File::delete(__STUDENT_HOMEWORKS_DIRECTORY, $file->nombre);
 
-   DB::table('t_tareas_archivos', !__COSEY)->where('id', $file_id)->delete();
+   DB::table('t_tareas_archivos')->where('id', $file_id)->delete();
 }
-

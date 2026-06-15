@@ -80,8 +80,10 @@ $lang = new Lang([
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
                <?php $sent = $homework->hasBeenDoneByStudent($student) ? 'success' : 'white' ?>
-               <?php $cantSend = $homework->fec_in->greaterThanOrEqualTo(Carbon::today())  ? true : false ?>
+               <?php $cantSend = $homework->fec_in->lessThanOrEqualTo(Carbon::today())  ? true : false ?>
                <?php $expired = ($homework->fec_out->greaterThanOrEqualTo(Carbon::today()) ? '' : 'danger'); ?>
+
+
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
                   <div class="card <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">

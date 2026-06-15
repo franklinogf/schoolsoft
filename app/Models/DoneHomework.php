@@ -38,7 +38,7 @@ class DoneHomework extends Model
      */
     public function homework(): BelongsTo
     {
-        return $this->belongsTo(Homework::class, 'id_tarea', 'id');
+        return $this->belongsTo(Homework::class, 'id_tarea', 'id_documento');
     }
 
     /**
@@ -54,7 +54,7 @@ class DoneHomework extends Model
      */
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class, 'id_estudiante', 'id');
+        return $this->belongsTo(Student::class, 'id_estudiante', 'mt');
     }
 
     /**

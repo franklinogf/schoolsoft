@@ -2,6 +2,7 @@
 
 namespace App\Models\Foro;
 
+use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Traits\HasYear;
 use Carbon\CarbonInterface;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $estado (a = activo, c= inactivo)
  * @property CarbonInterface $desde
  * @property-read Teacher $teacher
+ * @property-read Subject $teacher
  * @property-read Collection<int,TopicComment> $comments
  */
 class Topic extends Model
@@ -51,6 +53,14 @@ class Topic extends Model
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'creador_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo<Subject, $this>
+     */
+    public function subject(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class, 'curso', 'curso');
     }
 
     /**

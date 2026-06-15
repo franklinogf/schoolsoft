@@ -67,7 +67,7 @@ class Homework extends Model
      */
     public function doneHomeworks(): HasMany
     {
-        return $this->hasMany(DoneHomework::class, 'id_tarea', 'id');
+        return $this->hasMany(DoneHomework::class, 'id_tarea', 'id_documento');
     }
 
 

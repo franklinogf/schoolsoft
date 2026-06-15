@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\DefaultPictureEnum;
 use App\Enums\Gender;
 use App\Enums\PicturePathEnum;
+use App\Models\Exam\DoneExam;
+use App\Models\Exam\Exam;
 use App\Models\Foro\Topic;
 use App\Models\Scopes\YearScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -222,14 +224,6 @@ class Student extends Model
         });
     }
 
-    protected function casts(): array
-    {
-        return [
-            'fecha' => 'date:Y-m-d',
-            'fecha_matri' => 'date:Y-m-d',
-        ];
-    }
-
     public function classes(): HasMany
     {
         return $this->hasMany(Classes::class, 'ss', 'ss')->orderBy('curso');
@@ -247,12 +241,47 @@ class Student extends Model
     }
 
     /**
+     * @return Builder<Exam>
+     */
+    public function exams(): Builder
+    {
+        $classes = $this->classes()->pluck('curso');
+
+        return Exam::query()->whereIn('curso', $classes);
+    }
+
+    /**
+     * @return HasMany<DoneExam>
+     */
+    public function doneExams(): HasMany
+    {
+        return $this->hasMany(DoneExam::class, 'id_estudiante', 'mt');
+    }
+
+    public function doneExam(Exam $exam): ?DoneExam
+    {
+        return $this->doneExams()->where('id_examen', $exam->id)->first();
+    }
+
+    public function hasTakenTheExam(Exam $exam): bool
+    {
+        return $this->doneExams()->where('id_examen', $exam->id)->exists();
+    }
+
+    /**
      * @return HasMany<DoneHomework>
      */
     public function doneHomeworks(): HasMany
     {
         return $this->HasMAny(DoneHomework::class, 'id_estudiante', 'mt');
     }
+
+    public function hasDoneTheHomework(Homework $homework): bool
+    {
+        return $this->doneHomeworks()->where('id_tarea', $homework->id_documento)->exists();
+    }
+
+
     /**
      * @return Builder<Topic>
      */
@@ -431,5 +460,13 @@ class Student extends Model
     public function diabetesInsulinPump(): HasOne
     {
         return $this->hasOne(DiabetesInsulinPump::class, 'ss', 'ss');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'fecha' => 'date:Y-m-d',
+            'fecha_matri' => 'date:Y-m-d',
+        ];
     }
 }
