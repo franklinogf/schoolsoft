@@ -1,21 +1,20 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Foro\Topic;
 use Classes\Util;
-use Classes\Controllers\Topic;
 use Classes\Server;
 
 Server::is_post();
 
 if (isset($_POST['topicsByClass'])) {
-   $topic = new Topic();
-   $class = $_POST['topicsByClass'];  
-   $data = $topic->ByClass($class);
+   $class = $_POST['topicsByClass'];
+   $topic = Topic::query()->byClass($class)->active()->get();
 
-   if ($data) {
+   if ($topic) {
       $array = [
          'response' => true,
-         'data' => $data
+         'data' => $topic
       ];
    } else {
       $array = ['response' => false];

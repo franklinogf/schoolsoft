@@ -42,7 +42,7 @@ class Topic extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('orderByDate', function (Builder $builder): void {
-            $builder->orderBy('fecha');
+            $builder->orderByDesc('fecha');
         });
     }
     /**
@@ -66,7 +66,7 @@ class Topic extends Model
      */
     protected function scopeActive(Builder $query): void
     {
-        $query->where('estado', self::ACTIVE);
+        $query->where('estado', self::ACTIVE)->whereTodayOrAfter('fecha');
     }
 
     /**

@@ -1,40 +1,39 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Foro\Topic;
+use App\Models\Foro\TopicComment;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Topic;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 if (!isset($_GET['id'])) {
   Route::error();
 }
-$topic = new Topic($_GET['id']);
-if(!isset($topic->id)){
+$topic = Topic::find($_GET['id']);
+
+if (!isset($topic->id)) {
   Route::error();
 }
-$student = new Student(Session::id());
-$teacher = new Teacher($topic->creador_id);
-$comments = $topic->comments();
+
+$comments = $topic->comments;
 $lang = new Lang([
-  ['Temas', 'Topics'],  
+  ['Temas', 'Topics'],
   ['Comentario nuevo', 'New comment'],
   ['Por favor escriba algo', 'Please write something'],
   ['Comentar', 'Comment'],
-  
-  
-  
-  
+
+
+
+
 ]);
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
-<head> 
+<head>
   <?php
   $title = $topic->titulo;
   Route::includeFile('/foro/estudiante/includes/layouts/header.php');
@@ -61,7 +60,7 @@ $lang = new Lang([
     <div class="card">
       <h4 id="title" class="card-header text-center bg-gradient-primary bg-primary rounded-0"><?= $topic->titulo ?></h4>
       <div class="card-body">
-        <h5 class="card-title"><?= $teacher->fullName(); ?></h5>
+        <h5 class="card-title"><?= $topic->teacher->fullName; ?></h5>
         <p id="description" class="card-text"><?= $topic->descripcion ?></p>
       </div>
       <div class="card-footer text-white d-flex justify-content-between bg-gradient-secondary bg-secondary">
@@ -81,28 +80,28 @@ $lang = new Lang([
       <?php endif ?>
 
 
-        <div id="commentsList" class="bg-white">
-          <?php foreach ($comments as $comment) : ?>
-            <?php
-            $student = new Student($comment->creador_id);
-            $profilePicture = $comment->tipo === 'p' ? $teacher->profilePicture() : $student->profilePicture();
-            ?>
-            <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
-              <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
-              <div class="media-body">
-                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName() : '<i class="fas fa-user-graduate fa-xs"></i> ' . $student->fullName()) ?></h5>
-                <p class="m-0 p-2"><?= $comment->descripcion ?></p>
-                <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
-              </div>
+      <div id="commentsList" class="bg-white">
+        <?php foreach ($comments as $comment) : ?>
+          <?php
+          $commenter = $comment->tipo === TopicComment::TEACHER_TYPE ? $comment->teacher : $comment->student;
+          $profilePicture = $commenter->profilePicture;
+          ?>
+          <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
+            <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
+            <div class="media-body">
+              <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' : '<i class="fas fa-user-graduate fa-xs"></i> ') .  $commenter->fullName ?></h5>
+              <p class="m-0 p-2"><?= $comment->descripcion ?></p>
+              <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
             </div>
-          <?php endforeach ?>
-        </div>
+          </div>
+        <?php endforeach ?>
+      </div>
     </div>
 
   </div>
 
   <?php
-   Route::includeFile('/includes/layouts/scripts.php', true);
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

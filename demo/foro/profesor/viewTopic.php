@@ -3,8 +3,6 @@ require_once __DIR__ . '/../../app.php';
 
 use App\Models\Foro\Topic;
 use App\Models\Foro\TopicComment;
-use App\Models\Student;
-use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
@@ -19,8 +17,6 @@ $topic = Topic::find($_GET['id']);
 if ($topic === null) {
   Route::error();
 }
-
-$teacher = Teacher::find(Session::id());
 
 $comments = $topic->comments;
 $lang = new Lang([
@@ -83,7 +79,7 @@ $lang = new Lang([
     <div class="card">
       <h4 id="title" class="card-header text-center bg-gradient-primary bg-primary rounded-0"><?= $topic->titulo ?></h4>
       <div class="card-body">
-        <h5 class="card-title"><?= $teacher->fullName; ?></h5>
+        <h5 class="card-title"><?= $topic->teacher->fullName; ?></h5>
         <p id="description" class="card-text"><?= $topic->descripcion ?></p>
       </div>
       <div class="card-footer text-white d-flex justify-content-between bg-gradient-secondary bg-secondary">
@@ -113,7 +109,7 @@ $lang = new Lang([
             <div class="media mt-3 pt-3 px-3 border-primary-gradient-top">
               <img src="<?= $profilePicture ?>" class="align-self-center mr-3 rounded-circle" alt="profile picture" width="72" height="72">
               <div class="media-body">
-                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' . $teacher->fullName : '<i class="fas fa-user-graduate fa-xs"></i> ' . $student->fullName()) ?></h5>
+                <h5 class="mt-0"><?= ($comment->tipo === 'p' ? '<i class="fas fa-user-tie fa-xs"></i> ' : '<i class="fas fa-user-graduate fa-xs"></i> ') .  $commenter->fullName ?></h5>
                 <p class="m-0 mb-2 p-2 text-break"><?= $comment->descripcion ?></p>
                 <p class="text-muted text-right"><?= Util::formatDate($comment->fecha, true, true) . ' ' . Util::formatTime($comment->hora) ?></p>
                 <!-- <button data-comment-id="<?php //echo $comment->id 
