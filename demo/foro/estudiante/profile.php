@@ -1,14 +1,15 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Student;
 
 Session::is_logged();
-$student = new Student(Session::id());
+$student = Student::findOrFail(Session::id());
+
 $lang = new Lang([
   ['Mi perfil', 'My profile'],
   ["Cambiar foto de perfil", "Change profile picture"],
@@ -32,20 +33,20 @@ $lang = new Lang([
 <head>
   <?php
   $title = $lang->translation("Mi Perfil");
-Route::includeFile('/foro/estudiante/includes/layouts/header.php');
-?>
+  Route::includeFile('/foro/estudiante/includes/layouts/header.php');
+  ?>
 </head>
 
 <body class='pb-5'>
   <?php
-Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
-?>
+  Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
+  ?>
   <div class="container mt-5">
     <h1 class="text-center"><?= $lang->translation("Mi Perfil") ?> <i class="far fa-id-card"></i></h1>
     <form action="<?= Route::url('/foro/estudiante/includes/profile.php') ?>" method="POST" enctype="multipart/form-data">
       <div class="row mt-5">
         <div class="col-lg-6 col-sm-12">
-          <img src="<?= $student->profilePicture() ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
+          <img src="<?= $student->profilePicture ?>" alt="Profile Picture" class="profile-picture img-thumbnail rounded mx-auto d-block" width="250" height="250">
           <div class="form-group text-center mt-2">
             <button id="pictureBtn" type='button' class="btn btn-secondary"><?= $lang->translation("Cambiar foto de perfil") ?></button>
             <button id="pictureCancel" type='button' hidden class="btn btn-danger"><i class="fas fa-times"></i></button>
@@ -113,8 +114,8 @@ Route::includeFile('/foro/estudiante/includes/layouts/menu.php');
 
 
   <?php
-Route::includeFile('/includes/layouts/scripts.php', true);
-?>
+  Route::includeFile('/includes/layouts/scripts.php', true);
+  ?>
 </body>
 
 </html>

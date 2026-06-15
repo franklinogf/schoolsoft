@@ -2,17 +2,17 @@
 
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Student;
 use Classes\File;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
-use Classes\Controllers\Student;
-use Classes\Util;
+
 
 Session::is_logged();
 Server::is_post();
 
-$student = new Student(Session::id());
+$student = Student::findOrFail(Session::id());
 
 $student->nombre = $_POST['name'];
 $student->apellidos = $_POST['lastName'];
@@ -28,7 +28,7 @@ $file = new File('picture');
 if ($file->amount > 0) {
    $newName = $student->mt . '.jpg';
    $student->imagen = $newName;
-   $file::upload($file->files, __STUDENT_PROFILE_PICTURE_PATH,$newName);
+   $file::upload($file->files, __STUDENT_PROFILE_PICTURE_PATH, $newName);
 }
 
 $student->save();
