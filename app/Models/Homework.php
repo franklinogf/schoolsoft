@@ -70,6 +70,12 @@ class Homework extends Model
         return $this->hasMany(DoneHomework::class, 'id_tarea', 'id');
     }
 
+
+    public function hasBeenDoneByStudent(Student $student): bool
+    {
+        return $this->doneHomeworks()->where('id_estudiante', $student->mt)->exists();
+    }
+
     /**
      * @param Builder<$this> $query
      */

@@ -8,7 +8,7 @@ use Classes\Session;
 
 
 Session::is_logged();
-$jqUI = true;
+
 $DataTable = true;
 $student = Student::findOrFail(Session::id());
 $lang = new Lang([

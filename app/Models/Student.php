@@ -237,6 +237,23 @@ class Student extends Model
 
 
     /**
+     * @return Builder<Homework>
+     */
+    public function homeworks(): Builder
+    {
+        $classes = $this->classes()->pluck('curso');
+
+        return Homework::query()->whereIn('curso', $classes);
+    }
+
+    /**
+     * @return HasMany<DoneHomework>
+     */
+    public function doneHomeworks(): HasMany
+    {
+        return $this->HasMAny(DoneHomework::class, 'id_estudiante', 'mt');
+    }
+    /**
      * @return Builder<Topic>
      */
     public function topics(): Builder

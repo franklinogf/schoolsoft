@@ -1,17 +1,19 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Student;
+use Carbon\Carbon;
 use Classes\File;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Student;
+
 
 Session::is_logged();
-$student = new Student(Session::id());
+$student = Student::findOrFail(Session::id());
 
-$homeworks = $student->homeworks();
+$homeworks = $student->homeworks()->get();
 $lang = new Lang([
    ['Mis Tareas', 'My Homeworks'],
    ['Cerrar', 'Close'],
@@ -49,7 +51,7 @@ $lang = new Lang([
    <div class="container-lg mt-5 px-0 pb-5">
 
       <h1 class="text-center mb-3"><?= $lang->translation("Mis Tareas") ?></h1>
-      <?php if ($homeworks) : ?>
+      <?php if ($homeworks->isNotEmpty()) : ?>
          <div class="alert alert-warning mx-auto" role="alert">
             <?= $lang->translation("Las tareas se borrarán al día siguiente de la fecha de entrega o vencimiento.") ?>
          </div>
@@ -74,16 +76,16 @@ $lang = new Lang([
    </div>
    <!-- homework list -->
    <div class="container">
-      <?php if ($homeworks) : ?>
+      <?php if ($homeworks->isNotEmpty()) : ?>
          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <?php foreach ($homeworks as $homework) : ?>
-               <?php $sent = $student->doneHomework($homework->id_documento) ? 'success' : 'white' ?>
-               <?php $cantSend = Util::date() >= $homework->fec_in  ? true : false ?>
-               <?php $expired = $homework->fec_out >= Util::date() || $homework->fec_out === '0000-00-00' ? '' : 'danger'; ?>
+               <?php $sent = $homework->hasBeenDoneByStudent($student) ? 'success' : 'white' ?>
+               <?php $cantSend = $homework->fec_in->greaterThanOrEqualTo(Carbon::today())  ? true : false ?>
+               <?php $expired = ($homework->fec_out->greaterThanOrEqualTo(Carbon::today()) ? '' : 'danger'); ?>
                <div class="col mb-4 homework <?= $homework->id_documento ?>">
                   <div class="card <?= $expired === 'danger' ? "border-{$expired}" : "" ?>">
                      <h6 class="card-header bg-gradient-primary bg-primary d-flex justify-content-between">
-                        <?= "{$homework->curso} - {$homework->desc}" ?>
+                        <?= "{$homework->curso} - {$homework->descripcion}" ?>
                         <?php if ($homework->enviartarea === 'si') : ?>
                            <i class="fas fa-circle text-<?= $sent ?>"></i>
                         <?php endif ?>
