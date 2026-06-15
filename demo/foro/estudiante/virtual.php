@@ -1,18 +1,18 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Student;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Student;
 
 Session::is_logged();
 $DataTable = true;
-$student = new Student(Session::id());
+
+$student = Student::findOrFail(Session::id());
 $lang = new Lang([
-['Salón Virtual','Virtual classroom'],
-['Cerrar','Close']
+  ['Salón Virtual', 'Virtual classroom'],
+  ['Cerrar', 'Close']
 ]);
 ?>
 <!DOCTYPE html>
@@ -51,7 +51,7 @@ $lang = new Lang([
               </button>
             </div>
             <div class="modal-body">
-              
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $lang->translation("Cerrar") ?></button>
@@ -64,7 +64,7 @@ $lang = new Lang([
 
   </div>
   <?php
-   Route::includeFile('/includes/layouts/scripts.php', true);
+  Route::includeFile('/includes/layouts/scripts.php', true);
   ?>
 
 </body>

@@ -1,24 +1,24 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Controllers\Student;
+use App\Models\Admin;
+use App\Models\Student;
+use App\Models\VirtualClass;
+use App\Models\VirtualClassAttendance;
 use Classes\Util;
 use Classes\Server;
 use Classes\Session;
-use Classes\DataBase\DB;
 
 
 Server::is_post();
-$student = new Student(Session::id());
+$student = Student::findOrFail(Session::id());
 
 if (isset($_POST['find'])) {
 
-   $virtualClass = DB::table('virtual')->where([
-      ['curso', $_POST['find']],
-      ['year', $student->info('year')],
-      ['id_profesor', $_POST['teacherId']],
-      ['activo', true],
-   ])->first();
+   $virtualClass = VirtualClass::query()
+      ->active()
+      ->ofClass($_POST['find'])
+      ->where(['id_profesor' =>  $_POST['teacherId']])->first();
 
    if ($virtualClass) {
       $array = [
@@ -39,19 +39,18 @@ if (isset($_POST['find'])) {
 
    echo Util::toJson($array);
 } else if (isset($_POST['asis'])) {
-   $virtualAsis = DB::table("asistencia_virtual")->where([
-      ["id_virtual", $_POST['asis']],
-      ["ss_estudiante" , $student->ss],
-      ["year", $student->info('year')]
-   ])->first();
+   $virtualAsis = VirtualClassAttendance::query()->where([
+      "id_virtual" => $_POST['asis'],
+      "ss_estudiante" => $student->ss
+   ])->exists();
 
    if (!$virtualAsis) {
-      DB::table("asistencia_virtual")->insert([
+      VirtualClassAttendance::query()->create([
          "id_virtual" => $_POST['asis'],
          "ss_estudiante" => $student->ss,
-         "fecha" => Util::date(),
-         "hora" => Util::time(),
-         "year" => $student->info('year'),
+         "fecha" => date('Y-m-d'),
+         "hora" => date('H:i:s'),
+         "year" => Admin::primaryAdmin()->year(),
       ]);
    }
 }
