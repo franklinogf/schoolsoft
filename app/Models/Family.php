@@ -127,24 +127,20 @@ class Family extends Model
     public $timestamps = false;
     protected $guarded = [];
 
+    /**
+     * @return HasMany<Student, $this>
+     */
     public function kids(): HasMany
     {
         return $this->hasMany(Student::class, 'id', 'id');
     }
 
+    /**
+     * @return HasMany<Payment, $this>
+     */
     public function charges(): HasMany
     {
         return $this->hasMany(Payment::class, 'id', 'id');
-    }
-
-    public function payments(): HasMany
-    {
-        return $this->charges()->whereDate('fecha_d', '!=', '0000-00-00');
-    }
-
-    public function debts(): HasMany
-    {
-        return $this->charges()->whereDate('fecha_d',  '0000-00-00');
     }
 
     public function scopeActive(Builder $query): Builder

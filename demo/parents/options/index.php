@@ -19,6 +19,7 @@ $buttons = [
     ['name' => 'Tiendas', 'link' => 'stores/'],
     ['name' => 'Reporte de compras', 'link' => 'Shopping/'],
     ['name' => 'Deposits', 'link' => 'deposit/'],
+    ['name' => 'Pagos', 'link' => 'payments/'],
 ];
 $lang = new Lang([
     ["Mensajes y Opciones", "Messages and Options"],

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Scopes\YearScope;
+use App\Models\Traits\HasYear;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -43,14 +45,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Payment extends Model
 {
+    use HasYear;
     protected $table = 'pagos';
     protected $primaryKey = 'mt';
     public $timestamps = false;
     protected $guarded = [];
-    protected static function booted(): void
-    {
-        static::addGlobalScope(new YearScope);
-    }
 
     public static function nextReceiptNumber(): int
     {
@@ -61,8 +60,27 @@ class Payment extends Model
         return $maxReceipt ? $maxReceipt + 1 : 1;
     }
 
+    /**
+     * @return BelongsTo<Student, $this>
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopeDebts(Builder $query): void
+    {
+        $query->where('deuda', '>', 0);
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopePayments(Builder $query): void
+    {
+        $query->where('pago', '>', 0);
     }
 }
