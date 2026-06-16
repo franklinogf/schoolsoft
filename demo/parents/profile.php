@@ -1,15 +1,16 @@
 <?php
 require_once __DIR__ . '/../app.php';
 
+use App\Models\Family;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\Controllers\Parents;
+
 
 Session::is_logged();
 
-$parents = new Parents(Session::id());
+$parents = Family::findOrFail(Session::id());
 $lang = new Lang([
   ["Mi Perfil", "My profile"],
   ["Información importante", "Important information"],

@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../app.php';
 
-use Classes\Controllers\Parents;
+use App\Models\Family;
 use Classes\Route;
 use Classes\Server;
 use Classes\Session;
@@ -12,7 +12,7 @@ Server::is_post();
 
 
 
-$parents = new Parents(Session::id());
+$parents = Family::findOrFail(Session::id());
 // Mother Information
 $parents->madre = $_POST['nameM'];
 $parents->ex_m = $_POST['exM'];
