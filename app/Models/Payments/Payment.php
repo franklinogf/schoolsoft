@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Models\Payments;
+
+use App\Models\Scopes\YearScope;
+use App\Models\Student;
+use App\Models\Traits\HasYear;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * @property string $id
+ * @property string $nombre
+ * @property string $desc1
+ * @property string $fecha_d
+ * @property float $pago
+ * @property string $year
+ * @property string $fecha_p
+ * @property float $deuda
+ * @property int $codigo
+ * @property string $ss
+ * @property string $tdp
+ * @property string $grado
+ * @property int $code1
+ * @property string $usuario
+ * @property string $hora
+ * @property string $fecha2
+ * @property string $nuchk
+ * @property string $paypal
+ * @property int $rec
+ * @property int $add1
+ * @property int $id2
+ * @property string $computadora
+ * @property string $ip
+ * @property int $mt
+ * @property string $baja
+ * @property int $bash
+ * @property int $caja
+ * @property string $razon
+ * @property string $fecha_r
+ * @property string $chkd
+ * @property string $cdc
+ * @property string $codigo2
+ * @property Student $student
+ */
+class Payment extends Model
+{
+    use HasYear;
+    protected $table = 'pagos';
+    protected $primaryKey = 'mt';
+    public $timestamps = false;
+    protected $guarded = [];
+
+    public static function nextReceiptNumber(): int
+    {
+        // Get the maximum receipt number from the payments table, ignoring the year scope
+        $maxReceipt = (int) self::withoutGlobalScope(YearScope::class)->query()->max('rec');
+
+        // If no receipts exist, start from 1, otherwise increment the max by 1
+        return $maxReceipt ? $maxReceipt + 1 : 1;
+    }
+
+    /**
+     * @return BelongsTo<Student, $this>
+     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopeDebts(Builder $query): void
+    {
+        $query->where('deuda', '>', 0);
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopePayments(Builder $query): void
+    {
+        $query->where('pago', '>', 0);
+    }
+}

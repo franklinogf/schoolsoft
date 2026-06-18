@@ -17,7 +17,7 @@ use App\Models\Student;
 use App\Models\Family;
 use App\Models\StudentDocument;
 use App\Models\Classes;
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

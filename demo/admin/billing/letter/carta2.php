@@ -2,7 +2,7 @@
 
 use App\Models\Admin;
 use App\Models\Family;
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 use App\Models\Student;
 
 

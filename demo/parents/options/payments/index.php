@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../../app.php';
 
 use App\Models\Family;
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 use Carbon\Carbon;
 use Classes\Route;
 use Classes\Session;

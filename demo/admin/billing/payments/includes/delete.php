@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 use Classes\Route;
 
 require_once __DIR__ . '/../../../../app.php';

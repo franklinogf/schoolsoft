@@ -2,7 +2,7 @@
 
 use App\Models\Admin;
 use App\Models\Family;
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 
 use Classes\Email;
 use Classes\PDF;
@@ -31,18 +31,18 @@ $mes = $_REQUEST['mes'];
 $student = $_REQUEST['student'] !== 'all' ? $_REQUEST['student'] : null;
 
 $MES = array(
-	'enero',
-	'febrero',
-	'marzo',
-	'abril',
-	'mayo',
-	'junio',
-	'julio',
-	'agosto',
-	'septiembre',
-	'octubre',
-	'noviembre',
-	'diciembre'
+    'enero',
+    'febrero',
+    'marzo',
+    'abril',
+    'mayo',
+    'junio',
+    'julio',
+    'agosto',
+    'septiembre',
+    'octubre',
+    'noviembre',
+    'diciembre'
 );
 
 
@@ -119,7 +119,7 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(0, 5, strtoupper(__('Cuenta')) . ' # ' . $id, 0, 1);
     $pdf->Ln(5);
-    $pdf->MultiCell(0, 6, strtoupper(__('Hemos revisado nuevamente nuestras cuentas a cobrar y encontramos que usted a la fecha de hoy '.$fechaHoy.' no ha efectuado el pago correspondiente al mes de:')));
+    $pdf->MultiCell(0, 6, strtoupper(__('Hemos revisado nuevamente nuestras cuentas a cobrar y encontramos que usted a la fecha de hoy ' . $fechaHoy . ' no ha efectuado el pago correspondiente al mes de:')));
     $pdf->Ln(5);
     $pdf->SetFont('Arial', 'B', 12);
 
@@ -155,13 +155,13 @@ foreach ($paymentGroup as $id => $payments) {
     $pdf->Ln(5);
     $pdf->Cell(0, 5, strtoupper(__('Nota importante')), 0, 1);
     $pdf->Ln(5);
-	$pdf->Cell(0, 7, '1. ENVIAR EL PAGO EN O ANTES DEL 15 DE '.strtoupper($MES[$mes -1]).' '.date('Y').'.', 0, 1);
+    $pdf->Cell(0, 7, '1. ENVIAR EL PAGO EN O ANTES DEL 15 DE ' . strtoupper($MES[$mes - 1]) . ' ' . date('Y') . '.', 0, 1);
     $pdf->Ln(5);
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(0, 5, __(utf8_encode('Si usted ha realizado el pago antes mencionado, por favor hacer caso omiso a esta notificación.')));
-//    $pdf->MultiCell(0, 7, strtoupper(__('2. Los pagos pueden hacerse mediante tarjeta de credito, ath, athmovil business, efectivo, giro postal.')));
+    $pdf->SetFont('Arial', 'B', 11);
+    $pdf->Cell(0, 5, __(utf8_encode('Si usted ha realizado el pago antes mencionado, por favor hacer caso omiso a esta notificación.')));
+    //    $pdf->MultiCell(0, 7, strtoupper(__('2. Los pagos pueden hacerse mediante tarjeta de credito, ath, athmovil business, efectivo, giro postal.')));
     $pdf->Ln(3);
-//    $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
+    //    $pdf->MultiCell(0, 7, strtoupper(__('3. Favor de hacer los arreglos pertinentes para que los servicios educativos de su hijo(a) no se vean afectados.')));
     $pdf->Ln(3);
     $uniqueId = Str::uuid()->toString();
     $filePath = "{$directory}/$uniqueId.pdf";

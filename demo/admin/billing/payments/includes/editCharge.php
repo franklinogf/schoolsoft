@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Payment;
+use App\Models\Payments\Payment;
 use App\Models\Student;
 use Classes\Route;
 use Illuminate\Database\Capsule\Manager as DB;
