@@ -41,7 +41,10 @@ $(function () {
   function resetForm() {
     $('#email').val('')
     $('#cc-name,#cc-number,#cc-expiration,#cc-cvv,#cc-zip').val('')
+    $('#cc-number').attr('placeholder', '')
+    $('#cc-cvv').attr('placeholder', '***')
     $('#ach-name,#ach-type,#ach-number,#ach-route,#ach-zip').val('')
+    $('#ach-number,#ach-route').attr('placeholder', '')
     $('#itemStudent').val('')
     $('#itemBudget').html('<option value="">Seleccione estudiante primero</option>')
     $('#itemAmount').val('')
@@ -65,15 +68,22 @@ $(function () {
     }
 
     $('#cc-name').val(autoPay.ccNombre || '')
-    $('#cc-number').val(autoPay.ccNumero || '')
+    $('#cc-number').val('')
+    $('#cc-number').attr('placeholder', autoPay.ccLast4 ? `****${autoPay.ccLast4}` : '')
     $('#cc-expiration').val(autoPay.fechaExpiracion || '')
-    $('#cc-cvv').val(autoPay.cvv || '')
+    $('#cc-cvv').val('')
+    $('#cc-cvv').attr('placeholder', '***')
     $('#cc-zip').val(autoPay.ccZip || '')
 
     $('#ach-name').val(autoPay.achNombre || '')
     $('#ach-type').val(autoPay.tipoCuenta || '')
-    $('#ach-number').val(autoPay.achNumero || '')
-    $('#ach-route').val(autoPay.numeroRuta || '')
+    $('#ach-number').val('')
+    $('#ach-number').attr('placeholder', autoPay.achLast4 ? `****${autoPay.achLast4}` : '')
+    $('#ach-route').val('')
+    $('#ach-route').attr(
+      'placeholder',
+      autoPay.numeroRutaLast4 ? `****${autoPay.numeroRutaLast4}` : ''
+    )
     $('#ach-zip').val(autoPay.achZip || '')
 
     $('#dayOfPayment').val(autoPay.diaDePago || '')
@@ -245,6 +255,8 @@ $(function () {
   }
 
   function validateHeader() {
+    const isUpdate = Boolean($('#autoPayId').val())
+
     if (!$('#email').val()) {
       Alert.fire('Error', 'Debe ingresar email', 'error')
       return null
@@ -272,11 +284,12 @@ $(function () {
       payload.ccZip = $('#cc-zip').val()
 
       if (
-        !payload.ccNombre ||
-        !payload.ccNumero ||
-        !payload.fechaExpiracion ||
-        !payload.ccv ||
-        !payload.ccZip
+        !isUpdate &&
+        (!payload.ccNombre ||
+          !payload.ccNumero ||
+          !payload.fechaExpiracion ||
+          !payload.ccv ||
+          !payload.ccZip)
       ) {
         Alert.fire('Error', 'Complete todos los campos de tarjeta', 'error')
         return null
@@ -289,11 +302,12 @@ $(function () {
       payload.achZip = $('#ach-zip').val()
 
       if (
-        !payload.achNombre ||
-        !payload.achNumero ||
-        !payload.numeroRuta ||
-        !payload.tipoCuenta ||
-        !payload.achZip
+        !isUpdate &&
+        (!payload.achNombre ||
+          !payload.achNumero ||
+          !payload.numeroRuta ||
+          !payload.tipoCuenta ||
+          !payload.achZip)
       ) {
         Alert.fire('Error', 'Complete todos los campos de ACH', 'error')
         return null

@@ -76,13 +76,16 @@ function mapAutoPay(AutoPay $autoPay, string $year): array
         'formaDePago' => $autoPay->formaDePago?->value,
         'diaDePago' => $autoPay->diaDePago,
         'ccNombre' => $autoPay->ccNombre,
-        'ccNumero' => $autoPay->ccNumero,
+        'ccNumero' => null,
+        'ccLast4' => $autoPay->ccNumero ? substr((string) $autoPay->ccNumero, -4) : null,
         'fechaExpiracion' => $autoPay->fechaExpiracion,
-        'cvv' => $autoPay->cvv,
+        'cvv' => null,
         'ccZip' => $autoPay->ccZip,
         'achNombre' => $autoPay->achNombre,
-        'achNumero' => $autoPay->achNumero,
-        'numeroRuta' => $autoPay->numeroRuta,
+        'achNumero' => null,
+        'achLast4' => $autoPay->achNumero ? substr((string) $autoPay->achNumero, -4) : null,
+        'numeroRuta' => null,
+        'numeroRutaLast4' => $autoPay->numeroRuta ? substr((string) $autoPay->numeroRuta, -4) : null,
         'tipoCuenta' => $autoPay->tipoCuenta?->value,
         'achZip' => $autoPay->achZip,
         'total' => (float) $autoPay->total,
@@ -234,6 +237,11 @@ if ($action === 'saveHeader') {
     $payMode = 'automatico';
     $email = trim((string) ($_POST['email'] ?? ''));
     $dayOfPayment = isset($_POST['diaDePago']) && $_POST['diaDePago'] !== '' ? (int) $_POST['diaDePago'] : null;
+    $existingAutoPay = $autoPayId > 0 ? findAutoPay($autoPayId, $accountId, $year) : null;
+
+    if ($autoPayId > 0 && !$existingAutoPay) {
+        jsonResponse(['success' => false, 'message' => 'Autopay not found'], 404);
+    }
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         jsonResponse(['success' => false, 'message' => 'Valid email is required'], 422);
@@ -257,12 +265,30 @@ if ($action === 'saveHeader') {
     ];
 
     if ($paymentType === 'tarjeta') {
+        $isExistingCard = $existingAutoPay && $existingAutoPay->tipoDePago?->value === 'tarjeta';
+
+        $ccName = trim((string) ($_POST['ccNombre'] ?? ''));
+        $ccNumberSanitized = preg_replace('/\D/', '', (string) ($_POST['ccNumero'] ?? ''));
+        $ccExpiration = trim((string) ($_POST['fechaExpiracion'] ?? ''));
+        $ccCvvSanitized = preg_replace('/\D/', '', (string) ($_POST['ccv'] ?? ''));
+        $ccZipSanitized = preg_replace('/\D/', '', (string) ($_POST['ccZip'] ?? ''));
+
+        $ccName = $ccName !== '' ? $ccName : ($isExistingCard ? (string) $existingAutoPay->ccNombre : '');
+        $ccNumber = $ccNumberSanitized !== '' ? (int) $ccNumberSanitized : ($isExistingCard ? (int) $existingAutoPay->ccNumero : 0);
+        $ccExpiration = $ccExpiration !== '' ? $ccExpiration : ($isExistingCard ? (string) $existingAutoPay->fechaExpiracion : '');
+        $ccZip = $ccZipSanitized !== '' ? (int) $ccZipSanitized : ($isExistingCard ? (int) $existingAutoPay->ccZip : 0);
+
+        if ($ccName === '' || $ccNumber === 0 || $ccExpiration === '' || $ccZip === 0) {
+            jsonResponse(['success' => false, 'message' => 'Complete todos los campos de tarjeta'], 422);
+        }
+
         $payload = array_merge($payload, [
-            'ccNombre' => trim((string) ($_POST['ccNombre'] ?? '')),
-            'ccNumero' => (int) preg_replace('/\D/', '', (string) ($_POST['ccNumero'] ?? '')),
-            'fechaExpiracion' => trim((string) ($_POST['fechaExpiracion'] ?? '')),
-            'cvv' => (int) preg_replace('/\D/', '', (string) ($_POST['ccv'] ?? '')),
-            'ccZip' => (int) preg_replace('/\D/', '', (string) ($_POST['ccZip'] ?? '')),
+            'ccNombre' => $ccName,
+            'ccNumero' => $ccNumber,
+            'fechaExpiracion' => $ccExpiration,
+            // CVV should never be stored persistently.
+            'cvv' => null,
+            'ccZip' => $ccZip,
             'achNombre' => null,
             'achNumero' => null,
             'numeroRuta' => null,
@@ -272,17 +298,37 @@ if ($action === 'saveHeader') {
     }
 
     if ($paymentType === 'ach') {
+        $isExistingAch = $existingAutoPay && $existingAutoPay->tipoDePago?->value === 'ach';
+
         $accountType = (string) ($_POST['tipoCuenta'] ?? '');
-        if (!in_array($accountType, ['w', 's'], true)) {
+        if (!in_array($accountType, ['w', 's'], true) && !$isExistingAch) {
             jsonResponse(['success' => false, 'message' => 'Invalid ACH account type'], 422);
         }
 
+        if (!in_array($accountType, ['w', 's'], true) && $isExistingAch) {
+            $accountType = (string) $existingAutoPay->tipoCuenta?->value;
+        }
+
+        $achName = trim((string) ($_POST['achNombre'] ?? ''));
+        $achNumberSanitized = preg_replace('/\D/', '', (string) ($_POST['achNumero'] ?? ''));
+        $routeSanitized = preg_replace('/\D/', '', (string) ($_POST['numeroRuta'] ?? ''));
+        $achZipSanitized = preg_replace('/\D/', '', (string) ($_POST['achZip'] ?? ''));
+
+        $achName = $achName !== '' ? $achName : ($isExistingAch ? (string) $existingAutoPay->achNombre : '');
+        $achNumber = $achNumberSanitized !== '' ? (int) $achNumberSanitized : ($isExistingAch ? (int) $existingAutoPay->achNumero : 0);
+        $routeNumber = $routeSanitized !== '' ? (int) $routeSanitized : ($isExistingAch ? (int) $existingAutoPay->numeroRuta : 0);
+        $achZip = $achZipSanitized !== '' ? (int) $achZipSanitized : ($isExistingAch ? (int) $existingAutoPay->achZip : 0);
+
+        if ($achName === '' || $achNumber === 0 || $routeNumber === 0 || !in_array($accountType, ['w', 's'], true) || $achZip === 0) {
+            jsonResponse(['success' => false, 'message' => 'Complete todos los campos de ACH'], 422);
+        }
+
         $payload = array_merge($payload, [
-            'achNombre' => trim((string) ($_POST['achNombre'] ?? '')),
-            'achNumero' => (int) preg_replace('/\D/', '', (string) ($_POST['achNumero'] ?? '')),
-            'numeroRuta' => (int) preg_replace('/\D/', '', (string) ($_POST['numeroRuta'] ?? '')),
+            'achNombre' => $achName,
+            'achNumero' => $achNumber,
+            'numeroRuta' => $routeNumber,
             'tipoCuenta' => $accountType,
-            'achZip' => (int) preg_replace('/\D/', '', (string) ($_POST['achZip'] ?? '')),
+            'achZip' => $achZip,
             'ccNombre' => null,
             'ccNumero' => null,
             'fechaExpiracion' => null,

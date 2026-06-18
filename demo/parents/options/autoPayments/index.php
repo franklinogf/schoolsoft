@@ -69,23 +69,23 @@ $students = Student::query()->where('id', Session::id())->get();
                                 <div class="form-row">
                                     <div class="form-group col-12 col-md-6">
                                         <label for="cc-name"><?= __('Nombre en la tarjeta') ?></label>
-                                        <input type="text" class="form-control justText" id="cc-name">
+                                        <input type="text" class="form-control justText" id="cc-name" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label for="cc-number"><?= __('Numero de la tarjeta') ?></label>
-                                        <input type="text" class="form-control" id="cc-number">
+                                        <input type="text" class="form-control" id="cc-number" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="cc-expiration"><?= __('Expiracion') ?></label>
-                                        <input type="text" class="form-control" id="cc-expiration" placeholder="MM/YY">
+                                        <input type="text" class="form-control" id="cc-expiration" placeholder="MM/YY" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="cc-cvv">CVV</label>
-                                        <input type="text" class="form-control" id="cc-cvv">
+                                        <input type="password" class="form-control" id="cc-cvv" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="cc-zip"><?= __('Codigo Postal') ?></label>
-                                        <input type="text" class="form-control zip" id="cc-zip">
+                                        <input type="text" class="form-control zip" id="cc-zip" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@ $students = Student::query()->where('id', Session::id())->get();
                                 <div class="form-row">
                                     <div class="form-group col-12 col-md-6">
                                         <label for="ach-name"><?= __('Nombre en la cuenta') ?></label>
-                                        <input type="text" class="form-control justText" id="ach-name">
+                                        <input type="text" class="form-control justText" id="ach-name" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label for="ach-type"><?= __('Tipo de cuenta') ?></label>
@@ -106,15 +106,15 @@ $students = Student::query()->where('id', Session::id())->get();
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="ach-number"><?= __('Numero de cuenta') ?></label>
-                                        <input type="text" class="form-control justNumber" id="ach-number">
+                                        <input type="text" class="form-control justNumber" id="ach-number" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="ach-route"><?= __('Numero de ruta') ?></label>
-                                        <input type="text" class="form-control justNumber" id="ach-route">
+                                        <input type="text" class="form-control justNumber" id="ach-route" autocomplete="off">
                                     </div>
                                     <div class="form-group col-12 col-md-4">
                                         <label for="ach-zip"><?= __('Codigo Postal') ?></label>
-                                        <input type="text" class="form-control zip" id="ach-zip">
+                                        <input type="text" class="form-control zip" id="ach-zip" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@ $students = Student::query()->where('id', Session::id())->get();
                         <div class="form-row align-items-center mt-2">
                             <div id="dayOfPaymentWrapper" class="col-12 col-md-5 mt-2 mt-md-0">
                                 <label for="dayOfPayment" class="mb-1"><?= __('Dia de pago automatico') ?></label>
-                                <input class="form-control" type="number" id="dayOfPayment" min="1" max="30" step="1">
+                                <input class="form-control" type="number" id="dayOfPayment" min="1" max="30" step="1" required>
                             </div>
                         </div>
 
