@@ -1,1 +1,0 @@
-Agregar columna theme a la tabla colegio

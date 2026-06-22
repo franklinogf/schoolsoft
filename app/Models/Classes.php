@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\YearScope;
+use App\Models\Traits\HasYear;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -159,9 +159,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $dip4
  * @property string $nta70
  * @property string $nta30
+ * @property Student $student
+ * @property Teacher $teacher
  */
 class Classes extends Model
 {
+    use HasYear;
     protected $table = 'padres';
     protected $primaryKey = 'aa';
     public $timestamps = false;
@@ -169,22 +172,31 @@ class Classes extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope(new YearScope);
         static::addGlobalScope('lastName', function (Builder $builder) {
             $builder->orderBy('apellidos');
         });
     }
 
+    /**
+     * @return BelongsTo<Student, $this>
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'ss', 'ss');
+    }
+    /**
+     * @return BelongsTo<Teacher, $this>
+     */
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(Teacher::class, 'id', 'id');
     }
 
     protected function scopeTable(Builder $query, string $table): void
     {
         $query->from($table);
     }
-    
+
     protected function scopeOfClass(Builder $query, string $class): void
     {
         $query->where('curso', $class);

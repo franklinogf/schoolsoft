@@ -44,6 +44,11 @@ $options = [
                 'name' => __('Eventos'),
                 'desc' => __('Gestión de eventos.'),
                 'link' => 'events/index.php',
+            ],
+            [
+                'name' => __('Citas de profesores'),
+                'desc' => __('Gestión de citas de profesores.'),
+                'link' => 'appointments/index.php',
             ]
         ],
     ],
@@ -58,7 +63,7 @@ $options = [
             [
                 'name' => __("Informes de notas"),
                 'desc' => __(''),
-                'link' => 'gradesReports',
+                'link' => 'gradesReports/index.php',
             ],
             [
                 'name' => __("Acumulativa"),
