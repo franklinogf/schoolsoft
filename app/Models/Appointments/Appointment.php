@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read AppointmentSlot $slot
  * @property-read Student $student
  * @property-read Family $family
+ * 
+ * @method FamilyMember attendee()
  */
 final class Appointment extends Model
 {

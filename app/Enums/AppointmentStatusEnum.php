@@ -12,10 +12,10 @@ enum AppointmentStatusEnum: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::BOOKED => 'Booked',
-            self::DONE => 'Done',
-            self::CANCELLED => 'Cancelled',
-            self::NO_SHOW => 'No Show',
+            self::BOOKED => __('Reservado'),
+            self::DONE => __('Completado'),
+            self::CANCELLED => __('Cancelado'),
+            self::NO_SHOW => __('No Asistió'),
         };
     }
 

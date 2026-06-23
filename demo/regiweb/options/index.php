@@ -56,6 +56,7 @@ $options = [
             // ['name' => __('Planilla de uniformes'), 'link' => '#'],
             ['name' => __('Curva de notas'), 'link' => 'gradescurve/index.php'],
             ['name' => __('Clasificación de notas'), 'link' => 'pdf/pdfNoteClasification.php', 'target' => '_blank'],
+            ['name' => __('Citas con profesor'), 'link' => 'appointments/index.php'],
         ]
     ]
 
