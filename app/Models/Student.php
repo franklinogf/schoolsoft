@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string $grado
  * @property string $nombre
  * @property string $apellidos
- * @property string $id
+ * @property string $id family id
  * @property string $genero
  * @property string $rema
  * @property CarbonInterface $fecha

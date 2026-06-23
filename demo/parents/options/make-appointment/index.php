@@ -8,7 +8,6 @@ use Classes\Session;
 use Classes\DataBase\DB;
 use Classes\Controllers\Parents;
 use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
 $parents = new Parents(Session::id());
@@ -104,7 +103,7 @@ $lang = new Lang([
             ])->first();
         ?>
             <div class="container shadow-lg p-3 my-4">
-                <form action="<?= Route::url('/parents/options/appointment/mailAppointment.php') ?>" method="POST">
+                <form action="<?= Route::url('/parents/options/make-appointment/mailAppointment.php') ?>" method="POST">
                     <input type="hidden" name="teacherId" value="<?= $teacherId ?>">
                     <input type="hidden" name="teacherClass" value="<?= $teacherClass ?>">
                     <input type="hidden" name="student" value="<?= "$teacher->nombre $teacher->apellidos" ?>">

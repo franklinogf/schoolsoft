@@ -9,7 +9,7 @@ Session::is_logged();
 
 $buttons = [
     ['name' => 'Ver mensajes', 'link' => '#'],
-    ['name' => 'Hacer cita', 'link' => 'appointment/'],
+    ['name' => 'Hacer cita', 'link' => 'make-appointment/'],
     ['name' => 'Re-Matrícula', 'link' => 'reEnrollment/'],
     ['name' => 'Tareas', 'link' => 'homeworks/'],
     ['name' => 'Tarjeta de notas', 'link' => 'grades/'],
@@ -21,6 +21,7 @@ $buttons = [
     ['name' => 'Deposits', 'link' => 'deposit/'],
     ['name' => 'Pagos', 'link' => 'payments/'],
     ['name' => 'Pagos Automaticos', 'link' => 'autoPayments/'],
+    ['name' => 'Citas con profesores', 'link' => 'appointments/'],
 ];
 $lang = new Lang([
     ["Mensajes y Opciones", "Messages and Options"],

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Appointments;
 
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,9 +29,20 @@ final class AppointmentEvent extends Model
 {
     protected $guarded = [];
 
+    /**
+     * @return HasMany<AppointmentSlot, $this>
+     */
     public function slots(): HasMany
     {
         return $this->hasMany(AppointmentSlot::class);
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 
     protected function casts(): array

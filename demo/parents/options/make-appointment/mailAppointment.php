@@ -101,4 +101,4 @@ Email::to($to)
   ->body($body)
   ->send();
 
-Route::redirect('/options/appointment');
+Route::redirect('/options/make-appointment');
