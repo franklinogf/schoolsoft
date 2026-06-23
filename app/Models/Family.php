@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-
+use App\Dtos\FamilyMember;
+use App\Enums\AppointmentMemberEnum;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Traits\AlphaAndNumber;
 use Illuminate\Database\Eloquent\Collection;
@@ -142,6 +143,39 @@ class Family extends Model
     {
         return $this->hasMany(Payment::class, 'id', 'id');
     }
+
+
+    public function father(): FamilyMember
+    {
+        return new FamilyMember(
+            name: $this->padre,
+            email: $this->email_p,
+            phone: $this->tel_p,
+            relationship: AppointmentMemberEnum::Father
+        );
+    }
+
+    public function mother(): FamilyMember
+    {
+        return new FamilyMember(
+            name: $this->madre,
+            email: $this->email_m,
+            phone: $this->tel_m,
+            relationship: AppointmentMemberEnum::Mother
+        );
+    }
+
+    public function guardian(): FamilyMember
+    {
+        return new FamilyMember(
+            name: $this->encargado,
+            email: $this->email_e,
+            phone: $this->tel_e,
+            relationship: AppointmentMemberEnum::Guardian
+        );
+    }
+
+
 
     public function scopeActive(Builder $query): Builder
     {

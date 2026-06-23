@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Appointments;
 
+use App\Dtos\FamilyMember;
 use App\Enums\AppointmentMemberEnum;
 use App\Enums\AppointmentStatusEnum;
 use App\Models\Family;
@@ -44,6 +45,15 @@ final class Appointment extends Model
     public function family(): BelongsTo
     {
         return $this->belongsTo(Family::class, 'family_id');
+    }
+
+    public function attendee(): FamilyMember
+    {
+        return match ($this->family_member) {
+            AppointmentMemberEnum::Father => $this->family->father(),
+            AppointmentMemberEnum::Mother => $this->family->mother(),
+            AppointmentMemberEnum::Guardian => $this->family->guardian(),
+        };
     }
 
     protected function casts(): array
