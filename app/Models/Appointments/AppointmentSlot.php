@@ -6,6 +6,7 @@ namespace App\Models\Appointments;
 
 use App\Models\Teacher;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -25,19 +26,41 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 {
     protected $guarded = [];
 
+    /**
+     * @return BelongsTo<AppointmentEvent, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(AppointmentEvent::class);
     }
 
+    /**
+     * @return BelongsTo<Teacher, $this>
+     */
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
+    /**
+     * @return HasOne<Appointment, $this>
+     */
     public function appointment(): HasOne
     {
         return $this->hasOne(Appointment::class);
+    }
+
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopeNotTaken(Builder $query): void
+    {
+        $query->doesntHave('appointment');
+    }
+
+    public function isTaken(): bool
+    {
+        return $this->appointment()->exists();
     }
 
     protected function casts(): array

@@ -9,8 +9,7 @@ use App\Models\Subject;
 use App\Models\Appointments\Appointment;
 use App\Models\Appointments\AppointmentEvent;
 use App\Models\Appointments\AppointmentSlot;
-
-
+use Illuminate\Database\Eloquent\Collection;
 
 try {
     Session::is_logged();
@@ -98,6 +97,9 @@ try {
 
     $teacherIds = array_keys($teachersMap);
     if (!empty($teacherIds)) {
+        /**
+         * @var Collection<int, Appointment> $existingAppointments
+         */
         $existingAppointments = Appointment::where('family_id', $familyId)
             ->whereHas('slot', function ($query) use ($event, $teacherIds) {
                 $query->where('appointment_event_id', $event->id)
@@ -107,6 +109,9 @@ try {
             ->orderByDesc('updated_at')
             ->get();
 
+        /**
+         * @var array<int, Appointment> $existingByTeacher
+         */
         $existingByTeacher = [];
         foreach ($existingAppointments as $existingAppointment) {
             $slot = $existingAppointment->slot;
@@ -120,6 +125,9 @@ try {
             }
         }
 
+        /**
+         * @var Collection<int, AppointmentSlot> $slots
+         */
         $slots = AppointmentSlot::where('appointment_event_id', $event->id)
             ->whereIn('teacher_id', $teacherIds)
             ->with('appointment')
@@ -159,7 +167,7 @@ try {
                 'slot_id' => $existingSelection->appointment_slot_id,
                 'start_time' => $existingSelection->slot->starts_at->format('H:i'),
                 'end_time' => $existingSelection->slot->ends_at->format('H:i'),
-                'member' => is_object($existingSelection->family_member) ? $existingSelection->family_member->value : (string)$existingSelection->family_member,
+                'member' => $existingSelection->family_member->value,
                 'note' => (string)($existingSelection->notes ?? ''),
             ];
         }
