@@ -34,16 +34,25 @@ final class Appointment extends Model
 {
     protected $guarded = [];
 
+    /**
+     * @return BelongsTo<AppointmentSlot, $this>
+     */
     public function slot(): BelongsTo
     {
         return $this->belongsTo(AppointmentSlot::class, 'appointment_slot_id');
     }
 
+    /**
+     * @return BelongsTo<Student, $this>
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'mt');
     }
 
+    /**
+     * @return BelongsTo<Family, $this>
+     */
     public function family(): BelongsTo
     {
         return $this->belongsTo(Family::class, 'family_id');

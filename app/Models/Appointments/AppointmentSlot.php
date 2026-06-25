@@ -53,12 +53,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     /**
      * @param Builder<$this> $query
      */
-    protected function scopeNotTaken(Builder $query): void
+    protected function scopeNotBooked(Builder $query): void
     {
         $query->doesntHave('appointment');
     }
 
-    public function isTaken(): bool
+    /**
+     * @param Builder<$this> $query
+     */
+    protected function scopeBooked(Builder $query): void
+    {
+        $query->has('appointment');
+    }
+
+    public function isBooked(): bool
     {
         return $this->appointment()->exists();
     }
