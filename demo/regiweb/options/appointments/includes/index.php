@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../../../../app.php';
 
-use App\Enums\AppointmentMemberEnum;
 use App\Enums\AppointmentStatusEnum;
 use App\Models\Appointments\Appointment;
 use App\Models\Appointments\AppointmentEvent;
@@ -151,7 +150,6 @@ try {
         sort($involvedSubjects);
 
         $rows = [];
-        $subjectGroupsMap = [];
 
         foreach ($appointments as $appointment) {
             if (!$appointment->slot || !$appointment->student || !$appointment->family) {
@@ -159,7 +157,6 @@ try {
             }
 
             $student = $appointment->student;
-            $family = $appointment->family;
             $slot = $appointment->slot;
 
             $studentKey = trim((string) ($student->grado ?? '')) . '|' . trim((string) ($student->ss ?? ''));
@@ -175,41 +172,17 @@ try {
 
             sort($displayCourses);
 
-            $appointmentSubjects = !empty($displayCourses)
-                ? array_values(array_unique($displayCourses))
-                : [__('No subject')];
-
-            $row = [
+            $rows[] = [
                 'id' => $appointment->id,
                 'parent_name' => $appointment->attendee()->name,
                 'student_name' => trim((string) $student->nombre . ' ' . (string) $student->apellidos),
                 'student_grade' => (string) ($student->grado ?? ''),
-                'subject' => !empty($displayCourses) ? implode(', ', $displayCourses) : __('No subject'),
-                'subjects' => $appointmentSubjects,
+                'subjects' => !empty($displayCourses) ? array_values($displayCourses) : [__('No subject')],
                 'time_range' => $slot->starts_at->format('Y-m-d H:i') . ' - ' . $slot->ends_at->format('H:i'),
                 'family_member_label' => $appointment->family_member->getLabel(),
                 'notes' => (string) ($appointment->notes ?? ''),
                 'status_value' => $appointment->status->value,
                 'status_label' => $appointment->status->getLabel(),
-            ];
-
-            $rows[] = $row;
-
-            foreach ($appointmentSubjects as $subjectLabel) {
-                if (!isset($subjectGroupsMap[$subjectLabel])) {
-                    $subjectGroupsMap[$subjectLabel] = [];
-                }
-
-                $subjectGroupsMap[$subjectLabel][] = $row;
-            }
-        }
-
-        ksort($subjectGroupsMap);
-        $subjectGroups = [];
-        foreach ($subjectGroupsMap as $subjectLabel => $appointmentsBySubject) {
-            $subjectGroups[] = [
-                'subject' => $subjectLabel,
-                'appointments' => array_values($appointmentsBySubject),
             ];
         }
 
@@ -222,7 +195,6 @@ try {
                 'grades' => $eventGrades,
             ],
             'subjects' => $involvedSubjects,
-            'subject_groups' => $subjectGroups,
             'appointments' => $rows,
         ]);
         exit;

@@ -117,6 +117,11 @@ Session::is_logged();
             color: #1f3a6d;
         }
 
+        .chip-sm {
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
         .section-hidden {
             display: none;
         }
@@ -168,7 +173,7 @@ Session::is_logged();
 
             <div class="page-card">
                 <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-                    <h5 class="mb-2 mb-md-0"><?= __('Citas por materia') ?></h5>
+                    <h5 class="mb-2 mb-md-0"><?= __('Citas') ?></h5>
                     <button id="refreshBtn" class="btn btn-outline-secondary btn-sm" type="button" disabled>
                         <?= __('Actualizar') ?>
                     </button>
@@ -304,7 +309,7 @@ Session::is_logged();
 
                     renderEventGrades(response.event?.grades || []);
                     renderInvolvedSubjects(response.subjects || []);
-                    renderSubjectGroups(response.subject_groups || []);
+                    renderAppointments(response.appointments || []);
                 },
                 error: function(xhr) {
                     const message = xhr.responseJSON?.message || '<?= __('Error al cargar citas') ?>';
@@ -370,85 +375,80 @@ Session::is_logged();
             card.removeClass('section-hidden');
         }
 
-        function renderSubjectGroups(groups) {
+        function renderAppointments(appointments) {
             const container = $('#subjectGroupsContainer');
             container.empty();
 
-            if (!Array.isArray(groups) || !groups.length) {
+            if (!Array.isArray(appointments) || !appointments.length) {
                 renderEmpty('<?= __('No hay citas en este evento para este profesor') ?>');
                 return;
             }
 
-            groups.forEach(group => {
-                const appointments = Array.isArray(group.appointments) ? group.appointments : [];
-
-                let rowsHtml = '';
-                appointments.forEach(item => {
-                    const isBooked = item.status_value === BOOKED_STATUS;
-                    const actionsHtml = ACTIONS.map(action => {
-                        const disabled = isBooked ? '' : 'disabled';
-                        return `
-                            <button
-                                type="button"
-                                class="btn ${action.className} btn-sm status-btn"
-                                data-appointment-id="${escapeHtml(item.id)}"
-                                data-status="${escapeHtml(action.status)}"
-                                ${disabled}
-                            >
-                                ${escapeHtml(action.label)}
-                            </button>
-                        `;
-                    }).join('');
-
-                    rowsHtml += `
-                        <tr data-appointment-id="${escapeHtml(item.id)}">
-                            <td>${escapeHtml(item.parent_name)}</td>
-                            <td>${escapeHtml(item.student_name)}</td>
-                            <td>${escapeHtml(item.student_grade)}</td>
-                            <td>${escapeHtml(item.time_range)}</td>
-                            <td>${escapeHtml(item.family_member_label)}</td>
-                            <td>${escapeHtml(item.notes || '<?= __('Sin notas') ?>')}</td>
-                            <td>
-                                <span class="status-pill ${statusClassName(item.status_value)}" data-status-label data-status-value="${escapeHtml(item.status_value)}">
-                                    ${escapeHtml(item.status_label)}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="status-actions">
-                                    ${actionsHtml}
-                                </div>
-                            </td>
-                        </tr>
+            let rowsHtml = '';
+            appointments.forEach(item => {
+                const isBooked = item.status_value === BOOKED_STATUS;
+                const actionsHtml = ACTIONS.map(action => {
+                    const disabled = isBooked ? '' : 'disabled';
+                    return `
+                        <button
+                            type="button"
+                            class="btn ${action.className} btn-sm status-btn"
+                            data-appointment-id="${escapeHtml(item.id)}"
+                            data-status="${escapeHtml(action.status)}"
+                            ${disabled}
+                        >
+                            ${escapeHtml(action.label)}
+                        </button>
                     `;
-                });
+                }).join('');
 
-                const groupHtml = `
-                    <div class="subject-group">
-                        <div class="subject-group-header">${escapeHtml(group.subject || '<?= __('No subject') ?>')}</div>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th><?= __('Padres') ?></th>
-                                        <th><?= __('Estudiante') ?></th>
-                                        <th><?= __('Grado') ?></th>
-                                        <th><?= __('Horario') ?></th>
-                                        <th><?= __('Miembro') ?></th>
-                                        <th><?= __('Notas') ?></th>
-                                        <th><?= __('Estado') ?></th>
-                                        <th><?= __('Acciones') ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${rowsHtml || `<tr><td colspan="8" class="empty-state"><?= __('Sin citas para esta subject') ?></td></tr>`}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                rowsHtml += `
+                    <tr data-appointment-id="${escapeHtml(item.id)}">
+                        <td>${escapeHtml(item.parent_name)}</td>
+                        <td>${escapeHtml(item.student_name)}</td>
+                        <td>${escapeHtml(item.student_grade)}</td>
+                        <td>
+                            <div class="chip-list">
+                                ${(item.subjects || []).map(s => `<span class="chip chip-sm">${escapeHtml(s)}</span>`).join('')}
+                            </div>
+                        </td>
+                        <td>${escapeHtml(item.time_range)}</td>
+                        <td>${escapeHtml(item.family_member_label)}</td>
+                        <td>${escapeHtml(item.notes || '<?= __('Sin notas') ?>')}</td>
+                        <td>
+                            <span class="status-pill ${statusClassName(item.status_value)}" data-status-label data-status-value="${escapeHtml(item.status_value)}">
+                                ${escapeHtml(item.status_label)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="status-actions">
+                                ${actionsHtml}
+                            </div>
+                        </td>
+                    </tr>
                 `;
-
-                container.append(groupHtml);
             });
+
+            container.html(`
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><?= __('Padres') ?></th>
+                                <th><?= __('Estudiante') ?></th>
+                                <th><?= __('Grado') ?></th>
+                                <th><?= __('Materias') ?></th>
+                                <th><?= __('Horario') ?></th>
+                                <th><?= __('Miembro') ?></th>
+                                <th><?= __('Notas') ?></th>
+                                <th><?= __('Estado') ?></th>
+                                <th><?= __('Acciones') ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                </div>
+            `);
         }
 
         function updateStatus(appointmentId, status) {
