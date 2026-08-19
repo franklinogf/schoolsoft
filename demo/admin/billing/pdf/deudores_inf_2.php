@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../../app.php';
 
 use Classes\Controllers\School;
-use Classes\DataBase\DB;
+use Illuminate\Database\Capsule\Manager as DB;
 use Classes\Lang;
 use Classes\PDF;
 use Classes\Session;
@@ -84,11 +84,25 @@ foreach ($months as $month) {
 
 
 if ($_POST['gru'] === 'A') {
-    $infoData = DB::table('year')->select("DISTINCT grado")
-        ->whereRaw("year='$year' and activo !='B'")->orderBy('grado')->get();
+    $infoData = DB::table('year')
+        ->select("grado")
+        ->distinct()
+        ->where([
+            'year' => $year,
+            ['activo', '!=', 'B'],
+        ])
+        ->orderBy('grado')
+        ->get();
 } else {
-    $infoData = DB::table('year')->select("DISTINCT id")
-        ->whereRaw("year='$year' and activo !='B'")->orderBy('id')->get();
+    $infoData = DB::table('year')
+        ->select(["id", "ss"])
+        ->distinct()
+        ->where([
+            'year' => $year,
+            ['activo', '!=', 'B'],
+        ])
+        ->orderBy('id')
+        ->get();
 }
 $TotalForGrades = $TotalForGradesMonthly = $Grades = [];
 foreach ($infoData as $info) {
@@ -101,14 +115,29 @@ foreach ($infoData as $info) {
         $grade = $info->id;
         $Grades[] = $info->id;
         $students = DB::table('year')
-            ->whereRaw("grado='$grade' AND year='$year' and activo !='B'")->orderBy('apellidos, nombre')->get();
+            ->whereRaw("grado='$grade' AND year='$year' and activo !='B'")
+            ->orderBy('apellidos')
+            ->orderBy('nombre')
+            ->get();
     } else {
         /* ------------------------ Buscar estudiante por id ------------------------ */
-        $students = DB::table('year')->select("DISTINCT id")
-            ->whereRaw("id='$info->id' AND year='$year' and activo !='B'")->orderBy('apellidos, nombre')->get();
+        $students = DB::table('year')
+        ->select("id")
+        ->distinct()
+            ->where([
+                'id' => $info->id,
+                'year' => $year,
+                ['activo', '!=', 'B']
+            ])
+            ->orderBy('apellidos')
+            ->orderBy('nombre')
+            ->get();
     }
     $fami = DB::table('year')
-        ->whereRaw("id='$info->id' AND year='$year' and activo !='B'")->orderBy('apellidos, nombre')->first();
+        ->whereRaw("id='$info->id' AND year='$year' and activo !='B'")
+        ->orderBy('apellidos')
+        ->orderBy('nombre')
+        ->first();
 
     $TOTAL = [];
 

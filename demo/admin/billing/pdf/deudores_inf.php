@@ -1,4 +1,6 @@
 <?php
+
+
 if ($_POST['gru'] === 'B') {
     include 'deudores_inf_2.php';
     exit;
@@ -7,10 +9,11 @@ if ($_POST['gru'] === 'B') {
 require_once __DIR__ . '/../../../app.php';
 
 use Classes\Controllers\School;
-use Classes\DataBase\DB;
+
 use Classes\Lang;
 use Classes\PDF;
 use Classes\Session;
+use Illuminate\Database\Capsule\Manager as DB;
 
 Session::is_logged();
 $lang = new Lang([
@@ -82,11 +85,25 @@ $pdf->Fill();
 $pdf->AliasNbPages();
 
 if ($_POST['gru'] === 'A') {
-    $infoData = DB::table('year')->select("DISTINCT grado")
-        ->whereRaw("year='$year' and activo !='B'")->orderBy('grado')->get();
+    $infoData = DB::table('year')
+        ->select("grado")
+        ->distinct()
+        ->where([
+            'year' => $year,
+            ['activo', '!=', 'B'],
+        ])
+        ->orderBy('grado')
+        ->get();
 } else {
-    $infoData = DB::table('year')->select("DISTINCT id, ss")
-        ->whereRaw("year='$year' and activo !='B'")->orderBy('id')->get();
+    $infoData = DB::table('year')
+        ->select(["id", "ss"])
+        ->distinct()
+        ->where([
+            'year' => $year,
+            ['activo', '!=', 'B'],
+        ])
+        ->orderBy('id')
+        ->get();
 }
 $TotalForGrades = $TotalForGradesMonthly = $Grades = [];
 foreach ($infoData as $info) {
@@ -100,7 +117,14 @@ foreach ($infoData as $info) {
         $TotalForGradesMonthly[$grade] = [];
         $Grades[] = $info->grado;
         $students = DB::table('year')
-            ->whereRaw("grado='$grade' AND year='$year' and activo !='B'")->orderBy('apellidos, nombre')->get();
+            ->where([
+                'grado' => $grade,
+                'year' => $year,
+                ['activo', '!=', 'B']
+            ])
+            ->orderBy('apellidos')
+            ->orderBy('nombre')
+            ->get();
     } else {
         /* ------------------------ Buscar estudiante por id ------------------------ */
         $grade = $info->ss;
@@ -109,7 +133,14 @@ foreach ($infoData as $info) {
         $Grades[] = $info->ss;
 
         $students = DB::table('year')
-            ->whereRaw("id='$info->id' AND year='$year' and activo !='B'")->orderBy('apellidos, nombre')->get();
+        ->where([
+            'id' => $info->id,
+            'year' => $year,
+            ['activo', '!=', 'B']
+        ])
+        ->orderBy('apellidos')
+            ->orderBy('nombre')
+            ->get();
     }
     $pdf->addPage($_POST['pag'], $_POST['pag1']);
     $pdf->SetFont('Times', '', 11);
