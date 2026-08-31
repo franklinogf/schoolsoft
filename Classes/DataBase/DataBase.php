@@ -14,17 +14,17 @@ use PDOException;
 class DataBase
 {
     protected static $admin = false;
-    private $host = __HOST;
-    private $username = __USERNAME;
-    private $password = __PASSWORD;
-    private $dbName = __DB_NAME;
-    private $adminHost = __ADMIN_HOST;
-    private $adminUsername = __ADMIN_USERNAME;
-    private $adminPassword = __ADMIN_PASSWORD;
-    private $adminDbName = __ADMIN_DB_NAME;
+    private string $host = __HOST;
+    private string $username = __USERNAME;
+    private string $password = __PASSWORD;
+    private string $dbName = __DB_NAME;
+    private string $adminHost = __ADMIN_HOST;
+    private string $adminUsername = __ADMIN_USERNAME;
+    private string $adminPassword = __ADMIN_PASSWORD;
+    private string $adminDbName = __ADMIN_DB_NAME;
 
     // Conexión singleton para reutilización
-    private static $connection = null;
+    private static ?PDO $connection = null;
 
     protected function connect()
     {
@@ -35,19 +35,25 @@ class DataBase
 
         try {
             if (self::$admin) {
-                $dsn = "mysql:host={$this->adminHost};dbname={$this->adminDbName};charset=utf8";
+                $dsn = "mysql:host={$this->adminHost};port=3306;dbname={$this->adminDbName};charset=utf8";
                 $db = new PDO($dsn, $this->adminUsername, $this->adminPassword);
             } else {
-                $dsn = "mysql:host={$this->host};dbname={$this->dbName};charset=utf8";
-                $db = new PDO($dsn, $this->username, $this->password);
+                $dsn = "mysql:host={$this->host};port=3306;dbname={$this->dbName};charset=utf8";
+                $db = new PDO($dsn, $this->username, $this->password, [
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]);
             }
 
-            // Configurar PDO para que lance excepciones en caso de error
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // Devolver resultados como objetos
-            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            // Emular sentencias preparadas para mayor compatibilidad
-            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            // // Configurar PDO para que lance excepciones en caso de error
+            // $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // // Devolver resultados como objetos
+            // $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            // // Emular sentencias preparadas para mayor compatibilidad
+            // $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
 
             self::$connection = $db;
             return $db;
@@ -62,30 +68,6 @@ class DataBase
         self::$connection = null;
     }
 
-    // Método para iniciar una transacción
-    protected function beginTransaction()
-    {
-        $db = $this->connect();
-        return $db->beginTransaction();
-    }
-
-    // Método para confirmar una transacción
-    protected function commit()
-    {
-        if (self::$connection !== null) {
-            return self::$connection->commit();
-        }
-        return false;
-    }
-
-    // Método para revertir una transacción
-    protected function rollback()
-    {
-        if (self::$connection !== null) {
-            return self::$connection->rollBack();
-        }
-        return false;
-    }
 
     protected function normalQuery($query)
     {
@@ -237,7 +219,7 @@ class DataBase
     {
         $result = $this->selectFromDB($query, $whereArray);
         if ($result) {
-            return  $result->fetchAll();
+            return $result->fetchAll();
         }
         return [];
     }

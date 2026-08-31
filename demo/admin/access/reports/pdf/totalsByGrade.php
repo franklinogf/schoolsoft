@@ -1,14 +1,16 @@
 <?php
 require_once __DIR__ . '/../../../../app.php';
 
+use App\Models\Student;
+use App\Models\Teacher;
 use Classes\PDF;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Session;
-use Classes\DataBase\DB;
+
 use Classes\Controllers\School;
-use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
+
+
 
 Session::is_logged();
 
@@ -25,7 +27,6 @@ $lang = new Lang([
 
 $school = new School(Session::id());
 $year = $school->info('year2');
-$studentClass = new Student();
 $a = 0;
 $allGrades = $school->allGrades();
 $pdf = new PDF();
@@ -52,8 +53,8 @@ $totalGenderCountByGrade['F'] = 0;
 
 $totalGenderCountByGrade['students'] = 0;
 foreach ($allGrades as $count => $grade) {
-    $teacher = DB::table('profesor')->where([['grado', $grade], ['baja', '']])->first();
-    $students = $studentClass->findByGrade($grade);
+    $teacher = Teacher::query()->where(['grado' => $grade, 'baja' => ''])->first();
+    $students = Student::query()->byGrade($grade)->get();
     $pdf->Cell(15, 5, $count + 1, 1, 0, 'C');
 
     //    $nom = utf8_encode($teacher->nombre ?? '');
@@ -68,14 +69,16 @@ foreach ($allGrades as $count => $grade) {
     $genderCountByGrade[$grade]['N'] = 0;
     $genderCountByGrade[$grade]['T'] = 0;
 
-    foreach ($students as $count => $student) {
+    foreach ($students as $student) {
         $gender = Util::gender($student->genero);
         if ($student->nuevo === 'Si') {
             $genderCountByGrade[$grade]['N']++;
             $totalGenderCountByGrade['N']++;
         }
-        $genderCountByGrade[$grade][$gender]++;
-        $totalGenderCountByGrade[$gender]++;
+        if ($gender !== '') {
+            $genderCountByGrade[$grade][$gender]++;
+            $totalGenderCountByGrade[$gender]++;
+        }
         $genderCountByGrade[$grade]['T']++;
     }
     $pdf->Cell(20, 5, $genderCountByGrade[$grade]['N'], 1, 0, 'C');

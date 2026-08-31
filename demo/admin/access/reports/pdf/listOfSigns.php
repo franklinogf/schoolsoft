@@ -6,7 +6,6 @@ use Classes\Lang;
 use Classes\Session;
 use Classes\Controllers\School;
 use Classes\Controllers\Student;
-use Classes\Controllers\Teacher;
 use Classes\Util;
 
 Session::is_logged();
@@ -50,6 +49,9 @@ foreach ($allGrades as $grade) {
 
     foreach ($students as $count => $student) {
         $gender = Util::gender($student->genero);
+        if($gender === ''){
+            continue; // Skip if gender is not recognized
+        }
         $genderCount[$gender]++;
 
         $pdf->Cell(10, 10, $count + 1, 0, 0, 'C');
