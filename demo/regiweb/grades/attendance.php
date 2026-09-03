@@ -1,24 +1,28 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 use Classes\Lang;
 use Classes\Util;
 
 Session::is_logged();
 
-$teacher = new Teacher(Session::id());
-$attendanceOption = $teacher->info('asist');
+$teacher = Teacher::findOrFail(Session::id());
+$schoolInfo = Admin::primaryAdmin();
+$attendanceOption = $schoolInfo->asist;
 $lang = new Lang([
     ['Entrada de asistencias', 'Assists entry'],
     ['Asistencia de los estudiantes', 'Student assistance'],
     ["Fecha para la asistencia", "Date for assistance"],
     ["Lista de estudiantes", "Students list"],
     ["Estudiantes", "Students"],
-    ["Codigo de asistencia", "Attendance code"]
+    ["Codigo de asistencia", "Attendance code"],
+    ["Guardar", "Save"]
 ]);
 ?>
 <!DOCTYPE html>
@@ -45,17 +49,17 @@ $lang = new Lang([
                 <input class="form-control" type="date" id="date" value="<?= date('Y-m-d') ?>">
             </div>
         </div>
-        <?php if (__SCHOOL_ACRONYM !== 'cbtm'): ?>
+        <?php if (!school_is('cbtm')): ?>
             <?php if ($attendanceOption === "3"): ?>
                 <div id="classButtons" class="d-flex flex-wrap justify-content-center">
-                    <?php foreach ($teacher->classes() as $class): ?>
+                    <?php foreach ($teacher->classes as $class): ?>
                         <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-class="<?= $class->curso ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $class->desc1 ?>"><?= $class->curso ?></button>
                     <?php endforeach ?>
                 </div>
             <?php elseif ($attendanceOption === "2"):
                 $grades = DB::table('year')
                     ->select('DISTINCT grado')
-                    ->where('year', $teacher->info('year'))
+                    ->where('year', $schoolInfo->year)
                     ->orderBy('grado')->get();
             ?>
                 <div id="gradesButtons" class="d-flex flex-wrap justify-content-center">
@@ -85,24 +89,34 @@ $lang = new Lang([
 
         <?php endif ?>
 
-        <div id="studentsList" class="table-responsive mt-5 invisible">
-            <table class="table table-striped table-sm">
-                <caption><?= $lang->translation("Lista de estudiantes") ?></caption>
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col" class="text-center"><?= $lang->translation("Estudiantes") ?></th>
-                        <th scope="col" class="text-center"><?= $lang->translation("Codigo de asistencia") ?></th>
-                    </tr>
-                </thead>
-                <tbody>
+        <form id="attendanceForm">
+            <div id="studentsList" class="table-responsive mt-5 invisible">
+                <table class="table table-striped table-sm">
+                    <caption><?= $lang->translation("Lista de estudiantes") ?></caption>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" class="text-center"><?= $lang->translation("Estudiantes") ?></th>
+                            <th scope="col" class="text-center"><?= $lang->translation("Codigo de asistencia") ?></th>
 
-                </tbody>
-            </table>
-        </div>
+                            <?php if(school_is('csaa')):?>
+                            <?php for($i=1; $i<=6; $i++):?>
+                                <th style="width: 60px;" scope="col" class="text-center"><?= "P-{$i}" ?></th>
+                            <?php endfor;?>
+                            <?php endif;?>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <button id="saveAttendance" type="submit" class="btn btn-primary btn-lg d-block mx-auto my-3"><?= $lang->translation("Guardar") ?></button>
+            </div>
+        </form>
     </div>
     <script type="text/javascript">
         const attendanceCodes = <?= json_encode(Util::$attendanceCodes) ?>;
+        const hasAttendanceP = <?=  school_is('csaa') ? 'true' : 'false' ?>;
     </script>
     <?php
 
