@@ -80,13 +80,13 @@ foreach ($values as $value) {
             $email =  Email::to($to)
                 ->subject($subject)
                 ->body($body)
-                ->text($message)
-                ->id2($id)
-                ->ss($ss);
+                ->text($message);
+                // ->id2($id)
+                // ->ss($ss);
             foreach ($files as $file) {
                 $email->attach($file);
             }
-            $email->queue();
+            $email->queue($id,[$ss]);
             $emailsSent++;
         } catch (\Throwable $th) {
             $error = $th->getMessage();
