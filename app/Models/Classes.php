@@ -175,6 +175,9 @@ class Classes extends Model
         static::addGlobalScope('lastName', function (Builder $builder) {
             $builder->orderBy('apellidos');
         });
+        static::addGlobalScope('active', function (Builder $builder) {
+            $builder->where('baja', '');
+        });
     }
 
     /**

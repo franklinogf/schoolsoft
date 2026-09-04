@@ -27,22 +27,13 @@ if (isset($_POST['getStudents'])) {
     $attendanceOption = $_POST['getStudents'];
     $isCourse = $attendanceOption === '3';
     $attendanceArray = [];
-    $studentsWhere = [
-
-        [$isCourse ? 'curso' : 'grado', $isCourse ? $_POST['class'] : $_POST['grade']],
-        ['year', $year],
-    ];
-    if ($isCourse) {
-        $studentsWhere[] = ['id', $teacher->id];
-    }
-
-    $students = DB::table($isCourse ? 'padres' : 'year')
-    ->select(['ss', 'nombre', 'apellidos'])
-    ->distinct()
-        ->where($studentsWhere)
-        ->orderBy('apellidos')
-        ->orderBy('nombre')
-        ->get();
+    
+    $students = !$isCourse ? Student::query()
+        ->byGrade($_POST['grade'])
+        ->get()
+        : Student::query()
+            ->byClass($_POST['class'])
+            ->get();
 
     foreach ($students as $student) {
 
@@ -53,20 +44,19 @@ if (isset($_POST['getStudents'])) {
                 ['year', $year],
                 ['fecha', $date],
             ])
-             ->orderBy('apellidos')
-        ->orderBy('nombre')
+            ->orderBy('apellidos')
+            ->orderBy('nombre')
             ->first();
 
-        $attendanceArray[$student->ss]['code'] =  $attendance?->codigo ?? '';
+        $attendanceArray[$student->ss]['code'] = $attendance?->codigo ?? '';
         $attendanceArray[$student->ss]['p'] = [
-            'p1' =>  $attendance?->p1 ?? '',
-            'p2' =>  $attendance?->p2 ?? '',
-            'p3' =>  $attendance?->p3 ?? '',
-            'p4' =>  $attendance?->p4 ?? '',
-            'p5' =>  $attendance?->p5 ?? '',
-            'p6' =>  $attendance?->p6 ?? '',
+            'p1' => $attendance?->p1 ?? '',
+            'p2' => $attendance?->p2 ?? '',
+            'p3' => $attendance?->p3 ?? '',
+            'p4' => $attendance?->p4 ?? '',
+            'p5' => $attendance?->p5 ?? '',
+            'p6' => $attendance?->p6 ?? '',
         ];
-
     }
 
     // create array with the students
