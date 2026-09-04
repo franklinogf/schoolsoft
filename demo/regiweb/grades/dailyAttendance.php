@@ -1,15 +1,15 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Util;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::findOrFail(Session::id());
 $lang = new Lang([
     ["Informe de asistencia diarias","Daily attendance report"],
     ["Seleccione las fechas","Select the dates"],
@@ -81,7 +81,7 @@ $lang = new Lang([
                             <label class="input-group-text" for="class"><?= $lang->translation("Estudiantes") ?></label>
                         </div>
                         <select name="ss" class="form-control">
-                            <?php foreach ($teacher->homeStudents() as $student) : ?>
+                            <?php foreach ($teacher->homeStudents as $student) : ?>
                                 <option value="<?= $student->ss ?>"><?= "$student->apellidos, $student->nombre" ?></option>
                             <?php endforeach ?>
                         </select>

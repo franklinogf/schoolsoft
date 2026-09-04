@@ -200,8 +200,21 @@ class Classes extends Model
         $query->from($table);
     }
 
+    /**
+     * 
+     * @param Builder<$this> $query
+     */
     protected function scopeOfClass(Builder $query, string $class): void
     {
         $query->where('curso', $class);
+    }
+
+    /**
+     * 
+     * @param Builder<$this> $query
+     */
+    protected function scopeOfGrade(Builder $query, string $grade): void
+    {
+        $query->where('grado', $grade);
     }
 }

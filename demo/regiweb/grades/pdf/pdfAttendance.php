@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Controllers\Student;
+use App\Models\Admin;
+use App\Models\Classes;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Classes\PDF;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
+
 use Classes\Lang;
-use Classes\Util;
 
 Session::is_logged();
 $lang = new Lang([
@@ -25,15 +27,15 @@ $lang = new Lang([
 
 ]);
 
-$teacher = new Teacher(Session::id());
-$year = $teacher->info('year');
+$teacher = Teacher::findOrFail(Session::id());
+$schoolInfo = Admin::primaryAdmin();
+$year = $schoolInfo->year;
 list($f1, $f2, $f3) = explode(',', $_POST['semester']);
 $_class = $_POST['class'];
-$date1 = $teacher->info("asis$f1");
-$date2 = $teacher->info("asis$f2");
+$date1 = $schoolInfo->{"asis$f1"};
+$date2 = $schoolInfo->{"asis$f2"};
 
 list($year1, $year2) = explode('-', $year);
-$students = new Student();
 
 if (__LANG === "es") {
     $Mes = array('10' => 'Octubre', '12' => 'Diciembre', '03' => 'Marzo', '05' => 'Mayo');
@@ -63,20 +65,17 @@ $pdf->Cell(0, 5, $lang->translation('Informe de estudiantes con problemas de tar
 $pdf->Ln();
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(20, 5, $lang->translation('Maestro(a):'));
-$pdf->Cell(75, 5, utf8_decode($teacher->fullName()), 'B');
+$pdf->Cell(75, 5, $teacher->fullName, 'B');
 
 if ($_class === 'grado') {
     $pdf->Cell(20, 5, $lang->translation("Grado:"), 0, 0, 'C');
     $pdf->Cell(15, 5, "$teacher->grado", 'B', 1, 'C');
 } else {
-    $grade = DB::table('cursos')
-        ->select('desc1')
-        ->where([
-            ['curso', $_class],
-            ['year', $year],
-        ])->first();
+    $subject = Subject::query()
+        ->where('curso', $_class)
+        ->first();
     $pdf->Cell(25, 5, $lang->translation("Asignatura:"), 0, 0, 'C');
-    $pdf->Cell(0, 5, "$_class - $grade->desc1", 'B', 1);
+    $pdf->Cell(0, 5, $subject->display_label, 'B', 1);
 }
 
 $pdf->Ln();
@@ -88,20 +87,15 @@ $pdf->Cell(25, 5, $lang->translation("Ausencias"), 1, 0, 'C');
 $pdf->Cell(25, 5, $lang->translation("Tardanzas"), 1, 0, 'C');
 $pdf->Cell(50, 5, $lang->translation("Observaciones"), 1, 1, 'C');
 $pdf->SetFont('Arial', '', 9);
-if ($_class === 'grado') {
-    $students = DB::table('padres')
-        ->select('DISTINCT ss, nombre, apellidos')
-        ->where([
-            ['grado', $teacher->grado],
-            ['year', $year],
-        ])->orderBy('apellidos')->get();
-} else {
-    $students = DB::table('padres')
-        ->where([
-            ['curso', $_class],
-            ['year', $year],
-        ])->orderBy('apellidos')->get();
-}
+
+$students = $_class === 'grado' ?
+Classes::select(['ss', 'nombre', 'apellidos', 'grado'])
+->distinct()
+    ->ofGrade($teacher->grado)
+    ->get() :
+    Classes::query()
+    ->ofClass($_class)
+    ->get();
 
 
 foreach ($students as $index => $student) {
@@ -122,7 +116,7 @@ foreach ($students as $index => $student) {
         }
     }
     $pdf->Cell(10, 5, $index + 1, 1);
-    $pdf->Cell(70, 5, utf8_decode("$student->nombre $student->apellidos"), 1);
+    $pdf->Cell(70, 5, "$student->nombre $student->apellidos", 1);
     $pdf->Cell(20, 5, '', 1, 0, 'C');
     $pdf->Cell(25, 5, $attended, 1, 0, 'C');
     $pdf->Cell(25, 5, $late, 1, 0, 'C');

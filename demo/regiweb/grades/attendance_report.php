@@ -1,14 +1,13 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
+use App\Models\Teacher;
 use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 
 Session::is_logged();
-$teacher = new Teacher(Session::id());
+$teacher = Teacher::findOrFail(Session::id());
 $lang = New Lang([
     ["Informe de asistencias","Attendance report"],
     ["Grado","Grade"],
@@ -40,8 +39,8 @@ $lang = New Lang([
                     </div>
                     <select name="class" class="custom-select" id="class" required>                        
                         <option value="grado" selected><?= $lang->translation("Salón Hogar") ?></option>
-                        <?php foreach ($teacher->classes() as $class) : ?>
-                            <option value="<?= $class->curso ?>"><?= "$class->curso - $class->desc1" ?></option>
+                        <?php foreach ($teacher->classes as $class) : ?>
+                            <option value="<?= $class->curso ?>"><?= "$class->curso - $class->descripcion" ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>

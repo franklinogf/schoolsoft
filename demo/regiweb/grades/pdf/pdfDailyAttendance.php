@@ -1,18 +1,19 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
-use Classes\Controllers\Student;
+use App\Models\Admin;
+use App\Models\Teacher;
 use Classes\PDF;
 use Classes\Session;
 use Classes\DataBase\DB;
-use Classes\Controllers\Teacher;
 use Classes\Lang;
 use Classes\Util;
 
 Session::is_logged();
 
-$teacher = new Teacher(Session::id());
-$year = $teacher->info('year');
+$teacher = Teacher::findOrFail(Session::id());
+$schoolInfo = Admin::primaryAdmin();
+$year = $schoolInfo->year;
 
 $_date1 = $_POST['date1'];
 $_date2 = $_POST['date2'];
@@ -20,23 +21,6 @@ $_type = $_POST['type'];
 $_option = $_POST['option'];
 $_grade = $teacher->grado;
 
-
-// $codigos = [
-//     // ausencias
-//     "1" => 'Situación en el hogar',
-//     "2" => 'Determinación del hogar (viaje)',
-//     "3" => 'Actividad con padres (open house)',
-//     "4" => 'Enfermedad',
-//     "5" => 'Cita',
-//     "6" => 'Actividad educativa del colegio',
-//     "7" => 'Sin excusa del hogar',
-//     // tardanzas
-//     "8" => 'Sin excusa del hogar',
-//     "9" => 'Situación en el hogar',
-//     "10" => 'Problema en la transportación',
-//     "11" => 'Enfermedad',
-//     "12" => 'Cita'
-// ];
 $lang = new Lang([
     ["Informe de asistencias diarias", "Daily attendance report"],
     ["Informe de asistencias diarias en lista", "Daily attendance report list"],
@@ -148,7 +132,9 @@ if ($_option === 'home') {
             ['codigo', '>', 0],
             ['ss', $ss]
         ])->orderBy('fecha')->get();
-    $pdf->splitCells($lang->translation("Nombre") . utf8_encode(": {$asis[0]->apellidos}, {$asis[0]->nombre}"), $lang->translation("Grado") . ": {$asis[0]->grado}");
+    if($asis) {
+        $pdf->splitCells($lang->translation("Nombre") . (": {$asis[0]?->apellidos}, {$asis[0]?->nombre}"), $lang->translation("Grado") . ": {$asis[0]?->grado}");
+    }
     $pdf->Ln(10);
     $pdf->Cell(40);
     $pdf->Cell(10, 5, '', 'LTB', 0, 'C', true);
