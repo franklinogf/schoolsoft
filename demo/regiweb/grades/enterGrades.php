@@ -107,6 +107,7 @@ $grades = Classes::query()
     ->table($_report->getTableName())
     ->ofClass($_class)
     ->where('year', $year)
+    ->where('baja', '')
     ->when($_report === GradePageEnum::SUMMER_GRADES, function (Builder $query): void {
         $query->where('verano', '2');
     })->orderBy('apellidos')->orderBy('nombre')->get();

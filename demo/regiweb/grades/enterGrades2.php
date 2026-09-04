@@ -446,7 +446,15 @@ $_trimesterNumber = $_schoolInfo[$_trimester->value]['number'];
 
 $_table = $_options['table'] ?? null;
 
-$grades = Classes::query()->withoutGlobalScopes()->table($_table)->ofClass($_class)->where('year', $year)->orderBy('apellidos')->orderBy('nombre')->get();
+$grades = Classes::query()
+    ->withoutGlobalScopes()
+    ->table($_table)
+    ->ofClass($_class)
+    ->where('year', $year)
+    ->where('baja', '')
+    ->orderBy('apellidos')
+    ->orderBy('nombre')
+    ->get();
 
 
 // functions
