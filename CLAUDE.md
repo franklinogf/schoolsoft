@@ -9,18 +9,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 composer install
 npm install
 
-# Compile SCSS to CSS
-npm run compile-sass
-
-# Generate PHPDoc for Eloquent models
-php demo/phpdocs.php            # Regenerate all models
-php demo/phpdocs.php Student    # Single model
-
 # Run local dev server (no built-in script)
 php -S localhost:8000
 ```
 
-No formal test suite exists — testing is done manually.
+No formal test suite, linter, or CI is configured — testing is done manually. There is no composer `scripts` section;
+
+### Key Dependencies
+
+- `illuminate/database`, `illuminate/translation`, `illuminate/filesystem`, `illuminate/support` (^12) — Laravel components powering Eloquent, `__()`/`trans_choice()`, and filesystem helpers, used standalone (no full Laravel framework)
+- `setasign/fpdf` + `setasign/fpdi` — PDF generation/import (see PDF Generation below)
+- `phpoffice/phpspreadsheet` — Excel import/export
+- `resend/resend-php` — transactional email
+- `dnetix/redirection` — PlacetoPay Web Checkout SDK (see Payment Gateways below)
+- `ifsnop/mysqldump-php` — programmatic DB backups
 
 ## Architecture
 
@@ -76,6 +78,9 @@ Route::redirect('/login.php')            // tenant-aware redirect
 upload_attachment($_FILES['doc'], 'messages')  // stores to attachments/messages/
 attachments_url('letters/doc.pdf')             // returns full URL
 
+// Tenant flags
+school_has_active('some.flag')   // checks a boolean-ish school_config flag
+
 // Debug
 ds($data)   // LaraD umps (dev only)
 dd($data)   // legacy dump-and-die
@@ -125,6 +130,21 @@ $pdf->header = false;  // disable header
 $pdf->logo   = false;  // disable logo
 ```
 
+Report-specific PDFs (`app/Pdfs/`, e.g. `app/Pdfs/Infirmary/*`, `app/Pdfs/Plans/*`) implement `App\Pdfs\PdfInterface` (`generate(): void`) and internally build on `Classes\PDF`/FPDF rather than being called directly.
+
+### Services & Enums
+
+`app/Services/` holds plain PHP classes (no DI container, no interfaces) for business logic that doesn't belong on a model — e.g. `SchoolService`, `FileService`, `AppointmentSlotGeneratorService`, and the payment gateway wrappers below. Methods are often static (`SchoolService::getCurrentYear()`) but instance-based services also exist (e.g. `PlacetoPayCheckout` is constructed with `new` per request).
+
+`app/Enums/` holds PHP backed enums (mostly `string`-backed) for domain values (`Status`, `Gender`, `PaymentTypeEnum`, `TrimesterEnum`, etc.). UI-facing enums commonly add `getLabel()` (translated via `__()`) and `getCssClass()` helpers alongside the enum cases.
+
+### Payment Gateways
+
+Two gateway integrations exist as `app/Services/` classes, each backed by its own Eloquent session/log model and configured per-tenant in `demo/config/services.php` (via `school_config('services.<gateway>.*')`):
+
+- `EvertecPayment` — legacy gateway integration
+- `PlacetoPayCheckout` — wraps the `dnetix/redirection` SDK. Pattern: `PlacetoPaySession::startPending()` persists a `PENDING` row (with reference/amount) *before* calling the remote API, so state survives a network failure; `markCreated()`/`markStatus()` update it afterward. `PlacetoPaySessionStatus` (`app/Enums/`) mirrors the SDK's `Dnetix\Redirection\Entities\Status::ST_*` codes via `fromApiStatus()`.
+
 ### Common Patterns
 
 - **Grades**: Stored as zero-padded strings (`'01'`, `'11'`). Use `School->allGrades()` for dropdowns.
@@ -139,7 +159,8 @@ $pdf->logo   = false;  // disable logo
 | `bootstrap.php` | Root Composer/Eloquent bootstrap |
 | `core/Database.php` | Dual-connection Eloquent setup |
 | `app/helpers.php` | All global helper functions |
-| `Classes/Route.php` | Routing, asset, and include helpers |
+| `Classes/Route.php` | Routing, asset, and include helpers (also `error()`/`forbidden()`, CDN script helpers like `sweetAlert()`, `selectPicker()`) |
 | `Classes/Session.php` | Auth validation logic |
 | `config/database.php` | Central DB config |
 | `demo/config/database.php` | Tenant DB config template |
+| `demo/config/services.php` | Tenant credentials for third-party services (payment gateways, etc.) |
