@@ -184,3 +184,10 @@ if (!function_exists('school_has_active')) {
         return in_array(school_config('app.acronym'), config($schoolConfig, []));
     }
 }
+
+if (!function_exists('school_url')) {
+    function school_url(string $path): string
+    {
+        return rtrim(config('app.url'), '/') . '/' . school_config('app.acronym') . '/' . ltrim($path, '/');
+    }
+}
