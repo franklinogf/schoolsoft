@@ -13,10 +13,10 @@
     "setasign/fpdi": "^2.6.8",
     "setasign/fpdf": "^1.9.0",
     "illuminate/support": "^12.69.2",
-    "ramsey/uuid": "^4.9.3",
+    "ramsey/uuid": "^4.9.4",
     "ifsnop/mysqldump-php": "^2.13",
-    "phpoffice/phpspreadsheet": "^5.9",
-    "dnetix/redirection": "^2.1"
+    "phpoffice/phpspreadsheet": "^5.10",
+    "dnetix/redirection": "^2.1.4"
   },
   "autoload": {
     "psr-4": {

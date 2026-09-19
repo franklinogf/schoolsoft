@@ -46,6 +46,7 @@ class PlacetoPayCheckout
      *  buyerSurname?:string,
      *  payableType?:string,
      *  payableId?:string,
+     *  skipResult?:bool
      * } $data
      */
     public function createSession(array $data): PlacetoPaySession
@@ -74,6 +75,7 @@ class PlacetoPayCheckout
             'returnUrl' => $data['returnUrl'],
             'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
+            "skipResult" => $data['skipResult'] ?? false,
         ];
 
         if (! empty($data['buyerEmail'])) {
