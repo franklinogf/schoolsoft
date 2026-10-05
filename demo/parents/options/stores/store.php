@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/../../../app.php';
 
+use App\Models\Family;
 use App\Models\Store;
+use App\Services\PlacetoPayPaymentProcessor;
 use Classes\Route;
 use Classes\Session;
 use Classes\DataBase\DB;
@@ -15,6 +17,16 @@ $store = Store::find($store_id);
 
 // Include cart actions
 require_once 'includes/cart_actions.php';
+
+$status = $_GET['status'] ?? null;
+$statusMessage = $_GET['message'] ?? null;
+$statusOrder = $_GET['order'] ?? null;
+
+$family = Family::find(Session::id());
+$defaultMobile = $family ? ($family->cel_m ?: $family->cel_p) : '';
+
+// Re-checks against PlacetoPay, so a resolved payment doesn't keep warning
+$pendingPayment = (new PlacetoPayPaymentProcessor())->pendingFor(Session::id());
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
@@ -41,7 +53,18 @@ require_once 'includes/cart_actions.php';
         $products = $store->items;
         ?>
 
-        <div class="row" id="store" data-store-prefix="<?= $store->prefix_code ?>">
+        <?php if ($pendingPayment): ?>
+            <div class="alert alert-warning">
+                <?= __('placetopay.pending.warning', ['reference' => $pendingPayment->reference]) ?>
+                <a href="../placetopay/result.php?reference=<?= urlencode($pendingPayment->reference) ?>" class="alert-link"><?= __('placetopay.pending.view_detail') ?></a>
+            </div>
+        <?php endif; ?>
+
+        <div class="text-right small mb-2">
+            <a href="../placetopay/history.php"><?= __('placetopay.history.link') ?> &raquo;</a>
+        </div>
+
+        <div class="row" id="store">
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -216,10 +239,10 @@ require_once 'includes/cart_actions.php';
 
                             <div class="d-flex justify-content-between mt-3">
                                 <h5><?= __("Total") ?>:</h5>
-                                <h5>$<?= number_format($total, 2) ?></h5>
+                                <h5 id="cart-total">$<?= number_format($total, 2) ?></h5>
                             </div>
 
-                            <button type="button" class="btn btn-success btn-block mt-3" id="checkout-btn" data-toggle="modal" data-target="#paymentModal" data-amount="<?= $total ?>">
+                            <button type="button" class="btn btn-success btn-block mt-3" id="checkout-btn" data-toggle="modal" data-target="#paymentModal">
                                 <?= __("Proceder al pago") ?>
                             </button>
                         <?php endif; ?>
@@ -231,8 +254,9 @@ require_once 'includes/cart_actions.php';
 
     <!-- Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content" id="paymentForm" method="post" action="includes/start.php">
+                <input type="hidden" name="store_id" value="<?= $store->id ?>">
                 <div class="modal-header">
                     <h5 class="modal-title" id="paymentModalLabel"><?= __("Realizar Pago") ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -244,151 +268,44 @@ require_once 'includes/cart_actions.php';
                         <?= __("Monto a pagar") ?>: <strong id="payment-amount">$0.00</strong>
                     </div>
 
-                    <ul class="nav nav-tabs" id="paymentTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="credit-card-tab" data-toggle="tab" href="#credit-card" role="tab" aria-controls="credit-card" aria-selected="true"><?= __("Tarjeta de Crédito") ?></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="ach-tab" data-toggle="tab" href="#ach" role="tab" aria-controls="ach" aria-selected="false"><?= __("ACH") ?></a>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content mt-3" id="paymentTabsContent">
-                        <!-- Credit Card Form -->
-                        <div class="tab-pane fade show active" id="credit-card" role="tabpanel" aria-labelledby="credit-card-tab">
-                            <form id="credit-card-form">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cc-name"><?= __("Nombre en la tarjeta") ?></label>
-                                        <input type="text" class="form-control" id="cc-name" name="customerName" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cc-email"><?= __("Correo electrónico") ?></label>
-                                        <input type="email" class="form-control" id="cc-email" name="customerEmail" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cc-number"><?= __("Número de tarjeta") ?></label>
-                                    <input type="text" class="form-control" id="cc-number" name="cardNumber" required placeholder="XXXX XXXX XXXX XXXX">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="cc-exp-month"><?= __("Mes de expiración") ?></label>
-                                        <select class="form-control" id="cc-exp-month" name="expMonth" required>
-                                            <?php for ($i = 1; $i <= 12; $i++): ?>
-                                                <option value="<?= sprintf('%02d', $i) ?>"><?= sprintf('%02d', $i) ?></option>
-                                            <?php endfor; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="cc-exp-year"><?= __("Año de expiración") ?></label>
-                                        <select class="form-control" id="cc-exp-year" name="expYear" required>
-                                            <?php $currentYear = (int) date('Y'); ?>
-                                            <?php for ($i = $currentYear; $i <= $currentYear + 10; $i++): ?>
-                                                <option value="<?= substr((string) $i, -2) ?>"><?= $i ?></option>
-                                            <?php endfor; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="cc-cvv"><?= __("CVV") ?></label>
-                                        <input type="text" class="form-control" id="cc-cvv" name="cvv" required placeholder="XXX">
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cc-zipcode"><?= __("Código postal") ?></label>
-                                        <input type="text" class="form-control" id="cc-zipcode" name="zipcode">
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-block mt-3"><?= __("Pagar con Tarjeta de Crédito") ?></button>
-                            </form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first-name"><?= __("Nombre") ?></label>
+                            <input type="text" class="form-control" id="first-name" name="first_name" required>
                         </div>
-
-                        <!-- ACH Form -->
-                        <div class="tab-pane fade" id="ach" role="tabpanel" aria-labelledby="ach-tab">
-                            <form id="ach-form">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-name"><?= __("Nombre completo") ?></label>
-                                        <input type="text" class="form-control" id="ach-name" name="customerName" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-email"><?= __("Correo electrónico") ?></label>
-                                        <input type="email" class="form-control" id="ach-email" name="customerEmail" required>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-routing"><?= __("Número de ruta") ?></label>
-                                        <input type="text" class="form-control" id="ach-routing" name="routing" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-account"><?= __("Número de cuenta") ?></label>
-                                        <input type="text" class="form-control" id="ach-account" name="bankAccount" required>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-account-type"><?= __("Tipo de cuenta") ?></label>
-                                        <select class="form-control" id="ach-account-type" name="accType" required>
-                                            <option value="w"><?= __("Cuenta corriente") ?></option>
-                                            <option value="s"><?= __("Cuenta de ahorros") ?></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ach-zipcode"><?= __("Código postal") ?></label>
-                                        <input type="text" class="form-control" id="ach-zipcode" name="zipcode">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block mt-3"><?= __("Pagar con ACH") ?></button>
-                            </form>
+                        <div class="col-md-6 mb-3">
+                            <label for="last-name"><?= __("Apellidos") ?></label>
+                            <input type="text" class="form-control" id="last-name" name="last_name" required>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Processing Modal -->
-    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center py-5">
-                    <div class="spinner-border text-primary mb-3" role="status">
-                        <span class="sr-only"><?= __("Procesando...") ?></span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email"><?= __("Correo electrónico") ?></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="mobile"><?= __("Celular") ?></label>
+                            <input type="tel" class="form-control" id="mobile" name="mobile" value="<?= htmlspecialchars((string) $defaultMobile) ?>" placeholder="7875551234" pattern="\+?[\d\s\(\)\-]{10,20}" title="<?= __('placetopay.validation.mobile') ?>" required>
+                        </div>
                     </div>
-                    <h4><?= __("Procesando su pago...") ?></h4>
-                    <p><?= __("Por favor no cierre esta ventana.") ?></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Result Modal -->
-    <div class="modal fade" id="paymentResultModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="result-title"><?= __("Resultado del Pago") ?></h5>
-                </div>
-                <div class="modal-body" id="payment-result-content">
-                    <!-- Content will be inserted via JavaScript -->
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="terms" name="terms" value="1" required>
+                        <label class="custom-control-label" for="terms">
+                            <?= __('placetopay.form.accept_terms') ?> <a href="../placetopay/terms.php" target="_blank" rel="noopener"><?= __('placetopay.form.terms_link') ?></a>
+                        </label>
+                    </div>
+                    <small class="text-muted"><?= __('placetopay.form.redirect_notice') ?></small>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="result-ok-btn"><?= __("Aceptar") ?></button>
+                    <button type="submit" class="btn btn-primary btn-block" id="pay-btn"><?= __('placetopay.form.pay') ?></button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <?php
     Route::includeFile('/includes/layouts/scripts.php', true);
+    Route::sweetAlert();
     ?>
 
     <script>
@@ -467,154 +384,53 @@ require_once 'includes/cart_actions.php';
                     total += subtotal;
                 });
 
-                document.querySelector('.justify-content-between h5:last-child').textContent = '$' + total.toFixed(2);
+                document.getElementById('cart-total').textContent = '$' + total.toFixed(2);
             }
         });
     </script>
 
     <script>
-        // Payment functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set payment amount in modal
-            document.getElementById('checkout-btn')?.addEventListener('click', function() {
-                const amount = this.getAttribute('data-amount');
-                document.getElementById('payment-amount').textContent = '$' + parseFloat(amount).toFixed(2);
-            });
+        document.getElementById('checkout-btn')?.addEventListener('click', function() {
+            document.getElementById('payment-amount').textContent = document.getElementById('cart-total').textContent;
+        });
 
-            // Credit Card Form Submission
-            document.getElementById('credit-card-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Get form data
-                const formData = new FormData(this);
-                const paymentData = {};
-
-                // Convert FormData to object
-                formData.forEach((value, key) => {
-                    paymentData[key] = value;
-                });
-
-                // Add payment method and amount
-                paymentData.paymentMethod = 'creditCard';
-                paymentData.amount = document.getElementById('checkout-btn').getAttribute('data-amount');
-                paymentData.evertecPrefix = document.getElementById('store').getAttribute('data-store-prefix');
-
-                // Send payment request
-                processPayment(paymentData);
-            });
-
-            // ACH Form Submission
-            document.getElementById('ach-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Get form data
-                const formData = new FormData(this);
-                const paymentData = {};
-
-                // Convert FormData to object
-                formData.forEach((value, key) => {
-                    paymentData[key] = value;
-                });
-
-                // Add payment method and amount
-                paymentData.paymentMethod = 'ach';
-                paymentData.amount = document.getElementById('checkout-btn').getAttribute('data-amount');
-                paymentData.evertecPrefix = document.getElementById('store').getAttribute('data-store-prefix');
-
-                // Send payment request
-                processPayment(paymentData);
-            });
-
-            // Function to process payment
-            function processPayment(paymentData) {
-                // Hide payment modal and show processing modal
-                $('#paymentModal').modal('hide');
-                $('#processingModal').modal('show');
-
-                // Send payment request to server
-                fetch('includes/process_payment.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(paymentData)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Hide processing modal
-                        $('#processingModal').modal('hide');
-
-                        // Prepare result content
-                        let resultContent = '';
-                        let resultTitle = '';
-
-                        if (data.success) {
-                            resultTitle = '<?= __("Pago Exitoso") ?>';
-                            resultContent = `
-                            <div class="text-center">
-                                <div class="mb-4">
-                                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
-                                </div>
-                                <h4 class="mb-3"><?= __("¡Su pago ha sido procesado exitosamente!") ?></h4>
-                                <p>Número de autorización: ${data.authNumber}</p>
-                                <p>ID de transacción: ${data.trxID}</p>
-                                <p class="mt-4"><?= __("Gracias por su compra.") ?></p>
-                            </div>
-                        `;
-
-                            // Clear forms
-                            document.getElementById('credit-card-form').reset();
-                            document.getElementById('ach-form').reset();
-                        } else {
-                            resultTitle = '<?= __("Error en el Pago") ?>';
-                            resultContent = `
-                            <div class="text-center">
-                                <div class="mb-4">
-                                    <i class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
-                                </div>
-                                <h4 class="mb-3"><?= __("Lo sentimos, ha ocurrido un error") ?></h4>
-                                <p>${data.rMsg || data.error || '<?= __('No se pudo procesar su pago.') ?>'}</p>
-                                <p class="mt-4"><?= __("Por favor intente nuevamente.") ?></p>
-                            </div>
-                        `;
-                        }
-
-                        // Update and show result modal
-                        document.getElementById('result-title').textContent = resultTitle;
-                        document.getElementById('payment-result-content').innerHTML = resultContent;
-                        $('#paymentResultModal').modal('show');
-                    })
-                    .catch(error => {
-                        // Hide processing modal
-                        $('#processingModal').modal('hide');
-
-                        // Show error in result modal
-                        document.getElementById('result-title').textContent = 'Error';
-                        document.getElementById('payment-result-content').innerHTML = `
-                        <div class="text-center">
-                            <div class="mb-4">
-                                <i class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
-                            </div>
-                            <h4 class="mb-3"><?= __("Lo sentimos, ha ocurrido un error") ?></h4>
-                            <p><?= __("No se pudo conectar con el servidor de pagos.") ?></p>
-                            <p class="mt-4"><?= __("Por favor intente nuevamente.") ?></p>
-                        </div>
-                    `;
-                        $('#paymentResultModal').modal('show');
-                    });
+        // Avoid double requests while PlacetoPay takes time to answer
+        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+            if (this.dataset.submitted) {
+                event.preventDefault();
+                return;
             }
+            this.dataset.submitted = '1';
+            const button = document.getElementById('pay-btn');
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>' + <?= json_encode(__('placetopay.form.processing')) ?>;
+        });
 
-            // Result modal handler
-            document.getElementById('result-ok-btn').addEventListener('click', function() {
-                $('#paymentResultModal').modal('hide');
-
-                // Reload page if payment was successful
-                if (document.getElementById('result-title').textContent === 'Pago Exitoso') {
-                    window.location.reload();
-                }
-            });
+        // Re-enable the form if the page is restored from the back/forward cache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
         });
     </script>
+
+    <?php if ($status === 'success'): ?>
+        <script>
+            Alert.fire(<?= json_encode(__("Pago Exitoso")) ?>, <?= json_encode(__("¡Su pago ha sido procesado exitosamente!") . ($statusOrder ? ' ' . __("Referencia") . ': ' . $statusOrder : '')) ?>, 'success')
+        </script>
+    <?php elseif ($status === 'error'): ?>
+        <script>
+            Alert.fire(<?= json_encode(__("Error en el Pago")) ?>, <?= json_encode($statusMessage ?? __('No se pudo procesar su pago.')) ?>, 'error')
+        </script>
+    <?php endif; ?>
+
+    <?php if ($status): ?>
+        <script>
+            // Drop status/message/order from the URL so the alert isn't shown
+            // again on reload or after a cart form posts back to this page.
+            history.replaceState(null, '', <?= json_encode('store.php?id=' . $store->id) ?>);
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
