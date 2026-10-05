@@ -19,6 +19,7 @@ $buttons = [
     ['name' => 'Tiendas', 'link' => 'stores/'],
     ['name' => 'Reporte de compras', 'link' => 'Shopping/'],
     ['name' => 'Deposits', 'link' => 'deposit/'],
+    ['name' => 'Historial de pagos', 'link' => 'placetopay/history.php'],
     ['name' => 'Pagos', 'link' => 'payments/'],
     ['name' => 'Pagos Automaticos', 'link' => 'autoPayments/'],
     ['name' => 'Citas con profesores', 'link' => 'appointments/'],
@@ -34,6 +35,7 @@ $lang = new Lang([
     ["Hoja de progreso", "Progress sheet"],
     ["Informe de deficiencia", "Deficiency report"],
     ["Reporte de compras", "Purchase report"],
+    ["Historial de pagos", "Payment history"],
 ]);
 ?>
 <!DOCTYPE html>
