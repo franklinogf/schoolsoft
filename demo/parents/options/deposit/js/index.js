@@ -27,9 +27,9 @@ $(function () {
     $('#students button .name').removeClass('text-white')
     $(this).addClass('active')
     $(this).children('.name').addClass('text-white')
-    $('label[for=money]').text(`Cantidad a depositar a ${studentName}`)
+    $('label[for=money]').text(depositLang.amountTo.replace(':name', studentName))
     $('#student_id').val(studentId)
-    $('.pagar').prop('disabled', false)
+    $('#students').closest('.card').removeClass('border-danger')
   })
 
   $('#money').change(function (event) {
@@ -50,7 +50,8 @@ $(function () {
   $('#depositForm').submit(function (event) {
     if (!$('#student_id').val()) {
       event.preventDefault()
-      Alert.fire('Error', 'Debe seleccionar un estudiante para realizar el deposito', 'error')
+      $('#students').closest('.card').addClass('border-danger')
+      Alert.fire(depositLang.error, depositLang.selectStudent, 'error')
       return false
     }
     if (!this.checkValidity()) {
@@ -59,6 +60,22 @@ $(function () {
       $(this).addClass('was-validated')
       return false
     }
+    if ($(this).data('submitted')) {
+      event.preventDefault()
+      return false
+    }
     $('#amount').val(total)
+    // Avoid double requests while PlacetoPay takes time to answer
+    $(this).data('submitted', true)
+    $('.pagar')
+      .prop('disabled', true)
+      .html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>' + depositLang.processing)
+  })
+
+  // Re-enable the button if the page is restored from the back/forward cache
+  $(window).on('pageshow', function (event) {
+    if (event.originalEvent.persisted) {
+      window.location.reload()
+    }
   })
 })
