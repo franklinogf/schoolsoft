@@ -16,6 +16,7 @@ TranslatorFactory::get()->setLocale(config('app.locale', LanguageCode::SPANISH->
 Relation::enforceMorphMap([
     'student' => \App\Models\Student::class,
     'admin' => \App\Models\Admin::class,
+    'store_order' => \App\Models\StoreOrder::class,
 ]);
 
 define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html
