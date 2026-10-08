@@ -8,7 +8,7 @@ $(function () {
   $('.justText').mask('Z', {
     translation: {
       Z: {
-        pattern: /[A-Za-z ]/,
+        pattern: /[\p{L} ]/u,
         recursive: true
       }
     }

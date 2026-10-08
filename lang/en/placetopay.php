@@ -24,6 +24,8 @@ return [
         'terms' => 'You must accept the terms and conditions to continue.',
         'first_name' => 'First name is required.',
         'last_name' => 'Last name is required.',
+        'first_name_chars' => 'First name may only contain letters and spaces.',
+        'last_name_chars' => 'Last name may only contain letters and spaces.',
         'email' => 'Please enter a valid email address.',
         'mobile' => 'Please enter a valid mobile number (10 digits).',
     ],

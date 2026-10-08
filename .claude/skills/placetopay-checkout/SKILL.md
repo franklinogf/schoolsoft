@@ -80,7 +80,7 @@ Existing payable types (morph map in `bootstrap.php`): `'student'` (cafeteria de
 | Button control (double request) | JS disables button + server `pendingFor()` |
 | Cancel / status handling / retry | `return.php` always re-queries → `result.php` shows reference, amount + currency, status, date |
 | Lightbox | N/A (plain redirect; `returnUrl` always sent) |
-| Buyer fields + email format | `validateBuyer()` (`FILTER_VALIDATE_EMAIL`, 10–15 digit mobile) |
+| Buyer fields + email format | `validateBuyer()` (names: letters + spaces only `/^[\p{L} ]+$/u` via `isValidName()`; `FILTER_VALIDATE_EMAIL`; 10–15 digit mobile) |
 | Unique reference ≤ 32 | `generateReference()` loops on `referenceExists()` + UNIQUE index |
 | Double payment message | `pendingFor()` warning on page + block in start.php |
 | CustomerAccountNumber | always added in `createSession()` |

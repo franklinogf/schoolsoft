@@ -271,11 +271,11 @@ $pendingPayment = (new PlacetoPayPaymentProcessor())->pendingFor(Session::id());
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="first-name"><?= __("Nombre") ?></label>
-                            <input type="text" class="form-control" id="first-name" name="first_name" required>
+                            <input type="text" class="form-control" id="first-name" name="first_name" pattern="[\p{L} ]+" title="<?= __('placetopay.validation.first_name_chars') ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="last-name"><?= __("Apellidos") ?></label>
-                            <input type="text" class="form-control" id="last-name" name="last_name" required>
+                            <input type="text" class="form-control" id="last-name" name="last_name" pattern="[\p{L} ]+" title="<?= __('placetopay.validation.last_name_chars') ?>" required>
                         </div>
                     </div>
                     <div class="row">

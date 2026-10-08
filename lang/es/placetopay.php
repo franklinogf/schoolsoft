@@ -24,6 +24,8 @@ return [
         'terms' => 'Debe aceptar los términos y condiciones para continuar.',
         'first_name' => 'El nombre es obligatorio.',
         'last_name' => 'El apellido es obligatorio.',
+        'first_name_chars' => 'El nombre solo puede contener letras y espacios.',
+        'last_name_chars' => 'El apellido solo puede contener letras y espacios.',
         'email' => 'Por favor introduzca un correo electrónico válido.',
         'mobile' => 'Por favor introduzca un número de celular válido (10 dígitos).',
     ],

@@ -91,7 +91,8 @@ class PlacetoPayPaymentProcessor
 
     /**
      * Validate the buyer data PlacetoPay requires (name, surname, email,
-     * mobile) plus the terms acceptance. Returns the first error message,
+     * mobile) plus the terms acceptance. Names may only contain letters
+     * (accents included) and spaces. Returns the first error message,
      * or null when everything is valid.
      *
      * @param array{first_name?:string, last_name?:string, email?:string, mobile?:string, terms?:string} $input
@@ -101,11 +102,22 @@ class PlacetoPayPaymentProcessor
         return match (true) {
             empty($input['terms']) => __('placetopay.validation.terms'),
             trim($input['first_name'] ?? '') === '' => __('placetopay.validation.first_name'),
+            !self::isValidName($input['first_name'] ?? '') => __('placetopay.validation.first_name_chars'),
             trim($input['last_name'] ?? '') === '' => __('placetopay.validation.last_name'),
+            !self::isValidName($input['last_name'] ?? '') => __('placetopay.validation.last_name_chars'),
             filter_var(trim($input['email'] ?? ''), FILTER_VALIDATE_EMAIL) === false => __('placetopay.validation.email'),
             self::normalizeMobile($input['mobile'] ?? '') === null => __('placetopay.validation.mobile'),
             default => null,
         };
+    }
+
+    /**
+     * PlacetoPay rejects special characters in the buyer's name/surname:
+     * only letters (any language, accents included) and spaces are allowed.
+     */
+    public static function isValidName(string $name): bool
+    {
+        return preg_match('/^[\p{L} ]+$/u', trim($name)) === 1;
     }
 
     /**
