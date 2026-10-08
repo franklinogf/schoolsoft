@@ -58,6 +58,8 @@ return [
         'concept' => 'Description',
         'amount' => 'Amount',
         'pending_notice' => 'Your payment is pending confirmation by the financial institution. We will let you know when its status changes; do not make the payment again.',
+        'resume_notice' => 'Your payment has not been completed yet. If you left the payment page by mistake, you can go back to it and finish the payment.',
+        'resume' => 'Continue with the payment',
     ],
     'history' => [
         'title' => 'Payment history',

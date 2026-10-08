@@ -15,8 +15,8 @@ use Classes\Session;
 $reference = (string) ($_GET['reference'] ?? '');
 $error = $_GET['error'] ?? null;
 $session = $reference !== '' ? PlacetoPaySession::findByReference($reference) : null;
-
 $isOwner = $session && Session::id() && (string) Session::id() === (string) $session->account_id;
+$canResume = $isOwner && $session->canResume();
 
 $backUrl = match ($session?->payable_type) {
     'store_order' => '../stores/index.php',
@@ -78,7 +78,16 @@ $title = __('placetopay.result.title');
                             <?php endif; ?>
                         </ul>
 
-                        <?php if ($session->status->isPending()): ?>
+                        <?php if ($canResume): ?>
+                            <div class="card-body pb-0">
+                                <div class="alert alert-warning mb-0">
+                                    <p><?= __('placetopay.result.resume_notice') ?></p>
+                                    <a href="<?= htmlspecialchars($session->process_url) ?>" class="btn btn-warning btn-block w-100">
+                                        <?= __('placetopay.result.resume') ?>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php elseif ($session->status->isPending()): ?>
                             <div class="card-body pb-0">
                                 <div class="alert alert-warning mb-0">
                                     <?= __('placetopay.result.pending_notice') ?>

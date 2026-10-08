@@ -58,6 +58,8 @@ return [
         'concept' => 'Concepto',
         'amount' => 'Monto',
         'pending_notice' => 'Su pago está pendiente de confirmación por la entidad financiera. Le notificaremos cuando cambie de estado; no realice el pago nuevamente.',
+        'resume_notice' => 'Su pago aún no se ha completado. Si salió de la página de pago por error, puede volver a ella y terminar el pago.',
+        'resume' => 'Continuar con el pago',
     ],
     'history' => [
         'title' => 'Historial de pagos',

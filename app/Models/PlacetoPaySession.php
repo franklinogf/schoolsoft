@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PlacetoPaySessionStatus;
+use App\Services\PlacetoPayCheckout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -145,6 +146,20 @@ class PlacetoPaySession extends Model
     public static function findByRequestId(int $requestId): ?self
     {
         return self::where('request_id', $requestId)->first();
+    }
+
+    /**
+     * The buyer left the checkout without attempting a payment and the
+     * session hasn't expired yet, so they can go back to `process_url`.
+     * Sessions with a transaction already in progress are excluded, so the
+     * buyer isn't sent back to pay twice.
+     */
+    public function canResume(): bool
+    {
+        return $this->status === PlacetoPaySessionStatus::PENDING
+            && $this->process_url
+            && empty($this->last_response['payment'])
+            && $this->created_at->copy()->addMinutes(PlacetoPayCheckout::EXPIRATION_MINUTES)->isFuture();
     }
 
     /**
