@@ -1,5 +1,14 @@
 <?php
 
+$isCli = PHP_SAPI === 'cli';
+
+if ($isCli) {
+    // app.php derives the school acronym from PHP_SELF, which under CLI is the
+    // absolute script path; fake the web-relative one (/<school>/cron/<file>).
+    $_SERVER['SCRIPT_FILENAME'] = __FILE__;
+    $_SERVER['PHP_SELF'] = '/' . basename(dirname(__DIR__)) . '/cron/' . basename(__FILE__);
+}
+
 require_once __DIR__ . '/../app.php';
 
 use App\Enums\PlacetoPaySessionStatus;
@@ -14,19 +23,24 @@ use Dnetix\Redirection\Exceptions\PlacetoPayException;
  * reversal whose notification got lost), and applies the result through the
  * same idempotent processor.
  *
- * Called by the hosting cron with the per-school token:
+ * Called by the hosting cron, either through PHP CLI (no token needed, shell
+ * access is already trusted):
+ *   php /home/<user>/domains/<domain>/public_html/<school>/cron/placetopay.php
+ * or over HTTP with the per-school token:
  *   curl -s "https://<domain>/<school>/cron/placetopay.php?token=<cron_token>"
  * Testing environment: every 5-10 minutes, only while testing.
  * Production: once a day.
  */
-header('Content-Type: text/plain; charset=utf-8');
+if (! $isCli) {
+    header('Content-Type: text/plain; charset=utf-8');
 
-$expected = (string) school_config('services.placetopay.cron_token', '');
+    $expected = (string) school_config('services.placetopay.cron_token', '');
 
-if ($expected === '' || ! hash_equals($expected, (string) ($_GET['token'] ?? ''))) {
-    http_response_code(403);
-    echo "Forbidden\n";
-    exit;
+    if ($expected === '' || ! hash_equals($expected, (string) ($_GET['token'] ?? ''))) {
+        http_response_code(403);
+        echo "Forbidden\n";
+        exit;
+    }
 }
 
 set_time_limit(0);
