@@ -12,7 +12,7 @@ The integration is already built and certified-ready. New payment flows **reuse 
 | Piece | File | Role |
 |---|---|---|
 | SDK wrapper | `app/Services/PlacetoPayCheckout.php` | `createSession()`, `querySession()`, `generateReference()`, `readNotification()` / `isValidNotification()`. Always sends `buyer` (name, surname, email, mobile) and `CustomerAccountNumber`. Expiration `EXPIRATION_MINUTES = 30`. |
-| Processor | `app/Services/PlacetoPayPaymentProcessor.php` | **Single idempotent place** that applies a session result to its payable. `sync()` queries the API and, inside a transaction with `lockForUpdate()`, credits (`apply`), reverts refunds (`revert`) or discards rejected attempts (`discard`). Also `pendingFor($accountId)` (double-payment guard) and `validateBuyer($_POST)` / `normalizeMobile()`. |
+| Processor | `app/Services/PlacetoPayPaymentProcessor.php` | **Single idempotent place** that applies a session result to its payable. `sync()` queries the API and, inside a transaction with `lockForUpdate()`, credits (`apply`), reverts refunds (`revert`) or discards rejected attempts (`discard`) by delegating to the per-type handler in `app/Services/PlacetoPay/<Type>/` (resolved by `PaymentHandlerResolver`). Also `pendingFor($accountId)` (double-payment guard) and `validateBuyer($_POST)` / `normalizeMobile()`. |
 | Model | `app/Models/PlacetoPaySession.php` | Table `placetopay_sessions`. Scopes `pending()`, `forAccount()`, `history()`. `applied_at` / `refunded_at` make crediting and refunding run once. |
 | Status enum | `app/Enums/PlacetoPaySessionStatus.php` | `fromApiStatus()`, `isApproved()`, `isPending()`, `isRejected()`, `getLabel()`, `getBadgeClass()`. |
 | Return pages | `demo/parents/options/{deposit,stores}/includes/return.php` | Find session by `reference` → `processor->sync()` → redirect to the summary page. Not gated by login. |
@@ -29,10 +29,10 @@ Existing payable types (morph map in `bootstrap.php`): `'student'` (cafeteria de
 ## Adding a new payable (e.g. tuition, enrollment fee)
 
 1. **Morph map**: add `'<alias>' => Model::class` in `bootstrap.php` `Relation::enforceMorphMap()`. Always store the alias in `payable_type`, never `Model::class`.
-2. **Processor**: add the alias to the three `match ($session->payable_type)` blocks in `PlacetoPayPaymentProcessor`:
-   - `apply()` → mark paid / credit. Must be safe to call when already applied (it is guarded by `applied_at`, but also guard on the payable's own state).
+2. **Handler**: create `app/Services/PlacetoPay/<Type>/<Type>Handler.php` (extend `AbstractPaymentHandler`, see `Deposit/`, `StoreOrder/`, `FamilyCharges/`) and register the alias in `PaymentHandlerResolver::HANDLERS`. `PlacetoPayPaymentProcessor` stays untouched; it owns the `applied_at`/`refunded_at` guards and the transaction.
+   - `apply()` → mark paid / credit; return `false` if nothing could be credited (session stays unapplied and is retried). Also guard on the payable's own state.
    - `revert()` → undo on refund (balance back, `paid = 0`, etc.).
-   - `discard()` → only if an unpaid record was created *before* the checkout (like store orders) and should be removed when rejected/cancelled.
+   - `discard()` → override only if an unpaid record was created *before* the checkout (like store orders) and should be removed when rejected/cancelled.
    Use `withoutGlobalScopes()` / `withoutGlobalScope(YearScope::class)` when finding the payable: webhook and cron run outside the current-year context.
 3. **Form page** (copy `demo/parents/options/deposit/index.php` pattern):
    - Fields `first_name`, `last_name`, `email`, `mobile` (prefill from `Family::find(Session::id())->cel_m ?: cel_p`), plus required checkbox `terms` linking to `../placetopay/terms.php` (target `_blank`).
