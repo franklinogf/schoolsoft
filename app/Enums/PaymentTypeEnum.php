@@ -25,6 +25,18 @@ enum PaymentTypeEnum: string
     case PAGO_APP = '19';
 
 
+    /**
+     * Payment type (`pagos.tdp`) for a payment made through PlacetoPay.
+     */
+    public static function fromPlacetoPayMethod(?string $paymentMethod): self
+    {
+        $method = strtolower($paymentMethod ?? '');
+
+        return str_contains($method, 'ach') || str_contains($method, 'pse') || str_contains($method, 'bank')
+            ? self::DIRECT_PAYMENT
+            : self::CREDIT_CARD;
+    }
+
     public function getLabel(): string
     {
         return match ($this) {

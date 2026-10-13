@@ -34,6 +34,7 @@ return [
         'start_failed' => 'No se pudo iniciar el pago.',
         'invalid_deposit' => 'Datos de depósito inválidos.',
         'invalid_payment' => 'Datos de pago inválidos.',
+        'invalid_charges' => 'Los cargos seleccionados no son válidos o ya fueron pagados. Actualice la página e intente nuevamente.',
         'pending_blocked' => 'Tiene una transacción pendiente (referencia :reference). Espere a que se resuelva antes de realizar un nuevo pago.',
     ],
     'pending' => [
@@ -54,6 +55,25 @@ return [
         'new_balance' => 'El nuevo saldo es :amount',
         'failed' => 'No se pudo procesar el depósito.',
     ],
+    'payments' => [
+        'title' => 'Pagos',
+        'empty' => 'No tienes cargos registrados.',
+        'all_paid' => '¡Estás al día! No tienes cargos pendientes.',
+        'balance_due' => 'Balance pendiente',
+        'pending_count' => '{0} Sin cargos pendientes|{1} 1 cargo pendiente|[2,*] :count cargos pendientes',
+        'overdue_count' => '{1} 1 vencido|[2,*] :count vencidos',
+        'select_all' => 'Seleccionar todos',
+        'overdue' => 'Vencido',
+        'due' => 'Vence :date',
+        'paid' => 'Pagado',
+        'paid_on' => 'Pagado el :date',
+        'paid_section' => 'Cargos pagados (:count)',
+        'partial_paid' => 'Abonado :amount de :total',
+        'payer_details' => 'Datos del pagador',
+        'selected_count' => '{0} Ningún cargo seleccionado|{1} 1 cargo seleccionado|[2,*] :count cargos seleccionados',
+        'total' => 'Total a pagar',
+        'select_charge_error' => 'Seleccione al menos un cargo para pagar.',
+    ],
     'result' => [
         'title' => 'Resumen del pago',
         'transaction' => 'Transacción',
@@ -71,7 +91,7 @@ return [
     ],
     'terms' => [
         'title' => 'Términos y condiciones',
-        'intro' => 'Estos términos regulan los pagos en línea (depósitos de cafetería y compras en tiendas) que se realizan a :school a través de este portal.',
+        'intro' => 'Estos términos regulan los pagos en línea (pagos de cargos y mensualidades, depósitos de cafetería y compras en tiendas) que se realizan a :school a través de este portal.',
         'processing' => [
             'title' => '1. Procesamiento del pago',
             'body' => 'Los pagos son procesados por PlacetoPay (Evertec). Al continuar será redirigido a su plataforma segura; la escuela no recibe ni almacena los datos de su tarjeta o cuenta bancaria.',
@@ -90,11 +110,11 @@ return [
         ],
         'crediting' => [
             'title' => '5. Acreditación',
-            'body' => 'Los depósitos de cafetería se acreditan al balance del estudiante y las compras se marcan como pagadas solamente cuando el pago es aprobado. Puede consultar el estado de todos sus pagos en el historial de pagos.',
+            'body' => 'Los pagos de cargos se registran en la cuenta de la familia, los depósitos de cafetería se acreditan al balance del estudiante y las compras se marcan como pagadas solamente cuando el pago es aprobado. Puede consultar el estado de todos sus pagos en el historial de pagos.',
         ],
         'refunds' => [
             'title' => '6. Reembolsos y reversos',
-            'body' => 'Las solicitudes de reembolso deben dirigirse a la administración de la escuela. Cuando un pago es reembolsado o reversado, el monto se descuenta del balance de cafetería del estudiante o la compra se marca como no pagada.',
+            'body' => 'Las solicitudes de reembolso deben dirigirse a la administración de la escuela. Cuando un pago es reembolsado o reversado, los cargos vuelven a quedar pendientes, el monto se descuenta del balance de cafetería del estudiante o la compra se marca como no pagada.',
         ],
         'privacy' => [
             'title' => '7. Privacidad',

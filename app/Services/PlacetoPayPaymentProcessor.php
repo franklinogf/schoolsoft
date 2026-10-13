@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Enums\DepositPaymentTypeEnum;
 use App\Enums\OrderPaymentTypeEnum;
+use App\Enums\PaymentTypeEnum;
 use App\Enums\PlacetoPaySessionStatus;
 use App\Models\Deposit;
+use App\Models\Payments\Payment;
 use App\Models\PlacetoPaySession;
 use App\Models\Scopes\YearScope;
 use App\Models\StoreOrder;
@@ -20,7 +22,7 @@ use Illuminate\Database\Capsule\Manager;
 
 /**
  * Applies the result of a PlacetoPay session to whatever it paid for
- * (cafeteria deposit or store order). It is the single place used by the
+ * (cafeteria deposit, store order or family charges). It is the single place used by the
  * buyer's return, the notification webhook and the cron probe, so every
  * step is idempotent: a payment is credited once (`applied_at`) and a
  * refund/reversal is reverted once (`refunded_at`), no matter how many
@@ -162,11 +164,17 @@ class PlacetoPayPaymentProcessor
 
         $tx = $info->lastApprovedTransaction() ?? $info->lastTransaction();
 
-        match ($session->payable_type) {
+        $credited = match ($session->payable_type) {
             'student', Student::class => $this->creditDeposit($session, $tx),
             'store_order' => $this->markOrderPaid($session, $tx),
+            'family' => $this->creditCharges($session, $info, $tx),
             default => null,
         };
+
+        // Nothing could be credited: leave it unapplied so a later sync retries
+        if ($credited === false) {
+            return;
+        }
 
         $session->update(['applied_at' => Carbon::now()]);
     }
@@ -185,6 +193,7 @@ class PlacetoPayPaymentProcessor
         match ($session->payable_type) {
             'student', Student::class => $this->refundDeposit($session),
             'store_order' => $this->findOrder($session)?->update(['paid' => 0]),
+            'family' => $this->refundCharges($session),
             default => null,
         };
 
@@ -307,6 +316,123 @@ class PlacetoPayPaymentProcessor
             'refNumber' => $session->reference,
             'payment_type' => OrderPaymentTypeEnum::fromPlacetoPayMethod($tx?->paymentMethod()),
         ]);
+    }
+
+    /**
+     * Record a payment row in `pagos` for every charge the session covers,
+     * the same way the admin billing screen does, all under one receipt.
+     * The charges come from the items sent to PlacetoPay (sku = charge `mt`,
+     * price = amount paid) and the rows are tagged with the reference in
+     * `trxID`, so a refund can reverse exactly those. Returns false when
+     * nothing could be recorded.
+     */
+    private function creditCharges(PlacetoPaySession $session, RedirectInformation $info, ?Transaction $tx): bool
+    {
+        if ($this->chargePayments($session)->isNotEmpty()) {
+            return true;
+        }
+
+        $dt = new DateTime('now', new DateTimeZone('America/Puerto_Rico'));
+        $receipt = (int) Payment::withoutGlobalScope(YearScope::class)->max('rec') + 1;
+        $credited = false;
+
+        foreach ($info->request()?->payment()?->items() ?? [] as $item) {
+            $charge = Payment::withoutGlobalScope(YearScope::class)->find((int) $item->sku());
+
+            if (! $charge || (string) $charge->id !== (string) $session->account_id) {
+                continue;
+            }
+
+            $this->recordChargeMovement($charge, (float) $item->price() * max((int) $item->qty(), 1), [
+                'tdp' => PaymentTypeEnum::fromPlacetoPayMethod($tx?->paymentMethod())->value,
+                'nuchk' => substr((string) ($tx?->authorization() ?? ''), 0, 10),
+                'rec' => $receipt,
+                'id2' => $charge->mt,
+                'trxID' => $session->reference,
+            ], $dt);
+
+            $this->setCoursePaid($charge, 'OK');
+            $credited = true;
+        }
+
+        return $credited;
+    }
+
+    /**
+     * Reverse each payment row created by creditCharges() with a negative
+     * one, so the charge shows as pending again and the movement stays on
+     * record.
+     */
+    private function refundCharges(PlacetoPaySession $session): void
+    {
+        $dt = new DateTime('now', new DateTimeZone('America/Puerto_Rico'));
+
+        foreach ($this->chargePayments($session) as $payment) {
+            $this->recordChargeMovement($payment, -(float) $payment->pago, [
+                'tdp' => $payment->tdp,
+                'nuchk' => 'Reembolso',
+                'rec' => $payment->rec,
+                'id2' => $payment->id2,
+                'trxID' => $session->reference . '-R',
+            ], $dt);
+
+            $this->setCoursePaid($payment, '');
+        }
+    }
+
+    /**
+     * Payment rows recorded in `pagos` for the session.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Payment>
+     */
+    private function chargePayments(PlacetoPaySession $session): \Illuminate\Database\Eloquent\Collection
+    {
+        return Payment::withoutGlobalScope(YearScope::class)
+            ->where('trxID', $session->reference)
+            ->where('pago', '>', 0)
+            ->get();
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function recordChargeMovement(Payment $charge, float $amount, array $attributes, DateTime $dt): void
+    {
+        Payment::create([
+            'id' => $charge->id,
+            'nombre' => $charge->nombre,
+            'desc1' => $charge->desc1,
+            'fecha_d' => $charge->fecha_d,
+            'year' => $charge->year,
+            'codigo' => $charge->codigo,
+            'ss' => $charge->ss,
+            'pago_t' => $charge->codigo == '705' ? 'OK' : '',
+            'grado' => $charge->grado,
+            'fecha_p' => $dt->format('Y-m-d'),
+            'pago' => $amount,
+            'usuario' => 'PlacetoPay',
+            'hora' => $dt->format('H:i:s'),
+            'fecha2' => $dt->format('Y-m-d'),
+            ...$attributes,
+        ]);
+    }
+
+    /**
+     * Code 705 rows carry a course-paid flag (`pago_t`), kept in sync like
+     * the admin billing screen does.
+     */
+    private function setCoursePaid(Payment $charge, string $flag): void
+    {
+        if ($charge->codigo != '705') {
+            return;
+        }
+
+        Payment::withoutGlobalScope(YearScope::class)
+            ->where('ss', $charge->ss)
+            ->where('fecha_d', $charge->fecha_d)
+            ->where('codigo', $charge->codigo)
+            ->where('year', $charge->year)
+            ->update(['pago_t' => $flag]);
     }
 
     private function findStudent(PlacetoPaySession $session): ?Student

@@ -34,6 +34,7 @@ return [
         'start_failed' => 'The payment could not be started.',
         'invalid_deposit' => 'Invalid deposit data.',
         'invalid_payment' => 'Invalid payment data.',
+        'invalid_charges' => 'The selected charges are not valid or were already paid. Refresh the page and try again.',
         'pending_blocked' => 'You have a pending transaction (reference :reference). Wait for it to be resolved before making a new payment.',
     ],
     'pending' => [
@@ -54,6 +55,25 @@ return [
         'new_balance' => 'The new balance is :amount',
         'failed' => 'The deposit could not be processed.',
     ],
+    'payments' => [
+        'title' => 'Payments',
+        'empty' => 'You have no charges on record.',
+        'all_paid' => 'You\'re all caught up! You have no pending charges.',
+        'balance_due' => 'Balance due',
+        'pending_count' => '{0} No pending charges|{1} 1 pending charge|[2,*] :count pending charges',
+        'overdue_count' => '{1} 1 overdue|[2,*] :count overdue',
+        'select_all' => 'Select all',
+        'overdue' => 'Overdue',
+        'due' => 'Due :date',
+        'paid' => 'Paid',
+        'paid_on' => 'Paid on :date',
+        'paid_section' => 'Paid charges (:count)',
+        'partial_paid' => 'Paid :amount of :total',
+        'payer_details' => 'Payer details',
+        'selected_count' => '{0} No charges selected|{1} 1 charge selected|[2,*] :count charges selected',
+        'total' => 'Total to pay',
+        'select_charge_error' => 'Select at least one charge to pay.',
+    ],
     'result' => [
         'title' => 'Payment summary',
         'transaction' => 'Transaction',
@@ -71,7 +91,7 @@ return [
     ],
     'terms' => [
         'title' => 'Terms and conditions',
-        'intro' => 'These terms govern the online payments (cafeteria deposits and store purchases) made to :school through this portal.',
+        'intro' => 'These terms govern the online payments (charge and tuition payments, cafeteria deposits and store purchases) made to :school through this portal.',
         'processing' => [
             'title' => '1. Payment processing',
             'body' => 'Payments are processed by PlacetoPay (Evertec). When you continue you will be redirected to their secure platform; the school does not receive or store your card or bank account details.',
@@ -90,11 +110,11 @@ return [
         ],
         'crediting' => [
             'title' => '5. Crediting',
-            'body' => 'Cafeteria deposits are credited to the student\'s balance and purchases are marked as paid only when the payment is approved. You can check the status of all your payments in the payment history.',
+            'body' => 'Charge payments are recorded on the family account, cafeteria deposits are credited to the student\'s balance and purchases are marked as paid only when the payment is approved. You can check the status of all your payments in the payment history.',
         ],
         'refunds' => [
             'title' => '6. Refunds and reversals',
-            'body' => 'Refund requests must be directed to the school administration. When a payment is refunded or reversed, the amount is deducted from the student\'s cafeteria balance or the purchase is marked as unpaid.',
+            'body' => 'Refund requests must be directed to the school administration. When a payment is refunded or reversed, the charges become pending again, the amount is deducted from the student\'s cafeteria balance or the purchase is marked as unpaid.',
         ],
         'privacy' => [
             'title' => '7. Privacy',
