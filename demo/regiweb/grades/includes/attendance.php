@@ -27,13 +27,13 @@ if (isset($_POST['getStudents'])) {
     $attendanceOption = $_POST['getStudents'];
     $isCourse = $attendanceOption === '3';
     $attendanceArray = [];
-    
+
     $students = !$isCourse ? Student::query()
         ->byGrade($_POST['grade'])
         ->get()
         : Student::query()
-            ->byClass($_POST['class'])
-            ->get();
+        ->byClass($_POST['class'])
+        ->get();
 
     foreach ($students as $student) {
 
@@ -102,6 +102,9 @@ if (isset($_POST['getStudents'])) {
             if (DB::table('asispp')->where($where)->first()) {
                 DB::table('asispp')->where($where)->update($update);
             } else {
+                if ($data['codigo'] === '') {
+                    continue;
+                }
                 $insert = array_merge($update, [
                     'ss' => $ss,
                     'fecha' => $date,

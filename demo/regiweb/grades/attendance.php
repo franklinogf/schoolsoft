@@ -3,9 +3,9 @@ require_once __DIR__ . '/../../app.php';
 
 use App\Models\Admin;
 use App\Models\Teacher;
+use App\Services\SchoolService;
 use Classes\Route;
 use Classes\Session;
-use Classes\DataBase\DB;
 
 use Classes\Lang;
 use Classes\Util;
@@ -15,6 +15,7 @@ Session::is_logged();
 $teacher = Teacher::findOrFail(Session::id());
 $schoolInfo = Admin::primaryAdmin();
 $attendanceOption = $schoolInfo->asist;
+
 $lang = new Lang([
     ['Entrada de asistencias', 'Assists entry'],
     ['Asistencia de los estudiantes', 'Student assistance'],
@@ -52,15 +53,12 @@ $lang = new Lang([
         <?php if (!school_is('cbtm')): ?>
             <?php if ($attendanceOption === "3"): ?>
                 <div id="classButtons" class="d-flex flex-wrap justify-content-center">
-                    <?php foreach ($teacher->classes as $class): ?>
-                        <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-class="<?= $class->curso ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $class->desc1 ?>"><?= $class->curso ?></button>
+                    <?php foreach ($teacher->subjects as $class): ?>
+                        <button class="btn btn-outline-primary mr-2 mt-1 flex-grow-1" data-class="<?= $class->curso ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $class->descripcion ?>"><?= $class->curso ?></button>
                     <?php endforeach ?>
                 </div>
             <?php elseif ($attendanceOption === "2"):
-                $grades = DB::table('year')
-                    ->select('DISTINCT grado')
-                    ->where('year', $schoolInfo->year)
-                    ->orderBy('grado')->get();
+                $grades = SchoolService::getAllGrades();
             ?>
                 <div id="gradesButtons" class="d-flex flex-wrap justify-content-center">
                     <?php foreach ($grades as $grade): ?>
@@ -99,11 +97,11 @@ $lang = new Lang([
                             <th scope="col" class="text-center"><?= $lang->translation("Estudiantes") ?></th>
                             <th scope="col" class="text-center"><?= $lang->translation("Codigo de asistencia") ?></th>
 
-                            <?php if(school_is('csaa')):?>
-                            <?php for($i=1; $i<=6; $i++):?>
-                                <th style="width: 60px;" scope="col" class="text-center"><?= "P-{$i}" ?></th>
-                            <?php endfor;?>
-                            <?php endif;?>
+                            <?php if (school_is('csaa')): ?>
+                                <?php for ($i = 1; $i <= 6; $i++): ?>
+                                    <th style="width: 60px;" scope="col" class="text-center"><?= "P-{$i}" ?></th>
+                                <?php endfor; ?>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,7 +114,7 @@ $lang = new Lang([
     </div>
     <script type="text/javascript">
         const attendanceCodes = <?= json_encode(Util::$attendanceCodes) ?>;
-        const hasAttendanceP = <?=  school_is('csaa') ? 'true' : 'false' ?>;
+        const hasAttendanceP = <?= school_is('csaa') ? 'true' : 'false' ?>;
     </script>
     <?php
 
