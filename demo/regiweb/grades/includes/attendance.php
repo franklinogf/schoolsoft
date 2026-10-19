@@ -99,10 +99,24 @@ if (isset($_POST['getStudents'])) {
                 }
             }
 
+            $isBlank = $update['codigo'] === '';
+            if ($isBlank && $hasP) {
+                foreach (['p1', 'p2', 'p3', 'p4', 'p5', 'p6'] as $p) {
+                    if ($update[$p] !== '') {
+                        $isBlank = false;
+                        break;
+                    }
+                }
+            }
+
             if (DB::table('asispp')->where($where)->first()) {
-                DB::table('asispp')->where($where)->update($update);
+                if ($isBlank) {
+                    DB::table('asispp')->where($where)->delete();
+                } else {
+                    DB::table('asispp')->where($where)->update($update);
+                }
             } else {
-                if ($data['codigo'] === '') {
+                if ($isBlank) {
                     continue;
                 }
                 $insert = array_merge($update, [
