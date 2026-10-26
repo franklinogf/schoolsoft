@@ -63,10 +63,11 @@ class PlacetoPayPaymentProcessor
      * Re-check the account's pending sessions against PlacetoPay and return
      * the first one that is still pending, if any. Used to warn the parent
      * and block a new checkout so the same thing doesn't get paid twice.
+     * Card enrollments (amount 0) charge nothing, so they never block.
      */
     public function pendingFor(int|string $accountId): ?PlacetoPaySession
     {
-        $pending = PlacetoPaySession::forAccount($accountId)->pending()->orderBy('created_at')->get();
+        $pending = PlacetoPaySession::forAccount($accountId)->pending()->where('amount', '>', 0)->orderBy('created_at')->get();
 
         foreach ($pending as $session) {
             try {

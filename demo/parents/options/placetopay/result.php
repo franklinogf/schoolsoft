@@ -21,6 +21,7 @@ $canResume = $isOwner && $session->canResume();
 $backUrl = match ($session?->payable_type) {
     'store_order' => '../stores/index.php',
     'family' => '../payments/index.php',
+    'autopay' => '../autoPayments/index.php',
     default => '../deposit/index.php',
 };
 

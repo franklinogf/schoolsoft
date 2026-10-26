@@ -78,8 +78,9 @@ class PlacetoPayCheckout
      *  buyerMobile:string,
      *  payableType?:string,
      *  payableId?:string,
-     *  skipResult?:bool
-     * } $data
+     *  skipResult?:bool,
+     *  subscription?:bool
+     * } $data  With `subscription` true the session only stores the card (no payment; `amount` is ignored and recorded as 0).
      * @param array<int, array{keyword:string, value:string|int|string[]|int[], displayOn:'none'|'payment'|'receipt'|'both'|'approved'}> $fields
      *  Extra fields; `CustomerAccountNumber` (the parent account) is always added.
      * @param array<int, array{sku:string|int, name:string, qty:int, price:float, category?:'physical'|'digital', tax?:float}> $items
@@ -91,7 +92,7 @@ class PlacetoPayCheckout
 
         $session = PlacetoPaySession::startPending(
             $data['reference'],
-            $data['amount'],
+            empty($data['subscription']) ? $data['amount'] : 0,
             $currency,
             $data['payableType'] ?? null,
             $data['payableId'] ?? null,
@@ -141,6 +142,17 @@ class PlacetoPayCheckout
             ], $items);
         }
 
+        // Card enrollment: no charge is made, PlacetoPay only stores the card
+        // and returns its token (`subscription.instrument`) once approved.
+        // Later charges are ours to start through collect().
+        if (! empty($data['subscription'])) {
+            unset($request['payment']);
+            $request['subscription'] = [
+                'reference' => $data['reference'],
+                'description' => $data['description'],
+            ];
+        }
+
         try {
             $response = $this->client->request($request);
         } catch (PlacetoPayException $e) {
@@ -157,6 +169,107 @@ class PlacetoPayCheckout
             $response->requestId() !== '' ? (int) $response->requestId() : null,
             $response->processUrl() ?: null,
             $created ? PlacetoPaySessionStatus::PENDING : PlacetoPaySessionStatus::FAILED,
+            $response->toArray(),
+        );
+
+        return $session;
+    }
+
+    /**
+     * Extract the stored-card token returned by an approved recurring/
+     * subscription session, or null when the session has none.
+     *
+     * @return array{token:string, subtoken:?string, last4:?string, brand:?string}|null
+     */
+    public function extractToken(RedirectInformation $info): ?array
+    {
+        $subscription = $info->subscription();
+
+        if (! $subscription || $subscription->type() !== 'token') {
+            return null;
+        }
+
+        $values = [];
+        foreach ($subscription->instrumentToArray() as $item) {
+            if ($item) {
+                $values[$item['keyword']] = $item['value'];
+            }
+        }
+
+        return isset($values['token']) ? [
+            'token' => $values['token'],
+            'subtoken' => $values['subtoken'] ?? null,
+            'last4' => isset($values['lastDigits']) ? substr($values['lastDigits'], -4) : null,
+            'brand' => $values['franchiseName'] ?? $values['franchise'] ?? null,
+        ] : null;
+    }
+
+    /**
+     * Charge a stored card token (no buyer interaction). Persists a PENDING
+     * session first, like createSession(), so a network failure leaves a
+     * trace; the final status is applied later through sync().
+     *
+     * @param array{reference:string, description:string, currency?:string, amount:float, accountId:string|int, payableType?:string, payableId?:string, buyerEmail:string, buyerName:string, buyerSurname:string} $data
+     * @param array{token:string, subtoken?:?string} $instrument
+     */
+    public function collect(array $data, array $instrument, array $items = []): PlacetoPaySession
+    {
+        $currency = $data['currency'] ?? 'USD';
+
+        $session = PlacetoPaySession::startPending(
+            $data['reference'],
+            $data['amount'],
+            $currency,
+            $data['payableType'] ?? null,
+            $data['payableId'] ?? null,
+            (string) $data['accountId'],
+            $data['description'],
+        );
+
+        $token = ['token' => $instrument['token']];
+        if (! empty($instrument['subtoken'])) {
+            $token['subtoken'] = $instrument['subtoken'];
+        }
+
+        $request = [
+            'payer' => [
+                'name' => $data['buyerName'],
+                'surname' => $data['buyerSurname'],
+                'email' => $data['buyerEmail'],
+            ],
+            'payment' => [
+                'reference' => $data['reference'],
+                'description' => $data['description'],
+                'amount' => ['currency' => $currency, 'total' => $data['amount']],
+            ],
+            'instrument' => ['token' => $token],
+            'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
+        ];
+
+        if (! empty($items)) {
+            $request['payment']['items'] = array_map(fn (array $item) => [
+                'sku' => (string) $item['sku'],
+                'name' => $item['name'],
+                'category' => $item['category'] ?? 'physical',
+                'qty' => (int) $item['qty'],
+                'price' => (float) $item['price'],
+                'tax' => (float) ($item['tax'] ?? 0),
+            ], $items);
+        }
+
+        try {
+            $response = $this->client->collect($request);
+        } catch (PlacetoPayException $e) {
+            $session->markCreated(null, null, PlacetoPaySessionStatus::FAILED, ['error' => $e->getMessage()]);
+            throw $e;
+        }
+
+        // Collect answers with the payment result directly (no processUrl).
+        $session->markCreated(
+            $response->requestId() !== '' ? (int) $response->requestId() : null,
+            null,
+            PlacetoPaySessionStatus::fromApiStatus($response->status()->status()),
             $response->toArray(),
         );
 

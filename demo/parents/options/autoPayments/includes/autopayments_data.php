@@ -6,6 +6,9 @@ require_once __DIR__ . '/../../../../app.php';
 
 use App\Models\Admin;
 use App\Models\Payments\AutoPay;
+use App\Enums\PlacetoPaySessionStatus;
+use App\Models\PlacetoPaySession;
+use App\Models\Payments\AutoPayHistory;
 use App\Models\Payments\AutoPayItem;
 use App\Models\Payments\Budget;
 use App\Models\Payments\Payment;
@@ -72,22 +75,14 @@ function mapAutoPay(AutoPay $autoPay, string $year): array
         'id' => (int) $autoPay->id,
         'accountId' => (int) $autoPay->cuenta,
         'email' => (string) $autoPay->email,
-        'tipoDePago' => $autoPay->tipoDePago?->value,
-        'formaDePago' => $autoPay->formaDePago?->value,
         'diaDePago' => $autoPay->diaDePago,
-        'ccNombre' => $autoPay->ccNombre,
-        'ccNumero' => null,
-        'ccLast4' => $autoPay->ccNumero ? substr((string) $autoPay->ccNumero, -4) : null,
-        'fechaExpiracion' => $autoPay->fechaExpiracion,
-        'cvv' => null,
-        'ccZip' => $autoPay->ccZip,
-        'achNombre' => $autoPay->achNombre,
-        'achNumero' => null,
-        'achLast4' => $autoPay->achNumero ? substr((string) $autoPay->achNumero, -4) : null,
-        'numeroRuta' => null,
-        'numeroRutaLast4' => $autoPay->numeroRuta ? substr((string) $autoPay->numeroRuta, -4) : null,
-        'tipoCuenta' => $autoPay->tipoCuenta?->value,
-        'achZip' => $autoPay->achZip,
+        'estado' => $autoPay->estado,
+        'hasCard' => !empty($autoPay->pp_token),
+        'cardLast4' => $autoPay->pp_last4,
+        'cardBrand' => $autoPay->pp_brand,
+        'lastCharge' => $autoPay->ultimo_cobro,
+        'attempts' => (int) $autoPay->intentos,
+        'nextTry' => $autoPay->proximo_intento,
         'total' => (float) $autoPay->total,
         'items' => $items,
     ];
@@ -233,13 +228,10 @@ if ($action === 'studentCodes') {
 
 if ($action === 'saveHeader') {
     $autoPayId = (int) ($_POST['id'] ?? 0);
-    $paymentType = (string) ($_POST['tipoDePago'] ?? '');
-    $payMode = 'automatico';
     $email = trim((string) ($_POST['email'] ?? ''));
     $dayOfPayment = isset($_POST['diaDePago']) && $_POST['diaDePago'] !== '' ? (int) $_POST['diaDePago'] : null;
-    $existingAutoPay = $autoPayId > 0 ? findAutoPay($autoPayId, $accountId, $year) : null;
 
-    if ($autoPayId > 0 && !$existingAutoPay) {
+    if ($autoPayId > 0 && !findAutoPay($autoPayId, $accountId, $year)) {
         jsonResponse(['success' => false, 'message' => 'Autopay not found'], 404);
     }
 
@@ -247,109 +239,23 @@ if ($action === 'saveHeader') {
         jsonResponse(['success' => false, 'message' => 'Valid email is required'], 422);
     }
 
-    if (!in_array($paymentType, ['tarjeta', 'ach'], true)) {
-        jsonResponse(['success' => false, 'message' => 'Invalid payment method'], 422);
-    }
-
-    if ($payMode === 'automatico' && ($dayOfPayment === null || $dayOfPayment < 1 || $dayOfPayment > 30)) {
+    if ($dayOfPayment === null || $dayOfPayment < 1 || $dayOfPayment > 30) {
         jsonResponse(['success' => false, 'message' => 'Day of payment must be between 1 and 30'], 422);
     }
 
+    // The card itself is never handled here: it is registered in PlacetoPay (see start.php).
     $payload = [
         'cuenta' => $accountId,
         'year' => $year,
         'email' => $email,
-        'tipoDePago' => $paymentType,
-        'formaDePago' => $payMode,
-        'diaDePago' => $payMode === 'automatico' ? $dayOfPayment : null,
+        'tipoDePago' => 'tarjeta',
+        'formaDePago' => 'automatico',
+        'diaDePago' => $dayOfPayment,
     ];
 
-    if ($paymentType === 'tarjeta') {
-        $isExistingCard = $existingAutoPay && $existingAutoPay->tipoDePago?->value === 'tarjeta';
-
-        $ccName = trim((string) ($_POST['ccNombre'] ?? ''));
-        $ccNumberSanitized = preg_replace('/\D/', '', (string) ($_POST['ccNumero'] ?? ''));
-        $ccExpiration = trim((string) ($_POST['fechaExpiracion'] ?? ''));
-        $ccCvvSanitized = preg_replace('/\D/', '', (string) ($_POST['ccv'] ?? ''));
-        $ccZipSanitized = preg_replace('/\D/', '', (string) ($_POST['ccZip'] ?? ''));
-
-        $ccName = $ccName !== '' ? $ccName : ($isExistingCard ? (string) $existingAutoPay->ccNombre : '');
-        $ccNumber = $ccNumberSanitized !== '' ? (int) $ccNumberSanitized : ($isExistingCard ? (int) $existingAutoPay->ccNumero : 0);
-        $ccExpiration = $ccExpiration !== '' ? $ccExpiration : ($isExistingCard ? (string) $existingAutoPay->fechaExpiracion : '');
-        $ccZip = $ccZipSanitized !== '' ? (int) $ccZipSanitized : ($isExistingCard ? (int) $existingAutoPay->ccZip : 0);
-
-        if ($ccName === '' || $ccNumber === 0 || $ccExpiration === '' || $ccZip === 0) {
-            jsonResponse(['success' => false, 'message' => 'Complete todos los campos de tarjeta'], 422);
-        }
-
-        $payload = array_merge($payload, [
-            'ccNombre' => $ccName,
-            'ccNumero' => $ccNumber,
-            'fechaExpiracion' => $ccExpiration,
-            // CVV should never be stored persistently.
-            'cvv' => null,
-            'ccZip' => $ccZip,
-            'achNombre' => null,
-            'achNumero' => null,
-            'numeroRuta' => null,
-            'tipoCuenta' => null,
-            'achZip' => null,
-        ]);
-    }
-
-    if ($paymentType === 'ach') {
-        $isExistingAch = $existingAutoPay && $existingAutoPay->tipoDePago?->value === 'ach';
-
-        $accountType = (string) ($_POST['tipoCuenta'] ?? '');
-        if (!in_array($accountType, ['w', 's'], true) && !$isExistingAch) {
-            jsonResponse(['success' => false, 'message' => 'Invalid ACH account type'], 422);
-        }
-
-        if (!in_array($accountType, ['w', 's'], true) && $isExistingAch) {
-            $accountType = (string) $existingAutoPay->tipoCuenta?->value;
-        }
-
-        $achName = trim((string) ($_POST['achNombre'] ?? ''));
-        $achNumberSanitized = preg_replace('/\D/', '', (string) ($_POST['achNumero'] ?? ''));
-        $routeSanitized = preg_replace('/\D/', '', (string) ($_POST['numeroRuta'] ?? ''));
-        $achZipSanitized = preg_replace('/\D/', '', (string) ($_POST['achZip'] ?? ''));
-
-        $achName = $achName !== '' ? $achName : ($isExistingAch ? (string) $existingAutoPay->achNombre : '');
-        $achNumber = $achNumberSanitized !== '' ? (int) $achNumberSanitized : ($isExistingAch ? (int) $existingAutoPay->achNumero : 0);
-        $routeNumber = $routeSanitized !== '' ? (int) $routeSanitized : ($isExistingAch ? (int) $existingAutoPay->numeroRuta : 0);
-        $achZip = $achZipSanitized !== '' ? (int) $achZipSanitized : ($isExistingAch ? (int) $existingAutoPay->achZip : 0);
-
-        if ($achName === '' || $achNumber === 0 || $routeNumber === 0 || !in_array($accountType, ['w', 's'], true) || $achZip === 0) {
-            jsonResponse(['success' => false, 'message' => 'Complete todos los campos de ACH'], 422);
-        }
-
-        $payload = array_merge($payload, [
-            'achNombre' => $achName,
-            'achNumero' => $achNumber,
-            'numeroRuta' => $routeNumber,
-            'tipoCuenta' => $accountType,
-            'achZip' => $achZip,
-            'ccNombre' => null,
-            'ccNumero' => null,
-            'fechaExpiracion' => null,
-            'cvv' => null,
-            'ccZip' => null,
-        ]);
-    }
-
-    $autoPay = Manager::connection()->transaction(function () use ($autoPayId, $accountId, $year, $payload): AutoPay {
-        if ($autoPayId > 0) {
-            $existing = findAutoPay($autoPayId, $accountId, $year);
-            if (!$existing) {
-                throw new RuntimeException('Autopay not found');
-            }
-
-            $existing->update($payload);
-            return $existing->refresh();
-        }
-
-        return AutoPay::query()->create($payload);
-    });
+    $autoPay = $autoPayId > 0
+        ? tap(findAutoPay($autoPayId, $accountId, $year), fn(AutoPay $existing) => $existing->update($payload))
+        : AutoPay::query()->create($payload);
 
     $autoPay = AutoPay::query()
         ->with(['items.student', 'items.budget'])
@@ -480,12 +386,95 @@ if ($action === 'deleteItem') {
     ]);
 }
 
+if (in_array($action, ['activate', 'pause', 'resume'], true)) {
+    $autoPay = findAutoPay((int) ($_POST['id'] ?? 0), $accountId, $year);
+    if (!$autoPay) {
+        jsonResponse(['success' => false, 'message' => 'Autopay not found'], 404);
+    }
+
+    // From -> to, so a failed auto pay can only come back through a new card
+    $transitions = [
+        'activate' => [AutoPay::STATUS_PENDING, AutoPay::STATUS_ACTIVE],
+        'pause' => [AutoPay::STATUS_ACTIVE, AutoPay::STATUS_PAUSED],
+        'resume' => [AutoPay::STATUS_PAUSED, AutoPay::STATUS_ACTIVE],
+    ];
+    [$from, $to] = $transitions[$action];
+
+    if ($autoPay->estado !== $from) {
+        jsonResponse(['success' => false, 'message' => 'Action not allowed in the current state'], 409);
+    }
+
+    if ($to === AutoPay::STATUS_ACTIVE) {
+        if (empty($autoPay->pp_token)) {
+            jsonResponse(['success' => false, 'message' => 'Registre una tarjeta primero'], 422);
+        }
+
+        if (!$autoPay->items()->exists()) {
+            jsonResponse(['success' => false, 'message' => 'Agregue al menos un cargo'], 422);
+        }
+
+        if (!$autoPay->diaDePago) {
+            jsonResponse(['success' => false, 'message' => 'Indique el dia de pago'], 422);
+        }
+    }
+
+    $autoPay->update(['estado' => $to]);
+
+    jsonResponse([
+        'success' => true,
+        'data' => mapAutoPay($autoPay->load(['items.student', 'items.budget']), $year),
+    ]);
+}
+
+if ($action === 'history') {
+    $autoPay = findAutoPay((int) ($_GET['id'] ?? 0), $accountId, $year);
+    if (!$autoPay) {
+        jsonResponse(['success' => false, 'message' => 'Autopay not found'], 404);
+    }
+
+    // Legacy rows carry an HTML `descripcion` and no dates/auth, so only the plain columns are sent.
+    $history = AutoPayHistory::query()
+        ->where('posteoId', $autoPay->id)
+        ->orderByDesc('id')
+        ->get()
+        ->map(fn(AutoPayHistory $row): array => [
+            'id' => (int) $row->id,
+            'date' => $row->getRawOriginal('dateTime') ?: null,
+            'month' => $row->mes,
+            'message' => $row->mensaje,
+            'authNumber' => $row->authNumber ?: null,
+            'reference' => $row->referenceNumber ?: null,
+        ])
+        ->values();
+
+    jsonResponse(['success' => true, 'data' => $history]);
+}
+
 if ($action === 'deleteAutopay') {
     $autoPayId = (int) ($_POST['id'] ?? 0);
 
     $autoPay = findAutoPay($autoPayId, $accountId, $year);
     if (!$autoPay) {
         jsonResponse(['success' => false, 'message' => 'Autopay not found'], 404);
+    }
+
+    // A charge approved (or still in flight) at PlacetoPay but not yet recorded in `pagos`
+    // would be lost if the auto pay disappeared before the sync applies it.
+    $unapplied = PlacetoPaySession::query()
+        ->where('payable_type', 'autopay')
+        ->where('payable_id', (string) $autoPay->id)
+        ->where('amount', '>', 0)
+        ->whereNull('applied_at')
+        ->whereIn('status', [
+            PlacetoPaySessionStatus::PENDING,
+            PlacetoPaySessionStatus::APPROVED,
+            PlacetoPaySessionStatus::APPROVED_PARTIAL,
+            PlacetoPaySessionStatus::OK,
+        ])
+        ->exists();
+
+    if ($unapplied) {
+        jsonResponse(['success' => false, 'message' => 'Hay un cobro en proceso. Intente eliminarlo en unos minutos.'], 409);
     }
 
     Manager::connection()->transaction(function () use ($autoPay): void {

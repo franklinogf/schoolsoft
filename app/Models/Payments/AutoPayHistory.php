@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $descripcion
  * @property CarbonInterface $dateTime
  * @property string $authNumber
- * @property string $refNumber
+ * @property string $referenceNumber
  * @property AutoPay $autoPay
  */
 class AutoPayHistory extends Model

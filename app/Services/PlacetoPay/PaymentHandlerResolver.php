@@ -3,6 +3,7 @@
 namespace App\Services\PlacetoPay;
 
 use App\Models\Student;
+use App\Services\PlacetoPay\AutoPay\AutoPayHandler;
 use App\Services\PlacetoPay\Deposit\DepositHandler;
 use App\Services\PlacetoPay\FamilyCharges\FamilyChargesHandler;
 use App\Services\PlacetoPay\StoreOrder\StoreOrderHandler;
@@ -19,6 +20,7 @@ class PaymentHandlerResolver
         Student::class => DepositHandler::class,
         'store_order' => StoreOrderHandler::class,
         'family' => FamilyChargesHandler::class,
+        'autopay' => AutoPayHandler::class,
     ];
 
     public static function for(?string $payableType): ?PaymentHandler

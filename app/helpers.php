@@ -191,3 +191,15 @@ if (!function_exists('school_url')) {
         return rtrim(config('app.url'), '/') . '/' . school_config('app.acronym') . '/' . ltrim($path, '/');
     }
 }
+
+if (!function_exists('view')) {
+    /**
+     * Render a Blade template from `app/Views` (dot notation) to a string.
+     *
+     * @param array<string, mixed> $data
+     */
+    function view(string $view, array $data = []): string
+    {
+        return \App\Services\ViewRenderer::render($view, $data);
+    }
+}

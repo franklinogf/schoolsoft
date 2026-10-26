@@ -18,6 +18,7 @@ Relation::enforceMorphMap([
     'admin' => \App\Models\Admin::class,
     'store_order' => \App\Models\StoreOrder::class,
     'family' => \App\Models\Family::class,
+    'autopay' => \App\Models\Payments\AutoPay::class,
 ]);
 
 define('__ROOT', str_replace('/', DIRECTORY_SEPARATOR, __DIR__)); # /home/admin/public_html
