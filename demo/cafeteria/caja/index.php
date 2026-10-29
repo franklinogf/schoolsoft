@@ -122,10 +122,6 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
               <!-- Action Buttons -->
               <div class="mb-4">
                 <div class="btn-group-vertical w-100" role="group" aria-label="Cart Actions">
-                  <a href="../menu.php" class="btn btn-outline-secondary btn-lg mb-2 d-flex align-items-center justify-content-center">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    <span>Salir</span>
-                  </a>
                   <a href="#" id="pagar" class="btn btn-success btn-lg d-flex align-items-center justify-content-center disabled" data-toggle="modal" data-target="#pagarModal">
                     <i class="fas fa-credit-card mr-2"></i>
                     <span>Pagar</span>
@@ -160,7 +156,7 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
               </button>
 
               <!-- Send Receipts Section -->
-              <div class="card">
+              <div class="card mb-3">
                 <div class="card-body">
                   <h6 class="card-title">
                     <i class="fas fa-receipt mr-2"></i><?= __("Enviar recibos") ?>
@@ -175,6 +171,10 @@ $estudiantes = DB::table('year')->select('ss,nombre,apellidos')->where('year', $
                   </div>
                 </div>
               </div>
+              <a href="../menu.php" class="btn btn-outline-secondary btn-lg mb-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Salir</span>
+              </a>
             </div>
           </div>
           <!-- END SHOPPING CART -->
