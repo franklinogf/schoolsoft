@@ -39,12 +39,27 @@ Every PHP entry point must start with `require_once '../app.php'`. Skipping it b
 
 ### Dual ORM
 
-Legacy `Classes\DataBase\DB` (raw query builder) coexists with modern Eloquent models in `app/Models/`. Prefer Eloquent for new code.
+Legacy `Classes\DataBase\DB` (raw query builder) coexists with modern Eloquent models in `app/Models/`. Prefer Eloquent for new code. See "Legacy `Classes/` → `app/` migration" below for how to replace legacy usages.
 
 **Eloquent quirks:**
 - Many models use non-standard table names (e.g., `Student` → `year` table, `Family` → `madre`)
 - Most models carry global scopes — `Student` auto-filters by current academic year and excludes unenrolled records
 - Polymorphic relationships use a morph map (`'student'`, `'admin'`)
+
+### Legacy `Classes/` → `app/` migration
+
+When you edit a file that uses something from `Classes/` that has a modern equivalent in `app/`, migrate it to the new one **in the same change**. Only touch the files/lines you are already editing — don't do mass refactors. Don't add new code to `Classes/`; if something is missing, create it in `app/` (Model/Service).
+
+| Legacy (`Classes/`) | Use instead |
+|---|---|
+| `Classes\DataBase\DB` | An Eloquent model from `app/Models/` if one exists for that table. If there is **no** equivalent model, use `use Illuminate\Database\Capsule\Manager as DB;` |
+| `Classes\Models\*Model`, `Classes\Controllers\*` | Eloquent models in `app/Models/` + `app/Services/` / `app/Queries/` |
+| `Classes\Lang` | `__()` / `trans_choice()` |
+| `Classes\File`, `Classes\Email` / `Classes\Mail` | `App\Services\FileService`, `upload_attachment()` / `attachments_url()`, Resend |
+
+These have **no** equivalent in `app/` and are still the correct way: `Classes\Route`, `Classes\Session`, `Classes\PDF` (base for `app/Pdfs`), `Classes\Mail\*` (vendored PHPMailer), `Classes\Server`, `Classes\Util`.
+
+After migrating, check the affected page manually (no test suite) and make sure behavior is unchanged — mind global scopes (e.g. `Student`) and non-standard table names.
 
 ### Page Pattern
 
