@@ -20,8 +20,11 @@ $lang = new Lang([
     ['administradores', 'admins'],
     ['Redactar correo', 'Write email']
 ]);
-$key = array_keys($_GET)[0];
-$dataList = $_GET[$key];
+$key = array_keys($_POST)[0] ?? null;
+if (!in_array($key, ['students', 'teachers', 'admins'], true) || !is_array($_POST[$key])) {
+    Route::redirect('/admin/messages/');
+}
+$dataList = $_POST[$key];
 
 
 $titleHeader = $lang->translation("Enviar correo a");

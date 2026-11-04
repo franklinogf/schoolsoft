@@ -32,11 +32,12 @@ $lang = new Lang([
         <h1 class="text-center mb-3 mt-5"><?= $lang->translation("Seleccionar estudiantes para enviar correo electrónico") ?></h1>
 
         <div class="container bg-white shadow-lg py-3 my-3 rounded">
-            <form id="form" action="<?= Route::url('/admin/messages/email/') ?>">
+            <form id="form" method="POST" action="<?= Route::url('/admin/messages/email/') ?>">
 
                 <?php
                 $__tableData = $students->all();
                 $__tableDataCheckbox = true;
+                $__tableDataCheckboxName = 'students';
                 $__dataPk = 'mt';
                 $__tableDataInfo = [
                     [
