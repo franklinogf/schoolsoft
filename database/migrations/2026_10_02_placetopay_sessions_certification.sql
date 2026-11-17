@@ -2,7 +2,7 @@
 -- Run once per tenant database.
 
 ALTER TABLE placetopay_sessions
-  ADD COLUMN account_id VARCHAR(20) NULL AFTER payable_id,
+  -- ADD COLUMN account_id VARCHAR(20) NULL AFTER payable_id,
   ADD COLUMN description VARCHAR(255) NULL AFTER currency,
   ADD COLUMN applied_at DATETIME NULL COMMENT 'When the payment was credited to its payable',
   ADD COLUMN refunded_at DATETIME NULL COMMENT 'When a refund/reversal was applied to its payable',
