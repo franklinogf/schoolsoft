@@ -304,6 +304,21 @@ $options = [
                 'link' => 'pdf/de.php',
                 'target' => 'inf_deuda_salon',
             ],
+            [
+                'name' => __("Presuspuesto Grados"),
+                'desc' => __('Informe por grado.'),
+                'link' => 'pres_grado.php',
+            ],
+            [
+                'name' => __("Informe deudas mensual"),
+                'desc' => __('	Reporte mensual por Descripción.'),
+                'link' => 'inf_deu_men.php',
+            ],
+            [
+                'name' => __("Informe Hor. Ext."),
+                'desc' => __('Informe de Horario Extendido por grados.'),
+                'link' => 'inf_est_sup.php',
+            ],
         ],
     ],
 ];
