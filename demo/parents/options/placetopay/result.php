@@ -19,7 +19,7 @@ $isOwner = $session && Session::id() && (string) Session::id() === (string) $ses
 $canResume = $isOwner && $session->canResume();
 
 $backUrl = match ($session?->payable_type) {
-    'store_order' => '../stores/index.php',
+    'store_order' => str_starts_with((string) $session?->reference, 'ABO') ? '../account_credit/index.php' : '../stores/index.php',
     'family' => '../payments/index.php',
     'autopay' => '../autoPayments/index.php',
     default => '../deposit/index.php',

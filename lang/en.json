@@ -1029,5 +1029,16 @@
   "Selecciona miembro...": "Select member...",
   "Member is required for each selected teacher": "Member is required for each selected teacher",
   "The same family member cannot select the same time with different teachers": "The same family member cannot select the same time with different teachers",
-  "El mismo miembro no puede seleccionar la misma hora con diferentes profesores": "The same family member cannot select the same time with different teachers"
+  "El mismo miembro no puede seleccionar la misma hora con diferentes profesores": "The same family member cannot select the same time with different teachers",
+  "Ver mensajes": "View messages",
+  "Hacer cita": "Make an appointment",
+  "Re-Matrícula": "Re-Enrollment",
+  "Tareas": "Homeworks",
+  "Informe de deficiencia": "Deficiency report",
+  "Reporte de compras": "Purchase report",
+  "Historial de pagos": "Payment history",
+  "Abono a cuenta": "Account credit",
+  "Depósitos": "Deposits",
+  "Pagos Automaticos": "Automatic Payments",
+  "Citas con profesores": "Appointments with teachers"
 }

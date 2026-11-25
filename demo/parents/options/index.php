@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../../app.php';
 
-use Classes\Lang;
 use Classes\Route;
 use Classes\Session;
 
@@ -18,32 +17,23 @@ $buttons = [
     ['name' => 'Informe de deficiencia', 'link' => 'deficiency/'],
     ['name' => 'Tiendas', 'link' => 'stores/'],
     ['name' => 'Reporte de compras', 'link' => 'Shopping/'],
-    ['name' => 'Deposits', 'link' => 'deposit/'],
+    ['name' => 'Depósitos', 'link' => 'deposit/'],
     ['name' => 'Historial de pagos', 'link' => 'placetopay/history.php'],
     ['name' => 'Pagos', 'link' => 'payments/'],
     ['name' => 'Pagos Automaticos', 'link' => 'autoPayments/'],
     ['name' => 'Citas con profesores', 'link' => 'appointments/'],
 ];
-$lang = new Lang([
-    ["Mensajes y Opciones", "Messages and Options"],
-    ["Ver mensajes", "View messages"],
-    ["Hacer cita", "Make an appointment"],
-    ["Re-Matrícula", "Re-Enrollment"],
-    ["Tareas", "Homeworks"],
-    ["Tarjeta de notas", "Grades card"],
-    ["Documentos", "Documents"],
-    ["Hoja de progreso", "Progress sheet"],
-    ["Informe de deficiencia", "Deficiency report"],
-    ["Reporte de compras", "Purchase report"],
-    ["Historial de pagos", "Payment history"],
-]);
+
+if (school_is('cbl', 'demo')) {
+    $buttons[] = ['name' => 'Abono a cuenta', 'link' => 'account_credit/'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= __LANG ?>">
 
 <head>
     <?php
-    $title = $lang->translation("Mensajes y Opciones");
+    $title = __("Mensajes y Opciones");
     Route::includeFile('/parents/includes/layouts/header.php');
     ?>
 </head>
@@ -53,11 +43,11 @@ $lang = new Lang([
     Route::includeFile('/parents/includes/layouts/menu.php');
     ?>
     <div class="container-md mt-md-3 mb-md-5 px-0">
-        <h1 class="text-center my-4"><?= $lang->translation("Mensajes y Opciones") ?></h1>
+        <h1 class="text-center my-4"><?= __("Mensajes y Opciones") ?></h1>
         <div class="row row-cols-1 row-cols-md-2">
             <?php foreach ($buttons as $button): ?>
                 <div class="col mb-1">
-                    <a style="font-size: .8em;" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper($lang->translation($button['name']), 'UTF-8') ?></a>
+                    <a style="font-size: .8em;" <?= isset($button['target']) ? "target='{$button['target']}'" : '' ?> class="btn btn-primary btn-block" href="<?= $button['link'] ?>"><?= mb_strtoupper(__($button['name']), 'UTF-8') ?></a>
                 </div>
             <?php endforeach ?>
         </div>
