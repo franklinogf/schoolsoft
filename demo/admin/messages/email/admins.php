@@ -27,10 +27,11 @@ $schools = DB::table('colegio')->get();
         <h1 class="text-center mb-3 mt-5"><?= __("Enviar correo electrónico a administradores") ?></h1>
 
         <div class="container bg-white shadow-lg py-3 my-3 rounded">
-            <form id="form" action="<?= Route::url('/admin/messages/email/') ?>">
+            <form id="form" method="POST" action="<?= Route::url('/admin/messages/email/') ?>">
                 <?php
                 $__tableData = $schools;
                 $__tableDataCheckbox = true;
+                $__tableDataCheckboxName = 'admins';
                 $__dataPk = 'usuario';
                 $__tableDataInfo = [
                     [

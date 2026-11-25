@@ -114,6 +114,40 @@ $title = __('placetopay.result.title');
     </div>
 
     <?php Route::includeFile('/includes/layouts/scripts.php', true); ?>
+
+    <?php if ($session && $session->status->isPending()): ?>
+        <script>
+            // Pending: the webhook/cron may update the status while this page is open.
+            // Poll the stored status and reload as soon as it changes.
+            (function() {
+                const reference = <?= json_encode($session->reference) ?>;
+                const currentStatus = <?= json_encode($session->status->value) ?>;
+                const intervalMs = 10000;
+                const maxMs = 15 * 60 * 1000;
+                const startedAt = Date.now();
+
+                const timer = setInterval(async () => {
+                    if (Date.now() - startedAt > maxMs) return clearInterval(timer);
+                    if (document.hidden) return;
+
+                    try {
+                        const response = await fetch('./status.php?reference=' + encodeURIComponent(reference), {
+                            cache: 'no-store'
+                        });
+                        if (!response.ok) return;
+
+                        const data = await response.json();
+                        if (data.status !== currentStatus) {
+                            clearInterval(timer);
+                            window.location.reload();
+                        }
+                    } catch (e) {
+                        // Network hiccup: try again on the next tick.
+                    }
+                }, intervalMs);
+            })();
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
